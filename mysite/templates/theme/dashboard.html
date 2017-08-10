@@ -1,0 +1,183 @@
+<!-- Main content -->
+<section class="content">
+  <!-- Info boxes -->
+  <div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="fa fa-database"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Einzelbuchungen</span>
+          <span class="info-box-number">{{anzahl_datensaetze}}</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div><!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="fa fa-clock-o"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Daueraufträge</span>
+          <span class="info-box-number">{{anzahl_dauerauftraege}}</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div><!-- /.col -->
+
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Stechzeiten</span>
+          <span class="info-box-number">{{anzahl_stechzeiten}}</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div><!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="fa fa-money"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Wert aller Buchungen</span>
+          <span class="info-box-number">{{gesamt_wert}}</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Rückblick der letzten Monate</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-12">
+              <p class="text-center">
+                <strong>Einnahmen Ausgaben der letzten 6 Monate:</strong>
+              </p>
+              <div class="chart-responsive">
+                <!-- Sales Chart Canvas -->
+                <canvas id="einnahmenAusgaben6monate" style="height:400px;"></canvas>
+                <script> 
+                var salesChartData = {
+                	    labels: {{zusammenfassung_monatsliste|safe	}},
+                	    datasets: [
+                	      {
+                	        label: "Einnahmen",
+                	        pointBorderColor: "rgb(210, 214, 222)",
+                	        borderColor: "rgb(210, 214, 222)",
+                	        pointStrokeColor: "#c1c7d1",
+                	        pointHighlightFill: "#fff",
+                	        pointHighlightStroke: "rgb(220,220,220)",
+                	        data: {{zusammenfassung_einnahmenliste}}
+                	      },
+                	      {
+                	        label: "Ausgaben",
+                	        pointBorderColor: "rgba(60,141,188,0.8)",
+                	        borderColor: "#3b8bba",
+                	        pointStrokeColor: "rgba(60,141,188,1)",
+                	        pointHighlightFill: "#fff",
+                	        pointHighlightStroke: "rgba(60,141,188,1)",
+                	        data: {{zusammenfassung_ausgabenliste}}
+                	      }
+                	    ]
+                	  };
+                var canvas = document.getElementById("einnahmenAusgaben6monate");
+                var myLineChart = new Chart(canvas, {
+                	type: 'line',
+                    data: salesChartData,
+                    options: {
+                    	responsive: true,
+                    	maintainAspectRatio: false,
+                }});
+                </script>
+                
+                
+              </div><!-- /.chart-responsive -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- ./box-body -->
+        <div class="box-footer">
+          <div class="row">
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block border-right">
+                <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> *?,??%</span>
+                <h5 class="description-header">unbekannt€</h5>
+                <span class="description-text">Einnahmen</span>
+              </div><!-- /.description-block -->
+            </div><!-- /.col -->
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block border-right">
+                <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> *?,??%</span>
+                <h5 class="description-header">{{verganges_halbes_jahr}}€</h5>
+                <span class="description-text">Tagesschnitt vergangenes halbes Jahr</span>
+              </div><!-- /.description-block -->
+            </div><!-- /.col -->
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block border-right">
+                <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> *?,??%</span>
+                <h5 class="description-header">{{pro_tag_vergangener_monat}}€</h5>
+                <span class="description-text">Tagesschnitt verganener Monat</span>
+              </div><!-- /.description-block -->
+            </div><!-- /.col -->
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block">
+                <span class="description-percentage text-red"><i class="fa fa-caret-down"></i>  *?,??€</span>
+                <h5 class="description-header">{{pro_tag_aktueller_monat}}€</h5>
+                <span class="description-text">Tagesschnitt aktueller Monat</span>
+              </div><!-- /.description-block -->
+            </div>
+          </div><!-- /.row -->
+        </div><!-- /.box-footer -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+  <div class='row'>
+    <div class="col-md-12">
+      <!-- Tabelle letzte Buchungen -->
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Aktueller Monat</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="table-responsive">
+            <table class="table no-margin">
+              <thead>
+                <tr>
+                  <th>Nummer</th>
+                  <th>Datum</th>
+                  <th>Name</th>
+                  <th>Kategorie</th>
+                  <th>Wert</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for abrechnung in abrechnungen %}
+                <tr>
+                  <td>{{abrechnung.0}}</td>
+                  <td>{{abrechnung.1}}</td>
+                  <td>{{abrechnung.2}}</td>
+                  <td>{{abrechnung.3}}</td>
+                  <td><span class="label label-success">{{abrechnung.4}}</span></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div><!-- /.table-responsive -->
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <a href="/addeinzelbuchung/" class="btn btn-sm btn-info btn-flat pull-left">Neue Buchung</a>
+          <a href="/uebersicht/" class="btn btn-sm btn-default btn-flat pull-right">Alle Buchungen ansehen</a>
+        </div><!-- /.box-footer -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+
+</section><!-- /.content -->

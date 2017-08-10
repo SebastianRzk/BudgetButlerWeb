@@ -1,0 +1,198 @@
+
+<!-- Main content -->
+<section class="content">
+  <!-- Info boxes -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Aktuelle Daueraufträge</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+         <div class="table-responsive">
+            <table class="table no-margin">
+              <thead>
+                <tr>
+                  <th>Nummer</th>
+                  <th>Startdatum</th>
+                  <th>Endedatum</th>
+                  <th>Rhythmus</th>
+                  <th>Name</th>
+                  <th>Kategorie</th>
+                  <th>Wert</th>
+                  <th>Aktion</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for dauerauftrag in aktuelle_dauerauftraege %}
+                <tr>
+                  <td>{{dauerauftrag.index}}</td>
+                  <td>{{dauerauftrag.Startdatum}}</td>
+                  <td>{{dauerauftrag.Endedatum}}</td>
+                  <td>{{dauerauftrag.Rhythmus}}</td>
+                  <td>{{dauerauftrag.Name}}</td>
+                  <td>{{dauerauftrag.Kategorie}}</td>
+                  <td><span class="label label-success">{{dauerauftrag.Wert}}</span></td>
+                  <td>
+                  <form role="form" action="/adddauerauftrag/" method="post">
+                  	{% csrf_token %}
+                  		<input type="hidden" name="edit_index" value="{{dauerauftrag.index}}">
+                  		<button type="submit" name="action" value="edit" ><i class="fa fa-pencil"></i></button>
+                   </form>
+                   </td>
+                  
+                  <td>
+                  	<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
+                  	{% csrf_token %}
+                  		<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
+                  		<button name="action" value="delete" ><i class="fa fa-trash-o"></i></button>
+                    </form>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div><!-- /.table-responsive -->
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <a href="/adddauerauftrag/" class="btn btn-sm btn-info btn-flat pull-left">Neuer Dauerauftrag</a>
+        </div><!-- /.box-footer -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Tabelle letzte Buchungen -->
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Zukünftige Dauerauftraege</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+         <div class="table-responsive">
+            <table class="table no-margin">
+              <thead>
+                <tr>
+                  <th>Nummer</th>
+                  <th>Startdatum</th>
+                  <th>Endedatum</th>
+                  <th>Rhythmus</th>
+                  <th>Name</th>
+                  <th>Kategorie</th>
+                  <th>Wert</th>
+                  <th>Aktion</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for dauerauftrag in zukuenftige_dauerauftraege %}
+                <tr>
+                  <td>{{dauerauftrag.index}}</td>
+                  <td>{{dauerauftrag.Startdatum}}</td>
+                  <td>{{dauerauftrag.Endedatum}}</td>
+                  <td>{{dauerauftrag.Rhythmus}}</td>
+                  <td>{{dauerauftrag.Name}}</td>
+                  <td>{{dauerauftrag.Kategorie}}</td>
+                  <td><span class="label label-success">{{dauerauftrag.Wert}}</span></td>
+                  <td>
+                  <form role="form" action="/adddauerauftrag/" method="post">
+                  	{% csrf_token %}
+                  		<input type="hidden" name="edit_index" value="{{dauerauftrag.index}}">
+                  		<button type="submit" name="action" value="edit" ><i class="fa fa-pencil"></i></button>
+                   </form>
+                   </td>
+                  
+                  <td>
+                  	<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
+                  	{% csrf_token %}
+                  		<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
+                  		<button name="action" value="delete" ><i class="fa fa-trash-o"></i></button>
+                    </form>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div><!-- /.table-responsive -->
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <a href="/adddauerauftrag/" class="btn btn-sm btn-info btn-flat pull-left">Neuer Dauerauftrag</a>
+        </div><!-- /.box-footer -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Tabelle letzte Buchungen -->
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Vergangene  Daueraufträge</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+         <div class="table-responsive">
+            <table class="table no-margin">
+              <thead>
+                <tr>
+                  <th>Nummer</th>
+                  <th>Startdatum</th>
+                  <th>Endedatum</th>
+                  <th>Rhythmus</th>
+                  <th>Name</th>
+                  <th>Kategorie</th>
+                  <th>Wert</th>
+                  <th>Aktion</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for dauerauftrag in vergangene_dauerauftraege %}
+                <tr>
+                  <td>{{dauerauftrag.index}}</td>
+                  <td>{{dauerauftrag.Startdatum}}</td>
+                  <td>{{dauerauftrag.Endedatum}}</td>
+                  <td>{{dauerauftrag.Rhythmus}}</td>
+                  <td>{{dauerauftrag.Name}}</td>
+                  <td>{{dauerauftrag.Kategorie}}</td>
+                  <td><span class="label label-success">{{dauerauftrag.Wert}}</span></td>
+                  <td>
+                  <form role="form" action="/adddauerauftrag/" method="post">
+                  	{% csrf_token %}
+                  		<input type="hidden" name="edit_index" value="{{dauerauftrag.index}}">
+                  		<button type="submit" name="action" value="edit" ><i class="fa fa-pencil"></i></button>
+                   </form>
+                   </td>
+                  
+                  <td>
+                  	<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
+                  	{% csrf_token %}
+                  		<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
+                  		<button name="action" value="delete" ><i class="fa fa-trash-o"></i></button>
+                    </form>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div><!-- /.table-responsive -->
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <a href="/adddauerauftrag/" class="btn btn-sm btn-info btn-flat pull-left">Neuer Dauerauftrag</a>
+        </div><!-- /.box-footer -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+
+
+</section><!-- /.content -->

@@ -1,0 +1,53 @@
+	{% load static %}
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-6">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">Einstellungen</h3>
+				</div>
+				<!-- /.box-header -->
+				<!-- form start -->
+				<form role="form" action="/configuration/" method="post">{% csrf_token %}
+					<div class="box-body">
+						<div class="form-group">
+							<label>Installierte Datenbanken (nur mit einem Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
+						</div>
+						</div>
+					<div class="box-footer">
+						<button type="submit" name="action" value="edit_databases" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!--/.col (right) -->
+		
+		<div class="row">
+		<!-- left column -->
+		<div class="col-md-6">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">Einstellungen</h3>
+				</div>
+				<!-- /.box-header -->
+				<!-- form start -->
+				<form role="form" action="/configuration/" method="post">{% csrf_token %}
+					<div class="box-body">
+						<div class="form-group">
+							<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
+						</div>
+						</div>
+					<div class="box-footer">
+						<button type="submit" name="action" value="add_kategorie" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!--/.col (right) -->
+ </section>

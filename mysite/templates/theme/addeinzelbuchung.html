@@ -1,0 +1,122 @@
+	{% load static %}
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-6">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">{{element_titel}}</h3>
+				</div>
+				<!-- /.box-header -->
+				<!-- form start -->
+				<form role="form" action="/addeinzelbuchung/" method="post">{% csrf_token %}
+				<input type="hidden" name="ID" value="{{ID}}">
+					<div class="box-body">
+						<div class="form-group">
+							<label>Datum:</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</div>
+								<input value="{{default_item.Datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask />
+							</div>
+						</div>
+						<div class="form-group">
+							<label>Name der Ausgabe</label> <input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
+						</div>
+						<div class="form-group">
+							<label>Wert der Ausgabe</label> <input value="{{default_item.Wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
+						</div>
+						{% if bearbeitungsmodus %}
+							<input type="hidden" name="edit_index" value="{{default_item.index}}">
+						{% endif %}
+						<div class="form-group">
+							<label>Kategorie</label> <select value="{{default_item.Kategorie}}" class="form-control" id="kategorie_auswahl" name="kategorie">
+							 {% for kategorie in kategorien %}
+								<option>{{kategorie}}</option>
+							 {% endfor %}
+							</select>
+							
+							{% if bearbeitungsmodus %}
+								<script type="text/javascript">
+									function SelectElement()
+										{
+											var element = document.getElementById('kategorie_auswahl');
+											element.value = "{{default_item.Kategorie}}";
+										}
+										SelectElement()
+								</script>
+							{% endif %}
+							
+						</div>
+
+
+					</div>
+					<!-- /.box-body -->
+
+					<div class="box-footer">
+						<button type="submit" name="action" value="add" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!--/.col (right) -->
+	</div>
+	<!-- /.row -->
+	<div class="row">
+    <div class="col-md-12">
+      <!-- Tabelle letzte Buchungen -->
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Letzte Erfassungen</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="table-responsive">
+            <table class="table no-margin">
+              <thead>
+                <tr>
+                  <th>Modus</th>
+                  <th>Nummer</th>
+                  <th>Datum</th>
+                  <th>Name</th>
+                  <th>Kategorie</th>
+                  <th>Wert</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ausgabe in letzte_erfassung %}
+                <tr>
+                  <td>{{ausgabe.mode}}</td>
+                  <td>{{ausgabe.index}}</td>
+                  <td>{{ausgabe.datum}}</td>
+                  <td>{{ausgabe.name}}</td>
+                  <td>{{ausgabe.kategorie}}</td>
+                  <td><span class="label label-success">{{ausgabe.wert}}</span></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div><!-- /.table-responsive -->
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+           <a href="/uebersicht/" class="btn btn-sm btn-default btn-flat pull-right">Alle Buchungen ansehen</a>
+        </div><!-- /.box-footer -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</section>
+<!-- /.content -->
+<script type="text/javascript">
+      $(function () {
+    	  //Datemask dd/mm/yyyy
+          $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+          //Money Euro
+          $("[data-mask]").inputmask();
+      });
+    </script>
