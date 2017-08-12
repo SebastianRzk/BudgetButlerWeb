@@ -19,9 +19,9 @@ class TestUebersicht(unittest.TestCase):
         viewcore.viewcore.TEST = True
 
     def add_test_data(self):
-        test_database = viewcore.viewcore.database_instance()
-        test_database.add_einzelbuchung(datum("12/12/2012"), "Test einnahme kategorie", "test einnahme name", 100)
-        test_database.add_einzelbuchung(datum("13/12/2012"), "Test ausgabe kategorie", "test azsgabe name", -100)
+        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum("12/12/2012"), "Test einnahme kategorie", "test einnahme name", 100)
+        einzelbuchungen.add(datum("13/12/2012"), "Test ausgabe kategorie", "test azsgabe name", -100)
 
 
     def test_init_withEmptyDatabase(self):

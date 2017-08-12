@@ -29,7 +29,8 @@ def handle_request(request):
     '''
     Berechnung der Ausgaben für das Kreisdiagramm
     '''
-    tabelle = viewcore.database_instance().get_monatsausgaben_nach_kategorie(month, year)
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    tabelle = einzelbuchungen.get_monatsausgaben_nach_kategorie(month, year)
     ausgaben_liste = []
     ausgaben_labels = []
     ausgaben_data = []
@@ -37,8 +38,8 @@ def handle_request(request):
     for kategorie, row in tabelle.iterrows():
         ausgaben_labels.append(kategorie)
         ausgaben_data.append("%.2f" % abs(row.Wert))
-        ausgaben_colors.append("#" + viewcore.database_instance().get_farbe_fuer(kategorie))
-        ausgaben_liste.append((kategorie, "%.2f" % row.Wert, viewcore.database_instance().get_farbe_fuer(kategorie)))
+        ausgaben_colors.append("#" + einzelbuchungen.get_farbe_fuer(kategorie))
+        ausgaben_liste.append((kategorie, "%.2f" % row.Wert, einzelbuchungen.get_farbe_fuer(kategorie)))
     context['ausgaben'] = ausgaben_liste
     context['ausgaben_labels'] = ausgaben_labels
     context['ausgaben_data'] = ausgaben_data
@@ -47,7 +48,7 @@ def handle_request(request):
     '''
     Berechnung der Einnahmen für das Kreisdiagramm
     '''
-    tabelle_einnahmen = viewcore.database_instance().get_monatseinnahmen_nach_kategorie(month, year)
+    tabelle_einnahmen = einzelbuchungen.get_monatseinnahmen_nach_kategorie(month, year)
     einnahmen_liste = []
     einnahmen_labels = []
     einnahmen_data = []
@@ -55,8 +56,8 @@ def handle_request(request):
     for kategorie, row in tabelle_einnahmen.iterrows():
         einnahmen_labels.append(kategorie)
         einnahmen_data.append("%.2f" % abs(row.Wert))
-        einnahmen_colors.append("#" + viewcore.database_instance().get_farbe_fuer(kategorie))
-        einnahmen_liste.append((kategorie, "%.2f" % row.Wert, viewcore.database_instance().get_farbe_fuer(kategorie)))
+        einnahmen_colors.append("#" + einzelbuchungen.get_farbe_fuer(kategorie))
+        einnahmen_liste.append((kategorie, "%.2f" % row.Wert, einzelbuchungen.get_farbe_fuer(kategorie)))
     context['einnahmen'] = einnahmen_liste
     context['einnahmen_labels'] = einnahmen_labels
     context['einnahmen_data'] = einnahmen_data
@@ -64,11 +65,11 @@ def handle_request(request):
 
 
 
-    context['zusammenfassung'] = viewcore.database_instance().get_month_summary(month, year)
+    context['zusammenfassung'] = einzelbuchungen.get_month_summary(month, year)
 
     selected_date = str(year) + "_" + str(month).rjust(2, "0")
     context['selected_date'] = selected_date
-    context['monate'] = sorted(viewcore.database_instance().get_monate(), reverse=True)
+    context['monate'] = sorted(einzelbuchungen.get_monate(), reverse=True)
     context['gesamt'] = ausgaben_monat = tabelle.Wert.sum()
     context['gesamt_einnahmen'] = einnahmen_monat = tabelle_einnahmen.Wert.sum()
 
@@ -91,8 +92,8 @@ def handle_request(request):
         context['name_uebersicht_gruppe_2'] = 'Ungedeckte Ausgaben'
         context['wert_uebersicht_gruppe_2'] = (ausgaben_monat + einnahmen_monat) * -1
 
-    einnahmen_jahr = viewcore.database_instance().get_jahreseinnahmen(year)
-    ausgaben_jahr = viewcore.database_instance().get_jahresausgaben(year)
+    einnahmen_jahr = einzelbuchungen.get_jahreseinnahmen(year)
+    ausgaben_jahr = einzelbuchungen.get_jahresausgaben(year)
     if einnahmen_jahr >= abs(ausgaben_jahr):
         context['color_uebersicht_jahr_gruppe_1'] = "gray"
         context['name_uebersicht_jahr_gruppe_1'] = 'Gedeckte Einnahmen'

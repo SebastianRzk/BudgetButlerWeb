@@ -160,6 +160,7 @@ TEST = False
 
 def save_database():
     if viewcore.TEST:
+        print('testmode, no database saving')
         return
     if DATABASE_INSTANCE != None:
         DBManager.write(DATABASE_INSTANCE)
@@ -203,3 +204,15 @@ def get_icon_for_categorie(categorie):
             return item
     return "fa fa-archive"
 
+def design_colors():
+    colors = {}
+    colors[0] = ("f56954")
+    colors[1] = ("00a65a")
+    colors[2] = ("f39c12")
+    colors[3] = ("00c0ef")
+    colors[4] = ("3c8dbc")
+    colors[5] = ("d2d6de")
+
+    colors = {**colors, **colors}
+    colors = {**colors, **colors}
+    return colors

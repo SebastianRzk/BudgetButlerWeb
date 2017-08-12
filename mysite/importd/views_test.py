@@ -16,7 +16,7 @@ sys.path.insert(0, myPath + "/../")
 
 
 # Create your tests here.
-class Jahresuebersicht(unittest.TestCase):
+class Importd(unittest.TestCase):
 
     def setUp(self):
         print("create new database")
@@ -38,27 +38,30 @@ class Jahresuebersicht(unittest.TestCase):
     '''
     def test_addePassendeKategorie_shouldImportValue(self):
         self.setUp()
-        viewcore.viewcore.database_instance().add_einzelbuchung(datum('01/01/2017'), 'Essen', 'some name', -1.54)
+        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01/01/2017'), 'Essen', 'some name', -1.54)
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA}))
         assert page == 'import.html'
-        assert viewcore.viewcore.database_instance().get_jahresausgaben(2017) == -11.54
+        assert einzelbuchungen.get_jahresausgaben(2017) == -11.54
 
 
     def test_addeUnpassendenKategorie_shouldShowImportMappingPage(self):
         self.setUp()
-        viewcore.viewcore.database_instance().add_einzelbuchung(datum('01/01/2017'), 'unbekannt', 'some name', -1.54)
+        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01/01/2017'), 'unbekannt', 'some name', -1.54)
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA}))
         assert page == 'import_mapping.html'
 
     def test_addeUnpassendenKategorie_mitPassendemMapping_shouldImportValue(self):
         self.setUp()
-        viewcore.viewcore.database_instance().add_einzelbuchung(datum('01/01/2017'), 'Unpassend', 'some name', -1.54)
+        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01/01/2017'), 'Unpassend', 'some name', -1.54)
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
         assert page == 'import.html'
-        assert viewcore.viewcore.database_instance().get_jahresausgaben(2017) == -11.54
+        assert einzelbuchungen.get_jahresausgaben(2017) == -11.54
 
 
 

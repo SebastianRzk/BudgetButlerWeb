@@ -20,7 +20,8 @@ def berechne_monate(tabelle):
     print(tabelle)
     print('##########################')
 
-    alle_kategorien = set(viewcore.database_instance().get_alle_kategorien())
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    alle_kategorien = set(einzelbuchungen.get_alle_kategorien())
 
     monats_namen = []
     for _, wert_monats_gruppe in tabelle.iteritems():
@@ -69,7 +70,7 @@ def _umrechnen(tabelle):
     return result
 
 def _computePieChart(year, context):
-    tabelle = viewcore.database_instance().get_gesamtausgaben_jahr(year)
+    tabelle = viewcore.database_instance().einzelbuchungen.get_gesamtausgaben_jahr(year)
     ausgaben_labels = []
     ausgaben_data = []
     ausgaben_colors = []
@@ -77,7 +78,7 @@ def _computePieChart(year, context):
         print(row)
         ausgaben_labels.append(kategorie)
         ausgaben_data.append("%.2f" % abs(row.Wert))
-        ausgaben_colors.append("#" + viewcore.database_instance().get_farbe_fuer(kategorie))
+        ausgaben_colors.append("#" + viewcore.database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
 
     context['pie_ausgaben_labels'] = ausgaben_labels
     context['pie_ausgaben_data'] = ausgaben_data
@@ -85,14 +86,14 @@ def _computePieChart(year, context):
     return context
 
 def _computeAllesPieChart(context):
-    result = viewcore.database_instance().get_gesamtausgaben_nach_kategorie()
+    result = viewcore.database_instance().einzelbuchungen.get_gesamtausgaben_nach_kategorie()
     ausgaben_labels = []
     ausgaben_data = []
     ausgaben_colors = []
     for kategorie, wert in result.items():
         ausgaben_labels.append(kategorie)
         ausgaben_data.append("%.2f" % abs(wert))
-        ausgaben_colors.append("#" + viewcore.database_instance().get_farbe_fuer(kategorie))
+        ausgaben_colors.append("#" + viewcore.database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
 
     context['pie_alle_ausgaben_labels'] = ausgaben_labels
     context['pie_alle_ausgaben_data'] = ausgaben_data
@@ -100,7 +101,7 @@ def _computeAllesPieChart(context):
     return context
 
 def _computeAllesPieChartProzentual(context):
-    result = viewcore.database_instance().get_gesamtausgaben_nach_kategorie_prozentual()
+    result = viewcore.database_instance().einzelbuchungen.get_gesamtausgaben_nach_kategorie_prozentual()
     ausgaben_data = []
     for _, wert in result.items():
         ausgaben_data.append("%.2f" % abs(wert))
@@ -109,16 +110,14 @@ def _computeAllesPieChartProzentual(context):
     return context
 
 def _computePieChartProzentual(context, jahr):
-    result = viewcore.database_instance().get_jahresausgaben_nach_kategorie_prozentual(jahr)
+    result = viewcore.database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
     ausgaben_data = []
     for _, wert in result.items():
         ausgaben_data.append("%.2f" % abs(wert))
-
     context['pie_ausgaben_data_prozentual'] = ausgaben_data
     return context
 
 def index(request):
-
     context = handle_request(request)
     print(context)
     rendered_content = render_to_string('theme/uebersicht_jahr.html', context, request=request)
@@ -133,9 +132,9 @@ def handle_request(request):
 
     if 'date' in request.POST:
         year = int(float(request.POST['date']))
-
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
     kategorien_checked_map = {}
-    for kategorie in viewcore.database_instance().get_alle_kategorien():
+    for kategorie in einzelbuchungen.get_alle_kategorien():
         kategorien_checked_map[kategorie] = "checked"
 
     kategorien_checked_map['Summe'] = "checked"
@@ -149,13 +148,13 @@ def handle_request(request):
 
 
     jahresausgaben_jahr = []
-    for jahr, jahresblock in viewcore.database_instance().get_gesamtbuchungen_jahr(year).iteritems():
+    for jahr, jahresblock in einzelbuchungen.get_gesamtbuchungen_jahr(year).iteritems():
         print(jahresblock)
         for tblkategorie, tblwert in jahresblock.iteritems():
             jahresausgaben_jahr.append([tblkategorie, "%.2f" % tblwert, kategorien_checked_map[tblkategorie]])
         break
 
-    tabelle = viewcore.database_instance().get_jahresausgaben_nach_monat(year)
+    tabelle = einzelbuchungen.get_jahresausgaben_nach_monat(year)
     (monats_namen, kategorien_werte) = berechne_monate(tabelle)
 
 
@@ -165,7 +164,7 @@ def handle_request(request):
         print(kategorien_checked_map)
         print(kategorie)
         if kategorien_checked_map[kategorie] == 'checked':
-            gefilterte_kategorien_werte.append([kategorie, wert, viewcore.database_instance().get_farbe_fuer(kategorie)])
+            gefilterte_kategorien_werte.append([kategorie, wert, einzelbuchungen.get_farbe_fuer(kategorie)])
             print("append:", kategorie)
 
     gesamt = 0
@@ -184,7 +183,7 @@ def handle_request(request):
     context['monats_namen'] = monats_namen
     context['selected_date'] = year
     context['ausgaben'] = gefilterte_kategorien_werte
-    context['jahre'] = sorted(viewcore.database_instance().get_jahre(), reverse=True)
+    context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt'] = gesamt
     context['gesamt_enabled'] = kategorien_checked_map['Summe']
     return context

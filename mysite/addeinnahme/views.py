@@ -17,13 +17,14 @@ def handle_request(request):
     context = viewcore.generate_base_context("addeinnahme")
     context['element_titel'] = "Neue Einnahme"
     context['page_subtitle'] = "Daten der Einnahme:"
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
 
     if request.method == "POST" and request.POST['action'] == 'add':
         print(request.POST)
         if not viewcore.is_transaction_already_fired(request.POST['ID']):
             viewcore.fire(request.POST['ID'])
             if "edit_index" in request.POST:
-                viewcore.database_instance().edit_einzelbuchung(
+                einzelbuchungen.edit(
                     int(request.POST['edit_index']),
                     datum(request.POST['date']),
                     request.POST['kategorie'],
@@ -40,7 +41,7 @@ def handle_request(request):
                         })
 
             else:
-                viewcore.database_instance().add_einzelbuchung(
+                einzelbuchungen.add(
                     datum(request.POST['date']),
                     request.POST['kategorie'],
                     request.POST['name'],
@@ -59,7 +60,7 @@ def handle_request(request):
     if request.method == "POST" and request.POST['action'] == 'edit':
         print("Please edit:", request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
-        selected_item = viewcore.database_instance().get_single_einzelbuchung(db_index)
+        selected_item = einzelbuchungen.get(db_index)
         selected_item['Datum'] = str(selected_item['Datum'].day) + "/" + str(selected_item['Datum'].month) + "/" + str(selected_item['Datum'].year)
         selected_item['Wert'] = from_double_to_german(selected_item['Wert'])
         context['default_item'] = selected_item
@@ -70,7 +71,7 @@ def handle_request(request):
         context['page_subtitle'] = 'Daten bearbeiten:'
 
     context['ID'] = viewcore.get_next_transaction_id()
-    context['kategorien'] = sorted(viewcore.database_instance().get_kategorien_einnahmen())
+    context['kategorien'] = sorted(einzelbuchungen.get_kategorien_einnahmen())
     context['letzte_erfassung'] = viewcore.get_changed_einzelbuchungen()
     return context
 

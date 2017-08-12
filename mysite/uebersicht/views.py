@@ -10,14 +10,15 @@ def __init__(self):
 
 
 def handle_request(request):
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
     if request.method == "POST":
         if "action" in request.POST:
             if request.POST['action'] == "delete":
                 print("Delete: ", request.POST['delete_index'])
-                viewcore.database_instance().delete_einzelbuchung(int(request.POST['delete_index']))
+                einzelbuchungen.delete(int(request.POST['delete_index']))
                 viewcore.save_refresh()
 
-    db = viewcore.database_instance().get_sortierte_einzelbuchungen()
+    db = einzelbuchungen.get_all()
     ausgaben_monatlich = {}
     datum_alt = None
     ausgaben_liste = []

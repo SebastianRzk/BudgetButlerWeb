@@ -22,7 +22,7 @@ def _mapping_passt(post_parameter, unpassende_kategorien):
 def _import(import_data):
     print('importing data:')
     print(import_data)
-    viewcore.database_instance()._add_einnahmeausgabe(import_data)
+    viewcore.database_instance().einzelbuchungen.parse(import_data)
     viewcore.save_refresh()
 
 def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
@@ -36,8 +36,6 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
         mapping_kategorie = mapping_string[4:len(' importieren') * -1]
         print(unpassende_kategorie, 'wird in', mapping_kategorie, 'gemappt')
         import_data.Kategorie = import_data.Kategorie.map(lambda x: _kategorien_map(x, unpassende_kategorie, mapping_kategorie))
-
-
     return import_data
 
 
@@ -78,9 +76,7 @@ def handle_request(request):
         print(tables)
 
         imported_values = pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
-        imported_values['Datum'] = imported_values['Datum'].map(lambda x:  datetime.datetime.strptime(x, "%Y-%m-%d").date())
-
-        datenbank_kategorien = set(viewcore.database_instance().get_alle_kategorien())
+        datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
         nicht_passende_kategorien = []
         for imported_kategorie in set(imported_values.Kategorie):
             if imported_kategorie not in datenbank_kategorien:

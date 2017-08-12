@@ -59,7 +59,8 @@ def read_database(nutzername):
 
     database = DatabaseModule.Database(nutzername)
 
-    database.einzelbuchungen = pd.read_csv(StringIO(tables["einzelbuchungen"]))
+    raw_data = pd.read_csv(StringIO(tables["einzelbuchungen"]))
+    database.einzelbuchungen.parse(raw_data)
     print("READER: Einzelbuchungen gelesen:")
     print("READER:", database.einzelbuchungen)
 
@@ -97,13 +98,13 @@ def write(database):
     '''
     writes the DATABASE into a file
     '''
-    einzelbuchungen = database.einzelbuchungen.copy()[database.einzelbuchungen.Dynamisch == False]
-    einzelbuchungen_raw_data = einzelbuchungen.copy()[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
-    einzelbuchungen_raw_data = einzelbuchungen_raw_data.sort_values(by='Datum')
-
+    einzelbuchungen = database.einzelbuchungen.content.copy()[database.einzelbuchungen.content.Dynamisch == False]
+    einzelbuchungen_raw_data = einzelbuchungen[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
     content = einzelbuchungen_raw_data.to_csv(index=False)
+
     content += "\n Dauerauftraege \n"
     content += database.dauerauftraege.to_csv(index=False)
+
     content += "\n Gemeinsame Buchungen \n"
     database.gemeinsame_buchungen = database.gemeinsame_buchungen.sort_values(by='Datum')
     content += database.gemeinsame_buchungen.to_csv(index=False)
@@ -128,7 +129,7 @@ def export(database):
     writes the DATABASE into a file
     '''
     path = "./" + database.name + "_Export_" + str(datetime.today())
-    einzelbuchungen_raw_data = database.einzelbuchungen.copy()[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
+    einzelbuchungen_raw_data = database.einzelbuchungen.content.copy()[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
     einzelbuchungen_raw_data.to_csv(path, index=False)
     print("WRITER: Exportiere in : ", path)
     print("WRITER: Export Data:")

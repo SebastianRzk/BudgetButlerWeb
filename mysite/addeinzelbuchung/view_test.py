@@ -28,9 +28,6 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         viewcore.viewcore.DATABASES = ['test']
         viewcore.viewcore.TEST = True
 
-    def save_reload(self):
-        print("save reload deactivated")
-
     def test_init(self):
         self.setUp()
         views.handle_request(GetRequest())
@@ -47,11 +44,11 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen) == 1
-        assert self.testdb.einzelbuchungen.Wert[0] == -1 * float("2.00")
-        assert self.testdb.einzelbuchungen.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.Datum[0] == datum("1/1/2017")
+        assert len(self.testdb.einzelbuchungen.content) == 1
+        assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.00")
+        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1/1/2017")
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.setUp()
@@ -76,11 +73,11 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen) == 1
-        assert self.testdb.einzelbuchungen.Wert[0] == -1 * float("2.00")
-        assert self.testdb.einzelbuchungen.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.Datum[0] == datum("1/1/2017")
+        assert len(self.testdb.einzelbuchungen.content) == 1
+        assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.00")
+        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1/1/2017")
 
 
     def test_edit_ausgabe(self):
@@ -109,11 +106,11 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen) == 1
-        assert self.testdb.einzelbuchungen.Wert[0] == -1 * float("2.50")
-        assert self.testdb.einzelbuchungen.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.Datum[0] == datum("5/1/2017")
+        assert len(self.testdb.einzelbuchungen.content) == 1
+        assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.50")
+        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5/1/2017")
 
     def test_edit_ausgabe_should_only_fire_once(self):
         self.setUp()
@@ -151,11 +148,11 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen) == 1
-        assert self.testdb.einzelbuchungen.Wert[0] == -1 * float("2.50")
-        assert self.testdb.einzelbuchungen.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.Datum[0] == datum("5/1/2017")
+        assert len(self.testdb.einzelbuchungen.content) == 1
+        assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.50")
+        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5/1/2017")
 
     def test_edit_einzelbuchung_shouldLoadInputValues_and_invertWert(self):
         self.setUp()

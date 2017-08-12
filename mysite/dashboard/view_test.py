@@ -2,11 +2,19 @@
 '''
 '''
 
+import os
+import sys
 import unittest
+
+_PATH = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _PATH + '/../')
 
 from core.DatabaseModule import Database
 from dashboard import views
 import viewcore
+
+
+
 
 
 class TestUebersicht(unittest.TestCase):

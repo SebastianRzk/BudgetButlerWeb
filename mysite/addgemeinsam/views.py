@@ -22,6 +22,7 @@ def __init__(self):
 # Create your views here.
 
 def handle_request(request):
+    print(viewcore.database_instance())
     if request.method == "POST" and request.POST['action'] == 'add':
         print(request.POST)
         if not viewcore.is_transaction_already_fired(request.POST['ID']):
@@ -37,9 +38,14 @@ def handle_request(request):
             if "edit_index" in request.POST:
                 viewcore.database_instance().edit_gemeinsam(int(request.POST['edit_index']), einnameausgabe)
             else:
-                viewcore.database_instance().add_gemeinsame_einnahmeausgabe(einnameausgabe)
+                viewcore.database_instance().add_gemeinsame_einnahmeausgabe(ausgaben_datum=datum,
+                                                                            kategorie=request.POST['kategorie'],
+                                                                            ausgaben_name=request.POST['name'],
+                                                                            wert=value,
+                                                                            person=request.POST['person'])
             addgemeinsam.views.LAST_ELEMTENTS = addgemeinsam.views.LAST_ELEMTENTS.append(einnameausgabe)
             viewcore.save_database()
+    print(viewcore.database_instance().einzelbuchungen)
     context = viewcore.generate_base_context("addgemeinsam")
     if request.method == "POST" and request.POST['action'] == 'edit':
         print("Please edit:", request.POST['edit_index'])
@@ -61,7 +67,9 @@ def handle_request(request):
 
     context['ID'] = viewcore.get_next_transaction_id()
     context['personen'] = ['Sebastian', 'Maureen']
-    context['kategorien'] = sorted(viewcore.database_instance().get_kategorien_ausgaben())
+    print(viewcore.database_instance())
+    print(viewcore.database_instance().einzelbuchungen)
+    context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben())
     context['letzte_erfassung'] = last_elements
     return context
 
