@@ -43,7 +43,6 @@ class Database:
 
     def __init__(self, name):
         self.name = name
-        self.kategorien_liste = set()
         self.dauerauftraege = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
         self.gemeinsame_buchungen = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
         self.stechzeiten = pd.DataFrame({}, columns=self.persitent_stechzeiten_columns)
@@ -269,12 +268,6 @@ class Database:
         print("frame:", frame)
         for column_name, column in frame.copy().transpose().iterrows():
             self.gemeinsame_buchungen.ix[index:index, column_name] = max(column)
-
-
-
-    def add_kategorie(self, tmp_kategorie):
-        self.tmp_kategorie = tmp_kategorie
-
 
     def get_arbeitgeber(self):
         return ['DATEV']

@@ -355,4 +355,6 @@ class Einzelbuchungen:
             kategorien.add(self.tmp_kategorie)
         return kategorien
 
+    def add_kategorie(self, tmp_kategorie):
+        self.tmp_kategorie = tmp_kategorie
 

@@ -7,7 +7,7 @@ from viewcore import viewcore
 def __init__(self):
     self.count = 0
 
-def index(request):
+def handle_request(request):
     if request.method == "POST"and request.POST['action'] == 'edit_databases':
         dbs = request.POST['dbs']
 
@@ -29,7 +29,7 @@ def index(request):
         viewcore.database_instance()
 
     if request.method == "POST"and request.POST['action'] == 'add_kategorie':
-        viewcore.database_instance().add_kategorie(request.POST['neue_kategorie'])
+        viewcore.database_instance().einzelbuchungen.add_kategorie(request.POST['neue_kategorie'])
 
     context = viewcore.generate_base_context("configuration")
 
@@ -39,7 +39,10 @@ def index(request):
         if line.startswith("DATABASES:"):
             line = line.replace("DATABASES:", "")
             context['default_databases'] = line
+    return context
 
+def index(request):
+    context = handle_request(request)
 
     rendered_content = render_to_string('theme/konfiguration.html', context, request=request)
 
