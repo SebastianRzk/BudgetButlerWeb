@@ -76,7 +76,7 @@ def handle_request(request):
 
     if einnahmen_monat >= abs(ausgaben_monat):
         context['color_uebersicht_gruppe_1'] = "gray"
-        context['name_uebersicht_gruppe_1'] = 'Gedeckte Einnahmen'
+        context['name_uebersicht_gruppe_1'] = 'Gedeckte Ausgaben'
         context['wert_uebersicht_gruppe_1'] = abs(ausgaben_monat)
 
         context['color_uebersicht_gruppe_2'] = "lightgreen"
