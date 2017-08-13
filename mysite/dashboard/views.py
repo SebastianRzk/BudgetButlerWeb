@@ -55,8 +55,8 @@ def monatsliste():
     first = True
     result = "[ "
 
-    for monat in range(0, 7):
-        monat = 6 - monat
+    for monat in range(0, 6):
+        monat = 5 - monat
         if not first:
             result = result + ","
         else:

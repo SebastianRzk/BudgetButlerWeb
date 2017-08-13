@@ -93,8 +93,8 @@ class Einzelbuchungen:
         gruppiert = tabelle.Wert.groupby(tabelle.Datum).sum()
         gruppiert = gruppiert.sort_index()
 
-        return gruppiert.tolist()
-
+        # return gruppiert.tolist()
+        return ([0] * 6 + gruppiert.tolist())[-6:]
 
     def get_letzte_6_monate_einnahmen(self):
         tabelle = self.content.copy()[['Datum', 'Wert']]
@@ -111,7 +111,8 @@ class Einzelbuchungen:
         gruppiert = tabelle.Wert.groupby(tabelle.Datum).sum()
         gruppiert = gruppiert.sort_index()
 
-        return gruppiert.tolist()
+       # return gruppiert.tolist()
+        return ([0] * 6 + gruppiert.tolist())[-6:]
 
     def _nur_positiv(self, wert):
         if wert > 0:
