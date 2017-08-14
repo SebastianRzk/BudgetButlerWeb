@@ -272,14 +272,14 @@
               <tbody>
                 {% for ausgabe in ausgaben %}
                 <tr>
-                  <td><span class="label label-success">{{ausgabe.0}}</span></td>
-                  <td>{{ausgabe.1}}</td>
+                  <td style="vertical-align:middle"> <font size="5" color="{{ausgabe.2}}">&#x25cf;</font>{{ausgabe.0}}</td>
+                  <td style="vertical-align:middle">{{ausgabe.1}}</td>
                 </tr>
                 {% endfor %}
                 <tfooter>
                  <tr>
-                  <td><span class="label label-success">Summe</span></td>
-                  <td>{{gesamt}}</td>
+                  <td style="vertical-align:middle"><span class="label label-success">Summe</span></td>
+                  <td style="vertical-align:middle">{{gesamt}}</td>
                 </tr>
                 </tfooter>
               </tbody>

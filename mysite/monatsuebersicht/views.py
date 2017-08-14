@@ -112,9 +112,6 @@ def handle_request(request):
         context['name_uebersicht_jahr_gruppe_2'] = 'Ungedeckte Ausgaben'
         context['wert_uebersicht_jahr_gruppe_2'] = (ausgaben_jahr + einnahmen_jahr) * -1
 
-
-
-
     return context
 
 def index(request):
