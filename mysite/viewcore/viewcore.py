@@ -222,7 +222,4 @@ def design_colors():
     colors[13] = ("D81B60")
     colors[14] = ("222222")
     colors[15] = ("d2d6de")
-
-    colors = {**colors, **colors}
-    colors = {**colors, **colors}
     return colors
