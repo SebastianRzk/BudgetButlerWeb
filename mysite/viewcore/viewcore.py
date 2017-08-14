@@ -206,12 +206,22 @@ def get_icon_for_categorie(categorie):
 
 def design_colors():
     colors = {}
-    colors[0] = ("f56954")
-    colors[1] = ("00a65a")
-    colors[2] = ("f39c12")
+    colors[0] = ("3c8dbc")
+    colors[1] = ("f56954")
+    colors[2] = ("00a65a")
     colors[3] = ("00c0ef")
-    colors[4] = ("3c8dbc")
+    colors[4] = ("f39c12")
     colors[5] = ("d2d6de")
+    colors[6] = ("001F3F")
+    colors[7] = ("39CCCC")
+    colors[8] = ("3D9970")
+    colors[9] = ("01FF70")
+    colors[10] = ("FF851B")
+    colors[11] = ("F012BE")
+    colors[12] = ("8E24AA")
+    colors[13] = ("D81B60")
+    colors[14] = ("222222")
+    colors[15] = ("d2d6de")
 
     colors = {**colors, **colors}
     colors = {**colors, **colors}
