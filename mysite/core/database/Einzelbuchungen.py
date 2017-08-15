@@ -16,19 +16,19 @@ class Einzelbuchungen:
     content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
 
     def refresh(self):
-        self.content['Datum'] = self.content['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        self.content["Dynamisch"] = False
+        self.content['Datum'] = self.content['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
+        self.content['Dynamisch'] = False
         self.sort()
 
 
     def parse(self, raw_table):
-        raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        raw_table["Dynamisch"] = False
+        raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
+        raw_table['Dynamisch'] = False
         self.content = self.content.append(raw_table, ignore_index=True)
         self.sort()
 
     def sort(self):
-        print("DATABASE: Sortiere Einzelbuchungen")
+        print('DATABASE: Sortiere Einzelbuchungen')
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
@@ -144,8 +144,8 @@ class Einzelbuchungen:
         summe = monatsausgaben.Wert.sum()
 
         pro_tag = summe / max(monthrange(jahr, monat))
-        print("PRO TAG", pro_tag)
-        return "%.2f" % (pro_tag * -1)
+        print('PRO TAG', pro_tag)
+        return '%.2f' % (pro_tag * -1)
 
     def get_month_summary(self, monat, jahr):
         kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
@@ -157,36 +157,41 @@ class Einzelbuchungen:
         kopierte_tabelle = kopierte_tabelle.sort_values(by=['Datum', 'Kategorie'])
 
         zusammenfassung = []
-        kategorie_alt = ""
+        kategorie_alt = ''
         summe_alt = 0
-        name_alt = ""
-        datum_alt = ""
+        name_alt = ''
+        datum_alt = ''
         tag_liste = []
+        more_than_one = False
         for _, row in kopierte_tabelle.iterrows():
-            if(kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != "":
+            if(kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != '':  # next cat or day
                 if datum_alt != row.Datum :
-                    print("push:", [datum_alt, tag_liste])
+                    print('push:', [datum_alt, tag_liste])
                     zusammenfassung.append([datum_alt, tag_liste])
                     print(zusammenfassung)
                     tag_liste = []
-                tag_liste.append((kategorie_alt, name_alt, "%.2f" % summe_alt))
+                tag_liste.append((kategorie_alt, name_alt, '%.2f' % summe_alt))
                 datum_alt = row.Datum
                 summe_alt = row.Wert
                 kategorie_alt = row.Kategorie
-                name_alt = row.Name + "(" + str(row.Wert) + "€)"
-            elif kategorie_alt == "":
+                name_alt = row.Name
+                more_than_one = False
+            elif kategorie_alt == '':  # initial state
                 datum_alt = row.Datum
                 kategorie_alt = row.Kategorie
                 summe_alt = row.Wert
-                name_alt = row.Name + "(" + str(row.Wert) + "€)"
+                name_alt = row.Name
             else:
+                if not more_than_one:
+                    name_alt = name_alt + '(' + str(summe_alt) + '€)'
+                    more_than_one = True
+                name_alt = name_alt + ', ' + row.Name + '(' + str(row.Wert) + '€)'
                 summe_alt += row.Wert
-                name_alt = name_alt + ", " + row.Name + "(" + str(row.Wert) + "€)"
 
-        tag_liste.append([kategorie_alt, name_alt, "%.2f" % summe_alt])
-        print("push:", [datum_alt, tag_liste])
+        tag_liste.append([kategorie_alt, name_alt, '%.2f' % summe_alt])
+        print('push:', [datum_alt, tag_liste])
         zusammenfassung.append([datum_alt, tag_liste])
-        print("Zusammenfassung:")
+        print('Zusammenfassung:')
         print(zusammenfassung)
         return zusammenfassung
 
@@ -292,7 +297,7 @@ class Einzelbuchungen:
             color_index = color_index + 1
 
         if not input_kategorie in kategorie_farb_mapping:
-            return "00c0ef"
+            return '00c0ef'
         return kategorie_farb_mapping[input_kategorie]
 
     def append_row(self, row):
@@ -309,7 +314,7 @@ class Einzelbuchungen:
         '''
         Alle in der Datenbank eingetragenen Monate als set
         '''
-        monate = self.content.Datum.copy().map(lambda x: str(x.year) + "_" + str(x.month).rjust(2, '0'))
+        monate = self.content.Datum.copy().map(lambda x: str(x.year) + '_' + str(x.month).rjust(2, '0'))
         return set(monate)
 
     def get_jahre(self):
@@ -318,8 +323,8 @@ class Einzelbuchungen:
 
     def get_sortierter_monat_fuer(self, year, imonth, kopierte_tabelle, crit):
         kopierte_tabelle = kopierte_tabelle[crit]
-        kopierte_tabelle.Datum = kopierte_tabelle.Datum.map(lambda x:str(x.year) + "_" + str(x.month))
-        str_date = str(imonth) + "_" + str(year)
+        kopierte_tabelle.Datum = kopierte_tabelle.Datum.map(lambda x:str(x.year) + '_' + str(x.month))
+        str_date = str(imonth) + '_' + str(year)
         kopierte_tabelle = kopierte_tabelle[kopierte_tabelle.Datum == str_date]
         gemergte_tabelle = kopierte_tabelle.groupby(['Kategorie']).sum()
         gemergte_tabelle = gemergte_tabelle.sort_index()
