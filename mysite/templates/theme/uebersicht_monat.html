@@ -355,9 +355,10 @@
               <tbody>
                 {% for kategorie in tag.1 %}
                 <tr>
-                  <td><span class="label label-success">{{kategorie.0}}</span></td>
-                  <td>{{kategorie.1}}</td>
-                  <td>{{kategorie.2}}</td>
+                  <td style="vertical-align:middle"><font size="5" color="{{kategorie.farbe}}">&#x25cf;</font>{{kategorie.kategorie}}</td>
+                  <td style="vertical-align:middle">{{kategorie.kategorie}}</td>
+                  <td style="vertical-align:middle">{{kategorie.name}}</td>
+                  <td style="vertical-align:middle">{{kategorie.summe}}</td>
                 </tr>
                 {% endfor %}
               </tbody>

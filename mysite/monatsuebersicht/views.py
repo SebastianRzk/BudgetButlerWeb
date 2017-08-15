@@ -64,8 +64,12 @@ def handle_request(request):
     context['einnahmen_colors'] = einnahmen_colors
 
 
-
-    context['zusammenfassung'] = einzelbuchungen.get_month_summary(month, year)
+    zusammenfassung = einzelbuchungen.get_month_summary(month, year)
+    for tag, kategorien_liste in zusammenfassung:
+        for einheit in kategorien_liste:
+            einheit['farbe'] = einzelbuchungen.get_farbe_fuer(einheit['kategorie'])
+    print(zusammenfassung)
+    context['zusammenfassung'] = zusammenfassung
     ausgaben_monat = tabelle.Wert.sum()
     selected_date = str(year) + "_" + str(month).rjust(2, "0")
     context['selected_date'] = selected_date
