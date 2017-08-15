@@ -66,11 +66,11 @@ def handle_request(request):
 
 
     context['zusammenfassung'] = einzelbuchungen.get_month_summary(month, year)
-
+    ausgaben_monat = tabelle.Wert.sum()
     selected_date = str(year) + "_" + str(month).rjust(2, "0")
     context['selected_date'] = selected_date
     context['monate'] = sorted(einzelbuchungen.get_monate(), reverse=True)
-    context['gesamt'] = ausgaben_monat = tabelle.Wert.sum()
+    context['gesamt'] = "%.2f" % ausgaben_monat
     context['gesamt_einnahmen'] = einnahmen_monat = tabelle_einnahmen.Wert.sum()
 
 
