@@ -310,14 +310,14 @@
               <tbody>
                 {% for einnahme in einnahmen %}
                 <tr>
-                  <td><font size="5" color="{{einnahme.2}}">&#x25cf;</font>{{einnahme.0}}</td>
-                  <td>{{einnahme.1}}</td>
+                  <td style="vertical-align:middle"><font size="5" color="{{einnahme.2}}">&#x25cf;</font>{{einnahme.0}}</td>
+                  <td style="vertical-align:middle">{{einnahme.1}}</td>
                 </tr>
                 {% endfor %}
                 <tfooter>
                  <tr>
-                  <td>Summe</td>
-                  <td>{{gesamt_einnahmen}}</td>
+                  <td style="vertical-align:middle">Summe</td>
+                  <td style="vertical-align:middle">{{gesamt_einnahmen}}</td>
                 </tr>
                 </tfooter>
               </tbody>
