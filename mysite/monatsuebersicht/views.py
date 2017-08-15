@@ -71,7 +71,8 @@ def handle_request(request):
     context['selected_date'] = selected_date
     context['monate'] = sorted(einzelbuchungen.get_monate(), reverse=True)
     context['gesamt'] = "%.2f" % ausgaben_monat
-    context['gesamt_einnahmen'] = einnahmen_monat = tabelle_einnahmen.Wert.sum()
+    einnahmen_monat = tabelle_einnahmen.Wert.sum()
+    context['gesamt_einnahmen'] = "%.2f" % einnahmen_monat
 
 
     if einnahmen_monat >= abs(ausgaben_monat):
