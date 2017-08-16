@@ -108,14 +108,14 @@
               <tbody>
                 {% for ausgabe in zusammenfassung %}
                 <tr>
-                  <td><span class="label label-success">{{ausgabe.0}}</span></td>
+                  <td>{{ausgabe.0}}</td>
                   <td align="right">{{ausgabe.1}}</td>
                   <td> <input type="checkbox" name="{{ausgabe.0}}" {{ausgabe.2}}> </td>
                 </tr>
                 {% endfor %}
                 <tfooter>
                  <tr>
-                  <td><span class="label label-success">Summe</span></td>
+                  <td>Summe</td>
                   <td>{{gesamt}}</td>
                   <td> <input type="checkbox" name="Summe" {{gesamt_enabled}}> </td>
                 </tr>
