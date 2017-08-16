@@ -41,10 +41,10 @@ class TestUebersicht(unittest.TestCase):
         print("#################################################")
         print(result['alles']['2012.12'][0])
         (_, _, _, _, wert, _, link) = result['alles']['2012.12'][0]
-        assert wert > 0
+        assert float(wert) > 0
         assert link == "addeinnahme"
         (_, _, _, _, wert, _, link) = result['alles']['2012.12'][1]
-        assert wert < 0
+        assert float(wert) < 0
         assert link == "addeinzelbuchung"
 
 
