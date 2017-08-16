@@ -27,7 +27,15 @@ def handle_request(request):
                 viewcore.save_refresh()
 
     context = viewcore.generate_base_context('dauerauftraguebersicht')
-    context['aktuelle_dauerauftraege'] = viewcore.database_instance().aktuelle_dauerauftraege()
-    context['vergangene_dauerauftraege'] = viewcore.database_instance().past_dauerauftraege()
-    context['zukuenftige_dauerauftraege'] = viewcore.database_instance().future_dauerauftraege()
+    aktuelle_dauerauftraege = viewcore.database_instance().aktuelle_dauerauftraege()
+    context['aktuelle_dauerauftraege'] = _format_dauerauftrag_floatpoint(aktuelle_dauerauftraege)
+    vergangene_dauerauftraege = viewcore.database_instance().past_dauerauftraege()
+    context['vergangene_dauerauftraege'] = _format_dauerauftrag_floatpoint(vergangene_dauerauftraege)
+    zukuenftige_dauerauftraege = viewcore.database_instance().future_dauerauftraege()
+    context['zukuenftige_dauerauftraege'] = _format_dauerauftrag_floatpoint(zukuenftige_dauerauftraege)
     return context
+
+def _format_dauerauftrag_floatpoint(dauerauftraege):
+    for dauerauftrag in dauerauftraege:
+        dauerauftrag['Wert'] = '%.2f' % dauerauftrag['Wert']
+    return dauerauftraege
