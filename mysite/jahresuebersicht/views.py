@@ -151,7 +151,7 @@ def handle_request(request):
     for jahr, jahresblock in einzelbuchungen.get_gesamtbuchungen_jahr(year).iteritems():
         print(jahresblock)
         for tblkategorie, tblwert in jahresblock.iteritems():
-            jahresausgaben_jahr.append([tblkategorie, '%.2f' % tblwert, kategorien_checked_map[tblkategorie]])
+            jahresausgaben_jahr.append([tblkategorie, '%.2f' % tblwert, kategorien_checked_map[tblkategorie], einzelbuchungen.get_farbe_fuer(tblkategorie)])
         break
 
     tabelle = einzelbuchungen.get_jahresausgaben_nach_monat(year)
@@ -185,5 +185,6 @@ def handle_request(request):
     context['ausgaben'] = gefilterte_kategorien_werte
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt'] = '%.2f' % gesamt
+    context['gesamt_color'] = einzelbuchungen.get_farbe_fuer('Summe')
     context['gesamt_enabled'] = kategorien_checked_map['Summe']
     return context
