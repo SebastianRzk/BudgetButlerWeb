@@ -13,7 +13,6 @@ def _add_month(datum):
         datum = date(day=datum.day, month=1, year=datum.year + 1)
     return datum
 
-
 class FrequencsFunctions:
     '''
     the frequenzfunktionen
