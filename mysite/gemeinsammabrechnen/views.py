@@ -1,15 +1,14 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
+from adddauerauftrag.views import handle_request
 from viewcore import viewcore
 
 
 def __init__(self):
     self.count = 0
 
-# Create your views here.
-def index(request):
-
+def handle_request(request):
     ausgabe_sebastian = viewcore.database_instance().get_gemeinsame_ausgabe_fuer('Sebastian')
     ausgabe_maureen = viewcore.database_instance().get_gemeinsame_ausgabe_fuer('Maureen')
     ausgabe_sebastian = ausgabe_sebastian.Wert.sum()
@@ -37,8 +36,10 @@ def index(request):
     context['ausgabe_sebastian'] = "%.2f" % abs(ausgabe_sebastian)
     context['ausgabe_gesamt'] = "%.2f" % abs(ausgabe_gesamt)
     context['ergebnis'] = ergebnis
+    return context
 
-    print("context", context)
+def index(request):
+    context = handle_request(request)
     rendered_content = render_to_string('theme/gemeinsamabrechnen.html', context)
 
     context['content'] = rendered_content

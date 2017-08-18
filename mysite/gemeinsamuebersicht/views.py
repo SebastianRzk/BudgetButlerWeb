@@ -12,11 +12,7 @@ from viewcore import viewcore
 def __init__(self):
     self.count = 0
 
-# Create your views here.
-def index(request):
-    '''
-    Show gemeinsame Ausgaben Übersicht
-    '''
+def handle_request(request):
     if request.method == "POST":
         if "action" in request.POST:
             if request.POST['action'] == "delete":
@@ -33,7 +29,11 @@ def index(request):
 
     context = viewcore.generate_base_context('gemeinsameuebersicht')
     context['ausgaben'] = ausgaben_liste
+    return context
 
+# Create your views here.
+def index(request):
+    context = handle_request(request)
     rendered_content = render_to_string('theme/gemeinsameuebersicht.html', context, request=request)
 
     context['content'] = rendered_content
