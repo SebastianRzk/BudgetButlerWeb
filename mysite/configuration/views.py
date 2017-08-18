@@ -32,15 +32,6 @@ def handle_request(request):
         viewcore.database_instance().einzelbuchungen.add_kategorie(request.POST['neue_kategorie'])
 
     context = viewcore.generate_base_context("configuration")
-
-    file = open("../config", "r")
-    for line in file:
-        line = line.strip()
-        if line.startswith("DATABASES:"):
-            line = line.replace("DATABASES:", "")
-            context['default_databases'] = line
-    return context
-
 def index(request):
     context = handle_request(request)
 

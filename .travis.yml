@@ -4,7 +4,7 @@ python:
 install: 
   - pip install -r requirements.txt
   - pip install coveralls
-script: cd mysite && pytest && py.test --cov=mysite
+script: py.test --cov=mysite && cd mysite && pytest
 
 after_success:
   - coveralls
