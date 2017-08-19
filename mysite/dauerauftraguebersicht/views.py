@@ -19,19 +19,20 @@ def index(request):
     return render(request, 'theme/index.html', context)
 
 def handle_request(request):
+    dauerauftraege = viewcore.database_instance().dauerauftraege
     if request.method == "POST":
         if "action" in request.POST:
             if request.POST['action'] == "delete":
                 print("Delete: ", request.POST['delete_index'])
-                viewcore.database_instance().delete_dauerauftrag(int(request.POST['delete_index']))
+                dauerauftraege.delete(int(request.POST['delete_index']))
                 viewcore.save_refresh()
 
     context = viewcore.generate_base_context('dauerauftraguebersicht')
-    aktuelle_dauerauftraege = viewcore.database_instance().aktuelle_dauerauftraege()
+    aktuelle_dauerauftraege = dauerauftraege.aktuelle()
     context['aktuelle_dauerauftraege'] = _format_dauerauftrag_floatpoint(aktuelle_dauerauftraege)
-    vergangene_dauerauftraege = viewcore.database_instance().past_dauerauftraege()
+    vergangene_dauerauftraege = dauerauftraege.past()
     context['vergangene_dauerauftraege'] = _format_dauerauftrag_floatpoint(vergangene_dauerauftraege)
-    zukuenftige_dauerauftraege = viewcore.database_instance().future_dauerauftraege()
+    zukuenftige_dauerauftraege = dauerauftraege.future()
     context['zukuenftige_dauerauftraege'] = _format_dauerauftrag_floatpoint(zukuenftige_dauerauftraege)
     return context
 

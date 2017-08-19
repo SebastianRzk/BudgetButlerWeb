@@ -21,7 +21,7 @@ def handle_request(request):
 
     context = {
         'anzahl_datensaetze':einzelbuchungen.anzahl(),
-        'anzahl_dauerauftraege':len(viewcore.database_instance().dauerauftraege),
+        'anzahl_dauerauftraege':len(viewcore.database_instance().dauerauftraege.content),
         'anzahl_stechzeiten':viewcore.database_instance().anzahl_stechzeiten(),
         'gesamt_wert': einzelbuchungen.get_all().Wert.abs().sum(),
         'rest_budget': 400,

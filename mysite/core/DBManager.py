@@ -61,12 +61,10 @@ def read_database(nutzername):
 
     raw_data = pd.read_csv(StringIO(tables["einzelbuchungen"]))
     database.einzelbuchungen.parse(raw_data)
-    print("READER: Einzelbuchungen gelesen:")
-    print("READER:", database.einzelbuchungen)
+    print("READER: Einzelbuchungen gelesen")
 
-    database.dauerauftraege = pd.read_csv(StringIO(tables["dauerauftraege"]))
-    print("READER: Daueraufträge gelesen:")
-    print("READER:", database.dauerauftraege)
+    database.dauerauftraege.parse(pd.read_csv(StringIO(tables["dauerauftraege"])))
+    print("READER: Daueraufträge gelesen")
 
     database.gemeinsame_buchungen = pd.read_csv(StringIO(tables["gemeinsamebuchungen"]))
     print("READER: Gemmeinsame Buchungen gelesen:")
@@ -103,7 +101,7 @@ def write(database):
     content = einzelbuchungen_raw_data.to_csv(index=False)
 
     content += "\n Dauerauftraege \n"
-    content += database.dauerauftraege.to_csv(index=False)
+    content += database.dauerauftraege.content.to_csv(index=False)
 
     content += "\n Gemeinsame Buchungen \n"
     database.gemeinsame_buchungen = database.gemeinsame_buchungen.sort_values(by='Datum')

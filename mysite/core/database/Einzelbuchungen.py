@@ -15,12 +15,6 @@ class Einzelbuchungen:
     tmp_kategorie = None
     content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
 
-    def refresh(self):
-        self.content['Datum'] = self.content['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
-        self.content['Dynamisch'] = False
-        self.sort()
-
-
     def parse(self, raw_table):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         raw_table['Dynamisch'] = False

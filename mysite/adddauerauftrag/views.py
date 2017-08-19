@@ -18,7 +18,7 @@ def handle_request(request):
                 value = value * -1
 
             if "edit_index" in request.POST:
-                viewcore.database_instance().edit_dauerauftrag(
+                viewcore.database_instance().dauerauftraege.edit(
                     int(request.POST['edit_index']),
                     datum(request.POST["startdatum"]),
                     datum(request.POST["endedatum"]),
@@ -37,7 +37,7 @@ def handle_request(request):
                     "wert":value
                     })
             else:
-                viewcore.database_instance().add_dauerauftrag(
+                viewcore.database_instance().dauerauftraege.add(
                     datum(request.POST["startdatum"]),
                     datum(request.POST["endedatum"]),
                     request.POST['kategorie'],
@@ -60,7 +60,7 @@ def handle_request(request):
 
     if request.method == "POST" and request.POST['action'] == 'edit':
         db_index = int(request.POST['edit_index'])
-        default_item = viewcore.database_instance().get_single_dauerauftrag(db_index)
+        default_item = viewcore.database_instance().dauerauftraege.get(db_index)
         default_item['Startdatum'] = datum_to_string(default_item['Startdatum'])
         default_item['Endedatum'] = datum_to_string(default_item['Endedatum'])
         default_item['Wert'] = str(default_item['Wert'] * -1).replace(".", ",")

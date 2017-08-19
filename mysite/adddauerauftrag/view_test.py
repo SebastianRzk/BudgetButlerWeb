@@ -47,13 +47,13 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.dauerauftraege) == 1
-        assert self.testdb.dauerauftraege.Wert[0] == -1 * float("2.00")
-        assert self.testdb.dauerauftraege.Name[0] == "testname"
-        assert self.testdb.dauerauftraege.Kategorie[0] == "Essen"
-        assert self.testdb.dauerauftraege.Startdatum[0] == datum("1/1/2017")
-        assert self.testdb.dauerauftraege.Endedatum[0] == datum("6/1/2017")
-        assert self.testdb.dauerauftraege.Rhythmus[0] == "monatlich"
+        assert len(self.testdb.dauerauftraege.content) == 1
+        assert self.testdb.dauerauftraege.content.Wert[0] == -1 * float("2.00")
+        assert self.testdb.dauerauftraege.content.Name[0] == "testname"
+        assert self.testdb.dauerauftraege.content.Kategorie[0] == "Essen"
+        assert self.testdb.dauerauftraege.content.Startdatum[0] == datum("1/1/2017")
+        assert self.testdb.dauerauftraege.content.Endedatum[0] == datum("6/1/2017")
+        assert self.testdb.dauerauftraege.content.Rhythmus[0] == "monatlich"
 
     def test_add_dauerauftrag_einnahme(self):
         self.setUp()
@@ -70,13 +70,13 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.dauerauftraege) == 1
-        assert self.testdb.dauerauftraege.Wert[0] == float("2.00")
-        assert self.testdb.dauerauftraege.Name[0] == "testname"
-        assert self.testdb.dauerauftraege.Kategorie[0] == "Essen"
-        assert self.testdb.dauerauftraege.Startdatum[0] == datum("1/1/2017")
-        assert self.testdb.dauerauftraege.Endedatum[0] == datum("6/1/2017")
-        assert self.testdb.dauerauftraege.Rhythmus[0] == "monatlich"
+        assert len(self.testdb.dauerauftraege.content) == 1
+        assert self.testdb.dauerauftraege.content.Wert[0] == float("2.00")
+        assert self.testdb.dauerauftraege.content.Name[0] == "testname"
+        assert self.testdb.dauerauftraege.content.Kategorie[0] == "Essen"
+        assert self.testdb.dauerauftraege.content.Startdatum[0] == datum("1/1/2017")
+        assert self.testdb.dauerauftraege.content.Endedatum[0] == datum("6/1/2017")
+        assert self.testdb.dauerauftraege.content.Rhythmus[0] == "monatlich"
 
     def test_edit_dauerauftrag(self):
         self.setUp()
@@ -110,12 +110,12 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.dauerauftraege) == 1
-        assert self.testdb.dauerauftraege.Wert[0] == -1 * float("2.50")
-        assert self.testdb.dauerauftraege.Name[0] == "testname"
-        assert self.testdb.dauerauftraege.Kategorie[0] == "Essen"
-        assert self.testdb.dauerauftraege.Startdatum[0] == datum("2/1/2017")
-        assert self.testdb.dauerauftraege.Endedatum[0] == datum("5/1/2017")
+        assert len(self.testdb.dauerauftraege.content) == 1
+        assert self.testdb.dauerauftraege.content.Wert[0] == -1 * float("2.50")
+        assert self.testdb.dauerauftraege.content.Name[0] == "testname"
+        assert self.testdb.dauerauftraege.content.Kategorie[0] == "Essen"
+        assert self.testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
+        assert self.testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
 
     def test_edit_dauerauftrag_ausgabe_to_einnahme(self):
         self.setUp()
@@ -149,12 +149,12 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.dauerauftraege) == 1
-        assert self.testdb.dauerauftraege.Wert[0] == float("2.50")
-        assert self.testdb.dauerauftraege.Name[0] == "testname"
-        assert self.testdb.dauerauftraege.Kategorie[0] == "Essen"
-        assert self.testdb.dauerauftraege.Startdatum[0] == datum("2/1/2017")
-        assert self.testdb.dauerauftraege.Endedatum[0] == datum("5/1/2017")
+        assert len(self.testdb.dauerauftraege.content) == 1
+        assert self.testdb.dauerauftraege.content.Wert[0] == float("2.50")
+        assert self.testdb.dauerauftraege.content.Name[0] == "testname"
+        assert self.testdb.dauerauftraege.content.Kategorie[0] == "Essen"
+        assert self.testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
+        assert self.testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
 
 
     def test_edit_dauerauftrag_should_only_fire_once(self):
@@ -201,12 +201,12 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.dauerauftraege) == 1
-        assert self.testdb.dauerauftraege.Wert[0] == -1 * float("2.50")
-        assert self.testdb.dauerauftraege.Name[0] == "testname"
-        assert self.testdb.dauerauftraege.Kategorie[0] == "Essen"
-        assert self.testdb.dauerauftraege.Startdatum[0] == datum("2/1/2017")
-        assert self.testdb.dauerauftraege.Endedatum[0] == datum("5/1/2017")
+        assert len(self.testdb.dauerauftraege.content) == 1
+        assert self.testdb.dauerauftraege.content.Wert[0] == -1 * float("2.50")
+        assert self.testdb.dauerauftraege.content.Name[0] == "testname"
+        assert self.testdb.dauerauftraege.content.Kategorie[0] == "Essen"
+        assert self.testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
+        assert self.testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
 
 
     def test_add_dauerauftrag_should_only_fire_once(self):
@@ -239,12 +239,12 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.dauerauftraege) == 1
-        assert self.testdb.dauerauftraege.Wert[0] == -1 * float("2.50")
-        assert self.testdb.dauerauftraege.Name[0] == "testname"
-        assert self.testdb.dauerauftraege.Kategorie[0] == "Essen"
-        assert self.testdb.dauerauftraege.Startdatum[0] == datum("2/1/2017")
-        assert self.testdb.dauerauftraege.Endedatum[0] == datum("5/1/2017")
+        assert len(self.testdb.dauerauftraege.content) == 1
+        assert self.testdb.dauerauftraege.content.Wert[0] == -1 * float("2.50")
+        assert self.testdb.dauerauftraege.content.Name[0] == "testname"
+        assert self.testdb.dauerauftraege.content.Kategorie[0] == "Essen"
+        assert self.testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
+        assert self.testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
 
 
 if __name__ == '__main__':

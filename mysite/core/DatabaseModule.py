@@ -8,6 +8,7 @@ from calendar import monthrange
 from datetime import datetime, date, timedelta
 
 from core.Frequency import FrequencsFunctions
+from core.database.Dauerauftraege import Dauerauftraege
 from core.database.Einzelbuchungen import Einzelbuchungen
 import pandas as pd
 import viewcore
@@ -43,7 +44,7 @@ class Database:
 
     def __init__(self, name):
         self.name = name
-        self.dauerauftraege = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
+        self.dauerauftraege = Dauerauftraege()
         self.gemeinsame_buchungen = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
         self.stechzeiten = pd.DataFrame({}, columns=self.persitent_stechzeiten_columns)
         self.soll_zeiten = pd.DataFrame({}, columns=self.persistent_sollzeiten_columns)
@@ -56,9 +57,6 @@ class Database:
         '''
         print('DATABASE: Erneuere Datenbestand')
         self.gemeinsame_buchungen['Datum'] = self.gemeinsame_buchungen['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-
-        self.dauerauftraege['Startdatum'] = self.dauerauftraege['Startdatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        self.dauerauftraege['Endedatum'] = self.dauerauftraege['Endedatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
 
         self.stechzeiten['Datum'] = self.stechzeiten['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
         self.stechzeiten['Einstechen'] = self.stechzeiten['Einstechen'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
@@ -79,11 +77,8 @@ class Database:
             print(f'berechnete Arbeitszeit: {arbeitszeit}')
         self.stechzeiten = self.stechzeiten.sort_values(by=['Datum'])
 
-        for _, row in self.dauerauftraege.iterrows():
-            dauerauftrag_buchungen = self.einnahmenausgaben_until_today(row['Startdatum'], row['Endedatum'], row['Rhythmus'], row['Name'], row['Wert'], row['Kategorie'])
-            for buchung in dauerauftrag_buchungen:
-                self.einzelbuchungen.append_row(buchung)
-                print("DATABASE: Neuer Dauerauftrag-Einzelposten hinzugefügt: ", buchung)
+        alle_dauerauftragsbuchungen = self.dauerauftraege.get_all_einzelbuchungen_until_today()
+        self.einzelbuchungen.append_row(alle_dauerauftragsbuchungen)
 
         for ind, row in self.gemeinsame_buchungen.iterrows():
             einzelbuchung = pd.DataFrame([[row.Datum, row.Kategorie, row.Name + " (noch nicht abrerechnet, von " + row.Person + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
@@ -92,28 +87,6 @@ class Database:
         self.einzelbuchungen.sort()
         print('DATABASE: Datenbestand erneuert')
 
-    def add_dauerauftrag(self, startdatum, endedatum, kategorie, name, rhythmus, wert):
-        '''
-        add new dauerauftrag to the database
-        '''
-        neuer_dauerauftrag = pd.DataFrame(
-            [[endedatum, kategorie, name, rhythmus, startdatum, wert]],
-            columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert']
-            )
-        self.dauerauftraege = self.dauerauftraege.append(neuer_dauerauftrag, ignore_index=True)
-        print('DATABASE: Dauerauftrag hinzugefügt')
-
-
-    def edit_dauerauftrag(self, index, startdatum, endedatum, kategorie, name, rhythmus, wert):
-        '''
-        edit dauerauftrag for given index
-        '''
-        self.dauerauftraege.loc[self.dauerauftraege.index[[index]], 'Startdatum'] = startdatum
-        self.dauerauftraege.loc[self.dauerauftraege.index[[index]], 'Endedatum'] = endedatum
-        self.dauerauftraege.loc[self.dauerauftraege.index[[index]], 'Wert'] = wert
-        self.dauerauftraege.loc[self.dauerauftraege.index[[index]], "Kategorie"] = kategorie
-        self.dauerauftraege.loc[self.dauerauftraege.index[[index]], 'Name'] = name
-        self.dauerauftraege.loc[self.dauerauftraege.index[[index]], 'Rhythmus'] = rhythmus
 
     def add_stechzeit(self, buchungs_datum, einstechen, ausstechen, arbeitgeber):
         '''
@@ -239,27 +212,6 @@ class Database:
         f.write(abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
 
-    def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
-        return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
-
-    def einnahmenausgaben_until_today(self, startdatum,
-                                      endedatum, frequenzfunktion, name, wert, kategorie):
-        '''
-        compute all einnahmenausgaben until today
-        '''
-        laufdatum = startdatum
-        frequency_function = FrequencsFunctions().get_function_for_name(frequenzfunktion)
-        print("  Init alle Buchungen für die Den DauerauftragModule. Startdatum:", laufdatum)
-        result = []
-        while laufdatum < date.today() and laufdatum < endedatum:
-            abbuchung = self._berechne_abbuchung(laufdatum, kategorie, name, wert)
-            result.append(abbuchung)
-            laufdatum = frequency_function(laufdatum)
-        return result
-
-    def delete_dauerauftrag(self, dauerauftrag_index):
-        self.dauerauftraege = self.dauerauftraege.drop(dauerauftrag_index)
-
     def delete_gemeinsame_buchung(self, einzelbuchung_index):
         self.gemeinsame_buchungen = self.gemeinsame_buchungen.drop(einzelbuchung_index)
 
@@ -373,30 +325,6 @@ class Database:
     def get_sollzeiten_liste(self):
         return self.frame_to_list_of_dicts(self.soll_zeiten)
 
-    def aktuelle_dauerauftraege(self):
-        '''
-        return aktuelle dauerauftraege
-        '''
-        dauerauftraege = self.dauerauftraege.copy()
-        dauerauftraege = dauerauftraege[dauerauftraege.Endedatum > date.today()]
-        dauerauftraege = dauerauftraege[dauerauftraege.Startdatum < date.today()]
-        return self.frame_to_list_of_dicts(dauerauftraege)
-
-    def past_dauerauftraege(self):
-        '''
-        return vergangene dauerauftraege
-        '''
-        dauerauftraege = self.dauerauftraege.copy()
-        dauerauftraege = dauerauftraege[dauerauftraege.Endedatum < date.today()]
-        return self.frame_to_list_of_dicts(dauerauftraege)
-
-    def future_dauerauftraege(self):
-        '''
-        return dauerauftraege aus der zukunft
-        '''
-        dauerauftraege = self.dauerauftraege.copy()
-        dauerauftraege = dauerauftraege[dauerauftraege.Startdatum > date.today()]
-        return self.frame_to_list_of_dicts(dauerauftraege)
 
     def _row_to_dict(self, columns, index, row_data):
         row = {}
@@ -412,10 +340,6 @@ class Database:
             result_list.append(row)
 
         return result_list
-
-    def get_single_dauerauftrag(self, db_index):
-        db_row = self.dauerauftraege.iloc[db_index]
-        return self._row_to_dict(self.dauerauftraege.columns, db_index, db_row)
 
     def add_sonder_zeit(self, buchungs_datum, dauer, typ, arbeitgeber):
         row = pd.DataFrame([[buchungs_datum, dauer, typ, arbeitgeber]], columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
