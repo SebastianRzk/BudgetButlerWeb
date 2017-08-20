@@ -7,11 +7,6 @@ from django.template.loader import render_to_string
 from viewcore import viewcore
 
 
-def __init__(self):
-    self.count = 0
-
-
-
 def get_monats_namen(monat):
     return datetime.date(1900, monat, 1).strftime('%B')
 
