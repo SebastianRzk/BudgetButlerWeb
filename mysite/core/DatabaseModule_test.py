@@ -241,5 +241,13 @@ class refresh(unittest.TestCase):
         component_under_test = db.Database('test_database')
         component_under_test.refresh()
 
+    def teste_refresh_shouldAddEinzelbuchungenVonDauerauftrag(self):
+        component_under_test = db.Database('test_database')
+        component_under_test.dauerauftraege.add(datum('10/01/2010'), datum('11/03/2010'), '', '', 'monatlich', 20)
+        component_under_test.refresh()
+
+        assert len(component_under_test.einzelbuchungen.content) == 3
+        assert component_under_test.einzelbuchungen.get_jahreseinnahmen(2010) == 60
+
 if __name__ == '__main__':
     unittest.main()

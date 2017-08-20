@@ -42,6 +42,7 @@ class Dauerauftraege:
             for buchung in dauerauftrag_buchungen:
                 all_rows = all_rows.append(buchung, ignore_index=True)
                 print("DATABASE: Neuer Dauerauftrag-Einzelposten hinzugefügt: ", buchung)
+        return all_rows
 
     def add(self, startdatum, endedatum, kategorie, name, rhythmus, wert):
         neuer_dauerauftrag = pd.DataFrame(
