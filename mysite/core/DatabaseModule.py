@@ -39,9 +39,6 @@ class Database:
     Database
     '''
 
-    def _initial_einzelbuchungen_table(self):
-        return pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
-
     def __init__(self, name):
         self.name = name
         self.dauerauftraege = Dauerauftraege()
