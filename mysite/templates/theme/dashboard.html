@@ -49,9 +49,7 @@
       <div class="box">
         <div class="box-header with-border">
           <h3 class="box-title">Rückblick der letzten Monate</h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-          </div>
+          <button class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i></button>
         </div><!-- /.box-header -->
         <div class="box-body">
           <div class="row">
@@ -142,35 +140,31 @@
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">Aktueller Monat</h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-          </div>
+          <button class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i></button>
         </div><!-- /.box-header -->
-        <div class="box-body">
-          <div class="table-responsive">
-            <table class="table no-margin">
-              <thead>
-                <tr>
-                  <th>Nummer</th>
-                  <th>Datum</th>
-                  <th>Name</th>
-                  <th>Kategorie</th>
-                  <th>Wert</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for abrechnung in abrechnungen %}
-                <tr>
-                  <td>{{abrechnung.0}}</td>
-                  <td>{{abrechnung.1}}</td>
-                  <td>{{abrechnung.2}}</td>
-                  <td>{{abrechnung.3}}</td>
-                  <td>{{abrechnung.4}}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div><!-- /.table-responsive -->
+        <div class="box-body table-responsive">
+          <table class="table no-margin">
+            <thead>
+              <tr>
+                <th>Nummer</th>
+                <th>Datum</th>
+                <th>Name</th>
+                <th>Kategorie</th>
+                <th>Wert</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for abrechnung in abrechnungen %}
+              <tr>
+                <td>{{abrechnung.0}}</td>
+                <td>{{abrechnung.1}}</td>
+                <td>{{abrechnung.2}}</td>
+                <td>{{abrechnung.3}}</td>
+                <td>{{abrechnung.4}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div><!-- /.box-body -->
         <div class="box-footer clearfix">
           <a href="/addeinzelbuchung/" class="btn btn-sm btn-info btn-flat pull-left">Neue Buchung</a>

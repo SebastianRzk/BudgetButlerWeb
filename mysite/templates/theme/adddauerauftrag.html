@@ -9,8 +9,6 @@
 				<div class="box-header">
 					<h3 class="box-title">Neue Ausgabe</h3>
 				</div>
-				<!-- /.box-header -->
-				<!-- form start -->
 				<form role="form" action="/adddauerauftrag/" method="post">{% csrf_token %}
 				{% if bearbeitungsmodus %}
 					<input type="hidden" name="edit_index" value="{{edit_index}}">
@@ -72,62 +70,54 @@
 							</script>
 						{% endif %}
 					</div>
-
-
-					</div>
+				</div>
 					<!-- /.box-body -->
 
-					<div class="box-footer">
-						<button type="submit" name="action" value="add" class="btn btn-primary">Submit</button>
-					</div>
-				</form>
-			</div>
-			<!-- /.box -->
+				<div class="box-footer">
+					<button type="submit" name="action" value="add" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
 		</div>
-		<!--/.col (right) -->
+		<!-- /.box -->
 	</div>
+</div>
 	<!-- /.row -->
-	<div class="row">
-    <div class="col-md-12">
-      <!-- Tabelle letzte Buchungen -->
+<div class="row">
+	<div class="col-md-12">
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">Letzte Erfassungen</h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-          </div>
+          <button class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i></button>
         </div><!-- /.box-header -->
-        <div class="box-body">
-          <div class="table-responsive">
-            <table class="table no-margin">
-              <thead>
-                <tr>
-                  <th>Modus</th>
-                  <th>Nummer</th>
-                  <th>Startdatum</th>
-                  <th>Endedatum</th>
-                  <th>Rhythmus</th>
-                  <th>Name</th>
-                  <th>Kategorie</th>
-                  <th>Wert</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for ausgabe in letzte_erfassung %}
-                <tr>
-                  <td>{{ausgabe.mode}}</td>
-                  <td>{{ausgabe.nummer}}</td>
-                  <td>{{ausgabe.startdatum}}</td>
-                  <td>{{ausgabe.endedatum}}</td>
-                  <td>{{ausgabe.rhythmus}}</td>
-                  <td>{{ausgabe.name}}</td>
-                  <td>{{ausgabe.kategorie}}</td>
-                  <td>{{ausgabe.wert}}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div><!-- /.table-responsive -->
+        <div class="box-body table-responsive">
+          <table class="table no-margin">
+            <thead>
+              <tr>
+                <th>Modus</th>
+                <th>Nummer</th>
+                <th>Startdatum</th>
+                <th>Endedatum</th>
+                <th>Rhythmus</th>
+                <th>Name</th>
+                <th>Kategorie</th>
+                <th>Wert</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ausgabe in letzte_erfassung %}
+              <tr>
+                <td>{{ausgabe.mode}}</td>
+                <td>{{ausgabe.nummer}}</td>
+                <td>{{ausgabe.startdatum}}</td>
+                <td>{{ausgabe.endedatum}}</td>
+                <td>{{ausgabe.rhythmus}}</td>
+                <td>{{ausgabe.name}}</td>
+                <td>{{ausgabe.kategorie}}</td>
+                <td>{{ausgabe.wert}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div><!-- /.box-body -->
         <div class="box-footer clearfix">
            <a href="/uebersicht/" class="btn btn-sm btn-default btn-flat pull-right">Alle Buchungen ansehen</a>
@@ -136,9 +126,6 @@
     </div><!-- /.col -->
   </div><!-- /.row -->
 </section>
-<!-- /.content -->
-   
-
     
 <script type="text/javascript">
       $(function () {
