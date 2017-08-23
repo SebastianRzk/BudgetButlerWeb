@@ -314,44 +314,6 @@ a:focus {
   padding-left: 4px;
   font-weight: 300;
 }
-.content-header > .breadcrumb {
-  float: right;
-  background: transparent;
-  margin-top: 0px;
-  margin-bottom: 0;
-  font-size: 12px;
-  padding: 7px 5px;
-  position: absolute;
-  top: 15px;
-  right: 10px;
-  border-radius: 2px;
-}
-.content-header > .breadcrumb > li > a {
-  color: #444;
-  text-decoration: none;
-}
-.content-header > .breadcrumb > li > a > .fa,
-.content-header > .breadcrumb > li > a > .glyphicon,
-.content-header > .breadcrumb > li > a > .ion {
-  margin-right: 5px;
-}
-.content-header > .breadcrumb > li + li:before {
-  content: '>\00a0';
-}
-@media (max-width: 991px) {
-  .content-header > .breadcrumb {
-    position: relative;
-    margin-top: 5px;
-    top: 0;
-    right: 0;
-    float: none;
-    background: #d2d6de;
-    padding-left: 10px;
-  }
-  .content-header > .breadcrumb li:before {
-    color: #97a0b3;
-  }
-}
 .navbar-toggle {
   color: #fff;
   border: 0;
