@@ -1296,8 +1296,10 @@ a:focus {
   height: 40px;
   width: 40px;
   text-align: center;
-  font-size: 40px;
+  vertical-align:middle;
+  font-size: 30px;
   line-height: 40px;
+  padding-top: 5px;
   background: rgba(0, 0, 0, 0.2);
 }
 .shortcut-link{
