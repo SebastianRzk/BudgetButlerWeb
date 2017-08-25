@@ -13,6 +13,7 @@ DATABASES = []
 CONTEXT = {}
 FIRED_IDS = set()
 ID_COUNT = 1
+EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
 
 def database_instance():
     '''
@@ -83,9 +84,6 @@ def switch_database_instance(database_name):
 
 def get_menu_list():
     main_menu = {}
-    menu = []
-    menu.append({'url':'/dashboard/', 'name':'Dashboard', 'icon':'fa fa-th'})
-    main_menu['Dashboard'] = menu
 
     menu = []
     menu.append({'url':'/uebersicht/', 'name':'Alle Einzelbuchungen', 'icon':'fa fa-file'})
@@ -95,7 +93,7 @@ def get_menu_list():
     menu.append({'url':'/dauerauftraguebersicht/', 'name': 'Alle Daueraufträge', 'icon':'fa fa-file'})
     menu.append({'url':'/monatsuebersicht/', 'name': 'Monatsübersicht', 'icon':'fa fa-file'})
     menu.append({'url':'/jahresuebersicht/', 'name': 'Jahresübersicht', 'icon':'fa fa-file'})
-    main_menu['Persönliche Finanzen'] = menu
+    main_menu[EINZELBUCHUNGEN_SUBMENU_NAME] = menu
 
 
     menu = []
@@ -130,12 +128,17 @@ def get_name_from_key(pagename):
         for menu_item in menu_items:
             if menu_item['url'] == "/" + pagename + "/":
                 return menu_item['name']
+    return 'Übersicht'
 
 def get_key_for_name(pagename):
+    if pagename == 'dashboard':
+        return EINZELBUCHUNGEN_SUBMENU_NAME
+
     for name, menu_items in get_menu_list().items():
         for menu_item in menu_items:
             if menu_item['url'] == "/" + pagename + "/":
                 return name
+    return EINZELBUCHUNGEN_SUBMENU_NAME
 
 def generate_base_context(pagename):
     '''
