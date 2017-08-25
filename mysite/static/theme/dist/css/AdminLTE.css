@@ -1277,53 +1277,39 @@ a:focus {
  * Component: Info Box
  * -------------------
  */
-.info-box {
+.shortcut-box {
   display: block;
-  min-height: 90px;
+  min-height: 40px;
   background: #fff;
   width: 100%;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   border-radius: 2px;
   margin-bottom: 15px;
 }
-.info-box small {
-  font-size: 14px;
-}
-.info-box .progress {
-  background: rgba(0, 0, 0, 0.2);
-  margin: 5px -10px 5px -10px;
-  height: 2px;
-}
-.info-box .progress,
-.info-box .progress .progress-bar {
-  border-radius: 0;
-}
-.info-box .progress .progress-bar {
-  background: #fff;
-}
-.info-box-icon {
+.shortcut-icon {
   border-top-left-radius: 2px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 2px;
   display: block;
   float: left;
-  height: 90px;
-  width: 90px;
+  height: 40px;
+  width: 40px;
   text-align: center;
-  font-size: 45px;
-  line-height: 90px;
+  font-size: 40px;
+  line-height: 40px;
   background: rgba(0, 0, 0, 0.2);
 }
-.info-box-content {
-  padding: 5px 10px;
-  margin-left: 90px;
+.shortcut-link{
+	min-height: 40px;
+	font-size: 25px;
+	vertical-align:middle;
+	margin-top: 3px;
+	margin-left:3px;
 }
-.info-box-number {
-  display: block;
-  font-weight: bold;
-  font-size: 18px;
-}
+.
+
+
 .progress-description,
 .info-box-text {
   display: block;

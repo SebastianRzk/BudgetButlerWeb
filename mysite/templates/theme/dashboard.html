@@ -3,43 +3,38 @@
   <!-- Info boxes -->
   <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-aqua"><i class="fa fa-database"></i></span>
-        <div class="info-box-content">
-          <span class="info-box-text">Einzelbuchungen</span>
-          <span class="info-box-number">{{anzahl_datensaetze}}</span>
-        </div><!-- /.info-box-content -->
+      <div class="shortcut-box">
+      	<a href="/addeinzelbuchung">
+        <span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
+        <span class="pull-left shortcut-link">Neue Ausgabe</span>
+        </a>
       </div><!-- /.info-box -->
     </div><!-- /.col -->
+    
     <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-aqua"><i class="fa fa-clock-o"></i></span>
-        <div class="info-box-content">
-          <span class="info-box-text">Daueraufträge</span>
-          <span class="info-box-number">{{anzahl_dauerauftraege}}</span>
-        </div><!-- /.info-box-content -->
+      <div class="shortcut-box">
+      	<a href="/addeinnahme">
+        <span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
+        <span class="pull-left shortcut-link">Neue Einnahme</span>
+        </a>
       </div><!-- /.info-box -->
     </div><!-- /.col -->
-
-    <!-- fix for small devices only -->
-    <div class="clearfix visible-sm-block"></div>
-
+    
     <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
-        <div class="info-box-content">
-          <span class="info-box-text">Stechzeiten</span>
-          <span class="info-box-number">{{anzahl_stechzeiten}}</span>
-        </div><!-- /.info-box-content -->
+      <div class="shortcut-box">
+      	<a href="/monatsuebersicht">
+        <span class="shortcut-icon bg-aqua"><i class="fa fa-calendar"></i></span>
+        <span class="pull-left shortcut-link">Monatsübersicht</span>
+        </a>
       </div><!-- /.info-box -->
     </div><!-- /.col -->
+    
     <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-aqua"><i class="fa fa-money"></i></span>
-        <div class="info-box-content">
-          <span class="info-box-text">Wert aller Buchungen</span>
-          <span class="info-box-number">{{gesamt_wert}}</span>
-        </div><!-- /.info-box-content -->
+      <div class="shortcut-box">
+      	<a href="/addstechzeit">
+        <span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
+        <span class="pull-left shortcut-link">Neue Stechzeit</span>
+        </a>
       </div><!-- /.info-box -->
     </div><!-- /.col -->
   </div><!-- /.row -->

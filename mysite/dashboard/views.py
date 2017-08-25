@@ -20,10 +20,6 @@ def handle_request(request):
         ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
 
     context = {
-        'anzahl_datensaetze':einzelbuchungen.anzahl(),
-        'anzahl_dauerauftraege':len(viewcore.database_instance().dauerauftraege.content),
-        'anzahl_stechzeiten':viewcore.database_instance().anzahl_stechzeiten(),
-        'gesamt_wert': einzelbuchungen.get_all().Wert.abs().sum(),
         'rest_budget': 400,
         'prognose_monatsende': 110,
         'zusammenfassung_monatsliste': monatsliste(),
