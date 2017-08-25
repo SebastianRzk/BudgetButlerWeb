@@ -1,134 +1,131 @@
-  <!-- Info boxes -->
-  <div class="row">
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="shortcut-box">
-      	<a href="/addeinzelbuchung">
-        <span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
-        <span class="pull-left shortcut-link">Neue Ausgabe</span>
-        </a>
-      </div><!-- /.info-box -->
-    </div><!-- /.col -->
-    
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="shortcut-box">
-      	<a href="/addeinnahme">
-        <span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
-        <span class="pull-left shortcut-link">Neue Einnahme</span>
-        </a>
-      </div><!-- /.info-box -->
-    </div><!-- /.col -->
-    
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="shortcut-box">
-      	<a href="/monatsuebersicht">
-        <span class="shortcut-icon bg-aqua"><i class="fa fa-calendar"></i></span>
-        <span class="pull-left shortcut-link">Monatsübersicht</span>
-        </a>
-      </div><!-- /.info-box -->
-    </div><!-- /.col -->
-    
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="shortcut-box">
-      	<a href="/addstechzeit">
-        <span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
-        <span class="pull-left shortcut-link">Neue Stechzeit</span>
-        </a>
-      </div><!-- /.info-box -->
-    </div><!-- /.col -->
-  </div><!-- /.row -->
+<!-- Info boxes -->
+<div class="row">
+	<div class="col-md-3 col-sm-6 col-xs-12">
+		<div class="shortcut-box">
+			<a href="/addeinzelbuchung">
+				<span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
+				<span class="pull-left shortcut-link">Neue Ausgabe</span>
+			 </a>
+		</div>
+	</div><!-- /.col -->
+	<div class="col-md-3 col-sm-6 col-xs-12">
+		<div class="shortcut-box">
+			<a href="/addeinnahme">
+				<span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
+				<span class="pull-left shortcut-link">Neue Einnahme</span>
+			</a>
+		</div>
+	</div>
+	<div class="col-md-3 col-sm-6 col-xs-12">
+		<div class="shortcut-box">
+			<a href="/monatsuebersicht">
+				<span class="shortcut-icon bg-aqua"><i class="fa fa-calendar"></i></span>
+				<span class="pull-left shortcut-link">Monatsübersicht</span>
+			</a>
+		</div>
+	</div>
+	<div class="col-md-3 col-sm-6 col-xs-12">
+		<div class="shortcut-box">
+			<a href="/addstechzeit">
+				<span class="shortcut-icon bg-aqua"><i class="fa fa-plus"></i></span>
+				<span class="pull-left shortcut-link">Neue Stechzeit</span>
+			</a>
+		</div>
+	</div>
+</div><!-- /.row -->
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="box">
-        <div class="box-header with-border">
-          <h3 class="box-title">Rückblick der letzten Monate</h3>
-          <button class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i></button>
-        </div><!-- /.box-header -->
-        <div class="box-body">
-          <div class="row">
-            <div class="col-md-12">
-              <p class="text-center">
-                <strong>Einnahmen Ausgaben der letzten 6 Monate:</strong>
-              </p>
-              <div class="chart-responsive">
-                <!-- Sales Chart Canvas -->
-                <canvas id="einnahmenAusgaben6monate" style="height:400px;"></canvas>
-                <script> 
-                var salesChartData = {
-                	    labels: {{zusammenfassung_monatsliste|safe	}},
-                	    datasets: [
-                	      {
-                	        label: "Einnahmen",
-                	        pointBorderColor: "rgb(210, 214, 222)",
-                	        borderColor: "rgb(210, 214, 222)",
-                	        pointStrokeColor: "#c1c7d1",
-                	        pointHighlightFill: "#fff",
-                	        pointHighlightStroke: "rgb(220,220,220)",
-                	        data: {{zusammenfassung_einnahmenliste}}
-                	      },
-                	      {
-                	        label: "Ausgaben",
-                	        pointBorderColor: "rgba(60,141,188,0.8)",
-                	        borderColor: "#3b8bba",
-                	        pointStrokeColor: "rgba(60,141,188,1)",
-                	        pointHighlightFill: "#fff",
-                	        pointHighlightStroke: "rgba(60,141,188,1)",
-                	        data: {{zusammenfassung_ausgabenliste}}
-                	      }
-                	    ]
-                	  };
-                var canvas = document.getElementById("einnahmenAusgaben6monate");
-                var myLineChart = new Chart(canvas, {
-                	type: 'line',
-                    data: salesChartData,
-                    options: {
-                    	responsive: true,
-                    	maintainAspectRatio: false,
-                }});
-                </script>
-              </div><!-- /.chart-responsive -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- ./box-body -->
-      </div><!-- /.box -->
-    </div><!-- /.col -->
-  </div><!-- /.row -->
-  <div class='row'>
-    <div class="col-md-12">
-      <!-- Tabelle letzte Buchungen -->
-      <div class="box box-info">
-        <div class="box-header with-border">
-          <h3 class="box-title">Aktueller Monat</h3>
-          <button class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i></button>
-        </div><!-- /.box-header -->
-        <div class="box-body table-responsive">
-          <table class="table no-margin">
-            <thead>
-              <tr>
-                <th>Nummer</th>
-                <th>Datum</th>
-                <th>Name</th>
-                <th>Kategorie</th>
-                <th>Wert</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for abrechnung in abrechnungen %}
-              <tr>
-                <td>{{abrechnung.0}}</td>
-                <td>{{abrechnung.1}}</td>
-                <td>{{abrechnung.2}}</td>
-                <td>{{abrechnung.3}}</td>
-                <td>{{abrechnung.4}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div><!-- /.box-body -->
-        <div class="box-footer clearfix">
-          <a href="/addeinzelbuchung/" class="btn btn-sm btn-info btn-flat pull-left">Neue Buchung</a>
-          <a href="/uebersicht/" class="btn btn-sm btn-default btn-flat pull-right">Alle Buchungen ansehen</a>
-        </div><!-- /.box-footer -->
-      </div><!-- /.box -->
-    </div><!-- /.col -->
-  </div><!-- /.row -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">Rückblick der letzten Monate</h3>
+        <button class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div><!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="text-center">
+              <strong>Einnahmen Ausgaben der letzten 6 Monate:</strong>
+            </p>
+            <div class="chart-responsive">
+              <!-- Sales Chart Canvas -->
+              <canvas id="einnahmenAusgaben6monate" style="height:400px;"></canvas>
+              <script> 
+              var salesChartData = {
+              	    labels: {{zusammenfassung_monatsliste|safe	}},
+              	    datasets: [
+              	      {
+              	        label: "Einnahmen",
+              	        pointBorderColor: "rgb(210, 214, 222)",
+              	        borderColor: "rgb(210, 214, 222)",
+              	        pointStrokeColor: "#c1c7d1",
+              	        pointHighlightFill: "#fff",
+              	        pointHighlightStroke: "rgb(220,220,220)",
+              	        data: {{zusammenfassung_einnahmenliste}}
+              	      },
+              	      {
+              	        label: "Ausgaben",
+              	        pointBorderColor: "rgba(60,141,188,0.8)",
+              	        borderColor: "#3b8bba",
+              	        pointStrokeColor: "rgba(60,141,188,1)",
+              	        pointHighlightFill: "#fff",
+              	        pointHighlightStroke: "rgba(60,141,188,1)",
+              	        data: {{zusammenfassung_ausgabenliste}}
+              	      }
+              	    ]
+              	  };
+              var canvas = document.getElementById("einnahmenAusgaben6monate");
+              var myLineChart = new Chart(canvas, {
+              	type: 'line',
+                  data: salesChartData,
+                  options: {
+                  	responsive: true,
+                  	maintainAspectRatio: false,
+              }});
+              </script>
+            </div><!-- /.chart-responsive -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- ./box-body -->
+    </div><!-- /.box -->
+  </div><!-- /.col -->
+</div><!-- /.row -->
+<div class='row'>
+  <div class="col-md-12">
+    <!-- Tabelle letzte Buchungen -->
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Aktueller Monat</h3>
+        <button class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div><!-- /.box-header -->
+      <div class="box-body table-responsive">
+        <table class="table no-margin">
+          <thead>
+            <tr>
+              <th>Nummer</th>
+              <th>Datum</th>
+              <th>Name</th>
+              <th>Kategorie</th>
+              <th>Wert</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for abrechnung in abrechnungen %}
+            <tr>
+              <td>{{abrechnung.0}}</td>
+              <td>{{abrechnung.1}}</td>
+              <td>{{abrechnung.2}}</td>
+              <td>{{abrechnung.3}}</td>
+              <td>{{abrechnung.4}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div><!-- /.box-body -->
+      <div class="box-footer clearfix">
+        <a href="/addeinzelbuchung/" class="btn btn-sm btn-info btn-flat pull-left">Neue Buchung</a>
+        <a href="/uebersicht/" class="btn btn-sm btn-default btn-flat pull-right">Alle Buchungen ansehen</a>
+      </div><!-- /.box-footer -->
+    </div><!-- /.box -->
+  </div><!-- /.col -->
+</div><!-- /.row -->
