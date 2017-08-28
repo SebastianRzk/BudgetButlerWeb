@@ -212,6 +212,10 @@ class Database:
     def delete_gemeinsame_buchung(self, einzelbuchung_index):
         self.gemeinsame_buchungen = self.gemeinsame_buchungen.drop(einzelbuchung_index)
 
+    def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
+        return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
+
+
     def edit_gemeinsam(self, index, frame):
         print("index", index)
         print("frame:", frame)

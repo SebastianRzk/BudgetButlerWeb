@@ -48,14 +48,17 @@ def index(request):
 
 
 def abrechnen(request):
+    context = handle_abrechnen_request(request)
+    rendered_content = render_to_string("theme/present_abrechnung.html", context, request)
+    context['content'] = rendered_content
+    return render(request, 'theme/index.html', context)
+
+
+def handle_abrechnen_request(request):
     print("Abrechnen")
     context = viewcore.generate_base_context('gemeinsamabrechnen')
     abrechnungs_text = viewcore.database_instance().abrechnen()
     context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
-    rendered_content = render_to_string("theme/present_abrechnung.html", context, request)
-
-
-    context['content'] = rendered_content
-
     viewcore.save_refresh()
-    return render(request, 'theme/index.html', context)
+
+    return context
