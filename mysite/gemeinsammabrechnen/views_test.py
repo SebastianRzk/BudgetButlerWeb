@@ -23,6 +23,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
         print('create new database')
         self.testdb = Database('test')
         viewcore.viewcore.DATABASE_INSTANCE = self.testdb
+        viewcore.viewcore.DATABASE_INSTANCE.TEST = True
         viewcore.viewcore.DATABASES = ['test']
         viewcore.viewcore.TEST = True
 

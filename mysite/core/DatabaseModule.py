@@ -35,6 +35,7 @@ class StringWriter():
 class Database:
     persitent_stechzeiten_columns = ['Datum', 'Einstechen', 'Ausstechen', 'Arbeitgeber']
     persistent_sollzeiten_columns = ['Startdatum', 'Endedatum', 'Dauer', 'Arbeitgeber']
+    TEST = False
     '''
     Database
     '''
@@ -205,8 +206,9 @@ class Database:
         self.einzelbuchungen.append_row(ausgaben)
         self.gemeinsame_buchungen = self.gemeinsame_buchungen[self.gemeinsame_buchungen.Wert == 0]
         viewcore.viewcore.save_refresh()
-        f = open("../Abrechnung_" + str(datetime.now()), "w")
-        f.write(abrechnunsdatei.to_string())
+        if not self.TEST:
+            f = open("../Abrechnung_" + str(datetime.now()), "w")
+            f.write(abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
 
     def delete_gemeinsame_buchung(self, einzelbuchung_index):
