@@ -86,25 +86,25 @@ def get_menu_list():
     main_menu = {}
 
     menu = []
-    menu.append({'url':'/uebersicht/', 'name':'Alle Einzelbuchungen', 'icon':'fa fa-file'})
+    menu.append({'url':'/uebersicht/', 'name':'Alle Einzelbuchungen', 'icon':'fa fa-list'})
+    menu.append({'url':'/dauerauftraguebersicht/', 'name': 'Alle Daueraufträge', 'icon':'fa fa-list'})
     menu.append({'url':'/addeinzelbuchung/', 'name':'Neue Ausgabe', 'icon':'fa fa-plus'})
     menu.append({'url':'/addeinnahme/', 'name':'Neue Einnahme', 'icon':'fa fa-plus'})
     menu.append({'url':'/adddauerauftrag/', 'name':'Neuer Dauerauftrag', 'icon':'fa fa-plus'})
-    menu.append({'url':'/dauerauftraguebersicht/', 'name': 'Alle Daueraufträge', 'icon':'fa fa-file'})
-    menu.append({'url':'/monatsuebersicht/', 'name': 'Monatsübersicht', 'icon':'fa fa-file'})
-    menu.append({'url':'/jahresuebersicht/', 'name': 'Jahresübersicht', 'icon':'fa fa-file'})
+    menu.append({'url':'/monatsuebersicht/', 'name': 'Monatsübersicht', 'icon':'fa fa-line-chart'})
+    menu.append({'url':'/jahresuebersicht/', 'name': 'Jahresübersicht', 'icon':'fa fa-line-chart'})
     main_menu[EINZELBUCHUNGEN_SUBMENU_NAME] = menu
 
 
     menu = []
-    menu.append({'url':'/gemeinsameuebersicht/', 'name': 'Alle gem. Buchungen', 'icon':'fa fa-file'})
+    menu.append({'url':'/gemeinsameuebersicht/', 'name': 'Alle gem. Buchungen', 'icon':'fa fa-list'})
     menu.append({'url':'/addgemeinsam/', 'name':'Neue gemeinsame Buchung', 'icon':'fa fa-plus'})
     menu.append({'url': '/gemeinsamabrechnen/', 'name': 'Gemeinsam abrechnen', 'icon':'fa fa-cogs'})
     main_menu['Gemeinsame Finanzen'] = menu
 
 
     menu = []
-    menu.append({'url':'/stechzeituebersicht/', 'name': 'Stechzeituebersicht', 'icon':'fa fa-file'})
+    menu.append({'url':'/stechzeituebersicht/', 'name': 'Stechzeituebersicht', 'icon':'fa fa-line-chart'})
     menu.append({'url':'/addstechzeit/', 'name':'Neue Stechzeit', 'icon':'fa fa-plus'})
     menu.append({'url':'/addsollzeit/', 'name':'Sollzeit bearbeiten', 'icon':'fa fa-pencil'})
     main_menu['Stechzeiten'] = menu
