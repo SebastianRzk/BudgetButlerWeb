@@ -368,6 +368,7 @@ class Einzelbuchungen:
         if data.empty:
             return set()
         data = data[['Kategorie', 'Wert']]
+        data.Wert = data.Wert.map(lambda x: abs(x))
         data = data.groupby(by='Kategorie').sum()
         data = data.sort_values(by='Wert')
         print(data)
