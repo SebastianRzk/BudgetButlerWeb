@@ -64,8 +64,8 @@ def _umrechnen(tabelle):
             result[datum][kategorie] = wert
     return result
 
-def _computeAllesPieChartProzentual(context):
-    result = viewcore.database_instance().einzelbuchungen.get_gesamtausgaben_nach_kategorie_prozentual()
+def _computePieChartProzentual(context, jahr):
+    result = viewcore.database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
     ausgaben_data = []
     ausgaben_labels = []
     ausgaben_colors = []
@@ -74,18 +74,10 @@ def _computeAllesPieChartProzentual(context):
         ausgaben_labels.append(kategorie)
         ausgaben_colors.append('#' + viewcore.database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
 
-    context['pie_alle_ausgaben_data_prozentual'] = ausgaben_data
+    context['pie_ausgaben_data_prozentual'] = ausgaben_data
     context['pie_ausgaben_labels'] = ausgaben_labels
     context['pie_ausgaben_colors'] = ausgaben_colors
 
-    return context
-
-def _computePieChartProzentual(context, jahr):
-    result = viewcore.database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
-    ausgaben_data = []
-    for _, wert in result.items():
-        ausgaben_data.append('%.2f' % abs(wert))
-    context['pie_ausgaben_data_prozentual'] = ausgaben_data
     return context
 
 def index(request):
@@ -151,7 +143,6 @@ def handle_request(request):
 
     context = viewcore.generate_base_context('jahresuebersicht')
 
-    context = _computeAllesPieChartProzentual(context)
     context = _computePieChartProzentual(context, year)
 
     context['zusammenfassung'] = jahresausgaben_jahr
