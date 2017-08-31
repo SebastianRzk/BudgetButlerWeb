@@ -359,3 +359,20 @@ class Einzelbuchungen:
     def add_kategorie(self, tmp_kategorie):
         self.tmp_kategorie = tmp_kategorie
 
+    def top_kategorie_fuer_jahr(self, jahr):
+        if self.content.empty:
+            return set()
+        data = self.content[['Kategorie', 'Wert', 'Datum']]
+        data.Datum = data.Datum.map(lambda x: x.year)
+        data = data[data.Datum == jahr]
+        if data.empty:
+            return set()
+        data = data[['Kategorie', 'Wert']]
+        data = data.groupby(by='Kategorie').sum()
+        data = data.sort_values(by='Wert')
+        print(data)
+        kategorien = data.index.values
+        if len(kategorien) < 4:
+            return kategorien.tolist()
+        return kategorien.tolist()[-4:]
+

@@ -105,8 +105,12 @@ def handle_request(request):
         year = int(float(request.POST['date']))
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     kategorien_checked_map = {}
+    most_important_categories = einzelbuchungen.top_kategorie_fuer_jahr(year)
     for kategorie in einzelbuchungen.get_alle_kategorien():
-        kategorien_checked_map[kategorie] = 'checked'
+        if kategorie in most_important_categories:
+            kategorien_checked_map[kategorie] = 'checked'
+        else:
+            kategorien_checked_map[kategorie] = ''
 
     kategorien_checked_map['Summe'] = 'checked'
 

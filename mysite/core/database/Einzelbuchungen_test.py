@@ -7,6 +7,7 @@ from datetime import date
 import os
 import sys
 import unittest
+from pyatspi import component
 
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../../')
@@ -329,6 +330,35 @@ class gesamtausgaben_jahr(unittest.TestCase):
         assert set(result.keys()) == set(['kategorie 1', 'kategorie 2'])
         assert  result['kategorie 1'] == 75.00
         assert  result['kategorie 2'] == 25.00
+
+    def test_topKategorienFuerJahr_withEmptyDB_shouldReturnEmptySet(self):
+        component_under_test = Einzelbuchungen()
+
+        assert component_under_test.top_kategorie_fuer_jahr(2017) == set()
+
+    def test_topKategorienFuerJahr_withNonMatchingYears_shouldReturnEmptySet(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('10/10/2010'), 'k', 'n', 1)
+
+        assert component_under_test.top_kategorie_fuer_jahr(2011) == set()
+
+    def test_topKategorieFuerJahr_withOneMatchingKategorie_shouldReturnKategorie(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('10/10/2010'), 'some_kategorie', 'n', 1)
+
+        assert component_under_test.top_kategorie_fuer_jahr(2010) == ['some_kategorie']
+
+    def test_topKategoreiFuerJahr_shouldOnlyReturnThe4HighesCategories(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('10/10/2010'), 'high1', 'n', 14)
+        component_under_test.add(datum('10/10/2010'), 'high2', 'n', 13)
+        component_under_test.add(datum('10/10/2010'), 'high3', 'n', 12)
+        component_under_test.add(datum('10/10/2010'), 'high4', 'n', 11)
+        component_under_test.add(datum('10/10/2010'), 'low1', 'n', 10)
+        component_under_test.add(datum('10/10/2010'), 'low2', 'n', 9)
+
+        assert component_under_test.top_kategorie_fuer_jahr(2010) == ['high4', 'high3', 'high2', 'high1']
+
 
 class ausgaben_Letzten6Monate(unittest.TestCase):
 
