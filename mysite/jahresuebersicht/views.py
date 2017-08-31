@@ -120,6 +120,8 @@ def handle_request(request):
         for kategorie in kategorien_checked_map.keys():
             if not kategorie in request.POST:
                 kategorien_checked_map[kategorie] = ''
+            else:
+                kategorien_checked_map[kategorie] = 'checked'
 
 
     jahresausgaben_jahr = []
