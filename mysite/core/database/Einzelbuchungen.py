@@ -192,6 +192,7 @@ class Einzelbuchungen:
 
     def get_jahresausgaben_nach_monat(self, jahr):
         tabelle = self.content.copy()
+        tabelle = tabelle[tabelle.Wert < 0]
 
         crit1 = tabelle['Datum'].map(lambda x : x.year == jahr)
         tabelle = tabelle[crit1]
@@ -205,7 +206,6 @@ class Einzelbuchungen:
 
     def get_gesamtbuchungen_jahr(self, jahr):
         tabelle = self.content.copy()
-
         crit1 = tabelle['Datum'].map(lambda x : x.year == jahr)
 
         if tabelle.empty:

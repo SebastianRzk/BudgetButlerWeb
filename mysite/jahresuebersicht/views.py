@@ -16,7 +16,7 @@ def berechne_monate(tabelle):
     print('##########################')
 
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    alle_kategorien = set(einzelbuchungen.get_alle_kategorien())
+    alle_kategorien = set(einzelbuchungen.get_kategorien_ausgaben())
 
     monats_namen = []
     for _, wert_monats_gruppe in tabelle.iteritems():
@@ -32,25 +32,18 @@ def berechne_monate(tabelle):
     umgerechnete_tabelle = _umrechnen(tabelle)
     for monat, kategorien in umgerechnete_tabelle.items():
         ausstehende_kategorien = alle_kategorien.copy()
-        monatssumme = 0
         for kategorie, wert in kategorien.items():
             ausstehende_kategorien.remove(kategorie)
             if kategorien_werte[kategorie] == '[':
                 kategorien_werte[kategorie] = kategorien_werte[kategorie] + '%.2f' % abs(wert)
             else:
                 kategorien_werte[kategorie] = kategorien_werte[kategorie] + ',' + ' %.2f' % abs(wert)
-            if wert < 0:
-                monatssumme += abs(wert)
 
         for fehllende_kategorie in ausstehende_kategorien:
             if kategorien_werte[fehllende_kategorie] == '[':
                 kategorien_werte[fehllende_kategorie] = kategorien_werte[fehllende_kategorie] + '0.00'
             else:
                 kategorien_werte[fehllende_kategorie] = kategorien_werte[fehllende_kategorie] + ', 0.00'
-        if kategorien_werte['Summe'] == '[':
-            kategorien_werte['Summe'] = kategorien_werte['Summe'] + '%.2f' % monatssumme
-        else:
-            kategorien_werte['Summe'] = kategorien_werte['Summe'] + ',' + '%.2f' % monatssumme
 
     return (monats_namen, kategorien_werte)
 
