@@ -1,51 +1,49 @@
 <div class="row">
-		<!-- left column -->
-		<div class="col-md-12">
-			<!-- general form elements -->
-			<div class="box box-primary">
-				<div class="box-header">
-					<h3 class="box-title">Neue Ausgabe</h3>
-				</div>
-				<!-- /.box-header -->
-				<!-- form start -->
-				<form role="form" action="/jahresuebersicht/" method="post">{% csrf_token %}
-				<input type="hidden" name="ID" value="{{ID}}">
-				<input type="hidden" name="mode" value="change_month">
-					<div class="box-body">
-						<div class="form-group">
-							<label>Wähle Jahr</label> <select class="form-control" name="date" id="date">
-							 {% for jahr in jahre %}
-								<option value="{{jahr}}">{{jahr}}</option>
-							 {% endfor %}
-							</select>
-						</div>
-					</div>
-					<!-- /.box-body -->
-					<script type="text/javascript">
-
-					function SelectElement()
-					{    
-					    var element = document.getElementById('date');
-					    element.value = "{{selected_date}}";
-					}
-					SelectElement()
-					</script>
-
-					<div class="box-footer">
-						<button type="submit" value="OK" class="btn btn-primary">Filtern!</button>
-					</div>
-				</form>
+	<!-- left column -->
+	<div class="col-md-12">
+		<!-- general form elements -->
+		<div class="box box-primary">
+			<div class="box-header">
+				<h3 class="box-title">Neue Ausgabe</h3>
 			</div>
-			<!-- /.box -->
-		</div>
-		<!--/.col (right) -->
-	</div>
+			<!-- /.box-header -->
+			<!-- form start -->
+			<form role="form" action="/jahresuebersicht/" method="post">{% csrf_token %}
+			<input type="hidden" name="ID" value="{{ID}}">
+			<input type="hidden" name="mode" value="change_month">
+				<div class="box-body">
+					<div class="form-group">
+						<label>Wähle Jahr</label> <select class="form-control" name="date" id="date">
+						 {% for jahr in jahre %}
+							<option value="{{jahr}}">{{jahr}}</option>
+						 {% endfor %}
+						</select>
+					</div>
+				</div>
+				<!-- /.box-body -->
+				<script type="text/javascript">
 
-    <div class='row'>
-            <div class='col-md-12'>
-  <div class="box">
-    <canvas id="lineChart" height="450" width="1500"></canvas>
-    <script> 
+				function SelectElement()
+				{    
+				    var element = document.getElementById('date');
+				    element.value = "{{selected_date}}";
+				}
+				SelectElement()
+				</script>
+
+				<div class="box-footer">
+					<button type="submit" value="OK" class="btn btn-primary">Filtern!</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<div class='row'>
+	<div class='col-md-12'>
+		<div class="box">
+			<canvas id="lineChart" height="450" width="1500"></canvas>
+				<script> 
 	                var salesChartData = {
 	                	    labels: {{monats_namen|safe	}},
 	                	    datasets: [
@@ -130,95 +128,7 @@
       </div><!-- /.box -->
     </div><!-- /.col -->
   </div><!-- /.row -->
-  
-      <div class='row'>
-            <div class='col-md-6'>
-              <div class="box box-default">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Ausgaben {{selected_date}} Absolut</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="chart-responsive">
-                        <canvas id="zusammenfassungPie" height="400"></canvas>
-                      </div><!-- ./chart-responsive -->
-                    </div><!-- /.col -->
-                    <div class="col-md-4">
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- /.box-body -->
-                <div class="box-footer no-padding">
-                </div><!-- /.footer -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-   <script> 
-	   var pieData = {
-		  labels:{{pie_ausgaben_labels|safe}},
-		  datasets: [
-		        {
-		            data: {{pie_ausgaben_data|safe}},
-		            backgroundColor: {{pie_ausgaben_colors|safe}},
-		        }],
-	   };
-	   var canvas = document.getElementById("zusammenfassungPie");
-       var myLineChart = new Chart(canvas, {
-       	type: 'pie',
-           data: pieData,
-           options: {
-           	responsive: true,
-           	maintainAspectRatio: false,
-       }});
-	   
-   </script>
-            <div class='col-md-6'>
-              <div class="box box-default">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Alle erfassten Ausgaben Absolut</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="chart-responsive">
-                        <canvas id="zusammenfassungAllesPie" height="400"></canvas>
-                      </div><!-- ./chart-responsive -->
-                    </div><!-- /.col -->
-                    <div class="col-md-4">
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- /.box-body -->
-                <div class="box-footer no-padding">
-                </div><!-- /.footer -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-           </div>
-   <script> 
-	   var pieData = {
-		  labels:{{pie_alle_ausgaben_labels|safe}},
-		  datasets: [
-		        {
-		            data: {{pie_alle_ausgaben_data|safe}},
-		            backgroundColor: {{pie_alle_ausgaben_colors|safe}},
-		        }],
-	   };
-	   var canvas = document.getElementById("zusammenfassungAllesPie");
-       var myLineChart = new Chart(canvas, {
-       	type: 'pie',
-           data: pieData,
-           options: {
-           	responsive: true,
-           	maintainAspectRatio: false,
-       }});
-	   
-   </script>
-   
-      <div class='row'>
+  <div class='row'>
             <div class='col-md-6'>
               <div class="box box-default">
                 <div class="box-header with-border">
@@ -287,11 +197,11 @@
            </div>
    <script> 
 	   var pieData = {
-		  labels:{{pie_alle_ausgaben_labels|safe}},
+		  labels:{{pie_ausgaben_labels|safe}},
 		  datasets: [
 		        {
 		            data: {{pie_alle_ausgaben_data_prozentual|safe}},
-		            backgroundColor: {{pie_alle_ausgaben_colors|safe}},
+		            backgroundColor: {{pie_ausgaben_colors|safe}},
 		        }],
 	   };
 	   var canvas = document.getElementById("zusammenfassungAllesPieProzentual");
