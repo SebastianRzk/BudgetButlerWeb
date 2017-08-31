@@ -359,21 +359,34 @@ class Einzelbuchungen:
     def add_kategorie(self, tmp_kategorie):
         self.tmp_kategorie = tmp_kategorie
 
-    def top_kategorie_fuer_jahr(self, jahr):
-        if self.content.empty:
-            return set()
-        data = self.content[['Kategorie', 'Wert', 'Datum']]
+    def durchschnittliche_ausgaben_pro_monat(self, jahr, today=date.today()):
+        data = self.content.copy()
+        if data.empty:
+            return {}
+        data = data[data.Wert < 0]
+        if data.empty:
+            return {}
+        data['DatumBackup'] = data.Datum
         data.Datum = data.Datum.map(lambda x: x.year)
+        min_year = min(data.Datum)
         data = data[data.Datum == jahr]
         if data.empty:
-            return set()
-        data = data[['Kategorie', 'Wert']]
-        data.Wert = data.Wert.map(lambda x: abs(x))
+            return {}
+        monats_teiler = 12
+        if min_year == jahr:
+            monats_teiler = 13 - (min(self.content.Datum).month)
+        if jahr == today.year:
+            data.DatumBackup = data.DatumBackup.map(lambda x: x.month)
+            data = data[data.DatumBackup != today.month]
+            monats_teiler = monats_teiler - (13 - today.month)
+            if monats_teiler == 0:
+                return {}
+        print('#############Teiler', monats_teiler)
+        data.Wert = data.Wert.map(lambda x: abs(x / monats_teiler))
+        data = data[['Wert', 'Kategorie']]
         data = data.groupby(by='Kategorie').sum()
-        data = data.sort_values(by='Wert')
-        print(data)
-        kategorien = data.index.values
-        if len(kategorien) < 4:
-            return kategorien.tolist()
-        return kategorien.tolist()[-4:]
-
+        data = data.sort_index()
+        result = {}
+        for kategorie, wert in data.iterrows():
+            result[kategorie] = "%.2f" % wert
+        return result

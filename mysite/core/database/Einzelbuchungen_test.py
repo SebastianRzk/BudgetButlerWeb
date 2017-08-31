@@ -7,7 +7,6 @@ from datetime import date
 import os
 import sys
 import unittest
-from pyatspi import component
 
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../../')
@@ -331,33 +330,56 @@ class gesamtausgaben_jahr(unittest.TestCase):
         assert  result['kategorie 1'] == 75.00
         assert  result['kategorie 2'] == 25.00
 
-    def test_topKategorienFuerJahr_withEmptyDB_shouldReturnEmptySet(self):
+    def teste_durchschnittliche_ausgaben_pro_monat_withEmptyDB_shouldReturnEmptyDict(self):
         component_under_test = Einzelbuchungen()
 
-        assert component_under_test.top_kategorie_fuer_jahr(2017) == set()
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == {}
 
-    def test_topKategorienFuerJahr_withNonMatchingYears_shouldReturnEmptySet(self):
+    def teste_durchschnittliche_ausgaben_pro_monat_withNonmatchingYear_shouldReturnEmptyDict(self):
         component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('10/10/2010'), 'k', 'n', 1)
+        component_under_test.add(datum('10/10/2010'), 'K', '', -10)
 
-        assert component_under_test.top_kategorie_fuer_jahr(2011) == set()
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == {}
 
-    def test_topKategorieFuerJahr_withOneMatchingKategorie_shouldReturnKategorie(self):
+    def teste_durchschnittliche_ausgaben_pro_monat_withEinnahme_shouldReturnEmptyDict(self):
         component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('10/10/2010'), 'some_kategorie', 'n', 1)
+        component_under_test.add(datum('10/10/2011'), 'K', '', 10)
 
-        assert component_under_test.top_kategorie_fuer_jahr(2010) == ['some_kategorie']
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == {}
 
-    def test_topKategoreiFuerJahr_shouldOnlyReturnThe4HighesCategories(self):
+    def teste_durchschnittliche_ausgaben_pro_monat_withMatchingAndClosedYear_shouldReturnMonthlyPart(self):
         component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('10/10/2010'), 'high1', 'n', 14)
-        component_under_test.add(datum('10/10/2010'), 'high2', 'n', 13)
-        component_under_test.add(datum('10/10/2010'), 'high3', 'n', 12)
-        component_under_test.add(datum('10/10/2010'), 'high4', 'n', 11)
-        component_under_test.add(datum('10/10/2010'), 'low1', 'n', 10)
-        component_under_test.add(datum('10/10/2010'), 'low2', 'n', 9)
+        component_under_test.add(datum('10/10/2010'), 'K', '', -10)
+        component_under_test.add(datum('10/10/2011'), 'K', '', -12)
 
-        assert component_under_test.top_kategorie_fuer_jahr(2010) == ['high4', 'high3', 'high2', 'high1']
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == {'K':"1.00"}
+
+    def teste_durchschnittliche_ausgaben_pro_monat_shouldReturnMonthlyPart(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('10/10/2010'), 'K', '', -10)
+        component_under_test.add(datum('10/10/2011'), 'B', '', -12)
+        component_under_test.add(datum('10/10/2011'), 'A', '', -24)
+
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == {'A':"2.00", 'B':'1.00'}
+
+    def teste_durchschnittliche_ausgaben_pro_monat_mitAngefangenemJahr_sollteDurchAnzahlDerEntsprechendenMonateTeilen(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('10/8/2011'), 'B', '', -10)
+
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == { 'B':'2.00'}
+
+    def teste_durchschnittliche_ausgaben_pro_monat_mitNurLetztemMonat_sollteAusgabenDurchEinsTeilen(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('10/8/2011'), 'A', '', -10)
+
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011, today=datum('10/9/2011')) == {'A':'10.00'}
+
+    def teste_durchschnittliche_ausgaben_pro_monat_mitNurHeute_sollteAktuellenMonatIgnorieren(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(date.today(), 'A', '', -10)
+
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(date.today().year) == {}
+
 
 
 class ausgaben_Letzten6Monate(unittest.TestCase):

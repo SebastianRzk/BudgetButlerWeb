@@ -97,12 +97,8 @@ def handle_request(request):
         year = int(float(request.POST['date']))
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     kategorien_checked_map = {}
-    most_important_categories = einzelbuchungen.top_kategorie_fuer_jahr(year)
     for kategorie in einzelbuchungen.get_alle_kategorien():
-        if kategorie in most_important_categories:
-            kategorien_checked_map[kategorie] = 'checked'
-        else:
-            kategorien_checked_map[kategorie] = ''
+        kategorien_checked_map[kategorie] = 'checked'
 
     kategorien_checked_map['Summe'] = 'checked'
 
@@ -112,8 +108,6 @@ def handle_request(request):
         for kategorie in kategorien_checked_map.keys():
             if not kategorie in request.POST:
                 kategorien_checked_map[kategorie] = ''
-            else:
-                kategorien_checked_map[kategorie] = 'checked'
 
 
     jahresausgaben_jahr = []
@@ -141,8 +135,12 @@ def handle_request(request):
         gesamt = tabelle.Wert.sum()
 
 
+
+
     context = viewcore.generate_base_context('jahresuebersicht')
 
+    context['durchschnitt_monat_kategorien'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
+    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
     context = _computePieChartProzentual(context, year)
 
     context['zusammenfassung'] = jahresausgaben_jahr

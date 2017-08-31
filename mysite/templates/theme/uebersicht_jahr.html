@@ -3,11 +3,6 @@
 	<div class="col-md-12">
 		<!-- general form elements -->
 		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">Neue Ausgabe</h3>
-			</div>
-			<!-- /.box-header -->
-			<!-- form start -->
 			<form role="form" action="/jahresuebersicht/" method="post">{% csrf_token %}
 			<input type="hidden" name="ID" value="{{ID}}">
 			<input type="hidden" name="mode" value="change_month">
@@ -39,6 +34,58 @@
 		<!-- /.box -->
 	</div>
 </div>
+<div class="row">
+	<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">Durchschnittliche Ausgaben pro Monat</h3>
+				</div>
+				<canvas id="canvas" style="display: block; width: 1500px; height: 450px;" width="1500" height="450"></canvas>
+			</div>
+	</div>
+</div>
+<script>
+var color = Chart.helpers.color;
+var barChartData = {
+    labels: {{durchschnitt_monat_kategorien|safe}},
+    datasets: [{
+        label: 'Wert',
+        backgroundColor: color('red').alpha(0.5).rgbString(),
+        borderColor: 'red',
+        borderWidth: 1,
+        data: {{durchschnittlich_monat_wert|safe}}
+    }]
+
+};
+
+window.onload = function() {
+    var ctx = document.getElementById("canvas").getContext("2d");
+    window.myBar = new Chart(ctx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Chart.js Bar Chart'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+
+};
+
+
+</script>
 <div class='row'>
 	<div class='col-md-12'>
 		<div class="box">
