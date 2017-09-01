@@ -130,15 +130,6 @@ def handle_request(request):
             gefilterte_kategorien_werte.append([kategorie, wert, einzelbuchungen.get_farbe_fuer(kategorie)])
             print('append:', kategorie)
 
-    gesamt_ausgaben = 0
-    if not tabelle.empty:
-        gesamt_ausgaben = tabelle[tabelle.Wert < 0].Wert.sum()
-
-    gesamt_einnahmen = einzelbuchungen.get_jahreseinnahmen(year)
-
-
-
-
     context = viewcore.generate_base_context('jahresuebersicht')
 
     context['durchschnitt_monat_kategorien'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
