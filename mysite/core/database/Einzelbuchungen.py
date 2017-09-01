@@ -432,3 +432,29 @@ class Einzelbuchungen:
         for kategorie, wert in data.iterrows():
             result[kategorie] = "%.2f" % wert
         return result
+
+    def select(self):
+        return EinzelbuchungsSelektor(self.content)
+
+class EinzelbuchungsSelektor:
+    content = 0
+    def __init__(self, content):
+        self.content = content
+
+    def select_year(self, year):
+        data = self.content.copy()
+        if data.empty:
+            return EinzelbuchungsSelektor(data)
+        data['TMP'] = data.Datum.map(lambda x: x.year)
+        data = data[data.TMP == year]
+        del data['TMP']
+        return EinzelbuchungsSelektor(data)
+
+    def select_einnahmen(self):
+        return EinzelbuchungsSelektor(self.content[self.content.Wert > 0])
+
+    def select_ausgaben(self):
+        return EinzelbuchungsSelektor(self.content[self.content.Wert < 0])
+
+    def sum(self):
+        return self.content.Wert.sum()

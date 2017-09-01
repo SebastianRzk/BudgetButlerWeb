@@ -403,3 +403,53 @@ class einnahmen_Letzten6Monate(unittest.TestCase):
         component_under_test = Einzelbuchungen()
         component_under_test.add(date.today(), '', '', 1.23)
         assert component_under_test.get_letzte_6_monate_einnahmen() == [0, 0, 0, 0, 0, 1.23]
+
+class einzelbuchungs_selector(unittest.TestCase):
+
+    def test_sum_withEmptyDB_shouldReturnZero(self):
+        component_under_test = Einzelbuchungen()
+        assert component_under_test.select().sum() == 0
+
+    def test_sum_withBuchung_shouldReturnValue(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('1/1/2010'), '', '', 10)
+
+        assert component_under_test.select().sum() == 10
+
+    def test_filterYear_withNonMatchingYear_shouldRemoveItem(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('1/1/2010'), '', '', 10)
+
+        assert component_under_test.select().select_year(2011).sum() == 0
+
+    def test_filterYear_withMatchingYear_shoudReturnValue(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('1/1/2011'), '', '', 10)
+
+        assert component_under_test.select().select_year(2011).sum() == 10
+
+    def test_einnahmen_withEinnahme_shoudReturnValue(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('1/1/2011'), '', '', 10)
+
+        assert component_under_test.select().select_einnahmen().select_year(2011).sum() == 10
+
+    def test_einnahmen_withAusgabe_shoudReturnZero(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('1/1/2011'), '', '', -10)
+
+        assert component_under_test.select().select_einnahmen().select_year(2011).sum() == 0
+
+
+
+    def test_ausgaben_withEinnahme_shoudReturnZero(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('1/1/2011'), '', '', 10)
+
+        assert component_under_test.select().select_ausgaben().select_year(2011).sum() == 0
+
+    def test_ausgaben_withAusgabe_shoudReturnValue(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('1/1/2011'), '', '', -10)
+
+        assert component_under_test.select().select_ausgaben().select_year(2011).sum() == -10
