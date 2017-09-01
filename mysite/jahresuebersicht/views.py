@@ -103,11 +103,18 @@ def handle_request(request):
                 kategorien_checked_map[kategorie] = ''
 
 
-    jahresausgaben_jahr = []
-    for jahr, jahresblock in einzelbuchungen.get_gesamtbuchungen_jahr(year).iteritems():
+    jahresausgaben = []
+    for jahr, jahresblock in einzelbuchungen.get_ausgaben_kategorie_jahr(year).iteritems():
         print(jahresblock)
         for tblkategorie, tblwert in jahresblock.iteritems():
-            jahresausgaben_jahr.append([tblkategorie, '%.2f' % tblwert, kategorien_checked_map[tblkategorie], einzelbuchungen.get_farbe_fuer(tblkategorie)])
+            jahresausgaben.append([tblkategorie, '%.2f' % tblwert, kategorien_checked_map[tblkategorie], einzelbuchungen.get_farbe_fuer(tblkategorie)])
+        break
+
+    jahreseinnahmen = []
+    for jahr, jahresblock in einzelbuchungen.get_einnahmen_kategorie_jahr(year).iteritems():
+        print(jahresblock)
+        for tblkategorie, tblwert in jahresblock.iteritems():
+            jahreseinnahmen.append([tblkategorie, '%.2f' % tblwert, kategorien_checked_map[tblkategorie], einzelbuchungen.get_farbe_fuer(tblkategorie)])
         break
 
     tabelle = einzelbuchungen.get_jahresausgaben_nach_monat(year)
@@ -123,9 +130,11 @@ def handle_request(request):
             gefilterte_kategorien_werte.append([kategorie, wert, einzelbuchungen.get_farbe_fuer(kategorie)])
             print('append:', kategorie)
 
-    gesamt = 0
+    gesamt_ausgaben = 0
     if not tabelle.empty:
-        gesamt = tabelle.Wert.sum()
+        gesamt_ausgaben = tabelle[tabelle.Wert < 0].Wert.sum()
+
+    gesamt_einnahmen = einzelbuchungen.get_jahreseinnahmen(year)
 
 
 
@@ -136,12 +145,14 @@ def handle_request(request):
     context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
     context = _computePieChartProzentual(context, year)
 
-    context['zusammenfassung'] = jahresausgaben_jahr
+    context['zusammenfassung_ausgaben'] = jahresausgaben
+    context['zusammenfassung_einnahmen'] = jahreseinnahmen
     context['monats_namen'] = monats_namen
     context['selected_date'] = year
     context['ausgaben'] = gefilterte_kategorien_werte
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
-    context['gesamt'] = '%.2f' % gesamt
+    context['gesamt_ausgaben'] = '%.2f' % gesamt_ausgaben
+    context['gesamt_einnahmen'] = '%.2f' % gesamt_einnahmen
     context['gesamt_color'] = einzelbuchungen.get_farbe_fuer('Summe')
     context['gesamt_enabled'] = kategorien_checked_map['Summe']
     return context

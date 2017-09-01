@@ -218,6 +218,48 @@ class Einzelbuchungen:
         tabelle = tabelle.groupby(['Kategorie']).sum()
         return tabelle
 
+    def get_ausgaben_kategorie_jahr(self, jahr):
+        tabelle = self.content.copy()
+        if tabelle.empty:
+            return tabelle
+
+        tabelle.Datum = tabelle.Datum.map(lambda x:x.year)
+        tabelle = tabelle[tabelle.Datum == jahr]
+
+        if tabelle.empty:
+            return tabelle
+
+        tabelle = tabelle[tabelle.Wert < 0]
+
+        if tabelle.empty:
+            return tabelle
+
+        del tabelle['Dynamisch']
+        del tabelle['Datum']
+        tabelle = tabelle.groupby(['Kategorie']).sum()
+        return tabelle
+
+    def get_einnahmen_kategorie_jahr(self, jahr):
+        tabelle = self.content.copy()
+        if tabelle.empty:
+            return tabelle
+
+        tabelle.Datum = tabelle.Datum.map(lambda x:x.year)
+        tabelle = tabelle[tabelle.Datum == jahr]
+
+        if tabelle.empty:
+            return tabelle
+
+        tabelle = tabelle[tabelle.Wert > 0]
+
+        if tabelle.empty:
+            return tabelle
+
+        del tabelle['Dynamisch']
+        del tabelle['Datum']
+        tabelle = tabelle.groupby(['Kategorie']).sum()
+        return tabelle
+
     def get_jahresausgaben(self, jahr):
         ausgaben = self.content[self.content.Wert < 0]
         crit1 = ausgaben['Datum'].map(lambda x : x.year == jahr)
@@ -228,11 +270,11 @@ class Einzelbuchungen:
 
     def get_jahreseinnahmen(self, jahr):
         ausgaben = self.content[self.content.Wert > 0]
-        crit1 = ausgaben['Datum'].map(lambda x : x.year == jahr)
-        tabelle = ausgaben[crit1]
-        if tabelle.empty:
+        ausgaben.Datum = ausgaben['Datum'].map(lambda x: x.year)
+        ausgaben = ausgaben[ausgaben.Datum == jahr]
+        if ausgaben.empty:
             return 0
-        return tabelle.Wert.sum()
+        return ausgaben.Wert.sum()
 
     def get_gesamtausgaben_jahr(self, jahr):
         tabelle = self.content[self.content.Wert < 0]
