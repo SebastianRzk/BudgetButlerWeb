@@ -33,7 +33,6 @@ def handle_request(request):
                 viewcore.add_changed_einzelbuchungen(
                     {
                         "mode":"Bearbeitet",
-                        "index":request.POST['edit_index'],
                         "datum":str(datum(request.POST['date'])),
                         "kategorie":request.POST['kategorie'],
                         "name":request.POST['name'],
@@ -49,7 +48,6 @@ def handle_request(request):
                 viewcore.add_changed_einzelbuchungen(
                     {
                         "mode":"Hinzugefügt",
-                        "index":"unbekannt",
                         "datum":str(datum(request.POST['date'])),
                         "kategorie":request.POST['kategorie'],
                         "name":request.POST['name'],
@@ -72,7 +70,7 @@ def handle_request(request):
 
     context['ID'] = viewcore.get_next_transaction_id()
     context['kategorien'] = sorted(einzelbuchungen.get_kategorien_einnahmen())
-    context['letzte_erfassung'] = viewcore.get_changed_einzelbuchungen()
+    context['letzte_erfassung'] = reversed(viewcore.get_changed_einzelbuchungen())
     return context
 
 def index(request):
