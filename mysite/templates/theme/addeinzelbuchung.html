@@ -79,7 +79,7 @@
             <table class="table no-margin">
               <thead>
                 <tr>
-                  <th>Modus</th>
+                  <th></th>
                   <th>Datum</th>
                   <th>Name</th>
                   <th>Kategorie</th>
@@ -89,7 +89,7 @@
               <tbody>
                 {% for ausgabe in letzte_erfassung %}
                 <tr>
-                  <td>{{ausgabe.mode}}</td>
+                  <td><i class="fa fa-{{ausgabe.fa}} pull-right"></i></td>
                   <td>{{ausgabe.datum}}</td>
                   <td>{{ausgabe.name}}</td>
                   <td>{{ausgabe.kategorie}}</td>

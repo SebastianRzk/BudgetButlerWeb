@@ -27,7 +27,7 @@ def handle_request(request):
                     value)
                 viewcore.add_changed_einzelbuchungen(
                     {
-                        "mode":"Bearbeitet",
+                        "fa":"pencil",
                         "datum":str(datum(request.POST['date'])),
                         "kategorie":request.POST['kategorie'],
                         "name":request.POST['name'],
@@ -42,7 +42,7 @@ def handle_request(request):
 
                 viewcore.add_changed_einzelbuchungen(
                     {
-                        "mode":"Hinzugefügt",
+                        "fa":"plus",
                         "datum":str(datum(request.POST['date'])),
                         "kategorie":request.POST['kategorie'],
                         "name":request.POST['name'],
