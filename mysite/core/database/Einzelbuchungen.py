@@ -58,11 +58,6 @@ class Einzelbuchungen:
     def anzahl(self):
         return len(self.content)
 
-    def get_aktuellen_monat(self):
-        nov_mask = self.content['Datum'].map(lambda x: x.month) == date.today().month
-        return self.content[nov_mask]
-
-
     def get_letzte_6_monate_ausgaben(self):
         '''
         Get die ausgaben der letzten 6 Monate nach Monat sortiert
@@ -398,11 +393,28 @@ class EinzelbuchungsSelektor:
         del data['TMP']
         return EinzelbuchungsSelektor(data)
 
+    def select_month(self, month):
+        data = self.content.copy()
+        if data.empty:
+            return EinzelbuchungsSelektor(data)
+        data['TMP'] = data.Datum.map(lambda x: x.month)
+        data = data[data.TMP == month]
+        del data['TMP']
+        return EinzelbuchungsSelektor(data)
+
+
     def select_einnahmen(self):
         return EinzelbuchungsSelektor(self.content[self.content.Wert > 0])
 
     def select_ausgaben(self):
         return EinzelbuchungsSelektor(self.content[self.content.Wert < 0])
+
+    def select_aktueller_monat(self):
+        selector = self.select_year(date.today().year)
+        return selector.select_month(date.today().month)
+
+    def raw_table(self):
+        return self.content
 
     def sum(self):
         return self.content.Wert.sum()

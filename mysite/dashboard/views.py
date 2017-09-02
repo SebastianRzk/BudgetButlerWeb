@@ -11,12 +11,11 @@ from viewcore import viewcore
 def __init__(self):
     self.count = 0
 
-def handle_request(request):
+def handle_request():
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    ausgaben_monat = einzelbuchungen.get_aktuellen_monat()[einzelbuchungen.get_aktuellen_monat().Wert < 0].Wert.sum() * -1
 
     ausgaben_liste = []
-    for row_index, row in einzelbuchungen.get_aktuellen_monat().iterrows():
+    for row_index, row in einzelbuchungen.select().select_aktueller_monat().raw_table().iterrows():
         ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
 
     context = {
@@ -25,7 +24,6 @@ def handle_request(request):
         'zusammenfassung_monatsliste': monatsliste(),
         'zusammenfassung_einnahmenliste': str(einzelbuchungen.get_letzte_6_monate_einnahmen()),
         'zusammenfassung_ausgabenliste': str(einzelbuchungen.get_letzte_6_monate_ausgaben()),
-        'gesamtausgabe_diesen_monat': ausgaben_monat,
         'verganges_halbes_jahr': "%.2f" % (sum(einzelbuchungen.get_letzte_6_monate_ausgaben()) / (6 * 30 + 3)),
         'miete_grundkosten_farbe':'bg-green',
 
@@ -35,7 +33,7 @@ def handle_request(request):
     return context
 
 def index(request):
-    context = handle_request(request)
+    context = handle_request()
     rendered_content = render_to_string('theme/dashboard.html', context, request=request)
     context['content'] = rendered_content
     return render(request, 'theme/index.html', context)
