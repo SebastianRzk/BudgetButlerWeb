@@ -260,19 +260,6 @@ class Einzelbuchungen:
         tabelle = tabelle.groupby(['Kategorie']).sum()
         return tabelle
 
-    def get_gesamtausgaben_jahr(self, jahr):
-        tabelle = self.content[self.content.Wert < 0]
-
-        crit1 = tabelle['Datum'].map(lambda x : x.year == jahr)
-        tabelle = tabelle[crit1]
-
-        if tabelle.empty:
-            return pd.DataFrame()
-
-        del tabelle['Datum']
-        tabelle = tabelle.groupby(['Kategorie']).sum()
-        return tabelle
-
     def get_gesamtausgaben_nach_kategorie(self):
         tabelle = self.content.copy()
         tabelle = tabelle[tabelle.Wert < 0]

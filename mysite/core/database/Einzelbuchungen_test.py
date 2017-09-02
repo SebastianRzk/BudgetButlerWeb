@@ -161,62 +161,6 @@ class einzelbuchungen(unittest.TestCase):
 
 class gesamtausgaben_jahr(unittest.TestCase):
 
-    def test_get_gesamtausgaben_jahr_withOneAusgabe_shouldReturnAusgabe(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(date.today(), 'Some Kategorie', 'bla', -1)
-
-        result = component_under_test.get_gesamtausgaben_jahr(date.today().year)
-
-        assert result.index == ['Some Kategorie']
-        assert result.Wert[0] == -1
-
-    def test_get_gesamtausgaben_jahr_withOneAusgabeAndOneEinnahme_shouldReturnOnlyAusgabe(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(date.today(), 'Some Kategorie', 'bla', -1)
-        component_under_test.add(date.today(), 'Some Kategorie', 'bla', 11)
-
-        result = component_under_test.get_gesamtausgaben_jahr(date.today().year)
-
-        assert result.index == ['Some Kategorie']
-        assert result.Wert[0] == -1
-
-    def test_get_gesamtausgaben_jahr_withOneAusgabeAndOneAusgabeWithWrongYear_shouldReturnOnlyAusgabeOfMatchingYear(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2017'), 'Some Kategorie', 'bla', -1)
-        component_under_test.add(datum('01/01/2014'), 'Some Kategorie', 'bla', -1)
-
-        result = component_under_test.get_gesamtausgaben_jahr(2017)
-
-        assert result.index == ['Some Kategorie']
-        print(result)
-        assert result.Wert[0] == -1
-
-    def test_get_gesamtausgaben_jahr_withTwoDifferentCategories_shouldReturnBothCategories(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2017'), 'Some Kategorie', 'bla', -1)
-        component_under_test.add(datum('01/01/2017'), 'Some other Kategorie', 'bla', -1)
-
-        result = component_under_test.get_gesamtausgaben_jahr(2017)
-
-        assert set(result.index) == set(['Some Kategorie', 'Some other Kategorie'])
-
-    def test_get_gesamtausgaben_jahr_withTwoDifferentDates_shouldReturnCummulatedResult(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2017'), 'Some Kategorie', 'bla', -1)
-        component_under_test.add(datum('01/01/2017'), 'Some Kategorie', 'bla', -3)
-
-        result = component_under_test.get_gesamtausgaben_jahr(2017)
-
-        assert result.index == ['Some Kategorie']
-        assert result.Wert[0] == -4
-
-    def test_get_gesamtausgaben_jahr_withEmptyDB_shouldReturnEmptyDataframe(self):
-        component_under_test = Einzelbuchungen()
-
-        result = component_under_test.get_gesamtausgaben_jahr(2017)
-
-        assert set(result.index) == set()
-
     def test_get_jahresausgaben_nach_monat_withEmptyDB_shouldReturnEmptyDataframe(self):
         component_under_test = Einzelbuchungen()
 
