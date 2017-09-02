@@ -27,11 +27,9 @@ class TestUebersicht(unittest.TestCase):
 
     def test_init_withEmptyDatabase(self):
         self.set_up()
-        views.handle_request(GetRequest())
+        views.handle_request()
 
 
 if __name__ == '__main__':
     unittest.main()
 
-class GetRequest():
-    method = "GET"
