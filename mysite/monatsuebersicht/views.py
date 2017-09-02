@@ -22,20 +22,22 @@ def handle_request(request):
         year = int(float(datum.split("_")[0]))
         print('date:', request.POST)
 
-    print("year:", year)
-    print('month', month)
     context['selected_year'] = year
+
+
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)
+    table_ausgaben = table_data_selection.select_ausgaben()
+    table_einnahmen = table_data_selection.select_einnahmen()
 
     '''
     Berechnung der Ausgaben für das Kreisdiagramm
     '''
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    tabelle = einzelbuchungen.get_monatsausgaben_nach_kategorie(month, year)
     ausgaben_liste = []
     ausgaben_labels = []
     ausgaben_data = []
     ausgaben_colors = []
-    for kategorie, row in tabelle.iterrows():
+    for kategorie, row in table_ausgaben.group_by_kategorie().iterrows():
         ausgaben_labels.append(kategorie)
         ausgaben_data.append("%.2f" % abs(row.Wert))
         ausgaben_colors.append("#" + einzelbuchungen.get_farbe_fuer(kategorie))
@@ -48,12 +50,11 @@ def handle_request(request):
     '''
     Berechnung der Einnahmen für das Kreisdiagramm
     '''
-    tabelle_einnahmen = einzelbuchungen.get_monatseinnahmen_nach_kategorie(month, year)
     einnahmen_liste = []
     einnahmen_labels = []
     einnahmen_data = []
     einnahmen_colors = []
-    for kategorie, row in tabelle_einnahmen.iterrows():
+    for kategorie, row in table_einnahmen.group_by_kategorie().iterrows():
         einnahmen_labels.append(kategorie)
         einnahmen_data.append("%.2f" % abs(row.Wert))
         einnahmen_colors.append("#" + einzelbuchungen.get_farbe_fuer(kategorie))
@@ -70,13 +71,16 @@ def handle_request(request):
             einheit['farbe'] = einzelbuchungen.get_farbe_fuer(einheit['kategorie'])
     print(zusammenfassung)
     context['zusammenfassung'] = zusammenfassung
-    ausgaben_monat = tabelle.Wert.sum()
+
+    ausgaben_monat = table_ausgaben.sum()
+    context['gesamt'] = "%.2f" % ausgaben_monat
+    einnahmen_monat = table_einnahmen.sum()
+    context['gesamt_einnahmen'] = "%.2f" % einnahmen_monat
+
+
     selected_date = str(year) + "_" + str(month).rjust(2, "0")
     context['selected_date'] = selected_date
     context['monate'] = sorted(einzelbuchungen.get_monate(), reverse=True)
-    context['gesamt'] = "%.2f" % ausgaben_monat
-    einnahmen_monat = tabelle_einnahmen.Wert.sum()
-    context['gesamt_einnahmen'] = "%.2f" % einnahmen_monat
 
 
     if einnahmen_monat >= abs(ausgaben_monat):

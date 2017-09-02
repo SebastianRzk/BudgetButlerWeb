@@ -398,4 +398,17 @@ class einzelbuchungs_selector(unittest.TestCase):
 
         assert component_under_test.select().select_aktueller_monat().sum() == 0
 
+    def test_group_by_kategorie_withEmptyDB_shouldReturnEmptyTable(self):
+        component_under_test = Einzelbuchungen()
 
+        assert component_under_test.select().group_by_kategorie().empty
+
+    def test_group_by_kategorie_shouldGroupValues(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('20/01/1990'), 'A', '', -10)
+        component_under_test.add(datum('20/01/1990'), 'A', '', -10)
+        component_under_test.add(datum('20/01/1990'), 'B', '', 8)
+
+
+        assert component_under_test.select().group_by_kategorie().Wert.tolist() == [-20, 8]
+        assert component_under_test.select().group_by_kategorie().index.tolist() == ['A', 'B']

@@ -301,25 +301,6 @@ class Einzelbuchungen:
         jahre = self.content.Datum.copy().map(lambda x: str(x.year))
         return set(jahre)
 
-    def get_sortierter_monat_fuer(self, year, imonth, kopierte_tabelle, crit):
-        kopierte_tabelle = kopierte_tabelle[crit]
-        kopierte_tabelle.Datum = kopierte_tabelle.Datum.map(lambda x:str(x.year) + '_' + str(x.month))
-        str_date = str(imonth) + '_' + str(year)
-        kopierte_tabelle = kopierte_tabelle[kopierte_tabelle.Datum == str_date]
-        gemergte_tabelle = kopierte_tabelle.groupby(['Kategorie']).sum()
-        gemergte_tabelle = gemergte_tabelle.sort_index()
-        return gemergte_tabelle
-
-    def get_monatseinnahmen_nach_kategorie(self, year, imonth):
-        kopierte_tabelle = self.content.copy()
-        crit = kopierte_tabelle.Wert > 0
-        return self.get_sortierter_monat_fuer(year, imonth, kopierte_tabelle, crit)
-
-    def get_monatsausgaben_nach_kategorie(self, year, imonth):
-        kopierte_tabelle = self.content.copy()
-        crit = kopierte_tabelle.Wert < 0
-        return self.get_sortierter_monat_fuer(year, imonth, kopierte_tabelle, crit)
-
     def get_alle_kategorien(self):
         return self.get_kategorien_ausgaben().union(self.get_kategorien_einnahmen())
 
@@ -415,6 +396,12 @@ class EinzelbuchungsSelektor:
 
     def raw_table(self):
         return self.content
+
+    def sort_index(self):
+        return EinzelbuchungsSelektor(self.content.sort_index())
+
+    def group_by_kategorie(self):
+        return self.content.groupby(by='Kategorie').sum()
 
     def sum(self):
         return self.content.Wert.sum()
