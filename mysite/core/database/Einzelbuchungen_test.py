@@ -18,33 +18,6 @@ from viewcore.converter import datum
 
 class einzelbuchungen(unittest.TestCase):
 
-    def test_getJahresausgaben_withEmptyDatabase_shouldReturnZero(self):
-        component_under_test = Einzelbuchungen()
-        assert component_under_test.get_jahresausgaben(2016) == 0
-
-    def test_getJahresausgaben_withNonMatchingDate_shouldReturnZero(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/1990'), 'some kategorie', 'some name', -1.54)
-        assert component_under_test.get_jahresausgaben(2016) == 0
-
-    def test_getJahresausgaben_withNonMatchingValue_shouldReturnZero(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2016'), 'some kategorie', 'some name', 1.54)
-        assert component_under_test.get_jahresausgaben(2016) == 0
-
-    def test_getJahreseinnahmen_withEmptyDatabase_shouldReturnZero(self):
-        component_under_test = Einzelbuchungen()
-        assert component_under_test.get_jahreseinnahmen(2016) == 0
-
-    def test_getJahreseinnahmen_withNonMatchingDate_shouldReturnZero(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/1990'), 'some kategorie', 'some name', -1.54)
-
-    def test_getJahreseinnahmen_withNonMatchingValue_shouldReturnZero(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2016'), 'some kategorie', 'some name', -1.54)
-        assert component_under_test.get_jahreseinnahmen(2016) == 0
-
     def test_add(self):
         component_under_test = Einzelbuchungen()
         component_under_test.add(date.today(), 'some kategorie', 'some name', 1.54)

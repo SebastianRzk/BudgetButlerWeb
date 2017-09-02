@@ -247,7 +247,6 @@ class refresh(unittest.TestCase):
         component_under_test.refresh()
 
         assert len(component_under_test.einzelbuchungen.content) == 3
-        assert component_under_test.einzelbuchungen.get_jahreseinnahmen(2010) == 60
 
 if __name__ == '__main__':
     unittest.main()

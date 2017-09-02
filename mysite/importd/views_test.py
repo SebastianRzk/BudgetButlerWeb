@@ -43,7 +43,7 @@ class Importd(unittest.TestCase):
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA}))
         assert page == 'import.html'
-        assert einzelbuchungen.get_jahresausgaben(2017) == -11.54
+        assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
 
     def test_addeUnpassendenKategorie_shouldShowImportMappingPage(self):
@@ -61,7 +61,7 @@ class Importd(unittest.TestCase):
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
         assert page == 'import.html'
-        assert einzelbuchungen.get_jahresausgaben(2017) == -11.54
+        assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
 
 

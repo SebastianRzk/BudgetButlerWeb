@@ -97,8 +97,8 @@ def handle_request(request):
         context['name_uebersicht_gruppe_2'] = 'Ungedeckte Ausgaben'
         context['wert_uebersicht_gruppe_2'] = (ausgaben_monat + einnahmen_monat) * -1
 
-    einnahmen_jahr = einzelbuchungen.get_jahreseinnahmen(year)
-    ausgaben_jahr = einzelbuchungen.get_jahresausgaben(year)
+    einnahmen_jahr = einzelbuchungen.select().select_einnahmen().select_year(year).sum()
+    ausgaben_jahr = einzelbuchungen.select().select_ausgaben().select_year(year).sum()
     if einnahmen_jahr >= abs(ausgaben_jahr):
         context['color_uebersicht_jahr_gruppe_1'] = "gray"
         context['name_uebersicht_jahr_gruppe_1'] = 'Gedeckte Einnahmen'

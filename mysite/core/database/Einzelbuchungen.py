@@ -260,22 +260,6 @@ class Einzelbuchungen:
         tabelle = tabelle.groupby(['Kategorie']).sum()
         return tabelle
 
-    def get_jahresausgaben(self, jahr):
-        ausgaben = self.content[self.content.Wert < 0]
-        crit1 = ausgaben['Datum'].map(lambda x : x.year == jahr)
-        tabelle = ausgaben[crit1]
-        if tabelle.empty:
-            return 0
-        return tabelle.Wert.sum()
-
-    def get_jahreseinnahmen(self, jahr):
-        ausgaben = self.content[self.content.Wert > 0]
-        ausgaben.Datum = ausgaben['Datum'].map(lambda x: x.year)
-        ausgaben = ausgaben[ausgaben.Datum == jahr]
-        if ausgaben.empty:
-            return 0
-        return ausgaben.Wert.sum()
-
     def get_gesamtausgaben_jahr(self, jahr):
         tabelle = self.content[self.content.Wert < 0]
 
