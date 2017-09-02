@@ -118,29 +118,6 @@ class Einzelbuchungen:
             return wert * -1
         return 0
 
-    def get_ausgabe_pro_monat(self, monat_rueckwaerts):
-        today = date.today()
-
-        jahr = today.year
-        monat = today.month
-        if monat <= monat_rueckwaerts:
-            jahr = jahr - 1
-            monat = 12 + monat - monat_rueckwaerts
-        else:
-            monat = monat - monat_rueckwaerts
-
-
-        crit1 = self.content['Datum'].map(lambda x : x.year == jahr)
-        crit2 = self.content['Datum'].map(lambda x : x.month == monat)
-
-        monatsausgaben = self.content[crit1 & crit2]
-        print(monatsausgaben)
-        summe = monatsausgaben.Wert.sum()
-
-        pro_tag = summe / max(monthrange(jahr, monat))
-        print('PRO TAG', pro_tag)
-        return '%.2f' % (pro_tag * -1)
-
     def get_month_summary(self, monat, jahr):
         kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
 

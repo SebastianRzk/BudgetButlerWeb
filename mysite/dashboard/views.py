@@ -26,8 +26,6 @@ def handle_request(request):
         'zusammenfassung_einnahmenliste': str(einzelbuchungen.get_letzte_6_monate_einnahmen()),
         'zusammenfassung_ausgabenliste': str(einzelbuchungen.get_letzte_6_monate_ausgaben()),
         'gesamtausgabe_diesen_monat': ausgaben_monat,
-        'pro_tag_aktueller_monat': einzelbuchungen.get_ausgabe_pro_monat(0),
-        'pro_tag_vergangener_monat': einzelbuchungen.get_ausgabe_pro_monat(1),
         'verganges_halbes_jahr': "%.2f" % (sum(einzelbuchungen.get_letzte_6_monate_ausgaben()) / (6 * 30 + 3)),
         'miete_grundkosten_farbe':'bg-green',
 
