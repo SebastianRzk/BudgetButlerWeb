@@ -19,15 +19,10 @@ def handle_request():
         ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
 
     context = {
-        'rest_budget': 400,
-        'prognose_monatsende': 110,
         'zusammenfassung_monatsliste': monatsliste(),
         'zusammenfassung_einnahmenliste': str(einzelbuchungen.get_letzte_6_monate_einnahmen()),
         'zusammenfassung_ausgabenliste': str(einzelbuchungen.get_letzte_6_monate_ausgaben()),
-        'verganges_halbes_jahr': "%.2f" % (sum(einzelbuchungen.get_letzte_6_monate_ausgaben()) / (6 * 30 + 3)),
-        'miete_grundkosten_farbe':'bg-green',
-
-        'abrechnungen': ausgaben_liste,
+        'ausgaben_des_aktuellen_monats': ausgaben_liste,
     }
     context = {**context, **viewcore.generate_base_context('dashboard')}
     return context
