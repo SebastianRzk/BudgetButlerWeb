@@ -8,5 +8,5 @@ script: py.test --cov=mysite
 
 after_success:
   - coveralls
-  - pip install --user codecov && codecov -t $CODECOV
+  - pip install codecov && codecov -t $CODECOV
  
