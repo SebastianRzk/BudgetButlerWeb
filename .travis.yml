@@ -4,9 +4,10 @@ python:
 install: 
   - pip install -r integration-requirements.txt
   - pip install coveralls
+  - pip install --user codecov
+
 script: py.test --cov=mysite
 
 after_success:
   - coveralls
-  - pip install codecov && codecov -t $CODECOV
- 
+  - codecov 
