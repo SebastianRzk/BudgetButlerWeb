@@ -16,7 +16,7 @@ def berechne_monate(tabelle):
     print('##########################')
 
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    alle_kategorien = set(einzelbuchungen.get_kategorien_ausgaben())
+    alle_kategorien = set(einzelbuchungen.get_alle_kategorien())
 
     monats_namen = []
     for _, wert_monats_gruppe in tabelle.iteritems():
@@ -49,12 +49,14 @@ def berechne_monate(tabelle):
 
 def _umrechnen(tabelle):
     result = {}
-    for _, group in tabelle.iteritems():
-        for tblindex, wert in group.iteritems():
-            (datum, kategorie) = tblindex
-            if datum not in result:
-                result[datum] = {}
-            result[datum][kategorie] = wert
+    for tblindex, group in tabelle.iterrows():
+        print(index)
+        print('###')
+        print(group)
+        (datum, kategorie) = tblindex
+        if datum not in result:
+            result[datum] = {}
+        result[datum][kategorie] = group.Wert
     return result
 
 def _computePieChartProzentual(context, jahr):
@@ -102,20 +104,17 @@ def handle_request(request):
             if not kategorie in request.POST:
                 kategorien_checked_map[kategorie] = ''
 
+    jahresbuchungs_tabelle = einzelbuchungen.select().select_year(year)
+    jahres_ausgaben = jahresbuchungs_tabelle.select_ausgaben()
+    jahres_einnahmen = jahresbuchungs_tabelle.select_einnahmen()
 
     jahresausgaben = []
-    for jahr, jahresblock in einzelbuchungen.get_ausgaben_kategorie_jahr(year).iteritems():
-        print(jahresblock)
-        for tblkategorie, tblwert in jahresblock.iteritems():
-            jahresausgaben.append([tblkategorie, '%.2f' % tblwert, kategorien_checked_map[tblkategorie], einzelbuchungen.get_farbe_fuer(tblkategorie)])
-        break
+    for kategorie, jahresblock in jahres_ausgaben.group_by_kategorie().iterrows():
+        jahresausgaben.append([kategorie, '%.2f' % jahresblock.Wert, kategorien_checked_map[kategorie], einzelbuchungen.get_farbe_fuer(kategorie)])
 
     jahreseinnahmen = []
-    for jahr, jahresblock in einzelbuchungen.get_einnahmen_kategorie_jahr(year).iteritems():
-        print(jahresblock)
-        for tblkategorie, tblwert in jahresblock.iteritems():
-            jahreseinnahmen.append([tblkategorie, '%.2f' % tblwert, kategorien_checked_map[tblkategorie], einzelbuchungen.get_farbe_fuer(tblkategorie)])
-        break
+    for kategorie, jahresblock in jahres_einnahmen.group_by_kategorie().iterrows():
+        jahreseinnahmen.append([kategorie, '%.2f' % jahresblock.Wert, kategorien_checked_map[kategorie], einzelbuchungen.get_farbe_fuer(kategorie)])
 
     tabelle = einzelbuchungen.get_jahresausgaben_nach_monat(year)
     (monats_namen, kategorien_werte) = berechne_monate(tabelle)

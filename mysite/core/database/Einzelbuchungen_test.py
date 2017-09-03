@@ -73,27 +73,6 @@ class einzelbuchungen(unittest.TestCase):
         assert result['Kategorie'] == '1kategorie'
         assert result['Wert'] == 1.54
 
-    def test_get_gesamtausgaben_nach_kategorie_withEmptyDatabase_shouldReturnEmptyDict(self):
-        component_under_test = Einzelbuchungen()
-        assert component_under_test.get_gesamtausgaben_nach_kategorie() == {}
-
-    def test_get_gesamtausgaben_nach_kategorie_shouldReturnResult(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(date.today(), '1kategorie', '1name', -1)
-        component_under_test.add(date.today(), '1kategorie', '1name', -4)
-        component_under_test.add(date.today(), '2kategorie', '1name', -3)
-
-        result = component_under_test.get_gesamtausgaben_nach_kategorie()
-        assert result.keys() == set(['1kategorie', '2kategorie'])
-        assert result['1kategorie'] == -5
-        assert result['2kategorie'] == -3
-
-    def test_get_gesamtausgaben_nach_kategorie_withEinnahmen_shouldFilterEinnahmen(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(date.today(), '1kategorie', '1name', 1)
-
-        assert component_under_test.get_gesamtausgaben_nach_kategorie() == {}
-
     def test_get_einzelbuchungen_shouldReturnListSortedBy_Datum(self):
         component_under_test = Einzelbuchungen()
         component_under_test.add(datum('01/01/2012'), '1kategorie', '1name', 1)
@@ -167,41 +146,6 @@ class gesamtausgaben_jahr(unittest.TestCase):
         result = component_under_test.get_jahresausgaben_nach_monat(2017)
 
         assert set(result.index) == set()
-
-    def test_getGesamtausgabenNachKategorieProzentual_withEmptyDB_shouldReturnEmptyDict(self):
-        component_under_test = Einzelbuchungen()
-
-        result = component_under_test.get_gesamtausgaben_nach_kategorie_prozentual()
-
-        assert result == {}
-
-    def test_getGesamtausgabenNachKategorieProzentual_withEinnahme_shouldReturnEmptyDict(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2015'), 'kategorie 1', 'some name', 10)
-
-        result = component_under_test.get_gesamtausgaben_nach_kategorie_prozentual()
-
-        assert result == {}
-
-    def test_getGesamtausgabenNachKategorieProzentual_withOneEntry_shouldReturnKategorieWith100Percent(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2015'), 'kategorie 1', 'some name', -10)
-
-        result = component_under_test.get_gesamtausgaben_nach_kategorie_prozentual()
-
-        assert set(result.keys()) == set(['kategorie 1'])
-        assert  result['kategorie 1'] == 100.00
-
-    def test_getGesamtausgabenNachKategorieProzentual_withTwoEntrys_shouldReturnResult(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('01/01/2015'), 'kategorie 1', 'some name', -7.5)
-        component_under_test.add(datum('01/01/2015'), 'kategorie 2', 'some name', -2.5)
-
-        result = component_under_test.get_gesamtausgaben_nach_kategorie_prozentual()
-
-        assert set(result.keys()) == set(['kategorie 1', 'kategorie 2'])
-        assert  result['kategorie 1'] == 75.00
-        assert  result['kategorie 2'] == 25.00
 
     def test_getJahresausgabenNachKategorieProzentual_withEmptyDB_shouldReturnEmptyDict(self):
         component_under_test = Einzelbuchungen()

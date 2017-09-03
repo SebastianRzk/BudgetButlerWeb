@@ -175,66 +175,6 @@ class Einzelbuchungen:
         tabelle = tabelle.groupby(['Datum', 'Kategorie']).sum()
         return tabelle
 
-    def get_ausgaben_kategorie_jahr(self, jahr):
-        tabelle = self.content.copy()
-        if tabelle.empty:
-            return tabelle
-
-        tabelle.Datum = tabelle.Datum.map(lambda x:x.year)
-        tabelle = tabelle[tabelle.Datum == jahr]
-
-        if tabelle.empty:
-            return tabelle
-
-        tabelle = tabelle[tabelle.Wert < 0]
-
-        if tabelle.empty:
-            return tabelle
-
-        del tabelle['Dynamisch']
-        del tabelle['Datum']
-        tabelle = tabelle.groupby(['Kategorie']).sum()
-        return tabelle
-
-    def get_einnahmen_kategorie_jahr(self, jahr):
-        tabelle = self.content.copy()
-        if tabelle.empty:
-            return tabelle
-
-        tabelle.Datum = tabelle.Datum.map(lambda x:x.year)
-        tabelle = tabelle[tabelle.Datum == jahr]
-
-        if tabelle.empty:
-            return tabelle
-
-        tabelle = tabelle[tabelle.Wert > 0]
-
-        if tabelle.empty:
-            return tabelle
-
-        del tabelle['Dynamisch']
-        del tabelle['Datum']
-        tabelle = tabelle.groupby(['Kategorie']).sum()
-        return tabelle
-
-    def get_gesamtausgaben_nach_kategorie(self):
-        tabelle = self.content.copy()
-        tabelle = tabelle[tabelle.Wert < 0]
-        tabelle = tabelle.groupby(['Kategorie']).sum()
-        result = {}
-        for kategorie, row in tabelle.iterrows():
-            result[kategorie] = row.Wert
-        return result
-
-    def get_gesamtausgaben_nach_kategorie_prozentual(self):
-        tabelle = self.content[self.content.Wert < 0]
-        tabelle_gesamtsumme = tabelle.Wert.sum()
-        tabelle = tabelle.groupby(['Kategorie']).sum()
-        result = {}
-        for kategorie, row in tabelle.iterrows():
-            result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
-        return result
-
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
         tabelle = self.content.copy()
         tabelle = tabelle[tabelle.Wert < 0]
