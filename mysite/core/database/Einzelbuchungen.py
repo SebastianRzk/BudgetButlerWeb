@@ -3,7 +3,6 @@ Created on 10.08.2017
 
 @author: sebastian
 '''
-from calendar import monthrange
 from datetime import date
 from datetime import datetime
 
@@ -174,20 +173,6 @@ class Einzelbuchungen:
         del tabelle['Dynamisch']
         tabelle.Datum = tabelle.Datum.map(lambda x:x.month)
         tabelle = tabelle.groupby(['Datum', 'Kategorie']).sum()
-        return tabelle
-
-    def get_gesamtbuchungen_jahr(self, jahr):
-        tabelle = self.content.copy()
-        crit1 = tabelle['Datum'].map(lambda x : x.year == jahr)
-
-        if tabelle.empty:
-            return pd.DataFrame()
-
-        tabelle = tabelle[crit1]
-        tabelle.Datum = tabelle.Datum.map(lambda x:x.year)
-        del tabelle['Dynamisch']
-        del tabelle['Datum']
-        tabelle = tabelle.groupby(['Kategorie']).sum()
         return tabelle
 
     def get_ausgaben_kategorie_jahr(self, jahr):
