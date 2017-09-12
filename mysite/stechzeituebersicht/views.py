@@ -8,11 +8,6 @@ from core.DatabaseModule import Database
 from viewcore import viewcore
 
 
-def __init__(self):
-    self.count = 0
-
-# Create your views here.
-
 def handle_request():
     context = viewcore.generate_base_context('stechzeituebersicht')
 

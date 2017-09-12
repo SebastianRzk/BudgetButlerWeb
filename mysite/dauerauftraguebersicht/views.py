@@ -4,10 +4,6 @@ from django.template.loader import render_to_string
 
 from viewcore import viewcore
 
-
-def __init__(self):
-    self.count = 0
-
 # Create your views here.
 def index(request):
 

@@ -14,13 +14,6 @@ from viewcore import viewcore
 
 LAST_ELEMTENTS = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
 
-def __init__(self):
-    self.count = 0
-
-
-
-# Create your views here.
-
 def handle_request(request):
     print(viewcore.database_instance())
     if request.method == "POST" and request.POST['action'] == 'add':

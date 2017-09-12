@@ -7,9 +7,6 @@ from django.template.loader import render_to_string
 from viewcore import viewcore
 
 
-def __init__(self):
-    self.count = 0
-
 def handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
     today = datetime.date.today()

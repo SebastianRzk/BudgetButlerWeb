@@ -5,9 +5,6 @@ from viewcore import viewcore
 from viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german
 
-def __init__(self):
-    self.count = 0
-
 def handle_request(request):
     context = viewcore.generate_base_context("addeinzelbuchung")
     context['element_titel'] = "Neue Ausgabe"

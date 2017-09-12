@@ -5,14 +5,6 @@ from viewcore import viewcore
 from viewcore.converter import datum, dezimal_float, from_double_to_german
 
 
-
-def __init__(self):
-    self.count = 0
-
-
-
-# Create your views here.
-
 def handle_request(request):
     context = viewcore.generate_base_context("addeinnahme")
     context['element_titel'] = "Neue Einnahme"

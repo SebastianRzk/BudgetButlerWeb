@@ -4,10 +4,6 @@ from django.template.loader import render_to_string
 from adddauerauftrag.views import handle_request
 from viewcore import viewcore
 
-
-def __init__(self):
-    self.count = 0
-
 def handle_request(request):
     ausgabe_sebastian = viewcore.database_instance().get_gemeinsame_ausgabe_fuer('Sebastian')
     ausgabe_maureen = viewcore.database_instance().get_gemeinsame_ausgabe_fuer('Maureen')

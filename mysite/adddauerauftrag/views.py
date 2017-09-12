@@ -5,9 +5,6 @@ from viewcore import viewcore
 from viewcore.converter import datum, dezimal_float, datum_to_string
 
 
-def __init__(self):
-    self.count = 0
-
 def handle_request(request):
     if request.method == "POST" and request.POST['action'] == 'add':
         if not viewcore.is_transaction_already_fired(request.POST['ID']):

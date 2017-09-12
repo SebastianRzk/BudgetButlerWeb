@@ -8,11 +8,6 @@ import pandas
 from viewcore import viewcore
 
 
-def __init__(self):
-    self.count = 0
-
-
-
 def _mapping_passt(post_parameter, unpassende_kategorien):
     for unpassenden_kategorie in unpassende_kategorien:
         if not str(unpassenden_kategorie) + "_mapping" in post_parameter:

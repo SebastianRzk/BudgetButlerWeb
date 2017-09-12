@@ -1,19 +1,11 @@
 
 
-import datetime
-
-from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.template.context import RequestContext
 from django.template.loader import render_to_string
 
 from addstechzeit import views
 from viewcore import viewcore
 from viewcore.converter import time, datum
-
-
-def __init__(self):
-    self.count = 0
 
 def handle_request(request):
 
