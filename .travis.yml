@@ -6,7 +6,14 @@ install:
   - pip install coveralls
   - pip install codecov
 
-script: py.test --cov=mysite
+addons:
+  sonarcloud:
+    organization: "RosesTheN00b-github"
+
+
+script: 
+  - py.test --cov=mysite
+  - sonar-scanner -Dsonar.login=$SONAR
 
 after_success:
   - coveralls
