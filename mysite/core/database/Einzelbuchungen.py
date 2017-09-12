@@ -208,13 +208,6 @@ class Einzelbuchungen:
     def append_row(self, row):
         self.content = self.content.append(row, ignore_index=True)
 
-    def get_vorangegangenen_monat(self, index):
-        '''
-        gets vorangegangener monat
-        '''
-        nov_mask = self.content['Datum'].map(lambda x: x.month) == date.today().month - index
-        return self.content[nov_mask]
-
     def get_monate(self):
         '''
         Alle in der Datenbank eingetragenen Monate als set
