@@ -1,9 +1,6 @@
-# Create your tests here.
-'''
-'''
-
 import unittest
 
+from adddauerauftrag.view_test import PostRequest, GetRequest
 from core.DatabaseModule import Database
 from uebersicht import views
 import viewcore
@@ -48,8 +45,12 @@ class TestUebersicht(unittest.TestCase):
         assert link == "addeinzelbuchung"
 
 
+    def test_delete(self):
+        self.set_up()
+        self.add_test_data()
+        result = views.handle_request(PostRequest({'action':'delete', 'delete_index':'1'}))
+        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        assert einzelbuchungen.select().sum() == 100
+
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = "GET"
