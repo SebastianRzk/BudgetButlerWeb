@@ -37,12 +37,12 @@ class TestUebersicht(unittest.TestCase):
         result = views.handle_request(GetRequest())
         print("#################################################")
         print(result['alles']['2012.12'][0])
-        (_, _, _, _, wert, _, link) = result['alles']['2012.12'][0]
-        assert float(wert) > 0
-        assert link == "addeinnahme"
-        (_, _, _, _, wert, _, link) = result['alles']['2012.12'][1]
-        assert float(wert) < 0
-        assert link == "addeinzelbuchung"
+        item = result['alles']['2012.12'][0]
+        assert float(item['wert']) > 0
+        assert item['link'] == "addeinnahme"
+        item = result['alles']['2012.12'][1]
+        assert float(item['wert']) < 0
+        assert item['link'] == "addeinzelbuchung"
 
 
     def test_delete(self):
