@@ -26,27 +26,25 @@
               <tbody>
                 {% for ausgabe in ausgaben %}
                 <tr>
-                  <td>{{ausgabe.0}}</td>
-                  <td>{{ausgabe.1}}</td>
-                  <td>{{ausgabe.2}}</td>
-                  <td>{{ausgabe.3}}</td>
-                  <td align="right">{{ausgabe.4}}</td>
-                  <td>{{ausgabe.7}}
+                  <td>{{ausgabe.index}}</td>
+                  <td>{{ausgabe.datum}}</td>
+                  <td>{{ausgabe.name}}</td>
+                  <td>{{ausgabe.kategorie}}</td>
+                  <td align="right">{{ausgabe.wert}}</td>
+                  <td>{{ausgabe.tags}}
                    <td>
-	                   	{% if not ausgabe.5 %}
+	                   	{% if not ausgabe.dynamisch %}
 	                   	<div class="pull-right">
-		                   	<form role="form" action="/{{ausgabe.6}}/" method="post">
+		                   	<form role="form" action="/{{ausgabe.link}}/" method="post">
 		 	                 	{% csrf_token %}
-		                  		<input type="hidden" name="edit_index" value="{{ausgabe.0}}">
+		                  		<input type="hidden" name="edit_index" value="{{ausgabe.index}}">
 		                  		<button type="submit" name="action" value="edit" ><i class="fa fa-pencil"></i></button>
 		                    </form>
 		                </div>
-						{%endif%}
-	                  	{% if not ausgabe.5 %}
 		                <div class="pull-right">
-		                  	<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.2}} löschen?');" role="form" action="/uebersicht/" method="post">
+		                  	<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.name}} löschen?');" role="form" action="/uebersicht/" method="post">
 		                  		{% csrf_token %}
-		                  		<input type="hidden" name="delete_index" value="{{ausgabe.0}}">
+		                  		<input type="hidden" name="delete_index" value="{{ausgabe.index}}">
 		                  		<button name="action" value="delete" ><i class="fa fa-trash-o"></i></button>
 		                    </form>
 	                    </div>
