@@ -28,7 +28,7 @@ def handle_request(request):
         link = "addeinnahme"
         if row.Wert < 0:
             link = "addeinzelbuchung"
-        ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, '%.2f' % row.Wert, row.Dynamisch, link))
+        ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, '%.2f' % row.Wert, row.Dynamisch, link, str(row.Tags)))
 
     if datum_alt != None:
         ausgaben_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = ausgaben_liste
