@@ -19,7 +19,7 @@
                   <th>Name</th>
                   <th>Kategorie</th>
                   <th>Wert</th>
-                  <th>Aktion</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -31,22 +31,24 @@
                   <td>{{ausgabe.3}}</td>
                   <td align="right">{{ausgabe.4}}</td>
                    <td>
-                   	{% if not ausgabe.5 %}
-	                   	<form role="form" action="/{{ausgabe.6}}/" method="post">
-	 	                 	{% csrf_token %}
-	                  		<input type="hidden" name="edit_index" value="{{ausgabe.0}}">
-	                  		<button type="submit" name="action" value="edit" ><i class="fa fa-pencil"></i></button>
-	                    </form>
-					{%endif%}
-                    </td>
-                    <td>
-                  	{% if not ausgabe.5 %}
-	                  	<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.2}} löschen?');" role="form" action="/uebersicht/" method="post">
-	                  		{% csrf_token %}
-	                  		<input type="hidden" name="delete_index" value="{{ausgabe.0}}">
-	                  		<button name="action" value="delete" ><i class="fa fa-trash-o"></i></button>
-	                    </form>
-                    {% endif %}
+	                   	{% if not ausgabe.5 %}
+	                   	<div class="pull-right">
+		                   	<form role="form" action="/{{ausgabe.6}}/" method="post">
+		 	                 	{% csrf_token %}
+		                  		<input type="hidden" name="edit_index" value="{{ausgabe.0}}">
+		                  		<button type="submit" name="action" value="edit" ><i class="fa fa-pencil"></i></button>
+		                    </form>
+		                </div>
+						{%endif%}
+	                  	{% if not ausgabe.5 %}
+		                <div class="pull-right">
+		                  	<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.2}} löschen?');" role="form" action="/uebersicht/" method="post">
+		                  		{% csrf_token %}
+		                  		<input type="hidden" name="delete_index" value="{{ausgabe.0}}">
+		                  		<button name="action" value="delete" ><i class="fa fa-trash-o"></i></button>
+		                    </form>
+	                    </div>
+	                    {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
