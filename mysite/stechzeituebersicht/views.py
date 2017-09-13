@@ -48,17 +48,7 @@ def handle_request():
     for rowindex, row in viewcore.database_instance().stechzeiten.iterrows():
         stechzeiten.append([rowindex, row.Datum, row.Arbeitgeber, row.Einstechen, row.Ausstechen, row.Arbeitszeit])
 
-    wochen = {}
-    for woche, (ist, soll) in soll_ist_uebersicht.items():
-        ist_hours = ist.total_seconds() / (60 * 60)
-        soll_hours = soll.total_seconds() / (60 * 60)
-        wochen[woche] = ["%.2f" % (soll_hours - ist_hours), "%.2f" % ist_hours]
-
-
-
-    viewcore.database_instance().get_soll_ist_uebersicht(2017)
     context['stechzeiten'] = stechzeiten
-    context['wochen'] = wochen
     return context
 
 def index(request):
