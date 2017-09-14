@@ -13,14 +13,17 @@ import pandas as pd
 
 def read_database(nutzername):
     '''
-    read panda tables from csv files
+    read panda tables from disk
     '''
     if not os.path.isfile('../Database_' + nutzername + ".csv"):
         neue_datenbank = DatabaseModule.Database(nutzername)
         write(neue_datenbank)
 
     file = open('../Database_' + nutzername + ".csv", 'r')
+    return read_file(file, nutzername)
 
+
+def read_file(file, nutzername):
     tables = {}
 
     tables["einzelbuchungen"] = ""
