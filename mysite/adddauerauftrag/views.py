@@ -24,8 +24,7 @@ def handle_request(request):
                     request.POST['rhythmus'],
                     value)
                 viewcore.add_changed_dauerauftraege({
-                    'mode': 'Bearbeitet',
-                    'nummer':request.POST['edit_index'],
+                    'fa':'pencil',
                     'startdatum':str(datum(request.POST['startdatum'])),
                     'endedatum': str(datum(request.POST['endedatum'])),
                     'kategorie': request.POST['kategorie'],
@@ -42,8 +41,7 @@ def handle_request(request):
                     request.POST['rhythmus'],
                     value)
                 viewcore.add_changed_dauerauftraege({
-                    'mode': 'Hinzugefügt',
-                    'nummer':'not-set',
+                    'fa':'plus',
                     'startdatum':str(datum(request.POST['startdatum'])),
                     'endedatum': str(datum(request.POST['endedatum'])),
                     'kategorie': request.POST['kategorie'],
