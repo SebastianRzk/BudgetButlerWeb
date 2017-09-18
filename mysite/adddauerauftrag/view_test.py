@@ -21,7 +21,7 @@ from viewcore.converter import datum
 '''
 class TesteAddDauerauftragView(unittest.TestCase):
 
-    def setUp(self):
+    def set_up(self):
         print("create new database")
         self.testdb = Database("test")
         viewcore.viewcore.DATABASE_INSTANCE = self.testdb
@@ -29,11 +29,19 @@ class TesteAddDauerauftragView(unittest.TestCase):
         viewcore.viewcore.TEST = True
 
     def test_init(self):
-        self.setUp()
-        views.handle_request(GetRequest())
+        self.set_up()
+        context = views.handle_request(GetRequest())
+        assert context['approve_title'] == 'Dauerauftrag hinzufügen'
+
+    def test_editCallFromUeberischt_shouldNameButtonEdit(self):
+        self.set_up()
+        self.testdb.dauerauftraege.add(datum('10/10/2010'), datum('10/10/2010'), 'kategorie', 'name', 'monatlich', 10)
+        context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
+        assert context['approve_title'] == 'Dauerauftrag aktualisieren'
+
 
     def test_add_dauerauftrag(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":"????",
@@ -56,7 +64,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert self.testdb.dauerauftraege.content.Rhythmus[0] == "monatlich"
 
     def test_add_dauerauftrag_einnahme(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":viewcore.viewcore.get_next_transaction_id(),
@@ -79,7 +87,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert self.testdb.dauerauftraege.content.Rhythmus[0] == "monatlich"
 
     def test_edit_dauerauftrag(self):
-        self.setUp()
+        self.set_up()
 
         views.handle_request(PostRequest(
             {"action":"add",
@@ -118,7 +126,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert self.testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
 
     def test_edit_dauerauftrag_ausgabe_to_einnahme(self):
-        self.setUp()
+        self.set_up()
 
         views.handle_request(PostRequest(
             {"action":"add",
@@ -158,7 +166,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
 
     def test_edit_dauerauftrag_should_only_fire_once(self):
-        self.setUp()
+        self.set_up()
 
         views.handle_request(PostRequest(
             {"action":"add",
@@ -210,7 +218,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
 
     def test_add_dauerauftrag_should_only_fire_once(self):
-        self.setUp()
+        self.set_up()
 
         next_id = viewcore.viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
