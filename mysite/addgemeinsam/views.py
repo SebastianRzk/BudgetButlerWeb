@@ -40,6 +40,7 @@ def handle_request(request):
             viewcore.save_database()
     print(viewcore.database_instance().einzelbuchungen)
     context = viewcore.generate_base_context("addgemeinsam")
+    context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if request.method == "POST" and request.POST['action'] == 'edit':
         print("Please edit:", request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
@@ -54,6 +55,7 @@ def handle_request(request):
         context['default_person'] = db_row.Person
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
+        context['approve_title'] = 'Gemeinsame Ausgabe aktualisieren'
     last_elements = []
     for row_index, row in addgemeinsam.views.LAST_ELEMTENTS.iterrows():
         last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert, row.Person))

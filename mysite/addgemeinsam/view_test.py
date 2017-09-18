@@ -21,7 +21,7 @@ from viewcore.converter import datum
 '''
 class TesteAddGemeinsamView(unittest.TestCase):
 
-    def setUp(self):
+    def set_up(self):
         print('create new database')
         self.testdb = Database('test')
         viewcore.viewcore.DATABASE_INSTANCE = self.testdb
@@ -29,11 +29,18 @@ class TesteAddGemeinsamView(unittest.TestCase):
         viewcore.viewcore.TEST = True
 
     def test_init(self):
-        self.setUp()
-        views.handle_request(GetRequest())
+        self.set_up()
+        context = views.handle_request(GetRequest())
+        assert context['approve_title'] == 'Gemeinsame Ausgabe hinzufügen'
+
+    def test_editCallFromUeberischt_shouldNameButtonEdit(self):
+        self.set_up()
+        self.testdb.add_gemeinsame_einnahmeausgabe(datum('10/10/2010'), 'kategorie', 'ausgaben_name', 10, 'Sebastian')
+        context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
+        assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
 
     def test_add_shouldAddGemeinsameBuchung(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(PostRequest(
             {'action':'add',
              'ID':viewcore.viewcore.get_next_transaction_id(),
@@ -51,7 +58,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert self.testdb.gemeinsame_buchungen.Person[0] == 'testperson'
 
     def test_add_shouldAddDynamicEinzelbuchung(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(PostRequest(
             {'action':'add',
              'ID':viewcore.viewcore.get_next_transaction_id(),
@@ -69,7 +76,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert self.testdb.einzelbuchungen.content.Name[0] == 'testname (noch nicht abgerechnet, von testperson)'
 
     def test_add_should_only_fire_once(self):
-        self.setUp()
+        self.set_up()
         next_id = viewcore.viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {'action':'add',
@@ -98,7 +105,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert self.testdb.gemeinsame_buchungen.Person[0] == 'testperson'
 
     def test_edit_ausgabe(self):
-        self.setUp()
+        self.set_up()
 
         views.handle_request(PostRequest(
             {'action':'add',
@@ -130,7 +137,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert self.testdb.gemeinsame_buchungen.Person[0] == 'testperson2'
 
     def test_edit_should_only_fire_once(self):
-        self.setUp()
+        self.set_up()
 
         views.handle_request(PostRequest(
             {'action':'add',
