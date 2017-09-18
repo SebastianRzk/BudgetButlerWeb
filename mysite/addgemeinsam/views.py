@@ -62,10 +62,8 @@ def handle_request(request):
 
     context['ID'] = viewcore.get_next_transaction_id()
     context['personen'] = ['Sebastian', 'Maureen']
-    print(viewcore.database_instance())
-    print(viewcore.database_instance().einzelbuchungen)
     context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben())
-    context['letzte_erfassung'] = last_elements
+    context['letzte_erfassung'] = reversed(last_elements)
     return context
 
 def index(request):
