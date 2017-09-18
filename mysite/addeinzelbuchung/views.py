@@ -6,15 +6,16 @@ from viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german
 
 def handle_request(request):
-    context = viewcore.generate_base_context("addeinzelbuchung")
-    context['element_titel'] = "Neue Ausgabe"
+    context = viewcore.generate_base_context('addeinzelbuchung')
+    context['element_titel'] = 'Neue Ausgabe'
+    context['approve_title'] = 'Ausgabe hinzufügen'
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    if request.method == "POST" and request.POST['action'] == 'add':
+    if request.method == 'POST' and request.POST['action'] == 'add':
         print(request.POST)
         if not viewcore.is_transaction_already_fired(request.POST['ID']):
             viewcore.fire(request.POST['ID'])
             value = dezimal_float(request.POST['wert']) * -1
-            if "edit_index" in request.POST:
+            if 'edit_index' in request.POST:
                 database_index = int(request.POST['edit_index'])
                 einzelbuchungen.edit(
                     database_index,
@@ -24,11 +25,11 @@ def handle_request(request):
                     value)
                 viewcore.add_changed_einzelbuchungen(
                     {
-                        "fa":"pencil",
-                        "datum":str(datum(request.POST['date'])),
-                        "kategorie":request.POST['kategorie'],
-                        "name":request.POST['name'],
-                        "wert":value
+                        'fa':'pencil',
+                        'datum':str(datum(request.POST['date'])),
+                        'kategorie':request.POST['kategorie'],
+                        'name':request.POST['name'],
+                        'wert':value
                         })
             else:
                 einzelbuchungen.add(
@@ -39,17 +40,17 @@ def handle_request(request):
 
                 viewcore.add_changed_einzelbuchungen(
                     {
-                        "fa":"plus",
-                        "datum":str(datum(request.POST['date'])),
-                        "kategorie":request.POST['kategorie'],
-                        "name":request.POST['name'],
-                        "wert":value
+                        'fa':'plus',
+                        'datum':str(datum(request.POST['date'])),
+                        'kategorie':request.POST['kategorie'],
+                        'name':request.POST['name'],
+                        'wert':value
                         })
 
 
             viewcore.save_database()
-    if request.method == "POST" and request.POST['action'] == 'edit':
-        print("Please edit:", request.POST['edit_index'])
+    if request.method == 'POST' and request.POST['action'] == 'edit':
+        print('Please edit:', request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
 
         selected_item = einzelbuchungen.get(db_index)
@@ -60,8 +61,9 @@ def handle_request(request):
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
         context['set_kategorie'] = True
-        context['element_titel'] = "Einzelbuchung bearbeiten"
-        context['active_name'] = "Einzelbuchung bearbeiten"
+        context['element_titel'] = 'Einzelbuchung bearbeiten'
+        context['active_name'] = 'Einzelbuchung bearbeiten'
+        context['approve_title'] = 'Ausgabe aktualisieren'
 
 
 
