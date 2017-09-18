@@ -72,7 +72,7 @@
 					<!-- /.box-body -->
 
 				<div class="box-footer">
-					<button type="submit" name="action" value="add" class="btn btn-primary">Submit</button>
+					<button type="submit" name="action" value="add" class="btn btn-primary">{{approve_title}}</button>
 				</div>
 			</form>
 		</div>
@@ -91,8 +91,6 @@
           <table class="table no-margin">
             <thead>
               <tr>
-                <th>Modus</th>
-                <th>Nummer</th>
                 <th>Startdatum</th>
                 <th>Endedatum</th>
                 <th>Rhythmus</th>
@@ -104,8 +102,7 @@
             <tbody>
               {% for ausgabe in letzte_erfassung %}
               <tr>
-                <td>{{ausgabe.mode}}</td>
-                <td>{{ausgabe.nummer}}</td>
+                <td><i class="fa fa-{{ausgabe.fa}} pull-right"></i></td>
                 <td>{{ausgabe.startdatum}}</td>
                 <td>{{ausgabe.endedatum}}</td>
                 <td>{{ausgabe.rhythmus}}</td>
