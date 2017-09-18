@@ -96,9 +96,14 @@ def read_file(file, nutzername):
     return database
 
 def write(database):
+    file = open('../Database_' + database.name + ".csv", 'w')
+    write_file(database, file)
+    file.close()
     '''
     writes the DATABASE into a file
     '''
+
+def write_file(database, file):
     einzelbuchungen = database.einzelbuchungen.content.copy()[database.einzelbuchungen.content.Dynamisch == False]
     einzelbuchungen_raw_data = einzelbuchungen[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
     content = einzelbuchungen_raw_data.to_csv(index=False)
@@ -119,9 +124,7 @@ def write(database):
     content += "\n Sonderzeiten \n"
     content += database.sonder_zeiten.to_csv(index=False)
 
-    file = open('../Database_' + database.name + ".csv", 'w')
     file.write(content)
-    file.close()
 
     print("WRITER: All Saved")
 

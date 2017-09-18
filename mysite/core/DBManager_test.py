@@ -20,19 +20,27 @@ sys.path.insert(0, _PATH + '/../')
 class DBManager_readDB(unittest.TestCase):
 
     def teste_read_with_full_database(self):
-        db = DBManager.read_file(StringIO(self.full_db) , 'testuser')
+        database = DBManager.read_file(StringIO(self.full_db) , 'testuser')
 
-        assert db.name == 'testuser'
-        assert len(db.einzelbuchungen.content) == 19
-        assert len(db.einzelbuchungen.content[db.einzelbuchungen.content.Dynamisch == False]) == 2
-        assert db.einzelbuchungen.select().sum() == -226
+        assert database.name == 'testuser'
+        assert len(database.einzelbuchungen.content) == 19
+        assert len(database.einzelbuchungen.content[database.einzelbuchungen.content.Dynamisch == False]) == 2
+        assert database.einzelbuchungen.select().sum() == -226
 
-        assert len(db.dauerauftraege.content) == 2
-        assert db.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
+        assert len(database.dauerauftraege.content) == 2
+        assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
-        assert len(db.stechzeiten) == 1
+        assert len(database.stechzeiten) == 1
 
-        assert len(db.soll_zeiten) == 1
+        assert len(database.soll_zeiten) == 1
+
+    def teste_write_with_full_database(self):
+        database = DBManager.read_file(StringIO(self.full_db) , 'testuser')
+        string_writer = StringIO()
+        DBManager.write_file(database, string_writer)
+
+        assert string_writer.getvalue() == self.full_db
+
 
 
 
