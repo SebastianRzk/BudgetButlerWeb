@@ -11,10 +11,6 @@ def get_monats_namen(monat):
     return datetime.date(1900, monat, 1).strftime('%B')
 
 def berechne_monate(tabelle):
-    print('######################')
-    print(tabelle)
-    print('##########################')
-
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     alle_kategorien = set(einzelbuchungen.get_alle_kategorien())
 
