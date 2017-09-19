@@ -159,6 +159,11 @@ def generate_base_context(pagename):
     context['nutzername'] = database_instance().name
     return context
 
+def generate_error_context(pagename, errortext):
+    context = generate_base_context(pagename)
+    context['%Errortext'] = errortext
+    return context
+
 TEST = False
 
 def save_database():
