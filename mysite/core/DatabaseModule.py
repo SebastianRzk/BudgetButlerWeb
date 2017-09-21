@@ -10,6 +10,7 @@ from datetime import datetime, date, timedelta
 from core.Frequency import FrequencsFunctions
 from core.database.Dauerauftraege import Dauerauftraege
 from core.database.Einzelbuchungen import Einzelbuchungen
+from mysite.core.database.Sollzeiten import Sollzeiten
 from mysite.core.database.Stechzeiten import Stechzeiten
 import pandas as pd
 import viewcore
@@ -34,7 +35,6 @@ class StringWriter():
 
 
 class Database:
-    persistent_sollzeiten_columns = ['Startdatum', 'Endedatum', 'Dauer', 'Arbeitgeber']
     TEST = False
     '''
     Database
@@ -45,7 +45,7 @@ class Database:
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsame_buchungen = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
         self.stechzeiten = Stechzeiten()
-        self.soll_zeiten = pd.DataFrame({}, columns=self.persistent_sollzeiten_columns)
+        self.sollzeiten = Sollzeiten()
         self.sonder_zeiten = pd.DataFrame({}, columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
         self.einzelbuchungen = Einzelbuchungen()
 
@@ -56,10 +56,6 @@ class Database:
         print('DATABASE: Erneuere Datenbestand')
         self.gemeinsame_buchungen['Datum'] = self.gemeinsame_buchungen['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
 
-
-        self.soll_zeiten['Startdatum'] = self.soll_zeiten['Startdatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        self.soll_zeiten['Endedatum'] = self.soll_zeiten['Endedatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        self.soll_zeiten['Dauer'] = self.soll_zeiten['Dauer'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
 
         self.sonder_zeiten['Datum'] = self.sonder_zeiten['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
         self.sonder_zeiten['Dauer'] = self.sonder_zeiten['Dauer'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
@@ -76,18 +72,7 @@ class Database:
         self.einzelbuchungen.sort()
         print('DATABASE: Datenbestand erneuert')
 
-    def add_soll_zeit(self, startdatum, endedatum, dauer, arbeitgeber):
-        neue_soll_zeit = pd.DataFrame([[startdatum, endedatum, dauer, arbeitgeber]], columns=self.persistent_sollzeiten_columns)
-        self.soll_zeiten = self.soll_zeiten.append(neue_soll_zeit, ignore_index=True)
 
-        print('DATABASE: sollzeit hinzugefügt')
-        print(self.soll_zeiten)
-
-    def edit_sollzeit(self, index, startdatum, endedatum, dauer, arbeitgeber):
-        self.soll_zeiten.loc[self.soll_zeiten.index[[index]], 'Startdatum'] = startdatum
-        self.soll_zeiten.loc[self.soll_zeiten.index[[index]], 'Endedatum'] = endedatum
-        self.soll_zeiten.loc[self.soll_zeiten.index[[index]], 'Dauer'] = dauer
-        self.soll_zeiten.loc[self.soll_zeiten.index[[index]], 'Arbeitgeber'] = arbeitgeber
 
 
     def add_gemeinsame_einnahmeausgabe(self, ausgaben_datum, kategorie, ausgaben_name, wert, person):
@@ -229,8 +214,8 @@ class Database:
         print(function)
         if len(self.stechzeiten.content) != 0:
             startwoche = function(self, min(self.stechzeiten.content.Datum))
-        if len(self.soll_zeiten.Startdatum) != 0:
-            startwoche = function(self, min(self.soll_zeiten.Startdatum))
+        if len(self.sollzeiten.content.Startdatum) != 0:
+            startwoche = function(self, min(self.sollzeiten.content.Startdatum))
 
         ist_map = self.get_woechentliche_stechzeiten(jahr, function)
         result_map = {}
@@ -272,10 +257,10 @@ class Database:
 
     def _get_zeit_from_tag(self, wochentag):
         print("berechne tag: ", wochentag)
-        crit1 = self.soll_zeiten.Startdatum.map(lambda x : x <= wochentag)
-        crit2 = self.soll_zeiten.Endedatum.map(lambda x : x >= wochentag)
+        crit1 = self.sollzeiten.content.Startdatum.map(lambda x : x <= wochentag)
+        crit2 = self.sollzeiten.content.Endedatum.map(lambda x : x >= wochentag)
 
-        kopierte_tabelle = self.soll_zeiten.copy()
+        kopierte_tabelle = self.sollzeiten.content.copy()
         kopierte_tabelle = kopierte_tabelle[crit1 & crit2]
         kopierte_tabelle.Dauer = kopierte_tabelle.Dauer.map(lambda x: datetime.combine(date.min, x) - datetime.min)
         if kopierte_tabelle.Dauer.sum() == 0:
@@ -295,10 +280,6 @@ class Database:
         returns the anzahl der stechzeiten
         '''
         return len(self.stechzeiten.content)
-
-    def get_sollzeiten_liste(self):
-        return self.frame_to_list_of_dicts(self.soll_zeiten)
-
 
     def _row_to_dict(self, columns, index, row_data):
         row = {}

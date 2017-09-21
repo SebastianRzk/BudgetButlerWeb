@@ -22,13 +22,13 @@ def handle_request(request):
             laenge = request.POST['laenge']
             laenge = datetime.datetime.strptime(laenge, '%H:%M').time()
 
-            viewcore.database_instance().add_soll_zeit(startdatum, endedatum, laenge, "DATEV")
+            viewcore.database_instance().sollzeiten.add(startdatum, endedatum, laenge, "DATEV")
             viewcore.save_database()
 
     if request.method == "POST" and request.POST['action'] == 'edit':
         if not viewcore.is_transaction_already_fired(request.POST['ID']):
             viewcore.fire(request.POST['ID'])
-            viewcore.database_instance().edit_sollzeit(
+            viewcore.database_instance().sollzeiten.edit(
                 int(request.POST["edit_index"]),
                 datum(request.POST['startdatum']),
                 datum(request.POST['endedatum']),
@@ -36,7 +36,7 @@ def handle_request(request):
                 "DATEV")
             viewcore.save_database()
 
-    soll_zeiten_liste = viewcore.database_instance().get_sollzeiten_liste()
+    soll_zeiten_liste = viewcore.database_instance().sollzeiten.get_sollzeiten_liste()
     for sollzeit in soll_zeiten_liste:
         sollzeit['Dauer'] = str(sollzeit['Dauer'])
 

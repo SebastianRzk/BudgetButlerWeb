@@ -94,7 +94,7 @@ class stechzeiten(unittest.TestCase):
     def test_sollzeitOfFirtstWeekday_shouldReturnWeekOfTodayWithSollzeit(self):
         component_under_test = Database('test_database')
 
-        component_under_test.add_soll_zeit(datum('29/05/2017'), datum('29/05/2017'), time('1:02'), 'Datev')
+        component_under_test.sollzeiten.add(datum('29/05/2017'), datum('29/05/2017'), time('1:02'), 'Datev')
         result = component_under_test.get_soll_ist_uebersicht(datum('29/05/2017').year)
 
         assert datum('29/05/2017').isocalendar()[1] in result
@@ -103,7 +103,7 @@ class stechzeiten(unittest.TestCase):
     def test_sollzeitOfLastWeekday_shouldReturnWeekOfTodayWithSollzeit(self):
         component_under_test = Database('test_database')
 
-        component_under_test.add_soll_zeit(datum('02/06/2017'), datum('02/06/2017'), time('1:02'), 'Datev')
+        component_under_test.sollzeiten.add(datum('02/06/2017'), datum('02/06/2017'), time('1:02'), 'Datev')
         result = component_under_test.get_soll_ist_uebersicht(datum('02/06/2017').year)
 
         assert datum('02/06/2017').isocalendar()[1] in result
@@ -112,8 +112,8 @@ class stechzeiten(unittest.TestCase):
     def test_withTwoSollzeiten_shouldReturnCummulatedResults(self):
         component_under_test = Database('test_database')
 
-        component_under_test.add_soll_zeit(datum('16/5/2017'), datum('16/5/2017'), time('1:02'), 'Datev')
-        component_under_test.add_soll_zeit(datum('15/5/2017'), datum('15/5/2017'), time('0:30'), 'Datev')
+        component_under_test.sollzeiten.add(datum('16/5/2017'), datum('16/5/2017'), time('1:02'), 'Datev')
+        component_under_test.sollzeiten.add(datum('15/5/2017'), datum('15/5/2017'), time('0:30'), 'Datev')
 
         result = component_under_test.get_soll_ist_uebersicht(date.today().year)
 
@@ -121,11 +121,11 @@ class stechzeiten(unittest.TestCase):
         assert datum('16/5/2017').isocalendar()[1] in result.keys()
         assert result[datum('16/5/2017').isocalendar()[1]] == (_zero(), timedelta(hours=1, minutes=32))
 
-    def test_withTwoSollzeitenSameDate_shouldReturnCummulatedResults(self):
+    def test_withTwosollzeiten_add_SameDate_shouldReturnCummulatedResults(self):
         component_under_test = Database('test_database')
 
-        component_under_test.add_soll_zeit(datum('01/06/2017'), datum('01/06/2017'), time('1:02'), 'Datev')
-        component_under_test.add_soll_zeit(datum('01/06/2017'), datum('01/06/2017'), time('0:30'), 'Datev')
+        component_under_test.sollzeiten.add(datum('01/06/2017'), datum('01/06/2017'), time('1:02'), 'Datev')
+        component_under_test.sollzeiten.add(datum('01/06/2017'), datum('01/06/2017'), time('0:30'), 'Datev')
 
         result = component_under_test.get_soll_ist_uebersicht(date.today().year)
 
@@ -135,7 +135,7 @@ class stechzeiten(unittest.TestCase):
     def test_withWochenSollzeit_shouldIgnoreWochenende(self):
         component_under_test = Database('test_database')
 
-        component_under_test.add_soll_zeit(datum('15/5/2017'), datum('21/5/2017'), time('1:02'), 'Datev')
+        component_under_test.sollzeiten.add(datum('15/5/2017'), datum('21/5/2017'), time('1:02'), 'Datev')
 
         result = component_under_test.get_soll_ist_uebersicht(date.today().year)
 

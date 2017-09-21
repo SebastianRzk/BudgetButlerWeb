@@ -44,10 +44,10 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.soll_zeiten) == 1
-        assert self.testdb.soll_zeiten.Startdatum[0] == datum("1/1/2017")
-        assert self.testdb.soll_zeiten.Endedatum[0] == datum("2/3/2018")
-        assert self.testdb.soll_zeiten.Dauer[0] == datetime.datetime.strptime("2:00", '%H:%M').time()
+        assert len(self.testdb.sollzeiten.content) == 1
+        assert self.testdb.sollzeiten.content.Startdatum[0] == datum("1/1/2017")
+        assert self.testdb.sollzeiten.content.Endedatum[0] == datum("2/3/2018")
+        assert self.testdb.sollzeiten.content.Dauer[0] == datetime.datetime.strptime("2:00", '%H:%M').time()
 
 
     def test_add_should_only_fire_once(self):
@@ -71,10 +71,10 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.soll_zeiten) == 1
-        assert self.testdb.soll_zeiten.Startdatum[0] == datum("1/1/2017")
-        assert self.testdb.soll_zeiten.Endedatum[0] == datum("2/3/2018")
-        assert self.testdb.soll_zeiten.Dauer[0] == datetime.datetime.strptime("2:00", '%H:%M').time()
+        assert len(self.testdb.sollzeiten.content) == 1
+        assert self.testdb.sollzeiten.content.Startdatum[0] == datum("1/1/2017")
+        assert self.testdb.sollzeiten.content.Endedatum[0] == datum("2/3/2018")
+        assert self.testdb.sollzeiten.content.Dauer[0] == datetime.datetime.strptime("2:00", '%H:%M').time()
 
 
     def test_edit(self):
@@ -99,10 +99,10 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.soll_zeiten) == 1
-        assert self.testdb.soll_zeiten.Startdatum[0] == datum("2/2/2018")
-        assert self.testdb.soll_zeiten.Endedatum[0] == datum("3/4/2019")
-        assert self.testdb.soll_zeiten.Dauer[0] == datetime.datetime.strptime("3:00", '%H:%M').time()
+        assert len(self.testdb.sollzeiten.content) == 1
+        assert self.testdb.sollzeiten.content.Startdatum[0] == datum("2/2/2018")
+        assert self.testdb.sollzeiten.content.Endedatum[0] == datum("3/4/2019")
+        assert self.testdb.sollzeiten.content.Dauer[0] == datetime.datetime.strptime("3:00", '%H:%M').time()
 
 
     def test_edit_ausgabe_should_only_fire_once(self):
@@ -137,10 +137,10 @@ class TesteSollzeit(unittest.TestCase):
          ))
 
 
-        assert len(self.testdb.soll_zeiten) == 1
-        assert self.testdb.soll_zeiten.Startdatum[0] == datum("2/2/2018")
-        assert self.testdb.soll_zeiten.Endedatum[0] == datum("3/4/2019")
-        assert self.testdb.soll_zeiten.Dauer[0] == datetime.datetime.strptime("3:00", '%H:%M').time()
+        assert len(self.testdb.sollzeiten.content) == 1
+        assert self.testdb.sollzeiten.content.Startdatum[0] == datum("2/2/2018")
+        assert self.testdb.sollzeiten.content.Endedatum[0] == datum("3/4/2019")
+        assert self.testdb.sollzeiten.content.Dauer[0] == datetime.datetime.strptime("3:00", '%H:%M').time()
 
 
 if __name__ == '__main__':
