@@ -29,6 +29,11 @@ class Jahresuebersicht(unittest.TestCase):
         self.setUp()
         views.handle_request(GetRequest())
 
+    def test_withNoData_shouldGenerateErrorPage(self):
+        self.setUp()
+        context = views.handle_request(GetRequest())
+        assert context['%Errortext']
+
     def teste_mitMehtAusgabenAlsEinnahmen(self):
         self.setUp()
         self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
@@ -46,6 +51,15 @@ class Jahresuebersicht(unittest.TestCase):
         assert result_context['ausgaben'] == [('some kategorie', '-100.00', 'f56954')]
         assert result_context['ausgaben_labels'] == ['some kategorie']
         assert result_context['ausgaben_data'] == ['100.00']
+
+    def teste_mitUnterschiedlichenMonaten_shouldSelectNeusterMonat(self):
+        self.setUp()
+        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
+        self.testdb.einzelbuchungen.add(datum('10/10/2011'), 'eine einnahme kategorie', 'some name', 10)
+
+        result_context = views.handle_request(GetRequest())
+
+        assert result_context['selected_date'] == '2011_10'
 
 
 class GetRequest():

@@ -9,20 +9,22 @@ from viewcore import viewcore
 
 def handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    monate = sorted(einzelbuchungen.get_monate(), reverse=True)
+    context['monate'] = monate
+
     today = datetime.date.today()
     month = today.month
     year = today.year
+    if not monate:
+        return viewcore.generate_error_context('monatsuebersicht', 'Keine Ausgaben erfasst')
 
+    selected_item = context['monate'][0]
     if request.method == "POST":
-        datum = request.POST['date']
-        month = int(float(datum.split("_")[1]))
-        year = int(float(datum.split("_")[0]))
-        print('date:', request.POST)
+        selected_item = request.POST['date']
+    month = int(float(selected_item.split("_")[1]))
+    year = int(float(selected_item.split("_")[0]))
 
-    context['selected_year'] = year
-
-
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
     table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)
     table_ausgaben = table_data_selection.select_ausgaben()
     table_einnahmen = table_data_selection.select_einnahmen()
@@ -77,7 +79,6 @@ def handle_request(request):
 
     selected_date = str(year) + "_" + str(month).rjust(2, "0")
     context['selected_date'] = selected_date
-    context['monate'] = sorted(einzelbuchungen.get_monate(), reverse=True)
 
 
     if einnahmen_monat >= abs(ausgaben_monat):
@@ -123,7 +124,11 @@ def handle_request(request):
 def index(request):
     context = handle_request(request)
     print(context)
-    rendered_content = render_to_string('theme/uebersicht_monat.html', context, request=request)
+
+    if '%Errortext' in context:
+        rendered_content = context['%Errortext']
+    else:
+        rendered_content = render_to_string('theme/uebersicht_monat.html', context, request=request)
 
     context['content'] = rendered_content
 
