@@ -45,7 +45,7 @@ def handle_request():
 
     stechzeiten = []
 
-    for rowindex, row in viewcore.database_instance().stechzeiten.iterrows():
+    for rowindex, row in viewcore.database_instance().stechzeiten.content.iterrows():
         stechzeiten.append([rowindex, row.Datum, row.Arbeitgeber, row.Einstechen, row.Ausstechen, row.Arbeitszeit])
 
     context['stechzeiten'] = stechzeiten
