@@ -10,6 +10,7 @@ from datetime import datetime, date, timedelta
 from core.Frequency import FrequencsFunctions
 from core.database.Dauerauftraege import Dauerauftraege
 from core.database.Einzelbuchungen import Einzelbuchungen
+from mysite.core.database.Stechzeiten import Stechzeiten
 import pandas as pd
 import viewcore
 from viewcore.converter import datum
@@ -33,7 +34,6 @@ class StringWriter():
 
 
 class Database:
-    persitent_stechzeiten_columns = ['Datum', 'Einstechen', 'Ausstechen', 'Arbeitgeber']
     persistent_sollzeiten_columns = ['Startdatum', 'Endedatum', 'Dauer', 'Arbeitgeber']
     TEST = False
     '''
@@ -44,7 +44,7 @@ class Database:
         self.name = name
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsame_buchungen = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
-        self.stechzeiten = pd.DataFrame({}, columns=self.persitent_stechzeiten_columns)
+        self.stechzeiten = Stechzeiten()
         self.soll_zeiten = pd.DataFrame({}, columns=self.persistent_sollzeiten_columns)
         self.sonder_zeiten = pd.DataFrame({}, columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
         self.einzelbuchungen = Einzelbuchungen()
@@ -56,9 +56,6 @@ class Database:
         print('DATABASE: Erneuere Datenbestand')
         self.gemeinsame_buchungen['Datum'] = self.gemeinsame_buchungen['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
 
-        self.stechzeiten['Datum'] = self.stechzeiten['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        self.stechzeiten['Einstechen'] = self.stechzeiten['Einstechen'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
-        self.stechzeiten['Ausstechen'] = self.stechzeiten['Ausstechen'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
 
         self.soll_zeiten['Startdatum'] = self.soll_zeiten['Startdatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
         self.soll_zeiten['Endedatum'] = self.soll_zeiten['Endedatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
@@ -67,13 +64,7 @@ class Database:
         self.sonder_zeiten['Datum'] = self.sonder_zeiten['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
         self.sonder_zeiten['Dauer'] = self.sonder_zeiten['Dauer'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
 
-        self.stechzeiten['Arbeitszeit'] = timedelta(seconds=0)
-        for index, row in self.stechzeiten.iterrows():
-            arbeitszeit = datetime.combine(date.today(), row.Ausstechen) - datetime.combine(date.today(), row.Einstechen)
-            arbeitszeit = self._ziehe_pause_ab(arbeitszeit, row.Arbeitgeber)
-            self.stechzeiten.loc[self.stechzeiten.index[[index]], 'Arbeitszeit'] = arbeitszeit
-            print(f'berechnete Arbeitszeit: {arbeitszeit}')
-        self.stechzeiten = self.stechzeiten.sort_values(by=['Datum'])
+
 
         alle_dauerauftragsbuchungen = self.dauerauftraege.get_all_einzelbuchungen_until_today()
         self.einzelbuchungen.append_row(alle_dauerauftragsbuchungen)
@@ -84,26 +75,6 @@ class Database:
 
         self.einzelbuchungen.sort()
         print('DATABASE: Datenbestand erneuert')
-
-
-    def add_stechzeit(self, buchungs_datum, einstechen, ausstechen, arbeitgeber):
-        '''
-        add a new stechzeit to the database
-        '''
-        arbeitszeit = datetime.combine(date.today(), ausstechen) - datetime.combine(date.today(), einstechen)
-        stechzeit = pd.DataFrame([[buchungs_datum, einstechen, ausstechen, arbeitgeber, self._ziehe_pause_ab(arbeitszeit, arbeitgeber)]], columns=['Datum', 'Einstechen', 'Ausstechen', 'Arbeitgeber', 'Arbeitszeit'])
-        self.stechzeiten = self.stechzeiten.append(stechzeit, ignore_index=True)
-        print('DATABASE: stechzeit hinzugefügt')
-
-    def edit_stechzeit(self, index, buchungs_datum, einstechen, ausstechen, arbeitgeber):
-        '''
-        edit an existing stechzeit by tableIndex
-        '''
-        self.stechzeiten.loc[self.stechzeiten.index[[index]], 'Datum'] = buchungs_datum
-        self.stechzeiten.loc[self.stechzeiten.index[[index]], 'Einstechen'] = einstechen
-        self.stechzeiten.loc[self.stechzeiten.index[[index]], 'Ausstechen'] = ausstechen
-        self.stechzeiten.loc[self.stechzeiten.index[[index]], 'Arbeitgeber'] = arbeitgeber
-
 
     def add_soll_zeit(self, startdatum, endedatum, dauer, arbeitgeber):
         neue_soll_zeit = pd.DataFrame([[startdatum, endedatum, dauer, arbeitgeber]], columns=self.persistent_sollzeiten_columns)
@@ -236,7 +207,7 @@ class Database:
     def get_woechentliche_stechzeiten(self, jahr, function=func_woechentlich):
         print(jahr, 'wird ignoriert')
         wochen_karte = {}
-        for index, stechzeit in self.stechzeiten.iterrows():
+        for index, stechzeit in self.stechzeiten.content.iterrows():
             woche = function(self, stechzeit.Datum)
             if woche not in wochen_karte:
                 wochen_karte[woche] = timedelta(minutes=0)
@@ -256,8 +227,8 @@ class Database:
     def get_soll_ist_uebersicht(self, jahr, function=func_woechentlich):
         startwoche = 1
         print(function)
-        if len(self.stechzeiten) != 0:
-            startwoche = function(self, min(self.stechzeiten.Datum))
+        if len(self.stechzeiten.content) != 0:
+            startwoche = function(self, min(self.stechzeiten.content.Datum))
         if len(self.soll_zeiten.Startdatum) != 0:
             startwoche = function(self, min(self.soll_zeiten.Startdatum))
 
@@ -317,13 +288,13 @@ class Database:
         return  datetime.combine(date.today(), row.Ausstechen) - datetime.combine(date.today(), row.Einstechen)
 
     def stechzeiten_vorhanden(self):
-        return not self.stechzeiten.empty
+        return not self.stechzeiten.content.empty
 
     def anzahl_stechzeiten(self):
         '''
         returns the anzahl der stechzeiten
         '''
-        return len(self.stechzeiten)
+        return len(self.stechzeiten.content)
 
     def get_sollzeiten_liste(self):
         return self.frame_to_list_of_dicts(self.soll_zeiten)
@@ -347,6 +318,8 @@ class Database:
     def add_sonder_zeit(self, buchungs_datum, dauer, typ, arbeitgeber):
         row = pd.DataFrame([[buchungs_datum, dauer, typ, arbeitgeber]], columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
         self.sonder_zeiten = self.sonder_zeiten.append(row)
+
+
 
     def _ziehe_datev_ab(self, value):
         print("value", value)
@@ -374,4 +347,5 @@ class Database:
         if arbeitgeber == "DATEV":
             return self._ziehe_datev_ab(value)
         return value
+
 

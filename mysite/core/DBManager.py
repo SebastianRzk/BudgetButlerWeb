@@ -74,19 +74,13 @@ def read_file(file, nutzername):
     print("READER:", database.gemeinsame_buchungen)
 
     if tables['Stechzeiten'] != "":
-        database.stechzeiten = pd.read_csv(StringIO(tables["Stechzeiten"]))
-        print("READER: Stech Zeiten gelesen gelesen:")
-        print("READER:", database.gemeinsame_buchungen)
+        database.stechzeiten.parse(pd.read_csv(StringIO(tables["Stechzeiten"])))
 
     if tables['Sollzeiten'] != "":
         database.soll_zeiten = pd.read_csv(StringIO(tables["Sollzeiten"]))
-        print("READER: Soll zeiten gelesen:")
-        print("READER:", database.gemeinsame_buchungen)
 
     if tables['Sonderzeiten'] != "":
         database.sonder_zeiten = pd.read_csv(StringIO(tables["Sonderzeiten"]))
-        print("READER: Sonderzeiten gelesen gelesen:")
-        print("READER:", database.sonder_zeiten)
 
 
 
@@ -116,7 +110,7 @@ def write_file(database, file):
     content += database.gemeinsame_buchungen.to_csv(index=False)
 
     content += "\n Stechzeiten \n"
-    content += database.stechzeiten[database.persitent_stechzeiten_columns].to_csv(index=False)
+    content += database.stechzeiten.content[database.stechzeiten.persitent_stechzeiten_columns].to_csv(index=False)
 
     content += "\n Sollzeiten \n"
     content += database.soll_zeiten.to_csv(index=False)

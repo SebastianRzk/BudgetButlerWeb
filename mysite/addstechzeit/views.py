@@ -13,7 +13,7 @@ def handle_request(request):
         if not viewcore.is_transaction_already_fired(request.POST['ID']):
             viewcore.fire(request.POST['ID'])
 
-            viewcore.database_instance().add_stechzeit(datum(request.POST['date']), time(request.POST['start']), time(request.POST['ende']), request.POST['arbeitgeber'])
+            viewcore.database_instance().stechzeiten.add(datum(request.POST['date']), time(request.POST['start']), time(request.POST['ende']), request.POST['arbeitgeber'])
             viewcore.add_changed_stechzeiten({'Datum':datum(request.POST['date']),
                                               'Einstechen':time(request.POST['start']),
                                               'Ausstechen':time(request.POST['ende']),
@@ -24,7 +24,7 @@ def handle_request(request):
     if request.method == 'POST' and request.POST['action'] == 'edit':
         if not viewcore.is_transaction_already_fired(request.POST['ID']):
             viewcore.fire(request.POST['ID'])
-            viewcore.database_instance().edit_stechzeit(int(request.POST['edit_index']), datum(request.POST['date']), time(request.POST['start']), time(request.POST['ende']), request.POST['arbeitgeber'])
+            viewcore.database_instance().stechzeiten.edit(int(request.POST['edit_index']), datum(request.POST['date']), time(request.POST['start']), time(request.POST['ende']), request.POST['arbeitgeber'])
 
     if request.method == 'POST' and request.POST['action'] == 'add_sonderzeit':
         if not viewcore.is_transaction_already_fired(request.POST['ID']):

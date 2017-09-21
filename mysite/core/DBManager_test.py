@@ -30,7 +30,7 @@ class DBManager_readDB(unittest.TestCase):
         assert len(database.dauerauftraege.content) == 2
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
-        assert len(database.stechzeiten) == 1
+        assert len(database.stechzeiten.content) == 1
 
         assert len(database.soll_zeiten) == 1
 

@@ -44,11 +44,11 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.stechzeiten) == 1
-        assert self.testdb.stechzeiten.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.Arbeitgeber[0] == 'DATEV'
+        assert len(self.testdb.stechzeiten.content) == 1
+        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
+        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
+        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
+        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
 
 
     def test_add_should_only_fire_once(self):
@@ -74,11 +74,11 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.stechzeiten) == 1
-        assert self.testdb.stechzeiten.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.Arbeitgeber[0] == 'DATEV'
+        assert len(self.testdb.stechzeiten.content) == 1
+        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
+        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
+        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
+        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
 
 
     def test_edit(self):
@@ -105,11 +105,11 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.stechzeiten) == 1
-        assert self.testdb.stechzeiten.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.Arbeitgeber[0] == 'DATEV'
+        assert len(self.testdb.stechzeiten.content) == 1
+        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
+        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
+        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
+        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
 
     def test_edit_ausgabe_should_only_fire_once(self):
         self.setUp()
@@ -147,11 +147,11 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.stechzeiten) == 1
-        assert self.testdb.stechzeiten.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.Arbeitgeber[0] == 'DATEV'
+        assert len(self.testdb.stechzeiten.content) == 1
+        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
+        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
+        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
+        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
 
 
 
