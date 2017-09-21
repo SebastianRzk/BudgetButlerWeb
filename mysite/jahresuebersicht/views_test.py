@@ -2,6 +2,9 @@ import os
 import sys
 import unittest
 
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + "/../")
+
 from adddauerauftrag.view_test import PostRequest
 from core.DatabaseModule import Database
 from jahresuebersicht import views
@@ -9,14 +12,7 @@ import viewcore
 from viewcore.converter import datum
 
 
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + "/../")
 
-
-
-
-
-# Create your tests here.
 class Jahresuebersicht(unittest.TestCase):
 
     def setUp(self):
