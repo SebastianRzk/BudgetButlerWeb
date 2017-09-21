@@ -8,13 +8,14 @@ import os
 import sys
 import unittest
 
-from mysite.core.DatabaseModule import Database
-from mysite.core.database.Sollzeiten import Sollzeiten
-from mysite.viewcore.converter import laenge, datum
-
-
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../../')
+
+from core.DatabaseModule import Database
+from core.database.Sollzeiten import Sollzeiten
+from viewcore.converter import laenge, datum
+
+
 
 
 

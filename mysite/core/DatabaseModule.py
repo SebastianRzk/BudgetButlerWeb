@@ -10,8 +10,8 @@ from datetime import datetime, date, timedelta
 from core.Frequency import FrequencsFunctions
 from core.database.Dauerauftraege import Dauerauftraege
 from core.database.Einzelbuchungen import Einzelbuchungen
-from mysite.core.database.Sollzeiten import Sollzeiten
-from mysite.core.database.Stechzeiten import Stechzeiten
+from core.database.Sollzeiten import Sollzeiten
+from core.database.Stechzeiten import Stechzeiten
 import pandas as pd
 import viewcore
 from viewcore.converter import datum

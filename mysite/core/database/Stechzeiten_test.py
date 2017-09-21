@@ -9,11 +9,11 @@ import sys
 import unittest
 
 _PATH = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, _PATH + '/../../../')
+sys.path.insert(0, _PATH + '/../../')
 
-from mysite.core.DatabaseModule import Database
-from mysite.core.database.Stechzeiten import Stechzeiten
-from mysite.viewcore.converter import laenge, datum, time
+from core.DatabaseModule import Database
+from core.database.Stechzeiten import Stechzeiten
+from viewcore.converter import laenge, datum, time
 
 
 _PATH = os.path.dirname(os.path.abspath(__file__))
