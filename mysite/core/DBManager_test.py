@@ -32,7 +32,7 @@ class DBManager_readDB(unittest.TestCase):
 
         assert len(database.stechzeiten.content) == 1
 
-        assert len(database.soll_zeiten) == 1
+        assert len(database.sollzeiten.content) == 1
 
     def teste_write_with_full_database(self):
         database = DBManager.read_file(StringIO(self.full_db) , 'testuser')

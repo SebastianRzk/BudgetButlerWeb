@@ -28,7 +28,7 @@ class TesteSollzeit(unittest.TestCase):
         viewcore.viewcore.DATABASES = ['test']
         viewcore.viewcore.TEST = True
 
-    def test_init(self):
+    def test_page_init(self):
         self.setUp()
         views.handle_request(GetRequest())
 
@@ -167,11 +167,11 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'asDATEV',
              }
          ))
-        assert len(self.testdb.sonder_zeiten) == 1
-        assert self.testdb.sonder_zeiten.Datum[0] == datum('2/2/2017')
-        assert self.testdb.sonder_zeiten.Dauer[0] == time('11:00')
-        assert self.testdb.sonder_zeiten.Typ[0] == 'Urlaub'
-        assert self.testdb.sonder_zeiten.Arbeitgeber[0] == 'asDATEV'
+        assert len(self.testdb.sonderzeiten.content) == 1
+        assert self.testdb.sonderzeiten.content.Datum[0] == datum('2/2/2017')
+        assert self.testdb.sonderzeiten.content.Dauer[0] == time('11:00')
+        assert self.testdb.sonderzeiten.content.Typ[0] == 'Urlaub'
+        assert self.testdb.sonderzeiten.content.Arbeitgeber[0] == 'asDATEV'
 
     def test_add_sonderzeit_should_only_fire_once(self):
         self.setUp()
@@ -195,11 +195,11 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'asDATEV',
              }
          ))
-        assert len(self.testdb.sonder_zeiten) == 1
-        assert self.testdb.sonder_zeiten.Datum[0] == datum('2/2/2017')
-        assert self.testdb.sonder_zeiten.Dauer[0] == time('11:00')
-        assert self.testdb.sonder_zeiten.Typ[0] == 'Urlaub'
-        assert self.testdb.sonder_zeiten.Arbeitgeber[0] == 'asDATEV'
+        assert len(self.testdb.sonderzeiten.content) == 1
+        assert self.testdb.sonderzeiten.content.Datum[0] == datum('2/2/2017')
+        assert self.testdb.sonderzeiten.content.Dauer[0] == time('11:00')
+        assert self.testdb.sonderzeiten.content.Typ[0] == 'Urlaub'
+        assert self.testdb.sonderzeiten.content.Arbeitgeber[0] == 'asDATEV'
 
 if __name__ == '__main__':
     unittest.main()

@@ -12,6 +12,7 @@ from core.database.Dauerauftraege import Dauerauftraege
 from core.database.Einzelbuchungen import Einzelbuchungen
 from core.database.Sollzeiten import Sollzeiten
 from core.database.Stechzeiten import Stechzeiten
+from mysite.core.database.Sonderzeiten import Sonderzeiten
 import pandas as pd
 import viewcore
 from viewcore.converter import datum
@@ -46,7 +47,7 @@ class Database:
         self.gemeinsame_buchungen = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
         self.stechzeiten = Stechzeiten()
         self.sollzeiten = Sollzeiten()
-        self.sonder_zeiten = pd.DataFrame({}, columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
+        self.sonderzeiten = Sonderzeiten()
         self.einzelbuchungen = Einzelbuchungen()
 
     def refresh(self):
@@ -55,12 +56,6 @@ class Database:
         '''
         print('DATABASE: Erneuere Datenbestand')
         self.gemeinsame_buchungen['Datum'] = self.gemeinsame_buchungen['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-
-
-        self.sonder_zeiten['Datum'] = self.sonder_zeiten['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        self.sonder_zeiten['Dauer'] = self.sonder_zeiten['Dauer'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
-
-
 
         alle_dauerauftragsbuchungen = self.dauerauftraege.get_all_einzelbuchungen_until_today()
         self.einzelbuchungen.append_row(alle_dauerauftragsbuchungen)
@@ -199,7 +194,7 @@ class Database:
             print(stechzeit)
             wochen_karte[woche] = wochen_karte[woche] + stechzeit.Arbeitszeit
 
-        for index, sonderzeit in self.sonder_zeiten.iterrows():
+        for index, sonderzeit in self.sonderzeiten.content.iterrows():
             woche = function(self, sonderzeit.Datum)
             if woche not in wochen_karte:
                 wochen_karte[woche] = timedelta(minutes=0)
@@ -295,11 +290,6 @@ class Database:
             result_list.append(row)
 
         return result_list
-
-    def add_sonder_zeit(self, buchungs_datum, dauer, typ, arbeitgeber):
-        row = pd.DataFrame([[buchungs_datum, dauer, typ, arbeitgeber]], columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
-        self.sonder_zeiten = self.sonder_zeiten.append(row)
-
 
 
     def _ziehe_datev_ab(self, value):

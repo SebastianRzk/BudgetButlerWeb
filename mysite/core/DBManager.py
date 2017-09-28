@@ -77,10 +77,10 @@ def read_file(file, nutzername):
         database.stechzeiten.parse(pd.read_csv(StringIO(tables["Stechzeiten"])))
 
     if tables['Sollzeiten'] != "":
-        database.soll_zeiten = pd.read_csv(StringIO(tables["Sollzeiten"]))
+        database.sollzeiten.parse(pd.read_csv(StringIO(tables["Sollzeiten"])))
 
     if tables['Sonderzeiten'] != "":
-        database.sonder_zeiten = pd.read_csv(StringIO(tables["Sonderzeiten"]))
+        database.sonderzeiten.parse(pd.read_csv(StringIO(tables["Sonderzeiten"])))
 
 
 
@@ -113,10 +113,10 @@ def write_file(database, file):
     content += database.stechzeiten.content[database.stechzeiten.persitent_stechzeiten_columns].to_csv(index=False)
 
     content += "\n Sollzeiten \n"
-    content += database.soll_zeiten.to_csv(index=False)
+    content += database.sollzeiten.content.to_csv(index=False)
 
     content += "\n Sonderzeiten \n"
-    content += database.sonder_zeiten.to_csv(index=False)
+    content += database.sonderzeiten.content.to_csv(index=False)
 
     file.write(content)
 
