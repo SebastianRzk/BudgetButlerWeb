@@ -46,14 +46,14 @@ class converter_test(unittest.TestCase):
 class sonder_zeiten(unittest.TestCase):
     def test_add(self):
         component_under_test = db.Database('test_database')
-        component_under_test.add_sonder_zeit(datum('01/01/2017'), time('10:00'), 'test', 'test')
+        component_under_test.sonderzeiten.add(datum('01/01/2017'), time('10:00'), 'test', 'test')
 
-        assert len(component_under_test.sonder_zeiten) == 1
+        assert len(component_under_test.sonderzeiten.content) == 1
 
     def test_get_soll_ist_ueberischt_withSonderzeit_und_stechzeit_shouldReturnCummulatedResult(self):
         component_under_test = db.Database('test_database')
         component_under_test.stechzeiten.add(date.today(), time('0:0'), time('1:23'), 'Datev')
-        component_under_test.add_sonder_zeit(date.today(), time('4:00'), 'urlaub', 'Datev')
+        component_under_test.sonderzeiten.add(date.today(), time('4:00'), 'urlaub', 'Datev')
         result = component_under_test.get_soll_ist_uebersicht(date.today().year)
         print(result[date.today().isocalendar()[1]])
         assert len(result.keys()) == 1

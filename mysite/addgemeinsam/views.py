@@ -29,22 +29,22 @@ def handle_request(request):
             einnameausgabe = pandas.DataFrame([[datum, request.POST['kategorie'], request.POST['name'], value, request.POST['person']]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
             print(einnameausgabe)
             if "edit_index" in request.POST:
-                viewcore.database_instance().edit_gemeinsam(int(request.POST['edit_index']), einnameausgabe)
+                viewcore.database_instance().gemeinsamebuchungen.edit(int(request.POST['edit_index']), einnameausgabe)
             else:
-                viewcore.database_instance().add_gemeinsame_einnahmeausgabe(ausgaben_datum=datum,
+                viewcore.database_instance().gemeinsamebuchungen.add(ausgaben_datum=datum,
                                                                             kategorie=request.POST['kategorie'],
                                                                             ausgaben_name=request.POST['name'],
                                                                             wert=value,
                                                                             person=request.POST['person'])
             addgemeinsam.views.LAST_ELEMTENTS = addgemeinsam.views.LAST_ELEMTENTS.append(einnameausgabe)
-            viewcore.save_database()
+            viewcore.save_refresh()
     print(viewcore.database_instance().einzelbuchungen)
     context = viewcore.generate_base_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if request.method == "POST" and request.POST['action'] == 'edit':
         print("Please edit:", request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
-        db_row = viewcore.database_instance().gemeinsame_buchungen.iloc[db_index]
+        db_row = viewcore.database_instance().gemeinsamebuchungen.content.iloc[db_index]
         tag = db_row.Datum.day
         monat = db_row.Datum.month
         jahr = db_row.Datum.year

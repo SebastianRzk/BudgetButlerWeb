@@ -164,19 +164,11 @@ def generate_error_context(pagename, errortext):
     context['%Errortext'] = errortext
     return context
 
-TEST = False
-
 def save_database():
-    if viewcore.TEST:
-        print('testmode, no database saving')
-        return
     if DATABASE_INSTANCE != None:
         DBManager.write(DATABASE_INSTANCE)
 
 def save_refresh():
-    if viewcore.TEST:
-        print("TESTMODE! save and refresh deaktived")
-        return
     save_database()
     db_name = viewcore.DATABASE_INSTANCE.name
     viewcore.DATABASE_INSTANCE = None

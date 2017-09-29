@@ -1,5 +1,6 @@
 import unittest
 
+from test import DBManagerStub
 from adddauerauftrag.view_test import PostRequest, GetRequest
 from core.DatabaseModule import Database
 from uebersicht import views
@@ -10,10 +11,7 @@ from viewcore.converter import datum
 class TestUebersicht(unittest.TestCase):
 
     def set_up(self):
-        print("create new database")
-        viewcore.viewcore.DATABASE_INSTANCE = Database("test")
-        viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+        DBManagerStub.setup_db_for_test()
 
     def add_test_data(self):
         einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen

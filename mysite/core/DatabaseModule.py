@@ -4,13 +4,14 @@ Created on 17.09.2016
 @author: sebastian
 '''
 
-from calendar import monthrange
 from datetime import datetime, date, timedelta
 
 from core.Frequency import FrequencsFunctions
 from core.database.Dauerauftraege import Dauerauftraege
 from core.database.Einzelbuchungen import Einzelbuchungen
+from core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from core.database.Sollzeiten import Sollzeiten
+from core.database.Sonderzeiten import Sonderzeiten
 from core.database.Stechzeiten import Stechzeiten
 import pandas as pd
 import viewcore
@@ -35,7 +36,6 @@ class StringWriter():
 
 
 class Database:
-    TEST = False
     '''
     Database
     '''
@@ -43,50 +43,24 @@ class Database:
     def __init__(self, name):
         self.name = name
         self.dauerauftraege = Dauerauftraege()
-        self.gemeinsame_buchungen = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
+        self.gemeinsamebuchungen = Gemeinsamebuchungen()
         self.stechzeiten = Stechzeiten()
         self.sollzeiten = Sollzeiten()
-        self.sonder_zeiten = pd.DataFrame({}, columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
+        self.sonderzeiten = Sonderzeiten()
         self.einzelbuchungen = Einzelbuchungen()
 
     def refresh(self):
-        '''
-        inits the database
-        '''
         print('DATABASE: Erneuere Datenbestand')
-        self.gemeinsame_buchungen['Datum'] = self.gemeinsame_buchungen['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-
-
-        self.sonder_zeiten['Datum'] = self.sonder_zeiten['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        self.sonder_zeiten['Dauer'] = self.sonder_zeiten['Dauer'].map(lambda x:  datetime.strptime(x, '%H:%M:%S').time())
-
-
-
         alle_dauerauftragsbuchungen = self.dauerauftraege.get_all_einzelbuchungen_until_today()
         self.einzelbuchungen.append_row(alle_dauerauftragsbuchungen)
 
-        for ind, row in self.gemeinsame_buchungen.iterrows():
-            einzelbuchung = pd.DataFrame([[row.Datum, row.Kategorie, row.Name + " (noch nicht abrerechnet, von " + row.Person + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
-            self.einzelbuchungen.append_row(einzelbuchung)
+
+        anteil_gemeinsamer_buchungen = self.gemeinsamebuchungen.anteil_gemeinsamer_buchungen()
+        self.einzelbuchungen.append_row(anteil_gemeinsamer_buchungen)
 
         self.einzelbuchungen.sort()
         print('DATABASE: Datenbestand erneuert')
 
-
-
-
-    def add_gemeinsame_einnahmeausgabe(self, ausgaben_datum, kategorie, ausgaben_name, wert, person):
-        row = pd.DataFrame([[ausgaben_datum, kategorie, ausgaben_name, wert, person]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
-        self.gemeinsame_buchungen = self.gemeinsame_buchungen.append(row, ignore_index=True)
-
-        self.einzelbuchungen.add(datum=ausgaben_datum,
-                                kategorie=kategorie,
-                                name=ausgaben_name + " (noch nicht abgerechnet, von " + person + ")",
-                                wert=wert * 0.5,
-                                dynamisch=True)
-
-    def get_gemeinsame_ausgabe_fuer(self, person):
-        return self.gemeinsame_buchungen[self.gemeinsame_buchungen.Person == person]
 
     def _write_trenner(self, abrechnunsdatei):
         return abrechnunsdatei.write("".rjust(40, "#") + "\n ")
@@ -95,9 +69,8 @@ class Database:
         '''
         rechnet gemeinsame ausgaben aus der Datenbank ab
         '''
-        self.gemeinsame_buchungen = self.gemeinsame_buchungen.sort_values(by='Datum')
-        ausgaben_maureen = self.gemeinsame_buchungen[self.gemeinsame_buchungen.Person == 'Maureen']
-        ausgaben_sebastian = self.gemeinsame_buchungen[self.gemeinsame_buchungen.Person == 'Sebastian']
+        ausgaben_maureen = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == 'Maureen']
+        ausgaben_sebastian = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == 'Sebastian']
 
         summe_maureen = ausgaben_maureen['Wert'].sum()
         summe_sebastian = ausgaben_sebastian['Wert'].sum()
@@ -127,7 +100,7 @@ class Database:
         self._write_trenner(abrechnunsdatei)
 
         abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
-        for _, row in self.gemeinsame_buchungen.iterrows():
+        for _, row in self.gemeinsamebuchungen.content.iterrows():
             abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'] / 2)).rjust(7, " ") + "\n")
 
         abrechnunsdatei.write("\n")
@@ -149,7 +122,7 @@ class Database:
             abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
 
         ausgaben = pd.DataFrame()
-        for _ , row in self.gemeinsame_buchungen.iterrows():
+        for _ , row in self.gemeinsamebuchungen.content.iterrows():
             buchung = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] / 2)))
             buchung.Dynamisch = False
             ausgaben = ausgaben.append(buchung)
@@ -160,25 +133,20 @@ class Database:
         abrechnunsdatei.write("#######MaschinenimportEnd\n")
 
         self.einzelbuchungen.append_row(ausgaben)
-        self.gemeinsame_buchungen = self.gemeinsame_buchungen[self.gemeinsame_buchungen.Wert == 0]
+        self.gemeinsamebuchungen.empty()
         viewcore.viewcore.save_refresh()
-        if not self.TEST:
-            f = open("../Abrechnung_" + str(datetime.now()), "w")
-            f.write(abrechnunsdatei.to_string())
+        self.abrechnungs_write_function("../Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
 
-    def delete_gemeinsame_buchung(self, einzelbuchung_index):
-        self.gemeinsame_buchungen = self.gemeinsame_buchungen.drop(einzelbuchung_index)
+
+    def _write_to_file(self, filename, content):
+        f = open(filename, "w")
+        f.write(content)
+
+    abrechnungs_write_function = _write_to_file
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
-
-
-    def edit_gemeinsam(self, index, frame):
-        print("index", index)
-        print("frame:", frame)
-        for column_name, column in frame.copy().transpose().iterrows():
-            self.gemeinsame_buchungen.ix[index:index, column_name] = max(column)
 
     def get_arbeitgeber(self):
         return ['DATEV']
@@ -199,7 +167,7 @@ class Database:
             print(stechzeit)
             wochen_karte[woche] = wochen_karte[woche] + stechzeit.Arbeitszeit
 
-        for index, sonderzeit in self.sonder_zeiten.iterrows():
+        for index, sonderzeit in self.sonderzeiten.content.iterrows():
             woche = function(self, sonderzeit.Datum)
             if woche not in wochen_karte:
                 wochen_karte[woche] = timedelta(minutes=0)
@@ -295,11 +263,6 @@ class Database:
             result_list.append(row)
 
         return result_list
-
-    def add_sonder_zeit(self, buchungs_datum, dauer, typ, arbeitgeber):
-        row = pd.DataFrame([[buchungs_datum, dauer, typ, arbeitgeber]], columns=['Datum', 'Dauer', 'Typ', 'Arbeitgeber'])
-        self.sonder_zeiten = self.sonder_zeiten.append(row)
-
 
 
     def _ziehe_datev_ab(self, value):

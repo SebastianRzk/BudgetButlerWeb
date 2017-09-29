@@ -8,15 +8,19 @@ import os
 import sys
 import unittest
 
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + "/../")
+
+from test import DBManagerStub
 from addeinnahme import views
+from core import DBManager
 from core.DatabaseModule import Database
-from mysite import dauerauftraguebersicht, uebersicht
 import viewcore
 from viewcore.converter import datum
 
 
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + "/../")
+
+
 
 
 
@@ -24,12 +28,9 @@ sys.path.insert(0, myPath + "/../")
 '''
 class TestAddEinnahmeView(unittest.TestCase):
 
+    testdb = None
     def set_up(self):
-        print("create new database")
-        self.testdb = Database("test")
-        viewcore.viewcore.DATABASE_INSTANCE = self.testdb
-        viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+        self.testdb = DBManagerStub.setup_db_for_test()
 
     def test_init(self):
         self.set_up()

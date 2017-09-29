@@ -11,22 +11,18 @@ import unittest
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
+from test import DBManagerStub
 from addgemeinsam import views
 from core.DatabaseModule import Database
 import viewcore
 from viewcore.converter import datum
 
 
-'''
-'''
 class TesteAddGemeinsamView(unittest.TestCase):
 
     def set_up(self):
-        print('create new database')
-        self.testdb = Database('test')
-        viewcore.viewcore.DATABASE_INSTANCE = self.testdb
-        viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+        DBManagerStub.setup_db_for_test()
+
 
     def test_init(self):
         self.set_up()
@@ -35,7 +31,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
-        self.testdb.add_gemeinsame_einnahmeausgabe(datum('10/10/2010'), 'kategorie', 'ausgaben_name', 10, 'Sebastian')
+        testdb = viewcore.viewcore.database_instance()
+        testdb.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', 10, 'Sebastian')
         context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
 
@@ -51,11 +48,12 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,00'
              }
          ))
-        assert self.testdb.gemeinsame_buchungen.Wert[0] == -1 * float('2.00')
-        assert self.testdb.gemeinsame_buchungen.Name[0] == 'testname'
-        assert self.testdb.gemeinsame_buchungen.Kategorie[0] == 'Essen'
-        assert self.testdb.gemeinsame_buchungen.Datum[0] == datum('1/1/2017')
-        assert self.testdb.gemeinsame_buchungen.Person[0] == 'testperson'
+        testdb = viewcore.viewcore.database_instance()
+        assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
+        assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
+        assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
 
     def test_add_shouldAddDynamicEinzelbuchung(self):
         self.set_up()
@@ -69,11 +67,11 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,00'
              }
          ))
-
-        assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * 0.5 * float('2.00')
-        assert self.testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum('1/1/2017')
-        assert self.testdb.einzelbuchungen.content.Name[0] == 'testname (noch nicht abgerechnet, von testperson)'
+        testdb = viewcore.viewcore.database_instance()
+        assert testdb.einzelbuchungen.content.Wert[0] == -1 * 0.5 * float('2.00')
+        assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.einzelbuchungen.content.Datum[0] == datum('1/1/2017')
+        assert testdb.einzelbuchungen.content.Name[0] == 'testname (noch nicht abgerechnet, von testperson)'
 
     def test_add_should_only_fire_once(self):
         self.set_up()
@@ -98,11 +96,12 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'0,00'
              }
          ))
-        assert self.testdb.gemeinsame_buchungen.Wert[0] == -1 * float('2.00')
-        assert self.testdb.gemeinsame_buchungen.Name[0] == 'testname'
-        assert self.testdb.gemeinsame_buchungen.Kategorie[0] == 'Essen'
-        assert self.testdb.gemeinsame_buchungen.Datum[0] == datum('1/1/2017')
-        assert self.testdb.gemeinsame_buchungen.Person[0] == 'testperson'
+        testdb = viewcore.viewcore.database_instance()
+        assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
+        assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
+        assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
 
     def test_edit_ausgabe(self):
         self.set_up()
@@ -130,11 +129,12 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        assert self.testdb.gemeinsame_buchungen.Wert[0] == -1 * float('2.50')
-        assert self.testdb.gemeinsame_buchungen.Name[0] == 'testname'
-        assert self.testdb.gemeinsame_buchungen.Kategorie[0] == 'Essen'
-        assert self.testdb.gemeinsame_buchungen.Datum[0] == datum('5/1/2017')
-        assert self.testdb.gemeinsame_buchungen.Person[0] == 'testperson2'
+        testdb = viewcore.viewcore.database_instance()
+        assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
+        assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
+        assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson2'
 
     def test_edit_should_only_fire_once(self):
         self.set_up()
@@ -173,11 +173,12 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'0,00'
              }
          ))
-        assert self.testdb.gemeinsame_buchungen.Wert[0] == -1 * float('2.50')
-        assert self.testdb.gemeinsame_buchungen.Name[0] == 'testname'
-        assert self.testdb.gemeinsame_buchungen.Kategorie[0] == 'Essen'
-        assert self.testdb.gemeinsame_buchungen.Datum[0] == datum('5/1/2017')
-        assert self.testdb.gemeinsame_buchungen.Person[0] == 'testperson2'
+        testdb = viewcore.viewcore.database_instance()
+        assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
+        assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
+        assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson2'
 
 
 if __name__ == '__main__':

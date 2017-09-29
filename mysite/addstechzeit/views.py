@@ -33,7 +33,7 @@ def handle_request(request):
             item_dauer = time(request.POST['length'])
             item_typ = request.POST['typ']
             item_arbeitgeber = request.POST['arbeitgeber']
-            viewcore.database_instance().add_sonder_zeit(item_datum, item_dauer, item_typ, item_arbeitgeber)
+            viewcore.database_instance().sonderzeiten.add(item_datum, item_dauer, item_typ, item_arbeitgeber)
 
     context = viewcore.generate_base_context('addstechzeit')
     context['sonderzeit_typen'] = ['Urlaub', 'Feiertag']
