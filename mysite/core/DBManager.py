@@ -11,10 +11,13 @@ import pandas as pd
 
 
 
+
+
 def read_database(nutzername):
-    '''
-    read panda tables from disk
-    '''
+    return read_function(nutzername)
+
+
+def from_file(nutzername):
     if not os.path.isfile('../Database_' + nutzername + ".csv"):
         neue_datenbank = DatabaseModule.Database(nutzername)
         write(neue_datenbank)
@@ -22,6 +25,14 @@ def read_database(nutzername):
     file = open('../Database_' + nutzername + ".csv", 'r')
     return read_file(file, nutzername)
 
+def to_file(database):
+    file = open('../Database_' + database.name + ".csv", 'w')
+    write_file(database, file)
+    file.close()
+
+
+read_function = from_file
+write_function = to_file
 
 def read_file(file, nutzername):
     tables = {}
@@ -69,9 +80,7 @@ def read_file(file, nutzername):
     database.dauerauftraege.parse(pd.read_csv(StringIO(tables["dauerauftraege"])))
     print("READER: Daueraufträge gelesen")
 
-    database.gemeinsame_buchungen = pd.read_csv(StringIO(tables["gemeinsamebuchungen"]))
-    print("READER: Gemmeinsame Buchungen gelesen:")
-    print("READER:", database.gemeinsame_buchungen)
+    database.gemeinsamebuchungen.parse(pd.read_csv(StringIO(tables["gemeinsamebuchungen"])))
 
     if tables['Stechzeiten'] != "":
         database.stechzeiten.parse(pd.read_csv(StringIO(tables["Stechzeiten"])))
@@ -84,18 +93,13 @@ def read_file(file, nutzername):
 
 
 
-    print('READER: Initialisiere Database')
+    print('READER: Refreshe Database')
     database.refresh()
-    print('READER: Initialisierung abgeschlossen')
+    print('READER: Refresh done')
     return database
 
 def write(database):
-    file = open('../Database_' + database.name + ".csv", 'w')
-    write_file(database, file)
-    file.close()
-    '''
-    writes the DATABASE into a file
-    '''
+    write_function(database)
 
 def write_file(database, file):
     einzelbuchungen = database.einzelbuchungen.content.copy()[database.einzelbuchungen.content.Dynamisch == False]
@@ -106,8 +110,7 @@ def write_file(database, file):
     content += database.dauerauftraege.content.to_csv(index=False)
 
     content += "\n Gemeinsame Buchungen \n"
-    database.gemeinsame_buchungen = database.gemeinsame_buchungen.sort_values(by='Datum')
-    content += database.gemeinsame_buchungen.to_csv(index=False)
+    content += database.gemeinsamebuchungen.content.to_csv(index=False)
 
     content += "\n Stechzeiten \n"
     content += database.stechzeiten.content[database.stechzeiten.persitent_stechzeiten_columns].to_csv(index=False)

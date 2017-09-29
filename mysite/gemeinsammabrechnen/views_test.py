@@ -2,15 +2,16 @@ import os
 import sys
 import unittest
 
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/../')
+
 from core.DatabaseModule import Database
 from core.database.Einzelbuchungen import Einzelbuchungen
 from gemeinsammabrechnen import views
+from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum
 
-
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + '/../')
 
 
 
@@ -18,30 +19,26 @@ sys.path.insert(0, myPath + '/../')
 
 # Create your tests here.
 class Gemeinsamabrechnen(unittest.TestCase):
+    def set_up(self):
+        DBManagerStub.setup_db_for_test()
 
-    def setUp(self):
-        print('create new database')
-        self.testdb = Database('test')
-        viewcore.viewcore.DATABASE_INSTANCE = self.testdb
-        viewcore.viewcore.DATABASE_INSTANCE.TEST = True
-        viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
 
     def test_init(self):
-        self.setUp()
+        self.set_up()
         result = views.handle_request(GetRequest())
 
 
     def test_abrechnen(self):
-        self.setUp()
-        self.testdb.add_gemeinsame_einnahmeausgabe(datum('01/01/2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
-        self.testdb.einzelbuchungen = Einzelbuchungen()
+        self.set_up()
+        testdb = viewcore.viewcore.database_instance()
+        testdb.gemeinsamebuchungen.add(datum('01/01/2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
+        DBManagerStub.stub_abrechnungs_write()
         views.handle_abrechnen_request(PostRequest({}))
 
-        print(self.testdb.einzelbuchungen.content)
+        print(testdb.einzelbuchungen.content)
 
-        assert self.testdb.einzelbuchungen.anzahl() == 1
-        assert self.testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
+        assert testdb.einzelbuchungen.anzahl() == 1
+        assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
 
 
 class GetRequest():

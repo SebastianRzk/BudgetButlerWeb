@@ -13,7 +13,12 @@ sys.path.insert(0, myPath + '/../')
 
 from configuration import views
 from core.DatabaseModule import Database
+from mysite.core import DBManager
+from mysite.test import DBManagerStub
 import viewcore
+
+
+
 
 
 '''
@@ -25,7 +30,8 @@ class TesteSollzeit(unittest.TestCase):
         self.testdb = Database('test')
         viewcore.viewcore.DATABASE_INSTANCE = self.testdb
         viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+        DBManager.read_function = DBManagerStub.from_string
+        DBManager.write_function = DBManagerStub.to_string
 
     def test_init(self):
         self.setUp()

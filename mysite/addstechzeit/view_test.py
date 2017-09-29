@@ -13,8 +13,13 @@ sys.path.insert(0, myPath + '/../')
 
 from addstechzeit import views
 from core.DatabaseModule import Database
+from mysite.core import DBManager
+from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum, time
+
+
+
 
 
 '''
@@ -26,7 +31,8 @@ class TesteSollzeit(unittest.TestCase):
         self.testdb = Database('test')
         viewcore.viewcore.DATABASE_INSTANCE = self.testdb
         viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+        DBManager.read_function = DBManagerStub.from_string
+        DBManager.write_function = DBManagerStub.to_string
 
     def test_page_init(self):
         self.setUp()

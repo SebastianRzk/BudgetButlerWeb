@@ -5,8 +5,8 @@ from adddauerauftrag.views import handle_request
 from viewcore import viewcore
 
 def handle_request(request):
-    ausgabe_sebastian = viewcore.database_instance().get_gemeinsame_ausgabe_fuer('Sebastian')
-    ausgabe_maureen = viewcore.database_instance().get_gemeinsame_ausgabe_fuer('Maureen')
+    ausgabe_sebastian = viewcore.database_instance().gemeinsamebuchungen.fuer('Sebastian')
+    ausgabe_maureen = viewcore.database_instance().gemeinsamebuchungen.fuer('Maureen')
     ausgabe_sebastian = ausgabe_sebastian.Wert.sum()
     ausgabe_maureen = ausgabe_maureen.Wert.sum()
     ausgabe_gesamt = ausgabe_maureen + ausgabe_sebastian

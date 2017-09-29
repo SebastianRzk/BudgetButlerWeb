@@ -19,7 +19,7 @@ def handle_request(request):
 
 
     ausgaben_liste = []
-    data = viewcore.database_instance().gemeinsame_buchungen.sort_values(by='Datum')
+    data = viewcore.database_instance().gemeinsamebuchungen.content.sort_values(by='Datum')
     for row_index, row in data.iterrows():
         ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert, row.Person))
 

@@ -13,20 +13,22 @@ sys.path.insert(0, myPath + "/../")
 
 from addeinzelbuchung import views
 from core.DatabaseModule import Database
+from mysite.core import DBManager
+from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum
+
+
 
 
 '''
 '''
 class TesteAddEinzelbuchungView(unittest.TestCase):
 
+    testdb = None
     def set_up(self):
-        print("create new database")
-        self.testdb = Database("test")
-        viewcore.viewcore.DATABASE_INSTANCE = self.testdb
-        viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+        self.testdb = DBManagerStub.setup_db_for_test()
+
 
     def test_init(self):
         self.set_up()
