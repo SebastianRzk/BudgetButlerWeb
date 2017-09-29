@@ -7,16 +7,18 @@ Created on 10.05.2017
 import os
 import sys
 import unittest
+from test import DBManagerStub
 
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
 from addeinzelbuchung import views
+from core import DBManager
 from core.DatabaseModule import Database
-from mysite.core import DBManager
-from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum
+
+
 
 
 

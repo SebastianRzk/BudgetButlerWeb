@@ -8,12 +8,13 @@ import os
 import sys
 import unittest
 
-from mysite.core import DBManager
-from mysite.viewcore import viewcore
-
-
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../')
+
+from core import DBManager
+from viewcore import viewcore
+
+
 
 
 

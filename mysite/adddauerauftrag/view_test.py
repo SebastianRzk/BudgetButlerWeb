@@ -11,12 +11,15 @@ import unittest
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + "/../")
 
+from test import DBManagerStub
 from adddauerauftrag import views
+from core import DBManager
 from core.DatabaseModule import Database
-from mysite.core import DBManager
-from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum
+
+
+
 
 
 

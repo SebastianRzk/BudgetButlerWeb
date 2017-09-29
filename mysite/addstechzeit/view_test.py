@@ -11,35 +11,25 @@ import unittest
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
+from test import DBManagerStub
 from addstechzeit import views
+from core import DBManager
 from core.DatabaseModule import Database
-from mysite.core import DBManager
-from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum, time
 
 
-
-
-
-'''
-'''
 class TesteSollzeit(unittest.TestCase):
 
-    def setUp(self):
-        print('create new database')
-        self.testdb = Database('test')
-        viewcore.viewcore.DATABASE_INSTANCE = self.testdb
-        viewcore.viewcore.DATABASES = ['test']
-        DBManager.read_function = DBManagerStub.from_string
-        DBManager.write_function = DBManagerStub.to_string
+    def set_up(self):
+        DBManagerStub.setup_db_for_test()
 
     def test_page_init(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(GetRequest())
 
     def test_add(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(PostRequest(
             {'action':'add',
              'ID':viewcore.viewcore.get_next_transaction_id(),
@@ -50,15 +40,16 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.stechzeiten.content) == 1
-        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
+        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        assert len(stechzeiten_tabelle) == 1
+        assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
+        assert stechzeiten_tabelle.Einstechen[0] == time('9:00')
+        assert stechzeiten_tabelle.Ausstechen[0] == time('10:00')
+        assert stechzeiten_tabelle.Arbeitgeber[0] == 'DATEV'
 
 
     def test_add_should_only_fire_once(self):
-        self.setUp()
+        self.set_up()
         same_id = viewcore.viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {'action':'add',
@@ -79,16 +70,15 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'asDATEV',
              }
          ))
-
-        assert len(self.testdb.stechzeiten.content) == 1
-        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
-
+        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        assert len(stechzeiten_tabelle) == 1
+        assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
+        assert stechzeiten_tabelle.Einstechen[0] == time('9:00')
+        assert stechzeiten_tabelle.Ausstechen[0] == time('10:00')
+        assert stechzeiten_tabelle.Arbeitgeber[0] == 'DATEV'
 
     def test_edit(self):
-        self.setUp()
+        self.set_up()
 
         views.handle_request(PostRequest(
             {'action':'add',
@@ -110,15 +100,15 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'DATEV',
              }
          ))
+        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        assert len(stechzeiten_tabelle) == 1
+        assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
+        assert stechzeiten_tabelle.Einstechen[0] == time('9:00')
+        assert stechzeiten_tabelle.Ausstechen[0] == time('10:00')
+        assert stechzeiten_tabelle.Arbeitgeber[0] == 'DATEV'
 
-        assert len(self.testdb.stechzeiten.content) == 1
-        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
-
-    def test_edit_ausgabe_should_only_fire_once(self):
-        self.setUp()
+    def test_edit_stechzeit_should_only_fire_once(self):
+        self.set_up()
 
         views.handle_request(PostRequest(
             {'action':'add',
@@ -153,16 +143,18 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.stechzeiten.content) == 1
-        assert self.testdb.stechzeiten.content.Datum[0] == datum('1/1/2017')
-        assert self.testdb.stechzeiten.content.Einstechen[0] == time('9:00')
-        assert self.testdb.stechzeiten.content.Ausstechen[0] == time('10:00')
-        assert self.testdb.stechzeiten.content.Arbeitgeber[0] == 'DATEV'
+        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        print(stechzeiten_tabelle)
+        assert len(stechzeiten_tabelle) == 1
+        assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
+        assert stechzeiten_tabelle.Einstechen[0] == time('9:00')
+        assert stechzeiten_tabelle.Ausstechen[0] == time('10:00')
+        assert stechzeiten_tabelle.Arbeitgeber[0] == 'DATEV'
 
 
 
     def test_add_sonderzeit(self):
-        self.setUp()
+        self.set_up()
 
         views.handle_request(PostRequest(
             {'action':'add_sonderzeit',
@@ -173,14 +165,16 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'asDATEV',
              }
          ))
-        assert len(self.testdb.sonderzeiten.content) == 1
-        assert self.testdb.sonderzeiten.content.Datum[0] == datum('2/2/2017')
-        assert self.testdb.sonderzeiten.content.Dauer[0] == time('11:00')
-        assert self.testdb.sonderzeiten.content.Typ[0] == 'Urlaub'
-        assert self.testdb.sonderzeiten.content.Arbeitgeber[0] == 'asDATEV'
+
+        sonderzeiten_tabelle = viewcore.viewcore.database_instance().sonderzeiten.content
+        assert len(sonderzeiten_tabelle) == 1
+        assert sonderzeiten_tabelle.Datum[0] == datum('2/2/2017')
+        assert sonderzeiten_tabelle.Dauer[0] == time('11:00')
+        assert sonderzeiten_tabelle.Typ[0] == 'Urlaub'
+        assert sonderzeiten_tabelle.Arbeitgeber[0] == 'asDATEV'
 
     def test_add_sonderzeit_should_only_fire_once(self):
-        self.setUp()
+        self.set_up()
 
         same_id = viewcore.viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
@@ -201,11 +195,13 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'asDATEV',
              }
          ))
-        assert len(self.testdb.sonderzeiten.content) == 1
-        assert self.testdb.sonderzeiten.content.Datum[0] == datum('2/2/2017')
-        assert self.testdb.sonderzeiten.content.Dauer[0] == time('11:00')
-        assert self.testdb.sonderzeiten.content.Typ[0] == 'Urlaub'
-        assert self.testdb.sonderzeiten.content.Arbeitgeber[0] == 'asDATEV'
+
+        sonderzeiten_tabelle = viewcore.viewcore.database_instance().sonderzeiten.content
+        assert len(sonderzeiten_tabelle) == 1
+        assert sonderzeiten_tabelle.Datum[0] == datum('2/2/2017')
+        assert sonderzeiten_tabelle.Dauer[0] == time('11:00')
+        assert sonderzeiten_tabelle.Typ[0] == 'Urlaub'
+        assert sonderzeiten_tabelle.Arbeitgeber[0] == 'asDATEV'
 
 if __name__ == '__main__':
     unittest.main()
@@ -214,8 +210,6 @@ class GetRequest():
     method = 'GET'
 
 class PostRequest:
-
     def __init__(self, args):
         self.POST = args
-
     method = 'POST'

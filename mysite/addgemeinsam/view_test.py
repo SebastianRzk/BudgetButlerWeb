@@ -11,17 +11,13 @@ import unittest
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
+from test import DBManagerStub
 from addgemeinsam import views
 from core.DatabaseModule import Database
-from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum
 
 
-
-
-'''
-'''
 class TesteAddGemeinsamView(unittest.TestCase):
 
     def set_up(self):

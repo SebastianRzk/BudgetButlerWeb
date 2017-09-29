@@ -8,17 +8,18 @@ import os
 import sys
 import unittest
 
-
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
+from test import DBManagerStub
 from addeinnahme import views
+from core import DBManager
 from core.DatabaseModule import Database
-from mysite import dauerauftraguebersicht, uebersicht
-from mysite.core import DBManager
-from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum
+
+
+
 
 
 

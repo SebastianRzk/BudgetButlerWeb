@@ -5,23 +5,16 @@ import unittest
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
+from test import DBManagerStub
 from core.DatabaseModule import Database
 from core.database.Einzelbuchungen import Einzelbuchungen
 from gemeinsammabrechnen import views
-from mysite.test import DBManagerStub
 import viewcore
 from viewcore.converter import datum
 
-
-
-
-
-
-# Create your tests here.
 class Gemeinsamabrechnen(unittest.TestCase):
     def set_up(self):
         DBManagerStub.setup_db_for_test()
-
 
     def test_init(self):
         self.set_up()
@@ -45,8 +38,6 @@ class GetRequest():
     method = 'GET'
 
 class PostRequest:
-
     def __init__(self, args):
         self.POST = args
-
     method = "POST"
