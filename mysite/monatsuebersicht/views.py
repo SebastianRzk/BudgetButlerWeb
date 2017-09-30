@@ -13,9 +13,6 @@ def handle_request(request):
     monate = sorted(einzelbuchungen.get_monate(), reverse=True)
     context['monate'] = monate
 
-    today = datetime.date.today()
-    month = today.month
-    year = today.year
     if not monate:
         return viewcore.generate_error_context('monatsuebersicht', 'Keine Ausgaben erfasst')
 
@@ -79,7 +76,7 @@ def handle_request(request):
 
     selected_date = str(year) + "_" + str(month).rjust(2, "0")
     context['selected_date'] = selected_date
-
+    context['selected_year'] = year
 
     if einnahmen_monat >= abs(ausgaben_monat):
         context['color_uebersicht_gruppe_1'] = "gray"
