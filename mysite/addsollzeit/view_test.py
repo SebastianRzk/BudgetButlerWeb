@@ -14,8 +14,10 @@ sys.path.insert(0, myPath + "/../")
 
 from addsollzeit import views
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -34,13 +36,13 @@ class TesteSollzeit(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "startdatum":"1/1/2017",
              "endedatum":"2/3/2018",
              "laenge":"2:00",
              }
          ))
-        db = viewcore.viewcore.database_instance()
+        db = viewcore.database_instance()
         assert len(db.sollzeiten.content) == 1
         assert db.sollzeiten.content.Startdatum[0] == datum("1/1/2017")
         assert db.sollzeiten.content.Endedatum[0] == datum("2/3/2018")
@@ -49,7 +51,7 @@ class TesteSollzeit(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        single_id = viewcore.viewcore.get_next_transaction_id()
+        single_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":single_id,
@@ -67,7 +69,7 @@ class TesteSollzeit(unittest.TestCase):
              "laenge":"0:00",
              }
          ))
-        db = viewcore.viewcore.database_instance()
+        db = viewcore.database_instance()
         assert len(db.sollzeiten.content) == 1
         assert db.sollzeiten.content.Startdatum[0] == datum("1/1/2017")
         assert db.sollzeiten.content.Endedatum[0] == datum("2/3/2018")
@@ -79,7 +81,7 @@ class TesteSollzeit(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "startdatum":"1/1/2017",
              "endedatum":"2/3/2018",
              "laenge":"2:00",
@@ -88,14 +90,14 @@ class TesteSollzeit(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"edit",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "edit_index":"0",
              "startdatum":"2/2/2018",
              "endedatum":"3/4/2019",
              "laenge":"3:00",
              }
          ))
-        db = viewcore.viewcore.database_instance()
+        db = viewcore.database_instance()
         assert len(db.sollzeiten.content) == 1
         assert db.sollzeiten.content.Startdatum[0] == datum("2/2/2018")
         assert db.sollzeiten.content.Endedatum[0] == datum("3/4/2019")
@@ -106,13 +108,13 @@ class TesteSollzeit(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "startdatum":"1/1/2017",
              "endedatum":"2/3/2018",
              "laenge":"2:00",
              }
          ))
-        same_id = viewcore.viewcore.get_next_transaction_id()
+        same_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {"action":"edit",
              "ID":same_id,
@@ -133,7 +135,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        db = viewcore.viewcore.database_instance()
+        db = viewcore.database_instance()
         assert len(db.sollzeiten.content) == 1
         assert db.sollzeiten.content.Startdatum[0] == datum("2/2/2018")
         assert db.sollzeiten.content.Endedatum[0] == datum("3/4/2019")
@@ -142,11 +144,3 @@ class TesteSollzeit(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = "GET"
-
-class PostRequest:
-    def __init__(self, args):
-        self.POST = args
-    method = "POST"

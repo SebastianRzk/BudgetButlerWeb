@@ -1,10 +1,11 @@
 import unittest
 
 from test import DBManagerStub
-from adddauerauftrag.view_test import PostRequest, GetRequest
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from uebersicht import views
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -14,7 +15,7 @@ class TestUebersicht(unittest.TestCase):
         DBManagerStub.setup_db_for_test()
 
     def add_test_data(self):
-        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum("12/12/2012"), "Test einnahme kategorie", "test einnahme name", 100)
         einzelbuchungen.add(datum("13/12/2012"), "Test ausgabe kategorie", "test azsgabe name", -100)
 
@@ -46,8 +47,8 @@ class TestUebersicht(unittest.TestCase):
     def test_delete(self):
         self.set_up()
         self.add_test_data()
-        result = views.handle_request(PostRequest({'action':'delete', 'delete_index':'1'}))
-        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        views.handle_request(PostRequest({'action':'delete', 'delete_index':'1'}))
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
         assert einzelbuchungen.select().sum() == 100
 
 if __name__ == '__main__':

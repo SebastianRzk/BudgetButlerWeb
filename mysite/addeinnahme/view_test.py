@@ -12,10 +12,12 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from addeinnahme import views
 from core import DBManager
 from core.DatabaseModule import Database
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -47,7 +49,7 @@ class TestAddEinnahmeView(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -63,7 +65,7 @@ class TestAddEinnahmeView(unittest.TestCase):
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
-        next_id = viewcore.viewcore.get_next_transaction_id()
+        next_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":next_id,
@@ -95,7 +97,7 @@ class TestAddEinnahmeView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -104,10 +106,10 @@ class TestAddEinnahmeView(unittest.TestCase):
          ))
 
 
-        print("dbs: " , viewcore.viewcore.DATABASES)
+        print("dbs: " , viewcore.DATABASES)
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "edit_index":"0",
              "date":"5/1/2017",
              "kategorie":"Essen",
@@ -128,7 +130,7 @@ class TestAddEinnahmeView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -136,7 +138,7 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        next_id = viewcore.viewcore.get_next_transaction_id()
+        next_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":next_id,
@@ -170,7 +172,7 @@ class TestAddEinnahmeView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -190,13 +192,3 @@ class TestAddEinnahmeView(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = "GET"
-
-class PostRequest:
-
-    def __init__(self, args):
-        self.POST = args
-
-    method = "POST"

@@ -46,10 +46,11 @@
             	{% else%}
 		            <li class="treeview">
 		    {% endif %}
-		    	 <a href="#"> <i
-						class="fa fa-dashboard"></i> <span>{{submenuid}}</span> <i
-						class="fa fa-angle-left pull-right"></i>
-					</a> 
+				 <a href="#">
+					<span class="fa fa-dashboard"></span>
+					<span>{{submenuid}}</span> 
+					<span class="fa fa-angle-left pull-right"></span>
+				</a> 
               <ul class="treeview-menu">
               {%for menuitem in submenu%}
 			{% if menuitem.url == active_page_url %}

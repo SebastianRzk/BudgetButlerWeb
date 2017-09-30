@@ -42,7 +42,7 @@ def setup_db_for_test():
     return database
 
 def stub_abrechnungs_write():
-    viewcore.viewcore.database_instance().abrechnungs_write_function = write_to_console
+    viewcore.database_instance().abrechnungs_write_function = write_to_console
 
 def write_to_console(filename, content):
     print('Consolewriter:::::')

@@ -12,10 +12,12 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from addstechzeit import views
 from core import DBManager
 from core.DatabaseModule import Database
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum, time
 
 
@@ -32,7 +34,7 @@ class TesteSollzeit(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'1/1/2017',
              'start':'9:00',
              'ende':'10:00',
@@ -40,7 +42,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        stechzeiten_tabelle = viewcore.database_instance().stechzeiten.content
         assert len(stechzeiten_tabelle) == 1
         assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
         assert stechzeiten_tabelle.Einstechen[0] == time('9:00')
@@ -50,7 +52,7 @@ class TesteSollzeit(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        same_id = viewcore.viewcore.get_next_transaction_id()
+        same_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {'action':'add',
              'ID':same_id,
@@ -70,7 +72,7 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'asDATEV',
              }
          ))
-        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        stechzeiten_tabelle = viewcore.database_instance().stechzeiten.content
         assert len(stechzeiten_tabelle) == 1
         assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
         assert stechzeiten_tabelle.Einstechen[0] == time('9:00')
@@ -82,7 +84,7 @@ class TesteSollzeit(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'2/2/2017',
              'start':'11:00',
              'ende':'12:00',
@@ -92,7 +94,7 @@ class TesteSollzeit(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {'action':'edit',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'edit_index':'0',
              'date':'1/1/2017',
              'start':'9:00',
@@ -100,7 +102,7 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'DATEV',
              }
          ))
-        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        stechzeiten_tabelle = viewcore.database_instance().stechzeiten.content
         assert len(stechzeiten_tabelle) == 1
         assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
         assert stechzeiten_tabelle.Einstechen[0] == time('9:00')
@@ -112,7 +114,7 @@ class TesteSollzeit(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'2/2/2017',
              'start':'11:00',
              'ende':'12:00',
@@ -120,7 +122,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        same_index = viewcore.viewcore.get_next_transaction_id()
+        same_index = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {'action':'edit',
              'ID':same_index,
@@ -143,7 +145,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        stechzeiten_tabelle = viewcore.viewcore.database_instance().stechzeiten.content
+        stechzeiten_tabelle = viewcore.database_instance().stechzeiten.content
         print(stechzeiten_tabelle)
         assert len(stechzeiten_tabelle) == 1
         assert stechzeiten_tabelle.Datum[0] == datum('1/1/2017')
@@ -158,7 +160,7 @@ class TesteSollzeit(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {'action':'add_sonderzeit',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'2/2/2017',
              'length':'11:00',
              'typ':'Urlaub',
@@ -166,7 +168,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        sonderzeiten_tabelle = viewcore.viewcore.database_instance().sonderzeiten.content
+        sonderzeiten_tabelle = viewcore.database_instance().sonderzeiten.content
         assert len(sonderzeiten_tabelle) == 1
         assert sonderzeiten_tabelle.Datum[0] == datum('2/2/2017')
         assert sonderzeiten_tabelle.Dauer[0] == time('11:00')
@@ -176,7 +178,7 @@ class TesteSollzeit(unittest.TestCase):
     def test_add_sonderzeit_should_only_fire_once(self):
         self.set_up()
 
-        same_id = viewcore.viewcore.get_next_transaction_id()
+        same_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {'action':'add_sonderzeit',
              'ID':same_id,
@@ -196,7 +198,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        sonderzeiten_tabelle = viewcore.viewcore.database_instance().sonderzeiten.content
+        sonderzeiten_tabelle = viewcore.database_instance().sonderzeiten.content
         assert len(sonderzeiten_tabelle) == 1
         assert sonderzeiten_tabelle.Datum[0] == datum('2/2/2017')
         assert sonderzeiten_tabelle.Dauer[0] == time('11:00')
@@ -205,11 +207,3 @@ class TesteSollzeit(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = 'GET'
-
-class PostRequest:
-    def __init__(self, args):
-        self.POST = args
-    method = 'POST'

@@ -14,21 +14,18 @@ from pandas.core.frame import DataFrame
 
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
-'''
-'''
-import viewcore.viewcore
-
+from viewcore import viewcore
 
 
 
 class TesteViewcore(unittest.TestCase):
 
     def teste_getIcon_withExactKategoryName_shouldReturnIcon(self):
-        icon = viewcore.viewcore.get_icon_for_categorie('Essen');
+        icon = viewcore.get_icon_for_categorie('Essen');
         assert icon == 'fa fa-cutlery'
 
     def teste_getIcon_withNameContainsAcategoryName_shouldReturnIcon(self):
-        icon = viewcore.viewcore.get_icon_for_categorie('Essen (gemeinsam)');
+        icon = viewcore.get_icon_for_categorie('Essen (gemeinsam)');
         assert icon == 'fa fa-cutlery'
 
 

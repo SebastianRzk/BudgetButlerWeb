@@ -6,10 +6,12 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from core.database.Einzelbuchungen import Einzelbuchungen
 from gemeinsammabrechnen import views
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 class Gemeinsamabrechnen(unittest.TestCase):
@@ -23,7 +25,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
     def test_abrechnen(self):
         self.set_up()
-        testdb = viewcore.viewcore.database_instance()
+        testdb = viewcore.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01/01/2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         DBManagerStub.stub_abrechnungs_write()
         views.handle_abrechnen_request(PostRequest({}))
@@ -32,12 +34,3 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
         assert testdb.einzelbuchungen.anzahl() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
-
-
-class GetRequest():
-    method = 'GET'
-
-class PostRequest:
-    def __init__(self, args):
-        self.POST = args
-    method = "POST"

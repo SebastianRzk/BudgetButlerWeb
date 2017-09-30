@@ -6,10 +6,11 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
 from test import DBManagerStub
-from adddauerauftrag.view_test import PostRequest
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from jahresuebersicht import views
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -26,7 +27,7 @@ class Jahresuebersicht(unittest.TestCase):
 
     def teste_contextValues_withSingleEinnahmeAndSingleAusgabe(self):
         self.set_up()
-        db = viewcore.viewcore.database_instance()
+        db = viewcore.database_instance()
         db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
 
@@ -39,7 +40,7 @@ class Jahresuebersicht(unittest.TestCase):
 
     def teste_contextValues_withMutlibleEinnahmeAndAusgabe(self):
         self.set_up()
-        db = viewcore.viewcore.database_instance()
+        db = viewcore.database_instance()
         db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
         db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
@@ -52,7 +53,3 @@ class Jahresuebersicht(unittest.TestCase):
         assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-200.00', 'checked', '00a65a'], ['some kategorie2', '-100.00', 'checked', '00c0ef']]
         assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '20.00', 'checked', '3c8dbc'], ['eine einnahme kategorie2', '10.00', 'checked', 'f56954']]
 
-
-class GetRequest():
-    method = "GET"
-    POST = {}

@@ -4,9 +4,11 @@ import sys
 import unittest
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from importd import views
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -35,7 +37,7 @@ class Importd(unittest.TestCase):
     '''
     def test_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
-        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01/01/2017'), 'Essen', 'some name', -1.54)
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA}))
@@ -45,7 +47,7 @@ class Importd(unittest.TestCase):
 
     def test_addeUnpassendenKategorie_shouldShowImportMappingPage(self):
         self.set_up()
-        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01/01/2017'), 'unbekannt', 'some name', -1.54)
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA}))
@@ -53,23 +55,9 @@ class Importd(unittest.TestCase):
 
     def test_addeUnpassendenKategorie_mitPassendemMapping_shouldImportValue(self):
         self.set_up()
-        einzelbuchungen = viewcore.viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01/01/2017'), 'Unpassend', 'some name', -1.54)
 
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
         assert page == 'import.html'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
-
-
-
-class GetRequest():
-    method = "GET"
-    POST = {}
-
-
-class PostRequest:
-
-    def __init__(self, args):
-        self.POST = args
-
-    method = "POST"

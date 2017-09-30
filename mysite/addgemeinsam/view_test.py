@@ -12,9 +12,11 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from addgemeinsam import views
 from core.DatabaseModule import Database
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -31,7 +33,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
-        db = viewcore.viewcore.database_instance()
+        db = viewcore.database_instance()
         db.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', 10, 'Sebastian')
         context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
@@ -40,7 +42,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -48,7 +50,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,00'
              }
          ))
-        testdb = viewcore.viewcore.database_instance()
+        testdb = viewcore.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -59,7 +61,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -67,7 +69,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,00'
              }
          ))
-        testdb = viewcore.viewcore.database_instance()
+        testdb = viewcore.database_instance()
         assert testdb.einzelbuchungen.content.Wert[0] == -1 * 0.5 * float('2.00')
         assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
         assert testdb.einzelbuchungen.content.Datum[0] == datum('1/1/2017')
@@ -75,7 +77,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        next_id = viewcore.viewcore.get_next_transaction_id()
+        next_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {'action':'add',
              'ID':next_id,
@@ -96,7 +98,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'0,00'
              }
          ))
-        testdb = viewcore.viewcore.database_instance()
+        testdb = viewcore.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -108,7 +110,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -119,7 +121,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'edit_index':'0',
              'date':'5/1/2017',
              'kategorie':'Essen',
@@ -129,7 +131,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        testdb = viewcore.viewcore.database_instance()
+        testdb = viewcore.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -141,7 +143,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {'action':'add',
-             'ID':viewcore.viewcore.get_next_transaction_id(),
+             'ID':viewcore.get_next_transaction_id(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -150,7 +152,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        next_id = viewcore.viewcore.get_next_transaction_id()
+        next_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {'action':'add',
              'ID':next_id,
@@ -173,7 +175,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'0,00'
              }
          ))
-        testdb = viewcore.viewcore.database_instance()
+        testdb = viewcore.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -183,13 +185,3 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = 'GET'
-
-class PostRequest:
-
-    def __init__(self, args):
-        self.POST = args
-
-    method = 'POST'
