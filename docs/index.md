@@ -7,7 +7,7 @@
 
 * Python 3.6
 * Pip
-* Modern Webbrowser
+* Modern Webbrowser (e.G. Firefox or Chromium)
 * (git)
 
 ## Install and run
@@ -32,5 +32,7 @@ Open your webbrowser and visit:
 
 	http://127.0.0.1:8000/
 
+## Known problems
 
+* Google Chrome: Wrong vertical sizing of charts
 
