@@ -17,7 +17,7 @@ from test.RequestStubs import PostRequest
 from addeinzelbuchung import views
 from core import DBManager
 from core.DatabaseModule import Database
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -49,7 +49,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -65,7 +65,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
-        next_id = viewcore.viewcore.get_next_transaction_id()
+        next_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":next_id,
@@ -98,7 +98,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -106,11 +106,9 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-
-        print("dbs: " , viewcore.viewcore.DATABASES)
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "edit_index":"0",
              "date":"5/1/2017",
              "kategorie":"Essen",
@@ -130,7 +128,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -138,7 +136,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        next_id = viewcore.viewcore.get_next_transaction_id()
+        next_id = viewcore.get_next_transaction_id()
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":next_id,
@@ -172,7 +170,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.viewcore.get_next_transaction_id(),
+             "ID":viewcore.get_next_transaction_id(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",

@@ -11,7 +11,7 @@ from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from core.database.Einzelbuchungen import Einzelbuchungen
 from gemeinsammabrechnen import views
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 class Gemeinsamabrechnen(unittest.TestCase):
@@ -25,7 +25,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
     def test_abrechnen(self):
         self.set_up()
-        testdb = viewcore.viewcore.database_instance()
+        testdb = viewcore.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01/01/2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         DBManagerStub.stub_abrechnungs_write()
         views.handle_abrechnen_request(PostRequest({}))

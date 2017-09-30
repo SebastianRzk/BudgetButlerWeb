@@ -11,7 +11,7 @@ from test.RequestStubs import PostRequest
 from core import DBManager
 from core.DatabaseModule import Database
 from dauerauftraguebersicht import views
-import viewcore
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -26,7 +26,7 @@ class Dauerauftragsuebersicht(unittest.TestCase):
 
     def test_delete(self):
         self.set_up()
-        dauerauftraege = viewcore.viewcore.database_instance().dauerauftraege
+        dauerauftraege = viewcore.database_instance().dauerauftraege
         dauerauftraege.add(datum('01/01/2011'), datum('01/01/2011'), '', '11', 'monatlich', 1)
         dauerauftraege.add(datum('01/01/2011'), datum('01/01/2011'), '', '22', 'monatlich', 1)
 

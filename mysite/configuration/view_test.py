@@ -17,7 +17,7 @@ from test.RequestStubs import PostRequest
 from configuration import views
 from core import DBManager
 from core.DatabaseModule import Database
-import viewcore
+from viewcore import viewcore
 
 class TesteSollzeit(unittest.TestCase):
 
@@ -31,7 +31,7 @@ class TesteSollzeit(unittest.TestCase):
     def teste_addKategorie(self):
         self.set_up()
         views.handle_request(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
-        assert viewcore.viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
+        assert viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
 
 if __name__ == '__main__':

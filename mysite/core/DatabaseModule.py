@@ -13,8 +13,8 @@ from core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from core.database.Sollzeiten import Sollzeiten
 from core.database.Sonderzeiten import Sonderzeiten
 from core.database.Stechzeiten import Stechzeiten
-import pandas as pd
-import viewcore
+from pandas import DataFrame
+from viewcore import viewcore
 from viewcore.converter import datum
 
 
@@ -121,7 +121,7 @@ class Database:
         for _ , row in ausgaben_sebastian.iterrows():
             abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
 
-        ausgaben = pd.DataFrame()
+        ausgaben = DataFrame()
         for _ , row in self.gemeinsamebuchungen.content.iterrows():
             buchung = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] / 2)))
             buchung.Dynamisch = False
@@ -134,7 +134,7 @@ class Database:
 
         self.einzelbuchungen.append_row(ausgaben)
         self.gemeinsamebuchungen.empty()
-        viewcore.viewcore.save_refresh()
+        viewcore.save_refresh()
         self.abrechnungs_write_function("../Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
 
@@ -146,7 +146,7 @@ class Database:
     abrechnungs_write_function = _write_to_file
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
-        return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
+        return DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
 
     def get_arbeitgeber(self):
         return ['DATEV']
