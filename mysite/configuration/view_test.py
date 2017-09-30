@@ -23,11 +23,11 @@ class TesteSollzeit(unittest.TestCase):
         DBManagerStub.setup_db_for_test()
 
     def test_init(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(GetRequest())
 
     def teste_addKategorie(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
         assert viewcore.viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
@@ -39,8 +39,6 @@ class GetRequest():
     method = 'GET'
 
 class PostRequest:
-
+    method = 'POST'
     def __init__(self, args):
         self.POST = args
-
-    method = 'POST'

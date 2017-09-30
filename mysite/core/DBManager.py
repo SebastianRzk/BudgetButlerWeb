@@ -10,9 +10,6 @@ from core import DatabaseModule
 import pandas as pd
 
 
-
-
-
 def read_database(nutzername):
     return read_function(nutzername)
 
@@ -122,17 +119,4 @@ def write_file(database, file):
     content += database.sonderzeiten.content.to_csv(index=False)
 
     file.write(content)
-
     print("WRITER: All Saved")
-
-def export(database):
-    '''
-    writes the DATABASE into a file
-    '''
-    path = "./" + database.name + "_Export_" + str(datetime.today())
-    einzelbuchungen_raw_data = database.einzelbuchungen.content.copy()[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
-    einzelbuchungen_raw_data.to_csv(path, index=False)
-    print("WRITER: Exportiere in : ", path)
-    print("WRITER: Export Data:")
-    print(einzelbuchungen_raw_data)
-    print("WRITER: Done")
