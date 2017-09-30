@@ -6,6 +6,7 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
 from gemeinsamuebersicht import views
 
 
@@ -20,7 +21,3 @@ class Gemeinsamuebersicht(unittest.TestCase):
     def test_init(self):
         self.set_up()
         views.handle_request(GetRequest())
-
-
-class GetRequest():
-    method = "GET"

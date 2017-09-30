@@ -12,6 +12,8 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from configuration import views
 from core import DBManager
 from core.DatabaseModule import Database
@@ -34,11 +36,3 @@ class TesteSollzeit(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = 'GET'
-
-class PostRequest:
-    method = 'POST'
-    def __init__(self, args):
-        self.POST = args

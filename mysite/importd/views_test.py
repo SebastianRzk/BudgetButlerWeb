@@ -4,6 +4,8 @@ import sys
 import unittest
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from importd import views
 import viewcore
@@ -59,17 +61,3 @@ class Importd(unittest.TestCase):
         page, context = views.handle_request(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
         assert page == 'import.html'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
-
-
-
-class GetRequest():
-    method = "GET"
-    POST = {}
-
-
-class PostRequest:
-
-    def __init__(self, args):
-        self.POST = args
-
-    method = "POST"

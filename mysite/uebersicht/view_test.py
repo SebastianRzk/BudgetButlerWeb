@@ -1,7 +1,8 @@
 import unittest
 
 from test import DBManagerStub
-from adddauerauftrag.view_test import PostRequest, GetRequest
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from uebersicht import views
 import viewcore

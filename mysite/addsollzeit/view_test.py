@@ -14,6 +14,8 @@ sys.path.insert(0, myPath + "/../")
 
 from addsollzeit import views
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 import viewcore
 from viewcore.converter import datum
@@ -142,11 +144,3 @@ class TesteSollzeit(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = "GET"
-
-class PostRequest:
-    def __init__(self, args):
-        self.POST = args
-    method = "POST"

@@ -6,7 +6,8 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
 from test import DBManagerStub
-from adddauerauftrag.view_test import PostRequest, GetRequest
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core import DBManager
 from core.DatabaseModule import Database
 from dauerauftraguebersicht import views

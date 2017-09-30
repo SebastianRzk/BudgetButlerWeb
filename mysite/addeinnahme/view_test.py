@@ -12,6 +12,8 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from addeinnahme import views
 from core import DBManager
 from core.DatabaseModule import Database
@@ -190,13 +192,3 @@ class TestAddEinnahmeView(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = "GET"
-
-class PostRequest:
-
-    def __init__(self, args):
-        self.POST = args
-
-    method = "POST"

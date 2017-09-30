@@ -6,6 +6,8 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from monatsuebersicht import views
 import viewcore
@@ -59,13 +61,3 @@ class Jahresuebersicht(unittest.TestCase):
         result_context = views.handle_request(GetRequest())
 
         assert result_context['selected_date'] == '2011_10'
-
-
-class GetRequest():
-    method = 'GET'
-    POST = {}
-
-class PostRequest:
-    method = 'POST'
-    def __init__(self, args):
-        self.POST = args

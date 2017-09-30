@@ -6,6 +6,8 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 from test import DBManagerStub
+from test.RequestStubs import GetRequest
+from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from core.database.Einzelbuchungen import Einzelbuchungen
 from gemeinsammabrechnen import views
@@ -32,12 +34,3 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
         assert testdb.einzelbuchungen.anzahl() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
-
-
-class GetRequest():
-    method = 'GET'
-
-class PostRequest:
-    def __init__(self, args):
-        self.POST = args
-    method = "POST"

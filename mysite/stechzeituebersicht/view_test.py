@@ -36,11 +36,3 @@ class TesteStechzeitenuebersicht(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-class GetRequest():
-    method = "GET"
-
-class PostRequest:
-    method = "POST"
-    def __init__(self, args):
-        self.POST = args
