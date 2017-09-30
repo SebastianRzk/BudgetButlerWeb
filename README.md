@@ -4,4 +4,4 @@
 
 ## Documentation
 
-[Link to the project page on github](https://RosesThenN00b.github.io/BudgetButlerWeb/)
+[Link to the project page on github](https://RosesTheN00b.github.io/BudgetButlerWeb/)
