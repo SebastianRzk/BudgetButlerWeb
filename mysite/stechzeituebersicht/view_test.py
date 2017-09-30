@@ -16,6 +16,7 @@ from pandas.core.frame import DataFrame
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
+from test import DBManagerStub
 from core.DatabaseModule import Database
 from stechzeituebersicht import views
 import viewcore
@@ -25,15 +26,11 @@ from viewcore.converter import datum, time
 
 class TesteStechzeitenuebersicht(unittest.TestCase):
 
-    def setUp(self):
-        print("create new database")
-        self.testdb = Database("test")
-        viewcore.viewcore.DATABASE_INSTANCE = self.testdb
-        viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+    def set_up(self):
+        DBManagerStub.setup_db_for_test()
 
     def test_withNoStechzeiten_shouldReturnNothing_andNoError(self):
-        self.setUp()
+        self.set_up()
         views.handle_request()
 
 
@@ -44,8 +41,6 @@ class GetRequest():
     method = "GET"
 
 class PostRequest:
-
+    method = "POST"
     def __init__(self, args):
         self.POST = args
-
-    method = "POST"

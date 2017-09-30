@@ -5,6 +5,7 @@ import unittest
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
+from test import DBManagerStub
 from adddauerauftrag.view_test import PostRequest
 from core.DatabaseModule import Database
 from jahresuebersicht import views
@@ -15,22 +16,19 @@ from viewcore.converter import datum
 
 class Jahresuebersicht(unittest.TestCase):
 
-    def setUp(self):
-        print("create new database")
-        self.testdb = Database("test")
-        viewcore.viewcore.DATABASE_INSTANCE = self.testdb
-        viewcore.viewcore.DATABASES = ['test']
-        viewcore.viewcore.TEST = True
+    def set_up(self):
+        DBManagerStub.setup_db_for_test()
 
     def test_init(self):
-        self.setUp()
+        self.set_up()
         views.handle_request(GetRequest())
 
 
     def teste_contextValues_withSingleEinnahmeAndSingleAusgabe(self):
-        self.setUp()
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
+        self.set_up()
+        db = viewcore.viewcore.database_instance()
+        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
+        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
 
         result_context = views.handle_request(PostRequest({'date':'2010', 'mode':''}))
 
@@ -40,13 +38,14 @@ class Jahresuebersicht(unittest.TestCase):
 
 
     def teste_contextValues_withMutlibleEinnahmeAndAusgabe(self):
-        self.setUp()
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie2', 'some name', -100)
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie2', 'some name', 10)
+        self.set_up()
+        db = viewcore.viewcore.database_instance()
+        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
+        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
+        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
+        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
+        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie2', 'some name', -100)
+        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie2', 'some name', 10)
 
         result_context = views.handle_request(PostRequest({'date':'2010', 'mode':''}))
 

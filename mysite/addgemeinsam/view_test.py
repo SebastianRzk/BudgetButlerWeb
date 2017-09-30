@@ -31,8 +31,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
-        testdb = viewcore.viewcore.database_instance()
-        testdb.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', 10, 'Sebastian')
+        db = viewcore.viewcore.database_instance()
+        db.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', 10, 'Sebastian')
         context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
 
