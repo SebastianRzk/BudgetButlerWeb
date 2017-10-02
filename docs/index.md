@@ -29,6 +29,16 @@ Change into django module and run server:
 Open your webbrowser and visit:
 
 	http://127.0.0.1:8000/
+	
+## Run tests
+
+Run all softwaretests with pytest:
+
+	pytest
+
+Run tests with coverage analysis:
+
+	py.test --cov=mysite
 
 ## Known problems
 
