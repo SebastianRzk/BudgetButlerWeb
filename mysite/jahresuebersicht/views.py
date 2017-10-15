@@ -153,6 +153,5 @@ def handle_request(request):
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()
-    context['gesamt_color'] = einzelbuchungen.get_farbe_fuer('Summe')
     context['gesamt_enabled'] = kategorien_checked_map['Summe']
     return context
