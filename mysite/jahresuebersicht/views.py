@@ -12,7 +12,7 @@ def get_monats_namen(monat):
 
 def berechne_monate(tabelle):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    alle_kategorien = set(einzelbuchungen.get_alle_kategorien())
+    alle_kategorien = set(einzelbuchungen.get_kategorien_ausgaben())
 
     monats_namen = []
     for _, wert_monats_gruppe in tabelle.iteritems():
@@ -22,7 +22,7 @@ def berechne_monate(tabelle):
 
     print(monats_namen)
 
-    kategorien_werte = {'Summe':'['}
+    kategorien_werte = {}
     for kategorie in alle_kategorien:
         kategorien_werte[kategorie] = '['
     umgerechnete_tabelle = _umrechnen(tabelle)
@@ -69,6 +69,20 @@ def _computePieChartProzentual(context, jahr):
     context['pie_ausgaben_labels'] = ausgaben_labels
     context['pie_ausgaben_colors'] = ausgaben_colors
 
+    result = viewcore.database_instance().einzelbuchungen.get_jahreseinnahmen_nach_kategorie_prozentual(jahr)
+    einnahmen_data = []
+    einnahmen_labels = []
+    einnahmen_colors = []
+    for kategorie, wert in result.items():
+        einnahmen_data.append('%.2f' % abs(wert))
+        einnahmen_labels.append(kategorie)
+        einnahmen_colors.append('#' + viewcore.database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
+
+    context['pie_einnahmen_data_prozentual'] = einnahmen_data
+    context['pie_einnahmen_labels'] = einnahmen_labels
+    context['pie_einnahmen_colors'] = einnahmen_colors
+
+
     return context
 
 def index(request):
@@ -90,8 +104,6 @@ def handle_request(request):
     kategorien_checked_map = {}
     for kategorie in einzelbuchungen.get_alle_kategorien():
         kategorien_checked_map[kategorie] = 'checked'
-
-    kategorien_checked_map['Summe'] = 'checked'
 
     if request.method == 'POST' and request.POST['mode'] == 'change_selected':
         print('change selected')
@@ -128,7 +140,7 @@ def handle_request(request):
     context = viewcore.generate_base_context('jahresuebersicht')
 
     context['durchschnitt_monat_kategorien'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
-    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
+    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))    
     context = _computePieChartProzentual(context, year)
 
     context['zusammenfassung_ausgaben'] = jahresausgaben
@@ -139,6 +151,4 @@ def handle_request(request):
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()
-    context['gesamt_color'] = einzelbuchungen.get_farbe_fuer('Summe')
-    context['gesamt_enabled'] = kategorien_checked_map['Summe']
     return context

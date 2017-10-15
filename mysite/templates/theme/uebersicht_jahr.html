@@ -38,7 +38,7 @@
 			<div class="box-header">
 				<h3 class="box-title">Durchschnittliche Ausgaben pro Monat</h3>
 			</div>
-			<canvas id="canvas" style="display: block; width: 1500px; height: 450px;" width="1500" height="450"></canvas>
+			<canvas id="averagecanvas" style="display: block; width: 100%; height: 450px;"></canvas>
 		</div>
 	</div>
 </div>
@@ -57,7 +57,7 @@ var barChartData = {
 };
 
 window.onload = function() {
-    var ctx = document.getElementById("canvas").getContext("2d");
+    var ctx = document.getElementById("averagecanvas").getContext("2d");
     window.myBar = new Chart(ctx, {
         type: 'bar',
         data: barChartData,
@@ -83,7 +83,10 @@ window.onload = function() {
 <div class="row">
 	<div class="col-md-12">
 		<div class="box box-primary">
-			<canvas id="lineChart" height="450" width="1500"></canvas>
+			<div class="box-header">
+				<h3 class="box-title">Ausgaben</h3>
+			</div>
+			<canvas id="lineChartCanvas" style="display: block; width: 100%; height: 450px;"></canvas>
 			<script> 
 	                var salesChartData = {
 	                	    labels: {{monats_namen|safe	}},
@@ -99,13 +102,12 @@ window.onload = function() {
 	                            {%endfor%}
 	                	    ]
 	                	  };
-	                var canvas = document.getElementById("lineChart");
-	                var myLineChart = new Chart(canvas, {
+	                var canvas = document.getElementById("lineChartCanvas");
+	                new Chart(canvas, {
 	                	type: 'line',
 	                    data: salesChartData,
 	                    options: {
 	                    	responsive: true,
-	                    	maintainAspectRatio: false,
 	                }});
                 </script>
 		</div>
@@ -153,9 +155,9 @@ window.onload = function() {
 								{% endfor %}
 								<tfooter>
 								<tr>
-									<td style="vertical-align: middle"><font size="5" color="{{summe_color}}">&#x25cf;</font>Summe</td>
+									<td style="vertical-align: middle">Summe</td>
 									<td style="vertical-align: middle" align="right">{{gesamt_ausgaben}}</td>
-									<td><input type="checkbox" name="Summe"{{gesamt_enabled}}></td>
+									<td/>
 								</tr>
 								<tr>
 									<td></td>
@@ -170,8 +172,6 @@ window.onload = function() {
 				</form>
 			</div>
 			<!-- /.box-body -->
-			<div class="box-footer clearfix"></div>
-			<!-- /.box-footer -->
 		</div>
 		<!-- /.box -->
 	</div>
@@ -206,7 +206,7 @@ window.onload = function() {
 								{% endfor %}
 								<tfooter>
 								<tr>
-									<td style="vertical-align: middle"><font size="5" color="{{summe_color}}">&#x25cf;</font>Summe</td>
+									<td style="vertical-align: middle">Summe</td>
 									<td style="vertical-align: middle" align="right">{{gesamt_einnahmen}}</td>
 								</tr>
 								</tfooter>
@@ -215,8 +215,6 @@ window.onload = function() {
 					</div>
 			</div>
 			<!-- /.box-body -->
-			<div class="box-footer clearfix"></div>
-			<!-- /.box-footer -->
 		</div>
 		<!-- /.box -->
 	</div>
@@ -225,56 +223,82 @@ window.onload = function() {
 </div>
 <!-- /.row -->
 <div class='row'>
-	<div class='col-md-6'>
-		<div class="box box-default">
-			<div class="box-header with-border">
-				<h3 class="box-title">Ausgaben {{selected_date}} Prozentual</h3>
-				<div class="box-tools pull-right">
-					<button class="btn btn-box-tool" data-widget="collapse">
-						<span class="fa fa-minus"></span>
-					</button>
-				</div>
-			</div>
-			<!-- /.box-header -->
-			<div class="box-body">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="chart-responsive">
-							<canvas id="zusammenfassungPieProzentual" height="400"></canvas>
-						</div>
-						<!-- ./chart-responsive -->
-					</div>
-					<!-- /.col -->
-					<div class="col-md-4"></div>
-					<!-- /.col -->
-				</div>
-				<!-- /.row -->
-			</div>
-			<!-- /.box-body -->
-			<div class="box-footer no-padding"></div>
-			<!-- /.footer -->
-		</div>
-		<!-- /.box -->
-	</div>
-	<!-- /.col -->
-	<script> 
-	   var pieData = {
-		  labels:{{pie_ausgaben_labels|safe}},
-		  datasets: [
-		        {
-		            data: {{pie_ausgaben_data_prozentual|safe}},
-		            backgroundColor: {{pie_ausgaben_colors|safe}},
-		        }],
-	   };
-	   var canvas = document.getElementById("zusammenfassungPieProzentual");
-       var myLineChart = new Chart(canvas, {
-       	type: 'pie',
-           data: pieData,
-           options: {
-           	responsive: true,
-           	maintainAspectRatio: false,
-       }});
-	   
-   </script>
+  <div class='col-md-6'>
+    <div class="box box-default">
+      <div class="box-header with-border">
+        <h3 class="box-title">Ausgaben {{selected_date}} Prozentual</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse">
+            <span class="fa fa-minus"></span>
+          </button>
+        </div>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="chart-responsive">
+              <canvas id="zusammenfassungPieProzentualAusgaben" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.box -->
+      <script> 
+           var pieData = {
+             labels:{{pie_ausgaben_labels|safe}},
+             datasets: [{
+               data: {{pie_ausgaben_data_prozentual|safe}},
+               backgroundColor: {{pie_ausgaben_colors|safe}},
+             }],
+           };
+           var canvas = document.getElementById("zusammenfassungPieProzentualAusgaben");
+           new Chart(canvas, {
+             type: 'pie',
+             data: pieData,
+             options: {
+               responsive: true,
+               maintainAspectRatio: false,
+           }});
+      </script>
+    </div>
+  </div><!-- /.col -->  
+
+  <div class='col-md-6'>
+    <div class="box box-default">
+      <div class="box-header with-border">
+        <h3 class="box-title">Einnahmen {{selected_date}} Prozentual</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse">
+            <span class="fa fa-minus"></span>
+          </button>
+        </div>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="chart-responsive">
+              <canvas id="zusammenfassungPieProzentualEinnahmen" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.box -->
+      <script> 
+           var pieData = {
+             labels:{{pie_einnahmen_labels|safe}},
+             datasets: [{
+               data: {{pie_einnahmen_data_prozentual|safe}},
+               backgroundColor: {{pie_einnahmen_colors|safe}},
+             }],
+           };
+           var canvas = document.getElementById("zusammenfassungPieProzentualEinnahmen");
+           new Chart(canvas, {
+             type: 'pie',
+             data: pieData,
+             options: {
+               responsive: true,
+               maintainAspectRatio: false,
+           }});
+      </script>
+    </div>
+  </div><!-- /.col -->  
 </div>
 
