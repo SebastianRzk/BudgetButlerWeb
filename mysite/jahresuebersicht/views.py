@@ -12,7 +12,7 @@ def get_monats_namen(monat):
 
 def berechne_monate(tabelle):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    alle_kategorien = set(einzelbuchungen.get_alle_kategorien())
+    alle_kategorien = set(einzelbuchungen.get_kategorien_ausgaben())
 
     monats_namen = []
     for _, wert_monats_gruppe in tabelle.iteritems():
@@ -22,7 +22,7 @@ def berechne_monate(tabelle):
 
     print(monats_namen)
 
-    kategorien_werte = {'Summe':'['}
+    kategorien_werte = {}
     for kategorie in alle_kategorien:
         kategorien_werte[kategorie] = '['
     umgerechnete_tabelle = _umrechnen(tabelle)
@@ -105,8 +105,6 @@ def handle_request(request):
     for kategorie in einzelbuchungen.get_alle_kategorien():
         kategorien_checked_map[kategorie] = 'checked'
 
-    kategorien_checked_map['Summe'] = 'checked'
-
     if request.method == 'POST' and request.POST['mode'] == 'change_selected':
         print('change selected')
 
@@ -153,5 +151,4 @@ def handle_request(request):
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()
-    context['gesamt_enabled'] = kategorien_checked_map['Summe']
     return context
