@@ -83,7 +83,10 @@ window.onload = function() {
 <div class="row">
 	<div class="col-md-12">
 		<div class="box box-primary">
-			<canvas id="lineChartCanvas" height="450" width="1500"></canvas>
+			<div class="box-header">
+				<h3 class="box-title">Ausgaben</h3>
+			</div>
+			<canvas id="lineChartCanvas" style="display: block; width: 100%; height: 450px;"></canvas>
 			<script> 
 	                var salesChartData = {
 	                	    labels: {{monats_namen|safe	}},
@@ -100,12 +103,11 @@ window.onload = function() {
 	                	    ]
 	                	  };
 	                var canvas = document.getElementById("lineChartCanvas");
-	                var myLineChart = new Chart(canvas, {
+	                new Chart(canvas, {
 	                	type: 'line',
 	                    data: salesChartData,
 	                    options: {
 	                    	responsive: true,
-	                    	maintainAspectRatio: false,
 	                }});
                 </script>
 		</div>
