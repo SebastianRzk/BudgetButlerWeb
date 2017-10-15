@@ -176,11 +176,15 @@ class Einzelbuchungen:
         return tabelle
 
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
-        tabelle = self.content.copy()
-        tabelle = tabelle[tabelle.Wert < 0]
-        crit1 = tabelle['Datum'].map(lambda x : x.year == jahr)
-        tabelle = tabelle[crit1]
+        tabelle = self.select().select_ausgaben().select_year(jahr).content
+        return self._berechne_prozentual(tabelle)
 
+    def get_jahreseinnahmen_nach_kategorie_prozentual(self, jahr):
+        tabelle = self.select().select_einnahmen().select_year(jahr).content
+        return self._berechne_prozentual(tabelle)
+
+
+    def _berechne_prozentual(self, tabelle):
         if len(tabelle) == 0:
             return {}
 
@@ -190,6 +194,8 @@ class Einzelbuchungen:
         for kategorie, row in tabelle.iterrows():
             result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
         return result
+
+  
 
 
     def get_farbe_fuer(self, input_kategorie):

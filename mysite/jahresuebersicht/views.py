@@ -69,6 +69,20 @@ def _computePieChartProzentual(context, jahr):
     context['pie_ausgaben_labels'] = ausgaben_labels
     context['pie_ausgaben_colors'] = ausgaben_colors
 
+    result = viewcore.database_instance().einzelbuchungen.get_jahreseinnahmen_nach_kategorie_prozentual(jahr)
+    einnahmen_data = []
+    einnahmen_labels = []
+    einnahmen_colors = []
+    for kategorie, wert in result.items():
+        einnahmen_data.append('%.2f' % abs(wert))
+        einnahmen_labels.append(kategorie)
+        einnahmen_colors.append('#' + viewcore.database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
+
+    context['pie_einnahmen_data_prozentual'] = einnahmen_data
+    context['pie_einnahmen_labels'] = einnahmen_labels
+    context['pie_einnahmen_colors'] = einnahmen_colors
+
+
     return context
 
 def index(request):
@@ -128,7 +142,7 @@ def handle_request(request):
     context = viewcore.generate_base_context('jahresuebersicht')
 
     context['durchschnitt_monat_kategorien'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
-    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
+    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))    
     context = _computePieChartProzentual(context, year)
 
     context['zusammenfassung_ausgaben'] = jahresausgaben

@@ -263,5 +263,44 @@ window.onload = function() {
       </script>
     </div>
   </div><!-- /.col -->  
+
+  <div class='col-md-6'>
+    <div class="box box-default">
+      <div class="box-header with-border">
+        <h3 class="box-title">Ausgaben {{selected_date}} Prozentual</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse">
+            <span class="fa fa-minus"></span>
+          </button>
+        </div>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="chart-responsive">
+              <canvas id="zusammenfassungPieProzentualEinnahmen" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.box -->
+      <script> 
+           var pieData = {
+             labels:{{pie_einnahmen_labels|safe}},
+             datasets: [{
+               data: {{pie_einnahmen_data_prozentual|safe}},
+               backgroundColor: {{pie_einnahmen_colors|safe}},
+             }],
+           };
+           var canvas = document.getElementById("zusammenfassungPieProzentualEinnahmen");
+           new Chart(canvas, {
+             type: 'pie',
+             data: pieData,
+             options: {
+               responsive: true,
+               maintainAspectRatio: false,
+           }});
+      </script>
+    </div>
+  </div><!-- /.col -->  
 </div>
 
