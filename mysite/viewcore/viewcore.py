@@ -59,6 +59,17 @@ def add_changed_einzelbuchungen(new_changed_einzelbuchung_event):
     context.append(new_changed_einzelbuchung_event)
 
 
+def add_changed_gemeinsamebuchungen(new_changed_gemeinsamebuchungen_event):
+    context = get_changed_gemeinsamebuchungen()
+    context.append(new_changed_gemeinsamebuchungen_event)
+
+def get_changed_gemeinsamebuchungen():
+    context = _get_context()
+    if "gemeinsamebuchungen_changed" not in context.keys():
+        context["gemeinsamebuchungen_changed"] = []
+    return context["gemeinsamebuchungen_changed"]
+
+
 def get_changed_dauerauftraege():
     context = _get_context()
     if "dauerauftraege_changed" not in context.keys():
