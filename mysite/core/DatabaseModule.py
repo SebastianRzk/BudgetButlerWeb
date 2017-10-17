@@ -236,10 +236,6 @@ class Database:
 
         return kopierte_tabelle.Dauer.sum()
 
-    def _substract(self, row):
-        print(row)
-        return  datetime.combine(date.today(), row.Ausstechen) - datetime.combine(date.today(), row.Einstechen)
-
     def stechzeiten_vorhanden(self):
         return not self.stechzeiten.content.empty
 
@@ -263,33 +259,3 @@ class Database:
             result_list.append(row)
 
         return result_list
-
-
-    def _ziehe_datev_ab(self, value):
-        print("value", value)
-        if value <= timedelta(hours=2):
-            return value
-
-        if value <= timedelta(hours=2, minutes=14):
-            return timedelta(hours=2)
-
-        if value <= timedelta(hours=4, minutes=45):
-            return value - timedelta(minutes=15)
-
-        if value <= timedelta(hours=4, minutes=59):
-            return timedelta(hours=4, minutes=30)
-
-        if value <= timedelta(hours=6, minutes=30):
-            return value - timedelta(minutes=30)
-
-        if value <= timedelta(hours=6, minutes=44):
-            return timedelta(hours=6)
-
-        return value - timedelta(minutes=45)
-
-    def _ziehe_pause_ab(self, value, arbeitgeber):
-        if arbeitgeber == "DATEV":
-            return self._ziehe_datev_ab(value)
-        return value
-
-

@@ -26,20 +26,6 @@ class FrequencsFunctions:
             self.backwardmap[funktion] = name
 
 
-    def get_frequency_function_by_name(self):
-        '''
-        collects frequency-function out of console
-        '''
-        ergebnis = ""
-        while ergebnis == "":
-            print("Bitte geben Sie einen Rhythmus ein:")
-            print("Mögliche Eingaben sind: ", self.forwardmap.keys())
-            eingabe = input()
-            for moeglicher_treffer in self.forwardmap.keys():
-                if moeglicher_treffer == eingabe:
-                    ergebnis = moeglicher_treffer
-        return ergebnis
-
     def get_function_for_name(self, name):
         '''
         returns frequency-function for its name
