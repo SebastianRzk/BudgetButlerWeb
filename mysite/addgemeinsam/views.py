@@ -11,9 +11,6 @@ import pandas
 import addgemeinsam
 from viewcore import viewcore
 
-
-LAST_ELEMTENTS = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
-
 def handle_request(request):
     print(viewcore.database_instance())
     if request.method == "POST" and request.POST['action'] == 'add':
@@ -30,13 +27,32 @@ def handle_request(request):
             print(einnameausgabe)
             if "edit_index" in request.POST:
                 viewcore.database_instance().gemeinsamebuchungen.edit(int(request.POST['edit_index']), einnameausgabe)
+                viewcore.add_changed_gemeinsamebuchungen(
+                    {
+                        'fa':'pencil',
+                        'datum':str(datum),
+                        'kategorie':request.POST['kategorie'],
+                        'name':request.POST['name'],
+                        'wert':"%.2f" % value,
+                        'person':request.POST['person']
+                        })
+
             else:
                 viewcore.database_instance().gemeinsamebuchungen.add(ausgaben_datum=datum,
                                                                             kategorie=request.POST['kategorie'],
                                                                             ausgaben_name=request.POST['name'],
                                                                             wert=value,
                                                                             person=request.POST['person'])
-            addgemeinsam.views.LAST_ELEMTENTS = addgemeinsam.views.LAST_ELEMTENTS.append(einnameausgabe)
+                viewcore.add_changed_gemeinsamebuchungen(
+                    {
+                        'fa':'plus',
+                        'datum':str(datum),
+                        'kategorie':request.POST['kategorie'],
+                        'name':request.POST['name'],
+                        'wert':"%.2f" % value,
+                        'person':request.POST['person']
+                        })
+
             viewcore.save_refresh()
     print(viewcore.database_instance().einzelbuchungen)
     context = viewcore.generate_base_context("addgemeinsam")
@@ -56,14 +72,11 @@ def handle_request(request):
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
         context['approve_title'] = 'Gemeinsame Ausgabe aktualisieren'
-    last_elements = []
-    for row_index, row in addgemeinsam.views.LAST_ELEMTENTS.iterrows():
-        last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert, row.Person))
 
     context['ID'] = viewcore.get_next_transaction_id()
     context['personen'] = ['Sebastian', 'Maureen']
     context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben())
-    context['letzte_erfassung'] = reversed(last_elements)
+    context['letzte_erfassung'] = reversed(viewcore.get_changed_gemeinsamebuchungen())
     return context
 
 def index(request):

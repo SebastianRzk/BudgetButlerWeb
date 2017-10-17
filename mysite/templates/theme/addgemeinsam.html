@@ -72,23 +72,23 @@
             <table class="table no-margin">
               <thead>
                 <tr>
-                  <th>Nummer</th>
+                  <th></th>
                   <th>Datum</th>
                   <th>Name</th>
                   <th>Kategorie</th>
-                  <th>Wert</th>
+                  <th class="pull-right">Wert</th>
                   <th>Person</th>
                 </tr>
               </thead>
               <tbody>
                 {% for ausgabe in letzte_erfassung %}
                 <tr>
-                  <td>{{ausgabe.0}}</td>
-                  <td>{{ausgabe.1}}</td>
-                  <td>{{ausgabe.2}}</td>
-                  <td>{{ausgabe.3}}</td>
-                  <td>{{ausgabe.4}}</td>
-				  <td>{{ausgabe.5}}</td>
+                  <td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
+                  <td>{{ausgabe.datum}}</td>
+                  <td>{{ausgabe.name}}</td>
+                  <td>{{ausgabe.kategorie}}</td>
+                  <td class="pull-right">{{ausgabe.wert}}</td>
+				  <td>{{ausgabe.person}}</td>
                 </tr>
                 {% endfor %}
               </tbody>
