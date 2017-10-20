@@ -224,7 +224,7 @@
             <tbody>
               {% for ausgabe in ausgaben %}
               <tr>
-                <td style="vertical-align:middle"> <font size="5" color="{{ausgabe.2}}">&#x25cf;</font>{{ausgabe.0}}</td>
+                <td style="vertical-align:middle"> <span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
                 <td style="vertical-align:middle">{{ausgabe.1}}</td>
               </tr>
               {% endfor %}
@@ -261,7 +261,7 @@
             <tbody>
               {% for einnahme in einnahmen %}
               <tr>
-                <td style="vertical-align:middle"><font size="5" color="{{einnahme.2}}">&#x25cf;</font>{{einnahme.0}}</td>
+                <td style="vertical-align:middle"><span class="fa fa-circle" style="color: #{{einnahme.2}};"></span> {{einnahme.0}}</td>
                 <td style="vertical-align:middle">{{einnahme.1}}</td>
               </tr>
               {% endfor %}
