@@ -33,6 +33,9 @@ def handle_request():
     ist_werte_monatlich = []
     soll_werte_monatlich = []
     soll_ist_uebersicht_monatlich = viewcore.database_instance().get_soll_ist_uebersicht(2017, Database.func_monatlich)
+    print('soll_ist_uebersicht_monatlichsoll_ist_uebersicht_monatlichsoll_ist_uebersicht_monatlichsoll_ist_uebersicht_monatlich')
+    print(soll_ist_uebersicht_monatlich)
+    print('soll_ist_uebersicht_monatlichsoll_ist_uebersicht_monatlichsoll_ist_uebersicht_monatlichsoll_ist_uebersicht_soll_ist_uebersicht_monatlich')
     for monat, (ist, soll) in soll_ist_uebersicht_monatlich.items():
         stechzeiten_label_monatlich.append(datetime.date(1900, monat, 1).strftime('%B'))
         ist_werte_monatlich.append("%.2f" % (ist.total_seconds() / (60 * 60)))
