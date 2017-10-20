@@ -148,7 +148,7 @@ window.onload = function() {
 							<tbody>
 								{% for ausgabe in zusammenfassung_ausgaben %}
 								<tr>
-									<td style="vertical-align: middle"><font size="5" color="{{ausgabe.3}}">&#x25cf;</font>{{ausgabe.0}}</td>
+									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span>{{ausgabe.0}}</td>
 									<td style="vertical-align: middle" align="right">{{ausgabe.1}}</td>
 									<td style="vertical-align: middle"><input type="checkbox" name="{{ausgabe.0}}"{{ausgabe.2}}></td>
 								</tr>
@@ -200,7 +200,7 @@ window.onload = function() {
 							<tbody>
 								{% for ausgabe in zusammenfassung_einnahmen %}
 								<tr>
-									<td style="vertical-align: middle"><font size="5" color="{{ausgabe.3}}">&#x25cf;</font>{{ausgabe.0}}</td>
+									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span> {{ausgabe.0}}</td>
 									<td style="vertical-align: middle" align="right">{{ausgabe.1}}</td>
 								</tr>
 								{% endfor %}
