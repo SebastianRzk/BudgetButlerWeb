@@ -124,7 +124,7 @@ def get_menu_list():
     menu = []
     menu.append({'url': '/import/', 'name': 'Datensätze importieren', 'icon':'fa fa-cogs'})
     menu.append({'url': '/configuration/', 'name': 'Konfiguration', 'icon':'fa fa-cogs'})
-    menu.append({'url':'/production/?database=' + viewcore.database_instance().name, 'name':'Reload Database', 'icon':'fa fa-refresh'})
+    menu.append({'url':'/production/?database=' + viewcore.database_instance().name, 'name':'Datenbank neu laden', 'icon':'fa fa-refresh'})
     for database in DATABASES:
         if database != database_instance().name:
             menu.append({'url':'/production/?database=' + database, 'name':'To ' + database, 'icon':'fa fa-cogs'})

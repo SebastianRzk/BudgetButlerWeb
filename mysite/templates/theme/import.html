@@ -2,18 +2,17 @@
     <div class='col-md-12'>
       <div class='box'>
         <div class='box-header'>
-          <h3 class='box-title'> Generierte Abrechnung: <small>Simple and fast</small></h3>
+          <h3 class='box-title'> Generierte Abrechnung:</h3>
           <!-- tools box -->
           <div class="pull-right box-tools">
-            <button class="btn btn-default btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><span class="fa fa-minus"></span></button>
-            <button class="btn btn-default btn-sm" data-widget='remove' data-toggle="tooltip" title="Remove"><span class="fa fa-times"></span></button>
+            <button class="btn btn-box-tool" data-widget='collapse' data-toggle="tooltip" title="Collapse"><span class="fa fa-minus"></span></button>
           </div><!-- /. tools -->
         </div><!-- /.box-header -->
         <div class='box-body pad'>
           <form  id="form1" action="/import/" method="post">{% csrf_token %}
           	<div class="box-footer">
          	<textarea  name='import' class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-			<button type="submit" value="OK" class="btn btn-primary">Submit</button>
+			<button type="submit" value="OK" class="btn btn-primary">Daten aus Abrechnung importieren</button>
 			</div>
           </form>
         </div>
@@ -58,7 +57,7 @@
           </div><!-- /.table-responsive -->
         </div><!-- /.box-body -->
         <div class="box-footer clearfix">
-          <a href="/gemeinsameuebersicht/" class="btn btn-sm btn-default btn-flat pull-right">Alle Buchungen ansehen</a>
+          <a href="/uebersicht/" class="btn btn-sm btn-default btn-flat pull-right">Alle persönlichen Einzelbuchungen ansehen</a>
         </div><!-- /.box-footer -->
       </div><!-- /.box -->
     </div><!-- /.col -->
