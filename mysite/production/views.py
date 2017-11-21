@@ -3,7 +3,6 @@ from viewcore import viewcore
 from test import DBManagerStub
 # Create your views here.
 def leave_debug(request):
-    print(request.GET.url)
     viewcore.switch_database_instance(request.GET['database'])
     return redirect('/dashboard/')
 
