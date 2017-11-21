@@ -5,6 +5,11 @@ install:
   - pip install -r integration-requirements.txt
   - pip install coveralls
   - pip install codecov
+  - sudo apt-get install phantomjs
+
+env:
+  global:
+  - TRAVIS_INTEGRATION=TRUE
 
 addons:
   sonarcloud:
@@ -12,7 +17,9 @@ addons:
 
 
 script: 
-  - py.test --cov=mysite
+  - cd mysite && py.test --cov=mysite && cd ..
+  - cd mysite && python manage.py runserver &
+  - cd selenium_tests && pytest && cd ..
   - sonar-scanner -Dsonar.login=$SONAR
 
 after_success:

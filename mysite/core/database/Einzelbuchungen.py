@@ -38,7 +38,7 @@ class Einzelbuchungen:
         self.sort()
 
     def get(self, db_index):
-        row = self.content.iloc[db_index]
+        row = self.content.loc[db_index]
         return self._row_to_dict(self.content.columns, db_index, row)
 
     def get_all(self):
@@ -195,7 +195,7 @@ class Einzelbuchungen:
             result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
         return result
 
-  
+
 
 
     def get_farbe_fuer(self, input_kategorie):
@@ -328,4 +328,6 @@ class EinzelbuchungsSelektor:
         return self.content.groupby(by='Kategorie').sum()
 
     def sum(self):
+        if self.content.empty:
+            return 0
         return self.content.Wert.sum()

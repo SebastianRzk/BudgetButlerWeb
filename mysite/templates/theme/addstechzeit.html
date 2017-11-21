@@ -45,7 +45,7 @@
 							<input type="hidden" name="edit_index" value="{{edit_index}}">
 						{% endif %}
 						<div class="form-group">
-							<label>Pausenberechnung</label> <select value="{{default_kategorie}}" class="form-control" name="arbeitgeber">
+							<label>Pausenberechnung</label> <select value="{{default_kategorie}}" class="form-control" id="arbeitgeber" name="arbeitgeber">
 							 {% for arbeitgeber_ in arbeitgeber %}
 								<option>{{arbeitgeber_}}</option>
 							 {% endfor %}

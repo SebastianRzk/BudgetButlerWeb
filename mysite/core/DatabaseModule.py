@@ -16,6 +16,7 @@ from core.database.Stechzeiten import Stechzeiten
 from pandas import DataFrame
 from viewcore import viewcore
 from viewcore.converter import datum
+import pandas
 
 
 class StringWriter():
@@ -231,9 +232,8 @@ class Database:
         kopierte_tabelle = self.sollzeiten.content.copy()
         kopierte_tabelle = kopierte_tabelle[crit1 & crit2]
         kopierte_tabelle.Dauer = kopierte_tabelle.Dauer.map(lambda x: datetime.combine(date.min, x) - datetime.min)
-        if kopierte_tabelle.Dauer.sum() == 0:
+        if pandas.isna(kopierte_tabelle.Dauer.sum()) or kopierte_tabelle.Dauer.sum() == 0:
             return timedelta(minutes=0)
-
         return kopierte_tabelle.Dauer.sum()
 
     def stechzeiten_vorhanden(self):
