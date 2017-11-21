@@ -12,7 +12,7 @@ addons:
 
 
 script: 
-  - py.test --cov=mysite
+  - cd mysite && py.test --cov=mysite && cd ..
   - sonar-scanner -Dsonar.login=$SONAR
 
 after_success:
