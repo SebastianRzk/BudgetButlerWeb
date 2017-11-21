@@ -328,4 +328,6 @@ class EinzelbuchungsSelektor:
         return self.content.groupby(by='Kategorie').sum()
 
     def sum(self):
+        if self.content.empty:
+            return 0
         return self.content.Wert.sum()
