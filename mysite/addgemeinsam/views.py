@@ -74,7 +74,7 @@ def handle_request(request):
         context['approve_title'] = 'Gemeinsame Ausgabe aktualisieren'
 
     context['ID'] = viewcore.get_next_transaction_id()
-    context['personen'] = ['Sebastian', 'Maureen']
+    context['personen'] = [viewcore.database_instance().name, 'Maureen']
     context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben())
     context['letzte_erfassung'] = reversed(viewcore.get_changed_gemeinsamebuchungen())
     return context

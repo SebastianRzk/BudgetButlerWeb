@@ -138,6 +138,12 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5/1/2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson2'
 
+    def test_personenOption_shouldContainDBName(self):
+        self.set_up()
+        result = views.handle_request(GetRequest())
+
+        assert viewcore.database_instance().name in result['personen']
+
     def test_edit_should_only_fire_once(self):
         self.set_up()
 
