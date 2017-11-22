@@ -9,7 +9,7 @@ from core import DatabaseModule, DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
 from datetime import datetime
-from mysite.viewcore.converter import datum
+from viewcore.converter import datum
 
 
 __DATABASES = {}

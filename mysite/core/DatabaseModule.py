@@ -17,7 +17,7 @@ from pandas import DataFrame
 from viewcore import viewcore
 from viewcore.converter import datum
 import pandas
-from mysite.viewcore.viewcore import name_of_partner
+from viewcore.viewcore import name_of_partner
 
 
 class StringWriter():
