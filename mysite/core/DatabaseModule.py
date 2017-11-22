@@ -41,6 +41,7 @@ class Database:
     '''
     Database
     '''
+    func_today = date.today
 
     def __init__(self, name):
         self.name = name
@@ -85,7 +86,7 @@ class Database:
         dif_maureen = (ausgaben_gesamt / 2) - summe_maureen
 
         abrechnunsdatei = StringWriter()
-        abrechnunsdatei.write("Abrechnung vom " + str(date.today()) + "\n")
+        abrechnunsdatei.write("Abrechnung vom " + str(self.func_today()) + "\n")
         self._write_trenner(abrechnunsdatei)
         abrechnunsdatei.write("Ergebnis: \n")
 

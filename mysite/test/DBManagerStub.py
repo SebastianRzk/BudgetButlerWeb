@@ -8,6 +8,8 @@ from _io import StringIO
 from core import DatabaseModule, DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
+from datetime import datetime
+from mysite.viewcore.converter import datum
 
 
 __DATABASES = {}
@@ -39,7 +41,11 @@ def setup_db_for_test():
     print('Overwrite database read and write')
     DBManager.read_function = from_string
     DBManager.write_function = to_string
+    database.func_today = _fixed_date
     return database
+
+def _fixed_date():
+    return datum('01/01/2010')
 
 def stub_abrechnungs_write():
     viewcore.database_instance().abrechnungs_write_function = write_to_console

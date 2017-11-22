@@ -26,7 +26,7 @@ def _zero():
 
 
 class abrechnen(unittest.TestCase):
-    abrechnung = """Abrechnung vom 2017-11-22
+    abrechnung = """Abrechnung vom 2010-01-01
 ########################################
  Ergebnis: 
 test muss an Maureen noch 5.00€ überweisen.
