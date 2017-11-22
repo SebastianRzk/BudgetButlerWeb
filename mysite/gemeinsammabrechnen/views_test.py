@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+from mysite.viewcore.viewcore import name_of_partner
 
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
@@ -34,3 +35,24 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
         assert testdb.einzelbuchungen.anzahl() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
+
+    def test_shortResult_withEqualValue_shouldReturnEqualSentence(self):
+        self.set_up()
+        result = views.handle_request(GetRequest())
+        assert result['ergebnis'] == 'Die gemeinsamen Ausgaben sind ausgeglichen.'
+
+    def test_shortResult_withPartnerMoreSpendings_shouldReturnEqualSentence(self):
+        self.set_up()
+        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        name_partner = viewcore.name_of_partner()
+        gemeinsame_buchungen.add(datum('01/01/2010'), 'Some Cat.', '', -11, name_partner)
+        result = views.handle_request(GetRequest())
+        assert result['ergebnis'] == 'Maureen bekommt von test noch 5.50€.'
+
+    def test_shortResult_withSelfMoreSpendings_shouldReturnEqualSentence(self):
+        self.set_up()
+        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        name_self = viewcore.database_instance().name
+        gemeinsame_buchungen.add(datum('01/01/2010'), 'Some Cat.', 'Some Name', -11, name_self)
+        result = views.handle_request(GetRequest())
+        assert result['ergebnis'] == 'test bekommt von Maureen noch 5.50€.'

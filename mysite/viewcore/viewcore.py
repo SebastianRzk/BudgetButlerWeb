@@ -215,6 +215,9 @@ def get_icon_for_categorie(categorie):
             return item
     return "fa fa-archive"
 
+def name_of_partner():
+    return 'Maureen'
+
 def design_colors():
     colors = {}
     colors[0] = ("3c8dbc")

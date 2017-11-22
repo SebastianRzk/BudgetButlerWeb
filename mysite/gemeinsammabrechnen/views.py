@@ -3,27 +3,30 @@ from django.template.loader import render_to_string
 
 from adddauerauftrag.views import handle_request
 from viewcore import viewcore
+from mysite.viewcore.viewcore import name_of_partner
 
 def handle_request(request):
-    ausgabe_sebastian = viewcore.database_instance().gemeinsamebuchungen.fuer('Sebastian')
-    ausgabe_maureen = viewcore.database_instance().gemeinsamebuchungen.fuer('Maureen')
-    ausgabe_sebastian = ausgabe_sebastian.Wert.sum()
-    ausgabe_maureen = ausgabe_maureen.Wert.sum()
+    name_self = viewcore.database_instance().name
+    name_partner = viewcore.name_of_partner()
+
+    ausgabe_sebastian = viewcore.database_instance().gemeinsamebuchungen.fuer(name_self)
+    ausgabe_maureen = viewcore.database_instance().gemeinsamebuchungen.fuer(name_partner)
+    ausgabe_sebastian = _sum(ausgabe_sebastian.Wert)
+    ausgabe_maureen = _sum(ausgabe_maureen.Wert)
     ausgabe_gesamt = ausgabe_maureen + ausgabe_sebastian
-    print("maureen", ausgabe_maureen)
-    print('sebastian', ausgabe_sebastian)
+    print(viewcore.name_of_partner(), ausgabe_maureen)
+    print(viewcore.database_instance().name, ausgabe_sebastian)
 
     dif_sebastian = (ausgabe_gesamt / 2) - ausgabe_sebastian
     dif_maureen = (ausgabe_gesamt / 2) - ausgabe_maureen
 
-    ergebnis = "No Ergebnis set"
-
+    ergebnis = 'Die gemeinsamen Ausgaben sind ausgeglichen.'
 
     if dif_maureen > 0:
-        ergebnis = "Maureen bekommt von Sebastian noch " + str("%.2f" % dif_maureen) + "€."
+        ergebnis = name_partner + ' bekommt von ' + name_self + ' noch ' + str('%.2f' % dif_maureen) + '€.'
 
     if dif_sebastian > 0:
-        ergebnis = "Sebastian bekommt von Maureen noch " + str("%.2f" % dif_sebastian) + "€."
+        ergebnis = name_self + ' bekommt von ' + name_partner + ' noch ' + str('%.2f' % dif_sebastian) + '€.'
     print("ergebnis:", ergebnis)
 
     context = viewcore.generate_base_context('gemeinsamabrechnen')
@@ -42,6 +45,10 @@ def index(request):
 
     return render(request, 'theme/index.html', context)
 
+def _sum(data):
+    if data.empty:
+        return 0
+    return data.sum()
 
 def abrechnen(request):
     context = handle_abrechnen_request(request)
