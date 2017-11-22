@@ -17,6 +17,7 @@ from pandas import DataFrame
 from viewcore import viewcore
 from viewcore.converter import datum
 import pandas
+from mysite.viewcore.viewcore import name_of_partner
 
 
 class StringWriter():
@@ -70,11 +71,14 @@ class Database:
         '''
         rechnet gemeinsame ausgaben aus der Datenbank ab
         '''
-        ausgaben_maureen = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == 'Maureen']
-        ausgaben_sebastian = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == 'Sebastian']
+        name_self = viewcore.database_instance().name
+        name_partner = viewcore.name_of_partner()
 
-        summe_maureen = ausgaben_maureen['Wert'].sum()
-        summe_sebastian = ausgaben_sebastian['Wert'].sum()
+        ausgaben_maureen = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == name_partner]
+        ausgaben_sebastian = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == name_self]
+        print(ausgaben_maureen)
+        summe_maureen = self._sum(ausgaben_maureen['Wert'])
+        summe_sebastian = self._sum(ausgaben_sebastian['Wert'])
 
         ausgaben_gesamt = summe_maureen + summe_sebastian
 
@@ -86,15 +90,15 @@ class Database:
         abrechnunsdatei.write("Ergebnis: \n")
 
         if dif_maureen > 0:
-            abrechnunsdatei.write("Sebastian muss an Maureen noch " + str(dif_maureen) + "€ überweisen.\n")
+            abrechnunsdatei.write(name_self + ' muss an ' + name_partner + ' noch ' + str('%.2f' % dif_maureen) + "€ überweisen.\n")
         else:
-            abrechnunsdatei.write("Maureen muss an Sebastian noch " + str("%.2f" % (dif_maureen * -1)) + "€ überweisen.\n")
+            abrechnunsdatei.write(name_partner + ' muss an ' + name_self + ' noch ' + str("%.2f" % (dif_maureen * -1)) + "€ überweisen.\n")
 
         abrechnunsdatei.write("\n")
-        abrechnunsdatei.write("Ausgaben von Maureen".ljust(30, " ") + str("%.2f" % (summe_maureen * -1)).rjust(7, " ") + "\n")
-        abrechnunsdatei.write("Ausgaben von Sebastian".ljust(30, " ") + str("%.2f" % (summe_sebastian * -1)).rjust(7, " ") + "\n")
+        abrechnunsdatei.write(('Ausgaben von ' + name_partner).ljust(30, " ") + str("%.2f" % summe_maureen).rjust(7, " ") + "\n")
+        abrechnunsdatei.write(('Ausgaben von ' + name_self).ljust(30, " ") + str("%.2f" % summe_sebastian).rjust(7, " ") + "\n")
         abrechnunsdatei.write("".ljust(38, "-") + "\n")
-        abrechnunsdatei.write("Gesamt".ljust(31, " ") + str("%.2f" % ausgaben_gesamt).ljust(7, " ") + "\n \n \n")
+        abrechnunsdatei.write("Gesamt".ljust(30, " ") + str("%.2f" % ausgaben_gesamt).rjust(7, " ") + "\n \n \n")
 
         self._write_trenner(abrechnunsdatei)
         abrechnunsdatei.write("Gesamtausgaben pro Person \n")
@@ -105,8 +109,10 @@ class Database:
             abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'] / 2)).rjust(7, " ") + "\n")
 
         abrechnunsdatei.write("\n")
+        abrechnunsdatei.write("\n")
+
         self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write("Ausgaben von Maureen \n")
+        abrechnunsdatei.write('Ausgaben von ' + name_partner + ' \n')
         self._write_trenner(abrechnunsdatei)
 
         abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
@@ -114,8 +120,9 @@ class Database:
             abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
 
         abrechnunsdatei.write("\n")
+        abrechnunsdatei.write("\n")
         self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write("Ausgaben von Sebastian \n")
+        abrechnunsdatei.write('Ausgaben von ' + name_self + ' \n')
         self._write_trenner(abrechnunsdatei)
 
         abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
@@ -139,6 +146,10 @@ class Database:
         self.abrechnungs_write_function("../Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
 
+    def _sum(self, data):
+        if data.empty:
+            return 0
+        return data.sum()
 
     def _write_to_file(self, filename, content):
         f = open(filename, "w")
