@@ -10,6 +10,7 @@ import sys
 import unittest
 from pandas.core.frame import DataFrame
 from core.DatabaseModule import Database
+from test import DBManagerStub
 
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../')
@@ -17,11 +18,76 @@ sys.path.insert(0, _PATH + '/../')
 import core.DatabaseModule as db
 from viewcore.converter import datum, laenge
 from viewcore.converter import time
+from viewcore import viewcore
 
 
 def _zero():
     return timedelta(minutes=0)
 
+
+class abrechnen(unittest.TestCase):
+    abrechnung = """Abrechnung vom 2010-01-01
+########################################
+ Ergebnis: 
+test muss an Maureen noch 5.00€ überweisen.
+
+Ausgaben von Maureen           -10.00
+Ausgaben von test                0.00
+--------------------------------------
+Gesamt                         -10.00
+ 
+ 
+########################################
+ Gesamtausgaben pro Person 
+########################################
+ Datum      Kategorie    Name                    Wert
+2017-03-17  some kategorie some name              -5.00
+
+
+########################################
+ Ausgaben von Maureen 
+########################################
+ Datum      Kategorie    Name                    Wert
+2017-03-17  some kategorie some name             -10.00
+
+
+########################################
+ Ausgaben von test 
+########################################
+ Datum      Kategorie    Name                    Wert
+
+
+#######MaschinenimportStart
+Datum,Kategorie,Name,Wert,Dynamisch
+2017-03-17,some kategorie,some name,-5.00,False
+#######MaschinenimportEnd
+"""
+
+
+    def set_up(self):
+        DBManagerStub.setup_db_for_test()
+        DBManagerStub.stub_abrechnungs_write()
+
+    def test_abrechnen_shouldAddEinzelbuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        db.gemeinsamebuchungen.add(datum('17/03/2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
+        db.abrechnen()
+
+        assert len(db.einzelbuchungen.content) == 1
+        uebertragene_buchung = db.einzelbuchungen.get(0)
+        assert uebertragene_buchung['Name'] == 'some name'
+        assert uebertragene_buchung['Datum'] == datum('17/03/2017')
+        assert uebertragene_buchung['Kategorie'] == 'some kategorie'
+        assert uebertragene_buchung['Wert'] == '5.00'
+
+    def test_abrechnen_shouldPrintFileContent(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        db.gemeinsamebuchungen.add(datum('17/03/2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
+        abrechnungs_text = db.abrechnen()
+
+        assert abrechnungs_text == self.abrechnung
 class converter_test(unittest.TestCase):
     def test_frame_to_list_of_dicts_withEmptyDataframe_shouldReturnEmptyList(self):
         empty_dataframe = DataFrame()
