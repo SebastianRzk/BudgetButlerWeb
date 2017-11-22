@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 
 from adddauerauftrag.views import handle_request
 from viewcore import viewcore
-from mysite.viewcore.viewcore import name_of_partner
+from viewcore.viewcore import name_of_partner
 
 def handle_request(request):
     name_self = viewcore.database_instance().name
