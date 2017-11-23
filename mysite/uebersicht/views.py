@@ -20,7 +20,7 @@ def handle_request(request):
     for row_index, row in db.iterrows():
         if datum_alt == None:
             datum_alt = row.Datum
-        if datum_alt.month != row.Datum.month:
+        if datum_alt.month != row.Datum.month or datum_alt.year != row.Datum.year:
             ausgaben_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = ausgaben_liste
             ausgaben_liste = []
             datum_alt = row.Datum
