@@ -75,13 +75,14 @@ class Einzelbuchungen:
 
         tabelle = tabelle[tabelle.Datum >= mindate]
         tabelle = tabelle[tabelle.Datum <= date.today()]
-        tabelle.Datum = tabelle.Datum.apply(lambda x: str(x.month) + str(x.year))
+        tabelle.Datum = tabelle.Datum.apply(lambda x:  str(x.year) + str(x.month).rjust(2, "0"))
         tabelle.Wert = tabelle.Wert.apply(self._nur_negativ)
 
         gruppiert = tabelle.Wert.groupby(tabelle.Datum).sum()
         gruppiert = gruppiert.sort_index()
 
         # return gruppiert.tolist()
+        print(gruppiert)
         return ([0] * 6 + gruppiert.tolist())[-6:]
 
     def get_letzte_6_monate_einnahmen(self):
@@ -94,11 +95,11 @@ class Einzelbuchungen:
 
         tabelle = tabelle[tabelle.Datum >= mindate]
         tabelle = tabelle[tabelle.Datum <= date.today()]
-        tabelle.Datum = tabelle.Datum.apply(lambda x: str(x.month) + str(x.year))
+        tabelle.Datum = tabelle.Datum.apply(lambda x:  str(x.year) + str(x.month).rjust(2, "0"))
         tabelle.Wert = tabelle.Wert.map(self._nur_positiv)
         gruppiert = tabelle.Wert.groupby(tabelle.Datum).sum()
         gruppiert = gruppiert.sort_index()
-
+        print(gruppiert)
        # return gruppiert.tolist()
         return ([0] * 6 + gruppiert.tolist())[-6:]
 

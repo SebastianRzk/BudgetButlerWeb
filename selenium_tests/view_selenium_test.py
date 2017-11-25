@@ -2,14 +2,17 @@ from selenium.webdriver.common.keys import Keys
 import time
 from selenium.webdriver.support.select import Select
 from SeleniumTest import SeleniumTestClass
+from SeleniumTest import fill_element
+from SeleniumTest import enter_test_mode
+from SeleniumTest import define_kategorie
 
 
 class TestUI(SeleniumTestClass):
     def _add_ausgabe(self, driver):
         driver.get('http://localhost:8000/addeinzelbuchung/')
-        self._fill_element(driver, 'date', '17031994')
-        self._fill_element(driver, 'name', 'eine ausgabe')
-        self._fill_element(driver, 'wert', '12,34')
+        fill_element(driver, 'date', '17031994')
+        fill_element(driver, 'name', 'eine ausgabe')
+        fill_element(driver, 'wert', '12,34')
         add_button = driver.find_element_by_id('add')
         add_button.click()
 
@@ -18,15 +21,10 @@ class TestUI(SeleniumTestClass):
         print(tableRows[0].text)
         print(tableRows[1].text)
 
-    def _enter_test_mode(self, driver):
-        driver.get('http://localhost:8000/production/testmode')
 
     def _define_kategorie(self, driver):
-        driver.get('http://127.0.0.1:8000/configuration/')
         kategorie_name = 'testkategorie'
-        self._fill_element(driver, 'neue_kategorie', kategorie_name)
-        button = driver.find_element_by_id('add_kategorie')
-        button.click()
+        define_kategorie(driver, kategorie_name)
 
         self._look_for_kategorie_in_auswahl(driver, kategorie_name, 'http://localhost:8000/addeinzelbuchung/')
         self._look_for_kategorie_in_auswahl(driver, kategorie_name, 'http://localhost:8000/addeinnahme/')
@@ -39,16 +37,9 @@ class TestUI(SeleniumTestClass):
         assert kategorie_name in map(lambda x: x.text, kategorie_auswahl.options)
 
 
-    def _fill_element(self, driver, elementname, content):
-        elem = driver.find_element_by_name(elementname)
-        elem.clear()
-        elem.send_keys(content)
-
-
-
     def test_simple_example(self, driver_provider):
         DRIVER = driver_provider()
-        self._enter_test_mode(DRIVER)
+        enter_test_mode(DRIVER)
 
         self._define_kategorie(DRIVER)
 
