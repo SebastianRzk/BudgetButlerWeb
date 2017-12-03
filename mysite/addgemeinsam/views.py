@@ -10,6 +10,7 @@ import pandas
 
 import addgemeinsam
 from viewcore import viewcore
+from viewcore.converter import from_double_to_german
 
 def handle_request(request):
     print(viewcore.database_instance())
@@ -41,7 +42,7 @@ def handle_request(request):
                 viewcore.database_instance().gemeinsamebuchungen.add(ausgaben_datum=datum,
                                                                             kategorie=request.POST['kategorie'],
                                                                             ausgaben_name=request.POST['name'],
-                                                                            wert=value,
+                                                                            wert="%.2f" % value,
                                                                             person=request.POST['person'])
                 viewcore.add_changed_gemeinsamebuchungen(
                     {
@@ -64,11 +65,16 @@ def handle_request(request):
         tag = db_row.Datum.day
         monat = db_row.Datum.month
         jahr = db_row.Datum.year
-        context['default_tag'] = str(tag) + "/" + str(monat) + "/" + str(jahr)
-        context['default_name'] = db_row.Name
-        context['default_wert'] = str(db_row.Wert * -1).replace(".", ",")
-        context['default_kategorie'] = db_row.Kategorie
-        context['default_person'] = db_row.Person
+        default_item = {
+            'datum': str(tag) + "/" + str(monat) + "/" + str(jahr),
+            'name': db_row.Name,
+            'wert': from_double_to_german(db_row.Wert * -1),
+            'kategorie': db_row.Kategorie,
+            'person': db_row.Person
+        }
+
+
+        context['default_item'] = default_item
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
         context['approve_title'] = 'Gemeinsame Ausgabe aktualisieren'

@@ -28,6 +28,10 @@ class TestUebersicht(unittest.TestCase):
         self.set_up()
         views.handle_request()
 
+    def test_diagramm_vorbelegung(self):
+        self.set_up()
+        result = views.handle_request()
+
 
 if __name__ == '__main__':
     unittest.main()

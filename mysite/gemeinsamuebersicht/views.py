@@ -21,7 +21,7 @@ def handle_request(request):
     ausgaben_liste = []
     data = viewcore.database_instance().gemeinsamebuchungen.content.sort_values(by='Datum')
     for row_index, row in data.iterrows():
-        ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert, row.Person))
+        ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, '%.2f' % row.Wert, row.Person))
 
     context = viewcore.generate_base_context('gemeinsameuebersicht')
     context['ausgaben'] = ausgaben_liste

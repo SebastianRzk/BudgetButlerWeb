@@ -18,37 +18,57 @@
 								<div class="input-group-addon">
 									<span class="fa fa-calendar"></span>
 								</div>
-								<input value="{{default_tag}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask />
+								<input value="{{default_item.datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask />
 							</div>
 						</div>
 						<div class="form-group">
-							<label>Name der Ausgabe</label> <input value="{{default_name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
+							<label>Name der Ausgabe</label> <input value="{{default_item.name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
 						</div>
 						<div class="form-group">
-							<label>Wert der Ausgabe</label> <input value="{{default_wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
+							<label>Wert der Ausgabe</label> <input value="{{default_item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
 						</div>
 						{% if bearbeitungsmodus %}
-							<input type="hidden" name="edit_index" value="{{edit_index}}">
+							<input type="hidden" name="edit_index" value="{{default_item.index}}">
 						{% endif %}
 						<div class="form-group">
-							<label>Kategorie</label> <select value="{{default_kategorie}}" class="form-control" name="kategorie">
+							<label>Kategorie</label> <select class="form-control" name="kategorie" id="kategorie_auswahl">
 							 {% for kategorie in kategorien %}
 								<option>{{kategorie}}</option>
 							 {% endfor %}
 							</select>
+							{% if bearbeitungsmodus %}
+							<script type="text/javascript">
+								function SelectElement()
+									{
+										var element = document.getElementById('kategorie_auswahl');
+										element.value = "{{default_item.kategorie}}";
+									}
+									SelectElement()
+							</script>
+							{% endif %}
 						</div>
 						<div class="form-group">
-							<label>Person</label> <select value="{{default_person}}" class="form-control" name="person">
+							<label>Person</label> <select class="form-control" name="person" id="person_auswahl">
 							 {% for person in personen %}
 								<option>{{person}}</option>
 							 {% endfor %}
 							</select>
+							{% if bearbeitungsmodus %}
+							<script type="text/javascript">
+								function SelectElement()
+									{
+										var element = document.getElementById('person_auswahl');
+										element.value = "{{default_item.person}}";
+									}
+									SelectElement()
+							</script>
+							{% endif %}
 						</div>
 					</div>
 					<!-- /.box-body -->
 
 					<div class="box-footer">
-						<button type="submit" name="action" value="add" class="btn btn-primary">{{approve_title}}</button>
+						<button type="submit" name="action" value="add" id="add" class="btn btn-primary">{{approve_title}}</button>
 					</div>
 				</form>
 			</div>
@@ -69,7 +89,7 @@
         </div><!-- /.box-header -->
         <div class="box-body">
           <div class="table-responsive">
-            <table class="table no-margin">
+            <table class="table no-margin" id="letzte_erfassungen">
               <thead>
                 <tr>
                   <th></th>
