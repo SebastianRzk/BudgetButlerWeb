@@ -72,6 +72,8 @@ def handle_request(request):
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
         context['approve_title'] = 'Dauerauftrag aktualisieren'
+        context['element_titel'] = 'Dauerauftrag bearbeiten'
+        context['active_name'] = 'Dauerauftrag bearbeiten'
         print(context)
 
     context['ID'] = viewcore.get_next_transaction_id()
