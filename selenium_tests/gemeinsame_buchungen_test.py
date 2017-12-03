@@ -24,9 +24,6 @@ class TestUI(SeleniumTestClass):
         add_button = driver.find_element_by_id('add')
         add_button.click()
 
-        base_table = driver.find_element_by_id('letzte_erfassungen')
-        tableRows = base_table.find_elements_by_tag_name('tr')
-
     def teste_uebersicht(self, driver_provider):
         driver = driver_provider()
         enter_test_mode(driver)
@@ -70,7 +67,6 @@ class TestUI(SeleniumTestClass):
         assert get_selected_option(driver, 'person_auswahl') == 'test'
         assert driver.find_element_by_name('date').get_attribute('value') == '01/01/2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
-
 
         driver.close()
 
