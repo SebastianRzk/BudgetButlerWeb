@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 
 from viewcore import viewcore
-from viewcore.converter import datum, dezimal_float, datum_to_string
+from viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german
 
 
 def handle_request(request):
@@ -59,11 +59,21 @@ def handle_request(request):
         default_item = viewcore.database_instance().dauerauftraege.get(db_index)
         default_item['Startdatum'] = datum_to_string(default_item['Startdatum'])
         default_item['Endedatum'] = datum_to_string(default_item['Endedatum'])
-        default_item['Wert'] = str(default_item['Wert'] * -1).replace('.', ',')
+
+        if default_item['Wert'] < 0:
+            default_item['typ'] = 'Ausgabe'
+        else:
+            default_item['typ'] = 'Einnahme'
+
+        default_item['Wert'] = from_double_to_german(abs(default_item['Wert']))
+
+
         context['default_item'] = default_item
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
         context['approve_title'] = 'Dauerauftrag aktualisieren'
+        context['element_titel'] = 'Dauerauftrag bearbeiten'
+        context['active_name'] = 'Dauerauftrag bearbeiten'
         print(context)
 
     context['ID'] = viewcore.get_next_transaction_id()

@@ -18,7 +18,7 @@ addons:
 
 script: 
   - py.test --cov=mysite mysite
-  - cd mysite && python manage.py runserver &
+  - cd mysite && python manage.py runserver > build.log &
   - cd selenium_tests && pytest && cd ..
   - sonar-scanner -Dsonar.login=$SONAR
 

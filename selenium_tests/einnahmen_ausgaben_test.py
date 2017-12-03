@@ -25,8 +25,6 @@ class TestUI(SeleniumTestClass):
 
         base_table = driver.find_element_by_id('letzte_erfassungen')
         tableRows = base_table.find_elements_by_tag_name('tr')
-        print(tableRows[0].text)
-        print(tableRows[1].text)
 
     def teste_edit_vorbelegung(self, driver_provider):
         driver = driver_provider()
@@ -49,7 +47,6 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_id('item_2_datum').get_attribute('innerHTML') == 'Jan. 1, 2012'
         assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
 
-        sleep(2)
         edit_button = driver.find_element_by_id('edit_2')
         edit_button.click()
 
@@ -57,7 +54,6 @@ class TestUI(SeleniumTestClass):
         assert get_selected_option(driver, 'kategorie_auswahl') == '2test_kategorie'
         assert driver.find_element_by_name('date').get_attribute('value') == '01/01/2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
-
 
         driver.close()
 

@@ -5,7 +5,7 @@
 			<!-- general form elements -->
 			<div class="box box-primary">
 				<div class="box-header">
-					<h3 class="box-title">Neue Ausgabe</h3>
+					<h3 class="box-title">{{element_titel}}</h3>
 				</div>
 				<form role="form" action="/adddauerauftrag/" method="post">{% csrf_token %}
 				{% if bearbeitungsmodus %}
@@ -19,7 +19,7 @@
 							<div class="input-group-addon">
 								<span class="fa fa-calendar"></span>
 							</div>
-							<input value="{{default_item.Startdatum}}" type="text" name="startdatum" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask />
+							<input value="{{default_item.Startdatum}}" type="text" name="startdatum" id="startdatum" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask />
 						</div>
 					</div>
 					<div class="form-group">
@@ -28,11 +28,11 @@
 							<div class="input-group-addon">
 								<span class="fa fa-calendar"></span>
 							</div>
-							<input value="{{default_item.Endedatum}}" type="text" name="endedatum" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask />
+							<input value="{{default_item.Endedatum}}" type="text" name="endedatum" class="form-control" id="endedatum" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask />
 						</div>
 					</div>
 					<div class="form-group">
-						<label>Name der Ausgabe</label> <input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
+						<label>Name des Dauerauftrags</label> <input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
 					</div>
 					<div class="form-group">
 						<label>Rhythmus</label> <select value="{{default_item.Rhythmus}}" class="form-control" name="rhythmus">
@@ -42,14 +42,24 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<label>Art</label> <select value="{{default_item.art}}" class="form-control" name="typ">
+						<label>Art</label> <select value="{{default_item.art}}" class="form-control" name="typ" id="typ_auswahl">
 						<option>Ausgabe</option>
 						<option>Einnahme</option>
+						{% if bearbeitungsmodus %}
+						<script type="text/javascript">
+							function SelectElement()
+								{
+									var element = document.getElementById('typ_auswahl');
+									element.value = "{{default_item.typ}}";
+								}
+								SelectElement()
+						</script>
+						{% endif %}
 						</select>
 					</div>
 					
 					<div class="form-group">
-						<label>Wert der Ausgabe</label> <input value="{{default_item.Wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
+						<label>Wert der einzelnen Buchung</label> <input value="{{default_item.Wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
 					</div>
 					<div class="form-group">
 						<label>Kategorie</label> <select class="form-control" name="kategorie" id="kategorie_auswahl">
@@ -72,7 +82,7 @@
 					<!-- /.box-body -->
 
 				<div class="box-footer">
-					<button type="submit" name="action" value="add" class="btn btn-primary">{{approve_title}}</button>
+					<button type="submit" name="action" value="add" id="add" class="btn btn-primary">{{approve_title}}</button>
 				</div>
 			</form>
 		</div>

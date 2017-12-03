@@ -34,9 +34,15 @@ class TesteAddGemeinsamView(unittest.TestCase):
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
         db = viewcore.database_instance()
-        db.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', 10, 'Sebastian')
+        db.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
         context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
+        preset = context['default_item']
+        assert preset['datum'] == '10/10/2010'
+        assert preset['kategorie'] == 'kategorie'
+        assert preset['name'] == 'ausgaben_name'
+        assert preset['wert'] == '10,00'
+        assert preset['person'] == 'Sebastian'
 
     def test_add_shouldAddGemeinsameBuchung(self):
         self.set_up()
@@ -104,6 +110,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
         assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1/1/2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
+
+
 
     def test_edit_ausgabe(self):
         self.set_up()
