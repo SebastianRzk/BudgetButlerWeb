@@ -185,36 +185,6 @@ def save_refresh():
     viewcore.DATABASE_INSTANCE = None
     viewcore.switch_database_instance(db_name)
 
-def get_icon_for_categorie(categorie):
-    kategorienliste = {
-        "Miete_Grundkosten":"fa fa-home",
-        "Essen":"fa fa-cutlery",
-        "Bus_Bahn":"fa fa-train",
-        "Spass":"fa fa-camera-retro",
-        "Einrichtung": "fa fa-free-code-camp",
-        "Geschenke":"fa fa-gift",
-        "Hygiene":"fa fa-bath",
-        "Handy":"fa fa-mobile",
-        "Alkohol":"fa fa-beer",
-        "Spende":"fa fa-leaf",
-        "Fahrrad":"fa fa-bicycle",
-        "Urlaub":"fa fa-globe",
-        "Schreibwaren":"fa fa-pencil",
-        "Umzug":"fa fa-truck",
-        "Medizin":"fa fa-medkit",
-        "Sport":"fa fa-futbol-o",
-        "Versicherung":"fa fa-file",
-        }
-
-    if categorie in kategorienliste.keys():
-        return kategorienliste[categorie]
-
-
-    for key, item in kategorienliste.items():
-        if key in categorie:
-            return item
-    return "fa fa-archive"
-
 def name_of_partner():
     return 'Maureen'
 
