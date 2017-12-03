@@ -41,13 +41,27 @@ class TesteAddDauerauftragView(unittest.TestCase):
         context = views.handle_request(GetRequest())
         assert context['approve_title'] == 'Dauerauftrag hinzufügen'
 
-    def test_editCallFromUeberischt_shouldNameButtonEdit(self):
+    def test_editCallFromUeberischt_presetValuesCorrect(self):
         self.set_up()
 
         testdb = viewcore.database_instance()
-        testdb.dauerauftraege.add(datum('10/10/2010'), datum('10/10/2010'), 'kategorie', 'name', 'monatlich', 10)
+        testdb.dauerauftraege.add(datum('10/10/2010'), datum('10/10/2011'), '0kategorie', '0name', 'monatlich', 10)
         context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Dauerauftrag aktualisieren'
+
+        preset = context['default_item']
+        assert preset['Name'] == '0name'
+        assert preset['Startdatum'] == '10/10/2010'
+        assert preset['Endedatum'] == '10/10/2011'
+        assert preset['Kategorie'] == '0kategorie'
+        assert preset['Wert'] == '10,00'
+        assert preset['typ'] == 'Einnahme'
+
+        testdb.dauerauftraege.add(datum('10/10/2010'), datum('10/10/2011'), '0kategorie', '0name', 'monatlich', -10)
+        context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'1'}))
+        preset = context['default_item']
+        assert preset['typ'] == 'Ausgabe'
+
 
 
     def test_add_dauerauftrag(self):
