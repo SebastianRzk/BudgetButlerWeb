@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 
 from viewcore import viewcore
+from viewcore import request_handler
 from viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german
+
+
 
 def handle_request(request):
     context = viewcore.generate_base_context('addeinzelbuchung')
@@ -11,44 +14,41 @@ def handle_request(request):
     context['approve_title'] = 'Ausgabe hinzufügen'
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     if request.method == 'POST' and request.POST['action'] == 'add':
-        print(request.POST)
-        if not viewcore.is_transaction_already_fired(request.POST['ID']):
-            viewcore.fire(request.POST['ID'])
-            value = dezimal_float(request.POST['wert']) * -1
-            if 'edit_index' in request.POST:
-                database_index = int(request.POST['edit_index'])
-                einzelbuchungen.edit(
-                    database_index,
-                    datum(request.POST['date']),
-                    request.POST['kategorie'],
-                    request.POST['name'],
-                    value)
-                viewcore.add_changed_einzelbuchungen(
-                    {
-                        'fa':'pencil',
-                        'datum':str(datum(request.POST['date'])),
-                        'kategorie':request.POST['kategorie'],
-                        'name':request.POST['name'],
-                        'wert':'%.2f' % value
-                        })
-            else:
-                einzelbuchungen.add(
-                    datum(request.POST['date']),
-                    request.POST['kategorie'],
-                    request.POST['name'],
-                    value)
+        value = dezimal_float(request.POST['wert']) * -1
+        if 'edit_index' in request.POST:
+            database_index = int(request.POST['edit_index'])
+            einzelbuchungen.edit(
+                database_index,
+                datum(request.POST['date']),
+                request.POST['kategorie'],
+                request.POST['name'],
+                value)
+            viewcore.add_changed_einzelbuchungen(
+                {
+                    'fa':'pencil',
+                    'datum':str(datum(request.POST['date'])),
+                    'kategorie':request.POST['kategorie'],
+                    'name':request.POST['name'],
+                    'wert':'%.2f' % value
+                    })
+        else:
+            einzelbuchungen.add(
+                datum(request.POST['date']),
+                request.POST['kategorie'],
+                request.POST['name'],
+                value)
 
-                viewcore.add_changed_einzelbuchungen(
-                    {
-                        'fa':'plus',
-                        'datum':str(datum(request.POST['date'])),
-                        'kategorie':request.POST['kategorie'],
-                        'name':request.POST['name'],
-                        'wert':'%.2f' % value
-                        })
+            viewcore.add_changed_einzelbuchungen(
+                {
+                    'fa':'plus',
+                    'datum':str(datum(request.POST['date'])),
+                    'kategorie':request.POST['kategorie'],
+                    'name':request.POST['name'],
+                    'wert':'%.2f' % value
+                    })
 
 
-            viewcore.save_database()
+        viewcore.save_database()
     if request.method == 'POST' and request.POST['action'] == 'edit':
         print('Please edit:', request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
@@ -64,6 +64,7 @@ def handle_request(request):
         context['element_titel'] = 'Einzelbuchung bearbeiten'
         context['active_name'] = 'Einzelbuchung bearbeiten'
         context['approve_title'] = 'Ausgabe aktualisieren'
+        context['transaction_key'] = 'requested'
 
 
 
@@ -73,9 +74,4 @@ def handle_request(request):
     return context
 
 def index(request):
-
-    context = handle_request(request)
-
-    rendered_content = render_to_string('theme/addeinzelbuchung.html', context, request=request)
-    context['content'] = rendered_content
-    return render(request, 'theme/index.html', context)
+    return request_handler.handle_request(request, handle_request, 'theme/addeinzelbuchung.html')

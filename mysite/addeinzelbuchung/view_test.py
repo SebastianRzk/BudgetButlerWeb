@@ -7,6 +7,7 @@ Created on 10.05.2017
 import os
 import sys
 import unittest
+from django.template.context_processors import request
 
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
@@ -17,9 +18,8 @@ from test.RequestStubs import PostRequest
 from addeinzelbuchung import views
 from core import DBManager
 from core.DatabaseModule import Database
-from viewcore import viewcore
 from viewcore.converter import datum
-
+from viewcore import request_handler
 
 
 
@@ -32,7 +32,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
     testdb = None
     def set_up(self):
         self.testdb = DBManagerStub.setup_db_for_test()
-
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
@@ -49,7 +49,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         self.set_up()
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -65,10 +65,10 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        request_key = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"add",
-             "ID":next_id,
+             "ID":request_key,
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -76,9 +76,9 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":next_id,
+             "ID":request_key,
              "date":"1/1/2017",
              "kategorie":"overwritten",
              "name":"overwritten",
@@ -98,7 +98,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -108,7 +108,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "edit_index":"0",
              "date":"5/1/2017",
              "kategorie":"Essen",
@@ -125,10 +125,9 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     def test_edit_ausgabe_should_only_fire_once(self):
         self.set_up()
-
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -136,8 +135,8 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        next_id = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
@@ -148,7 +147,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
@@ -170,7 +169,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
         views.handle_request(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",

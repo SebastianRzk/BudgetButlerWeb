@@ -43,7 +43,6 @@ def fire(id):
     print("All fired ids:", viewcore.FIRED_IDS)
 
 def _get_context():
-    print("CONTEXT:", CONTEXT, "  ", DATABASE_INSTANCE)
     if DATABASE_INSTANCE.name not in CONTEXT.keys():
         CONTEXT[DATABASE_INSTANCE.name] = {}
     return CONTEXT[DATABASE_INSTANCE.name]
@@ -130,8 +129,6 @@ def get_menu_list():
             menu.append({'url':'/production/?database=' + database, 'name':'To ' + database, 'icon':'fa fa-cogs'})
 
     main_menu['Einstellungen'] = menu
-    print(main_menu)
-
     return main_menu
 
 def get_name_from_key(pagename):
