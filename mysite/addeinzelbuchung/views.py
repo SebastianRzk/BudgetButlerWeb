@@ -64,11 +64,9 @@ def handle_request(request):
         context['element_titel'] = 'Einzelbuchung bearbeiten'
         context['active_name'] = 'Einzelbuchung bearbeiten'
         context['approve_title'] = 'Ausgabe aktualisieren'
-        context['transaction_key'] = 'requested'
 
 
-
-    context['ID'] = viewcore.get_next_transaction_id()
+    context['transaction_key'] = 'requested'
     context['kategorien'] = sorted(einzelbuchungen.get_kategorien_ausgaben())
     context['letzte_erfassung'] = reversed(viewcore.get_changed_einzelbuchungen())
     return context

@@ -19,26 +19,20 @@ from core import DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
 from viewcore.converter import datum
+from viewcore import request_handler
 
 
-
-
-
-
-
-
-'''
-'''
 class TesteAddDauerauftragView(unittest.TestCase):
     testdb = None
 
     def set_up(self):
         print("create new database")
         testdb = DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
-        context = views.handle_request(GetRequest())
+        context = views.index(GetRequest())
         assert context['approve_title'] == 'Dauerauftrag hinzufügen'
 
     def test_editCallFromUeberischt_presetValuesCorrect(self):
@@ -46,7 +40,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
         testdb = viewcore.database_instance()
         testdb.dauerauftraege.add(datum('10/10/2010'), datum('10/10/2011'), '0kategorie', '0name', 'monatlich', 10)
-        context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
+        context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Dauerauftrag aktualisieren'
 
         preset = context['default_item']
@@ -66,9 +60,9 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
     def test_add_dauerauftrag(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":"????",
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"6/1/2017",
              "kategorie":"Essen",
@@ -91,9 +85,9 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
     def test_add_dauerauftrag_einnahme(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"6/1/2017",
              "kategorie":"Essen",
@@ -116,9 +110,9 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_edit_dauerauftrag(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":"?x???",
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"6/1/2017",
              "kategorie":"Essen",
@@ -131,9 +125,9 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
 
         print("dbs: " , viewcore.DATABASES)
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":"??xxx?",
+             "ID":request_handler.current_key(),
              "edit_index":"0",
              "startdatum":"2/1/2017",
              "endedatum":"5/1/2017",
@@ -156,9 +150,9 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_edit_dauerauftrag_ausgabe_to_einnahme(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"6/1/2017",
              "kategorie":"Essen",
@@ -170,9 +164,9 @@ class TesteAddDauerauftragView(unittest.TestCase):
          ))
 
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "edit_index":"0",
              "startdatum":"2/1/2017",
              "endedatum":"5/1/2017",
@@ -196,9 +190,9 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_edit_dauerauftrag_should_only_fire_once(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"6/1/2017",
              "kategorie":"Essen",
@@ -208,8 +202,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
              "wert":"2,00"
              }
          ))
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        next_id = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
@@ -223,7 +217,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
@@ -249,8 +243,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_add_dauerauftrag_should_only_fire_once(self):
         self.set_up()
 
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        next_id = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "startdatum":"2/1/2017",
@@ -263,7 +257,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "startdatum":"2/1/2017",

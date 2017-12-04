@@ -23,14 +23,14 @@ def handle_request(request, request_action, html_base_page):
             print('new db version: ' + str(request_handler.DATABASE_VERSION))
         else:
             print('transaction rejected (requested:' + str(request_handler.DATABASE_VERSION) + ", got:" + request.POST['ID'] + ')')
-            request = GetRequest()
+            request.method = 'GET'
 
     context = request_action(request)
 
-    rendered_content = request_handler.RENDER_PARTIALLY_FUNC(html_base_page, context, request=request)
-
     if 'transaction_key' in context:
         context['ID'] = current_key()
+
+    rendered_content = request_handler.RENDER_PARTIALLY_FUNC(html_base_page, context, request=request)
 
     context['content'] = rendered_content
     response = request_handler.RENDER_FULL_FUNC(request, 'theme/index.html', context)
