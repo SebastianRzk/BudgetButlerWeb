@@ -18,6 +18,7 @@ from addstechzeit import views
 from core import DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
+from viewcore import request_handler
 from viewcore.converter import datum, time
 
 
@@ -25,6 +26,7 @@ class TesteSollzeit(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_page_init(self):
         self.set_up()
@@ -32,9 +34,9 @@ class TesteSollzeit(unittest.TestCase):
 
     def test_add(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'1/1/2017',
              'start':'9:00',
              'ende':'10:00',
@@ -52,8 +54,8 @@ class TesteSollzeit(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        same_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        same_id = request_handler.current_key()
+        views.index(PostRequest(
             {'action':'add',
              'ID':same_id,
              'date':'1/1/2017',
@@ -63,7 +65,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
              'ID':same_id,
              'date':'2/2/2017',
@@ -82,9 +84,9 @@ class TesteSollzeit(unittest.TestCase):
     def test_edit(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'2/2/2017',
              'start':'11:00',
              'ende':'12:00',
@@ -92,9 +94,9 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'edit',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'edit_index':'0',
              'date':'1/1/2017',
              'start':'9:00',
@@ -112,9 +114,9 @@ class TesteSollzeit(unittest.TestCase):
     def test_edit_stechzeit_should_only_fire_once(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'2/2/2017',
              'start':'11:00',
              'ende':'12:00',
@@ -122,8 +124,8 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        same_index = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        same_index = request_handler.current_key()
+        views.index(PostRequest(
             {'action':'edit',
              'ID':same_index,
              'edit_index':'0',
@@ -134,7 +136,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'edit',
              'ID':same_index,
              'edit_index':'0',
@@ -158,9 +160,9 @@ class TesteSollzeit(unittest.TestCase):
     def test_add_sonderzeit(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add_sonderzeit',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'2/2/2017',
              'length':'11:00',
              'typ':'Urlaub',
@@ -178,8 +180,8 @@ class TesteSollzeit(unittest.TestCase):
     def test_add_sonderzeit_should_only_fire_once(self):
         self.set_up()
 
-        same_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        same_id = request_handler.current_key()
+        views.index(PostRequest(
             {'action':'add_sonderzeit',
              'ID':same_id,
              'date':'2/2/2017',
@@ -188,7 +190,7 @@ class TesteSollzeit(unittest.TestCase):
              'arbeitgeber':'asDATEV',
              }
          ))
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add_sonderzeit',
              'ID':same_id,
              'date':'2/2/2017',
