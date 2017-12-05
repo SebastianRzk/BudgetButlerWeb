@@ -7,9 +7,11 @@ from django.template.loader import render_to_string
 from django.shortcuts import render
 from test.RequestStubs import GetRequest
 from viewcore import request_handler
+from viewcore import viewcore
+import random
 
 DATABASE_VERSION = 0
-
+SESSION_RANDOM = str(random.random())
 RENDER_PARTIALLY_FUNC = render_to_string
 RENDER_FULL_FUNC = render
 
@@ -22,7 +24,7 @@ def handle_request(request, request_action, html_base_page):
             request_handler.DATABASE_VERSION = request_handler.DATABASE_VERSION + 1
             print('new db version: ' + str(request_handler.DATABASE_VERSION))
         else:
-            print('transaction rejected (requested:' + str(request_handler.DATABASE_VERSION) + ", got:" + request.POST['ID'] + ')')
+            print('transaction rejected (requested:' + current_key() + ", got:" + request.POST['ID'] + ')')
             request.method = 'GET'
 
     context = request_action(request)
@@ -38,7 +40,7 @@ def handle_request(request, request_action, html_base_page):
     return response
 
 def current_key():
-    return 'DATABASE_VERSION_' + str(request_handler.DATABASE_VERSION)
+    return request_handler.SESSION_RANDOM + ' ' + viewcore.database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
 
 def stub_me():
     request_handler.RENDER_PARTIALLY_FUNC = partially_render_stub
