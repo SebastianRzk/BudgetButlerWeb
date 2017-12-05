@@ -18,6 +18,7 @@ from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from viewcore import viewcore
+from viewcore import request_handler
 from viewcore.converter import datum
 
 
@@ -27,16 +28,17 @@ class TesteSollzeit(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
-        views.handle_request(GetRequest())
+        views.index(GetRequest())
 
     def test_add(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"2/3/2018",
              "laenge":"2:00",
@@ -51,8 +53,8 @@ class TesteSollzeit(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        single_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        single_id = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"add",
              "ID":single_id,
              "startdatum":"1/1/2017",
@@ -61,7 +63,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
              "ID":single_id,
              "startdatum":"2/2/2022",
@@ -79,18 +81,18 @@ class TesteSollzeit(unittest.TestCase):
     def test_edit(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"2/3/2018",
              "laenge":"2:00",
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"edit",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "edit_index":"0",
              "startdatum":"2/2/2018",
              "endedatum":"3/4/2019",
@@ -106,16 +108,16 @@ class TesteSollzeit(unittest.TestCase):
 
     def test_edit_ausgabe_should_only_fire_once(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "startdatum":"1/1/2017",
              "endedatum":"2/3/2018",
              "laenge":"2:00",
              }
          ))
-        same_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        same_id = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"edit",
              "ID":same_id,
              "edit_index":"0",
@@ -125,7 +127,7 @@ class TesteSollzeit(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"edit",
              "ID":same_id,
              "edit_index":"0",
