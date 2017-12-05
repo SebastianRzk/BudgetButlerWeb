@@ -18,38 +18,32 @@ from addeinnahme import views
 from core import DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
+from viewcore import request_handler
 from viewcore.converter import datum
 
-
-
-
-
-
-
-'''
-'''
 class TestAddEinnahmeView(unittest.TestCase):
 
     testdb = None
     def set_up(self):
         self.testdb = DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
-        context = views.handle_request(GetRequest())
+        context = views.index(GetRequest())
         assert context['approve_title'] == 'Einnahme hinzufügen'
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
         self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'kategorie', 'name', 10.00)
-        context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
+        context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Einnahme aktualisieren'
 
     def test_add_ausgabe(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -65,8 +59,8 @@ class TestAddEinnahmeView(unittest.TestCase):
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        next_id = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "date":"1/1/2017",
@@ -76,7 +70,7 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "date":"1/1/2017",
@@ -95,9 +89,9 @@ class TestAddEinnahmeView(unittest.TestCase):
     def test_edit_ausgabe(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -107,9 +101,9 @@ class TestAddEinnahmeView(unittest.TestCase):
 
 
         print("dbs: " , viewcore.DATABASES)
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "edit_index":"0",
              "date":"5/1/2017",
              "kategorie":"Essen",
@@ -128,9 +122,9 @@ class TestAddEinnahmeView(unittest.TestCase):
     def test_edit_ausgabe_should_only_fire_once(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -138,8 +132,8 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        next_id = request_handler.current_key()
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
@@ -150,7 +144,7 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
@@ -170,9 +164,9 @@ class TestAddEinnahmeView(unittest.TestCase):
     def test_edit_einzelbuchung_shouldLoadInputValues(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {"action":"add",
-             "ID":viewcore.get_next_transaction_id(),
+             "ID":request_handler.current_key(),
              "date":"1/1/2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -180,7 +174,7 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        result = views.handle_request(PostRequest(
+        result = views.index(PostRequest(
             {"action":"edit",
              "edit_index":"0"
              }

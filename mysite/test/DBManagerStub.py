@@ -42,6 +42,7 @@ def setup_db_for_test():
     DBManager.read_function = from_string
     DBManager.write_function = to_string
     database.func_today = _fixed_date
+
     return database
 
 def _fixed_date():

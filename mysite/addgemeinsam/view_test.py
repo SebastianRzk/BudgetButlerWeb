@@ -18,24 +18,26 @@ from addgemeinsam import views
 from core.DatabaseModule import Database
 from viewcore import viewcore
 from viewcore.converter import datum
+from viewcore import request_handler
 
 
 class TesteAddGemeinsamView(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
 
     def test_init(self):
         self.set_up()
-        context = views.handle_request(GetRequest())
+        context = views.index(GetRequest())
         assert context['approve_title'] == 'Gemeinsame Ausgabe hinzufügen'
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
         db = viewcore.database_instance()
         db.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
-        context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
+        context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
         preset = context['default_item']
         assert preset['datum'] == '10/10/2010'
@@ -46,9 +48,9 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_add_shouldAddGemeinsameBuchung(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -65,9 +67,9 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_add_shouldAddDynamicEinzelbuchung(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -83,8 +85,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        next_id = request_handler.current_key()
+        views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
              'date':'1/1/2017',
@@ -94,7 +96,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,00'
              }
          ))
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
              'date':'1/1/2017',
@@ -116,9 +118,9 @@ class TesteAddGemeinsamView(unittest.TestCase):
     def test_edit_ausgabe(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -127,9 +129,9 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'edit_index':'0',
              'date':'5/1/2017',
              'kategorie':'Essen',
@@ -148,7 +150,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_personenOption_shouldContainNames(self):
         self.set_up()
-        result = views.handle_request(GetRequest())
+        result = views.index(GetRequest())
 
         assert viewcore.database_instance().name in result['personen']
         assert viewcore.name_of_partner() in result['personen']
@@ -157,9 +159,9 @@ class TesteAddGemeinsamView(unittest.TestCase):
     def test_edit_should_only_fire_once(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
-             'ID':viewcore.get_next_transaction_id(),
+             'ID':request_handler.current_key(),
              'date':'1/1/2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -168,8 +170,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        next_id = viewcore.get_next_transaction_id()
-        views.handle_request(PostRequest(
+        next_id = request_handler.current_key()
+        views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
              'edit_index':'0',
@@ -180,7 +182,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,50'
              }
          ))
-        views.handle_request(PostRequest(
+        views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
              'edit_index':'0',

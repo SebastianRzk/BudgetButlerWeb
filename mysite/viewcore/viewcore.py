@@ -43,7 +43,6 @@ def fire(id):
     print("All fired ids:", viewcore.FIRED_IDS)
 
 def _get_context():
-    print("CONTEXT:", CONTEXT, "  ", DATABASE_INSTANCE)
     if DATABASE_INSTANCE.name not in CONTEXT.keys():
         CONTEXT[DATABASE_INSTANCE.name] = {}
     return CONTEXT[DATABASE_INSTANCE.name]
@@ -130,8 +129,6 @@ def get_menu_list():
             menu.append({'url':'/production/?database=' + database, 'name':'To ' + database, 'icon':'fa fa-cogs'})
 
     main_menu['Einstellungen'] = menu
-    print(main_menu)
-
     return main_menu
 
 def get_name_from_key(pagename):
@@ -184,36 +181,6 @@ def save_refresh():
     db_name = viewcore.DATABASE_INSTANCE.name
     viewcore.DATABASE_INSTANCE = None
     viewcore.switch_database_instance(db_name)
-
-def get_icon_for_categorie(categorie):
-    kategorienliste = {
-        "Miete_Grundkosten":"fa fa-home",
-        "Essen":"fa fa-cutlery",
-        "Bus_Bahn":"fa fa-train",
-        "Spass":"fa fa-camera-retro",
-        "Einrichtung": "fa fa-free-code-camp",
-        "Geschenke":"fa fa-gift",
-        "Hygiene":"fa fa-bath",
-        "Handy":"fa fa-mobile",
-        "Alkohol":"fa fa-beer",
-        "Spende":"fa fa-leaf",
-        "Fahrrad":"fa fa-bicycle",
-        "Urlaub":"fa fa-globe",
-        "Schreibwaren":"fa fa-pencil",
-        "Umzug":"fa fa-truck",
-        "Medizin":"fa fa-medkit",
-        "Sport":"fa fa-futbol-o",
-        "Versicherung":"fa fa-file",
-        }
-
-    if categorie in kategorienliste.keys():
-        return kategorienliste[categorie]
-
-
-    for key, item in kategorienliste.items():
-        if key in categorie:
-            return item
-    return "fa fa-archive"
 
 def name_of_partner():
     return 'Maureen'
