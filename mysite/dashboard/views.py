@@ -12,7 +12,13 @@ def handle_request():
 
     ausgaben_liste = []
     for row_index, row in einzelbuchungen.select().select_aktueller_monat().raw_table().iterrows():
-        ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
+        ausgaben_liste.append(
+            {'index': row_index,
+             'datum': row.Datum,
+             'name': row.Name,
+             'kategorie': row.Kategorie,
+             'wert': '%.2f' % row.Wert
+            })
 
     context = {
         'zusammenfassung_monatsliste': monatsliste(),
