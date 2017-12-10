@@ -33,7 +33,7 @@ def handle_request(request):
                     'datum':str(datum),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':"%.2f" % value,
+                    'wert':from_double_to_german(value),
                     'person':request.POST['person']
                     })
 
@@ -49,7 +49,7 @@ def handle_request(request):
                     'datum':str(datum),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':"%.2f" % value,
+                    'wert':from_double_to_german(value),
                     'person':request.POST['person']
                     })
 

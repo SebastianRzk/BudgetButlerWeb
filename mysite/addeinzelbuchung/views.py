@@ -29,7 +29,7 @@ def handle_request(request):
                     'datum':str(datum(request.POST['date'])),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':'%.2f' % value
+                    'wert':from_double_to_german(value)
                     })
         else:
             einzelbuchungen.add(
@@ -44,7 +44,7 @@ def handle_request(request):
                     'datum':str(datum(request.POST['date'])),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':'%.2f' % value
+                    'wert':from_double_to_german(value)
                     })
 
 

@@ -22,13 +22,13 @@ def handle_request(request):
                 request.POST['rhythmus'],
                 value)
             viewcore.add_changed_dauerauftraege({
-                'fa':'pencil',
-                'startdatum':str(datum(request.POST['startdatum'])),
-                'endedatum': str(datum(request.POST['endedatum'])),
+                'fa': 'pencil',
+                'startdatum': str(datum(request.POST['startdatum'])),
+                'endedatum':  str(datum(request.POST['endedatum'])),
                 'kategorie': request.POST['kategorie'],
-                'name':request.POST['name'],
-                'rhythmus':request.POST['rhythmus'],
-                'wert':value
+                'name': request.POST['name'],
+                'rhythmus': request.POST['rhythmus'],
+                'wert': from_double_to_german(value)
                 })
         else:
             viewcore.database_instance().dauerauftraege.add(
@@ -39,13 +39,13 @@ def handle_request(request):
                 request.POST['rhythmus'],
                 value)
             viewcore.add_changed_dauerauftraege({
-                'fa':'plus',
-                'startdatum':str(datum(request.POST['startdatum'])),
+                'fa': 'plus',
+                'startdatum': str(datum(request.POST['startdatum'])),
                 'endedatum': str(datum(request.POST['endedatum'])),
                 'kategorie': request.POST['kategorie'],
-                'name':request.POST['name'],
-                'rhythmus':request.POST['rhythmus'],
-                'wert':value
+                'name': request.POST['name'],
+                'rhythmus': request.POST['rhythmus'],
+                'wert': from_double_to_german(value)
                 })
 
         viewcore.save_refresh()
