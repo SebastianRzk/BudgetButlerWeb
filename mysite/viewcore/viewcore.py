@@ -11,8 +11,6 @@ from viewcore import viewcore
 DATABASE_INSTANCE = None
 DATABASES = []
 CONTEXT = {}
-FIRED_IDS = set()
-ID_COUNT = 1
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
 
 def database_instance():
@@ -29,18 +27,6 @@ def database_instance():
     if viewcore.DATABASE_INSTANCE is None:
         viewcore.DATABASE_INSTANCE = DBManager.read_database(viewcore.DATABASES[0])
     return DATABASE_INSTANCE
-
-def get_next_transaction_id():
-    viewcore.ID_COUNT = viewcore.ID_COUNT + 1
-    return str(viewcore.ID_COUNT)
-
-def is_transaction_already_fired(id):
-    return id in viewcore.FIRED_IDS
-
-def fire(id):
-    viewcore.FIRED_IDS.add(id)
-    print("VIEWCORE: Fire id", id)
-    print("All fired ids:", viewcore.FIRED_IDS)
 
 def _get_context():
     if DATABASE_INSTANCE.name not in CONTEXT.keys():

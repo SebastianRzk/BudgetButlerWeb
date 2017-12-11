@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 import pandas
 
 from viewcore import viewcore
-
+from viewcore import request_handler
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
     for unpassenden_kategorie in unpassende_kategorien:
@@ -35,10 +35,9 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
 
 
 def index(request):
-    renderpage, context = handle_request(request)
-    rendered_content = render_to_string('theme/' + renderpage, context, request=request)
-    context['content'] = rendered_content
-    return render(request, 'theme/index.html', context)
+    page, context = handle_request(request)
+    return request_handler.handle_request(request, lambda x: context , page)
+
 
 
 def handle_request(request):
@@ -118,7 +117,7 @@ def handle_request(request):
         context['unpassende_kategorien'] = nicht_passende_kategorien
         context['optionen'] = options
         context['import'] = request.POST['import']
-        context['ID'] = viewcore.get_next_transaction_id()
+        context['transaction_id'] = 'requested'
         return 'import_mapping.html', context
 
     return 'import.html', viewcore.generate_base_context('import')
@@ -128,7 +127,3 @@ def _kategorien_map(actual, target, goal):
         return actual
     return goal
 
-def _base_import_site(request, context):
-    rendered_content = render_to_string('theme/import.html', context, request=request)
-    context['content'] = rendered_content
-    return render(request, 'theme/index.html', context)
