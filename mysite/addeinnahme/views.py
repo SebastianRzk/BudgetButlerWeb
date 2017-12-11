@@ -26,7 +26,7 @@ def handle_request(request):
                     'datum':str(datum(request.POST['date'])),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':dezimal_float(request.POST['wert'])
+                    'wert':from_double_to_german(dezimal_float(request.POST['wert']))
                     })
 
         else:
@@ -41,7 +41,7 @@ def handle_request(request):
                     'datum':str(datum(request.POST['date'])),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':dezimal_float(request.POST['wert'])
+                    'wert':from_double_to_german(dezimal_float(request.POST['wert']))
                     })
         viewcore.save_database()
 

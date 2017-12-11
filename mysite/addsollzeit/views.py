@@ -38,9 +38,9 @@ def handle_request(request):
         sollzeit['Dauer'] = str(sollzeit['Dauer'])
 
     context = viewcore.generate_base_context("addsollzeit")
-    context['ID'] = viewcore.get_next_transaction_id()
     context['arbeitgeber'] = viewcore.database_instance().get_arbeitgeber()
     context['alle_sollzeiten'] = soll_zeiten_liste
+    context['transaction_key'] = 'required'
     return context
 
 # Create your views here.

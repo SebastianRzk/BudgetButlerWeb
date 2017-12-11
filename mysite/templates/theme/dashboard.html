@@ -106,17 +106,17 @@
               <th>Datum</th>
               <th>Name</th>
               <th>Kategorie</th>
-              <th>Wert</th>
+              <th align="right">Wert</th>
             </tr>
           </thead>
           <tbody>
             {% for abrechnung in ausgaben_des_aktuellen_monats %}
             <tr>
-              <td>{{abrechnung.0}}</td>
-              <td>{{abrechnung.1}}</td>
-              <td>{{abrechnung.2}}</td>
-              <td>{{abrechnung.3}}</td>
-              <td>{{abrechnung.4}}</td>
+              <td>{{abrechnung.index}}</td>
+              <td>{{abrechnung.datum}}</td>
+              <td>{{abrechnung.name}}</td>
+              <td>{{abrechnung.kategorie}}</td>
+              <td align="right">{{abrechnung.wert}}</td>
             </tr>
             {% endfor %}
           </tbody>

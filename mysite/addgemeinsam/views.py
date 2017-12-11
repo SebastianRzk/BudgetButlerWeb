@@ -33,7 +33,7 @@ def handle_request(request):
                     'datum':str(datum),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':"%.2f" % value,
+                    'wert':from_double_to_german(value),
                     'person':request.POST['person']
                     })
 
@@ -49,7 +49,7 @@ def handle_request(request):
                     'datum':str(datum),
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
-                    'wert':"%.2f" % value,
+                    'wert':from_double_to_german(value),
                     'person':request.POST['person']
                     })
 
@@ -78,7 +78,6 @@ def handle_request(request):
         context['edit_index'] = db_index
         context['approve_title'] = 'Gemeinsame Ausgabe aktualisieren'
 
-    context['ID'] = viewcore.get_next_transaction_id()
     context['personen'] = [viewcore.database_instance().name, viewcore.name_of_partner()]
     context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben())
     context['letzte_erfassung'] = reversed(viewcore.get_changed_gemeinsamebuchungen())

@@ -47,7 +47,7 @@ def stub_me():
     request_handler.RENDER_FULL_FUNC = full_render_stub
 
 def partially_render_stub(html_base_page, context, request):
-    return ""
+    return html_base_page
 
 def full_render_stub(request, theme, context):
     return context
