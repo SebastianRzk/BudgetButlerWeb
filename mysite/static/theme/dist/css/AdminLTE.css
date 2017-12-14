@@ -2128,3 +2128,9 @@ Gradient Background colors
   opacity: 1;
   filter: alpha(opacity=100);
 }
+
+.table-wert {
+  text-align: right;
+  padding-right: 50pt !important;
+
+}

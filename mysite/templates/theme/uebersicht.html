@@ -18,7 +18,7 @@
                   <th>Datum</th>
                   <th>Name</th>
                   <th>Kategorie</th>
-                  <th>Wert</th>
+                  <th class="table-wert">Wert</th>
                   <th>Tags</th>
                   <th></th>
                 </tr>
@@ -30,7 +30,7 @@
                   <td id="item_{{ausgabe.index}}_datum">{{ausgabe.datum}}</td>
                   <td id="item_{{ausgabe.index}}_name">{{ausgabe.name}}</td>
                   <td id="item_{{ausgabe.index}}_kategorie">{{ausgabe.kategorie}}</td>
-                  <td id="item_{{ausgabe.index}}_wert" align="right">{{ausgabe.wert}}</td>
+                  <td id="item_{{ausgabe.index}}_wert" class="table-wert">{{ausgabe.wert}}</td>
                   <td id="item_{{ausgabe.index}}_tags">{{ausgabe.tags}}
                    <td>
 	                   	{% if not ausgabe.dynamisch %}

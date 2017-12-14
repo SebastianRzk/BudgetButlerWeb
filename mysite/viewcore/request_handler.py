@@ -25,7 +25,10 @@ def handle_request(request, request_action, html_base_page):
             print('new db version: ' + str(request_handler.DATABASE_VERSION))
         else:
             print('transaction rejected (requested:' + current_key() + ", got:" + request.POST['ID'] + ')')
-            request.method = 'GET'
+            context = viewcore.generate_base_context('Fehler')
+            rendered_content = request_handler.request_handler.RENDER_PARTIALLY_FUNC('theme/error_race.html', {}, request=request)
+            context['content'] = rendered_content
+            return request_handler.RENDER_FULL_FUNC(request, 'theme/index.html', context)
 
     context = request_action(request)
 
