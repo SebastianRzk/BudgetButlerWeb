@@ -141,7 +141,7 @@ window.onload = function() {
 							<thead>
 								<tr>
 									<th>Kategorie</th>
-									<th align="right">Wert</th>
+									<th class="table-wert">Wert</th>
 									<th>Visualisiert</th>
 								</tr>
 							</thead>
@@ -149,14 +149,14 @@ window.onload = function() {
 								{% for ausgabe in zusammenfassung_ausgaben %}
 								<tr>
 									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span>{{ausgabe.0}}</td>
-									<td style="vertical-align: middle" align="right">{{ausgabe.1}}</td>
+									<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
 									<td style="vertical-align: middle"><input type="checkbox" name="{{ausgabe.0}}"{{ausgabe.2}}></td>
 								</tr>
 								{% endfor %}
 								<tfooter>
 								<tr>
 									<td style="vertical-align: middle">Summe</td>
-									<td style="vertical-align: middle" align="right">{{gesamt_ausgaben}}</td>
+									<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben}}</td>
 									<td/>
 								</tr>
 								<tr>
@@ -194,20 +194,20 @@ window.onload = function() {
 							<thead>
 								<tr>
 									<th>Kategorie</th>
-									<th align="right">Wert</th>
+									<th class="table-wert">Wert</th>
 								</tr>
 							</thead>
 							<tbody>
 								{% for ausgabe in zusammenfassung_einnahmen %}
 								<tr>
 									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span> {{ausgabe.0}}</td>
-									<td style="vertical-align: middle" align="right">{{ausgabe.1}}</td>
+									<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
 								</tr>
 								{% endfor %}
 								<tfooter>
 								<tr>
 									<td style="vertical-align: middle">Summe</td>
-									<td style="vertical-align: middle" align="right">{{gesamt_einnahmen}}</td>
+									<td style="vertical-align: middle" class="table-wert">{{gesamt_einnahmen}}</td>
 								</tr>
 								</tfooter>
 							</tbody>
