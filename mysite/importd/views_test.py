@@ -28,7 +28,7 @@ class Importd(unittest.TestCase):
     def test_init_shouldReturnIndexPage(self):
         self.set_up()
         context = views.index(GetRequest())
-        assert context['content'] == 'import.html'
+        assert context['content'] == 'theme/import.html'
 
     _IMPORT_DATA = '''
     #######MaschinenimportStart
@@ -42,7 +42,7 @@ class Importd(unittest.TestCase):
         einzelbuchungen.add(datum('01/01/2017'), 'Essen', 'some name', -1.54)
 
         context = views.index(PostRequest({'import':self._IMPORT_DATA}))
-        assert context['content'] == 'import.html'
+        assert context['content'] == 'theme/import.html'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
 
@@ -52,7 +52,7 @@ class Importd(unittest.TestCase):
         einzelbuchungen.add(datum('01/01/2017'), 'unbekannt', 'some name', -1.54)
 
         context = views.index(PostRequest({'import':self._IMPORT_DATA}))
-        assert context['content'] == 'import_mapping.html'
+        assert context['content'] == 'theme/import_mapping.html'
 
     def test_addeUnpassendenKategorie_mitPassendemMapping_shouldImportValue(self):
         self.set_up()
@@ -60,5 +60,5 @@ class Importd(unittest.TestCase):
         einzelbuchungen.add(datum('01/01/2017'), 'Unpassend', 'some name', -1.54)
 
         context = views.index(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
-        assert context['content'] == 'import.html'
+        assert context['content'] == 'theme/import.html'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
