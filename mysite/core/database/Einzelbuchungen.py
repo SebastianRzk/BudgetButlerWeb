@@ -328,6 +328,24 @@ class EinzelbuchungsSelektor:
     def group_by_kategorie(self):
         return self.content.groupby(by='Kategorie').sum()
 
+    def inject_zeros_for_year(self, year, max_month=12):
+        data = self.content.copy()
+        for month in range(1, max_month + 1):
+            inject_month = date(day=1, month=month, year=year)
+            data = data.append(pd.DataFrame([[inject_month, 0]], columns=['Datum', 'Wert']), ignore_index=True)
+        return EinzelbuchungsSelektor(data)
+
+    def sum_monthly(self):
+        data = self.content.copy()
+        data = data[['Datum', 'Wert']]
+        data.Datum = data.Datum.map(lambda x: x.month)
+        grouped = data.groupby(by='Datum').sum()
+        result = []
+        for monat, reihe in grouped.iterrows():
+            result.append("%.2f" % abs(reihe.Wert))
+
+        return result
+
     def sum(self):
         if self.content.empty:
             return 0

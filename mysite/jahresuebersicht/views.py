@@ -140,9 +140,25 @@ def handle_request(request):
     context = viewcore.generate_base_context('jahresuebersicht')
 
     context['durchschnitt_monat_kategorien'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
-    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))    
+    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
     context = _computePieChartProzentual(context, year)
 
+    laenge = 12
+    if year == today.year:
+        laenge = today.month
+
+    context['buchungen'] = [
+        {
+            'kategorie': 'Einnahmen',
+            'farbe': 'rgb(210, 214, 222)',
+            'wert': jahres_einnahmen.inject_zeros_for_year(year, laenge).sum_monthly()
+        },
+        {
+            'kategorie': 'Ausgaben',
+            'farbe': 'rgba(60,141,188,0.8)',
+            'wert': jahres_ausgaben.inject_zeros_for_year(year, laenge).sum_monthly()
+        }
+    ]
     context['zusammenfassung_ausgaben'] = jahresausgaben
     context['zusammenfassung_einnahmen'] = jahreseinnahmen
     context['monats_namen'] = monats_namen

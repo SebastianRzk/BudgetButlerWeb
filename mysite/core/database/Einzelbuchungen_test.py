@@ -267,6 +267,37 @@ class einnahmen_Letzten6Monate(unittest.TestCase):
 
 class einzelbuchungs_selector(unittest.TestCase):
 
+    def test_injectZeros_shouldInjectZeroes(self):
+        component_under_test = Einzelbuchungen()
+        select = component_under_test.select()
+
+        assert len(select.content) == 0
+
+        select = select.inject_zeros_for_year(2017)
+        assert len(select.content) == 12
+        assert select.content.loc[0].Datum == datum('01/01/2017')
+        assert select.content.loc[11].Datum == datum('01/12/2017')
+        assert select.content.Wert.sum() == 0
+
+    def test_sumMonthly_withUniqueMonths(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('01/01/2017'), '', '', 20,)
+        component_under_test.add(datum('01/02/2017'), '', '', 10,)
+
+        result = component_under_test.select().sum_monthly()
+
+        assert result == ['20.00', '10.00']
+
+    def test_sumMonthly_withDuplicatedMonths_shouldSumValues(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('01/02/2017'), '', '', 5,)
+        component_under_test.add(datum('01/01/2017'), '', '', 20,)
+        component_under_test.add(datum('01/02/2017'), '', '', 10,)
+
+        result = component_under_test.select().sum_monthly()
+
+        assert result == ['20.00', '15.00']
+
     def test_sum_withEmptyDB_shouldReturnZero(self):
         component_under_test = Einzelbuchungen()
         assert component_under_test.select().sum() == 0
