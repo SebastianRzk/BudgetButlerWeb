@@ -10,18 +10,6 @@ from viewcore import viewcore
 def get_monats_namen(monat):
     return datetime.date(1900, monat, 1).strftime('%B')
 
-def _umrechnen(tabelle):
-    result = {}
-    for tblindex, group in tabelle.iterrows():
-        print(index)
-        print('###')
-        print(group)
-        (datum, kategorie) = tblindex
-        if datum not in result:
-            result[datum] = {}
-        result[datum][kategorie] = group.Wert
-    return result
-
 def _computePieChartProzentual(context, jahr):
     result = viewcore.database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
     ausgaben_data = []
