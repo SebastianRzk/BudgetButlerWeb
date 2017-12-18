@@ -10,51 +10,6 @@ from viewcore import viewcore
 def get_monats_namen(monat):
     return datetime.date(1900, monat, 1).strftime('%B')
 
-def berechne_monate(tabelle):
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    alle_kategorien = set(einzelbuchungen.get_kategorien_ausgaben())
-
-    monats_namen = []
-    for _, wert_monats_gruppe in tabelle.iteritems():
-        for (monat, _), _ in wert_monats_gruppe.iteritems():
-            if get_monats_namen(monat) not in monats_namen:
-                monats_namen.append(get_monats_namen(monat))
-
-    print(monats_namen)
-
-    kategorien_werte = {}
-    for kategorie in alle_kategorien:
-        kategorien_werte[kategorie] = '['
-    umgerechnete_tabelle = _umrechnen(tabelle)
-    for monat, kategorien in umgerechnete_tabelle.items():
-        ausstehende_kategorien = alle_kategorien.copy()
-        for kategorie, wert in kategorien.items():
-            ausstehende_kategorien.remove(kategorie)
-            if kategorien_werte[kategorie] == '[':
-                kategorien_werte[kategorie] = kategorien_werte[kategorie] + '%.2f' % abs(wert)
-            else:
-                kategorien_werte[kategorie] = kategorien_werte[kategorie] + ',' + ' %.2f' % abs(wert)
-
-        for fehllende_kategorie in ausstehende_kategorien:
-            if kategorien_werte[fehllende_kategorie] == '[':
-                kategorien_werte[fehllende_kategorie] = kategorien_werte[fehllende_kategorie] + '0.00'
-            else:
-                kategorien_werte[fehllende_kategorie] = kategorien_werte[fehllende_kategorie] + ', 0.00'
-
-    return (monats_namen, kategorien_werte)
-
-def _umrechnen(tabelle):
-    result = {}
-    for tblindex, group in tabelle.iterrows():
-        print(index)
-        print('###')
-        print(group)
-        (datum, kategorie) = tblindex
-        if datum not in result:
-            result[datum] = {}
-        result[datum][kategorie] = group.Wert
-    return result
-
 def _computePieChartProzentual(context, jahr):
     result = viewcore.database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
     ausgaben_data = []
@@ -85,6 +40,22 @@ def _computePieChartProzentual(context, jahr):
 
     return context
 
+def _compile_colors(result, einzelbuchungen):
+    einnahmen = {}
+    for month in result.keys():
+        for kategorie in result[month]:
+            if month == 1:
+                einnahmen[kategorie] = {}
+                einnahmen[kategorie]['values'] = '[' + result[month][kategorie]
+                continue
+            einnahmen[kategorie]['values'] = einnahmen[kategorie]['values'] + ',' + result[month][kategorie]
+
+    for kategorie in einnahmen:
+        einnahmen[kategorie]['values'] = einnahmen[kategorie]['values'] + ']'
+        einnahmen[kategorie]['farbe'] = einzelbuchungen.get_farbe_fuer(kategorie)
+
+    return einnahmen
+
 def index(request):
     context = handle_request(request)
     print(context)
@@ -101,16 +72,6 @@ def handle_request(request):
     if 'date' in request.POST:
         year = int(float(request.POST['date']))
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    kategorien_checked_map = {}
-    for kategorie in einzelbuchungen.get_alle_kategorien():
-        kategorien_checked_map[kategorie] = 'checked'
-
-    if request.method == 'POST' and request.POST['mode'] == 'change_selected':
-        print('change selected')
-
-        for kategorie in kategorien_checked_map.keys():
-            if not kategorie in request.POST:
-                kategorien_checked_map[kategorie] = ''
 
     jahresbuchungs_tabelle = einzelbuchungen.select().select_year(year)
     jahres_ausgaben = jahresbuchungs_tabelle.select_ausgaben()
@@ -118,36 +79,47 @@ def handle_request(request):
 
     jahresausgaben = []
     for kategorie, jahresblock in jahres_ausgaben.group_by_kategorie().iterrows():
-        jahresausgaben.append([kategorie, '%.2f' % jahresblock.Wert, kategorien_checked_map[kategorie], einzelbuchungen.get_farbe_fuer(kategorie)])
+        jahresausgaben.append([kategorie, '%.2f' % jahresblock.Wert, einzelbuchungen.get_farbe_fuer(kategorie)])
 
     jahreseinnahmen = []
     for kategorie, jahresblock in jahres_einnahmen.group_by_kategorie().iterrows():
-        jahreseinnahmen.append([kategorie, '%.2f' % jahresblock.Wert, kategorien_checked_map[kategorie], einzelbuchungen.get_farbe_fuer(kategorie)])
+        jahreseinnahmen.append([kategorie, '%.2f' % jahresblock.Wert, einzelbuchungen.get_farbe_fuer(kategorie)])
 
-    tabelle = einzelbuchungen.get_jahresausgaben_nach_monat(year)
-    (monats_namen, kategorien_werte) = berechne_monate(tabelle)
-
-
-    gefilterte_kategorien_werte = []
-    print(kategorien_werte)
-    for kategorie, wert in kategorien_werte.items():
-        print(kategorien_checked_map)
-        print(kategorie)
-        if kategorien_checked_map[kategorie] == 'checked':
-            gefilterte_kategorien_werte.append([kategorie, wert, einzelbuchungen.get_farbe_fuer(kategorie)])
-            print('append:', kategorie)
+    num_monate = sorted(list(set(jahresbuchungs_tabelle.raw_table().Datum.map(lambda x: x.month))))
+    monats_namen = []
+    for num_monat in num_monate:
+        monats_namen.append(get_monats_namen(num_monat))
 
     context = viewcore.generate_base_context('jahresuebersicht')
 
     context['durchschnitt_monat_kategorien'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
-    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))    
+    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
     context = _computePieChartProzentual(context, year)
 
+    laenge = 12
+    if year == today.year:
+        laenge = today.month
+
+
+    context['buchungen'] = [
+        {
+            'kategorie': 'Einnahmen',
+            'farbe': 'rgb(210, 214, 222)',
+            'wert': jahres_einnahmen.inject_zeros_for_year(year, laenge).sum_monthly()
+        },
+        {
+            'kategorie': 'Ausgaben',
+            'farbe': 'rgba(60,141,188,0.8)',
+            'wert': jahres_ausgaben.inject_zeros_for_year(year, laenge).sum_monthly()
+        }
+    ]
     context['zusammenfassung_ausgaben'] = jahresausgaben
     context['zusammenfassung_einnahmen'] = jahreseinnahmen
     context['monats_namen'] = monats_namen
     context['selected_date'] = year
-    context['ausgaben'] = gefilterte_kategorien_werte
+
+    context['einnahmen'] = _compile_colors(jahres_einnahmen.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(), einzelbuchungen)
+    context['ausgaben'] = _compile_colors(jahres_ausgaben.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(), einzelbuchungen)
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()

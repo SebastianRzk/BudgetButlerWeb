@@ -84,41 +84,107 @@ window.onload = function() {
 	<div class="col-md-12">
 		<div class="box box-primary">
 			<div class="box-header">
-				<h3 class="box-title">Ausgaben</h3>
+				<h3 class="box-title">Buchungen {{jahr}}</h3>
 			</div>
-			<canvas id="lineChartCanvas" style="display: block; width: 100%; height: 450px;"></canvas>
+			<canvas id="buchungenCanvas" style="display: block; width: 100%; height: 450px;"></canvas>
 			<script> 
-	                var salesChartData = {
-	                	    labels: {{monats_namen|safe	}},
-	                	    datasets: [
-	                	    	{% for kategorie,wert,farbe in ausgaben %}
-	                            {
-	                                label: '{{kategorie}}',
-	                                pointBorderColor: "#{{farbe}}",
-	                                borderColor: "#{{farbe}}",
-	                                pointStrokeColor: "#{{farbe}}",
-	                                data: {{wert}}]
-	                            },
-	                            {%endfor%}
-	                	    ]
-	                	  };
-	                var canvas = document.getElementById("lineChartCanvas");
-	                new Chart(canvas, {
-	                	type: 'line',
-	                    data: salesChartData,
-	                    options: {
-	                    	responsive: true,
-	                }});
-                </script>
+				var salesChartData = {
+						labels: {{monats_namen|safe	}},
+						datasets: [
+							{% for dataset in buchungen %}
+							{
+								label: '{{dataset.kategorie}}',
+								pointBorderColor: "{{dataset.farbe}}",
+								borderColor: "{{dataset.farbe}}",
+								pointStrokeColor: "{{dataset.farbe}}",
+								data: {{dataset.wert|safe}}
+							},
+							{%endfor%}
+						]
+					};
+					var canvas = document.getElementById("buchungenCanvas");
+					new Chart(canvas, {
+						type: 'line',
+						data: salesChartData,
+						options: {
+						responsive: true,
+					}});
+			</script>
+		</div>
+	</div>
+	<!-- /.col -->
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="box box-primary">
+			<div class="box-header">
+				<h3 class="box-title">Einnahmen</h3>
+			</div>
+			<canvas id="lineChartCanvasEinnahmen" style="display: block; width: 100%; height: 450px;"></canvas>
+			<script> 
+				var salesChartData = {
+						labels: {{monats_namen|safe	}},
+						datasets: [
+							{% for key,val in einnahmen.items %}
+							{
+								label: '{{key}}',
+								pointBorderColor: "#{{val.farbe}}",
+								borderColor: "#{{val.farbe}}",
+								pointStrokeColor: "#{{val.farbe}}",
+								data: {{val.values}}
+							},
+							{%endfor%}
+						]
+					};
+					var canvas = document.getElementById("lineChartCanvasEinnahmen");
+					new Chart(canvas, {
+						type: 'line',
+						data: salesChartData,
+						options: {
+						responsive: true,
+					}});
+			</script>
 		</div>
 
 	</div>
 	<!-- /.col -->
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="box box-primary">
+			<div class="box-header">
+				<h3 class="box-title">Ausgaben</h3>
+			</div>
+			<canvas id="lineChartCanvas" style="display: block; width: 100%; height: 450px;"></canvas>
+			<script> 
+				var salesChartData = {
+						labels: {{monats_namen|safe	}},
+						datasets: [
+							{% for key,val in ausgaben.items %}
+							{
+								label: '{{key}}',
+								pointBorderColor: "#{{val.farbe}}",
+								borderColor: "#{{val.farbe}}",
+								pointStrokeColor: "#{{val.farbe}}",
+								data: {{val.values}}
+							},
+							{%endfor%}
+						]
+					};
+					var canvas = document.getElementById("lineChartCanvas");
+					new Chart(canvas, {
+						type: 'line',
+						data: salesChartData,
+						options: {
+						responsive: true,
+					}});
+			</script>
+		</div>
 
-
-
-
+	</div>
+	<!-- /.col -->
+</div>
 <div class="row">
 	<div class="col-md-6">
 		<!-- Tabelle letzte Buchungen -->
@@ -142,15 +208,13 @@ window.onload = function() {
 								<tr>
 									<th>Kategorie</th>
 									<th class="table-wert">Wert</th>
-									<th>Visualisiert</th>
 								</tr>
 							</thead>
 							<tbody>
 								{% for ausgabe in zusammenfassung_ausgaben %}
 								<tr>
-									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span>{{ausgabe.0}}</td>
+									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
 									<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
-									<td style="vertical-align: middle"><input type="checkbox" name="{{ausgabe.0}}"{{ausgabe.2}}></td>
 								</tr>
 								{% endfor %}
 								<tfooter>
@@ -162,7 +226,6 @@ window.onload = function() {
 								<tr>
 									<td></td>
 									<td></td>
-									<td><button type="submit" value="OK" class="btn btn-primary">Filtern!</button></td>
 								</tr>
 								</tfooter>
 							</tbody>
@@ -200,7 +263,7 @@ window.onload = function() {
 							<tbody>
 								{% for ausgabe in zusammenfassung_einnahmen %}
 								<tr>
-									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span> {{ausgabe.0}}</td>
+									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
 									<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
 								</tr>
 								{% endfor %}

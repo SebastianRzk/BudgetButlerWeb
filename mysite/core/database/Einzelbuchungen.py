@@ -6,6 +6,7 @@ Created on 10.08.2017
 from datetime import date
 from datetime import datetime
 
+import itertools as it
 import pandas as pd
 from viewcore import viewcore
 
@@ -162,20 +163,6 @@ class Einzelbuchungen:
         print(zusammenfassung)
         return zusammenfassung
 
-    def get_jahresausgaben_nach_monat(self, jahr):
-        tabelle = self.content.copy()
-        tabelle = tabelle[tabelle.Wert < 0]
-
-        crit1 = tabelle['Datum'].map(lambda x : x.year == jahr)
-        tabelle = tabelle[crit1]
-
-        if set(tabelle.index) == set():
-            return pd.DataFrame()
-        del tabelle['Dynamisch']
-        tabelle.Datum = tabelle.Datum.map(lambda x:x.month)
-        tabelle = tabelle.groupby(['Datum', 'Kategorie']).sum()
-        return tabelle
-
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_ausgaben().select_year(jahr).content
         return self._berechne_prozentual(tabelle)
@@ -195,9 +182,6 @@ class Einzelbuchungen:
         for kategorie, row in tabelle.iterrows():
             result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
         return result
-
-
-
 
     def get_farbe_fuer(self, input_kategorie):
         colors = viewcore.design_colors()
@@ -327,6 +311,51 @@ class EinzelbuchungsSelektor:
 
     def group_by_kategorie(self):
         return self.content.groupby(by='Kategorie').sum()
+
+    def inject_zeros_for_year(self, year, max_month=12):
+        data = self.content.copy()
+        for month in range(1, max_month + 1):
+            inject_month = date(day=1, month=month, year=year)
+            data = data.append(pd.DataFrame([[inject_month, 0]], columns=['Datum', 'Wert']), ignore_index=True)
+        return EinzelbuchungsSelektor(data)
+
+    def inject_zeroes_for_year_and_kategories(self, year, max_month=12):
+        data = self.content.copy()
+        kategorien = set(data.Kategorie)
+
+        dates = []
+        for month in range(1, max_month + 1):
+            dates.append(date(day=1, month=month, year=year))
+
+        injections = it.product(dates, kategorien)
+        for injection_date, injection_kategorie in injections:
+            data = data.append(pd.DataFrame([[injection_date, injection_kategorie, 0]], columns=['Datum', 'Kategorie', 'Wert']), ignore_index=True)
+        return EinzelbuchungsSelektor(data)
+
+
+    def sum_monthly(self):
+        data = self.content.copy()
+        data = data[['Datum', 'Wert']]
+        data.Datum = data.Datum.map(lambda x: x.month)
+        grouped = data.groupby(by='Datum').sum()
+        result = []
+        for monat, reihe in grouped.iterrows():
+            result.append("%.2f" % abs(reihe.Wert))
+        return result
+
+    def sum_kategorien_monthly(self):
+        data = self.content.copy()
+        data = data[['Datum', 'Kategorie', 'Wert']]
+        data.Datum = data.Datum.map(lambda x: x.month)
+        grouped = data.groupby(by=['Datum', 'Kategorie']).sum()
+        result = {}
+
+        for (monat, kategorie), reihe in grouped.iterrows():
+            if monat not in result:
+                result[monat] = {}
+            result[monat][kategorie] = "%.2f" % abs(reihe.Wert)
+        return result
+
 
     def sum(self):
         if self.content.empty:
