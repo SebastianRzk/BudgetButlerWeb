@@ -147,6 +147,20 @@ def handle_request(request):
     if year == today.year:
         laenge = today.month
 
+    einnahmen = {}
+    result = jahres_einnahmen.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly()
+    for month in result.keys():
+        for kategorie in result[month]:
+            if month == 1:
+                einnahmen[kategorie] = {}
+                einnahmen[kategorie]['values'] = '[' + result[month][kategorie]
+                continue
+            einnahmen[kategorie]['values'] = einnahmen[kategorie]['values'] + ',' + result[month][kategorie]
+
+    for kategorie in einnahmen:
+        einnahmen[kategorie]['values'] = einnahmen[kategorie]['values'] + ']'
+        einnahmen[kategorie]['farbe'] = einzelbuchungen.get_farbe_fuer(kategorie)
+
     context['buchungen'] = [
         {
             'kategorie': 'Einnahmen',
@@ -164,6 +178,8 @@ def handle_request(request):
     context['monats_namen'] = monats_namen
     context['selected_date'] = year
     context['ausgaben'] = gefilterte_kategorien_werte
+
+    context['einnahmen'] = einnahmen
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()

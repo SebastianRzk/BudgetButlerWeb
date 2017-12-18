@@ -267,6 +267,32 @@ class einnahmen_Letzten6Monate(unittest.TestCase):
 
 class einzelbuchungs_selector(unittest.TestCase):
 
+    def test_inject_zeroes_for_year_and_kategories_shouldInjectZeroes(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('01/02/2017'), 'kat1', '', 5,)
+        component_under_test.add(datum('01/02/2017'), 'kat2', '', 5,)
+        result = component_under_test.select().inject_zeroes_for_year_and_kategories(2017).raw_table()
+        assert len(result) == 26
+        assert datum('01/01/2017') in set(result.Datum)
+        assert datum('01/12/2017') in set(result.Datum)
+        assert result.Wert.sum() == 10
+        assert set(['kat1', 'kat2']) == set(result.Kategorie)
+
+    def test_sum_kategorien_monthly(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('01/02/2017'), 'kat1', '', 5,)
+        component_under_test.add(datum('01/02/2017'), 'kat2', '', 10,)
+        result = component_under_test.select().sum_kategorien_monthly()
+        assert len(result) == 1
+        assert len(result[2]) == 2
+        assert result[2]['kat1'] == '5.00'
+        assert result[2]['kat2'] == '10.00'
+
+    def test_inject_zeroes_for_year_and_kategories_wothNoValues_shouldInjectZeroes(self):
+        component_under_test = Einzelbuchungen()
+        assert component_under_test.select().inject_zeroes_for_year_and_kategories(2017).sum() == 0
+
+
     def test_injectZeros_shouldInjectZeroes(self):
         component_under_test = Einzelbuchungen()
         select = component_under_test.select()
