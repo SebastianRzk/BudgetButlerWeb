@@ -161,13 +161,13 @@ window.onload = function() {
 				var salesChartData = {
 						labels: {{monats_namen|safe	}},
 						datasets: [
-							{% for kategorie,wert,farbe in ausgaben %}
+							{% for key,val in ausgaben.items %}
 							{
-								label: '{{kategorie}}',
-								pointBorderColor: "#{{farbe}}",
-								borderColor: "#{{farbe}}",
-								pointStrokeColor: "#{{farbe}}",
-								data: {{wert}}]
+								label: '{{key}}',
+								pointBorderColor: "#{{val.farbe}}",
+								borderColor: "#{{val.farbe}}",
+								pointStrokeColor: "#{{val.farbe}}",
+								data: {{val.values}}
 							},
 							{%endfor%}
 						]
@@ -208,15 +208,13 @@ window.onload = function() {
 								<tr>
 									<th>Kategorie</th>
 									<th class="table-wert">Wert</th>
-									<th>Visualisiert</th>
 								</tr>
 							</thead>
 							<tbody>
 								{% for ausgabe in zusammenfassung_ausgaben %}
 								<tr>
-									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span>{{ausgabe.0}}</td>
+									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
 									<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
-									<td style="vertical-align: middle"><input type="checkbox" name="{{ausgabe.0}}"{{ausgabe.2}}></td>
 								</tr>
 								{% endfor %}
 								<tfooter>
@@ -228,7 +226,6 @@ window.onload = function() {
 								<tr>
 									<td></td>
 									<td></td>
-									<td><button type="submit" value="OK" class="btn btn-primary">Filtern!</button></td>
 								</tr>
 								</tfooter>
 							</tbody>
@@ -266,7 +263,7 @@ window.onload = function() {
 							<tbody>
 								{% for ausgabe in zusammenfassung_einnahmen %}
 								<tr>
-									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.3}};"></span> {{ausgabe.0}}</td>
+									<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
 									<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
 								</tr>
 								{% endfor %}

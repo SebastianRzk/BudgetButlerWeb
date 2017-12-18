@@ -140,13 +140,6 @@ class einzelbuchungen(unittest.TestCase):
 
 class gesamtausgaben_jahr(unittest.TestCase):
 
-    def test_get_jahresausgaben_nach_monat_withEmptyDB_shouldReturnEmptyDataframe(self):
-        component_under_test = Einzelbuchungen()
-
-        result = component_under_test.get_jahresausgaben_nach_monat(2017)
-
-        assert set(result.index) == set()
-
     def test_getJahresausgabenNachKategorieProzentual_withEmptyDB_shouldReturnEmptyDict(self):
         component_under_test = Einzelbuchungen()
 

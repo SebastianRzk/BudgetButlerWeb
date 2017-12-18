@@ -163,20 +163,6 @@ class Einzelbuchungen:
         print(zusammenfassung)
         return zusammenfassung
 
-    def get_jahresausgaben_nach_monat(self, jahr):
-        tabelle = self.content.copy()
-        tabelle = tabelle[tabelle.Wert < 0]
-
-        crit1 = tabelle['Datum'].map(lambda x : x.year == jahr)
-        tabelle = tabelle[crit1]
-
-        if set(tabelle.index) == set():
-            return pd.DataFrame()
-        del tabelle['Dynamisch']
-        tabelle.Datum = tabelle.Datum.map(lambda x:x.month)
-        tabelle = tabelle.groupby(['Datum', 'Kategorie']).sum()
-        return tabelle
-
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_ausgaben().select_year(jahr).content
         return self._berechne_prozentual(tabelle)

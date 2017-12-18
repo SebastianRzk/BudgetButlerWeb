@@ -33,8 +33,8 @@ class Jahresuebersicht(unittest.TestCase):
 
         result_context = views.handle_request(PostRequest({'date':'2010', 'mode':''}))
 
-        assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-100.00', 'checked', 'f56954']]
-        assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '10.00', 'checked', '3c8dbc']]
+        assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-100.00', 'f56954']]
+        assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '10.00', '3c8dbc']]
         assert 'eine einnahme kategorie' in result_context['einnahmen']
         assert result_context['einnahmen']['eine einnahme kategorie']['values'] == '[0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,10.00,0.00,0.00]'
 
@@ -52,7 +52,7 @@ class Jahresuebersicht(unittest.TestCase):
 
         result_context = views.handle_request(PostRequest({'date':'2010', 'mode':''}))
 
-        assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-200.00', 'checked', '00a65a'], ['some kategorie2', '-100.00', 'checked', '00c0ef']]
-        assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '20.00', 'checked', '3c8dbc'], ['eine einnahme kategorie2', '10.00', 'checked', 'f56954']]
+        assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-200.00', '00a65a'], ['some kategorie2', '-100.00', '00c0ef']]
+        assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '20.00', '3c8dbc'], ['eine einnahme kategorie2', '10.00', 'f56954']]
         assert result_context['buchungen'][0]['wert'] == ['0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '30.00', '0.00', '0.00']
         assert result_context['buchungen'][1]['wert'] == ['0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '300.00', '0.00', '0.00']
