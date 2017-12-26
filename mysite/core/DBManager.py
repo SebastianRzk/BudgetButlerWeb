@@ -37,9 +37,6 @@ def read_file(file, nutzername):
     tables["einzelbuchungen"] = ""
     tables["dauerauftraege"] = ""
     tables["gemeinsamebuchungen"] = ""
-    tables["Stechzeiten"] = ""
-    tables["Sollzeiten"] = ""
-    tables["Sonderzeiten"] = ""
     mode = "einzelbuchungen"
     for line in file:
         line = line.strip()
@@ -51,18 +48,6 @@ def read_file(file, nutzername):
 
         if line == 'Gemeinsame Buchungen':
             mode = 'gemeinsamebuchungen'
-            continue
-
-        if line == 'Stechzeiten':
-            mode = 'Stechzeiten'
-            continue
-
-        if line == 'Sollzeiten':
-            mode = 'Sollzeiten'
-            continue
-
-        if line == 'Sonderzeiten':
-            mode = 'Sonderzeiten'
             continue
 
         tables[mode] = tables[mode] + "\n" + line
@@ -78,17 +63,6 @@ def read_file(file, nutzername):
     print("READER: Daueraufträge gelesen")
 
     database.gemeinsamebuchungen.parse(pd.read_csv(StringIO(tables["gemeinsamebuchungen"])))
-
-    if tables['Stechzeiten'] != "":
-        database.stechzeiten.parse(pd.read_csv(StringIO(tables["Stechzeiten"])))
-
-    if tables['Sollzeiten'] != "":
-        database.sollzeiten.parse(pd.read_csv(StringIO(tables["Sollzeiten"])))
-
-    if tables['Sonderzeiten'] != "":
-        database.sonderzeiten.parse(pd.read_csv(StringIO(tables["Sonderzeiten"])))
-
-
 
     print('READER: Refreshe Database')
     database.refresh()
@@ -108,15 +82,6 @@ def write_file(database, file):
 
     content += "\n Gemeinsame Buchungen \n"
     content += database.gemeinsamebuchungen.content.to_csv(index=False)
-
-    content += "\n Stechzeiten \n"
-    content += database.stechzeiten.content[database.stechzeiten.persitent_stechzeiten_columns].to_csv(index=False)
-
-    content += "\n Sollzeiten \n"
-    content += database.sollzeiten.content.to_csv(index=False)
-
-    content += "\n Sonderzeiten \n"
-    content += database.sonderzeiten.content.to_csv(index=False)
 
     file.write(content)
     print("WRITER: All Saved")

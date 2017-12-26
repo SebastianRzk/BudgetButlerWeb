@@ -29,11 +29,6 @@ class TesteConverter(unittest.TestCase):
         assert result.month == 3
         assert result.year == 2017
 
-    def test_zeit(self):
-        result = time("12:34")
-        assert result.hour == 12
-        assert result.minute == 34
-
     def test_dezimal_float(self):
         result = dezimal_float("2,34")
         assert result == 2.34

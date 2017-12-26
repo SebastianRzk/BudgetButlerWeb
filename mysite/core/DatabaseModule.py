@@ -10,9 +10,6 @@ from core.Frequency import FrequencsFunctions
 from core.database.Dauerauftraege import Dauerauftraege
 from core.database.Einzelbuchungen import Einzelbuchungen
 from core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
-from core.database.Sollzeiten import Sollzeiten
-from core.database.Sonderzeiten import Sonderzeiten
-from core.database.Stechzeiten import Stechzeiten
 from pandas import DataFrame
 from viewcore import viewcore
 from viewcore.converter import datum
@@ -47,9 +44,6 @@ class Database:
         self.name = name
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsamebuchungen = Gemeinsamebuchungen()
-        self.stechzeiten = Stechzeiten()
-        self.sollzeiten = Sollzeiten()
-        self.sonderzeiten = Sonderzeiten()
         self.einzelbuchungen = Einzelbuchungen()
 
     def refresh(self):
@@ -169,93 +163,6 @@ class Database:
 
     def func_monatlich(self, buchungs_datum):
         return buchungs_datum.month
-
-    def get_woechentliche_stechzeiten(self, jahr, function=func_woechentlich):
-        print(jahr, 'wird ignoriert')
-        wochen_karte = {}
-        for index, stechzeit in self.stechzeiten.content.iterrows():
-            woche = function(self, stechzeit.Datum)
-            if woche not in wochen_karte:
-                wochen_karte[woche] = timedelta(minutes=0)
-            print(stechzeit)
-            wochen_karte[woche] = wochen_karte[woche] + stechzeit.Arbeitszeit
-
-        for index, sonderzeit in self.sonderzeiten.content.iterrows():
-            woche = function(self, sonderzeit.Datum)
-            if woche not in wochen_karte:
-                wochen_karte[woche] = timedelta(minutes=0)
-            value = datetime.combine(date.min, sonderzeit.Dauer) - datetime.min
-            wochen_karte[woche] = wochen_karte[woche] + value
-
-
-        return wochen_karte
-
-    def get_soll_ist_uebersicht(self, jahr, function=func_woechentlich):
-        startwoche = 1
-        print(function)
-        if len(self.stechzeiten.content) != 0:
-            startwoche = function(self, min(self.stechzeiten.content.Datum))
-        if len(self.sollzeiten.content.Startdatum) != 0:
-            startwoche = function(self, min(self.sollzeiten.content.Startdatum))
-
-        ist_map = self.get_woechentliche_stechzeiten(jahr, function)
-        result_map = {}
-
-        for woche in range(startwoche, function(self, date.today()) + 1):
-            ist_wert = timedelta(minutes=0)
-            if woche in ist_map:
-                ist_wert = ist_map[woche]
-            if function == Database.func_woechentlich:
-                result_map[woche] = (ist_wert, self._get_soll_wert_fuer_woche(woche))
-            elif function == Database.func_monatlich:
-                result_map[woche] = (ist_wert, self._get_soll_wert_fuer_monat(woche))
-            else:
-                result_map[woche] = (ist_wert, 0)
-
-        return result_map
-
-    def _get_soll_wert_fuer_woche(self, woche):
-        sonntag = datetime.strptime(str(date.today().year) + "-" + str(woche) + "-0", '%Y-%W-%w')
-        tag = sonntag - timedelta(days=6)
-
-        zeit = timedelta(minutes=0)
-        for wochentag in range(0, 5):
-            zeit = zeit + self._get_zeit_from_tag((tag + timedelta(days=wochentag)).date())
-        return zeit
-
-    def _get_soll_wert_fuer_monat(self, monat):
-        erster_tag = datum('01/' + str(monat) + "/2017")
-
-        zeit = timedelta(minutes=0)
-        ein_tag = timedelta(days=1)
-        tag = erster_tag
-        while tag.month == monat:
-            if tag.weekday() < 5:
-                zeit = zeit + self._get_zeit_from_tag(tag)
-            tag = tag + ein_tag
-        return zeit
-
-
-    def _get_zeit_from_tag(self, wochentag):
-        print("berechne tag: ", wochentag)
-        crit1 = self.sollzeiten.content.Startdatum.map(lambda x : x <= wochentag)
-        crit2 = self.sollzeiten.content.Endedatum.map(lambda x : x >= wochentag)
-
-        kopierte_tabelle = self.sollzeiten.content.copy()
-        kopierte_tabelle = kopierte_tabelle[crit1 & crit2]
-        kopierte_tabelle.Dauer = kopierte_tabelle.Dauer.map(lambda x: datetime.combine(date.min, x) - datetime.min)
-        if pandas.isna(kopierte_tabelle.Dauer.sum()) or kopierte_tabelle.Dauer.sum() == 0:
-            return timedelta(minutes=0)
-        return kopierte_tabelle.Dauer.sum()
-
-    def stechzeiten_vorhanden(self):
-        return not self.stechzeiten.content.empty
-
-    def anzahl_stechzeiten(self):
-        '''
-        returns the anzahl der stechzeiten
-        '''
-        return len(self.stechzeiten.content)
 
     def _row_to_dict(self, columns, index, row_data):
         row = {}

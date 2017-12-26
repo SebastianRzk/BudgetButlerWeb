@@ -31,10 +31,6 @@ class DBManager_readDB(unittest.TestCase):
         assert len(database.dauerauftraege.content) == 2
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
-        assert len(database.stechzeiten.content) == 1
-
-        assert len(database.sollzeiten.content) == 1
-
     def teste_write_with_full_database(self):
         database = DBManager.read_file(StringIO(self.full_db) , 'testuser')
         string_writer = StringIO()
@@ -59,15 +55,4 @@ Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 Datum,Kategorie,Name,Wert,Person
 2017-12-30,Miete,monatlich,-200.0,Sebastian
 2017-12-31,Miete,monatlich,-200.0,Maureen
-
- Stechzeiten 
-Datum,Einstechen,Ausstechen,Arbeitgeber
-2017-08-14,08:00:00,16:45:00,SOMETHING
-
- Sollzeiten 
-Startdatum,Endedatum,Dauer,Arbeitgeber
-2017-08-08,2017-12-12,08:00:00,SOMETHING
-
- Sonderzeiten 
-Datum,Dauer,Typ,Arbeitgeber
 '''
