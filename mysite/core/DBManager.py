@@ -49,6 +49,8 @@ def read_file(file, nutzername):
         if line == 'Gemeinsame Buchungen':
             mode = 'gemeinsamebuchungen'
             continue
+        if not ',' in line:
+            break
 
         tables[mode] = tables[mode] + "\n" + line
 
