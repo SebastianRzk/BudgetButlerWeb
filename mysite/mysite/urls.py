@@ -38,10 +38,6 @@ urlpatterns = [
     url(r'^configuration/', include('configuration.urls')),
     url(r'^jahresuebersicht/', include('jahresuebersicht.urls')),
     url(r'^addeinnahme/', include('addeinnahme.urls')),
-    url(r'^addstechzeit/', include('addstechzeit.urls')),
-    url(r'^stechzeituebersicht/', include('stechzeituebersicht.urls')),
-    url(r'^addsollzeit/', include('addsollzeit.urls')),
- #     url(r'^gemeinsamabrechnen/abrechnen/', include('gemeinsammabrechnen.urls')),
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

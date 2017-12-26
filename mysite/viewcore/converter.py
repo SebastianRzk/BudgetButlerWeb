@@ -5,9 +5,6 @@ Created on 10.05.2017
 '''
 import datetime
 
-def time(string):
-    return datetime.datetime.strptime(string, '%H:%M').time()
-
 def datum(string):
     return datetime.datetime.strptime(string , '%d/%m/%Y').date()
 

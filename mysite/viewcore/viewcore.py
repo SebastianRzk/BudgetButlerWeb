@@ -100,13 +100,6 @@ def get_menu_list():
 
 
     menu = []
-    menu.append({'url':'/stechzeituebersicht/', 'name': 'Stechzeituebersicht', 'icon':'fa fa-line-chart'})
-    menu.append({'url':'/addstechzeit/', 'name':'Neue Stechzeit', 'icon':'fa fa-plus'})
-    menu.append({'url':'/addsollzeit/', 'name':'Sollzeit bearbeiten', 'icon':'fa fa-pencil'})
-    main_menu['Stechzeiten'] = menu
-
-
-    menu = []
     menu.append({'url': '/import/', 'name': 'Datensätze importieren', 'icon':'fa fa-cogs'})
     menu.append({'url': '/configuration/', 'name': 'Konfiguration', 'icon':'fa fa-cogs'})
     menu.append({'url':'/production/?database=' + viewcore.database_instance().name, 'name':'Datenbank neu laden', 'icon':'fa fa-refresh'})
