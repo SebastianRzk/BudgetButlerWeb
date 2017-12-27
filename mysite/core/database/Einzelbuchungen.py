@@ -58,16 +58,6 @@ class Einzelbuchungen:
     def anzahl(self):
         return len(self.content)
 
-    def _nur_positiv(self, wert):
-        if wert > 0:
-            return wert
-        return 0
-
-    def _nur_negativ(self, wert):
-        if wert < 0:
-            return wert * -1
-        return 0
-
     def get_month_summary(self, monat, jahr):
         kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
 
