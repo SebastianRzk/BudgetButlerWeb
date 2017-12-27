@@ -235,29 +235,6 @@ class gesamtausgaben_jahr(unittest.TestCase):
         assert component_under_test.durchschnittliche_ausgaben_pro_monat(date.today().year) == {}
 
 
-
-class ausgaben_Letzten6Monate(unittest.TestCase):
-
-    def test_withEmptyDatabase_shouldReturnListOfZeros(self):
-        component_under_test = Einzelbuchungen()
-        assert component_under_test.get_letzte_6_monate_ausgaben() == [0, 0, 0, 0, 0, 0]
-
-    def test_withOnlyDataOfToday_shouldReturnSumOfMonthPaddedWithZeros(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(date.today(), '', '', -1.23)
-        assert component_under_test.get_letzte_6_monate_ausgaben() == [0, 0, 0, 0, 0, 1.23]
-
-class einnahmen_Letzten6Monate(unittest.TestCase):
-
-    def test_withEmptyDatabase_shouldReturnListOfZeros(self):
-        component_under_test = Einzelbuchungen()
-        assert component_under_test.get_letzte_6_monate_einnahmen() == [0, 0, 0, 0, 0, 0]
-
-    def test_withOnlyDataOfToday_shouldReturnSumOfMonthPaddedWithZeros(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(date.today(), '', '', 1.23)
-        assert component_under_test.get_letzte_6_monate_einnahmen() == [0, 0, 0, 0, 0, 1.23]
-
 class einzelbuchungs_selector(unittest.TestCase):
 
     def test_inject_zeroes_for_year_and_kategories_shouldInjectZeroes(self):

@@ -58,52 +58,6 @@ class Einzelbuchungen:
     def anzahl(self):
         return len(self.content)
 
-    def get_letzte_6_monate_ausgaben(self):
-        '''
-        Get die ausgaben der letzten 6 Monate nach Monat sortiert
-        '''
-
-        tabelle = self.content.copy()
-        del tabelle['Name']
-        del tabelle['Kategorie']
-        del tabelle['Dynamisch']
-
-
-        if date.today().month > 6:
-            mindate = date(day=1, month=(date.today().month - 6), year=date.today().year)
-        else:
-            mindate = date(day=1, month=(date.today().month + 6), year=date.today().year - 1)
-
-        tabelle = tabelle[tabelle.Datum >= mindate]
-        tabelle = tabelle[tabelle.Datum <= date.today()]
-        tabelle.Datum = tabelle.Datum.apply(lambda x:  str(x.year) + str(x.month).rjust(2, "0"))
-        tabelle.Wert = tabelle.Wert.apply(self._nur_negativ)
-
-        gruppiert = tabelle.Wert.groupby(tabelle.Datum).sum()
-        gruppiert = gruppiert.sort_index()
-
-        # return gruppiert.tolist()
-        print(gruppiert)
-        return ([0] * 6 + gruppiert.tolist())[-6:]
-
-    def get_letzte_6_monate_einnahmen(self):
-        tabelle = self.content.copy()[['Datum', 'Wert']]
-
-        if date.today().month > 6:
-            mindate = date(day=1, month=(date.today().month - 6), year=date.today().year)
-        else:
-            mindate = date(day=1, month=(date.today().month + 6), year=date.today().year - 1)
-
-        tabelle = tabelle[tabelle.Datum >= mindate]
-        tabelle = tabelle[tabelle.Datum <= date.today()]
-        tabelle.Datum = tabelle.Datum.apply(lambda x:  str(x.year) + str(x.month).rjust(2, "0"))
-        tabelle.Wert = tabelle.Wert.map(self._nur_positiv)
-        gruppiert = tabelle.Wert.groupby(tabelle.Datum).sum()
-        gruppiert = gruppiert.sort_index()
-        print(gruppiert)
-       # return gruppiert.tolist()
-        return ([0] * 6 + gruppiert.tolist())[-6:]
-
     def _nur_positiv(self, wert):
         if wert > 0:
             return wert
@@ -311,6 +265,24 @@ class EinzelbuchungsSelektor:
 
     def group_by_kategorie(self):
         return self.content.groupby(by='Kategorie').sum()
+
+    def select_letzte_6_montate(self):
+        if date.today().month > 6:
+            mindate = date(day=1, month=(date.today().month - 6), year=date.today().year)
+        else:
+            mindate = date(day=1, month=(date.today().month + 6), year=date.today().year - 1)
+        tabelle = self.content.copy()
+        tabelle = tabelle[tabelle.Datum >= mindate]
+        tabelle = tabelle[tabelle.Datum <= date.today()]
+        return EinzelbuchungsSelektor(tabelle)
+
+    def inject_zeros_for_last_6_months(self):
+        today = date.today()
+        if today.month > 6:
+            return self.inject_zeros_for_year(today.year, today.month)
+
+        first_mapped = self.inject_zeroes_for_year_and_kategories(today.year, today.month)
+        return first_mapped.inject_zeroes_for_year_and_kategories(today.year - 1, 12)
 
     def inject_zeros_for_year(self, year, max_month=12):
         data = self.content.copy()

@@ -45,7 +45,7 @@
         <div class="row">
           <div class="col-md-12">
             <p class="text-center">
-              <strong>Einnahmen Ausgaben der letzten 6 Monate:</strong>
+              <strong>Einnahmen Ausgaben der letzten 7 Monate:</strong>
             </p>
             <div class="chart-responsive">
               <!-- Sales Chart Canvas -->
@@ -61,7 +61,7 @@
               	        pointStrokeColor: "#c1c7d1",
               	        pointHighlightFill: "#fff",
               	        pointHighlightStroke: "rgb(220,220,220)",
-              	        data: {{zusammenfassung_einnahmenliste}}
+              	        data: {{zusammenfassung_einnahmenliste|safe}}
               	      },
               	      {
               	        label: "Ausgaben",
@@ -70,7 +70,7 @@
               	        pointStrokeColor: "rgba(60,141,188,1)",
               	        pointHighlightFill: "#fff",
               	        pointHighlightStroke: "rgba(60,141,188,1)",
-              	        data: {{zusammenfassung_ausgabenliste}}
+              	        data: {{zusammenfassung_ausgabenliste|safe}}
               	      }
               	    ]
               	  };
