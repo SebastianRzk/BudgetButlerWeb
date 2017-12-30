@@ -51,20 +51,15 @@ def monatsliste():
                    9:'"September"', 10:'"Oktober"', 11:'"November"', 12:'"Dezember"'}
     aktueller_monat = date.today().month
 
-    first = True
-    result = "[ "
+    result_list = []
 
     for monat in range(0, 7):
         monat = 6 - monat
-        if not first:
-            result = result + ","
-        else:
-            first = False
 
         berechneter_monat = aktueller_monat - monat
         if berechneter_monat < 1:
             berechneter_monat = berechneter_monat + 12
-        result = result + month_map[berechneter_monat]
+        result_list.append(month_map[berechneter_monat])
 
-    return result + ']'
+    return list_to_json(result_list)
 
