@@ -12,7 +12,7 @@ from core.DatabaseModule import Database
 from monatsuebersicht import views
 from viewcore import viewcore
 from viewcore.converter import datum
-
+from viewcore import request_handler
 
 
 
@@ -23,14 +23,15 @@ class Jahresuebersicht(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
-        views.handle_request(GetRequest())
+        views.index(GetRequest())
 
     def test_withNoData_shouldGenerateErrorPage(self):
         self.set_up()
-        context = views.handle_request(GetRequest())
+        context = views.index(GetRequest())
         assert context['%Errortext']
 
     def teste_mitMehtAusgabenAlsEinnahmen(self):
@@ -39,7 +40,7 @@ class Jahresuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
 
-        result_context = views.handle_request(PostRequest({'date':'2010_10'}))
+        result_context = views.index(PostRequest({'date':'2010_10'}))
 
         assert result_context['gesamt'] == '-100.00'
         assert result_context['gesamt_einnahmen'] == '10.00'
@@ -58,6 +59,6 @@ class Jahresuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10/10/2011'), 'eine einnahme kategorie', 'some name', 10)
 
-        result_context = views.handle_request(GetRequest())
+        result_context = views.index(GetRequest())
 
         assert result_context['selected_date'] == '2011_10'
