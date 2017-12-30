@@ -5,7 +5,7 @@ from viewcore import request_handler
 from viewcore import viewcore
 
 
-def handle_request(request):
+def _handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     monate = sorted(einzelbuchungen.get_monate(), reverse=True)
@@ -117,5 +117,5 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'theme/uebersicht_monat.html')
+    return request_handler.handle_request(request, _handle_request, 'theme/uebersicht_monat.html')
 
