@@ -7,12 +7,13 @@ from core.DatabaseModule import Database
 from uebersicht import views
 from viewcore import viewcore
 from viewcore.converter import datum
-
+from viewcore import request_handler
 
 class TestUebersicht(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def add_test_data(self):
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -22,18 +23,18 @@ class TestUebersicht(unittest.TestCase):
 
     def test_init_withEmptyDatabase(self):
         self.set_up()
-        views.handle_request(GetRequest())
+        views.index(GetRequest())
 
     def test_init_filledDatabase(self):
         self.set_up()
         self.add_test_data()
-        views.handle_request(GetRequest())
+        views.index(GetRequest())
 
 
     def test_getRequest_withEinnahme_shouldReturnEditLinkOfEinnahme(self):
         self.set_up()
         self.add_test_data()
-        result = views.handle_request(GetRequest())
+        result = views.index(GetRequest())
         print("#################################################")
         print(result['alles']['2012.12'][0])
         item = result['alles']['2012.12'][0]
@@ -47,7 +48,7 @@ class TestUebersicht(unittest.TestCase):
     def test_delete(self):
         self.set_up()
         self.add_test_data()
-        views.handle_request(PostRequest({'action':'delete', 'delete_index':'1'}))
+        views.index(PostRequest({'action':'delete', 'delete_index':'1'}))
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         assert einzelbuchungen.select().sum() == 100
 

@@ -1,13 +1,11 @@
 
 import datetime
 
-from django.shortcuts import render
-from django.template.loader import render_to_string
-
+from viewcore import request_handler
 from viewcore import viewcore
 
 
-def handle_request(request):
+def _handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     monate = sorted(einzelbuchungen.get_monate(), reverse=True)
@@ -119,15 +117,5 @@ def handle_request(request):
     return context
 
 def index(request):
-    context = handle_request(request)
-    print(context)
-
-    if '%Errortext' in context:
-        rendered_content = context['%Errortext']
-    else:
-        rendered_content = render_to_string('theme/uebersicht_monat.html', context, request=request)
-
-    context['content'] = rendered_content
-
-    return render(request, 'theme/index.html', context)
+    return request_handler.handle_request(request, _handle_request, 'theme/uebersicht_monat.html')
 
