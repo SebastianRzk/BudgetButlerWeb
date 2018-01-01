@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.template.loader import render_to_string
 
 from viewcore import viewcore
 from viewcore import request_handler
