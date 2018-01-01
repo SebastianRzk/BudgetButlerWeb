@@ -26,11 +26,11 @@ class TesteSollzeit(unittest.TestCase):
 
     def test_init(self):
         self.set_up()
-        views.handle_request(GetRequest())
+        views.index(GetRequest())
 
     def teste_addKategorie(self):
         self.set_up()
-        views.handle_request(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
+        views.index(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
         assert viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
 
