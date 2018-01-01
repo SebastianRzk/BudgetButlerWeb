@@ -1,20 +1,8 @@
 
-from django.shortcuts import render
-from django.template.loader import render_to_string
-
 from viewcore import viewcore
+from viewcore import request_handler
 
-# Create your views here.
-def index(request):
-
-    context = handle_request(request)
-    rendered_content = render_to_string('theme/dauerauftraguebersicht.html', context, request=request)
-
-    context['content'] = rendered_content
-
-    return render(request, 'theme/index.html', context)
-
-def handle_request(request):
+def _handle_request(request):
     dauerauftraege = viewcore.database_instance().dauerauftraege
     if request.method == "POST":
         if "action" in request.POST:
@@ -36,3 +24,6 @@ def _format_dauerauftrag_floatpoint(dauerauftraege):
     for dauerauftrag in dauerauftraege:
         dauerauftrag['Wert'] = '%.2f' % dauerauftrag['Wert']
     return dauerauftraege
+
+def index(request):
+    return request_handler.handle_request(request, _handle_request, 'theme/dauerauftraguebersicht.html')
