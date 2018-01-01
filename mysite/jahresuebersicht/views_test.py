@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+from django.template.context_processors import request
 
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
@@ -12,6 +13,7 @@ from core.DatabaseModule import Database
 from jahresuebersicht import views
 from viewcore import viewcore
 from viewcore.converter import datum
+from viewcore import request_handler
 
 
 
@@ -19,10 +21,11 @@ class Jahresuebersicht(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
-        views.handle_request(GetRequest())
+        views.index(GetRequest())
 
 
     def teste_contextValues_withSingleEinnahmeAndSingleAusgabe(self):
@@ -31,7 +34,7 @@ class Jahresuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
 
-        result_context = views.handle_request(PostRequest({'date':'2010', 'mode':''}))
+        result_context = views.index(PostRequest({'date':'2010', 'mode':''}))
 
         assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-100.00', 'f56954']]
         assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '10.00', '3c8dbc']]
@@ -50,7 +53,7 @@ class Jahresuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie2', 'some name', -100)
         db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie2', 'some name', 10)
 
-        result_context = views.handle_request(PostRequest({'date':'2010', 'mode':''}))
+        result_context = views.index(PostRequest({'date':'2010', 'mode':''}))
 
         assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-200.00', '00a65a'], ['some kategorie2', '-100.00', '00c0ef']]
         assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '20.00', '3c8dbc'], ['eine einnahme kategorie2', '10.00', 'f56954']]
