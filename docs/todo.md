@@ -4,7 +4,7 @@
 
 ### Backend
 
-* Replace all manual requesthandler with core request handler
+[DONE] Replace all manual requesthandler with core request handler
 * Replace absolute with realtive theme path (depends on prev)
 * Replace hardcoded name with dynamic name
 * Replace international date format with german date format
