@@ -3,9 +3,6 @@
 import datetime
 
 from django.http.response import HttpResponse
-from django.shortcuts import render
-from django.template.context import RequestContext
-from django.template.loader import render_to_string
 import pandas
 
 import addgemeinsam
