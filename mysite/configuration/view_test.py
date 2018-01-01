@@ -18,11 +18,13 @@ from configuration import views
 from core import DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
+from viewcore import request_handler
 
 class TesteSollzeit(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
