@@ -1,11 +1,9 @@
-from django.shortcuts import render
-from django.template.loader import render_to_string
-
 from adddauerauftrag.views import handle_request
 from viewcore import viewcore
 from viewcore.viewcore import name_of_partner
+from viewcore import request_handler
 
-def handle_request(request):
+def _handle_request(_):
     name_self = viewcore.database_instance().name
     name_partner = viewcore.name_of_partner()
 
@@ -38,12 +36,7 @@ def handle_request(request):
     return context
 
 def index(request):
-    context = handle_request(request)
-    rendered_content = render_to_string('theme/gemeinsamabrechnen.html', context)
-
-    context['content'] = rendered_content
-
-    return render(request, 'theme/index.html', context)
+    return request_handler.handle_request(request, _handle_request, 'theme/dauerauftraguebersicht.html')
 
 def _sum(data):
     if data.empty:
@@ -51,13 +44,10 @@ def _sum(data):
     return data.sum()
 
 def abrechnen(request):
-    context = handle_abrechnen_request(request)
-    rendered_content = render_to_string("theme/present_abrechnung.html", context, request)
-    context['content'] = rendered_content
-    return render(request, 'theme/index.html', context)
+    return request_handler.handle_request(request, _handle_abrechnen_request, 'theme/present_abrechnung.html')
 
 
-def handle_abrechnen_request(request):
+def _handle_abrechnen_request(_):
     print("Abrechnen")
     context = viewcore.generate_base_context('gemeinsamabrechnen')
     abrechnungs_text = viewcore.database_instance().abrechnen()

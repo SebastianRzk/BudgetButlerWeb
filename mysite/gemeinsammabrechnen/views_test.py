@@ -1,7 +1,8 @@
 import os
 import sys
 import unittest
-from mysite.viewcore.viewcore import name_of_partner
+from viewcore.viewcore import name_of_partner
+from viewcore import request_handler
 
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
@@ -18,10 +19,11 @@ from viewcore.converter import datum
 class Gemeinsamabrechnen(unittest.TestCase):
     def set_up(self):
         DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
-        result = views.handle_request(GetRequest())
+        result = views.index(GetRequest())
 
 
     def test_abrechnen(self):
@@ -29,7 +31,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
         testdb = viewcore.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01/01/2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         DBManagerStub.stub_abrechnungs_write()
-        views.handle_abrechnen_request(PostRequest({}))
+        views.abrechnen(PostRequest({}))
 
         print(testdb.einzelbuchungen.content)
 
@@ -38,7 +40,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
     def test_shortResult_withEqualValue_shouldReturnEqualSentence(self):
         self.set_up()
-        result = views.handle_request(GetRequest())
+        result = views.index(GetRequest())
         assert result['ergebnis'] == 'Die gemeinsamen Ausgaben sind ausgeglichen.'
 
     def test_shortResult_withPartnerMoreSpendings_shouldReturnEqualSentence(self):
@@ -46,7 +48,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
         gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
         name_partner = viewcore.name_of_partner()
         gemeinsame_buchungen.add(datum('01/01/2010'), 'Some Cat.', '', -11, name_partner)
-        result = views.handle_request(GetRequest())
+        result = views.index(GetRequest())
         assert result['ergebnis'] == 'Maureen bekommt von test noch 5.50€.'
 
     def test_shortResult_withSelfMoreSpendings_shouldReturnEqualSentence(self):
@@ -54,5 +56,5 @@ class Gemeinsamabrechnen(unittest.TestCase):
         gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
         name_self = viewcore.database_instance().name
         gemeinsame_buchungen.add(datum('01/01/2010'), 'Some Cat.', 'Some Name', -11, name_self)
-        result = views.handle_request(GetRequest())
+        result = views.index(GetRequest())
         assert result['ergebnis'] == 'test bekommt von Maureen noch 5.50€.'
