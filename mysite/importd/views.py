@@ -1,8 +1,5 @@
 from _io import StringIO
-import datetime
 
-from django.shortcuts import render
-from django.template.loader import render_to_string
 import pandas
 
 from viewcore import viewcore
