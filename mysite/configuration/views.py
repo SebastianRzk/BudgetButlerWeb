@@ -1,9 +1,7 @@
-from django.shortcuts import render
-from django.template.loader import render_to_string
-
 from viewcore import viewcore
+from viewcore import request_handler
 
-def handle_request(request):
+def _handle_request(request):
     if request.method == 'POST'and request.POST['action'] == 'edit_databases':
         dbs = request.POST['dbs']
 
@@ -37,11 +35,5 @@ def handle_request(request):
     return context
 
 def index(request):
-    context = handle_request(request)
-
-    rendered_content = render_to_string('theme/konfiguration.html', context, request=request)
-
-    context['content'] = rendered_content
-
-    return render(request, 'theme/index.html', context)
+    return request_handler.handle_request(request, _handle_request, 'theme/konfiguration.html')
 

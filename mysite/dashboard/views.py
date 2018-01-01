@@ -1,13 +1,9 @@
-
 from datetime import date
 
-from django.shortcuts import render
-from django.template.loader import render_to_string
-
 from viewcore import viewcore
+from viewcore import request_handler
 
-
-def handle_request():
+def _handle_request(_):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     selector = einzelbuchungen.select()
     ausgaben_liste = []
@@ -22,22 +18,17 @@ def handle_request():
 
 
     context = {
-        'zusammenfassung_monatsliste': monatsliste(),
-        'zusammenfassung_einnahmenliste': list_to_json(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
-        'zusammenfassung_ausgabenliste': list_to_json(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
+        'zusammenfassung_monatsliste': _monatsliste(),
+        'zusammenfassung_einnahmenliste': _list_to_json(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
+        'zusammenfassung_ausgabenliste': _list_to_json(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
         'ausgaben_des_aktuellen_monats': ausgaben_liste,
     }
     print(context)
     context = {**context, **viewcore.generate_base_context('dashboard')}
     return context
 
-def index(request):
-    context = handle_request()
-    rendered_content = render_to_string('theme/dashboard.html', context, request=request)
-    context['content'] = rendered_content
-    return render(request, 'theme/index.html', context)
 
-def list_to_json(liste):
+def _list_to_json(liste):
     result = '['
     for item in liste:
         if len(result) > 1:
@@ -45,7 +36,7 @@ def list_to_json(liste):
         result = result + str(item)
     return result + ']'
 
-def monatsliste():
+def _monatsliste():
     month_map = {1:'"Januar"', 2:'"Februar"', 3:'"März"', 4:'"April"', 5:'"Mai"',
                   6:'"Juni"', 7:'"Juli"', 8:'"August"',
                    9:'"September"', 10:'"Oktober"', 11:'"November"', 12:'"Dezember"'}
@@ -61,5 +52,7 @@ def monatsliste():
             berechneter_monat = berechneter_monat + 12
         result_list.append(month_map[berechneter_monat])
 
-    return list_to_json(result_list)
+    return _list_to_json(result_list)
 
+def index(request):
+    return request_handler.handle_request(request, _handle_request, 'theme/dashboard.html')

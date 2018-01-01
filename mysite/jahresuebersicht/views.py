@@ -1,10 +1,7 @@
-
 import datetime
 
-from django.shortcuts import render
-from django.template.loader import render_to_string
-
 from viewcore import viewcore
+from viewcore import request_handler
 
 
 def get_monats_namen(monat):
@@ -66,16 +63,8 @@ def _compile_colors(result, einzelbuchungen, num_monate):
 
     return einnahmen
 
-def index(request):
-    context = handle_request(request)
-    print(context)
-    rendered_content = render_to_string('theme/uebersicht_jahr.html', context, request=request)
 
-    context['content'] = rendered_content
-
-    return render(request, 'theme/index.html', context)
-
-def handle_request(request):
+def _handle_request(request):
     today = datetime.date.today()
     year = today.year
 
@@ -135,3 +124,6 @@ def handle_request(request):
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()
     return context
+
+def index(request):
+    return request_handler.handle_request(request, _handle_request, 'theme/uebersicht_jahr.html')

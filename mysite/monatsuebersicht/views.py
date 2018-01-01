@@ -1,6 +1,4 @@
 
-import datetime
-
 from viewcore import request_handler
 from viewcore import viewcore
 

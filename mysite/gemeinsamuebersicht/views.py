@@ -1,14 +1,7 @@
-'''
-View für Page Gemeinsame Ausgaben Übersicht
-
-'''
-
-from django.shortcuts import render
-from django.template.loader import render_to_string
-
 from viewcore import viewcore
+from viewcore import request_handler
 
-def handle_request(request):
+def _handle_request(request):
     if request.method == "POST":
         if "action" in request.POST:
             if request.POST['action'] == "delete":
@@ -29,10 +22,5 @@ def handle_request(request):
 
 # Create your views here.
 def index(request):
-    context = handle_request(request)
-    rendered_content = render_to_string('theme/gemeinsameuebersicht.html', context, request=request)
-
-    context['content'] = rendered_content
-
-    return render(request, 'theme/index.html', context)
+    return request_handler.handle_request(request, _handle_request, 'theme/gemeinsameuebersicht.html')
 
