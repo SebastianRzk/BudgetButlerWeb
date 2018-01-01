@@ -298,7 +298,8 @@ class EinzelbuchungsSelektor:
     def sum_monthly(self):
         data = self.content.copy()
         data = data[['Datum', 'Wert']]
-        data.Datum = data.Datum.map(lambda x: x.month)
+        data.Datum = data.Datum.map(lambda x: (x.year * 13) + x.month)
+        print(data)
         grouped = data.groupby(by='Datum').sum()
         result = []
         for monat, reihe in grouped.iterrows():
