@@ -31,8 +31,8 @@ class Jahresuebersicht(unittest.TestCase):
     def teste_contextValues_withSingleEinnahmeAndSingleAusgabe(self):
         self.set_up()
         db = viewcore.database_instance()
-        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
-        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
 
         result_context = views.index(PostRequest({'date':'2010', 'mode':''}))
 
@@ -46,12 +46,12 @@ class Jahresuebersicht(unittest.TestCase):
     def teste_contextValues_withMutlibleEinnahmeAndAusgabe(self):
         self.set_up()
         db = viewcore.database_instance()
-        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
-        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
-        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie', 'some name', -100)
-        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie', 'some name', 10)
-        db.einzelbuchungen.add(datum('10/10/2010'), 'some kategorie2', 'some name', -100)
-        db.einzelbuchungen.add(datum('10/10/2010'), 'eine einnahme kategorie2', 'some name', 10)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie2', 'some name', -100)
+        db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie2', 'some name', 10)
 
         result_context = views.index(PostRequest({'date':'2010', 'mode':''}))
 

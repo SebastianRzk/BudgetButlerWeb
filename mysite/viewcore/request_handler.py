@@ -14,6 +14,7 @@ DATABASE_VERSION = 0
 SESSION_RANDOM = str(random.random())
 RENDER_PARTIALLY_FUNC = render_to_string
 RENDER_FULL_FUNC = render
+BASE_THEME_PATH = 'theme/'
 
 
 def handle_request(request, request_action, html_base_page):
@@ -22,9 +23,9 @@ def handle_request(request, request_action, html_base_page):
         if request.POST['ID'] != current_key():
             print('transaction rejected (requested:' + current_key() + ", got:" + request.POST['ID'] + ')')
             context = viewcore.generate_base_context('Fehler')
-            rendered_content = request_handler.request_handler.RENDER_PARTIALLY_FUNC('theme/error_race.html', {}, request=request)
+            rendered_content = request_handler.request_handler.RENDER_PARTIALLY_FUNC(request_handler.BASE_THEME_PATH + 'error_race.html', {}, request=request)
             context['content'] = rendered_content
-            return request_handler.RENDER_FULL_FUNC(request, 'theme/index.html', context)
+            return request_handler.RENDER_FULL_FUNC(request, request_handler.BASE_THEME_PATH + 'index.html', context)
         print('transaction allowed')
         request_handler.DATABASE_VERSION = request_handler.DATABASE_VERSION + 1
         print('new db version: ' + str(request_handler.DATABASE_VERSION))
@@ -37,10 +38,10 @@ def handle_request(request, request_action, html_base_page):
     if '%Errortext' in context:
         rendered_content = context['%Errortext']
     else:
-        rendered_content = request_handler.RENDER_PARTIALLY_FUNC(html_base_page, context, request=request)
+        rendered_content = request_handler.RENDER_PARTIALLY_FUNC(request_handler.BASE_THEME_PATH + html_base_page, context, request=request)
 
     context['content'] = rendered_content
-    response = request_handler.RENDER_FULL_FUNC(request, 'theme/index.html', context)
+    response = request_handler.RENDER_FULL_FUNC(request, request_handler.BASE_THEME_PATH + 'index.html', context)
     print('Page generated')
     return response
 

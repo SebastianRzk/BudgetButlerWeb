@@ -28,8 +28,8 @@ class Dauerauftragsuebersicht(unittest.TestCase):
     def test_delete(self):
         self.set_up()
         dauerauftraege = viewcore.database_instance().dauerauftraege
-        dauerauftraege.add(datum('01/01/2011'), datum('01/01/2011'), '', '11', 'monatlich', 1)
-        dauerauftraege.add(datum('01/01/2011'), datum('01/01/2011'), '', '22', 'monatlich', 1)
+        dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
+        dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '22', 'monatlich', 1)
 
         views.index(PostRequest({'action':'delete', 'delete_index':'1'}))
 

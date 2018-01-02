@@ -21,8 +21,8 @@ def handle_request(request):
                 value)
             viewcore.add_changed_dauerauftraege({
                 'fa': 'pencil',
-                'startdatum': str(datum(request.POST['startdatum'])),
-                'endedatum':  str(datum(request.POST['endedatum'])),
+                'startdatum': request.POST['startdatum'],
+                'endedatum':  request.POST['endedatum'],
                 'kategorie': request.POST['kategorie'],
                 'name': request.POST['name'],
                 'rhythmus': request.POST['rhythmus'],
@@ -38,8 +38,8 @@ def handle_request(request):
                 value)
             viewcore.add_changed_dauerauftraege({
                 'fa': 'plus',
-                'startdatum': str(datum(request.POST['startdatum'])),
-                'endedatum': str(datum(request.POST['endedatum'])),
+                'startdatum': request.POST['startdatum'],
+                'endedatum': request.POST['endedatum'],
                 'kategorie': request.POST['kategorie'],
                 'name': request.POST['name'],
                 'rhythmus': request.POST['rhythmus'],
@@ -78,4 +78,4 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'theme/adddauerauftrag.html')
+    return request_handler.handle_request(request, handle_request, 'adddauerauftrag.html')

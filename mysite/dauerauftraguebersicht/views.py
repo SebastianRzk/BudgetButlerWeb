@@ -26,4 +26,4 @@ def _format_dauerauftrag_floatpoint(dauerauftraege):
     return dauerauftraege
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'theme/dauerauftraguebersicht.html')
+    return request_handler.handle_request(request, _handle_request, 'dauerauftraguebersicht.html')

@@ -2,6 +2,7 @@
 from viewcore import viewcore
 from viewcore import request_handler
 from viewcore.converter import datum, dezimal_float, from_double_to_german
+from viewcore.converter import datum_to_string
 
 
 def handle_request(request):
@@ -23,7 +24,7 @@ def handle_request(request):
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'pencil',
-                    'datum':str(datum(request.POST['date'])),
+                    'datum':request.POST['date'],
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
                     'wert':from_double_to_german(dezimal_float(request.POST['wert']))
@@ -38,7 +39,7 @@ def handle_request(request):
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'plus',
-                    'datum':str(datum(request.POST['date'])),
+                    'datum':request.POST['date'],
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
                     'wert':from_double_to_german(dezimal_float(request.POST['wert']))
@@ -49,7 +50,7 @@ def handle_request(request):
         print('Please edit:', request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
         selected_item = einzelbuchungen.get(db_index)
-        selected_item['Datum'] = str(selected_item['Datum'].day) + '/' + str(selected_item['Datum'].month) + '/' + str(selected_item['Datum'].year)
+        selected_item['Datum'] = datum_to_string(selected_item['Datum'])
         selected_item['Wert'] = from_double_to_german(selected_item['Wert'])
         context['default_item'] = selected_item
         context['bearbeitungsmodus'] = True
@@ -65,4 +66,4 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'theme/addeinnahme.html')
+    return request_handler.handle_request(request, handle_request, 'addeinnahme.html')

@@ -6,7 +6,7 @@ Created on 10.05.2017
 import datetime
 
 def datum(string):
-    return datetime.datetime.strptime(string , '%d/%m/%Y').date()
+    return datetime.datetime.strptime(string , '%d.%m.%Y').date()
 
 def dezimal_float(string):
     string = string.replace(",", ".")
@@ -20,5 +20,5 @@ def laenge(string):
     return datetime.datetime.strptime(string, '%H:%M').time()
 
 def datum_to_string(datum_obj):
-    return datum_obj.strftime('%d/%m/%Y')
+    return datum_obj.strftime('%d.%m.%Y')
 

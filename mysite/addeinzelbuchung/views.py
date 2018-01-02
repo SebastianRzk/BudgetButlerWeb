@@ -24,7 +24,7 @@ def handle_request(request):
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'pencil',
-                    'datum':str(datum(request.POST['date'])),
+                    'datum':request.POST['date'],
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
                     'wert':from_double_to_german(value)
@@ -39,7 +39,7 @@ def handle_request(request):
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'plus',
-                    'datum':str(datum(request.POST['date'])),
+                    'datum':request.POST['date'],
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
                     'wert':from_double_to_german(value)
@@ -70,4 +70,4 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'theme/addeinzelbuchung.html')
+    return request_handler.handle_request(request, handle_request, 'addeinzelbuchung.html')

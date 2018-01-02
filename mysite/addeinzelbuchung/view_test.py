@@ -41,7 +41,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
-        self.testdb.einzelbuchungen.add(datum('10/10/2010'), 'kategorie', 'name', 10.00)
+        self.testdb.einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
         context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Ausgabe aktualisieren'
 
@@ -50,7 +50,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "date":"1/1/2017",
+             "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
              "wert":"2,00"
@@ -61,7 +61,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.00")
         assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
         assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1/1/2017")
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
@@ -69,7 +69,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":request_key,
-             "date":"1/1/2017",
+             "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
              "wert":"2,00"
@@ -79,7 +79,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":request_key,
-             "date":"1/1/2017",
+             "date":"1.1.2017",
              "kategorie":"overwritten",
              "name":"overwritten",
              "wert":"0,00"
@@ -90,7 +90,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.00")
         assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
         assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1/1/2017")
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
 
 
     def test_edit_ausgabe(self):
@@ -99,7 +99,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "date":"1/1/2017",
+             "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
              "wert":"2,00"
@@ -110,7 +110,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
             {"action":"add",
              "ID":request_handler.current_key(),
              "edit_index":"0",
-             "date":"5/1/2017",
+             "date":"5.1.2017",
              "kategorie":"Essen",
              "name":"testname",
              "wert":"2,50"
@@ -121,14 +121,14 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.50")
         assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
         assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5/1/2017")
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
 
     def test_edit_ausgabe_should_only_fire_once(self):
         self.set_up()
         views.index(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "date":"1/1/2017",
+             "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
              "wert":"2,00"
@@ -140,7 +140,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
-             "date":"5/1/2017",
+             "date":"5.1.2017",
              "kategorie":"Essen",
              "name":"testname",
              "wert":"2,50"
@@ -151,7 +151,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
-             "date":"5/1/2017",
+             "date":"5.1.2017",
              "kategorie":"overwritten",
              "name":"overwritten",
              "wert":"0,00"
@@ -162,7 +162,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         assert self.testdb.einzelbuchungen.content.Wert[0] == -1 * float("2.50")
         assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
         assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5/1/2017")
+        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
 
     def test_edit_einzelbuchung_shouldLoadInputValues_and_invertWert(self):
         self.set_up()
@@ -170,7 +170,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         views.handle_request(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "date":"1/1/2017",
+             "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
              "wert":"2,34"

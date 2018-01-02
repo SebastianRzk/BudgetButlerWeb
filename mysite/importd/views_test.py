@@ -39,7 +39,7 @@ class Importd(unittest.TestCase):
     def test_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
-        einzelbuchungen.add(datum('01/01/2017'), 'Essen', 'some name', -1.54)
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
         context = views.index(PostRequest({'import':self._IMPORT_DATA}))
         assert context['content'] == 'theme/import.html'
@@ -49,7 +49,7 @@ class Importd(unittest.TestCase):
     def test_addeUnpassendenKategorie_shouldShowImportMappingPage(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
-        einzelbuchungen.add(datum('01/01/2017'), 'unbekannt', 'some name', -1.54)
+        einzelbuchungen.add(datum('01.01.2017'), 'unbekannt', 'some name', -1.54)
 
         context = views.index(PostRequest({'import':self._IMPORT_DATA}))
         assert context['content'] == 'theme/import_mapping.html'
@@ -57,7 +57,7 @@ class Importd(unittest.TestCase):
     def test_addeUnpassendenKategorie_mitPassendemMapping_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
-        einzelbuchungen.add(datum('01/01/2017'), 'Unpassend', 'some name', -1.54)
+        einzelbuchungen.add(datum('01.01.2017'), 'Unpassend', 'some name', -1.54)
 
         context = views.index(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
         assert context['content'] == 'theme/import.html'

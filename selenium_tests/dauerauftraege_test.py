@@ -65,8 +65,8 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '2name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '2test_kategorie'
         assert get_selected_option(driver, 'typ_auswahl') == 'Ausgabe'
-        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01/01/2012'
-        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02/02/2012'
+        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01.01.2012'
+        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
         driver.close()
@@ -90,8 +90,8 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '0name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '0test_kategorie'
         assert get_selected_option(driver, 'typ_auswahl') == 'Einnahme'
-        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01/01/2010'
-        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02/02/2010'
+        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01.01.2010'
+        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2010'
         assert driver.find_element_by_name('wert').get_attribute('value') == '0,50'
 
         driver.close()

@@ -55,4 +55,4 @@ def _monatsliste():
     return _list_to_json(result_list)
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'theme/dashboard.html')
+    return request_handler.handle_request(request, _handle_request, 'dashboard.html')

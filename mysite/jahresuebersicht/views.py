@@ -126,4 +126,4 @@ def _handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'theme/uebersicht_jahr.html')
+    return request_handler.handle_request(request, _handle_request, 'uebersicht_jahr.html')

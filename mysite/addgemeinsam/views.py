@@ -7,27 +7,25 @@ import pandas
 
 import addgemeinsam
 from viewcore import viewcore
-from viewcore.converter import from_double_to_german
+from viewcore.converter import from_double_to_german, datum, datum_to_string
 from viewcore import request_handler
 
 def handle_request(request):
     print(viewcore.database_instance())
     if request.method == "POST" and request.POST['action'] == 'add':
         print(request.POST)
-        datum = request.POST['date']
-        datum = datetime.datetime.strptime(datum, '%d/%m/%Y')
-        datum = datum.date()
+        date = datum(request.POST['date'])
         value = request.POST['wert'].replace(",", ".")
         value = float(value)
         value = value * -1
-        einnameausgabe = pandas.DataFrame([[datum, request.POST['kategorie'], request.POST['name'], value, request.POST['person']]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
+        einnameausgabe = pandas.DataFrame([[date, request.POST['kategorie'], request.POST['name'], value, request.POST['person']]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
         print(einnameausgabe)
         if "edit_index" in request.POST:
             viewcore.database_instance().gemeinsamebuchungen.edit(int(request.POST['edit_index']), einnameausgabe)
             viewcore.add_changed_gemeinsamebuchungen(
                 {
                     'fa':'pencil',
-                    'datum':str(datum),
+                    'datum':request.POST['date'],
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
                     'wert':from_double_to_german(value),
@@ -35,7 +33,7 @@ def handle_request(request):
                     })
 
         else:
-            viewcore.database_instance().gemeinsamebuchungen.add(ausgaben_datum=datum,
+            viewcore.database_instance().gemeinsamebuchungen.add(ausgaben_datum=date,
                                                                         kategorie=request.POST['kategorie'],
                                                                         ausgaben_name=request.POST['name'],
                                                                         wert="%.2f" % value,
@@ -43,7 +41,7 @@ def handle_request(request):
             viewcore.add_changed_gemeinsamebuchungen(
                 {
                     'fa':'plus',
-                    'datum':str(datum),
+                    'datum':date,
                     'kategorie':request.POST['kategorie'],
                     'name':request.POST['name'],
                     'wert':from_double_to_german(value),
@@ -58,11 +56,8 @@ def handle_request(request):
         print("Please edit:", request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
         db_row = viewcore.database_instance().gemeinsamebuchungen.content.iloc[db_index]
-        tag = db_row.Datum.day
-        monat = db_row.Datum.month
-        jahr = db_row.Datum.year
         default_item = {
-            'datum': str(tag) + "/" + str(monat) + "/" + str(jahr),
+            'datum': datum_to_string(db_row.Datum),
             'name': db_row.Name,
             'wert': from_double_to_german(db_row.Wert * -1),
             'kategorie': db_row.Kategorie,
@@ -82,5 +77,5 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'theme/addgemeinsam.html')
+    return request_handler.handle_request(request, handle_request, 'addgemeinsam.html')
 

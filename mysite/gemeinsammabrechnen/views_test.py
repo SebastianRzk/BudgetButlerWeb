@@ -29,7 +29,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
     def test_abrechnen(self):
         self.set_up()
         testdb = viewcore.database_instance()
-        testdb.gemeinsamebuchungen.add(datum('01/01/2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
+        testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         DBManagerStub.stub_abrechnungs_write()
         views.abrechnen(PostRequest({}))
 
@@ -47,7 +47,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
         self.set_up()
         gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
         name_partner = viewcore.name_of_partner()
-        gemeinsame_buchungen.add(datum('01/01/2010'), 'Some Cat.', '', -11, name_partner)
+        gemeinsame_buchungen.add(datum('01.01.2010'), 'Some Cat.', '', -11, name_partner)
         result = views.index(GetRequest())
         assert result['ergebnis'] == 'Maureen bekommt von test noch 5.50€.'
 
@@ -55,6 +55,6 @@ class Gemeinsamabrechnen(unittest.TestCase):
         self.set_up()
         gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
         name_self = viewcore.database_instance().name
-        gemeinsame_buchungen.add(datum('01/01/2010'), 'Some Cat.', 'Some Name', -11, name_self)
+        gemeinsame_buchungen.add(datum('01.01.2010'), 'Some Cat.', 'Some Name', -11, name_self)
         result = views.index(GetRequest())
         assert result['ergebnis'] == 'test bekommt von Maureen noch 5.50€.'
