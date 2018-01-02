@@ -7,12 +7,12 @@
 [DONE] Replace all manual requesthandler with core request handler
 [DONE] Replace absolute with realtive theme path (depends on prev)
 * Replace hardcoded name with dynamic name
-* Replace international date format with german date format
+[DONE] Replace international date format with german date format
 * Add redirection in execution in request handler
 
 ### UI
 
-* Replace international date format with german date format
+[DONE] Replace international date format with german date format
 * Add addKategorie in add*something page
 * Remove unused jquery extensions
 
