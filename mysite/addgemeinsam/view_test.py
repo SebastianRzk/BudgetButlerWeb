@@ -36,11 +36,11 @@ class TesteAddGemeinsamView(unittest.TestCase):
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
         db = viewcore.database_instance()
-        db.gemeinsamebuchungen.add(datum('10/10/2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
+        db.gemeinsamebuchungen.add(datum('10.10.2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
         context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
         preset = context['default_item']
-        assert preset['datum'] == '10/10/2010'
+        assert preset['datum'] == '10.10.2010'
         assert preset['kategorie'] == 'kategorie'
         assert preset['name'] == 'ausgaben_name'
         assert preset['wert'] == '10,00'
@@ -51,7 +51,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':request_handler.current_key(),
-             'date':'1/1/2017',
+             'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -62,7 +62,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
-        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1.1.2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
 
     def test_add_shouldAddDynamicEinzelbuchung(self):
@@ -70,7 +70,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':request_handler.current_key(),
-             'date':'1/1/2017',
+             'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -80,7 +80,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         testdb = viewcore.database_instance()
         assert testdb.einzelbuchungen.content.Wert[0] == -1 * 0.5 * float('2.00')
         assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
-        assert testdb.einzelbuchungen.content.Datum[0] == datum('1/1/2017')
+        assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
         assert testdb.einzelbuchungen.content.Name[0] == 'testname (noch nicht abgerechnet, von testperson)'
 
     def test_add_should_only_fire_once(self):
@@ -89,7 +89,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
-             'date':'1/1/2017',
+             'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -99,7 +99,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
-             'date':'1/1/2017',
+             'date':'1.1.2017',
              'kategorie':'overwritten',
              'name':'overwritten',
              'person':'overwritten',
@@ -110,7 +110,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
-        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1.1.2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
 
 
@@ -121,7 +121,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':request_handler.current_key(),
-             'date':'1/1/2017',
+             'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -133,7 +133,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
             {'action':'add',
              'ID':request_handler.current_key(),
              'edit_index':'0',
-             'date':'5/1/2017',
+             'date':'5.1.2017',
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson2',
@@ -145,7 +145,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
-        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5.1.2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson2'
 
     def test_personenOption_shouldContainNames(self):
@@ -162,7 +162,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':request_handler.current_key(),
-             'date':'1/1/2017',
+             'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -175,7 +175,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
             {'action':'add',
              'ID':next_id,
              'edit_index':'0',
-             'date':'5/1/2017',
+             'date':'5.1.2017',
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson2',
@@ -186,7 +186,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
             {'action':'add',
              'ID':next_id,
              'edit_index':'0',
-             'date':'5/1/2017',
+             'date':'5.1.2017',
              'kategorie':'overwritten',
              'name':'overwritten',
              'person':'overwritten',
@@ -197,7 +197,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
-        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5/1/2017')
+        assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5.1.2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson2'
 
 

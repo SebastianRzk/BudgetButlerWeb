@@ -24,7 +24,7 @@ from viewcore.converter import *
 class TesteConverter(unittest.TestCase):
 
     def test_datum(self):
-        result = datum("2/3/2017")
+        result = datum("2.3.2017")
         assert result.day == 2
         assert result.month == 3
         assert result.year == 2017
@@ -39,8 +39,8 @@ class TesteConverter(unittest.TestCase):
         assert result.minute == 23
 
     def test_datum_backwards(self):
-        result = datum_to_string(datum('13/12/2015'))
-        assert result == '13/12/2015'
+        result = datum_to_string(datum('13.12.2015'))
+        assert result == '13.12.2015'
 
     def test_fromDoubleToGerman(self):
         result = from_double_to_german(3.444)

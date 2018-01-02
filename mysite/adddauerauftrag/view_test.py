@@ -39,19 +39,19 @@ class TesteAddDauerauftragView(unittest.TestCase):
         self.set_up()
 
         testdb = viewcore.database_instance()
-        testdb.dauerauftraege.add(datum('10/10/2010'), datum('10/10/2011'), '0kategorie', '0name', 'monatlich', 10)
+        testdb.dauerauftraege.add(datum('10.10.2010'), datum('10.10.2011'), '0kategorie', '0name', 'monatlich', 10)
         context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Dauerauftrag aktualisieren'
 
         preset = context['default_item']
         assert preset['Name'] == '0name'
-        assert preset['Startdatum'] == '10/10/2010'
-        assert preset['Endedatum'] == '10/10/2011'
+        assert preset['Startdatum'] == '10.10.2010'
+        assert preset['Endedatum'] == '10.10.2011'
         assert preset['Kategorie'] == '0kategorie'
         assert preset['Wert'] == '10,00'
         assert preset['typ'] == 'Einnahme'
 
-        testdb.dauerauftraege.add(datum('10/10/2010'), datum('10/10/2011'), '0kategorie', '0name', 'monatlich', -10)
+        testdb.dauerauftraege.add(datum('10.10.2010'), datum('10.10.2011'), '0kategorie', '0name', 'monatlich', -10)
         context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'1'}))
         preset = context['default_item']
         assert preset['typ'] == 'Ausgabe'
@@ -63,8 +63,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "startdatum":"1/1/2017",
-             "endedatum":"6/1/2017",
+             "startdatum":"1.1.2017",
+             "endedatum":"6.1.2017",
              "kategorie":"Essen",
              "typ":"Ausgabe",
              "rhythmus":"monatlich",
@@ -79,8 +79,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Wert[0] == -1 * float("2.00")
         assert testdb.dauerauftraege.content.Name[0] == "testname"
         assert testdb.dauerauftraege.content.Kategorie[0] == "Essen"
-        assert testdb.dauerauftraege.content.Startdatum[0] == datum("1/1/2017")
-        assert testdb.dauerauftraege.content.Endedatum[0] == datum("6/1/2017")
+        assert testdb.dauerauftraege.content.Startdatum[0] == datum("1.1.2017")
+        assert testdb.dauerauftraege.content.Endedatum[0] == datum("6.1.2017")
         assert testdb.dauerauftraege.content.Rhythmus[0] == "monatlich"
 
     def test_add_dauerauftrag_einnahme(self):
@@ -88,8 +88,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "startdatum":"1/1/2017",
-             "endedatum":"6/1/2017",
+             "startdatum":"1.1.2017",
+             "endedatum":"6.1.2017",
              "kategorie":"Essen",
              "typ":"Einnahme",
              "rhythmus":"monatlich",
@@ -103,8 +103,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Wert[0] == float("2.00")
         assert testdb.dauerauftraege.content.Name[0] == "testname"
         assert testdb.dauerauftraege.content.Kategorie[0] == "Essen"
-        assert testdb.dauerauftraege.content.Startdatum[0] == datum("1/1/2017")
-        assert testdb.dauerauftraege.content.Endedatum[0] == datum("6/1/2017")
+        assert testdb.dauerauftraege.content.Startdatum[0] == datum("1.1.2017")
+        assert testdb.dauerauftraege.content.Endedatum[0] == datum("6.1.2017")
         assert testdb.dauerauftraege.content.Rhythmus[0] == "monatlich"
 
     def test_edit_dauerauftrag(self):
@@ -113,8 +113,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "startdatum":"1/1/2017",
-             "endedatum":"6/1/2017",
+             "startdatum":"1.1.2017",
+             "endedatum":"6.1.2017",
              "kategorie":"Essen",
              "typ":"Ausgabe",
              "rhythmus":"monatlich",
@@ -129,8 +129,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
             {"action":"add",
              "ID":request_handler.current_key(),
              "edit_index":"0",
-             "startdatum":"2/1/2017",
-             "endedatum":"5/1/2017",
+             "startdatum":"2.1.2017",
+             "endedatum":"5.1.2017",
              "kategorie":"Essen",
              "typ":"Ausgabe",
              "rhythmus":"monatlich",
@@ -144,8 +144,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Wert[0] == -1 * float("2.50")
         assert testdb.dauerauftraege.content.Name[0] == "testname"
         assert testdb.dauerauftraege.content.Kategorie[0] == "Essen"
-        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
-        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
+        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2.1.2017")
+        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5.1.2017")
 
     def test_edit_dauerauftrag_ausgabe_to_einnahme(self):
         self.set_up()
@@ -153,8 +153,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "startdatum":"1/1/2017",
-             "endedatum":"6/1/2017",
+             "startdatum":"1.1.2017",
+             "endedatum":"6.1.2017",
              "kategorie":"Essen",
              "typ":"Ausgabe",
              "rhythmus":"monatlich",
@@ -168,8 +168,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
             {"action":"add",
              "ID":request_handler.current_key(),
              "edit_index":"0",
-             "startdatum":"2/1/2017",
-             "endedatum":"5/1/2017",
+             "startdatum":"2.1.2017",
+             "endedatum":"5.1.2017",
              "kategorie":"Essen",
              "typ":"Einnahme",
              "rhythmus":"monatlich",
@@ -183,8 +183,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Wert[0] == float("2.50")
         assert testdb.dauerauftraege.content.Name[0] == "testname"
         assert testdb.dauerauftraege.content.Kategorie[0] == "Essen"
-        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
-        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
+        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2.1.2017")
+        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5.1.2017")
 
 
     def test_edit_dauerauftrag_should_only_fire_once(self):
@@ -193,8 +193,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":request_handler.current_key(),
-             "startdatum":"1/1/2017",
-             "endedatum":"6/1/2017",
+             "startdatum":"1.1.2017",
+             "endedatum":"6.1.2017",
              "kategorie":"Essen",
              "typ":"Ausgabe",
              "rhythmus":"monatlich",
@@ -207,8 +207,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
-             "startdatum":"2/1/2017",
-             "endedatum":"5/1/2017",
+             "startdatum":"2.1.2017",
+             "endedatum":"5.1.2017",
              "kategorie":"Essen",
              "typ":"Ausgabe",
              "rhythmus":"monatlich",
@@ -221,8 +221,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
             {"action":"add",
              "ID":next_id,
              "edit_index":"0",
-             "startdatum":"2/1/2017",
-             "endedatum":"5/1/2017",
+             "startdatum":"2.1.2017",
+             "endedatum":"5.1.2017",
              "kategorie":"overwritten",
              "typ":"Ausgabe",
              "rhythmus":"overwritten",
@@ -236,8 +236,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Wert[0] == -1 * float("2.50")
         assert testdb.dauerauftraege.content.Name[0] == "testname"
         assert testdb.dauerauftraege.content.Kategorie[0] == "Essen"
-        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
-        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
+        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2.1.2017")
+        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5.1.2017")
 
 
     def test_add_dauerauftrag_should_only_fire_once(self):
@@ -247,8 +247,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
-             "startdatum":"2/1/2017",
-             "endedatum":"5/1/2017",
+             "startdatum":"2.1.2017",
+             "endedatum":"5.1.2017",
              "kategorie":"Essen",
              "typ":"Ausgabe",
              "rhythmus":"monatlich",
@@ -260,8 +260,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {"action":"add",
              "ID":next_id,
-             "startdatum":"2/1/2017",
-             "endedatum":"5/1/2017",
+             "startdatum":"2.1.2017",
+             "endedatum":"5.1.2017",
              "kategorie":"overwritten",
              "typ":"Ausgabe",
              "rhythmus":"overwritten",
@@ -275,8 +275,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Wert[0] == -1 * float("2.50")
         assert testdb.dauerauftraege.content.Name[0] == "testname"
         assert testdb.dauerauftraege.content.Kategorie[0] == "Essen"
-        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2/1/2017")
-        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5/1/2017")
+        assert testdb.dauerauftraege.content.Startdatum[0] == datum("2.1.2017")
+        assert testdb.dauerauftraege.content.Endedatum[0] == datum("5.1.2017")
 
 
 if __name__ == '__main__':

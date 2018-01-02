@@ -70,20 +70,20 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def test_abrechnen_shouldAddEinzelbuchungen(self):
         self.set_up()
         db = viewcore.database_instance()
-        db.gemeinsamebuchungen.add(datum('17/03/2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
+        db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
         db.abrechnen()
 
         assert len(db.einzelbuchungen.content) == 1
         uebertragene_buchung = db.einzelbuchungen.get(0)
         assert uebertragene_buchung['Name'] == 'some name'
-        assert uebertragene_buchung['Datum'] == datum('17/03/2017')
+        assert uebertragene_buchung['Datum'] == datum('17.03.2017')
         assert uebertragene_buchung['Kategorie'] == 'some kategorie'
         assert uebertragene_buchung['Wert'] == '5.00'
 
     def test_abrechnen_shouldPrintFileContent(self):
         self.set_up()
         db = viewcore.database_instance()
-        db.gemeinsamebuchungen.add(datum('17/03/2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
+        db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
         abrechnungs_text = db.abrechnen()
 
         assert abrechnungs_text == self.abrechnung
@@ -115,7 +115,7 @@ class refresh(unittest.TestCase):
 
     def teste_refresh_shouldAddEinzelbuchungenVonDauerauftrag(self):
         component_under_test = db.Database('test_database')
-        component_under_test.dauerauftraege.add(datum('10/01/2010'), datum('11/03/2010'), '', '', 'monatlich', 20)
+        component_under_test.dauerauftraege.add(datum('10.01.2010'), datum('11.03.2010'), '', '', 'monatlich', 20)
         component_under_test.refresh()
 
         assert len(component_under_test.einzelbuchungen.content) == 3

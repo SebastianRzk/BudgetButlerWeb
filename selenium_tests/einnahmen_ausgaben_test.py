@@ -52,7 +52,7 @@ class TestUI(SeleniumTestClass):
 
         assert driver.find_element_by_name('name').get_attribute('value') == '2name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '2test_kategorie'
-        assert driver.find_element_by_name('date').get_attribute('value') == '01/01/2012'
+        assert driver.find_element_by_name('date').get_attribute('value') == '01.01.2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
         driver.close()
