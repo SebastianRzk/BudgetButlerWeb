@@ -4,8 +4,7 @@
 		<!-- general form elements -->
 		<div class="box box-primary">
 			<form role="form" action="/jahresuebersicht/" method="post">
-				{% csrf_token %} <input type="hidden" name="ID" value="{{ID}}"> <input type="hidden" name="mode"
-					value="change_month">
+				{% csrf_token %} <input type="hidden" name="mode" value="change_month">
 				<div class="box-body">
 					<div class="form-group">
 						<label>Wähle Jahr</label> <select class="form-control" name="date" id="date"> {% for jahr in jahre %}
