@@ -94,14 +94,14 @@ def get_menu_list():
 
     menu = []
     menu.append({'url':'/gemeinsameuebersicht/', 'name': 'Alle gem. Buchungen', 'icon':'fa fa-list'})
-    menu.append({'url':'/addgemeinsam/', 'name':'Neue gemeinsame Buchung', 'icon':'fa fa-plus'})
+    menu.append({'url':'/addgemeinsam/', 'name':'Neue gemeinsame Ausgabe', 'icon':'fa fa-plus'})
     menu.append({'url': '/gemeinsamabrechnen/', 'name': 'Gemeinsam abrechnen', 'icon':'fa fa-cogs'})
     main_menu['Gemeinsame Finanzen'] = menu
 
 
     menu = []
     menu.append({'url': '/import/', 'name': 'Datensätze importieren', 'icon':'fa fa-cogs'})
-    menu.append({'url': '/configuration/', 'name': 'Konfiguration', 'icon':'fa fa-cogs'})
+    menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon':'fa fa-cogs'})
     menu.append({'url':'/production/?database=' + viewcore.database_instance().name, 'name':'Datenbank neu laden', 'icon':'fa fa-refresh'})
     for database in DATABASES:
         if database != database_instance().name:
