@@ -82,5 +82,5 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'theme/addgemeinsam.html')
+    return request_handler.handle_request(request, handle_request, 'addgemeinsam.html')
 

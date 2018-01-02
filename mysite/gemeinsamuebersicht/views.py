@@ -22,5 +22,5 @@ def _handle_request(request):
 
 # Create your views here.
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'theme/gemeinsameuebersicht.html')
+    return request_handler.handle_request(request, _handle_request, 'gemeinsameuebersicht.html')
 

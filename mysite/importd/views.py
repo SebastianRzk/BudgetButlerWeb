@@ -33,7 +33,7 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
 
 def index(request):
     page, context = handle_request(request)
-    return request_handler.handle_request(request, lambda x: context , 'theme/' + page)
+    return request_handler.handle_request(request, lambda x: context , page)
 
 
 

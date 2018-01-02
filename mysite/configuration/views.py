@@ -35,5 +35,5 @@ def _handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'theme/konfiguration.html')
+    return request_handler.handle_request(request, _handle_request, 'konfiguration.html')
 

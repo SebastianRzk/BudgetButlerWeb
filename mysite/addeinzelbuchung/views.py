@@ -70,4 +70,4 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'theme/addeinzelbuchung.html')
+    return request_handler.handle_request(request, handle_request, 'addeinzelbuchung.html')
