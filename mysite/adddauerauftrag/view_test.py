@@ -14,6 +14,7 @@ sys.path.insert(0, _PATH + "/../")
 from test import DBManagerStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
+from test.RequestStubs import VersionedPostRequest
 from adddauerauftrag import views
 from core import DBManager
 from core.DatabaseModule import Database
@@ -60,9 +61,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
     def test_add_dauerauftrag(self):
         self.set_up()
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "startdatum":"1.1.2017",
              "endedatum":"6.1.2017",
              "kategorie":"Essen",
@@ -85,9 +85,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
     def test_add_dauerauftrag_einnahme(self):
         self.set_up()
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "startdatum":"1.1.2017",
              "endedatum":"6.1.2017",
              "kategorie":"Essen",
@@ -110,9 +109,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_edit_dauerauftrag(self):
         self.set_up()
 
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "startdatum":"1.1.2017",
              "endedatum":"6.1.2017",
              "kategorie":"Essen",
@@ -125,9 +123,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
 
         print("dbs: " , viewcore.DATABASES)
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "edit_index":"0",
              "startdatum":"2.1.2017",
              "endedatum":"5.1.2017",
@@ -150,9 +147,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_edit_dauerauftrag_ausgabe_to_einnahme(self):
         self.set_up()
 
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "startdatum":"1.1.2017",
              "endedatum":"6.1.2017",
              "kategorie":"Essen",
@@ -164,9 +160,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
          ))
 
 
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "edit_index":"0",
              "startdatum":"2.1.2017",
              "endedatum":"5.1.2017",
@@ -190,9 +185,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_edit_dauerauftrag_should_only_fire_once(self):
         self.set_up()
 
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "startdatum":"1.1.2017",
              "endedatum":"6.1.2017",
              "kategorie":"Essen",

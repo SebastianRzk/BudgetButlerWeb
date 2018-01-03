@@ -8,11 +8,13 @@ from django.shortcuts import render
 from test.RequestStubs import GetRequest
 from viewcore import request_handler
 from viewcore import viewcore
+from django.shortcuts import redirect
 import random
 
 DATABASE_VERSION = 0
 SESSION_RANDOM = str(random.random())
 RENDER_PARTIALLY_FUNC = render_to_string
+REDIRECTOR = redirect
 RENDER_FULL_FUNC = render
 BASE_THEME_PATH = 'theme/'
 
@@ -31,6 +33,9 @@ def handle_request(request, request_action, html_base_page):
         print('new db version: ' + str(request_handler.DATABASE_VERSION))
 
     context = request_action(request)
+
+    if request.method == 'POST' and 'redirect' in request.POST:
+        return request_handler.REDIRECTOR('/' + str(request.POST['redirect']) + '/')
 
     if 'transaction_key' in context:
         context['ID'] = current_key()
@@ -51,6 +56,7 @@ def current_key():
 def stub_me():
     request_handler.RENDER_PARTIALLY_FUNC = partially_render_stub
     request_handler.RENDER_FULL_FUNC = full_render_stub
+    request_handler.REDIRECTOR = lambda x: x
 
 def partially_render_stub(html_base_page, context, request):
     return html_base_page

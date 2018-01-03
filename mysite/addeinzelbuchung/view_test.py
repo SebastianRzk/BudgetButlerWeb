@@ -15,18 +15,13 @@ sys.path.insert(0, myPath + "/../")
 from test import DBManagerStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
+from test.RequestStubs import VersionedPostRequest
 from addeinzelbuchung import views
 from core import DBManager
 from core.DatabaseModule import Database
 from viewcore.converter import datum
 from viewcore import request_handler
 
-
-
-
-
-'''
-'''
 class TesteAddEinzelbuchungView(unittest.TestCase):
 
     testdb = None
@@ -47,9 +42,8 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     def test_add_ausgabe(self):
         self.set_up()
-        views.handle_request(PostRequest(
+        views.handle_request(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -96,9 +90,8 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
     def test_edit_ausgabe(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.handle_request(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -106,9 +99,8 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        views.handle_request(PostRequest(
+        views.handle_request(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "edit_index":"0",
              "date":"5.1.2017",
              "kategorie":"Essen",
@@ -125,9 +117,8 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     def test_edit_ausgabe_should_only_fire_once(self):
         self.set_up()
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",
@@ -167,9 +158,8 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
     def test_edit_einzelbuchung_shouldLoadInputValues_and_invertWert(self):
         self.set_up()
 
-        views.handle_request(PostRequest(
+        views.handle_request(VersionedPostRequest(
             {"action":"add",
-             "ID":request_handler.current_key(),
              "date":"1.1.2017",
              "kategorie":"Essen",
              "name":"testname",

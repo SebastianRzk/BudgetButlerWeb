@@ -18,7 +18,7 @@ def handle_request(request):
         value = request.POST['wert'].replace(",", ".")
         value = float(value)
         value = value * -1
-        einnameausgabe = pandas.DataFrame([[date, request.POST['kategorie'], request.POST['name'], value, request.POST['person']]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
+        einnameausgabe = pandas.DataFrame([[date, request.POST['kategorie'], str(request.POST['name']), value, request.POST['person']]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
         print(einnameausgabe)
         if "edit_index" in request.POST:
             viewcore.database_instance().gemeinsamebuchungen.edit(int(request.POST['edit_index']), einnameausgabe)

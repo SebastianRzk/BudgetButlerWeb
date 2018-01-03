@@ -14,6 +14,7 @@ sys.path.insert(0, myPath + '/../')
 from test import DBManagerStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
+from test.RequestStubs import VersionedPostRequest
 from addgemeinsam import views
 from core.DatabaseModule import Database
 from viewcore import viewcore
@@ -48,9 +49,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_add_shouldAddGemeinsameBuchung(self):
         self.set_up()
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {'action':'add',
-             'ID':request_handler.current_key(),
              'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -67,9 +67,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_add_shouldAddDynamicEinzelbuchung(self):
         self.set_up()
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {'action':'add',
-             'ID':request_handler.current_key(),
              'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -118,9 +117,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
     def test_edit_ausgabe(self):
         self.set_up()
 
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {'action':'add',
-             'ID':request_handler.current_key(),
              'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
@@ -159,9 +157,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
     def test_edit_should_only_fire_once(self):
         self.set_up()
 
-        views.index(PostRequest(
+        views.index(VersionedPostRequest(
             {'action':'add',
-             'ID':request_handler.current_key(),
              'date':'1.1.2017',
              'kategorie':'Essen',
              'name':'testname',
