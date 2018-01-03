@@ -13,7 +13,6 @@ from core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from pandas import DataFrame
 from viewcore import viewcore
 from viewcore.converter import datum
-import pandas
 from viewcore.viewcore import name_of_partner
 
 

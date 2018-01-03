@@ -6,10 +6,8 @@ def _handle_request(request):
         if "action" in request.POST:
             if request.POST['action'] == "delete":
                 print("Delete: ", request.POST['delete_index'])
-                viewcore.database_instance().delete_gemeinsame_buchung(int(request.POST['delete_index']))
+                viewcore.database_instance().gemeinsamebuchungen.delete(int(request.POST['delete_index']))
                 viewcore.save_refresh()
-
-
 
     ausgaben_liste = []
     data = viewcore.database_instance().gemeinsamebuchungen.content.sort_values(by='Datum')
