@@ -36,7 +36,7 @@ def _handle_request(_):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'dauerauftraguebersicht.html')
+    return request_handler.handle_request(request, _handle_request, 'gemeinsamabrechnen.html')
 
 def _sum(data):
     if data.empty:
