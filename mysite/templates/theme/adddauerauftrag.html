@@ -88,6 +88,31 @@
 		</div>
 		<!-- /.box -->
 	</div>
+	<div class="col-md-6">
+			<!-- general form elements -->
+			<div class="box box-primary collapsed-box">
+				<div class="box-header">
+					<h3 class="box-title">Neue Kategorie</h3>
+					<div class="box-tools pull-right">
+						<button class="btn btn-box-tool" data-widget="collapse" id="open_add_kategorie"><span class="fa fa-plus"></span></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<!-- form start -->
+				<form role="form" action="/configuration/" method="post">{% csrf_token %}
+					<div class="box-body">
+						<div class="form-group">
+							<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
+						</div>
+						</div>
+					<div class="box-footer">
+						<input type="hidden" name="redirect" value="adddauerauftrag">
+						<button type="submit" name="action" value="add_kategorie" id="add_kategorie" class="btn btn-primary">Daten aktualisieren</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.box -->
+		</div>
 </div>
 	<!-- /.row -->
 <div class="row">
