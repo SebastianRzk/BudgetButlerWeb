@@ -5,9 +5,6 @@ from selenium.webdriver.support.select import Select
 
 class SeleniumTestClass:
 
-    def _enter_test_mode(self, driver):
-        driver.get('http://localhost:8000/production/testmode')
-
     def _to_param(self, name, provider):
         return pytest.param(provider, id=name)
 
