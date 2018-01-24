@@ -8,15 +8,15 @@ DEFAULT_CONFIG = {
     'PARTNERNAME': 'kein_Partnername_gesetzt'
 }
 def _from_file():
-    if not Path("config").is_file():
+    if not Path("../config").is_file():
         return None
 
-    with open('config', 'r') as myfile:
+    with open('../config', 'r') as myfile:
         content = myfile.read()
     return content
 
 def _to_file(content):
-    with open('config', 'w') as myfile:
+    with open('../config', 'w') as myfile:
         myfile.write(content)
         myfile.close()
 
