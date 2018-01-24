@@ -18,6 +18,7 @@ sys.path.insert(0, _PATH + '/../')
 import core.DatabaseModule as db
 from viewcore.converter import datum, laenge
 from viewcore import viewcore
+from viewcore import configuration_provider
 
 
 def _zero():
@@ -66,6 +67,10 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def set_up(self):
         DBManagerStub.setup_db_for_test()
         DBManagerStub.stub_abrechnungs_write()
+        configuration_provider.stub_me('''
+            PARTNERNAME:Maureen
+            ''')
+
 
     def test_abrechnen_shouldAddEinzelbuchungen(self):
         self.set_up()

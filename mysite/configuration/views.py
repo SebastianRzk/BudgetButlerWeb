@@ -11,7 +11,7 @@ def _handle_request(request):
         viewcore.database_instance().einzelbuchungen.add_kategorie(request.POST['neue_kategorie'])
 
 
-    if request.medtod == 'POST' and request.post['action'] == 'set_partnername':
+    if request.method == 'POST' and request.POST['action'] == 'set_partnername':
         configuration_provider.set_configuration('PARTNERNAME', request.POST['partnername'])
 
     context = viewcore.generate_base_context('configuration')

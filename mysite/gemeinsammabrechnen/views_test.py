@@ -15,11 +15,15 @@ from core.database.Einzelbuchungen import Einzelbuchungen
 from gemeinsammabrechnen import views
 from viewcore import viewcore
 from viewcore.converter import datum
+from viewcore import configuration_provider
 
 class Gemeinsamabrechnen(unittest.TestCase):
     def set_up(self):
         DBManagerStub.setup_db_for_test()
         request_handler.stub_me()
+        configuration_provider.stub_me('''
+        PARTNERNAME:Maureen
+        ''')
 
     def test_init(self):
         self.set_up()

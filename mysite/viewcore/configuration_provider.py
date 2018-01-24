@@ -1,9 +1,11 @@
 from viewcore import configuration_provider
 from pathlib import Path
+from functools import reduce
 
 LOADED_CONFIG = {}
 DEFAULT_CONFIG = {
-    'DATABASES': 'Test_User'
+    'DATABASES': 'Test_User',
+    'PARTNERNAME': 'kein_Partnername_gesetzt'
 }
 def _from_file():
     if not Path(".config").is_file():
@@ -35,7 +37,15 @@ def _load_config():
     for key in configuration_provider.DEFAULT_CONFIG:
         if key not in loaded_config:
             loaded_config[key] = configuration_provider.DEFAULT_CONFIG[key]
+    print("#####",loaded_config)
     return loaded_config
+
+def _save_config(config):
+    content = []
+    for key in config:
+        content.append('{key}:{value}'.format(key=key, value=config[key]))
+    content = reduce(lambda x,y: str(x)+'\n'+str(y), content)
+    configuration_provider.SAVER(content)
 
 def get_configuration(key):
     if not configuration_provider.LOADED_CONFIG:
@@ -46,7 +56,7 @@ def set_configuration(key, value):
     if not configuration_provider.LOADED_CONFIG:
         configuration_provider.LOADED_CONFIG = _load_config()
     configuration_provider.LOADED_CONFIG[key] = value
-    configuration_provider.SAVER(configuration_provider.LOADED_CONFIG)
+    _save_config(configuration_provider.LOADED_CONFIG)
     configuration_provider.LOADED_CONFIG = _load_config()
 
 
@@ -58,8 +68,9 @@ def _to_string(content):
     configuration_provider.DEBUG_FILE = content
 
 
-def stub_me(content):
+def stub_me(content=None):
     configuration_provider.LOADER = _from_string
     configuration_provider.SAVER = _to_string
     configuration_provider.DEBUG_FILE = content
+    configuration_provider.LOADED_CONFIG = None
 

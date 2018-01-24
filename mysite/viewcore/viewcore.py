@@ -159,7 +159,7 @@ def save_refresh():
     viewcore.switch_database_instance(db_name)
 
 def name_of_partner():
-    return 'Maureen'
+    return configuration_provider.get_configuration('PARTNERNAME')
 
 def design_colors():
     colors = {}
