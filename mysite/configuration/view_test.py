@@ -38,6 +38,16 @@ class TestKonfiguration(unittest.TestCase):
         views.index(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
         assert viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
+
+    def test_change_db_should_trigger_db_reload(self):
+        self.set_up()
+        views.index(PostRequest({'action':'edit_databases', 'dbs':'test'}))
+        assert viewcore.database_instance().name == 'test'
+
+        views.index(PostRequest({'action':'edit_databases', 'dbs':'test2'}))
+        assert viewcore.database_instance().name == 'test2'
+
+
     def test_change_partnername_should_change_partnername(self):
         self.set_up()
         assert viewcore.name_of_partner() == 'kein_Partnername_gesetzt'

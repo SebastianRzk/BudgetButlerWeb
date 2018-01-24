@@ -6,6 +6,7 @@ def _handle_request(request):
         dbs = request.POST['dbs']
         configuration_provider.set_configuration('DATABASES',dbs)
         viewcore.DATABASES = []
+        viewcore.DATABASE_INSTANCE = None
 
     if request.method == 'POST' and request.POST['action'] == 'add_kategorie':
         viewcore.database_instance().einzelbuchungen.add_kategorie(request.POST['neue_kategorie'])
