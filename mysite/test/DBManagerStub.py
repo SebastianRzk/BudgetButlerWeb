@@ -17,7 +17,7 @@ __DATABASES = {}
 
 def from_string(nutzername):
     print('Reading database from RAM')
-    if not __DATABASES[nutzername]:
+    if not nutzername in __DATABASES:
         print('No database in RAM found! creating empty one!')
         neue_datenbank = DatabaseModule.Database(nutzername)
         to_string(neue_datenbank)
