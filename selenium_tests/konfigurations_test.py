@@ -21,4 +21,5 @@ class TestUI(SeleniumTestClass):
 
         driver.get('http://localhost:8000/addgemeinsam/')
         assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Olaf'])
+        driver.close()
         
