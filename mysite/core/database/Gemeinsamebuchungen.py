@@ -25,7 +25,7 @@ class Gemeinsamebuchungen:
     def anteil_gemeinsamer_buchungen(self):
         anteil_gemeinsamer_buchungen = DataFrame()
         for ind, row in self.content.iterrows():
-            einzelbuchung = DataFrame([[row.Datum, row.Kategorie, row.Name + " (noch nicht abgerechnet, von " + row.Person + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
+            einzelbuchung = DataFrame([[row.Datum, row.Kategorie, str(row.Name) + " (noch nicht abgerechnet, von " + str(row.Person) + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
             anteil_gemeinsamer_buchungen = anteil_gemeinsamer_buchungen.append(einzelbuchung, ignore_index=True)
         return anteil_gemeinsamer_buchungen
 

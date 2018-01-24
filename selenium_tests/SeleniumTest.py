@@ -40,6 +40,13 @@ def select_option(driver, option_id, item):
             option.click()  # select() in earlier versions of webdriver
             break
 
+def get_options(driver, option_id):
+    el = driver.find_element_by_id(option_id)
+    result = []
+    for option in el.find_elements_by_tag_name('option'):
+        result.append(option.text)
+    return result
+
 def get_selected_option(driver, option_id):
     select = Select(driver.find_element_by_id(option_id))
     selected_option = select.first_selected_option
