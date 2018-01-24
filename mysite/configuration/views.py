@@ -23,6 +23,7 @@ def _handle_request(request):
             default_databases = default_databases + ','
         default_databases = default_databases + db
     context['default_databases'] = default_databases
+    context['partnername'] = viewcore.name_of_partner()
     return context
 
 def index(request):
