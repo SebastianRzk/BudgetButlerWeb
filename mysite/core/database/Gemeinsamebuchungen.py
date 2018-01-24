@@ -42,6 +42,14 @@ class Gemeinsamebuchungen:
         for column_name, column in frame.copy().transpose().iterrows():
             self.content.ix[index:index, column_name] = max(column)
 
+    def rename(self, old_name, new_name):
+        self.content.Person = self.content.Person.map(lambda x: self._rename_value(old_name, new_name, x))
+
+    def _rename_value(self, old, new, x):
+        if x == old:
+            return new
+        return x
+
     def fuer(self, person):
         return self.content[self.content.Person == person]
 

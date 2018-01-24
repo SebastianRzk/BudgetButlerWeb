@@ -12,6 +12,8 @@ def _handle_request(request):
 
 
     if request.method == 'POST' and request.POST['action'] == 'set_partnername':
+        viewcore.database_instance().gemeinsamebuchungen.rename(viewcore.name_of_partner(), request.POST['partnername'])
+        viewcore.save_refresh()
         configuration_provider.set_configuration('PARTNERNAME', request.POST['partnername'])
 
     context = viewcore.generate_base_context('configuration')

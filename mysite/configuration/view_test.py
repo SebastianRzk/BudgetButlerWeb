@@ -19,9 +19,10 @@ from core import DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
 from viewcore import request_handler
+from viewcore.converter import datum
 from viewcore import configuration_provider
 
-class TesteSollzeit(unittest.TestCase):
+class TestKonfiguration(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
@@ -32,17 +33,30 @@ class TesteSollzeit(unittest.TestCase):
         self.set_up()
         views.index(GetRequest())
 
-    def teste_addKategorie(self):
+    def test_addKategorie(self):
         self.set_up()
         views.index(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
         assert viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
-    def teste_change_partnername(self):
+    def test_change_partnername_should_change_partnername(self):
         self.set_up()
         assert viewcore.name_of_partner() == 'kein_Partnername_gesetzt'
         views.index(PostRequest({'action':'set_partnername', 'partnername':'testpartner'}))
         assert viewcore.name_of_partner() == 'testpartner'
 
+
+    def test_change_partnername_should_mirgrate_old_partnernames(self):
+        self.set_up()
+        name_of_partner = viewcore.name_of_partner()
+        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        gemeinsame_buchungen.add(datum('01.01.2017'), 'kat', 'name', 1, name_of_partner)
+
+        views.index(PostRequest({'action':'set_partnername', 'partnername':'testpartner_renamed'}))
+        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        print(gemeinsame_buchungen.content)
+        database_partners = gemeinsame_buchungen.content.Person
+
+        assert set(database_partners) == set(['testpartner_renamed'])
 
 if __name__ == '__main__':
     unittest.main()
