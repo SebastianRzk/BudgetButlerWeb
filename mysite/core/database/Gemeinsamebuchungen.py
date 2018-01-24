@@ -25,7 +25,7 @@ class Gemeinsamebuchungen:
     def anteil_gemeinsamer_buchungen(self):
         anteil_gemeinsamer_buchungen = DataFrame()
         for ind, row in self.content.iterrows():
-            einzelbuchung = DataFrame([[row.Datum, row.Kategorie, row.Name + " (noch nicht abgerechnet, von " + row.Person + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
+            einzelbuchung = DataFrame([[row.Datum, row.Kategorie, str(row.Name) + " (noch nicht abgerechnet, von " + str(row.Person) + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
             anteil_gemeinsamer_buchungen = anteil_gemeinsamer_buchungen.append(einzelbuchung, ignore_index=True)
         return anteil_gemeinsamer_buchungen
 
@@ -41,6 +41,14 @@ class Gemeinsamebuchungen:
     def edit(self, index, frame):
         for column_name, column in frame.copy().transpose().iterrows():
             self.content.ix[index:index, column_name] = max(column)
+
+    def rename(self, old_name, new_name):
+        self.content.Person = self.content.Person.map(lambda x: self._rename_value(old_name, new_name, x))
+
+    def _rename_value(self, old, new, x):
+        if x == old:
+            return new
+        return x
 
     def fuer(self, person):
         return self.content[self.content.Person == person]

@@ -6,6 +6,7 @@ Created on 24.04.2017
 
 from core import DBManager
 from viewcore import viewcore
+from viewcore import configuration_provider
 
 
 DATABASE_INSTANCE = None
@@ -18,12 +19,8 @@ def database_instance():
     returns the actual database instance
     '''
     if not viewcore.DATABASES:
-        file = open("../config", "r")
-        for line in file:
-            line = line.strip()
-            if line.startswith("DATABASES:"):
-                line = line.replace("DATABASES:", "")
-                viewcore.DATABASES = line.split(',')
+        viewcore.DATABASES = configuration_provider.get_configuration('DATABASES').split(',')
+
     if viewcore.DATABASE_INSTANCE is None:
         viewcore.DATABASE_INSTANCE = DBManager.read_database(viewcore.DATABASES[0])
     return DATABASE_INSTANCE
@@ -162,7 +159,7 @@ def save_refresh():
     viewcore.switch_database_instance(db_name)
 
 def name_of_partner():
-    return 'Maureen'
+    return configuration_provider.get_configuration('PARTNERNAME')
 
 def design_colors():
     colors = {}

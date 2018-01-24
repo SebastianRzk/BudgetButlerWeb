@@ -5,9 +5,6 @@ from selenium.webdriver.support.select import Select
 
 class SeleniumTestClass:
 
-    def _enter_test_mode(self, driver):
-        driver.get('http://localhost:8000/production/testmode')
-
     def _to_param(self, name, provider):
         return pytest.param(provider, id=name)
 
@@ -42,6 +39,13 @@ def select_option(driver, option_id, item):
         if option.text == item:
             option.click()  # select() in earlier versions of webdriver
             break
+
+def get_options(driver, option_id):
+    el = driver.find_element_by_id(option_id)
+    result = []
+    for option in el.find_elements_by_tag_name('option'):
+        result.append(option.text)
+    return result
 
 def get_selected_option(driver, option_id):
     select = Select(driver.find_element_by_id(option_id))
