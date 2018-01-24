@@ -1,29 +1,18 @@
 from viewcore import viewcore
 from viewcore import request_handler
-
+from viewcore import configuration_provider
 def _handle_request(request):
-    if request.method == 'POST'and request.POST['action'] == 'edit_databases':
+    if request.method == 'POST' and request.POST['action'] == 'edit_databases':
         dbs = request.POST['dbs']
-
-        all_lines = []
-        file = open('../config', 'r')
-        for line in file:
-            line = line.strip()
-            all_lines.append(line)
-
-        file = open('../config', 'w')
-        for line in all_lines:
-            if line.startswith('DATABASES:'):
-                file.write('DATABASES:' + dbs + '\n')
-            else:
-                file.write(line + '\n')
-        file.close()
-
+        configuration_provider.set_configuration('DATABASES',dbs)
         viewcore.DATABASES = []
-        viewcore.database_instance()
 
-    if request.method == 'POST'and request.POST['action'] == 'add_kategorie':
+    if request.method == 'POST' and request.POST['action'] == 'add_kategorie':
         viewcore.database_instance().einzelbuchungen.add_kategorie(request.POST['neue_kategorie'])
+
+
+    if request.medtod == 'POST' and request.post['action'] == 'set_partnername':
+        configuration_provider.set_configuration('PARTNERNAME', request.POST['partnername'])
 
     context = viewcore.generate_base_context('configuration')
     default_databases = ''
