@@ -5,3 +5,38 @@
 ## Documentation
 
 [Link to the project page on github](https://RosesTheN00b.github.io/BudgetButlerWeb/)
+
+## Requirements
+
+* Python 3.6
+* Pip
+* Modern Webbrowser (e.G. Firefox or Chromium)
+* (git)
+
+## Install and run
+Clone the repository:
+
+	git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+
+Change into project directory
+
+	cd BudgetButlerWeb
+
+Install the requiurements
+
+	pip install -r requirements.txt
+
+Change into django module and run server:
+
+	cd mysite
+	python manage.py runserver
+
+Open your webbrowser and visit:
+
+	http://127.0.0.1:8000/
+
+
+## TODO
+[Link to todo page](docs/todo.md)
+
+
