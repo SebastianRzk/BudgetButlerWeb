@@ -153,7 +153,7 @@ a:active,
 a:focus {
   outline: none;
   text-decoration: none;
-  color: #72afd2;
+  color: var(--main-color);
 }
 /* Page Header */
 .page-header {
