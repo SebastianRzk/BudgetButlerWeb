@@ -5,10 +5,9 @@
  *   License: Open source - MIT
  *           Please visit http://opensource.org/licenses/MIT for more information
 !*/
-/*
- * Core: Genral Layout Style
- * -------------------------
- */
+:root {
+    --main-color: #00acd6;
+}
 html,
 body {
   min-height: 100%;
@@ -903,31 +902,7 @@ table.text-center th {
   display: inline;
   width: auto;
 }
-/* Description Blocks */
-.description-block {
-  display: block;
-  margin: 10px 0;
-  text-align: center;
-}
-.description-block.margin-bottom {
-  margin-bottom: 25px;
-}
-.description-block > .description-header {
-  margin: 0;
-  padding: 0;
-  font-weight: 600;
-  font-size: 16px;
-}
-.description-block > .description-text {
-  text-transform: uppercase;
-}
 
-
-
-/* Remove border radius */
-.flat {
-  border-radius: 0 !important;
-}
 .text-bold,
 .text-bold.table td,
 .text-bold.table th {
@@ -963,18 +938,18 @@ a {
 
 .design-scheme-click .shortcut-icon {
 	color: #FFF;
-	background-color: #00acd6;
+	background-color: var(--main-color);
 }
 
 .design-scheme-click:hover {
 	color: #FFF;
-	background-color: #00acd6;
+	background-color: var(--main-color);
 	border: 1px solid #000;
 }
 
 .design-scheme-click:hover .shortcut-icon,
 .design-scheme-click:hover .fa {
-	color: #00acd6 !important;
+	color: var(--main-color) !important;
 	background-color: #FFF;
 }
 
@@ -983,17 +958,17 @@ a {
 }
 
 button {
-	background-color: #00acd6;
+	background-color: var(--main-color);
 	color: #FFF;
 }
 
 button:hover {
 	background-color: #FFF;
-	color: #00acd6 !important;
+	color: var(--main-color) !important;
 }
 
 .bordered-hover {
-	border: 1px solid #00acd6;
+	border: 1px solid var(--main-color);
 }
 
 
