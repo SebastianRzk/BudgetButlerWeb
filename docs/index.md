@@ -12,7 +12,7 @@
 * Hohe Geschwindigkeit, auch bei großen Datenmengen
 * Quelloffen
 
-## Systeemvoraussetzungen
+## Systemvoraussetzungen
 
 * Python 3.6
 * Pip
