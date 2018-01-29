@@ -1,6 +1,8 @@
 # Things todo
 
-[][menu.md]
+[Hauptsiete][index.md]
+[Screenshots][screenshots.md]
+[TODOs][todo.md]
 
 ## TODO for first release candidate
 
