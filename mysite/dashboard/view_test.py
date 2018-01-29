@@ -22,8 +22,3 @@ class TestUebersicht(unittest.TestCase):
     def test_init_withEmptyDatabase(self):
         self.set_up()
         views.index(GetRequest())
-
-
-if __name__ == '__main__':
-    unittest.main()
-

@@ -51,6 +51,3 @@ class TestUebersicht(unittest.TestCase):
         views.index(PostRequest({'action':'delete', 'delete_index':'1'}))
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         assert einzelbuchungen.select().sum() == 100
-
-if __name__ == '__main__':
-    unittest.main()

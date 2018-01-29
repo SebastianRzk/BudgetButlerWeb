@@ -177,6 +177,3 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         assert result['default_item']['Name'] == "testname"
         assert result['default_item']['Wert'] == "2,34"
 
-
-if __name__ == '__main__':
-    unittest.main()

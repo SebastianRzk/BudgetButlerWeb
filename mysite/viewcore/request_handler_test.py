@@ -25,5 +25,3 @@ class TesteRequestHanlder(unittest.TestCase):
 
         assert result == '/test_page/'
 
-if __name__ == '__main__':
-    unittest.main()
