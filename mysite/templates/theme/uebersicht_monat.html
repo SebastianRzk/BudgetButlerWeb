@@ -25,7 +25,7 @@
               SelectElement()
           </script>
           <div class="box-footer">
-            <button type="submit" value="OK" class="btn btn-primary">Filtern!</button>
+            <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
           </div>
         </form>
       </div><!-- /.box -->
@@ -217,20 +217,20 @@
             <thead>
               <tr>
                 <th>Kategorie</th>
-                <th>Wert</th>
+                <th class="table-wert">Wert</th>
               </tr>
             </thead>
             <tbody>
               {% for ausgabe in ausgaben %}
               <tr>
                 <td style="vertical-align:middle"> <span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-                <td style="vertical-align:middle">{{ausgabe.1}}</td>
+                <td style="vertical-align:middle" class="table-wert">{{ausgabe.1}}</td>
               </tr>
               {% endfor %}
               <tfooter>
               <tr>
                 <td style="vertical-align:middle">Summe</td>
-                <td style="vertical-align:middle">{{gesamt}}</td>
+                <td style="vertical-align:middle" class="table-wert">{{gesamt}}</td>
               </tr>
               </tfooter>
             </tbody>
@@ -254,20 +254,20 @@
             <thead>
               <tr>
                 <th>Kategorie</th>
-                <th>Wert</th>
+                <th class="table-wert">Wert</th>
               </tr>
             </thead>
             <tbody>
               {% for einnahme in einnahmen %}
               <tr>
                 <td style="vertical-align:middle"><span class="fa fa-circle" style="color: #{{einnahme.2}};"></span> {{einnahme.0}}</td>
-                <td style="vertical-align:middle">{{einnahme.1}}</td>
+                <td style="vertical-align:middle" class="table-wert">{{einnahme.1}}</td>
               </tr>
               {% endfor %}
               <tfooter>
                 <tr>
                   <td style="vertical-align:middle">Summe</td>
-                  <td style="vertical-align:middle">{{gesamt_einnahmen}}</td>
+                  <td style="vertical-align:middle" class="table-wert">{{gesamt_einnahmen}}</td>
                 </tr>
               </tfooter>
             </tbody>

@@ -4,7 +4,7 @@ from viewcore import configuration_provider
 def _handle_request(request):
     if request.method == 'POST' and request.POST['action'] == 'edit_databases':
         dbs = request.POST['dbs']
-        configuration_provider.set_configuration('DATABASES',dbs)
+        configuration_provider.set_configuration('DATABASES', dbs)
         viewcore.DATABASES = []
         viewcore.DATABASE_INSTANCE = None
 
@@ -25,6 +25,7 @@ def _handle_request(request):
         default_databases = default_databases + db
     context['default_databases'] = default_databases
     context['partnername'] = viewcore.name_of_partner()
+    context['transaction_key'] = 'requested'
     return context
 
 def index(request):

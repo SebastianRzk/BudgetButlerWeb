@@ -1,5 +1,7 @@
 # Things todo
 
+[][menu.md]
+
 ## TODO for first release candidate
 
 ### Backend
@@ -22,10 +24,13 @@
 
 [DONE] Remove unused jquery extensions
 
+[DONE] Simple design
+
 ### Website
 
-* translate everything in german
-* add screenshots
+[DONE] translate everything in german
+
+[DONE] add screenshots
 
 ## Further releases:
 
