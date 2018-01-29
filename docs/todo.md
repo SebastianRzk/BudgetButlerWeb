@@ -28,8 +28,9 @@
 
 ### Website
 
-* translate everything in german
-* add screenshots
+[DONE] translate everything in german
+
+[DONE] add screenshots
 
 ## Further releases:
 
