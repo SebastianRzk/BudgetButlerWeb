@@ -1,8 +1,8 @@
 # Screenshots
 
-*[Hauptseite](index.md)
-*[Screenshots](screenshots.md)
-*[TODOs](todo.md)
+* [Hauptseite](index.md)
+* [Screenshots](screenshots.md)
+* [TODOs](todo.md)
 
 ## Ausgaben erfassen
 
