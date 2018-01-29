@@ -42,6 +42,16 @@ Im Projektverzeichnis in die Django-App navigieren und Django-Server starten:
 Webbrowser öffnen und folgende Url besuchen:
 
 	http://127.0.0.1:8000/
+	
+## Run tests
+
+Run all softwaretests with pytest:
+
+	pytest
+
+Run tests with coverage analysis:
+
+	py.test --cov=mysite
 
 ## Updates
 
