@@ -42,6 +42,7 @@ def _handle_request(request):
 
     context = viewcore.generate_base_context('uebersicht')
     context['alles'] = ausgaben_monatlich
+    context['transaction_key'] = 'requested'
     return context
 
 def index(request):
