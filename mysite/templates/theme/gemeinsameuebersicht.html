@@ -35,6 +35,7 @@
                         <div class="pull-right">
                         <form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.2}} löschen?');" role="form" action="/gemeinsameuebersicht/" method="post">
                         {% csrf_token %}
+		  		<input type="hidden" name="ID" value="{{ID}}">
                                 <input type="hidden" name="delete_index" value="{{ausgabe.0}}">
                                 <button name="action" value="delete" class="btn bordered-hover"><span class="fa fa-trash-o"></span></button>
                     </form></div>
