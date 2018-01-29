@@ -1,5 +1,7 @@
 # Things todo
 
+[][menu.md]
+
 ## TODO for first release candidate
 
 ### Backend
@@ -21,6 +23,8 @@
 [DONE] Add addKategorie in add*something page
 
 [DONE] Remove unused jquery extensions
+
+[DONE] Simple design
 
 ### Website
 

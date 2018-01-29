@@ -35,6 +35,8 @@ Open your webbrowser and visit:
 
 	http://127.0.0.1:8000/
 
+## Screenshots
+[Link to screenshots page](docs/screenshots.md)
 
 ## TODO
 [Link to todo page](docs/todo.md)
