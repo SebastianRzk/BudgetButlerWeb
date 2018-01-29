@@ -19,7 +19,6 @@
                   <th>Kategorie</th>
                   <th class="table-wert">Wert</th>
                   <th>Person</th>
-                  <th>Aktion</th>
                   <th></th>
                 </tr>
               </thead>
@@ -33,18 +32,18 @@
                   <td class="table-wert" id="item_{{ausgabe.0}}_wert">{{ausgabe.4}}</td>
                   <td id="item_{{ausgabe.0}}_person">{{ausgabe.5}}</td>
                    	<td>
+                        <div class="pull-right">
+                        <form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.2}} löschen?');" role="form" action="/gemeinsameuebersicht/" method="post">
+                        {% csrf_token %}
+                                <input type="hidden" name="delete_index" value="{{ausgabe.0}}">
+                                <button name="action" value="delete" class="btn bordered-hover"><span class="fa fa-trash-o"></span></button>
+                    </form></div>
+			<div class="pull-right">
                    	<form role="form" action="/addgemeinsam/" method="post">
                   	{% csrf_token %}
                   		<input type="hidden" name="edit_index" value="{{ausgabe.0}}">
-                  		<button type="submit" name="action" value="edit" id="edit_{{ausgabe.0}}" ><span class="fa fa-pencil"></span></button>
-                    </form>
-                    </td>
-                   <td>
-                  	<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.2}} löschen?');" role="form" action="/gemeinsameuebersicht/" method="post">
-                  	{% csrf_token %}
-                  		<input type="hidden" name="delete_index" value="{{ausgabe.0}}">
-                  		<button name="action" value="delete" ><span class="fa fa-trash-o"></span></button>
-                    </form>
+                  		<button type="submit" name="action" value="edit" id="edit_{{ausgabe.0}}" class="btn bordered-hover" ><span class="fa fa-pencil"></span></button>
+                    </form></div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -53,7 +52,7 @@
           </div><!-- /.table-responsive -->
         </div><!-- /.box-body -->
         <div class="box-footer clearfix">
-          <a href="/addgemeinsam/" class="btn bordered-hover pull-left">Neue gemeinsame Buchung</a>
+          <a href="/addgemeinsam/" class="btn btn-light pull-left">Neue gemeinsame Buchung</a>
         </div><!-- /.box-footer -->
       </div><!-- /.box -->
     </div><!-- /.col -->
