@@ -1,6 +1,6 @@
 # Screenshots
 
-*[Hauptsiete](index.md)
+*[Hauptseite](index.md)
 *[Screenshots](screenshots.md)
 *[TODOs](todo.md)
 
