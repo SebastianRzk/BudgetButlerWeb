@@ -43,19 +43,19 @@ Webbrowser öffnen und folgende Url besuchen:
 
 	http://127.0.0.1:8000/
 	
-## Run tests
+## Softwaretests ausführen
 
-Run all softwaretests with pytest:
+Alle Softwaretestsmit pytest starten:
 
 	pytest
 
-Run tests with coverage analysis:
+Testabdeckung mit pytest berechnen:
 
 	py.test --cov=mysite
 
 ## Updates
 
-BudgetButlerWeb updaten:
+BudgetButlerWeb aktualisieren:
 
 	git pull
 
