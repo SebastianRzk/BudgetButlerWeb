@@ -1,9 +1,9 @@
 # BudgetButlerWeb
 [![Build Status](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb) [![codecov](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb)
 
-*[Hauptsiete](index.md)
-*[Screenshots](screenshots.md)
-*[TODOs](todo.md)
+* [Hauptseite](index.md)
+* [Screenshots](screenshots.md)
+* [TODOs](todo.md)
 
 ## Idee
 
