@@ -18,6 +18,7 @@ def _handle_request(request):
     context['vergangene_dauerauftraege'] = _format_dauerauftrag_floatpoint(vergangene_dauerauftraege)
     zukuenftige_dauerauftraege = dauerauftraege.future()
     context['zukuenftige_dauerauftraege'] = _format_dauerauftrag_floatpoint(zukuenftige_dauerauftraege)
+    context['transaction_key'] = 'requested'
     return context
 
 def _format_dauerauftrag_floatpoint(dauerauftraege):

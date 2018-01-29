@@ -36,6 +36,7 @@
 									<div class="pull-right">
 										<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
 										{% csrf_token %}
+											<input type="hidden" name="ID" value="{{ID}}">
 											<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
 											<button name="action" value="delete" class="btn bordered-hover">><span class="fa fa-trash-o"></span></button>
 										</form>
@@ -100,6 +101,7 @@
            <div class="pull-right">
                   	<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
                   	{% csrf_token %}
+		  		<input type="hidden" name="ID" value="{{ID}}">
                   		<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
                   		<button name="action" value="delete" class="btn bordered-hover"><span class="fa fa-trash-o"></span></button>
                     	</form>
@@ -164,6 +166,7 @@
            <div class="pull-right">
                   	<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
                   	{% csrf_token %}
+		  		<input type="hidden" name="ID" value="{{ID}}">
                   		<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
                   		<button name="action" value="delete" class="btn bordered-hover"><span class="fa fa-trash-o"></span></button>
                     </form>
