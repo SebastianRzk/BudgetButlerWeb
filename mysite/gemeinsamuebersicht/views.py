@@ -16,6 +16,7 @@ def _handle_request(request):
 
     context = viewcore.generate_base_context('gemeinsameuebersicht')
     context['ausgaben'] = ausgaben_liste
+    context['transaction_key'] = 'requested'
     return context
 
 # Create your views here.

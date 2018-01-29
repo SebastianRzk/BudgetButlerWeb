@@ -1,141 +1,121 @@
-	{% load static %}
-	<div class="row">
-		<!-- left column -->
-		<div class="col-md-6">
-			<!-- general form elements -->
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">{{element_titel}}</h3>
-				</div>
-				<!-- /.box-header -->
-				<!-- form start -->
-				<form role="form" action="/addeinzelbuchung/" method="post">{% csrf_token %}
+{% load static %}
+<div class="row">
+	<div class="col-md-6">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">{{element_titel}}</h3>
+			</div>
+			<form role="form" action="/addeinzelbuchung/" method="post">{% csrf_token %}
 				<input type="hidden" name="ID" value="{{ID}}">
-					<div class="box-body">
-						<div class="form-group">
-							<label>Datum:</label>
-							<div class="input-group">
-								<div class="input-group-addon">
-									<span class="fa fa-calendar"></span>
-								</div>
-								<input value="{{default_item.Datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask />
+				<div class="box-body">
+					<div class="form-group">
+						<label>Datum:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<span class="fa fa-calendar"></span>
 							</div>
+							<input value="{{default_item.Datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask />
 						</div>
-						<div class="form-group">
-							<label>Name der Ausgabe</label> <input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
-						</div>
-						<div class="form-group">
-							<label>Wert der Ausgabe</label> <input value="{{default_item.Wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
-						</div>
+					</div>
+					<div class="form-group">
+						<label>Name der Ausgabe</label>
+						<input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
+					</div>
+					<div class="form-group">
+						<label>Wert der Ausgabe</label>
+						<input value="{{default_item.Wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
+					</div>
+					{% if bearbeitungsmodus %}
+					<input type="hidden" name="edit_index" value="{{default_item.index}}">
+					{% endif %}
+					<div class="form-group">
+						<label>Kategorie</label>
+						<select value="{{default_item.Kategorie}}" class="form-control" id="kategorie_auswahl" name="kategorie">
+							{% for kategorie in kategorien %}
+							<option>{{kategorie}}</option>
+							{% endfor %}
+						</select>
 						{% if bearbeitungsmodus %}
-							<input type="hidden" name="edit_index" value="{{default_item.index}}">
+						<script type="text/javascript">
+							function SelectElement()
+								{
+									var element = document.getElementById('kategorie_auswahl');
+									element.value = "{{default_item.Kategorie}}";
+								}
+								SelectElement()
+						</script>
 						{% endif %}
-						<div class="form-group">
-							<label>Kategorie</label> <select value="{{default_item.Kategorie}}" class="form-control" id="kategorie_auswahl" name="kategorie">
-							 {% for kategorie in kategorien %}
-								<option>{{kategorie}}</option>
-							 {% endfor %}
-							</select>
-							
-							{% if bearbeitungsmodus %}
-								<script type="text/javascript">
-									function SelectElement()
-										{
-											var element = document.getElementById('kategorie_auswahl');
-											element.value = "{{default_item.Kategorie}}";
-										}
-										SelectElement()
-								</script>
-							{% endif %}
-							
-						</div>
-
-
-					</div>
-					<!-- /.box-body -->
-
-					<div class="box-footer">
-						<button type="submit" name="action" value="add" id="add" class="btn bordered-hover">{{approve_title}}</button>
-					</div>
-				</form>
-			</div>
-			<!-- /.box -->
-		</div>
-		<!--/.col (right) -->
-		<div class="col-md-6">
-			<!-- general form elements -->
-			<div class="box collapsed-box">
-				<div class="box-header">
-					<h3 class="box-title">Neue Kategorie</h3>
-					<div class="box-tools pull-right">
-						<button class="btn btn-box-tool" data-widget="collapse" id="open_add_kategorie"><span class="fa fa-plus"></span></button>
 					</div>
 				</div>
-				<!-- /.box-header -->
-				<!-- form start -->
-				<form role="form" action="/configuration/" method="post">{% csrf_token %}
-					<div class="box-body">
-						<div class="form-group">
-							<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
-						</div>
-						</div>
-					<div class="box-footer">
-						<input type="hidden" name="redirect" value="addeinzelbuchung">
-						<button type="submit" name="action" value="add_kategorie" id="add_kategorie" class="btn bordered-hover">Daten aktualisieren</button>
-					</div>
-				</form>
-			</div>
-			<!-- /.box -->
+				<div class="box-footer">
+					<button type="submit" name="action" value="add" id="add" class="btn bordered-hover">{{approve_title}}</button>
+				</div>
+			</form>
 		</div>
 	</div>
-	<!-- /.row -->
-	<div class="row">
-    <div class="col-md-12">
-      <!-- Tabelle letzte Buchungen -->
-      <div class="box">
-        <div class="box-header with-border">
-          <h3 class="box-title">Letzte Erfassungen</h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
-          </div>
-        </div><!-- /.box-header -->
-        <div class="box-body">
-          <div class="table-responsive">
-            <table class="table no-margin" id="letzte_erfassungen">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Datum</th>
-                  <th>Name</th>
-                  <th>Kategorie</th>
-                  <th class="table-wert">Wert</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for ausgabe in letzte_erfassung %}
-                <tr>
-                  <td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
-                  <td>{{ausgabe.datum}}</td>
-                  <td>{{ausgabe.name}}</td>
-                  <td>{{ausgabe.kategorie}}</td>
-                  <td class="table-wert">{{ausgabe.wert}}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div><!-- /.table-responsive -->
-        </div><!-- /.box-body -->
-        <div class="box-footer clearfix">
-           <a href="/uebersicht/" class="btn btn-light pull-right">Alle Buchungen ansehen</a>
-        </div><!-- /.box-footer -->
-      </div><!-- /.box -->
-    </div><!-- /.col -->
-  </div><!-- /.row -->
+	<div class="col-md-6">
+		<div class="box collapsed-box">
+			<div class="box-header">
+				<h3 class="box-title">Neue Kategorie</h3>
+				<div class="box-tools pull-right">
+					<button class="btn btn-box-tool" data-widget="collapse" id="open_add_kategorie"><span class="fa fa-plus"></span></button>
+				</div>
+			</div>
+			<form role="form" action="/configuration/" method="post">{% csrf_token %}
+				<div class="box-body">
+					<div class="form-group">
+						<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label>
+						<input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
+					</div>
+				</div>
+				<div class="box-footer">
+					<input type="hidden" name="redirect" value="addeinzelbuchung">
+					<button type="submit" name="action" value="add_kategorie" id="add_kategorie" class="btn bordered-hover">Daten aktualisieren</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Letzte Erfassungen</h3>
+			</div>
+			<div class="box-body">
+				<div class="table-responsive">
+					<table class="table no-margin" id="letzte_erfassungen">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Datum</th>
+								<th>Name</th>
+								<th>Kategorie</th>
+								<th class="table-wert">Wert</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for ausgabe in letzte_erfassung %}
+							<tr>
+								<td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
+								<td>{{ausgabe.datum}}</td>
+								<td>{{ausgabe.name}}</td>
+								<td>{{ausgabe.kategorie}}</td>
+								<td class="table-wert">{{ausgabe.wert}}</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="box-footer clearfix">
+				<a href="/uebersicht/" class="btn btn-light pull-right">Alle Buchungen ansehen</a>
+			</div>
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
-      $(function () {
-    	  //Datemask dd/mm/yyyy
-          $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-          //Money Euro
-          $("[data-mask]").inputmask();
-      });
-    </script>
+	$(function () {
+		$("[data-mask]").inputmask();
+	});
+</script>

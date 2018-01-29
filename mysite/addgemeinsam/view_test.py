@@ -197,6 +197,3 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('5.1.2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson2'
 
-
-if __name__ == '__main__':
-    unittest.main()

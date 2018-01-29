@@ -1,119 +1,81 @@
-  <div class="row">
-    <div class="col-md-6">
-      <!-- Tabelle letzte Buchungen -->
-      <div class="box">
-        <div class="box-header with-border">
-          <h3 class="box-title">Ausgaben pro Person</h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
-          </div>
-        </div><!-- /.box-header -->
-        <div class="box-body">
-          <div class="table-responsive">
-            <table class="table no-margin">
-              <thead>
-                <tr>
-                  <th>Person</th>
-                  <th>Ausgegeben</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Maureen</td>
-                  <td>{{ausgabe_maureen}}</td>
-                </tr>
-                <tr>
-                  <td>Sebastian</td>
-                  <td>{{ausgabe_sebastian}}</td>
-                </tr>
-              </tbody>
-			<tfooter>
-				<tr>
-                  <td>Gesamt</td>
-                  <td>{{ausgabe_gesamt}}</td>
-                </tr>
-			</tfooter>
-            </table>
-          </div><!-- /.table-responsive -->
-        </div><!-- /.box-body -->
-      </div><!-- /.box -->
-    </div><!-- /.col -->
-    
-  <div class='row'>
-            <div class='col-md-6'>
-              <div class="box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Ausgaben nach Person</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
-                  </div>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="chart-responsive">
-                        <canvas id="zusammenfassungPie" height="200"></canvas>
-                         <script> 
-							   var pieData = {
-								  labels:["Sebastian","Maureen"],
-								  datasets: [
-								        {
-								            data: [{{ausgabe_sebastian}},{{ausgabe_maureen}}],
-								            backgroundColor: ['#00a65a','#f56954'],
-								        }],
-							   };
-							   var canvas = document.getElementById("zusammenfassungPie");
-						       var myLineChart = new Chart(canvas, {
-						       	type: 'pie',
-						           data: pieData,
-						           options: {
-						           	responsive: true,
-						           	maintainAspectRatio: false,
-						       }});
-							   
-						   </script>
-                      </div><!-- ./chart-responsive -->
-                    </div><!-- /.col -->
-                    <div class="col-md-4">
-                        <ul class="chart-legend clearfix">
-                        <li><span class="fa fa-circle-o text-red"></span> Maureen </li>
-                        <li><span class="fa fa-circle-o text-green"></span> Sebastian </li>
-                      </ul>
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-           </div>
-  </div><!-- /.row -->
-  
-  <div class="row">
-    <div class="col-md-6">
-      <!-- Tabelle letzte Buchungen -->
-      <div class="box">
-        <div class="box-header with-border">
-          <h3 class="box-title">Ergebnis</h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
-          </div>
-        </div><!-- /.box-header -->
-        <div class="box-body">
-          <div class="table-responsive">
-            <table class="table no-margin">
-              <thead>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{ergebnis}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div><!-- /.table-responsive -->
-        </div><!-- /.box-body -->
-        <div class="box-footer clearfix">
-          <a href="/abrechnen" class="btn bordered-hover pull-left">Jetzt Abrechnen!</a>
-        </div><!-- /.box-footer -->
-      </div><!-- /.box -->
-    </div><!-- /.col -->
-    
+<div class="row">
+	<div class="col-md-6">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Ausgaben pro Person</h3>
+			</div><!-- /.box-header -->
+			<div class="box-body">
+				<div class="table-responsive">
+					<table class="table no-margin">
+						<thead>
+							<tr>
+								<th>Person</th>
+								<th>Ausgegeben</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{partnername}}</td>
+								<td>{{ausgabe_maureen}}</td>
+							</tr>
+							<tr>
+								<td>{{myname}}</td>
+								<td>{{ausgabe_sebastian}}</td>
+							</tr>
+						</tbody>
+						<tfooter>
+							<tr>
+								<td>Gesamt</td>
+								<td>{{ausgabe_gesamt}}</td>
+							</tr>
+						</tfooter>
+					</table>
+				</div><!-- /.table-responsive -->
+			</div><!-- /.box-body -->
+		</div><!-- /.box -->
+	</div><!-- /.col -->
+
+	<div class='col-md-3'>
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Ausgaben nach Person</h3>
+			</div><!-- /.box-header -->
+			<div class="box-body">
+				<div class="chart-responsive">
+					<canvas id="zusammenfassungPie" height="200"></canvas>
+					<script>
+						var pieData = {
+						labels:["{{myname}}","{{partnername}}"],
+						datasets: [
+						{
+						data: [{{ausgabe_sebastian}},{{ausgabe_maureen}}],
+						backgroundColor: ['#00a65a','#f56954'],
+						}],
+						};
+						var canvas = document.getElementById("zusammenfassungPie");
+						var myLineChart = new Chart(canvas, {
+						type: 'pie',
+						data: pieData,
+						options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						}});
+					</script>
+				</div><!-- ./chart-responsive -->
+			</div><!-- /.box-body -->
+		</div><!-- /.box -->
+	</div><!-- /.col -->
+	<div class="col-md-6">
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Ergebnis</h3>
+			</div><!-- /.box-header -->
+			<div class="box-body">
+				{{ergebnis}}
+			</div><!-- /.box-body -->
+			<div class="box-footer clearfix">
+			  <a href="/abrechnen" class="btn bordered-hover pull-left">Jetzt Abrechnen!</a>
+			</div><!-- /.box-footer -->
+		</div><!-- /.box -->
+	</div><!-- /.col -->
  </div> <!--  row ende -->

@@ -68,5 +68,3 @@ class TestKonfiguration(unittest.TestCase):
 
         assert set(database_partners) == set(['testpartner_renamed'])
 
-if __name__ == '__main__':
-    unittest.main()

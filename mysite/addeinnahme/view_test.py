@@ -179,6 +179,3 @@ class TestAddEinnahmeView(unittest.TestCase):
         assert result['edit_index'] == 0
         assert result['default_item']['Name'] == "testname"
         assert result['default_item']['Wert'] == "2,34"
-
-if __name__ == '__main__':
-    unittest.main()

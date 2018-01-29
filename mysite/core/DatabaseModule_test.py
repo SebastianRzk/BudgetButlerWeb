@@ -125,5 +125,3 @@ class refresh(unittest.TestCase):
 
         assert len(component_under_test.einzelbuchungen.content) == 3
 
-if __name__ == '__main__':
-    unittest.main()

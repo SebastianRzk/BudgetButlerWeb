@@ -33,6 +33,8 @@ def _handle_request(_):
     context['ausgabe_sebastian'] = "%.2f" % abs(ausgabe_sebastian)
     context['ausgabe_gesamt'] = "%.2f" % abs(ausgabe_gesamt)
     context['ergebnis'] = ergebnis
+    context['myname'] = name_self
+    context['partnername'] = name_partner
     return context
 
 def index(request):

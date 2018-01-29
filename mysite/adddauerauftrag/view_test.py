@@ -272,6 +272,3 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Startdatum[0] == datum("2.1.2017")
         assert testdb.dauerauftraege.content.Endedatum[0] == datum("5.1.2017")
 
-
-if __name__ == '__main__':
-    unittest.main()
