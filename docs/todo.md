@@ -1,8 +1,8 @@
 # Things todo
 
-[Hauptsiete][index.md]
-[Screenshots][screenshots.md]
-[TODOs][todo.md]
+*[Hauptsiete](index.md)
+*[Screenshots](screenshots.md)
+*[TODOs](todo.md)
 
 ## TODO for first release candidate
 
