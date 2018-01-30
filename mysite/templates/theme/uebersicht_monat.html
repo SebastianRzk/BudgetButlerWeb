@@ -15,7 +15,7 @@
                 {% endfor %}
               </select>
             </div>
-          </div><!-- /.box-body -->
+          </div>
           <script type="text/javascript">
             function SelectElement()
               {    
@@ -28,9 +28,9 @@
             <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
           </div>
         </form>
-      </div><!-- /.box -->
-    </div>
-  </div>
+		</div>
+	</div>
+</div>
 
 <div class="row">
   <div class="col-md-12">
@@ -131,20 +131,17 @@
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Ausgaben</h3>
-        <div class="box-tools pull-right">
-          <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
-        </div>
-      </div><!-- /.box-header -->
+      </div>
       <div class="box-body">
         <div class="row">
           <div class="col-md-12">
             <div class="chart-responsive">
               <canvas id="zusammenfassungPie" height="400"></canvas>
             </div>
-          </div><!-- /.row -->
-        </div><!-- /.box-body -->
-      </div><!-- /.box -->
-    </div><!-- /.col -->
+          </div>
+        </div>
+      </div>
+    </div>
     <script> 
       var pieData = {
         labels:{{ausgaben_labels|safe}},
@@ -168,20 +165,17 @@
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Einnahmen</h3>
-        <div class="box-tools pull-right">
-          <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
-        </div>
       </div><!-- /.box-header -->
       <div class="box-body">
         <div class="row">
           <div class="col-md-12">
             <div class="chart-responsive">
               <canvas id="zusammenfassungEinnahmenPie" height="400"></canvas>
-            </div><!-- ./chart-responsive -->
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.box-body -->
-    </div><!-- /.box -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script> 
       var pieData = {
         labels:{{einnahmen_labels|safe}},
@@ -198,8 +192,8 @@
         responsive: true,
         maintainAspectRatio: false,
        }});
-    </script>                     
-  </div><!-- /.col -->
+    </script>
+  </div>
 </div>
 
 <div class="row">
@@ -210,7 +204,7 @@
         <div class="box-tools pull-right">
           <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
         </div>
-      </div><!-- /.box-header -->
+      </div>
       <div class="box-body">
         <div class="table-responsive">
           <table class="table no-margin">
@@ -235,10 +229,10 @@
               </tfooter>
             </tbody>
           </table>
-        </div><!-- /.table-responsive -->
-      </div><!-- /.box-body -->
-    </div><!-- /.box -->
-  </div><!-- /.col -->
+        </div>
+      </div>
+    </div>
+  </div>
   
   <div class="col-md-6">
     <div class="box">
@@ -247,7 +241,7 @@
         <div class="box-tools pull-right">
           <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
         </div>
-      </div><!-- /.box-header -->
+      </div>
       <div class="box-body">
         <div class="table-responsive">
           <table class="table no-margin">
@@ -272,13 +266,11 @@
               </tfooter>
             </tbody>
           </table>
-        </div><!-- /.table-responsive -->
-      </div><!-- /.box-body -->
-    </div><!-- /.box -->
-  </div><!-- /.col -->
-</div><!-- /.row -->
-  
-  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% for tag in zusammenfassung %}
 <div class="row">
   <div class="col-md-12">
@@ -288,7 +280,7 @@
         <div class="box-tools pull-right">
           <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
         </div>
-      </div><!-- /.box-header -->
+      </div>
       <div class="box-body">
         <div class="table-responsive">
           <table class="table no-margin">
@@ -309,10 +301,10 @@
               {% endfor %}
             </tbody>
           </table>
-        </div><!-- /.table-responsive -->
-      </div><!-- /.box-body -->
-    </div><!-- /.box -->
-  </div><!-- /.col -->
-</div><!-- /.row -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endfor %}
 

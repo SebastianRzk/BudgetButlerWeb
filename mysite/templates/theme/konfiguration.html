@@ -1,74 +1,57 @@
-	{% load static %}
-	<div class="row">
-		<!-- left column -->
-		<div class="col-md-6">
-			<!-- general form elements -->
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">Einstellungen</h3>
-				</div>
-				<!-- /.box-header -->
-				<!-- form start -->
-				<form role="form" action="/configuration/" method="post">{% csrf_token %}
-					<div class="box-body">
-						<div class="form-group">
-							<label>Installierte Datenbanken (nur mit einem Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
-						</div>
-						</div>
-					<div class="box-footer">
-						<input type="hidden" name="ID" value="{{ID}}">
-						<button type="submit" name="action" value="edit_databases" class="btn bordered-hover">Daten aktualisieren</button>
-					</div>
-				</form>
+{% load static %}
+<div class="row">
+	<div class="col-md-6">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">Einstellungen</h3>
 			</div>
-			<!-- /.box -->
-		</div>
-		<!--/.col (right) -->
-		
-		<div class="row">
-		<!-- left column -->
-		<div class="col-md-6">
-			<!-- general form elements -->
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">Einstellungen</h3>
-				</div>
-				<!-- /.box-header -->
-				<!-- form start -->
-				<form role="form" action="/configuration/" method="post">{% csrf_token %}
-					<div class="box-body">
-						<div class="form-group">
-							<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
-						</div>
-						</div>
-					<div class="box-footer">
-						<input type="hidden" name="ID" value="{{ID}}">
-						<button type="submit" name="action" value="add_kategorie" id="add_kategorie" class="btn bordered-hover">Daten aktualisieren</button>
+			<form role="form" action="/configuration/" method="post">{% csrf_token %}
+				<div class="box-body">
+					<div class="form-group">
+						<label>Installierte Datenbanken (nur mit einem Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
 					</div>
-				</form>
-			</div>
-			<!-- /.box -->
-		</div>
-		<div class="col-md-6">
-			<!-- general form elements -->
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">Partnername</h3>
-				</div>
-				<!-- /.box-header -->
-				<!-- form start -->
-				<form role="form" action="/configuration/" method="post">{% csrf_token %}
-					<div class="box-body">
-						<div class="form-group">
-							<label>Name des Partners ändern</label> <input type="text" name="partnername" class="form-control" value="{{partnername}}" placeholder="Enter ..." />
-						</div>
-						</div>
-					<div class="box-footer">
-						<input type="hidden" name="ID" value="{{ID}}">
-						<button type="submit" name="action" value="set_partnername" id="set_partnername" class="btn bordered-hover">Daten aktualisieren</button>
 					</div>
-				</form>
-			</div>
-			<!-- /.box -->
+				<div class="box-footer">
+					<input type="hidden" name="ID" value="{{ID}}">
+					<button type="submit" name="action" value="edit_databases" class="btn bordered-hover">Daten aktualisieren</button>
+				</div>
+			</form>
 		</div>
-		<!--/.col (right) -->
+	</div>
+	<div class="col-md-6">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">Einstellungen</h3>
+			</div>
+			<form role="form" action="/configuration/" method="post">{% csrf_token %}
+				<div class="box-body">
+					<div class="form-group">
+						<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
+					</div>
+					</div>
+				<div class="box-footer">
+					<input type="hidden" name="ID" value="{{ID}}">
+					<button type="submit" name="action" value="add_kategorie" id="add_kategorie" class="btn bordered-hover">Daten aktualisieren</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">Partnername</h3>
+			</div>
+			<form role="form" action="/configuration/" method="post">{% csrf_token %}
+				<div class="box-body">
+					<div class="form-group">
+						<label>Name des Partners ändern</label> <input type="text" name="partnername" class="form-control" value="{{partnername}}" placeholder="Enter ..." />
+					</div>
+					</div>
+				<div class="box-footer">
+					<input type="hidden" name="ID" value="{{ID}}">
+					<button type="submit" name="action" value="set_partnername" id="set_partnername" class="btn bordered-hover">Daten aktualisieren</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
