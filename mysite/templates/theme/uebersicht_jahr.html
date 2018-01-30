@@ -1,7 +1,5 @@
 <div class="row">
-	<!-- left column -->
 	<div class="col-md-12">
-		<!-- general form elements -->
 		<div class="box">
 			<form role="form" action="/jahresuebersicht/" method="post">
 				{% csrf_token %} <input type="hidden" name="mode" value="change_month">
@@ -12,7 +10,6 @@
 						</select>
 					</div>
 				</div>
-				<!-- /.box-body -->
 				<script type="text/javascript">
 
 				function SelectElement()
@@ -22,13 +19,11 @@
 				}
 				SelectElement()
 				</script>
-
 				<div class="box-footer">
 					<button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
 				</div>
 			</form>
 		</div>
-		<!-- /.box -->
 	</div>
 </div>
 <div class="row">
@@ -111,7 +106,6 @@ window.onload = function() {
 			</script>
 		</div>
 	</div>
-	<!-- /.col -->
 </div>
 
 <div class="row">
@@ -145,9 +139,7 @@ window.onload = function() {
 					}});
 			</script>
 		</div>
-
 	</div>
-	<!-- /.col -->
 </div>
 <div class="row">
 	<div class="col-md-12">
@@ -182,11 +174,9 @@ window.onload = function() {
 		</div>
 
 	</div>
-	<!-- /.col -->
 </div>
 <div class="row">
 	<div class="col-md-6">
-		<!-- Tabelle letzte Buchungen -->
 		<div class="box">
 			<div class="box-header with-border">
 				<h3 class="box-title">Ausgaben</h3>
@@ -196,7 +186,6 @@ window.onload = function() {
 					</button>
 				</div>
 			</div>
-			<!-- /.box-header -->
 			<div class="box-body">
 				<form role="form" action="/jahresuebersicht/" method="post">
 					{% csrf_token %} <input type="hidden" name="mode" value="change_selected"> <input type="hidden" name="date"
@@ -230,16 +219,12 @@ window.onload = function() {
 							</tbody>
 						</table>
 					</div>
-					<!-- /.table-responsive -->
 				</form>
 			</div>
-			<!-- /.box-body -->
 		</div>
-		<!-- /.box -->
 	</div>
 
 	<div class="col-md-6">
-		<!-- Tabelle letzte Buchungen -->
 		<div class="box">
 			<div class="box-header with-border">
 				<h3 class="box-title">Einnahmen</h3>
@@ -249,7 +234,6 @@ window.onload = function() {
 					</button>
 				</div>
 			</div>
-			<!-- /.box-header -->
 			<div class="box-body">
 					<div class="table-responsive">
 						<table class="table no-margin">
@@ -276,81 +260,75 @@ window.onload = function() {
 						</table>
 					</div>
 			</div>
-			<!-- /.box-body -->
 		</div>
-		<!-- /.box -->
 	</div>
-
-
 </div>
-<!-- /.row -->
 <div class='row'>
-  <div class='col-md-6'>
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">Ausgaben {{selected_date}} Prozentual</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="chart-responsive">
-              <canvas id="zusammenfassungPieProzentualAusgaben" height="400"></canvas>
-            </div>
-          </div>
-        </div>
-      </div><!-- /.box -->
-      <script> 
-           var pieData = {
-             labels:{{pie_ausgaben_labels|safe}},
-             datasets: [{
-               data: {{pie_ausgaben_data_prozentual|safe}},
-               backgroundColor: {{pie_ausgaben_colors|safe}},
-             }],
-           };
-           var canvas = document.getElementById("zusammenfassungPieProzentualAusgaben");
-           new Chart(canvas, {
-             type: 'pie',
-             data: pieData,
-             options: {
-               responsive: true,
-               maintainAspectRatio: false,
-           }});
-      </script>
-    </div>
-  </div><!-- /.col -->  
-
-  <div class='col-md-6'>
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">Einnahmen {{selected_date}} Prozentual</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="chart-responsive">
-              <canvas id="zusammenfassungPieProzentualEinnahmen" height="400"></canvas>
-            </div>
-          </div>
-        </div>
-      </div><!-- /.box -->
-      <script> 
-           var pieData = {
-             labels:{{pie_einnahmen_labels|safe}},
-             datasets: [{
-               data: {{pie_einnahmen_data_prozentual|safe}},
-               backgroundColor: {{pie_einnahmen_colors|safe}},
-             }],
-           };
-           var canvas = document.getElementById("zusammenfassungPieProzentualEinnahmen");
-           new Chart(canvas, {
-             type: 'pie',
-             data: pieData,
-             options: {
-               responsive: true,
-               maintainAspectRatio: false,
-           }});
-      </script>
-    </div>
-  </div><!-- /.col -->  
+	<div class='col-md-6'>
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Ausgaben {{selected_date}} Prozentual</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="chart-responsive">
+							<canvas id="zusammenfassungPieProzentualAusgaben" height="400"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				var pieData = {
+				labels:{{pie_ausgaben_labels|safe}},
+				datasets: [{
+				data: {{pie_ausgaben_data_prozentual|safe}},
+				backgroundColor: {{pie_ausgaben_colors|safe}},
+				}],
+				};
+				var canvas = document.getElementById("zusammenfassungPieProzentualAusgaben");
+				new Chart(canvas, {
+				type: 'pie',
+				data: pieData,
+				options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				}});
+			</script>
+		</div>
+	</div>
+	<div class='col-md-6'>
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Einnahmen {{selected_date}} Prozentual</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="chart-responsive">
+							<canvas id="zusammenfassungPieProzentualEinnahmen" height="400"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				var pieData = {
+				labels:{{pie_einnahmen_labels|safe}},
+				datasets: [{
+				data: {{pie_einnahmen_data_prozentual|safe}},
+				backgroundColor: {{pie_einnahmen_colors|safe}},
+				}],
+				};
+				var canvas = document.getElementById("zusammenfassungPieProzentualEinnahmen");
+				new Chart(canvas, {
+				type: 'pie',
+				data: pieData,
+				options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				}});
+			</script>
+		</div>
+	</div>
 </div>
 
