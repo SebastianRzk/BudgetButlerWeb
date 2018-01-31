@@ -793,19 +793,15 @@ a:focus {
   border-radius: 2px;
   margin-bottom: 15px;
 }
-.shortcut-icon {
-  border-top-left-radius: 2px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 2px;
+.shortcut-icon{
   display: block;
   float: left;
-  height: 40px;
-  width: 40px;
+  height: 38px;
+  width: 38px;
   text-align: center;
   vertical-align:middle;
-  font-size: 30px;
-  line-height: 40px;
+  font-size: 35px;
+  line-height: 32px;
   background: rgba(0, 0, 0, 0.2);
 }
 .shortcut-link{
