@@ -411,9 +411,7 @@ a:focus {
   font-size: 11px;
   font-weight: normal;
 }
-.user-panel > .info > a > .fa,
-.user-panel > .info > a > .ion,
-.user-panel > .info > a > .glyphicon {
+.user-panel > .info > a > .fa {
   margin-right: 3px;
 }
 .sidebar-menu {
@@ -430,9 +428,7 @@ a:focus {
   padding: 12px 5px 12px 15px;
   display: block;
 }
-.sidebar-menu > li > a > .fa,
-.sidebar-menu > li > a > .glyphicon,
-.sidebar-menu > li > a > .ion {
+.sidebar-menu > li > a > .fa{
   width: 20px;
 }
 .sidebar-menu > li .label,
@@ -478,9 +474,7 @@ a:focus {
   display: block;
   font-size: 14px;
 }
-.sidebar-menu .treeview-menu > li > a > .fa,
-.sidebar-menu .treeview-menu > li > a > .glyphicon,
-.sidebar-menu .treeview-menu > li > a > .ion {
+.sidebar-menu .treeview-menu > li > a > .fa{
   width: 20px;
 }
 .sidebar-menu .treeview-menu > li > a > .fa-angle-left,
@@ -588,17 +582,13 @@ a:focus {
   border-bottom: none;
 }
 .box-header > .fa,
-.box-header > .glyphicon,
-.box-header > .ion,
 .box-header .box-title {
   display: inline-block;
   font-size: 18px;
   margin: 0;
   line-height: 1;
 }
-.box-header > .fa,
-.box-header > .glyphicon,
-.box-header > .ion {
+.box-header > .fa{
   margin-right: 5px;
 }
 .box-header > .box-tools {
