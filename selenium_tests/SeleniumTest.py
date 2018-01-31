@@ -2,6 +2,7 @@ import pytest
 from selenium import webdriver
 import os
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.chrome.options import Options
 
 class SeleniumTestClass:
 
@@ -10,9 +11,12 @@ class SeleniumTestClass:
 
     def pytest_generate_tests(self, metafunc):
         if 'TRAVIS_INTEGRATION' in os.environ:
-            drivers = [self._to_param('PhantomJS', webdriver.PhantomJS)]
+            chrome_options = Options()
+            chrome_options.add_argument("--headless")
+            
+            drivers = [self._to_param('Chromium  headless',lambda: webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options))]
         else:
-            drivers = [self._to_param('Chrome', webdriver.Chrome)]
+            drivers = [self._to_param('Chromium', webdriver.Chrome)]
 
         metafunc.parametrize(argnames='driver_provider', argvalues=drivers, scope="module")
 

@@ -43,8 +43,7 @@ body {
  * ```.right-side has been deprecated as of v2.0 in favor of .content-wrapper  ```
  */
 .content-wrapper,
-.right-side,
-.main-footer {
+.right-side{
   -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
   -moz-transition: -moz-transform 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
   -o-transition: -o-transform 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
@@ -56,28 +55,22 @@ body {
   z-index: 820;
 }
 .layout-top-nav .content-wrapper,
-.layout-top-nav .right-side,
-.layout-top-nav .main-footer {
+.layout-top-nav .right-side{
   margin-left: 0;
 }
 @media (max-width: 767px) {
   .content-wrapper,
   .right-side,
-  .main-footer {
-    margin-left: 0;
-  }
 }
 @media (min-width: 768px) {
   .sidebar-collapse .content-wrapper,
-  .sidebar-collapse .right-side,
-  .sidebar-collapse .main-footer {
+  .sidebar-collapse .right-side {
     margin-left: 0;
   }
 }
 @media (max-width: 767px) {
   .sidebar-open .content-wrapper,
-  .sidebar-open .right-side,
-  .sidebar-open .main-footer {
+  .sidebar-open .right-side {
     -webkit-transform: translate(230px, 0);
     -ms-transform: translate(230px, 0);
     -o-transform: translate(230px, 0);
@@ -89,12 +82,6 @@ body {
   min-height: 100%;
   background-color: #ecf0f5;
   z-index: 800;
-}
-.main-footer {
-  background: #fff;
-  padding: 15px;
-  color: #444;
-  border-top: 1px solid #eee;
 }
 /* Fixed layout */
 .fixed .main-header,
@@ -424,9 +411,7 @@ a:focus {
   font-size: 11px;
   font-weight: normal;
 }
-.user-panel > .info > a > .fa,
-.user-panel > .info > a > .ion,
-.user-panel > .info > a > .glyphicon {
+.user-panel > .info > a > .fa {
   margin-right: 3px;
 }
 .sidebar-menu {
@@ -443,9 +428,7 @@ a:focus {
   padding: 12px 5px 12px 15px;
   display: block;
 }
-.sidebar-menu > li > a > .fa,
-.sidebar-menu > li > a > .glyphicon,
-.sidebar-menu > li > a > .ion {
+.sidebar-menu > li > a > .fa{
   width: 20px;
 }
 .sidebar-menu > li .label,
@@ -491,9 +474,7 @@ a:focus {
   display: block;
   font-size: 14px;
 }
-.sidebar-menu .treeview-menu > li > a > .fa,
-.sidebar-menu .treeview-menu > li > a > .glyphicon,
-.sidebar-menu .treeview-menu > li > a > .ion {
+.sidebar-menu .treeview-menu > li > a > .fa{
   width: 20px;
 }
 .sidebar-menu .treeview-menu > li > a > .fa-angle-left,
@@ -565,84 +546,6 @@ a:focus {
   padding-left: 0;
 }
 /*
- * Component: Small Box
- * --------------------
- */
-.small-box {
-  border-radius: 2px;
-  position: relative;
-  display: block;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-.small-box > .inner {
-  padding: 10px;
-}
-.small-box > .small-box-footer {
-  position: relative;
-  text-align: center;
-  padding: 3px 0;
-  color: #fff;
-  color: rgba(255, 255, 255, 0.8);
-  display: block;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.1);
-  text-decoration: none;
-}
-.small-box > .small-box-footer:hover {
-  color: #fff;
-  background: rgba(0, 0, 0, 0.15);
-}
-.small-box h3 {
-  font-size: 38px;
-  font-weight: bold;
-  margin: 0 0 10px 0;
-  white-space: nowrap;
-  padding: 0;
-}
-.small-box p {
-  font-size: 15px;
-}
-.small-box p > small {
-  display: block;
-  color: #f9f9f9;
-  font-size: 13px;
-  margin-top: 5px;
-}
-.small-box h3,
-.small-box p {
-  z-index: 5px;
-}
-.small-box .icon {
-  -webkit-transition: all 0.3s linear;
-  -o-transition: all 0.3s linear;
-  transition: all 0.3s linear;
-  position: absolute;
-  top: -10px;
-  right: 10px;
-  z-index: 0;
-  font-size: 90px;
-  color: rgba(0, 0, 0, 0.15);
-}
-.small-box:hover {
-  text-decoration: none;
-  color: #f9f9f9;
-}
-.small-box:hover .icon {
-  font-size: 95px;
-}
-@media (max-width: 767px) {
-  .small-box {
-    text-align: center;
-  }
-  .small-box .icon {
-    display: none;
-  }
-  .small-box p {
-    font-size: 12px;
-  }
-}
-/*
  * Component: Box
  * --------------
  */
@@ -679,17 +582,13 @@ a:focus {
   border-bottom: none;
 }
 .box-header > .fa,
-.box-header > .glyphicon,
-.box-header > .ion,
 .box-header .box-title {
   display: inline-block;
   font-size: 18px;
   margin: 0;
   line-height: 1;
 }
-.box-header > .fa,
-.box-header > .glyphicon,
-.box-header > .ion {
+.box-header > .fa{
   margin-right: 5px;
 }
 .box-header > .box-tools {
@@ -780,10 +679,6 @@ a:focus {
     margin-right: 10px;
   }
 }
-/*
- * Component: Info Box
- * -------------------
- */
 .shortcut-box {
   display: block;
   min-height: 40px;
@@ -793,44 +688,28 @@ a:focus {
   border-radius: 2px;
   margin-bottom: 15px;
 }
-.shortcut-icon {
-  border-top-left-radius: 2px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 2px;
+.shortcut-icon{
   display: block;
   float: left;
-  height: 40px;
-  width: 40px;
+  height: 38px;
+  width: 38px;
   text-align: center;
   vertical-align:middle;
-  font-size: 30px;
-  line-height: 40px;
+  font-size: 35px;
+  line-height: 32px;
   background: rgba(0, 0, 0, 0.2);
 }
+
+.shortcut-icon .fa{
+	margin: 2px;
+}
+
 .shortcut-link{
 	min-height: 40px;
 	font-size: 25px;
 	vertical-align:middle;
 	margin-top: 3px;
 	margin-left:3px;
-}
-.
-
-
-.progress-description,
-.info-box-text {
-  display: block;
-  font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.info-box-more {
-  display: block;
-}
-.progress-description {
-  margin: 0;
 }
 /*
  * Component: Button
