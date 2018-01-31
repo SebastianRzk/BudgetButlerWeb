@@ -5,7 +5,7 @@ install:
   - pip install -r integration-requirements.txt
   - pip install coveralls
   - pip install codecov
-  - sudo apt-get install chromium-browser
+  - sudo apt-get install chromium-browser chromium-chromedriver
 
 env:
   global:
