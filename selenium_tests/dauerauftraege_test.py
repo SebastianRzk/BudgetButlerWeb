@@ -44,6 +44,7 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_id('item_2_startdatum').get_attribute('innerHTML') == 'Jan. 1, 2012'
         assert driver.find_element_by_id('item_2_endedatum').get_attribute('innerHTML') == 'Feb. 2, 2012'
         assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
+        driver.close()
 
 
     def teste_edit_vorbelegung_ausgabe(self, driver_provider):
