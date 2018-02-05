@@ -1,13 +1,12 @@
 from viewcore import viewcore
+from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 
 def _handle_request(request):
-    if request.method == "POST":
-        if "action" in request.POST:
-            if request.POST['action'] == "delete":
-                print("Delete: ", request.POST['delete_index'])
-                viewcore.database_instance().gemeinsamebuchungen.delete(int(request.POST['delete_index']))
-                viewcore.save_refresh()
+    if post_action_is(request, 'delete'):
+        print("Delete: ", request.POST['delete_index'])
+        viewcore.database_instance().gemeinsamebuchungen.delete(int(request.POST['delete_index']))
+        viewcore.save_refresh()
 
     ausgaben_liste = []
     data = viewcore.database_instance().gemeinsamebuchungen.content.sort_values(by='Datum')

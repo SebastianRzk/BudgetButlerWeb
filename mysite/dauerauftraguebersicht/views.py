@@ -1,12 +1,12 @@
 
 from viewcore import viewcore
+from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 
 def _handle_request(request):
     dauerauftraege = viewcore.database_instance().dauerauftraege
-    if request.method == "POST":
-        if "action" in request.POST:
-            if request.POST['action'] == "delete":
+
+    if post_action_is(request, 'delete'):
                 print("Delete: ", request.POST['delete_index'])
                 dauerauftraege.delete(int(request.POST['delete_index']))
                 viewcore.save_refresh()

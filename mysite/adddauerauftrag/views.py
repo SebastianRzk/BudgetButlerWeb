@@ -1,5 +1,6 @@
 
 from viewcore import viewcore
+from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 from viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german
 
@@ -50,7 +51,7 @@ def handle_request(request):
     context = viewcore.generate_base_context('adddauerauftrag')
     context['approve_title'] = 'Dauerauftrag hinzufügen'
 
-    if request.method == 'POST' and request.POST['action'] == 'edit':
+    if post_action_is(request, 'edit'):
         db_index = int(request.POST['edit_index'])
         default_item = viewcore.database_instance().dauerauftraege.get(db_index)
         default_item['Startdatum'] = datum_to_string(default_item['Startdatum'])
