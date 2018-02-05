@@ -72,9 +72,10 @@ class TestHeadlines(SeleniumTestClass):
         driver = driver_provider()
         driver.get('http://localhost:8000/jahresuebersicht/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Jahresübersicht'
+        driver.close()
 
     def test_monatsuebersicht(self, driver_provider):
         driver = driver_provider()
         driver.get('http://localhost:8000/monatsuebersicht/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Monatsübersicht'
-
+        driver.close()
