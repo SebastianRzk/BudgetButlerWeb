@@ -180,3 +180,10 @@ def design_colors():
     colors[14] = ("222222")
     colors[15] = ("d2d6de")
     return colors
+
+def post_action_is(request, action_name):
+    if request.method != 'POST':
+        return False
+    if 'action' not in request.POST:
+        return False
+    return request.POST['action'] == action_name

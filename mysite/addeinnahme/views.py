@@ -1,5 +1,6 @@
 
 from viewcore import viewcore
+from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 from viewcore.converter import datum, dezimal_float, from_double_to_german
 from viewcore.converter import datum_to_string
@@ -13,7 +14,6 @@ def handle_request(request):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
 
     if request.method == 'POST' and request.POST['action'] == 'add':
-        print(request.POST)
         if 'edit_index' in request.POST:
             einzelbuchungen.edit(
                 int(request.POST['edit_index']),
@@ -46,7 +46,7 @@ def handle_request(request):
                     })
         viewcore.save_database()
 
-    if request.method == 'POST' and request.POST['action'] == 'edit':
+    if post_action_is(request, 'edit'):
         print('Please edit:', request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
         selected_item = einzelbuchungen.get(db_index)

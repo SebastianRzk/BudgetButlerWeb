@@ -1,16 +1,15 @@
 
 
 from viewcore import request_handler
+from viewcore.viewcore import post_action_is
 from viewcore import viewcore
 
 def _handle_request(request):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    if request.method == "POST":
-        if "action" in request.POST:
-            if request.POST['action'] == "delete":
-                print("Delete: ", request.POST['delete_index'])
-                einzelbuchungen.delete(int(request.POST['delete_index']))
-                viewcore.save_refresh()
+    if post_action_is(request, 'delete'):
+        print("Delete: ", request.POST['delete_index'])
+        einzelbuchungen.delete(int(request.POST['delete_index']))
+        viewcore.save_refresh()
 
     db = einzelbuchungen.get_all()
     ausgaben_monatlich = {}

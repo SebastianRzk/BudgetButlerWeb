@@ -3,6 +3,7 @@ from selenium import webdriver
 import os
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.chrome.options import Options
+import time
 
 class SeleniumTestClass:
 
@@ -13,14 +14,16 @@ class SeleniumTestClass:
         if 'TRAVIS_INTEGRATION' in os.environ:
             chrome_options = Options()
             chrome_options.add_argument("--headless")
-            
-            drivers = [self._to_param('Chromium  headless',lambda: webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options))]
+
+            drivers = [self._to_param('Chromium  headless',lambda: _launch_headles_chromium(chrome_options))]
         else:
             drivers = [self._to_param('Chromium', webdriver.Chrome)]
 
         metafunc.parametrize(argnames='driver_provider', argvalues=drivers, scope="module")
 
-
+def _launch_headles_chromium(chrome_options):
+    time.sleep(1) # Sleep 1 sec to avoid mem problems on travis
+    return webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options)
 
 def enter_test_mode(driver):
     driver.get('http://localhost:8000/production/testmode')

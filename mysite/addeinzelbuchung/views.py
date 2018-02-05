@@ -1,5 +1,6 @@
 
 from viewcore import viewcore
+from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 from viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german
@@ -47,7 +48,7 @@ def handle_request(request):
 
 
         viewcore.save_database()
-    if request.method == 'POST' and request.POST['action'] == 'edit':
+    if post_action_is(request, 'edit'):
         print('Please edit:', request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
 

@@ -1,12 +1,10 @@
-
-
 import datetime
-
 from django.http.response import HttpResponse
 import pandas
 
 import addgemeinsam
 from viewcore import viewcore
+from viewcore.viewcore import post_action_is
 from viewcore.converter import from_double_to_german, datum, datum_to_string
 from viewcore import request_handler
 
@@ -52,7 +50,7 @@ def handle_request(request):
     print(viewcore.database_instance().einzelbuchungen)
     context = viewcore.generate_base_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
-    if request.method == "POST" and request.POST['action'] == 'edit':
+    if post_action_is(request, 'edit'):
         print("Please edit:", request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
         db_row = viewcore.database_instance().gemeinsamebuchungen.content.iloc[db_index]
@@ -63,7 +61,6 @@ def handle_request(request):
             'kategorie': db_row.Kategorie,
             'person': db_row.Person
         }
-
 
         context['default_item'] = default_item
         context['bearbeitungsmodus'] = True
