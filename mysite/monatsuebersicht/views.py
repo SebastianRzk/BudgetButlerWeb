@@ -136,6 +136,7 @@ def _abrechnen(request):
 
     print(zusammenfassung)
     generator  = ReportGenerator('Monatsübersicht für '+str(month) + '/' + str(year))
+    print(compiled_zusammenfassung)
     generator.add_half_line_elements(compiled_zusammenfassung)
 
     page = ''

@@ -81,3 +81,26 @@ class ReportGenerator_test(unittest.TestCase):
             '--------------------------------------------------------------------------------',
             '                                                                       Blatt 1/1',
             '','']
+
+    def test_generate_page_with_no_data_should_generate_empty_page(self):
+        generator = ReportGenerator('SamplePage', 10)
+
+        data = {'Einnahmen': {},
+                'Ausgaben': {}
+                }
+        generator.add_half_line_elements(data)
+        result = generator.generate_pages()
+        print(result)
+
+        assert result == [
+            'SamplePage                                                                      ',
+            '--------------------------------------------------------------------------------',
+            'Einnahmen                                                                       ',
+            'Ausgaben                                                                        ',
+            '                                                                                ',
+            '                                                                                ',
+            '                                                                                ',
+            '                                                                                ',
+            '--------------------------------------------------------------------------------',
+            '                                                                       Blatt 1/1',
+            '','']

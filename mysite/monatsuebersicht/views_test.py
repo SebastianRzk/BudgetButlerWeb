@@ -15,11 +15,7 @@ from viewcore.converter import datum
 from viewcore import request_handler
 
 
-
-
-
-# Create your tests here.
-class Jahresuebersicht(unittest.TestCase):
+class Monatsuebersicht(unittest.TestCase):
 
     def set_up(self):
         DBManagerStub.setup_db_for_test()
@@ -62,3 +58,21 @@ class Jahresuebersicht(unittest.TestCase):
         result_context = views.index(GetRequest())
 
         assert result_context['selected_date'] == '2011_10'
+
+
+class Abrechnung(unittest.TestCase):
+    def set_up(self):
+        DBManagerStub.setup_db_for_test()
+        request_handler.stub_me()
+
+    def test_init(self):
+        self.set_up()
+        views.abrechnen(GetRequest())
+
+    def test_get_should_return_actual_month(self    ):
+        self.set_up()
+        context = views.abrechnen(GetRequest())
+        print(context)
+        #assert False
+
+        
