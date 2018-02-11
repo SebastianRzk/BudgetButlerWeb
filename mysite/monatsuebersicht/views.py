@@ -120,9 +120,17 @@ def index(request):
 def _abrechnen(request):
     #date = request.POST['date'].split('_')
     context = viewcore.generate_base_context('monatsuebersicht')
-    date = ['2017', '11']
-    year = int(date[0])
-    month = int(date[1])
+    date = viewcore.today()
+    year = date.year
+    month = date.month
+
+    if request.method == 'POST':
+        print(request.POST)
+        if 'date' in request.POST:
+            print('here')
+            str_year, str_month = request.POST['date'].split('_')
+            year = int(str_year)
+            month = int(str_month)
 
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
 
@@ -143,10 +151,9 @@ def _abrechnen(request):
         page = page + '<br>' + line
     print(page)
     context['abrechnungstext'] = '<pre>' + page + '</pre>'
-    context['element_titel'] = 'Abrechnung von {month}/{year}'.format(month=month, year=year)
+    context['element_titel'] = 'Abrechnung vom {month}/{year}'.format(month=month, year=year)
     print(context)
     return context
-
 
 
 def abrechnen(request):

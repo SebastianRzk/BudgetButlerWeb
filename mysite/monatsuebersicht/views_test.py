@@ -71,8 +71,14 @@ class Abrechnung(unittest.TestCase):
 
     def test_get_should_return_actual_month(self    ):
         self.set_up()
+        viewcore.stub_today_with(datum('10.10.2012'))
         context = views.abrechnen(GetRequest())
-        print(context)
-        #assert False
+        viewcore.reset_viewcore_stubs()
 
-        
+        assert context['element_titel'] == 'Abrechnung vom 10/2012'
+
+    def test_post_with_date_should_return_date(self):
+        self.set_up()
+        context = views.abrechnen(PostRequest({'date': '2011_9'}))
+        assert context['element_titel'] == 'Abrechnung vom 9/2011'
+
