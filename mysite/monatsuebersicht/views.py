@@ -3,7 +3,6 @@ from viewcore import request_handler
 from viewcore import viewcore
 from core.ReportGenerator import ReportGenerator
 
-
 def _handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -144,6 +143,7 @@ def _abrechnen(request):
         page = page + '<br>' + line
     print(page)
     context['abrechnungstext'] = '<pre>' + page + '</pre>'
+    context['element_titel'] = 'Abrechnung von {month}/{year}'.format(month=month, year=year)
     print(context)
     return context
 
