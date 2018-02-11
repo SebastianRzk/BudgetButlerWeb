@@ -1,6 +1,7 @@
 
 from viewcore import request_handler
 from viewcore import viewcore
+from core.ReportGenerator import ReportGenerator
 
 
 def _handle_request(request):
@@ -116,4 +117,38 @@ def _handle_request(request):
 
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'uebersicht_monat.html')
+
+def _abrechnen(request):
+    #date = request.POST['date'].split('_')
+    context = viewcore.generate_base_context('monatsuebersicht')
+    date = ['2017', '11']
+    year = int(date[0])
+    month = int(date[1])
+
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+
+    zusammenfassung = einzelbuchungen.get_month_expenses(month, year)
+    compiled_zusammenfassung = {}
+    for tag, kategorien_liste in zusammenfassung:
+        compiled_zusammenfassung[str(tag)] = {}
+        for einheit in kategorien_liste:
+            compiled_zusammenfassung[str(tag)][einheit['name']] = float(einheit['summe'])
+
+    print(zusammenfassung)
+    generator  = ReportGenerator('Monatsübersicht für '+str(month) + '/' + str(year))
+    generator.add_half_line_elements(compiled_zusammenfassung)
+
+    page = ''
+    for line in generator.generate_pages():
+        page = page + '<br>' + line
+    print(page)
+    context['abrechnungstext'] = '<pre>' + page + '</pre>'
+    print(context)
+    return context
+
+
+
+def abrechnen(request):
+    return request_handler.handle_request(request, _abrechnen, 'present_abrechnung.html')
+
 

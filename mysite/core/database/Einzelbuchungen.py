@@ -107,6 +107,44 @@ class Einzelbuchungen:
         print(zusammenfassung)
         return zusammenfassung
 
+    def get_month_expenses(self, monat, jahr):
+        kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
+
+        crit1 = kopierte_tabelle['Datum'].map(lambda x : x.year == jahr)
+        crit2 = kopierte_tabelle['Datum'].map(lambda x : x.month == monat)
+
+        kopierte_tabelle = kopierte_tabelle[crit1 & crit2]
+        kopierte_tabelle = kopierte_tabelle.sort_values(by=['Datum', 'Kategorie'])
+
+        zusammenfassung = []
+        kategorie_alt = ''
+        summe_alt = 0
+        name_alt = ''
+        datum_alt = ''
+        tag_liste = []
+        more_than_one = False
+        for _, row in kopierte_tabelle.iterrows():
+            if datum_alt != row.Datum and kategorie_alt != '':  # next cat or day
+                if datum_alt != row.Datum :
+                    print('push:', [datum_alt, tag_liste])
+                    zusammenfassung.append((datum_alt, tag_liste))
+                    print(zusammenfassung)
+                    tag_liste = []
+            tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
+            datum_alt = row.Datum
+            summe_alt = row.Wert
+            kategorie_alt = row.Kategorie
+            name_alt = row.Name
+            more_than_one = False
+
+        tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
+        print('push:', [datum_alt, tag_liste])
+        zusammenfassung.append([datum_alt, tag_liste])
+        print('Zusammenfassung:')
+        print(zusammenfassung)
+        return zusammenfassung
+
+
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_ausgaben().select_year(jahr).content
         return self._berechne_prozentual(tabelle)
