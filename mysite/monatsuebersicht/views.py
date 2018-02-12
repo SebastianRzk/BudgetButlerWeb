@@ -123,6 +123,7 @@ def _abrechnen(request):
     date = viewcore.today()
     year = date.year
     month = date.month
+    quantity = 60
 
     if request.method == 'POST':
         print(request.POST)
@@ -131,9 +132,11 @@ def _abrechnen(request):
             str_year, str_month = request.POST['date'].split('_')
             year = int(str_year)
             month = int(str_month)
+        if 'quantity' in request.POST:
+            quantity = int(request.POST['quantity'])
 
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    generator  = ReportGenerator('Monatsübersicht für '+str(month) + '/' + str(year))
+    generator  = ReportGenerator('Monatsübersicht für '+str(month) + '/' + str(year), quantity)
 
     table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)
     table_ausgaben = table_data_selection.select_ausgaben()
