@@ -22,7 +22,8 @@ class SeleniumTestClass:
         metafunc.parametrize(argnames='driver_provider', argvalues=drivers, scope="module")
 
 def _launch_headles_chromium(chrome_options):
-    time.sleep(1) # Sleep 1 sec to avoid mem problems on travis
+    if 'TRAVIS_INTEGRATION' in os.environ:
+        time.sleep(2) # Sleep 1 sec to avoid mem problems on travis
     return webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options)
 
 def enter_test_mode(driver):

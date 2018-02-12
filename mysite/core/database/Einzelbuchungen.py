@@ -58,55 +58,6 @@ class Einzelbuchungen:
     def anzahl(self):
         return len(self.content)
 
-    def get_month_summary(self, monat, jahr):
-        kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
-
-        crit1 = kopierte_tabelle['Datum'].map(lambda x : x.year == jahr)
-        crit2 = kopierte_tabelle['Datum'].map(lambda x : x.month == monat)
-
-        kopierte_tabelle = kopierte_tabelle[crit1 & crit2]
-        kopierte_tabelle = kopierte_tabelle.sort_values(by=['Datum', 'Kategorie'])
-
-        zusammenfassung = []
-        kategorie_alt = ''
-        summe_alt = 0
-        name_alt = ''
-        datum_alt = ''
-        tag_liste = []
-        more_than_one = False
-        for _, row in kopierte_tabelle.iterrows():
-            if(kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != '':  # next cat or day
-                if datum_alt != row.Datum :
-                    print('push:', [datum_alt, tag_liste])
-                    zusammenfassung.append((datum_alt, tag_liste))
-                    print(zusammenfassung)
-                    tag_liste = []
-                tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
-                datum_alt = row.Datum
-                summe_alt = row.Wert
-                kategorie_alt = row.Kategorie
-                name_alt = row.Name
-                more_than_one = False
-            elif kategorie_alt == '':  # initial state
-                datum_alt = row.Datum
-                kategorie_alt = row.Kategorie
-                summe_alt = row.Wert
-                name_alt = row.Name
-            else:
-                if not more_than_one:
-                    name_alt = name_alt + '(' + str(summe_alt) + '€)'
-                    more_than_one = True
-                name_alt = name_alt + ', ' + row.Name + '(' + str(row.Wert) + '€)'
-                summe_alt += row.Wert
-
-
-        tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
-        print('push:', [datum_alt, tag_liste])
-        zusammenfassung.append([datum_alt, tag_liste])
-        print('Zusammenfassung:')
-        print(zusammenfassung)
-        return zusammenfassung
-
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_ausgaben().select_year(jahr).content
         return self._berechne_prozentual(tabelle)
@@ -324,3 +275,65 @@ class EinzelbuchungsSelektor:
         if self.content.empty:
             return 0
         return self.content.Wert.sum()
+
+    def zusammenfassung(self):
+        kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
+
+        kopierte_tabelle = kopierte_tabelle.sort_values(by=['Datum', 'Kategorie'])
+
+        zusammenfassung = []
+        tag_liste = []
+        datum_alt = None
+        for _, row in kopierte_tabelle.iterrows():
+            if datum_alt and datum_alt != row.Datum:  # next cat or day
+                if datum_alt != row.Datum :
+                    zusammenfassung.append((datum_alt, tag_liste))
+                    tag_liste = []
+            tag_liste.append({'kategorie':row.Kategorie, 'name':row.Name, 'summe': row.Wert})
+            datum_alt = row.Datum
+
+        if datum_alt:
+            zusammenfassung.append([datum_alt, tag_liste])
+        print('Zusammenfassung:')
+        print(zusammenfassung)
+        return zusammenfassung
+
+    def get_month_summary(self):
+        kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
+
+        kopierte_tabelle = kopierte_tabelle.sort_values(by=['Datum', 'Kategorie'])
+
+        zusammenfassung = []
+        kategorie_alt = ''
+        summe_alt = 0
+        name_alt = ''
+        datum_alt = ''
+        tag_liste = []
+        more_than_one = False
+        for _, row in kopierte_tabelle.iterrows():
+            if(kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != '':  # next cat or day
+                if datum_alt != row.Datum :
+                    zusammenfassung.append((datum_alt, tag_liste))
+                    tag_liste = []
+                tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
+                datum_alt = row.Datum
+                summe_alt = row.Wert
+                kategorie_alt = row.Kategorie
+                name_alt = row.Name
+                more_than_one = False
+            elif kategorie_alt == '':  # initial state
+                datum_alt = row.Datum
+                kategorie_alt = row.Kategorie
+                summe_alt = row.Wert
+                name_alt = row.Name
+            else:
+                if not more_than_one:
+                    name_alt = name_alt + '(' + str(summe_alt) + '€)'
+                    more_than_one = True
+                name_alt = name_alt + ', ' + row.Name + '(' + str(row.Wert) + '€)'
+                summe_alt += row.Wert
+
+
+        tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
+        zusammenfassung.append([datum_alt, tag_liste])
+        return zusammenfassung

@@ -31,6 +31,32 @@
 		</div>
 	</div>
 </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box collapsed-box">
+      <div class="box-header with-border">
+        <h3 class="box-title">Druckausgabe erzeugen</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-plus"></span></button>
+        </div>
+      </div>
+      <div class="box-body">
+	<form role="form" action="/monatsuebersicht/abrechnung/" method="post">
+		{% csrf_token %}
+		<input type="hidden" name="date" value="{{selected_date}}">
+		<input type="checkbox" name="content" value="zusammenfassung_einnahmen" checked>Zusammenfassung der Einnahmen</br>
+		<input type="checkbox" name="content" value="zusammenfassung_ausgaben" checked>Zusammenfassung der Ausgaben</br>
+		<input type="checkbox" name="content" value="einnahmen" checked>Einzelbetrag der Einnahmen</br>
+		<input type="checkbox" name="content" value="ausgaben" checked>Einzelbetrag der Ausgaben</br>
+		Anzahl der Zeilen pro Seite: <input type="number" name="quantity" min="6" max="999" value="60">
+		<div class="box-footer">
+			<button type="submit" value="OK" class="btn bordered-hover">Abrechnung erzeugen!</button>
+          	</div>
+	</form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-12">
@@ -78,8 +104,7 @@
       </div>
     </div>
   </div>
-</div> 
-
+</div>
 <div class="row">
   <div class="col-md-12">
     <div class="box">

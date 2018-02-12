@@ -1,7 +1,8 @@
 
 from viewcore import request_handler
 from viewcore import viewcore
-
+from core.ReportGenerator import ReportGenerator
+from viewcore.converter import datum_to_string
 
 def _handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
@@ -57,7 +58,7 @@ def _handle_request(request):
     context['einnahmen_colors'] = einnahmen_colors
 
 
-    zusammenfassung = einzelbuchungen.get_month_summary(month, year)
+    zusammenfassung = table_data_selection.get_month_summary()
     for tag, kategorien_liste in zusammenfassung:
         for einheit in kategorien_liste:
             einheit['farbe'] = einzelbuchungen.get_farbe_fuer(einheit['kategorie'])
@@ -116,4 +117,89 @@ def _handle_request(request):
 
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'uebersicht_monat.html')
+
+def _abrechnen(request):
+    print(request.POST)
+    #date = request.POST['date'].split('_')
+    context = viewcore.generate_base_context('monatsuebersicht')
+    date = viewcore.today()
+    year = date.year
+    month = date.month
+    quantity = 60
+
+    if request.method == 'POST':
+        if 'date' in request.POST:
+            str_year, str_month = request.POST['date'].split('_')
+            year = int(str_year)
+            month = int(str_month)
+        if 'quantity' in request.POST:
+            quantity = int(request.POST['quantity'])
+
+    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    generator  = ReportGenerator('Monatsübersicht für '+str(month) + '/' + str(year), quantity)
+
+    table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)
+    table_ausgaben = table_data_selection.select_ausgaben()
+    table_einnahmen = table_data_selection.select_einnahmen()
+
+    if _is_selected(request, 'zusammenfassung_einnahmen'):
+        data = {}
+        for kategorie, row in table_einnahmen.group_by_kategorie().iterrows():
+            data[kategorie] = row.Wert
+        generator.add_half_line_elements({'Einnahmen': data})
+
+    if _is_selected(request, 'zusammenfassung_ausgaben'):
+        data = {}
+        for kategorie, row in table_ausgaben.group_by_kategorie().iterrows():
+            data[kategorie] = row.Wert
+        generator.add_half_line_elements({'Ausgaben': data})
+
+    if _is_selected(request, 'einnahmen'):
+        generator.add_halfline('')
+        generator.add_halfline('')
+        generator.add_halfline('----Einnahmen----')
+        zusammenfassung = table_einnahmen.zusammenfassung()
+        compiled_zusammenfassung = {}
+        for tag, kategorien_liste in zusammenfassung:
+            compiled_zusammenfassung[datum_to_string(tag)] = {}
+            for einheit in kategorien_liste:
+                compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
+
+        generator.add_half_line_elements(compiled_zusammenfassung)
+
+    if _is_selected(request, 'ausgaben'):
+        generator.add_halfline('')
+        generator.add_halfline('')
+        generator.add_halfline('----Ausgaben----')
+        zusammenfassung = table_ausgaben.zusammenfassung()
+        compiled_zusammenfassung = {}
+        for tag, kategorien_liste in zusammenfassung:
+            compiled_zusammenfassung[datum_to_string(tag)] = {}
+            for einheit in kategorien_liste:
+                compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
+
+        generator.add_half_line_elements(compiled_zusammenfassung)
+
+
+
+
+    page = ''
+    for line in generator.generate_pages():
+        page = page + '<br>' + line
+    context['abrechnungstext'] = '<pre>' + page + '</pre>'
+    context['element_titel'] = 'Abrechnung vom {month}/{year}'.format(month=month, year=year)
+    return context
+
+def _is_selected(request, name):
+    if request.method != 'POST':
+        return True
+
+    if 'content' not in request.POST:
+        return True
+    print('         ', any(name == s for s in request.POST.getlist('content')))
+    return any(name == s for s in request.POST.getlist('content'))
+
+def abrechnen(request):
+    return request_handler.handle_request(request, _abrechnen, 'present_abrechnung.html')
+
 

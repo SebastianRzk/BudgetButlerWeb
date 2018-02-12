@@ -7,12 +7,14 @@ Created on 24.04.2017
 from core import DBManager
 from viewcore import viewcore
 from viewcore import configuration_provider
+import datetime
 
 
 DATABASE_INSTANCE = None
 DATABASES = []
 CONTEXT = {}
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
+TODAY = lambda: datetime.datetime.now().date()
 
 def database_instance():
     '''
@@ -187,3 +189,12 @@ def post_action_is(request, action_name):
     if 'action' not in request.POST:
         return False
     return request.POST['action'] == action_name
+
+def today():
+    return viewcore.TODAY()
+
+def stub_today_with(new_today):
+    viewcore.TODAY = lambda: new_today
+
+def reset_viewcore_stubs():
+    viewcore.TODAY = lambda: datetime.datetime.now().date()

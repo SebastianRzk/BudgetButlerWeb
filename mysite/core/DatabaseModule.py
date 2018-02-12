@@ -12,8 +12,9 @@ from core.database.Einzelbuchungen import Einzelbuchungen
 from core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from pandas import DataFrame
 from viewcore import viewcore
-from viewcore.converter import datum
+from viewcore.converter import datum, datum_to_string
 from viewcore.viewcore import name_of_partner
+from viewcore.viewcore import today
 
 
 class StringWriter():
@@ -37,8 +38,6 @@ class Database:
     '''
     Database
     '''
-    func_today = date.today
-
     def __init__(self, name):
         self.name = name
         self.dauerauftraege = Dauerauftraege()
@@ -79,9 +78,9 @@ class Database:
         dif_maureen = (ausgaben_gesamt / 2) - summe_maureen
 
         abrechnunsdatei = StringWriter()
-        abrechnunsdatei.write("Abrechnung vom " + str(self.func_today()) + "\n")
+        abrechnunsdatei.write("Abrechnung vom " + datum_to_string(today()) + "\n")
         self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write("Ergebnis: \n")
+        abrechnunsdatei.write("Ergebnis:\n")
 
         if dif_maureen > 0:
             abrechnunsdatei.write(name_self + ' muss an ' + name_partner + ' noch ' + str('%.2f' % dif_maureen) + "€ überweisen.\n")
@@ -100,28 +99,28 @@ class Database:
 
         abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
         for _, row in self.gemeinsamebuchungen.content.iterrows():
-            abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'] / 2)).rjust(7, " ") + "\n")
+            abrechnunsdatei.write(datum_to_string(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'] / 2)).rjust(7, " ") + "\n")
 
         abrechnunsdatei.write("\n")
         abrechnunsdatei.write("\n")
 
         self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write('Ausgaben von ' + name_partner + ' \n')
+        abrechnunsdatei.write('Ausgaben von ' + name_partner + '\n')
         self._write_trenner(abrechnunsdatei)
 
         abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
         for _ , row in ausgaben_maureen.iterrows():
-            abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
+            abrechnunsdatei.write(datum_to_string(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
 
         abrechnunsdatei.write("\n")
         abrechnunsdatei.write("\n")
         self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write('Ausgaben von ' + name_self + ' \n')
+        abrechnunsdatei.write('Ausgaben von ' + name_self + '\n')
         self._write_trenner(abrechnunsdatei)
 
         abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
         for _ , row in ausgaben_sebastian.iterrows():
-            abrechnunsdatei.write(str(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
+            abrechnunsdatei.write(datum_to_string(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
 
         ausgaben = DataFrame()
         for _ , row in self.gemeinsamebuchungen.content.iterrows():

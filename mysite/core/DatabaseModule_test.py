@@ -21,14 +21,10 @@ from viewcore import viewcore
 from viewcore import configuration_provider
 
 
-def _zero():
-    return timedelta(minutes=0)
-
-
 class abrechnen(unittest.TestCase):
-    abrechnung = """Abrechnung vom 2010-01-01
+    abrechnung = """Abrechnung vom 01.01.2010
 ########################################
- Ergebnis: 
+ Ergebnis:
 test muss an Maureen noch 5.00€ überweisen.
 
 Ausgaben von Maureen           -10.00
@@ -41,18 +37,18 @@ Gesamt                         -10.00
  Gesamtausgaben pro Person 
 ########################################
  Datum      Kategorie    Name                    Wert
-2017-03-17  some kategorie some name              -5.00
+17.03.2017  some kategorie some name              -5.00
 
 
 ########################################
- Ausgaben von Maureen 
+ Ausgaben von Maureen
 ########################################
  Datum      Kategorie    Name                    Wert
-2017-03-17  some kategorie some name             -10.00
+17.03.2017  some kategorie some name             -10.00
 
 
 ########################################
- Ausgaben von test 
+ Ausgaben von test
 ########################################
  Datum      Kategorie    Name                    Wert
 
@@ -89,7 +85,9 @@ Datum,Kategorie,Name,Wert,Dynamisch
         self.set_up()
         db = viewcore.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
+        viewcore.stub_today_with(datum('01.01.2010'))
         abrechnungs_text = db.abrechnen()
+        viewcore.reset_viewcore_stubs()
 
         assert abrechnungs_text == self.abrechnung
 class converter_test(unittest.TestCase):
