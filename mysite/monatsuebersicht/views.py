@@ -58,7 +58,7 @@ def _handle_request(request):
     context['einnahmen_colors'] = einnahmen_colors
 
 
-    zusammenfassung = einzelbuchungen.get_month_summary(month, year)
+    zusammenfassung = table_data_selection.get_month_summary()
     for tag, kategorien_liste in zusammenfassung:
         for einheit in kategorien_liste:
             einheit['farbe'] = einzelbuchungen.get_farbe_fuer(einheit['kategorie'])

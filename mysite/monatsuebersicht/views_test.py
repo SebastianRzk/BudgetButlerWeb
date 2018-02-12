@@ -8,7 +8,6 @@ sys.path.insert(0, myPath + '/../')
 from test import DBManagerStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
-from core.DatabaseModule import Database
 from monatsuebersicht import views
 from viewcore import viewcore
 from viewcore.converter import datum
