@@ -81,3 +81,24 @@ class Abrechnung(unittest.TestCase):
         context = views.abrechnen(PostRequest({'date': '2011_9'}))
         assert context['element_titel'] == 'Abrechnung vom 9/2011'
 
+    def test_optionen(self):
+        self.set_up()
+
+        context = views.abrechnen(PostRequest({'date': '2011_9', 'content': ['einnahmen']}))
+        self.contains_only_header(context['abrechnungstext'], '---Einnahmen---')
+        context = views.abrechnen(PostRequest({'date': '2011_9', 'content': ['ausgaben']}))
+        self.contains_only_header(context['abrechnungstext'], '---Ausgaben---')
+        context = views.abrechnen(PostRequest({'date': '2011_9', 'content': ['zusammenfassung_einnahmen']}))
+        self.contains_only_header(context['abrechnungstext'], 'Einnahmen ')
+        context = views.abrechnen(PostRequest({'date': '2011_9', 'content': ['zusammenfassung_ausgaben']}))
+        self.contains_only_header(context['abrechnungstext'], 'Ausgaben ')
+
+    def contains_only_header(self, report, header):
+        all_headers = ['---Einnahmen---', 'Einnahmen ', '---Ausgaben---', 'Ausgaben ']
+        for h in all_headers:
+            if h != header:
+                assert h not in report
+            else:
+                assert h in report
+
+

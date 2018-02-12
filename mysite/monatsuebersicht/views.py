@@ -119,6 +119,7 @@ def index(request):
     return request_handler.handle_request(request, _handle_request, 'uebersicht_monat.html')
 
 def _abrechnen(request):
+    print(request.POST)
     #date = request.POST['date'].split('_')
     context = viewcore.generate_base_context('monatsuebersicht')
     date = viewcore.today()
