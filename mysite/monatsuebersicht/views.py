@@ -127,9 +127,7 @@ def _abrechnen(request):
     quantity = 60
 
     if request.method == 'POST':
-        print(request.POST)
         if 'date' in request.POST:
-            print('here')
             str_year, str_month = request.POST['date'].split('_')
             year = int(str_year)
             month = int(str_month)
@@ -166,8 +164,6 @@ def _abrechnen(request):
             for einheit in kategorien_liste:
                 compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
 
-        print(zusammenfassung)
-        print(compiled_zusammenfassung)
         generator.add_half_line_elements(compiled_zusammenfassung)
 
     if _is_selected(request, 'ausgaben'):
@@ -181,8 +177,6 @@ def _abrechnen(request):
             for einheit in kategorien_liste:
                 compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
 
-        print(zusammenfassung)
-        print(compiled_zusammenfassung)
         generator.add_half_line_elements(compiled_zusammenfassung)
 
 
@@ -191,10 +185,8 @@ def _abrechnen(request):
     page = ''
     for line in generator.generate_pages():
         page = page + '<br>' + line
-    print(page)
     context['abrechnungstext'] = '<pre>' + page + '</pre>'
     context['element_titel'] = 'Abrechnung vom {month}/{year}'.format(month=month, year=year)
-    print(context)
     return context
 
 def _is_selected(request, name):
