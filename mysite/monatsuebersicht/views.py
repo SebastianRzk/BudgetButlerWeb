@@ -2,6 +2,7 @@
 from viewcore import request_handler
 from viewcore import viewcore
 from core.ReportGenerator import ReportGenerator
+from viewcore.converter import datum_to_string
 
 def _handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
@@ -161,9 +162,9 @@ def _abrechnen(request):
         zusammenfassung = table_einnahmen.zusammenfassung()
         compiled_zusammenfassung = {}
         for tag, kategorien_liste in zusammenfassung:
-            compiled_zusammenfassung[str(tag)] = {}
+            compiled_zusammenfassung[datum_to_string(tag)] = {}
             for einheit in kategorien_liste:
-                compiled_zusammenfassung[str(tag)][einheit['name']] = float(einheit['summe'])
+                compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
 
         print(zusammenfassung)
         print(compiled_zusammenfassung)
@@ -176,9 +177,9 @@ def _abrechnen(request):
         zusammenfassung = table_ausgaben.zusammenfassung()
         compiled_zusammenfassung = {}
         for tag, kategorien_liste in zusammenfassung:
-            compiled_zusammenfassung[str(tag)] = {}
+            compiled_zusammenfassung[datum_to_string(tag)] = {}
             for einheit in kategorien_liste:
-                compiled_zusammenfassung[str(tag)][einheit['name']] = float(einheit['summe'])
+                compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
 
         print(zusammenfassung)
         print(compiled_zusammenfassung)
