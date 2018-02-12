@@ -133,18 +133,56 @@ def _abrechnen(request):
             month = int(str_month)
 
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-
-    zusammenfassung = einzelbuchungen.get_month_expenses(month, year)
-    compiled_zusammenfassung = {}
-    for tag, kategorien_liste in zusammenfassung:
-        compiled_zusammenfassung[str(tag)] = {}
-        for einheit in kategorien_liste:
-            compiled_zusammenfassung[str(tag)][einheit['name']] = float(einheit['summe'])
-
-    print(zusammenfassung)
     generator  = ReportGenerator('Monatsübersicht für '+str(month) + '/' + str(year))
-    print(compiled_zusammenfassung)
-    generator.add_half_line_elements(compiled_zusammenfassung)
+
+    table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)
+    table_ausgaben = table_data_selection.select_ausgaben()
+    table_einnahmen = table_data_selection.select_einnahmen()
+
+    if _is_selected(request, 'zusammenfassung_einnahmen'):
+        data = {}
+        for kategorie, row in table_einnahmen.group_by_kategorie().iterrows():
+            data[kategorie] = row.Wert
+        generator.add_half_line_elements({'Einnahmen': data})
+
+    if _is_selected(request, 'zusammenfassung_ausgaben'):
+        data = {}
+        for kategorie, row in table_ausgaben.group_by_kategorie().iterrows():
+            data[kategorie] = row.Wert
+        generator.add_half_line_elements({'Ausgaben': data})
+
+    if _is_selected(request, 'einnahmen'):
+        generator.add_halfline('')
+        generator.add_halfline('')
+        generator.add_halfline('----Einnahmen----')
+        zusammenfassung = table_einnahmen.zusammenfassung()
+        compiled_zusammenfassung = {}
+        for tag, kategorien_liste in zusammenfassung:
+            compiled_zusammenfassung[str(tag)] = {}
+            for einheit in kategorien_liste:
+                compiled_zusammenfassung[str(tag)][einheit['name']] = float(einheit['summe'])
+
+        print(zusammenfassung)
+        print(compiled_zusammenfassung)
+        generator.add_half_line_elements(compiled_zusammenfassung)
+
+    if _is_selected(request, 'ausgaben'):
+        generator.add_halfline('')
+        generator.add_halfline('')
+        generator.add_halfline('----Ausgaben----')
+        zusammenfassung = table_ausgaben.zusammenfassung()
+        compiled_zusammenfassung = {}
+        for tag, kategorien_liste in zusammenfassung:
+            compiled_zusammenfassung[str(tag)] = {}
+            for einheit in kategorien_liste:
+                compiled_zusammenfassung[str(tag)][einheit['name']] = float(einheit['summe'])
+
+        print(zusammenfassung)
+        print(compiled_zusammenfassung)
+        generator.add_half_line_elements(compiled_zusammenfassung)
+
+
+
 
     page = ''
     for line in generator.generate_pages():
@@ -155,6 +193,14 @@ def _abrechnen(request):
     print(context)
     return context
 
+def _is_selected(request, name):
+    if request.method != 'POST':
+        return True
+
+    if 'content' not in request.POST:
+        return True
+    print('         ', any(name == s for s in request.POST.getlist('content')))
+    return any(name == s for s in request.POST.getlist('content'))
 
 def abrechnen(request):
     return request_handler.handle_request(request, _abrechnen, 'present_abrechnung.html')

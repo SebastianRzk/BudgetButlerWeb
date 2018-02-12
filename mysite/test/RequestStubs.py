@@ -13,10 +13,12 @@ class PostRequest:
     def __init__(self, args):
         self.POST = args
 
+    def getlist(self, key):
+        return self.POST[key]
+
 from viewcore import request_handler
 
-class VersionedPostRequest:
-    method = "POST"
+class VersionedPostRequest(PostRequest):
     def __init__(self, args):
         self.POST = args
         self.POST["ID"] = request_handler.current_key()

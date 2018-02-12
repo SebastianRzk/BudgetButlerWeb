@@ -16,6 +16,9 @@ class ReportGenerator():
         self._half_lines = []
 
     def add_half_line_elements(self, summary_data):
+        if self._half_lines:
+            self._half_lines.append(''.ljust(self._col_width, ' '))
+
         for element in summary_data:
             self._half_lines.append(element.ljust(self._col_width, ' '))
 
@@ -35,6 +38,9 @@ class ReportGenerator():
         if len(name) > max_len:
             name = name[:(max_len-3)] + '...'
         return name
+
+    def add_halfline(self, halfline):
+        self._half_lines.append(halfline.ljust(self._col_width, ' '))
 
     def get_raw_half_lines(self):
         return self._half_lines

@@ -107,32 +107,6 @@ class Einzelbuchungen:
         print(zusammenfassung)
         return zusammenfassung
 
-    def get_month_expenses(self, monat, jahr):
-        kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
-
-        crit1 = kopierte_tabelle['Datum'].map(lambda x : x.year == jahr)
-        crit2 = kopierte_tabelle['Datum'].map(lambda x : x.month == monat)
-
-        kopierte_tabelle = kopierte_tabelle[crit1 & crit2]
-        kopierte_tabelle = kopierte_tabelle.sort_values(by=['Datum', 'Kategorie'])
-
-        zusammenfassung = []
-        tag_liste = []
-        datum_alt = None
-        for _, row in kopierte_tabelle.iterrows():
-            if datum_alt and datum_alt != row.Datum:  # next cat or day
-                if datum_alt != row.Datum :
-                    zusammenfassung.append((datum_alt, tag_liste))
-                    tag_liste = []
-            tag_liste.append({'kategorie':row.Kategorie, 'name':row.Name, 'summe': row.Wert})
-            datum_alt = row.Datum
-
-        if datum_alt:
-            zusammenfassung.append([datum_alt, tag_liste])
-        print('Zusammenfassung:')
-        print(zusammenfassung)
-        return zusammenfassung
-
 
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_ausgaben().select_year(jahr).content
@@ -351,3 +325,25 @@ class EinzelbuchungsSelektor:
         if self.content.empty:
             return 0
         return self.content.Wert.sum()
+
+    def zusammenfassung(self):
+        kopierte_tabelle = self.content.copy()[['Datum', 'Wert', 'Kategorie', 'Name']]
+
+        kopierte_tabelle = kopierte_tabelle.sort_values(by=['Datum', 'Kategorie'])
+
+        zusammenfassung = []
+        tag_liste = []
+        datum_alt = None
+        for _, row in kopierte_tabelle.iterrows():
+            if datum_alt and datum_alt != row.Datum:  # next cat or day
+                if datum_alt != row.Datum :
+                    zusammenfassung.append((datum_alt, tag_liste))
+                    tag_liste = []
+            tag_liste.append({'kategorie':row.Kategorie, 'name':row.Name, 'summe': row.Wert})
+            datum_alt = row.Datum
+
+        if datum_alt:
+            zusammenfassung.append([datum_alt, tag_liste])
+        print('Zusammenfassung:')
+        print(zusammenfassung)
+        return zusammenfassung

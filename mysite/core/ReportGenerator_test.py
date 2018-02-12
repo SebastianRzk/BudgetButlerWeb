@@ -104,3 +104,44 @@ class ReportGenerator_test(unittest.TestCase):
             '--------------------------------------------------------------------------------',
             '                                                                       Blatt 1/1',
             '','']
+
+    def test_generate_page_should_empty_line_between_elements(self):
+        generator = ReportGenerator('SamplePage', 10)
+
+        generator.add_half_line_elements({'Einnahmen': {}})
+        generator.add_half_line_elements({'Ausgaben': {}})
+        result = generator.generate_pages()
+        print(result)
+
+        assert result == [
+            'SamplePage                                                                      ',
+            '--------------------------------------------------------------------------------',
+            'Einnahmen                                                                       ',
+            '                                                                                ',
+            'Ausgaben                                                                        ',
+            '                                                                                ',
+            '                                                                                ',
+            '                                                                                ',
+            '--------------------------------------------------------------------------------',
+            '                                                                       Blatt 1/1',
+            '','']
+
+    def test_add_halfline(self):
+        generator = ReportGenerator('SamplePage', 10)
+
+        generator.add_halfline('----Ausgaben----')
+        result = generator.generate_pages()
+        print(result)
+
+        assert result == [
+            'SamplePage                                                                      ',
+            '--------------------------------------------------------------------------------',
+            '----Ausgaben----                                                                ',
+            '                                                                                ',
+            '                                                                                ',
+            '                                                                                ',
+            '                                                                                ',
+            '                                                                                ',
+            '--------------------------------------------------------------------------------',
+            '                                                                       Blatt 1/1',
+            '','']
