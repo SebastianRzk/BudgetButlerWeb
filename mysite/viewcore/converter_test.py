@@ -33,10 +33,6 @@ class TesteConverter(unittest.TestCase):
         result = dezimal_float("2,34")
         assert result == 2.34
 
-    def test_laenge(self):
-        result = laenge("1:23")
-        assert result.hour == 1
-        assert result.minute == 23
 
     def test_datum_backwards(self):
         result = datum_to_string(datum('13.12.2015'))
