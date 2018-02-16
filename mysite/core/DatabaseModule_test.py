@@ -15,7 +15,6 @@ from test import DBManagerStub
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../')
 
-import core.DatabaseModule as db
 from viewcore.converter import datum
 from viewcore import viewcore
 from viewcore import configuration_provider
@@ -59,7 +58,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
 #######MaschinenimportEnd
 """
 
-
     def set_up(self):
         DBManagerStub.setup_db_for_test()
         DBManagerStub.stub_abrechnungs_write()
@@ -90,18 +88,21 @@ Datum,Kategorie,Name,Wert,Dynamisch
         viewcore.reset_viewcore_stubs()
 
         assert abrechnungs_text == self.abrechnung
+
+
 class converter_test(unittest.TestCase):
+
     def test_frame_to_list_of_dicts_withEmptyDataframe_shouldReturnEmptyList(self):
         empty_dataframe = DataFrame()
 
-        result = db.Database('test_database').frame_to_list_of_dicts(empty_dataframe)
+        result = Database('test_database').frame_to_list_of_dicts(empty_dataframe)
 
         assert result == []
 
     def test_frame_to_list_of_dicts_withDataframe_shouldReturnListOfDicts(self):
         dataframe = DataFrame([{'col1':'test1', 'col2': 1}, {'col1':'test2', 'col2': 2}])
 
-        result = db.Database('test_database').frame_to_list_of_dicts(dataframe)
+        result = Database('test_database').frame_to_list_of_dicts(dataframe)
 
         print(result)
         assert len(result) == 2
@@ -111,13 +112,14 @@ class converter_test(unittest.TestCase):
         assert result[1]['col2'] == 2
 
 
-class refresh(unittest.TestCase):
+class Refresh(unittest.TestCase):
+
     def teste_refresh_with_empty_database(self):
-        component_under_test = db.Database('test_database')
+        component_under_test = Database('test_database')
         component_under_test.refresh()
 
     def teste_refresh_shouldAddEinzelbuchungenVonDauerauftrag(self):
-        component_under_test = db.Database('test_database')
+        component_under_test = Database('test_database')
         component_under_test.dauerauftraege.add(datum('10.01.2010'), datum('11.03.2010'), '', '', 'monatlich', 20)
         component_under_test.refresh()
 
