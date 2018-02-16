@@ -16,7 +16,7 @@ _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../')
 
 import core.DatabaseModule as db
-from viewcore.converter import datum, laenge
+from viewcore.converter import datum
 from viewcore import viewcore
 from viewcore import configuration_provider
 
