@@ -17,7 +17,7 @@
 							<div class="input-group-addon">
 								<span class="fa fa-calendar"></span>
 							</div>
-							<input value="{{default_item.Startdatum}}" type="text" name="startdatum" id="startdatum" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask />
+							<input value="{{default_item.Startdatum}}" type="text" name="startdatum" id="startdatum" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask pattern="[0-9.]{10,10}" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -26,7 +26,7 @@
 							<div class="input-group-addon">
 								<span class="fa fa-calendar"></span>
 							</div>
-							<input value="{{default_item.Endedatum}}" type="text" name="endedatum" class="form-control" id="endedatum" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask />
+							<input value="{{default_item.Endedatum}}" type="text" name="endedatum" class="form-control" id="endedatum" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask pattern="[0-9.]{10,10}" />
 						</div>
 					</div>
 					<div class="form-group">

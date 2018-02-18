@@ -14,14 +14,14 @@
 							<div class="input-group-addon">
 								<span class="fa fa-calendar"></span>
 							</div>
-							<input value="{{default_item.Datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask />
+							<input value="{{default_item.Datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask required="required" pattern="[0-9.]{10,10}" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label>Name der Einnahme</label> <input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="Enter ..." />
+						<label>Name der Einnahme</label> <input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="" required="required"/>
 					</div>
 					<div class="form-group">
-						<label>Wert der Einnahme</label> <input value="{{default_item.Wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" />
+						<label>Wert der Einnahme</label> <input value="{{default_item.Wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" required="required"/>
 					</div>
 					{% if bearbeitungsmodus %}
 					<input type="hidden" name="edit_index" value="{{default_item.index}}">
