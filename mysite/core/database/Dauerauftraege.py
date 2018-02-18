@@ -42,7 +42,6 @@ class Dauerauftraege:
             dauerauftrag_buchungen = self.einnahmenausgaben_until_today(row['Startdatum'], row['Endedatum'], row['Rhythmus'], row['Name'], row['Wert'], row['Kategorie'])
             for buchung in dauerauftrag_buchungen:
                 all_rows = all_rows.append(buchung, ignore_index=True)
-                print("DATABASE: Neuer Dauerauftrag-Einzelposten hinzugefügt: ", buchung)
         return all_rows
 
     def add(self, startdatum, endedatum, kategorie, name, rhythmus, wert):
