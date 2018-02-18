@@ -54,7 +54,6 @@ def read_file(file, nutzername):
 
         tables[mode] = tables[mode] + "\n" + line
 
-
     database = DatabaseModule.Database(nutzername)
 
     raw_data = pd.read_csv(StringIO(tables["einzelbuchungen"]))
@@ -71,8 +70,10 @@ def read_file(file, nutzername):
     print('READER: Refresh done')
     return database
 
+
 def write(database):
     write_function(database)
+
 
 def write_file(database, file):
     einzelbuchungen = database.einzelbuchungen.content.copy()[database.einzelbuchungen.content.Dynamisch == False]

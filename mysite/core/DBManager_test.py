@@ -62,7 +62,6 @@ Datum,Kategorie,Name,Wert,Person
 stechzeiten...
 '''
 
-
     full_db = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
 2017-11-11,Essen,Nochwas,-1.0,[]

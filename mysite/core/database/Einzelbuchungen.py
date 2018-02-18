@@ -22,7 +22,6 @@ class Einzelbuchungen:
         self.sort()
 
     def sort(self):
-        print('DATABASE: Sortiere Einzelbuchungen')
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
@@ -151,7 +150,6 @@ class Einzelbuchungen:
             monats_teiler = monats_teiler - (13 - today.month)
             if monats_teiler == 0:
                 return {}
-        print('#############Teiler', monats_teiler)
         data.Wert = data.Wert.map(lambda x: abs(x / monats_teiler))
         data = data[['Wert', 'Kategorie']]
         data = data.groupby(by='Kategorie').sum()
@@ -250,7 +248,6 @@ class EinzelbuchungsSelektor:
         data = self.content.copy()
         data = data[['Datum', 'Wert']]
         data.Datum = data.Datum.map(lambda x: (x.year * 13) + x.month)
-        print(data)
         grouped = data.groupby(by='Datum').sum()
         result = []
         for monat, reihe in grouped.iterrows():
@@ -294,8 +291,6 @@ class EinzelbuchungsSelektor:
 
         if datum_alt:
             zusammenfassung.append([datum_alt, tag_liste])
-        print('Zusammenfassung:')
-        print(zusammenfassung)
         return zusammenfassung
 
     def get_month_summary(self):

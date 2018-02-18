@@ -153,9 +153,6 @@ class Database:
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
 
-    def get_arbeitgeber(self):
-        return ['DATEV']
-
     def func_woechentlich(self, buchungs_datum):
         return buchungs_datum.isocalendar()[1]
 

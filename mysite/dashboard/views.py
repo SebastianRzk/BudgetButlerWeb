@@ -16,7 +16,6 @@ def _handle_request(_):
              'wert': '%.2f' % row.Wert
             })
 
-
     context = {
         'zusammenfassung_monatsliste': _monatsliste(),
         'zusammenfassung_einnahmenliste': _list_to_json(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
@@ -36,10 +35,20 @@ def _list_to_json(liste):
         result = result + str(item)
     return result + ']'
 
+
 def _monatsliste():
-    month_map = {1:'"Januar"', 2:'"Februar"', 3:'"März"', 4:'"April"', 5:'"Mai"',
-                  6:'"Juni"', 7:'"Juli"', 8:'"August"',
-                   9:'"September"', 10:'"Oktober"', 11:'"November"', 12:'"Dezember"'}
+    month_map = {1: '"Januar"',
+                 2: '"Februar"',
+                 3: '"März"',
+                 4: '"April"',
+                 5: '"Mai"',
+                 6: '"Juni"',
+                 7: '"Juli"',
+                 8: '"August"',
+                 9: '"September"',
+                 10: '"Oktober"',
+                 11: '"November"',
+                 12: '"Dezember"'}
     aktueller_monat = date.today().month
 
     result_list = []
@@ -53,6 +62,7 @@ def _monatsliste():
         result_list.append(month_map[berechneter_monat])
 
     return _list_to_json(result_list)
+
 
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'dashboard.html')

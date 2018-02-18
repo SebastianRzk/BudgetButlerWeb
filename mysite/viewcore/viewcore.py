@@ -127,23 +127,15 @@ def get_key_for_name(pagename):
     return EINZELBUCHUNGEN_SUBMENU_NAME
 
 def generate_base_context(pagename):
-    '''
-    Generate the base context for site
-    '''
-    print('###########################################################################################')
-    print('#################################Generatring new page######################################')
-    print('###########################################################################################')
-    context = {
+    return {
         'active': get_key_for_name(pagename),
         'active_page_url':'/' + pagename + '/',
         'active_name': get_name_from_key(pagename),
         'element_titel':get_name_from_key(pagename),
         'menu' : get_menu_list(),
-        'nutzername': 'Sebastian',
-        'extra_scripts':"",
+        'nutzername': database_instance().name,
+        'extra_scripts': ''
     }
-    context['nutzername'] = database_instance().name
-    return context
 
 def generate_error_context(pagename, errortext):
     context = generate_base_context(pagename)
