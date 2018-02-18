@@ -38,7 +38,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
         testdb = viewcore.database_instance()
         testdb.dauerauftraege.add(datum('10.10.2010'), datum('10.10.2011'), '0kategorie', '0name', 'monatlich', 10)
-        context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
+        context = views.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
         assert context['approve_title'] == 'Dauerauftrag aktualisieren'
 
         preset = context['default_item']
@@ -50,7 +50,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert preset['typ'] == 'Einnahme'
 
         testdb.dauerauftraege.add(datum('10.10.2010'), datum('10.10.2011'), '0kategorie', '0name', 'monatlich', -10)
-        context = views.handle_request(PostRequest({'action':'edit', 'edit_index':'1'}))
+        context = views.handle_request(PostRequest({'action': 'edit', 'edit_index': '1'}))
         preset = context['default_item']
         assert preset['typ'] == 'Ausgabe'
 
@@ -82,14 +82,14 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_add_dauerauftrag_einnahme(self):
         self.set_up()
         views.index(VersionedPostRequest(
-            {'action':'add',
-             'startdatum':'1.1.2017',
-             'endedatum':'6.1.2017',
-             'kategorie':'Essen',
-             'typ':'Einnahme',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,00'
+            {'action': 'add',
+             'startdatum': '1.1.2017',
+             'endedatum': '6.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Einnahme',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00'
              }
          ))
 
@@ -106,29 +106,29 @@ class TesteAddDauerauftragView(unittest.TestCase):
         self.set_up()
 
         views.index(VersionedPostRequest(
-            {'action':'add',
-             'startdatum':'1.1.2017',
-             'endedatum':'6.1.2017',
-             'kategorie':'Essen',
-             'typ':'Ausgabe',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,00'
+            {'action': 'add',
+             'startdatum': '1.1.2017',
+             'endedatum': '6.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Ausgabe',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00'
              }
          ))
 
 
         print('dbs: ' , viewcore.DATABASES)
         views.index(VersionedPostRequest(
-            {'action':'add',
-             'edit_index':'0',
-             'startdatum':'2.1.2017',
-             'endedatum':'5.1.2017',
-             'kategorie':'Essen',
-             'typ':'Ausgabe',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,50'
+            {'action': 'add',
+             'edit_index': '0',
+             'startdatum': '2.1.2017',
+             'endedatum': '5.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Ausgabe',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,50'
              }
          ))
 
@@ -144,28 +144,28 @@ class TesteAddDauerauftragView(unittest.TestCase):
         self.set_up()
 
         views.index(VersionedPostRequest(
-            {'action':'add',
-             'startdatum':'1.1.2017',
-             'endedatum':'6.1.2017',
-             'kategorie':'Essen',
-             'typ':'Ausgabe',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,00'
+            {'action': 'add',
+             'startdatum': '1.1.2017',
+             'endedatum': '6.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Ausgabe',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00'
              }
          ))
 
 
         views.index(VersionedPostRequest(
-            {'action':'add',
-             'edit_index':'0',
-             'startdatum':'2.1.2017',
-             'endedatum':'5.1.2017',
-             'kategorie':'Essen',
-             'typ':'Einnahme',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,50'
+            {'action': 'add',
+             'edit_index': '0',
+             'startdatum': '2.1.2017',
+             'endedatum': '5.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Einnahme',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,50'
              }
          ))
 
@@ -182,42 +182,42 @@ class TesteAddDauerauftragView(unittest.TestCase):
         self.set_up()
 
         views.index(VersionedPostRequest(
-            {'action':'add',
-             'startdatum':'1.1.2017',
-             'endedatum':'6.1.2017',
-             'kategorie':'Essen',
-             'typ':'Ausgabe',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,00'
+            {'action': 'add',
+             'startdatum': '1.1.2017',
+             'endedatum': '6.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Ausgabe',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00'
              }
          ))
         next_id = request_handler.current_key()
         views.index(PostRequest(
-            {'action':'add',
+            {'action': 'add',
              'ID':next_id,
-             'edit_index':'0',
-             'startdatum':'2.1.2017',
-             'endedatum':'5.1.2017',
-             'kategorie':'Essen',
-             'typ':'Ausgabe',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,50'
+             'edit_index': '0',
+             'startdatum': '2.1.2017',
+             'endedatum': '5.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Ausgabe',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,50'
              }
          ))
 
         views.index(PostRequest(
-            {'action':'add',
+            {'action': 'add',
              'ID':next_id,
-             'edit_index':'0',
-             'startdatum':'2.1.2017',
-             'endedatum':'5.1.2017',
-             'kategorie':'overwritten',
-             'typ':'Ausgabe',
-             'rhythmus':'overwritten',
-             'name':'overwritten',
-             'wert':'0,00'
+             'edit_index': '0',
+             'startdatum': '2.1.2017',
+             'endedatum': '5.1.2017',
+             'kategorie': 'overwritten',
+             'typ': 'Ausgabe',
+             'rhythmus': 'overwritten',
+             'name': 'overwritten',
+             'wert': '0,00'
              }
          ))
 
@@ -235,28 +235,28 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
         next_id = request_handler.current_key()
         views.index(PostRequest(
-            {'action':'add',
+            {'action': 'add',
              'ID':next_id,
-             'startdatum':'2.1.2017',
-             'endedatum':'5.1.2017',
-             'kategorie':'Essen',
-             'typ':'Ausgabe',
-             'rhythmus':'monatlich',
-             'name':'testname',
-             'wert':'2,50'
+             'startdatum': '2.1.2017',
+             'endedatum': '5.1.2017',
+             'kategorie': 'Essen',
+             'typ': 'Ausgabe',
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,50'
              }
          ))
 
         views.index(PostRequest(
-            {'action':'add',
+            {'action': 'add',
              'ID':next_id,
-             'startdatum':'2.1.2017',
-             'endedatum':'5.1.2017',
-             'kategorie':'overwritten',
-             'typ':'Ausgabe',
-             'rhythmus':'overwritten',
-             'name':'overwritten',
-             'wert':'0,00'
+             'startdatum': '2.1.2017',
+             'endedatum': '5.1.2017',
+             'kategorie': 'overwritten',
+             'typ': 'Ausgabe',
+             'rhythmus': 'overwritten',
+             'name': 'overwritten',
+             'wert': '0,00'
              }
          ))
 
