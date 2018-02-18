@@ -98,8 +98,6 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-
-        print("dbs: " , viewcore.DATABASES)
         views.index(VersionedPostRequest(
             {"action":"add",
              "edit_index":"0",

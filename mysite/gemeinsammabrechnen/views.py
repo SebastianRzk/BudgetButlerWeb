@@ -12,8 +12,6 @@ def _handle_request(_):
     ausgabe_sebastian = _sum(ausgabe_sebastian.Wert)
     ausgabe_maureen = _sum(ausgabe_maureen.Wert)
     ausgabe_gesamt = ausgabe_maureen + ausgabe_sebastian
-    print(viewcore.name_of_partner(), ausgabe_maureen)
-    print(viewcore.database_instance().name, ausgabe_sebastian)
 
     dif_sebastian = (ausgabe_gesamt / 2) - ausgabe_sebastian
     dif_maureen = (ausgabe_gesamt / 2) - ausgabe_maureen

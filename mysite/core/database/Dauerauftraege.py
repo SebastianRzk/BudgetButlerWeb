@@ -28,7 +28,6 @@ class Dauerauftraege:
         '''
         laufdatum = startdatum
         frequency_function = FrequencsFunctions().get_function_for_name(frequenzfunktion)
-        print("  Init alle Buchungen für die Den DauerauftragModule. Startdatum:", laufdatum)
         result = []
         while laufdatum < date.today() and laufdatum < endedatum:
             abbuchung = self._berechne_abbuchung(laufdatum, kategorie, name, wert)
@@ -62,7 +61,6 @@ class Dauerauftraege:
         return self.frame_to_list_of_dicts(dauerauftraege)
 
     def get(self, db_index):
-        print(self.content)
         db_row = self.content.loc[db_index]
         return self._row_to_dict(self.content.columns, db_index, db_row)
 

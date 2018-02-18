@@ -69,7 +69,6 @@ class Database:
 
         ausgaben_maureen = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == name_partner]
         ausgaben_sebastian = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == name_self]
-        print(ausgaben_maureen)
         summe_maureen = self._sum(ausgaben_maureen['Wert'])
         summe_sebastian = self._sum(ausgaben_sebastian['Wert'])
 

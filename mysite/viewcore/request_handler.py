@@ -47,7 +47,6 @@ def handle_request(request, request_action, html_base_page):
 
     context['content'] = rendered_content
     response = request_handler.RENDER_FULL_FUNC(request, request_handler.BASE_THEME_PATH + 'index.html', context)
-    print('Page generated')
     return response
 
 def current_key():

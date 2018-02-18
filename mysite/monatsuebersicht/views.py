@@ -62,7 +62,6 @@ def _handle_request(request):
     for tag, kategorien_liste in zusammenfassung:
         for einheit in kategorien_liste:
             einheit['farbe'] = einzelbuchungen.get_farbe_fuer(einheit['kategorie'])
-    print(zusammenfassung)
     context['zusammenfassung'] = zusammenfassung
 
     ausgaben_monat = table_ausgaben.sum()
@@ -119,8 +118,6 @@ def index(request):
     return request_handler.handle_request(request, _handle_request, 'uebersicht_monat.html')
 
 def _abrechnen(request):
-    print(request.POST)
-    #date = request.POST['date'].split('_')
     context = viewcore.generate_base_context('monatsuebersicht')
     date = viewcore.today()
     year = date.year
@@ -136,7 +133,7 @@ def _abrechnen(request):
             quantity = int(request.POST['quantity'])
 
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
-    generator  = ReportGenerator('Monatsübersicht für '+str(month) + '/' + str(year), quantity)
+    generator = ReportGenerator('Monatsübersicht für ' + str(month) + '/' + str(year), quantity)
 
     table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)
     table_ausgaben = table_data_selection.select_ausgaben()

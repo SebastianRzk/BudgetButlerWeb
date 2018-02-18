@@ -10,7 +10,7 @@ class ReportGenerator_test(unittest.TestCase):
 
         data = {
                 'Einnahmen': {'Miete': 123.45,
-                              'Sonstiges': -34.12}
+                              'Sonstiges':-34.12}
             }
         generator.add_half_line_elements(data)
 
@@ -25,8 +25,6 @@ class ReportGenerator_test(unittest.TestCase):
                 'Einnahmen': {'MieteMieteMieteMiete1234567890': 123.45}
             }
         generator.add_half_line_elements(data)
-        for l in generator.get_raw_half_lines():
-            print(l+"|")
         assert generator.get_raw_half_lines() == ['Einnahmen                             ',
                                                   '   MieteMieteMieteMiete12...   +123,45']
 
@@ -38,8 +36,6 @@ class ReportGenerator_test(unittest.TestCase):
                 'Einnahmen': {'MieteMieteMieteMiete1234567890': 12345.45}
             }
         generator.add_half_line_elements(data)
-        for l in generator.get_raw_half_lines():
-            print(l+"|")
         assert generator.get_raw_half_lines() == ['Einnahmen                             ',
                                                   '   MieteMieteMieteMiete12... +12345,45']
 
@@ -51,7 +47,7 @@ class ReportGenerator_test(unittest.TestCase):
             }
         generator.add_half_line_elements(data)
         for l in generator.get_raw_half_lines():
-            print(l+"|")
+            print(l + "|")
         assert generator.get_raw_half_lines() == ['Einnahmen                             ',
                                                   '   A                             +0,00']
 
@@ -62,10 +58,10 @@ class ReportGenerator_test(unittest.TestCase):
                 'Einnahmen': {'Firma1': 123.45,
                               'Firma2': 34.12,
                               'Firma3': 222.22},
-                'Ausgaben': {'Essen':  -300.40,
-                             'Miete': -450.00,
-                             'Versicherung': -200.00,
-                             'Sport': -50.00}
+                'Ausgaben': {'Essen':-300.40,
+                             'Miete':-450.00,
+                             'Versicherung':-200.00,
+                             'Sport':-50.00}
             }
         generator.add_half_line_elements(data)
 
@@ -80,7 +76,7 @@ class ReportGenerator_test(unittest.TestCase):
             '   Essen                       -300,40                                          ',
             '--------------------------------------------------------------------------------',
             '                                                                       Blatt 1/1',
-            '','']
+            '', '']
 
     def test_generate_page_with_no_data_should_generate_empty_page(self):
         generator = ReportGenerator('SamplePage', 10)
@@ -103,7 +99,7 @@ class ReportGenerator_test(unittest.TestCase):
             '                                                                                ',
             '--------------------------------------------------------------------------------',
             '                                                                       Blatt 1/1',
-            '','']
+            '', '']
 
     def test_generate_page_should_empty_line_between_elements(self):
         generator = ReportGenerator('SamplePage', 10)
@@ -124,7 +120,7 @@ class ReportGenerator_test(unittest.TestCase):
             '                                                                                ',
             '--------------------------------------------------------------------------------',
             '                                                                       Blatt 1/1',
-            '','']
+            '', '']
 
     def test_add_halfline(self):
         generator = ReportGenerator('SamplePage', 10)
@@ -144,4 +140,4 @@ class ReportGenerator_test(unittest.TestCase):
             '                                                                                ',
             '--------------------------------------------------------------------------------',
             '                                                                       Blatt 1/1',
-            '','']
+            '', '']
