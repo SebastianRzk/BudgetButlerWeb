@@ -14,8 +14,8 @@ class SeleniumTestClass:
         if 'TRAVIS_INTEGRATION' in os.environ:
             chrome_options = Options()
             chrome_options.add_argument("--headless")
-
-            drivers = [self._to_param('Chromium  headless',lambda: _launch_headles_chromium(chrome_options))]
+            instance = _launch_headles_chromium(chrome_options)
+            drivers = [self._to_param('Chromium  headless',lambda: instance)]
         else:
             drivers = [self._to_param('Chromium', webdriver.Chrome)]
 
