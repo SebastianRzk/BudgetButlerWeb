@@ -756,23 +756,13 @@ table.text-center th {
 .margin-bottom {
   margin-bottom: 20px;
 }
-/* Display inline */
-.inline {
-  display: inline;
-  width: auto;
-}
 
 .text-bold,
 .text-bold.table td,
 .text-bold.table th {
   font-weight: 700;
 }
-/* _fix for sparkline tooltip */
-.jqstooltip {
-  padding: 5px!important;
-  width: auto!important;
-  height: auto!important;
-}
+
 .table-wert {
   text-align: right;
   padding-right: 50pt !important;
