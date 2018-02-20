@@ -203,7 +203,7 @@ $.AdminLTE.tree = function (menu) {
  *
  * @type Object
  * @usage $.AdminLTE.boxWidget.activate()
- *								Set all of your option in the main $.AdminLTE.options object
+ *Set all of your option in the main $.AdminLTE.options object
  */
 $.AdminLTE.boxWidget = {
   activate: function () {
@@ -234,10 +234,4 @@ $.AdminLTE.boxWidget = {
       });
     }
   },
-  remove: function (element) {
-    //Find the box parent
-    var box = element.parents(".box").first();
-    box.slideUp();
-  },
-  options: $.AdminLTE.options.boxWidgetOptions
 };
