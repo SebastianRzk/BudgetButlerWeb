@@ -118,11 +118,6 @@ $(function () {
     }).css("width", "100%");
   }
 
-  //Activate sidebar push menu
-  if (o.sidebarPushMenu) {
-    $.AdminLTE.pushMenu(o.sidebarToggleSelector);
-  }
-
   //Activate Bootstrap tooltip
   if (o.enableBSToppltip) {
     $(o.BSTooltipSelector).tooltip();
@@ -218,30 +213,6 @@ $.AdminLTE.layout = {
       }
     }
   }
-};
-
-/* PushMenu()
- * ==========
- * Adds the push menu functionality to the sidebar.
- *
- * @type Function
- * @usage: $.AdminLTE.pushMenu("[data-toggle='offcanvas']")
- */
-$.AdminLTE.pushMenu = function (toggleBtn) {
-  //Enable sidebar toggle
-  $(toggleBtn).click(function (e) {
-    e.preventDefault();
-    //Enable sidebar push menu
-    $("body").toggleClass('sidebar-collapse');
-    $("body").toggleClass('sidebar-open');
-  });
-  $(".content-wrapper").click(function () {
-    //Enable hide menu when clicking on the content-wrapper on small screens    
-    if ($(window).width() <= 767 && $("body").hasClass("sidebar-open")) {
-      $("body").removeClass('sidebar-open');
-    }
-  });
-
 };
 
 /* Tree()
