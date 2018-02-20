@@ -37,14 +37,14 @@ def _load_config():
     for key in configuration_provider.DEFAULT_CONFIG:
         if key not in loaded_config:
             loaded_config[key] = configuration_provider.DEFAULT_CONFIG[key]
-    print("#####",loaded_config)
+    print("#####", loaded_config)
     return loaded_config
 
 def _save_config(config):
     content = []
     for key in config:
         content.append('{key}:{value}'.format(key=key, value=config[key]))
-    content = reduce(lambda x,y: str(x)+'\n'+str(y), content)
+    content = reduce(lambda x, y: str(x) + '\n' + str(y), content)
     configuration_provider.SAVER(content)
 
 def get_configuration(key):

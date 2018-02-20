@@ -22,7 +22,6 @@ def _handle_request(_):
         'zusammenfassung_ausgabenliste': _list_to_json(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
         'ausgaben_des_aktuellen_monats': ausgaben_liste,
     }
-    print(context)
     context = {**context, **viewcore.generate_base_context('dashboard')}
     return context
 

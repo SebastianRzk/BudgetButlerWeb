@@ -9,15 +9,12 @@ from viewcore.converter import from_double_to_german, datum, datum_to_string
 from viewcore import request_handler
 
 def handle_request(request):
-    print(viewcore.database_instance())
     if request.method == "POST" and request.POST['action'] == 'add':
-        print(request.POST)
         date = datum(request.POST['date'])
         value = request.POST['wert'].replace(",", ".")
         value = float(value)
         value = value * -1
         einnameausgabe = pandas.DataFrame([[date, request.POST['kategorie'], str(request.POST['name']), value, request.POST['person']]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
-        print(einnameausgabe)
         if "edit_index" in request.POST:
             viewcore.database_instance().gemeinsamebuchungen.edit(int(request.POST['edit_index']), einnameausgabe)
             viewcore.add_changed_gemeinsamebuchungen(
@@ -47,7 +44,6 @@ def handle_request(request):
                     })
 
         viewcore.save_refresh()
-    print(viewcore.database_instance().einzelbuchungen)
     context = viewcore.generate_base_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if post_action_is(request, 'edit'):

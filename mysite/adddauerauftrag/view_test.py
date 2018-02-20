@@ -69,7 +69,6 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-
         testdb = viewcore.database_instance()
         assert len(testdb.dauerauftraege.content) == 1
         assert testdb.dauerauftraege.content.Wert[0] == -1 * float('2.00')
@@ -117,8 +116,6 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-
-        print('dbs: ' , viewcore.DATABASES)
         views.index(VersionedPostRequest(
             {'action': 'add',
              'edit_index': '0',

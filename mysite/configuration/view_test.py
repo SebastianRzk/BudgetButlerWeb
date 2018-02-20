@@ -63,7 +63,6 @@ class TestKonfiguration(unittest.TestCase):
 
         views.index(PostRequest({'action':'set_partnername', 'partnername':'testpartner_renamed'}))
         gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
-        print(gemeinsame_buchungen.content)
         database_partners = gemeinsame_buchungen.content.Person
 
         assert set(database_partners) == set(['testpartner_renamed'])

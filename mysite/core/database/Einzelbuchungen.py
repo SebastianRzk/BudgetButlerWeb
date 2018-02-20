@@ -199,9 +199,6 @@ class EinzelbuchungsSelektor:
     def raw_table(self):
         return self.content
 
-    def sort_index(self):
-        return EinzelbuchungsSelektor(self.content.sort_index())
-
     def group_by_kategorie(self):
         return self.content.groupby(by='Kategorie').sum()
 

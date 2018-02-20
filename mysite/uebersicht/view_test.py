@@ -35,8 +35,6 @@ class TestUebersicht(unittest.TestCase):
         self.set_up()
         self.add_test_data()
         result = views.index(GetRequest())
-        print("#################################################")
-        print(result['alles']['2012.12'][0])
         item = result['alles']['2012.12'][0]
         assert float(item['wert']) > 0
         assert item['link'] == "addeinnahme"

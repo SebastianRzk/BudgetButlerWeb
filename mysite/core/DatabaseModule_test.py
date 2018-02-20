@@ -104,7 +104,6 @@ class converter_test(unittest.TestCase):
 
         result = Database('test_database').frame_to_list_of_dicts(dataframe)
 
-        print(result)
         assert len(result) == 2
         assert result[0]['col1'] == 'test1'
         assert result[0]['col2'] == 1

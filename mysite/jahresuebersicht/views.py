@@ -70,7 +70,6 @@ def _handle_request(request):
 
     if 'date' in request.POST:
         year = int(float(request.POST['date']))
-    print(year)
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
 
     jahresbuchungs_tabelle = einzelbuchungen.select().select_year(year)

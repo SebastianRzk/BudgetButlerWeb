@@ -37,8 +37,6 @@ class Gemeinsamabrechnen(unittest.TestCase):
         DBManagerStub.stub_abrechnungs_write()
         views.abrechnen(PostRequest({}))
 
-        print(testdb.einzelbuchungen.content)
-
         assert testdb.einzelbuchungen.anzahl() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
 

@@ -77,44 +77,18 @@ body {
     transform: translate(230px, 0);
   }
 }
-.content-wrapper,
-.right-side {
-  min-height: 100%;
+.content-wrapper {
+  min-height: 100vh;
   background-color: #ecf0f5;
   z-index: 800;
+  padding: 30px 50px 50px 50px;
 }
-/* Fixed layout */
-.fixed .main-header,
-.fixed .main-sidebar,
-.fixed .left-side {
-  position: fixed;
-}
-.fixed .main-header {
-  top: 0;
-  right: 0;
-  left: 0;
-}
-.fixed .content-wrapper,
-.fixed .right-side {
-  padding-top: 50px;
-}
-@media (max-width: 767px) {
-  .fixed .content-wrapper,
-  .fixed .right-side {
-    padding-top: 100px;
-  }
-}
-.fixed.layout-boxed .wrapper {
-  max-width: 100%;
-}
+
 /* Content */
 .content {
   min-height: 250px;
-  padding: 15px;
   margin-right: auto;
   margin-left: auto;
-  padding-left: 50px;
-  padding-right: 50px;
 }
 /* H1 - H6 font */
 h1,
@@ -146,11 +120,6 @@ a:focus {
 .page-header {
   margin: 10px 0 20px 0;
   font-size: 22px;
-}
-.page-header > small {
-  color: #666;
-  display: block;
-  margin-top: 5px;
 }
 /* Don't display when printing */
 @media print {
@@ -272,7 +241,7 @@ a:focus {
 }
 .content-header {
   position: relative;
-  padding: 15px 15px 0 15px;
+  padding-bottom: 25px;
 }
 .content-header > h1 {
   margin: 0;
@@ -335,7 +304,7 @@ a:focus {
   top: 0;
   left: 0;
   padding-top: 50px;
-  height: 100%;
+  min-height: 100vh;
   width: 230px;
   z-index: 810;
   -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
@@ -510,27 +479,6 @@ a:focus {
   -moz-appearance: none;
   appearance: none;
 }
-.form-group.has-success label {
-  color: #00a65a;
-}
-.form-group.has-success .form-control {
-  border-color: #00a65a !important;
-  box-shadow: none;
-}
-.form-group.has-warning label {
-  color: #f39c12;
-}
-.form-group.has-warning .form-control {
-  border-color: #f39c12 !important;
-  box-shadow: none;
-}
-.form-group.has-error label {
-  color: #dd4b39;
-}
-.form-group.has-error .form-control {
-  border-color: #dd4b39 !important;
-  box-shadow: none;
-}
 /* Input group */
 .input-group .input-group-addon {
   border-radius: 0px;
@@ -553,6 +501,7 @@ a:focus {
   position: relative;
   background: #ffffff;
   margin-bottom: 20px;
+  padding: 8px;
   width: 100%;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 }
@@ -564,7 +513,7 @@ a:focus {
 .box-header {
   color: #444;
   display: block;
-  padding: 10px;
+  padding: 5px;
   position: relative;
 }
 .box-header:before,
@@ -588,24 +537,14 @@ a:focus {
   margin: 0;
   line-height: 1;
 }
-.box-header > .fa{
-  margin-right: 5px;
-}
-.box-header > .box-tools {
+.box-tools {
   position: absolute;
   right: 10px;
-  top: 5px;
-}
-.box-header > .box-tools [data-toggle="tooltip"] {
-  position: relative;
-}
-.box-header > .box-tools.pull-right .dropdown-menu {
-  right: 0;
-  left: auto;
+  top: 3px;
 }
 .btn-box-tool {
   padding: 5px;
-  font-size: 12px;
+  font-size: 15px;
   background: transparent;
   box-shadow: none!important;
   color: #97a0b3;
@@ -679,38 +618,6 @@ a:focus {
     margin-right: 10px;
   }
 }
-.shortcut-box {
-  display: block;
-  min-height: 40px;
-  background: #fff;
-  width: 100%;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
-  margin-bottom: 15px;
-}
-.shortcut-icon{
-  display: block;
-  float: left;
-  height: 38px;
-  width: 38px;
-  text-align: center;
-  vertical-align:middle;
-  font-size: 35px;
-  line-height: 32px;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.shortcut-icon .fa{
-	margin: 2px;
-}
-
-.shortcut-link{
-	min-height: 40px;
-	font-size: 25px;
-	vertical-align:middle;
-	margin-top: 3px;
-	margin-left:3px;
-}
 /*
  * Component: Button
  * -----------------
@@ -776,23 +683,13 @@ table.text-center th {
 .margin-bottom {
   margin-bottom: 20px;
 }
-/* Display inline */
-.inline {
-  display: inline;
-  width: auto;
-}
 
 .text-bold,
 .text-bold.table td,
 .text-bold.table th {
   font-weight: 700;
 }
-/* _fix for sparkline tooltip */
-.jqstooltip {
-  padding: 5px!important;
-  width: auto!important;
-  height: auto!important;
-}
+
 .table-wert {
   text-align: right;
   padding-right: 50pt !important;
