@@ -53,6 +53,7 @@ body {
   transition: margin-left 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
   margin-left: 230px;
   z-index: 820;
+  height: 100vh;
 }
 .layout-top-nav .content-wrapper,
 .layout-top-nav .right-side{
