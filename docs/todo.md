@@ -7,7 +7,7 @@
 ## TODO for next version
 
 * Check input data and show messages
-* Allow generating monthly and annually reports
+* Allow generating annually reports
 
 ## Further releases:
 
@@ -20,4 +20,3 @@
 ### UI
 
 * Replace boostrap with css grid
-* Smoother design

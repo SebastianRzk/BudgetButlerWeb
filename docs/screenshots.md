@@ -4,6 +4,11 @@
 * [Screenshots](screenshots.md)
 * [TODOs](todo.md)
 
+## Startseite
+
+![](img/screenshots/dashboard.png)
+
+
 ## Ausgaben erfassen
 
 ![](img/screenshots/ausgabe.png)
