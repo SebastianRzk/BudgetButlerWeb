@@ -58,9 +58,6 @@ $.AdminLTE.options = {
  * options above.
  */
 $(function () {
-  //Easy access to options
-  var o = $.AdminLTE.options;
-
   //Activate the layout maker
   $.AdminLTE.layout.activate();
 
