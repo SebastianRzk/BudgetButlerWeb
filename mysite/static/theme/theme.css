@@ -545,20 +545,10 @@ a:focus {
   margin: 0;
   line-height: 1;
 }
-.box-header > .fa{
-  margin-right: 5px;
-}
-.box-header > .box-tools {
+.box-tools {
   position: absolute;
   right: 10px;
-  top: 5px;
-}
-.box-header > .box-tools [data-toggle="tooltip"] {
-  position: relative;
-}
-.box-header > .box-tools.pull-right .dropdown-menu {
-  right: 0;
-  left: auto;
+  top: 3px;
 }
 .btn-box-tool {
   padding: 5px;
