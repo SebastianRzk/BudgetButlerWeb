@@ -35,29 +35,6 @@ $.AdminLTE = {};
  * Modify these options to suit your implementation
  */
 $.AdminLTE.options = {
-  //Add slimscroll to navbar menus
-  //This requires you to load the slimscroll plugin
-  //in every page before app.js
-  navbarMenuSlimscroll: true,
-  navbarMenuSlimscrollWidth: "3px", //The width of the scroll bar
-  navbarMenuHeight: "200px", //The height of the inner menu
-  //Sidebar push menu toggle button selector
-  sidebarToggleSelector: "[data-toggle='offcanvas']",
-  //Activate sidebar push menu
-  sidebarPushMenu: true,
-  //Activate sidebar slimscroll if the fixed layout is set (requires SlimScroll Plugin)
-  sidebarSlimScroll: true,
-  //Bootstrap.js tooltip
-  enableBSToppltip: true,
-  BSTooltipSelector: "[data-toggle='tooltip']",
-  //Enable Fast Click. Fastclick.js creates a more
-  //native touch ecperience with touch devices. If you
-  //choose to enable the plugin, make sure you load the script 
-  //before AdminLTE's app.js
-  enableFastclick: true,
-  //Box Widget Plugin. Enable this plugin
-  //to allow boxes to be collapsed
-  enableBoxWidget: true,
   //Box Widget plugin options
   boxWidgetOptions: {
     boxWidgetIcons: {
@@ -71,25 +48,6 @@ $.AdminLTE.options = {
       collapse: '[data-widget="collapse"]'
     }
   },
-  //Define the set of colors to use globally around the website
-  colors: {
-    lightBlue: "#3c8dbc",
-    red: "#f56954",
-    green: "#00a65a",
-    aqua: "#00c0ef",
-    yellow: "#f39c12",
-    blue: "#0073b7",
-    navy: "#001F3F",
-    teal: "#39CCCC",
-    olive: "#3D9970",
-    lime: "#01FF70",
-    orange: "#FF851B",
-    fuchsia: "#F012BE",
-    purple: "#8E24AA",
-    maroon: "#D81B60",
-    black: "#222222",
-    gray: "#d2d6de"
-  }
 };
 
 /* ------------------
@@ -109,28 +67,7 @@ $(function () {
   //Enable sidebar tree view controls
   $.AdminLTE.tree('.sidebar');
 
-  //Add slimscroll to navbar dropdown
-  if (o.navbarMenuSlimscroll && typeof $.fn.slimscroll != 'undefined') {
-    $(".navbar .menu").slimscroll({
-      height: "200px",
-      alwaysVisible: false,
-      size: "3px"
-    }).css("width", "100%");
-  }
-
-  //Activate Bootstrap tooltip
-  if (o.enableBSToppltip) {
-    $(o.BSTooltipSelector).tooltip();
-  }
-
-  //Activate box widget
-  if (o.enableBoxWidget) {
-    $.AdminLTE.boxWidget.activate();
-  }
-  
-  if(o.enableFastclick && typeof FastClick != 'undefined') {
-    FastClick.attach(document.body);
-  }
+  $.AdminLTE.boxWidget.activate();
 
   /*
    * INITIALIZE BUTTON TOGGLE
