@@ -15,9 +15,9 @@ class SeleniumTestClass:
 
     def pytest_generate_tests(self, metafunc):
         if 'TRAVIS_INTEGRATION' in os.environ:
-            chrome = [self._to_param('Chromium  headless',lambda: _launch_headles_chromium(), close_driver)]
+            chrome = [self._to_param('Chromium  headless', _launch_headles_chromium, close_driver)]
         else:
-            chrome = [self._to_param('Chromium', webdriver.Chrome, close_driver)]
+            chrome = [self._to_param('Chromium', _launch_head_chrome, close_driver)]
 
         metafunc.parametrize(argnames=['get_driver', 'close_driver'], argvalues=chrome, scope="module")
 
@@ -29,6 +29,11 @@ def close_driver(driver):
         SeleniumTest.CHROME_CACHE.append(driver)
         return
     driver.close()
+
+def _launch_head_chrome():
+    chrome_options = Options()
+    chrome_options.add_argument("--window-size=1920,1080")
+    return webdriver.Chrome(chrome_options=chrome_options)
 
 def _launch_headles_chromium():
     if SeleniumTest.CHROME_CACHE:
