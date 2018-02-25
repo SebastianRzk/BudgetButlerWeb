@@ -60,19 +60,13 @@
 					<div class="form-group">
 						<label>Kategorie</label> <select class="form-control" name="kategorie" id="kategorie_auswahl">
 						 {% for kategorie in kategorien %}
-							<option>{{kategorie}}</option>
+							<option
+								{% if bearbeitungsmodus and kategorie == default_item.Kategorie%}
+								selected="selected"
+								{% endif %}
+								>{{kategorie}}</option>
 						 {% endfor %}
 						</select>
-						{% if bearbeitungsmodus %}
-						<script type="text/javascript">
-							function SelectElement()
-								{
-									var element = document.getElementById('kategorie_auswahl');
-									element.value = "{{default_item.Kategorie}}";
-								}
-								SelectElement()
-						</script>
-						{% endif %}
 					</div>
 				</div>
 				<div class="box-footer">
