@@ -25,8 +25,8 @@ class TestUI(SeleniumTestClass):
         add_button.click()
 
 
-    def teste_uebersicht(self, driver_provider):
-        driver = driver_provider()
+    def teste_uebersicht(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
         self._add_dauerauftrag(driver, '01012010', '02022010', '0name', '0test_kategorie', '0.5', 'Einnahme')
@@ -44,11 +44,11 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_id('item_2_startdatum').get_attribute('innerHTML') == 'Jan. 1, 2012'
         assert driver.find_element_by_id('item_2_endedatum').get_attribute('innerHTML') == 'Feb. 2, 2012'
         assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
-        driver.close()
+        close_driver(driver)
 
 
-    def teste_edit_vorbelegung_ausgabe(self, driver_provider):
-        driver = driver_provider()
+    def teste_edit_vorbelegung_ausgabe(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
         self._add_dauerauftrag(driver, '01012010', '02022010', '0name', '0test_kategorie', '0.5', 'Einnahme')
@@ -70,10 +70,10 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
-        driver.close()
+        close_driver(driver)
 
-    def teste_edit_vorbelegung_einnahme(self, driver_provider):
-        driver = driver_provider()
+    def teste_edit_vorbelegung_einnahme(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
         self._add_dauerauftrag(driver, '01012010', '02022010', '0name', '0test_kategorie', '0.5', 'Einnahme')
@@ -95,5 +95,5 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2010'
         assert driver.find_element_by_name('wert').get_attribute('value') == '0,50'
 
-        driver.close()
+        close_driver(driver)
 

@@ -17,7 +17,7 @@
 							<div class="input-group-addon">
 								<span class="fa fa-calendar"></span>
 							</div>
-							<input value="{{default_item.Startdatum}}" type="text" name="startdatum" id="startdatum" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask required="required" pattern="[0-9.]{10,10}" />
+							<input value="{{default_item.Startdatum}}" type="text" name="startdatum" id="startdatum" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask required="required" pattern="[0-9.]{10,10}" autofocus="autofocus"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -42,18 +42,16 @@
 					<div class="form-group">
 						<label>Art</label>
 						<select value="{{default_item.art}}" class="form-control" name="typ" id="typ_auswahl">
-							<option>Ausgabe</option>
-							<option>Einnahme</option>
-							{% if bearbeitungsmodus %}
-							<script type="text/javascript">
-								function SelectElement()
-									{
-										var element = document.getElementById('typ_auswahl');
-										element.value = "{{default_item.typ}}";
-									}
-									SelectElement()
-							</script>
-							{% endif %}
+							<option
+								{% if bearbeitungsmodus and default_item.typ == "Ausgabe"%}
+								selected="selected"
+								{% endif %}
+								>Ausgabe</option>
+							<option
+								{% if bearbeitungsmodus and default_item.typ == "Einnahme"%}
+								selected="selected"
+								{% endif %}
+								>Einnahme</option>
 						</select>
 					</div>
 					<div class="form-group">
@@ -62,19 +60,13 @@
 					<div class="form-group">
 						<label>Kategorie</label> <select class="form-control" name="kategorie" id="kategorie_auswahl">
 						 {% for kategorie in kategorien %}
-							<option>{{kategorie}}</option>
+							<option
+								{% if bearbeitungsmodus and kategorie == default_item.Kategorie%}
+								selected="selected"
+								{% endif %}
+								>{{kategorie}}</option>
 						 {% endfor %}
 						</select>
-						{% if bearbeitungsmodus %}
-						<script type="text/javascript">
-							function SelectElement()
-								{
-									var element = document.getElementById('kategorie_auswahl');
-									element.value = "{{default_item.Kategorie}}";
-								}
-								SelectElement()
-						</script>
-						{% endif %}
 					</div>
 				</div>
 				<div class="box-footer">

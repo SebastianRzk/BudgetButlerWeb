@@ -3,28 +3,50 @@ from selenium import webdriver
 import os
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.chrome.options import Options
-import time
+import SeleniumTest
+
+CHROME_CACHE = []
+CHROME_INSTANCES = []
 
 class SeleniumTestClass:
 
-    def _to_param(self, name, provider):
-        return pytest.param(provider, id=name)
+    def _to_param(self, name, provider, closer):
+        return pytest.param(provider, closer, id=name)
 
     def pytest_generate_tests(self, metafunc):
         if 'TRAVIS_INTEGRATION' in os.environ:
-            chrome_options = Options()
-            chrome_options.add_argument("--headless")
-
-            drivers = [self._to_param('Chromium  headless',lambda: _launch_headles_chromium(chrome_options))]
+            chrome = [self._to_param('Chromium  headless', _launch_headles_chromium, close_driver)]
         else:
-            drivers = [self._to_param('Chromium', webdriver.Chrome)]
+            chrome = [self._to_param('Chromium', _launch_head_chrome, close_driver)]
 
-        metafunc.parametrize(argnames='driver_provider', argvalues=drivers, scope="module")
+        metafunc.parametrize(argnames=['get_driver', 'close_driver'], argvalues=chrome, scope="module")
 
-def _launch_headles_chromium(chrome_options):
+def close_driver(driver):
+    if driver in SeleniumTest.CHROME_INSTANCES:
+        SeleniumTest.CHROME_INSTANCES.remove(driver)
+
     if 'TRAVIS_INTEGRATION' in os.environ:
-        time.sleep(2) # Sleep 1 sec to avoid mem problems on travis
-    return webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options)
+        SeleniumTest.CHROME_CACHE.append(driver)
+        return
+    driver.close()
+
+def _launch_head_chrome():
+    chrome_options = Options()
+    chrome_options.add_argument("--window-size=1920,1080")
+    return webdriver.Chrome(chrome_options=chrome_options)
+
+def _launch_headles_chromium():
+    if SeleniumTest.CHROME_CACHE:
+        browser = SeleniumTest.CHROME_CACHE[0]
+        SeleniumTest.CHROME_CACHE.remove(browser)
+        SeleniumTest.CHROME_INSTANCES.append(browser)
+        return browser
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options)
+    SeleniumTest.CHROME_INSTANCES.append(browser)
+    return browser
 
 def enter_test_mode(driver):
     driver.get('http://localhost:8000/production/testmode')

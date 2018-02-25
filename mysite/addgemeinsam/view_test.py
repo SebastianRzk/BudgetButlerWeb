@@ -42,6 +42,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
         preset = context['default_item']
         assert preset['datum'] == '10.10.2010'
+        assert preset['edit_index'] == '0'
         assert preset['kategorie'] == 'kategorie'
         assert preset['name'] == 'ausgaben_name'
         assert preset['wert'] == '10,00'

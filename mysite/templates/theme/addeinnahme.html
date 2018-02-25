@@ -14,7 +14,7 @@
 							<div class="input-group-addon">
 								<span class="fa fa-calendar"></span>
 							</div>
-							<input value="{{default_item.Datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask required="required" pattern="[0-9.]{10,10}" />
+							<input value="{{default_item.Datum}}" type="text" name="date" class="form-control" data-inputmask="'alias': 'dd.mm.yyyy'" data-mask required="required" pattern="[0-9.]{10,10}" autofocus="autofocus"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -30,19 +30,13 @@
 						<label>Kategorie</label>
 						<select value="{{default_item.Kategorie}}" class="form-control" id="kategorie_auswahl" name="kategorie">
 							{% for kategorie in kategorien %}
-							<option>{{kategorie}}</option>
+							<option
+								{% if bearbeitungsmodus and kategorie == default_item.Kategorie%}
+								selected="selected"
+								{% endif %}
+								>{{kategorie}}</option>
 							{% endfor %}
 						</select>
-						{% if bearbeitungsmodus %}
-						<script type="text/javascript">
-							function SelectElement()
-								{
-									var element = document.getElementById('kategorie_auswahl');
-									element.value = "{{default_item.Kategorie}}";
-								}
-								SelectElement()
-						</script>
-						{% endif %}
 					</div>
 				</div>
 				<div class="box-footer">

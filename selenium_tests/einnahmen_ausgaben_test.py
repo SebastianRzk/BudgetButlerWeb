@@ -18,15 +18,14 @@ class TestUI(SeleniumTestClass):
         fill_element(driver, 'wert', wert)
         select_option(driver, 'kategorie_auswahl', kategorie)
 
-
         add_button = driver.find_element_by_id('add')
         add_button.click()
 
         base_table = driver.find_element_by_id('letzte_erfassungen')
         tableRows = base_table.find_elements_by_tag_name('tr')
 
-    def teste_edit_vorbelegung(self, driver_provider):
-        driver = driver_provider()
+    def teste_edit_vorbelegung(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
         self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5')
@@ -54,5 +53,5 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('date').get_attribute('value') == '01.01.2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
-        driver.close()
+        close_driver(driver)
 

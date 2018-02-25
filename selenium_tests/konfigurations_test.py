@@ -9,8 +9,8 @@ from SeleniumTest import get_options
 from SeleniumTest import fill_element
 
 class TestUI(SeleniumTestClass):
-    def teste_change_partnername(self, driver_provider):
-        driver = driver_provider()
+    def teste_change_partnername(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         driver.get('http://localhost:8000/addgemeinsam/')
         assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Maureen'])
@@ -21,5 +21,5 @@ class TestUI(SeleniumTestClass):
 
         driver.get('http://localhost:8000/addgemeinsam/')
         assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Olaf'])
-        driver.close()
+        close_driver(driver)
         
