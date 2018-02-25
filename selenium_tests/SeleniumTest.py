@@ -32,7 +32,7 @@ def close_driver(driver):
 
 def _launch_headles_chromium():
     if SeleniumTest.CHROME_CACHE:
-        browser = SeleniumTest.CHROME_CACHE[1]
+        browser = SeleniumTest.CHROME_CACHE[0]
         SeleniumTest.CHROME_CACHE.remove(browser)
         SeleniumTest.CHROME_INSTANCES.append(browser)
         return browser
