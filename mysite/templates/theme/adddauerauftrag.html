@@ -42,18 +42,16 @@
 					<div class="form-group">
 						<label>Art</label>
 						<select value="{{default_item.art}}" class="form-control" name="typ" id="typ_auswahl">
-							<option>Ausgabe</option>
-							<option>Einnahme</option>
-							{% if bearbeitungsmodus %}
-							<script type="text/javascript">
-								function SelectElement()
-									{
-										var element = document.getElementById('typ_auswahl');
-										element.value = "{{default_item.typ}}";
-									}
-									SelectElement()
-							</script>
-							{% endif %}
+							<option
+								{% if bearbeitungsmodus and default_item.typ == "Ausgabe"%}
+								selected="selected"
+								{% endif %}
+								>Ausgabe</option>
+							<option
+								{% if bearbeitungsmodus and default_item.typ == "Einnahme"%}
+								selected="selected"
+								{% endif %}
+								>Einnahme</option>
 						</select>
 					</div>
 					<div class="form-group">
