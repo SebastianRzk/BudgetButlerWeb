@@ -8,74 +8,74 @@ from time import sleep
 from SeleniumTest import get_selected_option
 
 class TestHeadlines(SeleniumTestClass):
-    def test_add_dauerauftrag(self, driver_provider):
-        driver = driver_provider()
+    def test_add_dauerauftrag(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/adddauerauftrag/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neuer Dauerauftrag'
-        driver.close()
+        close_driver(driver)
 
-    def test_add_einnahme(self, driver_provider):
-        driver = driver_provider()
+    def test_add_einnahme(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/addeinnahme/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neue Einnahme'
-        driver.close()
+        close_driver(driver)
 
-    def test_add_einzelbuchung(self, driver_provider):
-        driver = driver_provider()
+    def test_add_einzelbuchung(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/addeinzelbuchung/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neue Ausgabe'
-        driver.close()
+        close_driver(driver)
 
-    def test_add_gemeinsam(self, driver_provider):
-        driver = driver_provider()
+    def test_add_gemeinsam(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/addgemeinsam/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neue gemeinsame Ausgabe'
-        driver.close()
+        close_driver(driver)
 
-    def test_configuration(self, driver_provider):
-        driver = driver_provider()
+    def test_configuration(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/configuration/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Einstellungen'
-        driver.close()
+        close_driver(driver)
 
-    def test_dashboard(self, driver_provider):
-        driver = driver_provider()
+    def test_dashboard(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht'
-        driver.close()
+        close_driver(driver)
 
-    def test_dauerauftragsuebersicht(self, driver_provider):
-        driver = driver_provider()
+    def test_dauerauftragsuebersicht(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/dauerauftraguebersicht/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Alle Daueraufträge'
-        driver.close()
+        close_driver(driver)
 
-    def test_gemeinsam_abrechnen(self, driver_provider):
-        driver = driver_provider()
+    def test_gemeinsam_abrechnen(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/gemeinsamabrechnen/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Gemeinsam abrechnen'
-        driver.close()
+        close_driver(driver)
 
-    def test_gemeinsam_uebersicht(self, driver_provider):
-        driver = driver_provider()
+    def test_gemeinsam_uebersicht(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/gemeinsameuebersicht/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Alle gem. Buchungen'
-        driver.close()
+        close_driver(driver)
 
-    def test_importd(self, driver_provider):
-        driver = driver_provider()
+    def test_importd(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/import/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Datensätze importieren'
-        driver.close()
+        close_driver(driver)
 
-    def test_jahresuebersicht(self, driver_provider):
-        driver = driver_provider()
+    def test_jahresuebersicht(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/jahresuebersicht/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Jahresübersicht'
-        driver.close()
+        close_driver(driver)
 
-    def test_monatsuebersicht(self, driver_provider):
-        driver = driver_provider()
+    def test_monatsuebersicht(self, get_driver, close_driver):
+        driver = get_driver()
         driver.get('http://localhost:8000/monatsuebersicht/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Monatsübersicht'
-        driver.close()
+        close_driver(driver)

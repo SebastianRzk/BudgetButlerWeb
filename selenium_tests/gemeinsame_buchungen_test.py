@@ -24,8 +24,8 @@ class TestUI(SeleniumTestClass):
         add_button = driver.find_element_by_id('add')
         add_button.click()
 
-    def teste_uebersicht(self, driver_provider):
-        driver = driver_provider()
+    def teste_uebersicht(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
         self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5', 'Maureen')
@@ -43,11 +43,12 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_id('item_2_datum').get_attribute('innerHTML') == 'Jan. 1, 2012'
         assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
         assert driver.find_element_by_id('item_2_person').get_attribute('innerHTML') == 'test'
-        driver.close()
+
+        close_driver(driver)
 
 
-    def teste_vorbelegung_with_self(self, driver_provider):
-        driver = driver_provider()
+    def teste_vorbelegung_with_self(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
         self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5', 'Maureen')
@@ -68,10 +69,10 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('date').get_attribute('value') == '01.01.2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
-        driver.close()
+        close_driver(driver)
 
-    def teste_vorbelegung_with_other(self, driver_provider):
-        driver = driver_provider()
+    def teste_vorbelegung_with_other(self, get_driver, close_driver):
+        driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
         self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5', 'Maureen')
@@ -93,7 +94,7 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('wert').get_attribute('value') == '0,50'
 
 
-        driver.close()
+        close_driver(driver)
 
 
 

@@ -12,20 +12,20 @@ from SeleniumTest import get_selected_option
 import time
 
 class TestUI(SeleniumTestClass):
-    def teste_ausgaben(self, driver_provider):
-        self._generic_test(driver_provider, 'addeinzelbuchung', 'Neue Ausgabe')
+    def teste_ausgaben(self, get_driver, close_driver):
+        self._generic_test(get_driver, close_driver, 'addeinzelbuchung', 'Neue Ausgabe')
 
-    def teste_einnahmen(self, driver_provider):
-        self._generic_test(driver_provider, 'addeinnahme', 'Neue Einnahme')
+    def teste_einnahmen(self, get_driver, close_driver):
+        self._generic_test(get_driver, close_driver, 'addeinnahme', 'Neue Einnahme')
 
-    def teste_dauerauftrag(self, driver_provider):
-        self._generic_test(driver_provider, 'adddauerauftrag', 'Neuer Dauerauftrag')
+    def teste_dauerauftrag(self, get_driver, close_driver):
+        self._generic_test(get_driver, close_driver, 'adddauerauftrag', 'Neuer Dauerauftrag')
 
-    def teste_gemeinsam(self, driver_provider):
-        self._generic_test(driver_provider, 'addgemeinsam', 'Neue gemeinsame Ausgabe')
+    def teste_gemeinsam(self, get_driver, close_driver):
+        self._generic_test(get_driver, close_driver, 'addgemeinsam', 'Neue gemeinsame Ausgabe')
 
-    def _generic_test(self, driver_provider, pagename, pagetitle):
-        driver = driver_provider()
+    def _generic_test(self, get_driver, close_driver, pagename, pagetitle):
+        driver = get_driver()
         enter_test_mode(driver)
         driver.get('http://localhost:8000/' + pagename + '/')
 
@@ -43,7 +43,7 @@ class TestUI(SeleniumTestClass):
 
         verify_kategorie_defined(driver, 'fancy test')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == pagetitle
-        driver.close()
+        close_driver(driver)
 
 def verify_no_kategories_defined(driver):
     el = driver.find_element_by_id('kategorie_auswahl')

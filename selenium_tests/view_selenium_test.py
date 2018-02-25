@@ -37,12 +37,12 @@ class TestUI(SeleniumTestClass):
         assert kategorie_name in map(lambda x: x.text, kategorie_auswahl.options)
 
 
-    def test_simple_example(self, driver_provider):
-        DRIVER = driver_provider()
+    def test_simple_example(self, get_driver, close_driver):
+        DRIVER = get_driver()
         enter_test_mode(DRIVER)
 
         self._define_kategorie(DRIVER)
 
         self._add_ausgabe(DRIVER)
 
-        DRIVER.close()
+        close_driver(DRIVER)
