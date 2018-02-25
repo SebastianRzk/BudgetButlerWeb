@@ -18,7 +18,6 @@ class TestUI(SeleniumTestClass):
         fill_element(driver, 'wert', wert)
         select_option(driver, 'kategorie_auswahl', kategorie)
 
-
         add_button = driver.find_element_by_id('add')
         add_button.click()
 
