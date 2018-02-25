@@ -51,6 +51,7 @@ def handle_request(request):
         db_index = int(request.POST['edit_index'])
         db_row = viewcore.database_instance().gemeinsamebuchungen.content.iloc[db_index]
         default_item = {
+            'edit_index': str(db_index),
             'datum': datum_to_string(db_row.Datum),
             'name': db_row.Name,
             'wert': from_double_to_german(db_row.Wert * -1),

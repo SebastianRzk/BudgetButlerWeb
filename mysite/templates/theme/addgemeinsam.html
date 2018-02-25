@@ -24,43 +24,31 @@
 						<label>Wert der Ausgabe</label> <input value="{{default_item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" class="form-control" placeholder="" required="required" />
 					</div>
 					{% if bearbeitungsmodus %}
-					<input type="hidden" name="edit_index" value="{{default_item.index}}">
+					<input type="hidden" name="edit_index" value="{{default_item.edit_index}}">
 					{% endif %}
 					<div class="form-group">
 						<label>Kategorie</label>
 						<select class="form-control" name="kategorie" id="kategorie_auswahl">
 							 {% for kategorie in kategorien %}
-							<option>{{kategorie}}</option>
+							<option
+								{% if bearbeitungsmodus and kategorie == default_item.kategorie%}
+								selected="selected"
+								{% endif %}
+								>{{kategorie}}</option>
 							 {% endfor %}
 						</select>
-						{% if bearbeitungsmodus %}
-						<script type="text/javascript">
-							function SelectElement()
-								{
-									var element = document.getElementById('kategorie_auswahl');
-									element.value = "{{default_item.kategorie}}";
-								}
-								SelectElement()
-						</script>
-						{% endif %}
 					</div>
 					<div class="form-group">
 						<label>Person</label>
 						<select class="form-control" name="person" id="person_auswahl">
 							{% for person in personen %}
-							<option>{{person}}</option>
+							<option
+								{% if bearbeitungsmodus and person == default_item.person %}
+								selected="selected"
+								{% endif %}
+								>{{person}}</option>
 							{% endfor %}
 						</select>
-						{% if bearbeitungsmodus %}
-						<script type="text/javascript">
-							function SelectElement()
-								{
-									var element = document.getElementById('person_auswahl');
-									element.value = "{{default_item.person}}";
-								}
-								SelectElement()
-						</script>
-						{% endif %}
 					</div>
 				</div>
 				<div class="box-footer">
