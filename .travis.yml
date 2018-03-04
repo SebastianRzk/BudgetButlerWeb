@@ -2,10 +2,7 @@ language: python
 python:
   - "3.6"
 install: 
-  - pip install -r integration-requirements.txt
-  - pip install coveralls
-  - pip install codecov
-  - sudo apt-get install chromium-browser chromium-chromedriver
+  - sh ci/install_requirements.sh
 
 env:
   global:
@@ -17,11 +14,14 @@ addons:
 
 
 script: 
-  - py.test --cov=mysite mysite
-  - cd mysite && python manage.py runserver > build.log &
-  - cd selenium_tests && pytest && cd ..
-  - sonar-scanner -Dsonar.login=$SONAR
+  - sh ci/run_unit_tests.sh
+  - sh ci/run_integration_tests.sh
 
 after_success:
+  - sonar-scanner -Dsonar.login=$SONAR
   - coveralls
-  - codecov 
+  - codecov
+
+
+
+
