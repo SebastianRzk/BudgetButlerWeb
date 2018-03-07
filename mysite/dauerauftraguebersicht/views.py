@@ -2,6 +2,7 @@
 from viewcore import viewcore
 from viewcore.viewcore import post_action_is
 from viewcore import request_handler
+import collections
 
 def _handle_request(request):
     dauerauftraege = viewcore.database_instance().dauerauftraege
@@ -12,12 +13,11 @@ def _handle_request(request):
                 viewcore.save_refresh()
 
     context = viewcore.generate_base_context('dauerauftraguebersicht')
-    aktuelle_dauerauftraege = dauerauftraege.aktuelle()
-    context['aktuelle_dauerauftraege'] = _format_dauerauftrag_floatpoint(aktuelle_dauerauftraege)
-    vergangene_dauerauftraege = dauerauftraege.past()
-    context['vergangene_dauerauftraege'] = _format_dauerauftrag_floatpoint(vergangene_dauerauftraege)
-    zukuenftige_dauerauftraege = dauerauftraege.future()
-    context['zukuenftige_dauerauftraege'] = _format_dauerauftrag_floatpoint(zukuenftige_dauerauftraege)
+    data = collections.OrderedDict()
+    data['Aktuelle Daueraufträge'] = _format_dauerauftrag_floatpoint(dauerauftraege.aktuelle())
+    data['Zukünftige Daueraufträge'] = _format_dauerauftrag_floatpoint(dauerauftraege.future())
+    data['Vergangene  Daueraufträge'] = _format_dauerauftrag_floatpoint(dauerauftraege.past())
+    context['dauerauftraege'] = data
     context['transaction_key'] = 'requested'
     return context
 
