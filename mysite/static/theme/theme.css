@@ -54,10 +54,6 @@ body {
   margin-left: 230px;
   z-index: 820;
 }
-.layout-top-nav .content-wrapper,
-.layout-top-nav .right-side{
-  margin-left: 0;
-}
 @media (max-width: 767px) {
   .content-wrapper,
   .right-side,
@@ -116,12 +112,8 @@ a:focus {
   text-decoration: none;
   color: var(--main-color);
 }
-/* Page Header */
-.page-header {
-  margin: 10px 0 20px 0;
-  font-size: 22px;
-}
-/* Don't display when printing */
+/* Page Header
+Don't display when printing */
 @media print {
   .no-print {
     display: none;
@@ -152,9 +144,6 @@ a:focus {
   border: none;
   min-height: 50px;
   border-radius: 0;
-}
-.layout-top-nav .main-header > .navbar {
-  margin-left: 0!important;
 }
 .main-header #navbar-search-input {
   background: rgba(255, 255, 255, 0.2);
@@ -490,9 +479,6 @@ a:focus {
 .btn-group-vertical .btn.btn-flat:last-of-type {
   border-radius: 0;
 }
-.icheck > label {
-  padding-left: 0;
-}
 /*
  * Component: Box
  * --------------
@@ -570,35 +556,8 @@ a:focus {
 .box-body > .table {
   margin-bottom: 0;
 }
-.box-body > .chart {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-}
-.box-body > .chart svg,
-.box-body > .chart canvas {
-  width: 100%!important;
-}
 .box-body .fc {
   margin-top: 5px;
-}
-.box-body .full-width-chart {
-  margin: -19px;
-}
-.box-body.no-padding .full-width-chart {
-  margin: -9px;
-}
-.box-body .box-pane {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 3px;
-}
-.box-body .box-pane-right {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 0;
 }
 .box-footer {
   border-top-left-radius: 0;
@@ -609,15 +568,7 @@ a:focus {
   padding: 10px;
   background-color: #ffffff;
 }
-.chart-legend {
-  margin: 10px 0;
-}
-@media (max-width: 991px) {
-  .chart-legend > li {
-    float: left;
-    margin-right: 10px;
-  }
-}
+
 /*
  * Component: Button
  * -----------------
@@ -648,12 +599,6 @@ a:focus {
 }
 .table > thead > tr > th {
   border-bottom: 2px solid #f4f4f4;
-}
-/* .text-center in tables */
-table.text-center,
-table.text-center td,
-table.text-center th {
-  text-align: center;
 }
 .table.align th {
   text-align: left;
