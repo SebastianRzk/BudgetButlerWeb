@@ -75,13 +75,6 @@ body {
   z-index: 800;
   padding: 30px 50px 50px 50px;
 }
-
-/* Content */
-.content {
-  min-height: 250px;
-  margin-right: auto;
-  margin-left: auto;
-}
 /* H1 - H6 font */
 h1,
 h2,
@@ -169,12 +162,6 @@ Don't display when printing */
 .content-header > h1 {
   margin: 0;
   font-size: 24px;
-}
-.content-header > h1 > small {
-  font-size: 15px;
-  display: inline-block;
-  padding-left: 4px;
-  font-weight: 300;
 }
 
 @media (max-width: 767px) {
