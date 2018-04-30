@@ -47,7 +47,6 @@ def handle_request(request):
                 'wert': from_double_to_german(value)
                 })
 
-        viewcore.save_refresh()
     context = viewcore.generate_base_context('adddauerauftrag')
     context['approve_title'] = 'Dauerauftrag hinzufügen'
 
@@ -64,7 +63,6 @@ def handle_request(request):
 
         default_item['Wert'] = from_double_to_german(abs(default_item['Wert']))
 
-
         context['default_item'] = default_item
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
@@ -77,6 +75,7 @@ def handle_request(request):
     context['letzte_erfassung'] = reversed(viewcore.get_changed_dauerauftraege())
     context['rhythmen'] = ['monatlich']
     return context
+
 
 def index(request):
     return request_handler.handle_request(request, handle_request, 'adddauerauftrag.html')

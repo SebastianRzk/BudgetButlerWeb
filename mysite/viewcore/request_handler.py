@@ -33,6 +33,7 @@ def handle_request(request, request_action, html_base_page):
         print('new db version: ' + str(request_handler.DATABASE_VERSION))
 
     context = request_action(request)
+    viewcore.save_tainted()
 
     if request.method == 'POST' and 'redirect' in request.POST:
         return request_handler.REDIRECTOR('/' + str(request.POST['redirect']) + '/')
@@ -49,18 +50,21 @@ def handle_request(request, request_action, html_base_page):
     response = request_handler.RENDER_FULL_FUNC(request, request_handler.BASE_THEME_PATH + 'index.html', context)
     return response
 
+
 def current_key():
     return request_handler.SESSION_RANDOM + ' ' + viewcore.database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
+
 
 def stub_me():
     request_handler.RENDER_PARTIALLY_FUNC = partially_render_stub
     request_handler.RENDER_FULL_FUNC = full_render_stub
     request_handler.REDIRECTOR = lambda x: x
 
+
 def partially_render_stub(html_base_page, context, request):
     return html_base_page
 
+
 def full_render_stub(request, theme, context):
     return context
-
 

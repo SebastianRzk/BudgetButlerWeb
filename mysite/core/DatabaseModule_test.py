@@ -65,7 +65,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
             PARTNERNAME:Maureen
             ''')
 
-
     def test_abrechnen_shouldAddEinzelbuchungen(self):
         self.set_up()
         db = viewcore.database_instance()
@@ -115,6 +114,24 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.de_taint()
         assert not db.is_tainted()
 
+    def test_deTaint_shouldDeTaintDauerauftraege(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.dauerauftraege.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeDauerauftraege(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.dauerauftraege.taint()
+        assert db.taint_number() == 1
+
+
 class converter_test(unittest.TestCase):
 
     def test_frame_to_list_of_dicts_withEmptyDataframe_shouldReturnEmptyList(self):
@@ -148,4 +165,3 @@ class Refresh(unittest.TestCase):
         component_under_test.refresh()
 
         assert len(component_under_test.einzelbuchungen.content) == 3
-

@@ -21,9 +21,9 @@ class StringWriter():
     '''
     Shadowes file
     '''
+
     def __init__(self):
         self.value = ""
-
 
     def write(self, new_line):
         '''write line into virtual file'''
@@ -38,6 +38,7 @@ class Database:
     '''
     Database
     '''
+
     def __init__(self, name):
         self.name = name
         self.dauerauftraege = Dauerauftraege()
@@ -49,27 +50,25 @@ class Database:
         self.tainted = self.tainted + 1
 
     def is_tainted(self):
-        return self.tainted != 0
+        return self.taint_number() != 0
 
     def taint_number(self):
-        return self.tainted
+        return self.tainted + self.dauerauftraege.taint_number()
 
     def de_taint(self):
         self.tainted = 0
-
+        self.dauerauftraege.de_taint()
 
     def refresh(self):
         print('DATABASE: Erneuere Datenbestand')
         alle_dauerauftragsbuchungen = self.dauerauftraege.get_all_einzelbuchungen_until_today()
         self.einzelbuchungen.append_row(alle_dauerauftragsbuchungen)
 
-
         anteil_gemeinsamer_buchungen = self.gemeinsamebuchungen.anteil_gemeinsamer_buchungen()
         self.einzelbuchungen.append_row(anteil_gemeinsamer_buchungen)
 
         self.einzelbuchungen.sort()
         print('DATABASE: Datenbestand erneuert')
-
 
     def _write_trenner(self, abrechnunsdatei):
         return abrechnunsdatei.write("".rjust(40, "#") + "\n ")
