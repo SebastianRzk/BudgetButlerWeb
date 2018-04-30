@@ -89,6 +89,31 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         assert abrechnungs_text == self.abrechnung
 
+    def test_taint_shouldIncreaseTaintNumber(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.taint()
+        assert db.taint_number() == 1
+
+    def test_isTainted_shouldReturnFalseWhenTainted(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert not db.is_tainted()
+        db.taint()
+        assert db.is_tainted()
+
+    def test_deTaint_shouldDeTaint(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.taint()
+        assert db.is_tainted()
+
+        db.de_taint()
+        assert not db.is_tainted()
 
 class converter_test(unittest.TestCase):
 

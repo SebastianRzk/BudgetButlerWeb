@@ -43,6 +43,20 @@ class Database:
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsamebuchungen = Gemeinsamebuchungen()
         self.einzelbuchungen = Einzelbuchungen()
+        self.tainted = 0
+
+    def taint(self):
+        self.tainted = self.tainted + 1
+
+    def is_tainted(self):
+        return self.tainted != 0
+
+    def taint_number(self):
+        return self.tainted
+
+    def de_taint(self):
+        self.tainted = 0
+
 
     def refresh(self):
         print('DATABASE: Erneuere Datenbestand')
