@@ -53,11 +53,12 @@ class Database:
         return self.taint_number() != 0
 
     def taint_number(self):
-        return self.tainted + self.dauerauftraege.taint_number()
+        return self.tainted + self.dauerauftraege.taint_number() + self.einzelbuchungen.taint_number()
 
     def de_taint(self):
         self.tainted = 0
         self.dauerauftraege.de_taint()
+        self.einzelbuchungen.de_taint()
 
     def refresh(self):
         print('DATABASE: Erneuere Datenbestand')

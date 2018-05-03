@@ -131,6 +131,23 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.dauerauftraege.taint()
         assert db.taint_number() == 1
 
+    def test_deTaint_shouldDeTaintEinzelbuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.einzelbuchungen.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeEinzelbuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.einzelbuchungen.taint()
+        assert db.taint_number() == 1
+
 
 class converter_test(unittest.TestCase):
 

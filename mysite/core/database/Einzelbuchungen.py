@@ -15,6 +15,18 @@ class Einzelbuchungen:
     tmp_kategorie = None
     content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
 
+    def __init__(self):
+            self.tainted = 0
+
+    def taint(self):
+        self.tainted = self.tainted + 1
+
+    def taint_number(self):
+        return self.tainted
+
+    def de_taint(self):
+        self.tainted = 0
+
     def parse(self, raw_table):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         raw_table['Dynamisch'] = False
@@ -64,7 +76,6 @@ class Einzelbuchungen:
     def get_jahreseinnahmen_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_einnahmen().select_year(jahr).content
         return self._berechne_prozentual(tabelle)
-
 
     def _berechne_prozentual(self, tabelle):
         if len(tabelle) == 0:
@@ -162,8 +173,10 @@ class Einzelbuchungen:
     def select(self):
         return EinzelbuchungsSelektor(self.content)
 
+
 class EinzelbuchungsSelektor:
     content = 0
+
     def __init__(self, content):
         self.content = content
 
@@ -184,7 +197,6 @@ class EinzelbuchungsSelektor:
         data = data[data.TMP == month]
         del data['TMP']
         return EinzelbuchungsSelektor(data)
-
 
     def select_einnahmen(self):
         return EinzelbuchungsSelektor(self.content[self.content.Wert > 0])
@@ -240,7 +252,6 @@ class EinzelbuchungsSelektor:
             data = data.append(pd.DataFrame([[injection_date, injection_kategorie, 0]], columns=['Datum', 'Kategorie', 'Wert']), ignore_index=True)
         return EinzelbuchungsSelektor(data)
 
-
     def sum_monthly(self):
         data = self.content.copy()
         data = data[['Datum', 'Wert']]
@@ -263,7 +274,6 @@ class EinzelbuchungsSelektor:
                 result[monat] = {}
             result[monat][kategorie] = "%.2f" % abs(reihe.Wert)
         return result
-
 
     def sum(self):
         if self.content.empty:
@@ -324,7 +334,6 @@ class EinzelbuchungsSelektor:
                     more_than_one = True
                 name_alt = name_alt + ', ' + row.Name + '(' + str(row.Wert) + '€)'
                 summe_alt += row.Wert
-
 
         tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
         zusammenfassung.append([datum_alt, tag_liste])
