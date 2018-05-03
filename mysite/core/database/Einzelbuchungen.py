@@ -9,23 +9,12 @@ from datetime import datetime
 import itertools as it
 import pandas as pd
 from viewcore import viewcore
+from core.database.DatabaseObject import DatabaseObject
 
 
-class Einzelbuchungen:
+class Einzelbuchungen(DatabaseObject):
     tmp_kategorie = None
     content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
-
-    def __init__(self):
-            self.tainted = 0
-
-    def taint(self):
-        self.tainted = self.tainted + 1
-
-    def taint_number(self):
-        return self.tainted
-
-    def de_taint(self):
-        self.tainted = 0
 
     def parse(self, raw_table):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())

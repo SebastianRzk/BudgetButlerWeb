@@ -8,22 +8,12 @@ from datetime import datetime, date
 
 from core.Frequency import FrequencsFunctions
 import pandas as pd
+from core.database.DatabaseObject import DatabaseObject
 
 
-class Dauerauftraege:
+class Dauerauftraege(DatabaseObject):
 
-    def __init__(self):
-        self.content = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
-        self.tainted = 0
-
-    def taint(self):
-        self.tainted = self.tainted + 1
-
-    def taint_number(self):
-        return self.tainted
-
-    def de_taint(self):
-        self.tainted = 0
+    content = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
 
     def parse(self, raw_table):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
