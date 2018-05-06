@@ -36,6 +36,7 @@ class Einzelbuchungen(DatabaseObject):
     def add(self, datum, kategorie, name, wert, dynamisch=False):
         neue_einzelbuchung = pd.DataFrame([[datum, kategorie, name, wert, [], dynamisch]], columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
         self.content = self.content.append(neue_einzelbuchung, ignore_index=True)
+        self.taint()
         self.sort()
 
     def get(self, db_index):
@@ -47,6 +48,7 @@ class Einzelbuchungen(DatabaseObject):
 
     def delete(self, einzelbuchung_index):
         self.content = self.content.drop(einzelbuchung_index)
+        self.taint()
 
     def edit(self, index, buchungs_datum, kategorie, name, wert):
         self.content.loc[self.content.index[[index]], 'Datum'] = buchungs_datum
@@ -54,6 +56,7 @@ class Einzelbuchungen(DatabaseObject):
         self.content.loc[self.content.index[[index]], 'Kategorie'] = kategorie
         self.content.loc[self.content.index[[index]], 'Name'] = name
         self.sort()
+        self.taint()
 
     def anzahl(self):
         return len(self.content)
