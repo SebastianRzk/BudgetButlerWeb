@@ -9,7 +9,6 @@ def _handle_request(request):
     if post_action_is(request, 'delete'):
         print("Delete: ", request.POST['delete_index'])
         einzelbuchungen.delete(int(request.POST['delete_index']))
-        viewcore.save_refresh()
 
     db = einzelbuchungen.get_all()
     ausgaben_monatlich = {}

@@ -6,7 +6,6 @@ from viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german
 
 
-
 def handle_request(request):
     context = viewcore.generate_base_context('addeinzelbuchung')
     context['element_titel'] = 'Neue Ausgabe'
@@ -46,8 +45,6 @@ def handle_request(request):
                     'wert':from_double_to_german(value)
                     })
 
-
-        viewcore.save_database()
     if post_action_is(request, 'edit'):
         print('Please edit:', request.POST['edit_index'])
         db_index = int(request.POST['edit_index'])
@@ -63,7 +60,6 @@ def handle_request(request):
         context['element_titel'] = 'Einzelbuchung bearbeiten'
         context['active_name'] = 'Einzelbuchung bearbeiten'
         context['approve_title'] = 'Ausgabe aktualisieren'
-
 
     context['transaction_key'] = 'requested'
     context['kategorien'] = sorted(einzelbuchungen.get_kategorien_ausgaben())
