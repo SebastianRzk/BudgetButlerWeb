@@ -68,7 +68,6 @@ class Database:
         anteil_gemeinsamer_buchungen = self.gemeinsamebuchungen.anteil_gemeinsamer_buchungen()
         self.einzelbuchungen.append_row(anteil_gemeinsamer_buchungen)
 
-        self.einzelbuchungen.sort()
         print('DATABASE: Datenbestand erneuert')
 
     def _write_trenner(self, abrechnunsdatei):

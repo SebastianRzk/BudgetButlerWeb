@@ -20,9 +20,9 @@ class Einzelbuchungen(DatabaseObject):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         raw_table['Dynamisch'] = False
         self.content = self.content.append(raw_table, ignore_index=True)
-        self.sort()
+        self._sort()
 
-    def sort(self):
+    def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
@@ -37,7 +37,7 @@ class Einzelbuchungen(DatabaseObject):
         neue_einzelbuchung = pd.DataFrame([[datum, kategorie, name, wert, [], dynamisch]], columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
         self.content = self.content.append(neue_einzelbuchung, ignore_index=True)
         self.taint()
-        self.sort()
+        self._sort()
 
     def get(self, db_index):
         row = self.content.loc[db_index]
@@ -55,7 +55,7 @@ class Einzelbuchungen(DatabaseObject):
         self.content.loc[self.content.index[[index]], 'Wert'] = wert
         self.content.loc[self.content.index[[index]], 'Kategorie'] = kategorie
         self.content.loc[self.content.index[[index]], 'Name'] = name
-        self.sort()
+        self._sort()
         self.taint()
 
     def anzahl(self):
@@ -95,6 +95,7 @@ class Einzelbuchungen(DatabaseObject):
 
     def append_row(self, row):
         self.content = self.content.append(row, ignore_index=True)
+        self._sort()
 
     def get_monate(self):
         '''

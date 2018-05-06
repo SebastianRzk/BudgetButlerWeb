@@ -11,16 +11,15 @@ from pandas.core.frame import DataFrame
 class Gemeinsamebuchungen:
     content = DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
 
-
     def parse(self, raw_table):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
         self.content = self.content.append(raw_table, ignore_index=True)
-        self.sort()
+        self._sort()
 
     def add(self, ausgaben_datum, kategorie, ausgaben_name, wert, person):
         row = DataFrame([[ausgaben_datum, kategorie, ausgaben_name, wert, person]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
         self.content = self.content.append(row, ignore_index=True)
-        self.sort()
+        self._sort()
 
     def anteil_gemeinsamer_buchungen(self):
         anteil_gemeinsamer_buchungen = DataFrame()
@@ -32,7 +31,7 @@ class Gemeinsamebuchungen:
     def empty(self):
         self.content = self.content[self.content.Wert == 0]
 
-    def sort(self):
+    def _sort(self):
         self.content = self.content.sort_values(by='Datum')
 
     def delete(self, einzelbuchung_index):
