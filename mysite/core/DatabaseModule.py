@@ -148,7 +148,7 @@ class Database:
 
         self.einzelbuchungen.append_row(ausgaben)
         self.gemeinsamebuchungen.empty()
-        viewcore.save_refresh()
+        self.taint()
         self.abrechnungs_write_function("../Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
 

@@ -5,17 +5,20 @@ import pandas
 from viewcore import viewcore
 from viewcore import request_handler
 
+
 def _mapping_passt(post_parameter, unpassende_kategorien):
     for unpassenden_kategorie in unpassende_kategorien:
         if not str(unpassenden_kategorie) + "_mapping" in post_parameter:
             return False
     return True
 
+
 def _import(import_data):
     print('importing data:')
     print(import_data)
     viewcore.database_instance().einzelbuchungen.parse(import_data)
-    viewcore.save_refresh()
+    viewcore.database_instance().einzelbuchungen.taint()
+
 
 def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
     print('Mappe Kategorien', unpassende_kategorien, post_parameter)
@@ -35,7 +38,6 @@ def index(request):
     page, context = handle_request(request)
     context['transaction_key'] = 'requested'
     return request_handler.handle_request(request, lambda x: context , page)
-
 
 
 def handle_request(request):
@@ -64,7 +66,6 @@ def handle_request(request):
                 continue
             tables[mode] = tables[mode] + "\n" + line
 
-
         print(tables)
 
         imported_values = pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
@@ -73,9 +74,6 @@ def handle_request(request):
         for imported_kategorie in set(imported_values.Kategorie):
             if imported_kategorie not in datenbank_kategorien:
                 nicht_passende_kategorien.append(imported_kategorie)
-
-
-
 
         if not nicht_passende_kategorien:
             print('keine unpassenden kategorien gefunden')
@@ -103,7 +101,6 @@ def handle_request(request):
 
             return 'import.html', context
 
-
         print("Nicht passende Kategorien: ", nicht_passende_kategorien)
         options = ['neue Kategorie anlegen']
 
@@ -119,6 +116,7 @@ def handle_request(request):
         return 'import_mapping.html', context
 
     return 'import.html', viewcore.generate_base_context('import')
+
 
 def _kategorien_map(actual, target, goal):
     if actual != target:

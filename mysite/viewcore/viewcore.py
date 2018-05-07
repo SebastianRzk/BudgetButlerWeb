@@ -154,13 +154,13 @@ def generate_error_context(pagename, errortext):
     return context
 
 
-def save_database():
+def _save_database():
     if DATABASE_INSTANCE != None:
         DBManager.write(DATABASE_INSTANCE)
 
 
-def save_refresh():
-    save_database()
+def _save_refresh():
+    _save_database()
     db_name = viewcore.DATABASE_INSTANCE.name
     viewcore.DATABASE_INSTANCE = None
     viewcore.switch_database_instance(db_name)
@@ -170,7 +170,7 @@ def save_tainted():
     db = viewcore.DATABASE_INSTANCE
     if db.is_tainted():
         print('Saving database with', db.taint_number(), 'modifications')
-        save_refresh()
+        _save_refresh()
         print('Saved')
         db.de_taint()
 
