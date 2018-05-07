@@ -61,3 +61,16 @@ class gemeinsame_buchungen(unittest.TestCase):
         component_under_test.delete(0)
         assert component_under_test.taint_number() == 1
 
+    def test_rename_shouldTaint(self):
+        component_under_test = Gemeinsamebuchungen()
+        component_under_test.add(
+            datum('1.1.2010'),
+            'some kategorie',
+            'some name',
+            'sebastian',
+            1.23)
+        component_under_test.de_taint()
+        assert component_under_test.taint_number() == 0
+        component_under_test.rename('sebastian', 'sebastian2')
+        assert component_under_test.taint_number() == 1
+

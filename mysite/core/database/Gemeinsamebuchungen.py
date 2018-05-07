@@ -51,6 +51,7 @@ class Gemeinsamebuchungen(DatabaseObject):
 
     def rename(self, old_name, new_name):
         self.content.Person = self.content.Person.map(lambda x: self._rename_value(old_name, new_name, x))
+        self.taint()
 
     def _rename_value(self, old, new, x):
         if x == old:
