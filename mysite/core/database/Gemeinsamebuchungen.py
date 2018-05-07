@@ -6,9 +6,10 @@ Created on 28.09.2017
 from datetime import datetime
 
 from pandas.core.frame import DataFrame
+from core.database.DatabaseObject import DatabaseObject
 
 
-class Gemeinsamebuchungen:
+class Gemeinsamebuchungen(DatabaseObject):
     content = DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
 
     def parse(self, raw_table):

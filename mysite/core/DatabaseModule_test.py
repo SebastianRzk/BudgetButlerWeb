@@ -131,6 +131,23 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.dauerauftraege.taint()
         assert db.taint_number() == 1
 
+    def test_deTaint_shouldDeTaintGemeinsameBuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.gemeinsamebuchungen.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeGemeinsameBuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.gemeinsamebuchungen.taint()
+        assert db.taint_number() == 1
+
     def test_deTaint_shouldDeTaintEinzelbuchungen(self):
         self.set_up()
         db = viewcore.database_instance()
