@@ -8,15 +8,21 @@ from viewcore.viewcore import post_action_is
 from viewcore.converter import from_double_to_german, datum, datum_to_string
 from viewcore import request_handler
 
+
 def handle_request(request):
     if request.method == "POST" and request.POST['action'] == 'add':
         date = datum(request.POST['date'])
         value = request.POST['wert'].replace(",", ".")
         value = float(value)
         value = value * -1
-        einnameausgabe = pandas.DataFrame([[date, request.POST['kategorie'], str(request.POST['name']), value, request.POST['person']]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
         if "edit_index" in request.POST:
-            viewcore.database_instance().gemeinsamebuchungen.edit(int(request.POST['edit_index']), einnameausgabe)
+            viewcore.database_instance().gemeinsamebuchungen.edit(int(request.POST['edit_index']),
+                                                                  datum=date,
+                                                                  name=str(request.POST['name']),
+                                                                  kategorie=request.POST['kategorie'],
+                                                                  wert=value,
+                                                                  person=request.POST['person']
+                                                                  )
             viewcore.add_changed_gemeinsamebuchungen(
                 {
                     'fa':'pencil',
@@ -43,7 +49,6 @@ def handle_request(request):
                     'person':request.POST['person']
                     })
 
-        viewcore.save_refresh()
     context = viewcore.generate_base_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if post_action_is(request, 'edit'):
@@ -69,6 +74,7 @@ def handle_request(request):
     context['letzte_erfassung'] = reversed(viewcore.get_changed_gemeinsamebuchungen())
     context['transaction_key'] = 'requested'
     return context
+
 
 def index(request):
     return request_handler.handle_request(request, handle_request, 'addgemeinsam.html')

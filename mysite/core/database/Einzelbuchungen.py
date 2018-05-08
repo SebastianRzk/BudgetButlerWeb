@@ -9,9 +9,10 @@ from datetime import datetime
 import itertools as it
 import pandas as pd
 from viewcore import viewcore
+from core.database.DatabaseObject import DatabaseObject
 
 
-class Einzelbuchungen:
+class Einzelbuchungen(DatabaseObject):
     tmp_kategorie = None
     content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
 
@@ -19,9 +20,9 @@ class Einzelbuchungen:
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         raw_table['Dynamisch'] = False
         self.content = self.content.append(raw_table, ignore_index=True)
-        self.sort()
+        self._sort()
 
-    def sort(self):
+    def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
@@ -35,7 +36,8 @@ class Einzelbuchungen:
     def add(self, datum, kategorie, name, wert, dynamisch=False):
         neue_einzelbuchung = pd.DataFrame([[datum, kategorie, name, wert, [], dynamisch]], columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
         self.content = self.content.append(neue_einzelbuchung, ignore_index=True)
-        self.sort()
+        self.taint()
+        self._sort()
 
     def get(self, db_index):
         row = self.content.loc[db_index]
@@ -46,13 +48,15 @@ class Einzelbuchungen:
 
     def delete(self, einzelbuchung_index):
         self.content = self.content.drop(einzelbuchung_index)
+        self.taint()
 
     def edit(self, index, buchungs_datum, kategorie, name, wert):
         self.content.loc[self.content.index[[index]], 'Datum'] = buchungs_datum
         self.content.loc[self.content.index[[index]], 'Wert'] = wert
         self.content.loc[self.content.index[[index]], 'Kategorie'] = kategorie
         self.content.loc[self.content.index[[index]], 'Name'] = name
-        self.sort()
+        self._sort()
+        self.taint()
 
     def anzahl(self):
         return len(self.content)
@@ -64,7 +68,6 @@ class Einzelbuchungen:
     def get_jahreseinnahmen_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_einnahmen().select_year(jahr).content
         return self._berechne_prozentual(tabelle)
-
 
     def _berechne_prozentual(self, tabelle):
         if len(tabelle) == 0:
@@ -92,6 +95,7 @@ class Einzelbuchungen:
 
     def append_row(self, row):
         self.content = self.content.append(row, ignore_index=True)
+        self._sort()
 
     def get_monate(self):
         '''
@@ -162,8 +166,10 @@ class Einzelbuchungen:
     def select(self):
         return EinzelbuchungsSelektor(self.content)
 
+
 class EinzelbuchungsSelektor:
     content = 0
+
     def __init__(self, content):
         self.content = content
 
@@ -184,7 +190,6 @@ class EinzelbuchungsSelektor:
         data = data[data.TMP == month]
         del data['TMP']
         return EinzelbuchungsSelektor(data)
-
 
     def select_einnahmen(self):
         return EinzelbuchungsSelektor(self.content[self.content.Wert > 0])
@@ -240,7 +245,6 @@ class EinzelbuchungsSelektor:
             data = data.append(pd.DataFrame([[injection_date, injection_kategorie, 0]], columns=['Datum', 'Kategorie', 'Wert']), ignore_index=True)
         return EinzelbuchungsSelektor(data)
 
-
     def sum_monthly(self):
         data = self.content.copy()
         data = data[['Datum', 'Wert']]
@@ -263,7 +267,6 @@ class EinzelbuchungsSelektor:
                 result[monat] = {}
             result[monat][kategorie] = "%.2f" % abs(reihe.Wert)
         return result
-
 
     def sum(self):
         if self.content.empty:
@@ -324,7 +327,6 @@ class EinzelbuchungsSelektor:
                     more_than_one = True
                 name_alt = name_alt + ', ' + row.Name + '(' + str(row.Wert) + '€)'
                 summe_alt += row.Wert
-
 
         tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
         zusammenfassung.append([datum_alt, tag_liste])

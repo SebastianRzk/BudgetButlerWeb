@@ -49,11 +49,12 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert preset['Wert'] == '10,00'
         assert preset['typ'] == 'Einnahme'
 
-        testdb.dauerauftraege.add(datum('10.10.2010'), datum('10.10.2011'), '0kategorie', '0name', 'monatlich', -10)
+        viewcore.database_instance().dauerauftraege.add(datum('10.10.2015'), datum('10.10.2015'), '0kategorie', '0name', 'monatlich', -10)
         context = views.handle_request(PostRequest({'action': 'edit', 'edit_index': '1'}))
         preset = context['default_item']
+        assert preset['Startdatum'] == '10.10.2015'
+        assert preset['Wert'] == '10,00'
         assert preset['typ'] == 'Ausgabe'
-
 
     def test_add_dauerauftrag(self):
         self.set_up()
@@ -152,7 +153,6 @@ class TesteAddDauerauftragView(unittest.TestCase):
              }
          ))
 
-
         views.index(VersionedPostRequest(
             {'action': 'add',
              'edit_index': '0',
@@ -173,7 +173,6 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Kategorie[0] == 'Essen'
         assert testdb.dauerauftraege.content.Startdatum[0] == datum('2.1.2017')
         assert testdb.dauerauftraege.content.Endedatum[0] == datum('5.1.2017')
-
 
     def test_edit_dauerauftrag_should_only_fire_once(self):
         self.set_up()
@@ -225,7 +224,6 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert testdb.dauerauftraege.content.Kategorie[0] == 'Essen'
         assert testdb.dauerauftraege.content.Startdatum[0] == datum('2.1.2017')
         assert testdb.dauerauftraege.content.Endedatum[0] == datum('5.1.2017')
-
 
     def test_add_dauerauftrag_should_only_fire_once(self):
         self.set_up()

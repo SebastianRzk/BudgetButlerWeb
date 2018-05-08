@@ -44,7 +44,6 @@ def handle_request(request):
                     'name':request.POST['name'],
                     'wert':from_double_to_german(dezimal_float(request.POST['wert']))
                     })
-        viewcore.save_database()
 
     if post_action_is(request, 'edit'):
         print('Please edit:', request.POST['edit_index'])
@@ -64,6 +63,7 @@ def handle_request(request):
     context['letzte_erfassung'] = reversed(viewcore.get_changed_einzelbuchungen())
     context['transaction_key'] = 'requested'
     return context
+
 
 def index(request):
     return request_handler.handle_request(request, handle_request, 'addeinnahme.html')

@@ -65,7 +65,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
             PARTNERNAME:Maureen
             ''')
 
-
     def test_abrechnen_shouldAddEinzelbuchungen(self):
         self.set_up()
         db = viewcore.database_instance()
@@ -88,6 +87,83 @@ Datum,Kategorie,Name,Wert,Dynamisch
         viewcore.reset_viewcore_stubs()
 
         assert abrechnungs_text == self.abrechnung
+
+    def test_taint_shouldIncreaseTaintNumber(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.taint()
+        assert db.taint_number() == 1
+
+    def test_isTainted_shouldReturnFalseWhenTainted(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert not db.is_tainted()
+        db.taint()
+        assert db.is_tainted()
+
+    def test_deTaint_shouldDeTaint(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.taint()
+        assert db.is_tainted()
+
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_deTaint_shouldDeTaintDauerauftraege(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.dauerauftraege.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeDauerauftraege(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.dauerauftraege.taint()
+        assert db.taint_number() == 1
+
+    def test_deTaint_shouldDeTaintGemeinsameBuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.gemeinsamebuchungen.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeGemeinsameBuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.gemeinsamebuchungen.taint()
+        assert db.taint_number() == 1
+
+    def test_deTaint_shouldDeTaintEinzelbuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.einzelbuchungen.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeEinzelbuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.einzelbuchungen.taint()
+        assert db.taint_number() == 1
 
 
 class converter_test(unittest.TestCase):
@@ -123,4 +199,3 @@ class Refresh(unittest.TestCase):
         component_under_test.refresh()
 
         assert len(component_under_test.einzelbuchungen.content) == 3
-

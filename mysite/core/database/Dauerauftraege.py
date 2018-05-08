@@ -4,16 +4,16 @@ Created on 18.08.2017
 @author: sebastian
 '''
 
-
 from datetime import datetime, date
 
 from core.Frequency import FrequencsFunctions
 import pandas as pd
+from core.database.DatabaseObject import DatabaseObject
 
 
-class Dauerauftraege:
-    def __init__(self):
-        self.content = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
+class Dauerauftraege(DatabaseObject):
+
+    content = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
 
     def parse(self, raw_table):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
@@ -49,6 +49,7 @@ class Dauerauftraege:
             columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert']
             )
         self.content = self.content.append(neuer_dauerauftrag, ignore_index=True)
+        self.taint()
         print('DATABASE: Dauerauftrag hinzugefügt')
 
     def aktuelle(self):
@@ -80,9 +81,6 @@ class Dauerauftraege:
         dauerauftraege = dauerauftraege[dauerauftraege.Startdatum > date.today()]
         return self.frame_to_list_of_dicts(dauerauftraege)
 
-
-
-
     def edit(self, index, startdatum, endedatum, kategorie, name, rhythmus, wert):
         '''
         edit dauerauftrag for given index
@@ -93,10 +91,11 @@ class Dauerauftraege:
         self.content.loc[self.content.index[[index]], "Kategorie"] = kategorie
         self.content.loc[self.content.index[[index]], 'Name'] = name
         self.content.loc[self.content.index[[index]], 'Rhythmus'] = rhythmus
-
+        self.taint()
 
     def delete(self, dauerauftrag_index):
         self.content = self.content.drop(dauerauftrag_index)
+        self.taint()
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))

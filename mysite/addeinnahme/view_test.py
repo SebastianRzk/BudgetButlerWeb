@@ -21,12 +21,13 @@ from core.DatabaseModule import Database
 from viewcore import viewcore
 from viewcore import request_handler
 from viewcore.converter import datum
+from viewcore.viewcore import database_instance
 
 class TestAddEinnahmeView(unittest.TestCase):
 
     testdb = None
     def set_up(self):
-        self.testdb = DBManagerStub.setup_db_for_test()
+        DBManagerStub.setup_db_for_test()
         request_handler.stub_me()
 
     def test_init(self):
@@ -36,7 +37,7 @@ class TestAddEinnahmeView(unittest.TestCase):
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
-        self.testdb.einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
+        database_instance().einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
         context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Einnahme aktualisieren'
 
@@ -51,11 +52,12 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen.content) == 1
-        assert self.testdb.einzelbuchungen.content.Wert[0] == float("2.00")
-        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
+        testdb = database_instance()
+        assert len(testdb.einzelbuchungen.content) == 1
+        assert testdb.einzelbuchungen.content.Wert[0] == float("2.00")
+        assert testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
@@ -80,11 +82,12 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen.content) == 1
-        assert self.testdb.einzelbuchungen.content.Wert[0] == float("2.00")
-        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
+        testdb = database_instance()
+        assert len(testdb.einzelbuchungen.content) == 1
+        assert testdb.einzelbuchungen.content.Wert[0] == float("2.00")
+        assert testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
 
     def test_edit_ausgabe(self):
         self.set_up()
@@ -108,11 +111,12 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen.content) == 1
-        assert self.testdb.einzelbuchungen.content.Wert[0] == float("2.50")
-        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
+        testdb = database_instance()
+        assert len(testdb.einzelbuchungen.content) == 1
+        assert testdb.einzelbuchungen.content.Wert[0] == float("2.50")
+        assert testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
 
 
     def test_edit_ausgabe_should_only_fire_once(self):
@@ -150,11 +154,12 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        assert len(self.testdb.einzelbuchungen.content) == 1
-        assert self.testdb.einzelbuchungen.content.Wert[0] == float("2.50")
-        assert self.testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert self.testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert self.testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
+        testdb = database_instance()
+        assert len(testdb.einzelbuchungen.content) == 1
+        assert testdb.einzelbuchungen.content.Wert[0] == float("2.50")
+        assert testdb.einzelbuchungen.content.Name[0] == "testname"
+        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
+        assert testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
 
     def test_edit_einzelbuchung_shouldLoadInputValues(self):
         self.set_up()

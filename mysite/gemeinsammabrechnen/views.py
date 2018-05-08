@@ -3,6 +3,7 @@ from viewcore import viewcore
 from viewcore.viewcore import name_of_partner
 from viewcore import request_handler
 
+
 def _handle_request(_):
     name_self = viewcore.database_instance().name
     name_partner = viewcore.name_of_partner()
@@ -35,13 +36,16 @@ def _handle_request(_):
     context['partnername'] = name_partner
     return context
 
+
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'gemeinsamabrechnen.html')
+
 
 def _sum(data):
     if data.empty:
         return 0
     return data.sum()
+
 
 def abrechnen(request):
     return request_handler.handle_request(request, _handle_abrechnen_request, 'present_abrechnung.html')
@@ -52,6 +56,7 @@ def _handle_abrechnen_request(_):
     context = viewcore.generate_base_context('gemeinsamabrechnen')
     abrechnungs_text = viewcore.database_instance().abrechnen()
     context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
-    viewcore.save_refresh()
+    viewcore.database_instance().einzelbuchungen.taint()
+    viewcore.database_instance().gemeinsamebuchungen.taint()
 
     return context

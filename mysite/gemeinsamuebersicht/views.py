@@ -2,11 +2,11 @@ from viewcore import viewcore
 from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 
+
 def _handle_request(request):
     if post_action_is(request, 'delete'):
         print("Delete: ", request.POST['delete_index'])
         viewcore.database_instance().gemeinsamebuchungen.delete(int(request.POST['delete_index']))
-        viewcore.save_refresh()
 
     ausgaben_liste = []
     data = viewcore.database_instance().gemeinsamebuchungen.content.sort_values(by='Datum')
@@ -17,6 +17,7 @@ def _handle_request(request):
     context['ausgaben'] = ausgaben_liste
     context['transaction_key'] = 'requested'
     return context
+
 
 # Create your views here.
 def index(request):
