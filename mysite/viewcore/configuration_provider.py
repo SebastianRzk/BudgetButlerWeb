@@ -5,8 +5,12 @@ from functools import reduce
 LOADED_CONFIG = {}
 DEFAULT_CONFIG = {
     'DATABASES': 'Test_User',
-    'PARTNERNAME': 'kein_Partnername_gesetzt'
+    'PARTNERNAME': 'kein_Partnername_gesetzt',
+    'DESIGN_COLORS': '3c8dbc,f56954,00a65a,00c0ef,f39c12,d2d6de,001F3F,39CCCC,3D9970,01FF70,FF851B,F012BE,8E24AA,D81B60,222222,d2d6de'
 }
+
+
+
 def _from_file():
     if not Path("../config").is_file():
         return None
