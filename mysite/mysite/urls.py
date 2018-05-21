@@ -38,6 +38,6 @@ urlpatterns = [
     url(r'^configuration/', include('configuration.urls')),
     url(r'^jahresuebersicht/', include('jahresuebersicht.urls')),
     url(r'^addeinnahme/', include('addeinnahme.urls')),
-
+    url(r'^theme/', include('theme.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
