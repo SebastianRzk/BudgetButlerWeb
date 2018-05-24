@@ -54,4 +54,21 @@
 			</form>
 		</div>
 	</div>
+		<div class="col-md-6">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">Farbe des Hauptdesigns ändern</h3>
+			</div>
+			<form role="form" action="/configuration/" method="post">{% csrf_token %}
+				<div class="box-body">
+					<div class="form-group">
+						<label></label><input id="themecolor" name="themecolor" type="color" value="{{themecolor}}"/>
+					</div>
+					</div>
+				<div class="box-footer">
+					<button type="submit" name="action" value="change_themecolor" id="change_themecolor" class="btn bordered-hover">Daten aktualisieren</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>

@@ -5,9 +5,8 @@
  *   License: Open source - MIT
  *           Please visit http://opensource.org/licenses/MIT for more information
 !*/
-:root {
-    --main-color: #00acd6;
-}
+@import '/theme/';
+
 html,
 body {
   min-height: 100%;
