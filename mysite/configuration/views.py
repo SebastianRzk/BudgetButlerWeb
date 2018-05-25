@@ -17,11 +17,37 @@ def _handle_request(request):
     if post_action_is(request, 'change_themecolor'):
         configuration_provider.set_configuration('THEME_COLOR', request.POST['themecolor'])
 
+    if post_action_is(request, 'change_colorpalette'):
+        request_colors = []
+        for colornumber in range(0, 20):
+            if str(colornumber) + '_checked' in request.POST:
+                request_colors.append(request.POST[str(colornumber) + '_farbe'][1:])
+        configuration_provider.set_configuration('DESIGN_COLORS', ','.join(request_colors))
+
     if post_action_is(request, 'set_partnername'):
         viewcore.database_instance().gemeinsamebuchungen.rename(viewcore.name_of_partner(), request.POST['partnername'])
         configuration_provider.set_configuration('PARTNERNAME', request.POST['partnername'])
 
+    farbmapping = []
+    for colornumber in range(0, 20):
+        checked = False
+        kategorie = 'keine'
+        color = viewcore.design_colors()[colornumber % len(viewcore.design_colors())]
+        len_kategorien = len(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
+        if colornumber < len_kategorien:
+            kategorie = list(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())[colornumber % len_kategorien]
+        if colornumber < len(viewcore.design_colors()):
+            checked = True
+
+        farbmapping.append({
+            'nummer': colornumber,
+            'checked': checked,
+            'farbe' : color,
+            'kategorie' : kategorie
+            })
+
     context = viewcore.generate_base_context('configuration')
+    context['palette'] = farbmapping
     default_databases = ''
     for db in viewcore.DATABASES:
         if len(default_databases) != 0:

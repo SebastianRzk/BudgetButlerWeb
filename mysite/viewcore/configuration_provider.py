@@ -10,8 +10,6 @@ DEFAULT_CONFIG = {
     'THEME_COLOR' : '#00acd6'
 }
 
-
-
 def _from_file():
     if not Path("../config").is_file():
         return None
@@ -32,14 +30,14 @@ SAVER = _to_file
 def _load_config():
     loaded_content = configuration_provider.LOADER()
     if not loaded_content:
-        return configuration_provider.DEFAULT_CONFIG
+        return dict(configuration_provider.DEFAULT_CONFIG)
     lines = loaded_content.split('\n')
     loaded_config = {}
     for line in lines:
         if ':' in line:
             line = line.strip()
             loaded_config[line.split(':')[0]] = line.split(':')[1]
-    for key in configuration_provider.DEFAULT_CONFIG:
+    for key in dict(configuration_provider.DEFAULT_CONFIG):
         if key not in loaded_config:
             loaded_config[key] = configuration_provider.DEFAULT_CONFIG[key]
     print("#####", loaded_config)

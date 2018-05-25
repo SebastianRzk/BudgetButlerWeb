@@ -71,3 +71,14 @@ class TestKonfiguration(unittest.TestCase):
 
         assert set(database_partners) == set(['testpartner_renamed'])
 
+    def test_change_colors(self):
+        self.set_up()
+        assert viewcore.design_colors() == '3c8dbc,f56954,00a65a,00c0ef,f39c12,d2d6de,001F3F,39CCCC,3D9970,01FF70,FF851B,F012BE,8E24AA,D81B60,222222,d2d6de'.split(',')
+        views.index(PostRequest({'action': 'change_colorpalette',
+                                 '0_checked': 'on',
+                                 '0_farbe' : '#000000',
+                                 '1_checked': 'on',
+                                 '1_farbe': '#FFFFFF',
+                                 '2_farbe': '#555555'}))
+        assert viewcore.design_colors() == ['000000', 'FFFFFF']
+        self.set_up()
