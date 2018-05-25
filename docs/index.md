@@ -11,6 +11,18 @@
 * Schlankes Design
 * Hohe Geschwindigkeit, auch bei großen Datenmengen
 * Quelloffen
+* Individualisierbar
+
+## Merkmale
+
+* Monatsübersicht
+* Jahresübersicht
+* Einzelbuchungen (erfassen, ändern, löschen)
+* Daueraufträge (erfassen, ändern, löschen)
+* Gemeinsame Buchungen (erfassen, ändern, löschen, abrechnen, aus Abrechnung importieren)
+* Farbthema anpassen
+* Farben der Kategorien anpassen
+* Verwendung mehrerer Datenbanken
 
 ## Systemvoraussetzungen
 
