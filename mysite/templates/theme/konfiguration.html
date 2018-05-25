@@ -8,7 +8,7 @@
 			<form role="form" action="/configuration/" method="post">{% csrf_token %}
 				<div class="box-body">
 					<div class="form-group">
-						<label>Installierte Datenbanken (nur mit einem Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
+						<label>Installierte Datenbanken (mit Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
 					</div>
 					</div>
 				<div class="box-footer">
