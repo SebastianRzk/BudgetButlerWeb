@@ -467,7 +467,7 @@ button:hover {
 	color: #000;
 }
 
-.main-header a {
+.main-header {
 	background-color: #FFF;
 	border: 1px solid #ecf0f5;
 }
@@ -484,7 +484,7 @@ button:hover {
 
 .content-area{
 	display : grid;
-	grid-template-rows: 6ex 4ex auto;
+	grid-template-rows: 6ex 5ex auto;
 	grid-template-columns: 30ex auto 6ex;
 	grid-column-gap: 5vh;
   background-color: #ecf0f5;
@@ -499,12 +499,13 @@ button:hover {
   grid-column: 1/2;
   grid-row: 2/3;
   background-color: white;
+  padding-top: 2ex;
 }
 
 .content {
 	grid-column: 2/3;
 	grid-row: 1/4;
-	height: 96vh;
+	height:100vh;
 	padding-top: 3ex;
 }
 
@@ -512,4 +513,5 @@ button:hover {
 	grid-column: 1/2;
 	grid-row: 3/4;
   background-color: white;
+  padding-top: 2ex;
 }
