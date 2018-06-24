@@ -76,35 +76,15 @@ a:focus {
  * Component: Main Header
  * ----------------------
  */
-.main-header {
-  position: relative;
-  max-height: 100px;
-  z-index: 1030;
-}
-.main-header .sidebar-toggle {
-  float: left;
-  background-color: transparent;
-  background-image: none;
-  padding: 15px 15px;
-  font-family: fontAwesome;
-}
-.main-header .sidebar-toggle:before {
-  content: "\f0c9";
-}
-.main-header .sidebar-toggle:hover {
-  color: #fff;
-}
 .main-header .sidebar-toggle .icon-bar {
   display: none;
 }
 .main-header .logo {
   display: block;
-  float: left;
   height: 50px;
   font-size: 20px;
   line-height: 50px;
   text-align: center;
-  width: 230px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 0 15px;
   font-weight: 300;
@@ -526,3 +506,40 @@ button:hover {
 	background-color: #f9fafc;
 }
 
+
+
+/*
+* Grid Layout
+*/
+
+.content-area{
+	display : grid;
+	grid-template-rows: 6ex 4ex auto;
+	grid-template-columns: 30ex auto 6ex;
+	grid-column-gap: 5vh;
+  background-color: #ecf0f5;
+}
+
+.title {
+	grid-column: 1/2;
+	grid-row: 1/2;
+}
+
+.sub-title {
+  grid-column: 1/2;
+  grid-row: 2/3;
+  background-color: white;
+}
+
+.content {
+	grid-column: 2/3;
+	grid-row: 1/4;
+	height: 96vh;
+	padding-top: 3ex;
+}
+
+.sidebar {
+	grid-column: 1/2;
+	grid-row: 3/4;
+  background-color: white;
+}
