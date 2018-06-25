@@ -44,6 +44,7 @@ def _launch_headles_chromium():
 
     chrome_options = Options()
     chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--window-size=1920,1080")
     browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options)
     SeleniumTest.CHROME_INSTANCES.append(browser)
     return browser
