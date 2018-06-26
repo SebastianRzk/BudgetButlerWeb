@@ -515,3 +515,10 @@ button:hover {
   background-color: white;
   padding-top: 2ex;
 }
+
+.theme-double-rows {
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: 100%;
+
+}
