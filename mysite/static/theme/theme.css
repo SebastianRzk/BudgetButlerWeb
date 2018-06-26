@@ -520,5 +520,41 @@ button:hover {
   display: grid;
   grid-template-rows: auto auto;
   grid-template-columns: 100%;
+}
 
+
+
+@media (max-width: 1000px) {
+  .input-theme {
+    display: grid;
+    grid: 'input-box'
+          'kategorie-box'
+          'last-elements';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-gap: 3ex;
+  }
+}
+
+@media (min-width: 1000px) {
+  .input-theme {
+    display: grid;
+    grid: 'input-box kategorie-box'
+          'last-elements last-elements';
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 3ex;
+  }
+}
+
+.input-box{
+  grid-area: input-box;
+}
+
+.input-kategorie-box{
+  grid-area: kategorie-box;
+}
+
+.last-elements-box{
+  grid-area: last-elements;
 }
