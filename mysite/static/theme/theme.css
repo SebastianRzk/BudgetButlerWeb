@@ -534,6 +534,11 @@ button:hover {
     grid-template-rows: auto auto auto;
     grid-gap: 3ex;
   }
+  .theme-double-columns {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 3ex;
+  }
 }
 
 @media (min-width: 1000px) {
@@ -543,6 +548,11 @@ button:hover {
           'last-elements last-elements';
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
+    grid-gap: 3ex;
+  }
+  .theme-double-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 3ex;
   }
 }
