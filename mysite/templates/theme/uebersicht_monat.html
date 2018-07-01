@@ -1,57 +1,54 @@
-<div class="row">
-  <div class="box">
-    <form role="form" action="/monatsuebersicht/" method="post">
-      {% csrf_token %}
-        <div class="box-body">
-          <div class="form-group">
-            <label>Wähle Monat</label>
-            <select class="form-control" name="date" id="date">
-              {% for monat in monate %}
-              <option value="{{monat}}">{{monat}}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-        <script type="text/javascript">
-          function SelectElement()
-            {
-              var element = document.getElementById('date');
-              element.value = "{{selected_date}}";
-            }
-            SelectElement()
-        </script>
-        <div class="box-footer">
-          <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
-        </div>
-      </form>
-	</div>
-</div>
-<div class="row">
-  <div class="box collapsed-box">
-    <div class="box-header with-border">
-      <h3 class="box-title">Druckausgabe erzeugen</h3>
-      <div class="box-tools pull-right">
-        <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-plus"></span></button>
-      </div>
-    </div>
+<div class="box theme-row">
+  <form role="form" action="/monatsuebersicht/" method="post">
+    {% csrf_token %}
     <div class="box-body">
-    <form role="form" action="/monatsuebersicht/abrechnung/" method="post">
-      {% csrf_token %}
-      <input type="hidden" name="date" value="{{selected_date}}">
-      <input type="checkbox" name="content" value="zusammenfassung_einnahmen" checked>Zusammenfassung der Einnahmen</br>
-      <input type="checkbox" name="content" value="zusammenfassung_ausgaben" checked>Zusammenfassung der Ausgaben</br>
-      <input type="checkbox" name="content" value="einnahmen" checked>Einzelbetrag der Einnahmen</br>
-      <input type="checkbox" name="content" value="ausgaben" checked>Einzelbetrag der Ausgaben</br>
-      Anzahl der Zeilen pro Seite: <input type="number" name="quantity" min="6" max="999" value="60">
-      <div class="box-footer">
-        <button type="submit" value="OK" class="btn bordered-hover">Abrechnung erzeugen!</button>
+      <div class="form-group">
+        <label>Wähle Monat</label>
+        <select class="form-control" name="date" id="date">
+          {% for monat in monate %}
+          <option value="{{monat}}">{{monat}}</option>
+          {% endfor %}
+        </select>
       </div>
-    </form>
     </div>
+    <script type="text/javascript">
+      function SelectElement()
+        {
+          var element = document.getElementById('date');
+          element.value = "{{selected_date}}";
+        }
+        SelectElement()
+    </script>
+    <div class="box-footer">
+      <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
+    </div>
+  </form>
+</div>
+
+<div class="box collapsed-box theme-row">
+  <div class="box-header with-border">
+    <h3 class="box-title">Druckausgabe erzeugen</h3>
+    <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-plus"></span></button>
+    </div>
+  </div>
+  <div class="box-body">
+  <form role="form" action="/monatsuebersicht/abrechnung/" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="date" value="{{selected_date}}">
+    <input type="checkbox" name="content" value="zusammenfassung_einnahmen" checked>Zusammenfassung der Einnahmen</br>
+    <input type="checkbox" name="content" value="zusammenfassung_ausgaben" checked>Zusammenfassung der Ausgaben</br>
+    <input type="checkbox" name="content" value="einnahmen" checked>Einzelbetrag der Einnahmen</br>
+    <input type="checkbox" name="content" value="ausgaben" checked>Einzelbetrag der Ausgaben</br>
+    Anzahl der Zeilen pro Seite: <input type="number" name="quantity" min="6" max="999" value="60">
+    <div class="box-footer">
+      <button type="submit" value="OK" class="btn bordered-hover">Abrechnung erzeugen!</button>
+    </div>
+  </form>
   </div>
 </div>
 
-<div class="row">
+<div class="theme-row">
   <div class="box">
     <div class="box-header">
       <h3 class="box-title">Balance {{selected_date}}</h3>
@@ -98,53 +95,52 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="box">
-    <div class="box-header">
-      <h3 class="box-title">Gesamtbalance {{selected_year}}</h3>
-      <canvas id="balance_jahr_canvas" style="width: 100%; height: 20ex;"></canvas>
-    </div>
-    <div class="box-body">
-      <script>
-        var barChartDataJahr = {
-          labels: ["{{selected_year}}"],
-          datasets: [{
-            label: '{{name_uebersicht_jahr_gruppe_1}}',
-            backgroundColor: "{{color_uebersicht_jahr_gruppe_1}}",
-            data: [{{wert_uebersicht_jahr_gruppe_1}}]
+
+<div class="box theme-row">
+  <div class="box-header">
+    <h3 class="box-title">Gesamtbalance {{selected_year}}</h3>
+    <canvas id="balance_jahr_canvas" style="width: 100%; height: 20ex;"></canvas>
+  </div>
+  <div class="box-body">
+    <script>
+      var barChartDataJahr = {
+        labels: ["{{selected_year}}"],
+        datasets: [{
+          label: '{{name_uebersicht_jahr_gruppe_1}}',
+          backgroundColor: "{{color_uebersicht_jahr_gruppe_1}}",
+          data: [{{wert_uebersicht_jahr_gruppe_1}}]
+        },
+        {
+          label: '{{name_uebersicht_jahr_gruppe_2}}',
+          backgroundColor: "{{color_uebersicht_jahr_gruppe_2}}",
+          data: [{{wert_uebersicht_jahr_gruppe_2}}]
+        }]
+      };
+      var ctx2 = document.getElementById("balance_jahr_canvas").getContext("2d");
+      window.myBarJahr = new Chart(ctx2, {
+        type: 'horizontalBar',
+        data: barChartDataJahr,
+        options: {
+          tooltips: {
+            mode: 'index',
+            intersect: false
           },
-          {
-            label: '{{name_uebersicht_jahr_gruppe_2}}',
-            backgroundColor: "{{color_uebersicht_jahr_gruppe_2}}",
-            data: [{{wert_uebersicht_jahr_gruppe_2}}]
-          }]
-        };
-        var ctx2 = document.getElementById("balance_jahr_canvas").getContext("2d");
-        window.myBarJahr = new Chart(ctx2, {
-          type: 'horizontalBar',
-          data: barChartDataJahr,
-          options: {
-            tooltips: {
-              mode: 'index',
-              intersect: false
-            },
-            responsive: true,
-            scales: {
-              xAxes: [{
-                stacked: true,
-              }],
-              yAxes: [{
-                stacked: true
-              }]
-            }
+          responsive: true,
+          scales: {
+            xAxes: [{
+              stacked: true,
+            }],
+            yAxes: [{
+              stacked: true
+            }]
           }
-        });
-      </script>
-    </div>
+        }
+      });
+    </script>
   </div>
 </div>
 
-<div class='theme-double-columns'>
+<div class="theme-double-columns">
   <div class="box">
     <div class="box-header with-border">
       <h3 class="box-title">Ausgaben</h3>
@@ -273,36 +269,35 @@
     </div>
   </div>
 </div>
+
 {% for tag in zusammenfassung %}
-<div class="row">
-  <div class="box">
-    <div class="box-header with-border">
-      <h3 class="box-title">{{tag.0}}</h3>
-      <div class="box-tools pull-right">
-        <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
-      </div>
+<div class="box theme-row">
+  <div class="box-header with-border">
+    <h3 class="box-title">{{tag.0}}</h3>
+    <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="collapse"><span class="fa fa-minus"></span></button>
     </div>
-    <div class="box-body">
-      <div class="table-responsive">
-        <table class="table no-margin">
-          <thead>
-            <tr>
-              <th>Kategorie</th>
-              <th>Name</th>
-              <th>Wert</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for kategorie in tag.1 %}
-            <tr>
-              <td style="vertical-align:middle"><span class="fa fa-circle" style="color: #{{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
-              <td style="vertical-align:middle">{{kategorie.name}}</td>
-              <td style="vertical-align:middle">{{kategorie.summe}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+  </div>
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table no-margin">
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th>Name</th>
+            <th>Wert</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for kategorie in tag.1 %}
+          <tr>
+            <td style="vertical-align:middle"><span class="fa fa-circle" style="color: #{{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
+            <td style="vertical-align:middle">{{kategorie.name}}</td>
+            <td style="vertical-align:middle">{{kategorie.summe}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

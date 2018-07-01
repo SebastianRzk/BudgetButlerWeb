@@ -522,7 +522,9 @@ button:hover {
   grid-template-columns: 100%;
 }
 
-
+.theme-row {
+  width:100%;
+}
 
 @media (max-width: 1000px) {
   .input-theme {
@@ -536,7 +538,7 @@ button:hover {
   }
   .theme-double-columns {
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto auto;
     grid-gap: 3ex;
   }
 }
