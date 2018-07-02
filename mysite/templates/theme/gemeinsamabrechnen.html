@@ -1,80 +1,76 @@
-<div class="row">
-	<div class="col-md-4">
-		<div class="box">
-			<div class="box-header with-border">
-				<h3 class="box-title">Ausgaben pro Person</h3>
-			</div>
-			<div class="box-body">
-				<div class="table-responsive">
-					<table class="table no-margin">
-						<thead>
-							<tr>
-								<th>Person</th>
-								<th class="table-wert">Ausgegeben</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{partnername}}</td>
-								<td class="table-wert">{{ausgabe_maureen}}</td>
-							</tr>
-							<tr>
-								<td>{{myname}}</td>
-								<td class="table-wert">{{ausgabe_sebastian}}</td>
-							</tr>
-						</tbody>
-						<tfooter>
-							<tr>
-								<td>Gesamt</td>
-								<td class="table-wert">{{ausgabe_gesamt}}</td>
-							</tr>
-						</tfooter>
-					</table>
-				</div>
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header with-border">
+			<h3 class="box-title">Ausgaben pro Person</h3>
+		</div>
+		<div class="box-body">
+			<div class="table-responsive">
+				<table class="table no-margin">
+					<thead>
+						<tr>
+							<th>Person</th>
+							<th class="table-wert">Ausgegeben</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{partnername}}</td>
+							<td class="table-wert">{{ausgabe_maureen}}</td>
+						</tr>
+						<tr>
+							<td>{{myname}}</td>
+							<td class="table-wert">{{ausgabe_sebastian}}</td>
+						</tr>
+					</tbody>
+					<tfooter>
+						<tr>
+							<td>Gesamt</td>
+							<td class="table-wert">{{ausgabe_gesamt}}</td>
+						</tr>
+					</tfooter>
+				</table>
 			</div>
 		</div>
 	</div>
-	<div class='col-md-3'>
-		<div class="box">
-			<div class="box-header with-border">
-				<h3 class="box-title">Ausgaben nach Person</h3>
-			</div><!-- /.box-header -->
-			<div class="box-body">
-				<div class="chart-responsive">
-					<canvas id="zusammenfassungPie" height="200"></canvas>
-					<script>
-						var pieData = {
-						labels:["{{myname}}","{{partnername}}"],
-						datasets: [
-						{
-						data: [{{ausgabe_sebastian}},{{ausgabe_maureen}}],
-						backgroundColor: ['#00a65a','#f56954'],
-						}],
-						};
-						var canvas = document.getElementById("zusammenfassungPie");
-						var myLineChart = new Chart(canvas, {
-						type: 'pie',
-						data: pieData,
-						options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						}});
-					</script>
-				</div>
+	<div class="box">
+		<div class="box-header with-border">
+			<h3 class="box-title">Ausgaben nach Person</h3>
+		</div><!-- /.box-header -->
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="zusammenfassungPie" height="200"></canvas>
+				<script>
+					var pieData = {
+					labels:["{{myname}}","{{partnername}}"],
+					datasets: [
+					{
+					data: [{{ausgabe_sebastian}},{{ausgabe_maureen}}],
+					backgroundColor: ['#00a65a','#f56954'],
+					}],
+					};
+					var canvas = document.getElementById("zusammenfassungPie");
+					var myLineChart = new Chart(canvas, {
+					type: 'pie',
+					data: pieData,
+					options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					}});
+				</script>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-6">
-		<div class="box">
-			<div class="box-header with-border">
-				<h3 class="box-title">Ergebnis</h3>
-			</div>
-			<div class="box-body">
-				{{ergebnis}}
-			</div>
-			<div class="box-footer clearfix">
-				<a href="/abrechnen" class="btn bordered-hover pull-left">Jetzt Abrechnen!</a>
-			</div>
+</div>
+<div class='theme-double-columns'>
+	<div class="box">
+		<div class="box-header with-border">
+			<h3 class="box-title">Ergebnis</h3>
+		</div>
+		<div class="box-body">
+			{{ergebnis}}
+		</div>
+		<div class="box-footer clearfix">
+			<a href="/abrechnen" class="btn bordered-hover pull-left">Jetzt Abrechnen!</a>
 		</div>
 	</div>
- </div>
+</div>
