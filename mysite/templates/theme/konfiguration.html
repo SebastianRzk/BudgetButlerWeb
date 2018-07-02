@@ -1,108 +1,101 @@
 {% load static %}
-<div class="row">
-	<div class="col-md-6">
-		<div class="box">
-			<div class="box-header">
-				<h3 class="box-title">Datenbanken</h3>
-			</div>
-			<form role="form" action="/configuration/" method="post">{% csrf_token %}
-				<div class="box-body">
-					<div class="form-group">
-						<label>Installierte Datenbanken (mit Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
-					</div>
-					</div>
-				<div class="box-footer">
-					<input type="hidden" name="ID" value="{{ID}}">
-					<button type="submit" name="action" value="edit_databases" class="btn bordered-hover">Daten aktualisieren</button>
-				</div>
-			</form>
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Datenbanken</h3>
 		</div>
+		<form role="form" action="/configuration/" method="post">{% csrf_token %}
+			<div class="box-body">
+				<div class="form-group">
+					<label>Installierte Datenbanken (mit Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
+				</div>
+				</div>
+			<div class="box-footer">
+				<input type="hidden" name="ID" value="{{ID}}">
+				<button type="submit" name="action" value="edit_databases" class="btn bordered-hover">Daten aktualisieren</button>
+			</div>
+		</form>
 	</div>
-	<div class="col-md-6">
-		<div class="box">
-			<div class="box-header">
-				<h3 class="box-title">Kategorien</h3>
-			</div>
-			<form role="form" action="/configuration/" method="post">{% csrf_token %}
-				<div class="box-body">
-					<div class="form-group">
-						<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
-					</div>
-					</div>
-				<div class="box-footer">
-					<input type="hidden" name="ID" value="{{ID}}">
-					<button type="submit" name="action" value="add_kategorie" id="add_kategorie" class="btn bordered-hover">Daten aktualisieren</button>
-				</div>
-			</form>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Kategorien</h3>
 		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="box">
-			<div class="box-header">
-				<h3 class="box-title">Partnername</h3>
-			</div>
-			<form role="form" action="/configuration/" method="post">{% csrf_token %}
-				<div class="box-body">
-					<div class="form-group">
-						<label>Name des Partners ändern</label> <input type="text" name="partnername" class="form-control" value="{{partnername}}" placeholder="Enter ..." />
-					</div>
-					</div>
-				<div class="box-footer">
-					<input type="hidden" name="ID" value="{{ID}}">
-					<button type="submit" name="action" value="set_partnername" id="set_partnername" class="btn bordered-hover">Daten aktualisieren</button>
+		<form role="form" action="/configuration/" method="post">{% csrf_token %}
+			<div class="box-body">
+				<div class="form-group">
+					<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
 				</div>
-			</form>
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="box">
-			<div class="box-header">
-				<h3 class="box-title">Farbe des Hauptdesigns ändern</h3>
-			</div>
-			<form role="form" action="/configuration/" method="post">{% csrf_token %}
-				<div class="box-body">
-					<div class="form-group">
-						<label></label><input id="themecolor" name="themecolor" type="color" value="{{themecolor}}"/>
-					</div>
-					</div>
-				<div class="box-footer">
-					<button type="submit" name="action" value="change_themecolor" id="change_themecolor" class="btn bordered-hover">Daten aktualisieren</button>
 				</div>
-			</form>
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="box">
-			<div class="box-header">
-				<h3 class="box-title">Farbpalette für Kategorien ändern</h3>
+			<div class="box-footer">
+				<input type="hidden" name="ID" value="{{ID}}">
+				<button type="submit" name="action" value="add_kategorie" id="add_kategorie" class="btn bordered-hover">Daten aktualisieren</button>
 			</div>
-			<form role="form" action="/configuration/" method="post">{% csrf_token %}
-				<div class="box-body">
-					<div class="form-group">
-						<table class="table no-margin">
-						<tbody>
-							{% for farbe in palette %}
-							<tr>
-								<td>{{farbe.nummer}}</td>
-								<td><input type="checkbox" name="{{farbe.nummer}}_checked"
-									{% if farbe.checked %}
-									checked="checked"
-									{% endif %}>
-								</td>
-								<td><input id="{{farbe.nummer}}_farbe" name="{{farbe.nummer}}_farbe" type="color" value="#{{farbe.farbe}}"/></td>
-								<td>Entspricht momentan : {{farbe.kategorie}}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					</div>
-					</div>
-				<div class="box-footer">
-					<button type="submit" name="action" value="change_colorpalette" id="change_colorpalette" class="btn bordered-hover">Daten aktualisieren</button>
-				</div>
-			</form>
-		</div>
+		</form>
 	</div>
 
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Partnername</h3>
+		</div>
+		<form role="form" action="/configuration/" method="post">{% csrf_token %}
+			<div class="box-body">
+				<div class="form-group">
+					<label>Name des Partners ändern</label> <input type="text" name="partnername" class="form-control" value="{{partnername}}" placeholder="Enter ..." />
+				</div>
+				</div>
+			<div class="box-footer">
+				<input type="hidden" name="ID" value="{{ID}}">
+				<button type="submit" name="action" value="set_partnername" id="set_partnername" class="btn bordered-hover">Daten aktualisieren</button>
+			</div>
+		</form>
+	</div>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Farbe des Hauptdesigns ändern</h3>
+		</div>
+		<form role="form" action="/configuration/" method="post">{% csrf_token %}
+			<div class="box-body">
+				<div class="form-group">
+					<label></label><input id="themecolor" name="themecolor" type="color" value="{{themecolor}}"/>
+				</div>
+				</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="change_themecolor" id="change_themecolor" class="btn bordered-hover">Daten aktualisieren</button>
+			</div>
+		</form>
+	</div>
+</div>
 
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Farbpalette für Kategorien ändern</h3>
+		</div>
+		<form role="form" action="/configuration/" method="post">{% csrf_token %}
+			<div class="box-body">
+				<div class="form-group">
+					<table class="table no-margin">
+					<tbody>
+						{% for farbe in palette %}
+						<tr>
+							<td>{{farbe.nummer}}</td>
+							<td><input type="checkbox" name="{{farbe.nummer}}_checked"
+								{% if farbe.checked %}
+								checked="checked"
+								{% endif %}>
+							</td>
+							<td><input id="{{farbe.nummer}}_farbe" name="{{farbe.nummer}}_farbe" type="color" value="#{{farbe.farbe}}"/></td>
+							<td>Entspricht momentan : {{farbe.kategorie}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				</div>
+				</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="change_colorpalette" id="change_colorpalette" class="btn bordered-hover">Daten aktualisieren</button>
+			</div>
+		</form>
+	</div>
 </div>
