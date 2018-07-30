@@ -1,0 +1,55 @@
+.smallbody {
+  display: grid;
+  grid-template-columns: 1fr 30ex 1fr;
+  grid-template-rows: 7fr 10ex 0fr 30ex 13fr;
+  grid-gap: 2ex;
+  height:100vh;
+}
+
+.fullsizebody{
+  display: grid;
+  grid-template-columns: 1fr 40ex 1fr;
+  grid-template-rows: 7fr 10ex 0fr 30ex 13fr;
+  grid-gap: 2ex;
+  height:100vh;
+}
+
+input{
+  width: 100%;
+}
+
+.content {
+  grid-row: 4/5;
+  grid-column: 2/3;
+}
+
+.mainimage {
+  grid-row: 2/3;
+  grid-column: 2/3;
+  padding: 1ex;
+  display: grid;
+  grid-template-rows: 10ex;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.fullsizecontent{
+  grid-column: 2/3;
+  padding: 1ex;
+}
+
+.rightbutton{
+  float: right;
+}
+
+.content div, .fullsizecontent div {
+  margin-top: 10px;
+}
+
+.fullsizecontent h2 {
+  margin-top: 5ex;
+}
+
+.bblogo {
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
