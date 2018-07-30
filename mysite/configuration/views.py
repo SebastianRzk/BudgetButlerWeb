@@ -37,6 +37,8 @@ def _handle_request(request):
 
         r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.POST['email'], 'password': request.POST['password']})
         print(r.content)
+        _write_to_file("../Online_Import/Import_" + str(datetime.now()), r.content)
+
         RequestStubs.CONFIGURED = True
         importview.handle_request(PostRequest({'import' : r.content.decode("utf-8")}))
         r = requests.post(serverurl + '/deleteitems.php', data={'email': request.POST['email'], 'password': request.POST['password']})
@@ -82,6 +84,12 @@ def _handle_request(request):
     context['themecolor'] = configuration_provider.get_configuration('THEME_COLOR')
     context['transaction_key'] = 'requested'
     return context
+
+
+
+def _write_to_file(self, filename, content):
+    f = open(filename, "w")
+    f.write(content)
 
 
 def index(request):
