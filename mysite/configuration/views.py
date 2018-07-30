@@ -30,16 +30,16 @@ def _handle_request(request):
         r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password'], 'kategorien': kategorien})
 
     if post_action_is(request, 'load_online_transactions'):
-        serverurl = request.POST['server'] + '/getabrechnung.php'
+        serverurl = request.POST['server'] +
 
         if not serverurl.startswith('http://') or serverurl.startswith('https://'):
              serverurl = 'https://' + serverurl
 
-        r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password']})
+        r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.POST['email'], 'password': request.POST['password']})
         print(r.content)
         RequestStubs.CONFIGURED = True
         importview.handle_request(PostRequest({'import' : r.content.decode("utf-8")}))
-
+        r = requests.post(serverurl + '/deleteitems.php', data={'email': request.POST['email'], 'password': request.POST['password']})
 
     if post_action_is(request, 'change_colorpalette'):
         request_colors = []
