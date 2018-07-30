@@ -2,7 +2,10 @@ from viewcore import viewcore
 from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 from viewcore import configuration_provider
-
+from importd import views as importview
+import requests
+from test.RequestStubs import PostRequest
+from test import RequestStubs
 
 def _handle_request(request):
     if post_action_is(request, 'edit_databases'):
@@ -16,6 +19,27 @@ def _handle_request(request):
 
     if post_action_is(request, 'change_themecolor'):
         configuration_provider.set_configuration('THEME_COLOR', request.POST['themecolor'])
+
+    if post_action_is(request, 'set_kategorien'):
+        kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben()))
+        serverurl = request.POST['server'] + '/setkategorien.php'
+
+        if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+             serverurl = 'https://' + serverurl
+
+        r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password'], 'kategorien': kategorien})
+
+    if post_action_is(request, 'load_online_transactions'):
+        serverurl = request.POST['server'] + '/getabrechnung.php'
+
+        if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+             serverurl = 'https://' + serverurl
+
+        r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password']})
+        print(r.content)
+        RequestStubs.CONFIGURED = True
+        importview.handle_request(PostRequest({'import' : r.content.decode("utf-8")}))
+
 
     if post_action_is(request, 'change_colorpalette'):
         request_colors = []
