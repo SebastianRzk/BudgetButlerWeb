@@ -6,6 +6,7 @@ from importd import views as importview
 import requests
 from test.RequestStubs import PostRequest
 from test import RequestStubs
+from datetime import datetime
 
 def _handle_request(request):
     if post_action_is(request, 'edit_databases'):
@@ -30,14 +31,14 @@ def _handle_request(request):
         r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password'], 'kategorien': kategorien})
 
     if post_action_is(request, 'load_online_transactions'):
-        serverurl = request.POST['server'] +
+        serverurl = request.POST['server']
 
         if not serverurl.startswith('http://') or serverurl.startswith('https://'):
              serverurl = 'https://' + serverurl
 
         r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.POST['email'], 'password': request.POST['password']})
         print(r.content)
-        _write_to_file("../Online_Import/Import_" + str(datetime.now()), r.content)
+        _write_to_file("../Online_Import/Import_" + str(datetime.now()), r.content.decode("utf-8"))
 
         RequestStubs.CONFIGURED = True
         importview.handle_request(PostRequest({'import' : r.content.decode("utf-8")}))
@@ -87,7 +88,7 @@ def _handle_request(request):
 
 
 
-def _write_to_file(self, filename, content):
+def _write_to_file(filename, content):
     f = open(filename, "w")
     f.write(content)
 
