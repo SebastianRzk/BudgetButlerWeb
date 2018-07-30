@@ -5,6 +5,7 @@
 <body class="smallbody">
   <div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
   <div class="content">
+  <h2>Tschüüs!</h2>
 
 <?php
 
