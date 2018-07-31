@@ -79,7 +79,7 @@ if ($auth->isLoggedIn()) {
 		echo "<h2>Passwort geändert</h2>";
 	}
 	if( isset($_POST['date']) ){
-		$dbh = new PDO('mysql:dbname=delight;host=localhost;charset=utf8mb4', 'root', '');
+		$dbh = getPDO();
 		$sql = "INSERT INTO `eintraege` (`person`, `name`, `kategorie`, `wert`, `datum`) VALUES (:person, :name , :kategorie , :wert , :datum )";
 		$sth = $dbh->prepare($sql);
 		$sth->execute(array(
