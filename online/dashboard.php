@@ -26,7 +26,7 @@ require_once('creds.php');
 	<h2> Neue Ausgabe erfassen </h2>
 	<form action="/dashboard.php" method="post">
 	<div>Datum: <input type="date" required="required" name="date" id="date" value="';
-	echo date("Y-m-j");
+	echo date("Y-m-d");
 	echo '"> </div>
 	<div>Name: <input type="text" required="required" name="name" id="name"> </div>
 	<div>Kategorie <select id="kategorie" name="kategorie">
