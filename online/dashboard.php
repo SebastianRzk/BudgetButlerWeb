@@ -1,9 +1,11 @@
 <html>
-<head><link rel="stylesheet" type="text/css" href="style.css"></head>
-<body class="fullsizebody">
+<?php
+require_once('layout.php');
+head('Dashboard');
+echo '<body class="fullsizebody">
 <div class="fullsizecontent">
 <div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
-<?php
+';
 
 require_once('creds.php');
     function showOk($auth)
@@ -120,7 +122,7 @@ if ($auth->isLoggedIn()) {
 	}
 
 } else {
-	echo "<p> <a href=\"/login.html\">Einloggen </a> <p>";
+	echo "<p> <a href=\"/login.php\">Einloggen </a> <p>";
 }
 ?>
 </div>

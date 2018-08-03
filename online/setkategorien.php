@@ -23,20 +23,18 @@ try {
 	}
 }
 catch (\Delight\Auth\InvalidEmailException $e) {
-    // wrong email address
-    echo "wrong email";
+	// wrong email address
+	echo "wrong email";
 }
 catch (\Delight\Auth\InvalidPasswordException $e) {
 	echo "wrong pass";
 }
 catch (\Delight\Auth\EmailNotVerifiedException $e) {
-    // email not verified
+	// email not verified
 	echo "email not verified";
 }
 catch (\Delight\Auth\TooManyRequestsException $e) {
-    // too many requests
-    echo "too many requests";
+	// too many requests
+	echo "too many requests";
 }
-
-
 ?>
