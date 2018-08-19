@@ -9,6 +9,7 @@ import requests
 from test.RequestStubs import PostRequest
 from test import RequestStubs
 from datetime import datetime
+from viewcore import configuration_provider
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -55,6 +56,9 @@ def handle_request(request):
             if not serverurl.startswith('http://') or serverurl.startswith('https://'):
                  serverurl = 'https://' + serverurl
 
+            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
+            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.POST['email'])
+
             r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.POST['email'], 'password': request.POST['password']})
             print(r.content)
             _write_to_file("../Online_Import/Import_" + str(datetime.now()), r.content.decode("utf-8"))
@@ -69,6 +73,9 @@ def handle_request(request):
 
             if not serverurl.startswith('http://') or serverurl.startswith('https://'):
                  serverurl = 'https://' + serverurl
+
+            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
+            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.POST['email'])
 
             r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password'], 'kategorien': kategorien})
         else:
@@ -143,7 +150,10 @@ def handle_request(request):
             context['transaction_id'] = 'requested'
             return 'import_mapping.html', context
 
-    return 'import.html', viewcore.generate_base_context('import')
+    context = viewcore.generate_base_context('import')
+    context['ONLINE_DEFAULT_SERVER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER')
+    context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')
+    return 'import.html', context
 
 def _write_to_file(filename, content):
     f = open(filename, "w")

@@ -19,8 +19,8 @@
 		<form role="form" action="/import/" method="post">{% csrf_token %}
 			<div class="box-body">
 				<div class="form-group">
-					<label>Server</label> <input type="text" name="server" class="form-control"/>
-					<label>Email</label> <input type="text" name="email" class="form-control"/>
+					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}"/>
+					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}"/>
 					<label>Passwort</label> <input type="password" name="password" class="form-control"/>
 				</div>
 				</div>
@@ -36,8 +36,8 @@
 		<form role="form" action="/import/" method="post">{% csrf_token %}
 			<div class="box-body">
 				<div class="form-group">
-					<label>Server</label> <input type="text" name="server" class="form-control"/>
-					<label>Email</label> <input type="text" name="email" class="form-control"/>
+					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}"/>
+					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}"/>
 					<label>Passwort</label> <input type="password" name="password" class="form-control"/>
 				</div>
 				</div>
