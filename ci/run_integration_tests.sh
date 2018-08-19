@@ -5,6 +5,8 @@ tar -xvzf geckodriver*
 chmod +x geckodriver
 export PATH=$PATH:$(pwd)/geckodriver
 
+echo "PATH:"
+echo $PATH
 
 cd mysite && python manage.py runserver > build.log &
 
