@@ -1,0 +1,6 @@
+/.buildconfig
+/.project
+/.pydevproject
+/Database_Test_User.csv
+**/*.pyc
+**/.pytest_cache

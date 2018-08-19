@@ -11,7 +11,7 @@ from test.RequestStubs import VersionedPostRequest
 from gemeinsamuebersicht import views
 from viewcore import request_handler
 from viewcore import viewcore
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 
 
 

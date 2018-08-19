@@ -12,7 +12,7 @@ from core import DBManager
 from core.DatabaseModule import Database
 from dauerauftraguebersicht import views
 from viewcore import viewcore
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 from viewcore import request_handler
 
 class Dauerauftragsuebersicht(unittest.TestCase):

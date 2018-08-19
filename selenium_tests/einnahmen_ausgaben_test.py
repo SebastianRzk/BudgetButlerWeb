@@ -28,12 +28,12 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5')
+        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '0.5')
         define_kategorie(driver, '1test_kategorie')
-        self._add_ausgabe(driver, '01012011', '1name', '1test_kategorie', 1)
+        self._add_ausgabe(driver, '2011-01-01', '1name', '1test_kategorie', 1)
         define_kategorie(driver, '2test_kategorie')
-        self._add_ausgabe(driver, '01012012', '2name', '2test_kategorie', 2)
-        self._add_ausgabe(driver, '01012013', '3name', '1test_kategorie', 3)
+        self._add_ausgabe(driver, '2012-01-01', '2name', '2test_kategorie', 2)
+        self._add_ausgabe(driver, '2013-01-01', '3name', '1test_kategorie', 3)
 
         driver.get('http://localhost:8000/uebersicht/')
         open_table_button = driver.find_element_by_id('open_2012.1')
@@ -50,7 +50,7 @@ class TestUI(SeleniumTestClass):
 
         assert driver.find_element_by_name('name').get_attribute('value') == '2name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '2test_kategorie'
-        assert driver.find_element_by_name('date').get_attribute('value') == '01.01.2012'
+        assert driver.find_element_by_name('date').get_attribute('value') == '2012-01-01'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
         close_driver(driver)

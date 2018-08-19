@@ -17,7 +17,8 @@ from test.RequestStubs import PostRequest
 from test.RequestStubs import VersionedPostRequest
 from adddauerauftrag import views
 from viewcore import viewcore
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
+from viewcore.converter import german_to_rfc as rfc
 from viewcore import request_handler
 
 
@@ -43,8 +44,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
         preset = context['default_item']
         assert preset['Name'] == '0name'
-        assert preset['Startdatum'] == '10.10.2010'
-        assert preset['Endedatum'] == '10.10.2011'
+        assert preset['Startdatum'] == rfc('10.10.2010')
+        assert preset['Endedatum'] == rfc('10.10.2011')
         assert preset['Kategorie'] == '0kategorie'
         assert preset['Wert'] == '10,00'
         assert preset['typ'] == 'Einnahme'
@@ -52,7 +53,7 @@ class TesteAddDauerauftragView(unittest.TestCase):
         viewcore.database_instance().dauerauftraege.add(datum('10.10.2015'), datum('10.10.2015'), '0kategorie', '0name', 'monatlich', -10)
         context = views.handle_request(PostRequest({'action': 'edit', 'edit_index': '1'}))
         preset = context['default_item']
-        assert preset['Startdatum'] == '10.10.2015'
+        assert preset['Startdatum'] == rfc('10.10.2015')
         assert preset['Wert'] == '10,00'
         assert preset['typ'] == 'Ausgabe'
 
@@ -60,8 +61,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         self.set_up()
         views.index(VersionedPostRequest(
             {'action': 'add',
-             'startdatum': '1.1.2017',
-             'endedatum': '6.1.2017',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('6.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Ausgabe',
              'rhythmus': 'monatlich',
@@ -83,8 +84,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         self.set_up()
         views.index(VersionedPostRequest(
             {'action': 'add',
-             'startdatum': '1.1.2017',
-             'endedatum': '6.1.2017',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('6.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Einnahme',
              'rhythmus': 'monatlich',
@@ -107,8 +108,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
         views.index(VersionedPostRequest(
             {'action': 'add',
-             'startdatum': '1.1.2017',
-             'endedatum': '6.1.2017',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('6.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Ausgabe',
              'rhythmus': 'monatlich',
@@ -120,8 +121,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(VersionedPostRequest(
             {'action': 'add',
              'edit_index': '0',
-             'startdatum': '2.1.2017',
-             'endedatum': '5.1.2017',
+             'startdatum': rfc('2.1.2017'),
+             'endedatum': rfc('5.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Ausgabe',
              'rhythmus': 'monatlich',
@@ -143,8 +144,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
         views.index(VersionedPostRequest(
             {'action': 'add',
-             'startdatum': '1.1.2017',
-             'endedatum': '6.1.2017',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('6.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Ausgabe',
              'rhythmus': 'monatlich',
@@ -156,8 +157,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(VersionedPostRequest(
             {'action': 'add',
              'edit_index': '0',
-             'startdatum': '2.1.2017',
-             'endedatum': '5.1.2017',
+             'startdatum': rfc('2.1.2017'),
+             'endedatum': rfc('5.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Einnahme',
              'rhythmus': 'monatlich',
@@ -179,8 +180,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
 
         views.index(VersionedPostRequest(
             {'action': 'add',
-             'startdatum': '1.1.2017',
-             'endedatum': '6.1.2017',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('6.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Ausgabe',
              'rhythmus': 'monatlich',
@@ -193,8 +194,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
             {'action': 'add',
              'ID':next_id,
              'edit_index': '0',
-             'startdatum': '2.1.2017',
-             'endedatum': '5.1.2017',
+             'startdatum': rfc('2.1.2017'),
+             'endedatum': rfc('5.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Ausgabe',
              'rhythmus': 'monatlich',
@@ -207,8 +208,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
             {'action': 'add',
              'ID':next_id,
              'edit_index': '0',
-             'startdatum': '2.1.2017',
-             'endedatum': '5.1.2017',
+             'startdatum': rfc('2.1.2017'),
+             'endedatum': rfc('5.1.2017'),
              'kategorie': 'overwritten',
              'typ': 'Ausgabe',
              'rhythmus': 'overwritten',
@@ -232,8 +233,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {'action': 'add',
              'ID':next_id,
-             'startdatum': '2.1.2017',
-             'endedatum': '5.1.2017',
+             'startdatum': rfc('2.1.2017'),
+             'endedatum': rfc('5.1.2017'),
              'kategorie': 'Essen',
              'typ': 'Ausgabe',
              'rhythmus': 'monatlich',
@@ -245,8 +246,8 @@ class TesteAddDauerauftragView(unittest.TestCase):
         views.index(PostRequest(
             {'action': 'add',
              'ID':next_id,
-             'startdatum': '2.1.2017',
-             'endedatum': '5.1.2017',
+             'startdatum': rfc('2.1.2017'),
+             'endedatum': rfc('5.1.2017'),
              'kategorie': 'overwritten',
              'typ': 'Ausgabe',
              'rhythmus': 'overwritten',

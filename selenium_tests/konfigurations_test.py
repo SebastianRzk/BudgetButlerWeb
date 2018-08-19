@@ -32,7 +32,7 @@ class TestUI(SeleniumTestClass):
         driver.get('http://127.0.0.1:8000/addeinzelbuchung/')
         add_button = driver.find_element_by_id('add')
         color_before = add_button.value_of_css_property("background-color")
-        assert color_before == 'rgba(0, 172, 214, 1)'
+        assert color_before == 'rgb(0, 172, 214)'
 
         driver.get('http://127.0.0.1:8000/configuration/')
         driver.execute_script("document.getElementById('themecolor').setAttribute('value', '#000000')")
@@ -41,7 +41,7 @@ class TestUI(SeleniumTestClass):
         driver.get('http://127.0.0.1:8000/addeinzelbuchung/')
         add_button = driver.find_element_by_id('add')
         color_before = add_button.value_of_css_property("background-color")
-        assert color_before == 'rgba(0, 0, 0, 1)'
+        assert color_before == 'rgb(0, 0, 0)'
 
         close_driver(driver)
 

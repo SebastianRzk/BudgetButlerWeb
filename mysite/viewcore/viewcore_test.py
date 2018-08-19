@@ -8,7 +8,7 @@ sys.path.insert(0, myPath + "/../")
 from viewcore import viewcore
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 
 
 

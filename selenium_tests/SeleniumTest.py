@@ -2,7 +2,7 @@ import pytest
 from selenium import webdriver
 import os
 from selenium.webdriver.support.select import Select
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 import SeleniumTest
 
 CHROME_CACHE = []
@@ -15,9 +15,9 @@ class SeleniumTestClass:
 
     def pytest_generate_tests(self, metafunc):
         if 'TRAVIS_INTEGRATION' in os.environ:
-            chrome = [self._to_param('Chromium  headless', _launch_headles_chromium, close_driver)]
+            chrome = [self._to_param('Firefox headless', _launch_headles_firefox, close_driver)]
         else:
-            chrome = [self._to_param('Chromium', _launch_head_chrome, close_driver)]
+            chrome = [self._to_param('Firefox', _launch_head_firefox, close_driver)]
 
         metafunc.parametrize(argnames=['get_driver', 'close_driver'], argvalues=chrome, scope="module")
 
@@ -30,22 +30,22 @@ def close_driver(driver):
         return
     driver.close()
 
-def _launch_head_chrome():
-    chrome_options = Options()
-    chrome_options.add_argument("--window-size=1920,1080")
-    return webdriver.Chrome(chrome_options=chrome_options)
+def _launch_head_firefox():
+    firefox_options = Options()
+    firefox_options.add_argument("--window-size=1920,1080")
+    return webdriver.Firefox(firefox_options=chrome_options)
 
-def _launch_headles_chromium():
+def _launch_headles_firefox():
     if SeleniumTest.CHROME_CACHE:
         browser = SeleniumTest.CHROME_CACHE[0]
         SeleniumTest.CHROME_CACHE.remove(browser)
         SeleniumTest.CHROME_INSTANCES.append(browser)
         return browser
 
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--window-size=1920,1080")
-    browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=chrome_options)
+    firefox_options = Options()
+    firefox_options.add_argument("-headless")
+    firefox_options.add_argument("--window-size=1920,1080")
+    browser = webdriver.Firefox(firefox_options=firefox_options)
     SeleniumTest.CHROME_INSTANCES.append(browser)
     return browser
 

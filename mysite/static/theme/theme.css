@@ -282,25 +282,6 @@ a:focus {
   margin: 0;
   line-height: 1;
 }
-.box-tools {
-  position: absolute;
-  right: 10px;
-  top: 3px;
-}
-.btn-box-tool {
-  padding: 5px;
-  font-size: 15px;
-  background: transparent;
-  box-shadow: none!important;
-  color: #97a0b3;
-}
-.open .btn-box-tool,
-.btn-box-tool:hover {
-  color: #606c84;
-}
-.btn-box-tool:active {
-  outline: none!important;
-}
 .box-body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -569,4 +550,30 @@ button:hover {
 
 .last-elements-box{
   grid-area: last-elements;
+}
+
+table {
+  width: 100%;
+  padding: 2ex;
+}
+
+th {
+  text-align: left;
+}
+
+.btn-tool {
+  border: none;
+  background: transparent;
+  color: #97a0b3;
+  outline: none;
+}
+
+.btn-icon {
+  height: 5ex;
+  width: 5ex;
+  font-size: 10;
+}
+
+.fa-large{
+  font-size: 13pt;
 }

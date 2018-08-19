@@ -11,7 +11,7 @@ import unittest
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../../')
 
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 import core.DatabaseModule as db
 from core.database.Einzelbuchungen import Einzelbuchungen
 

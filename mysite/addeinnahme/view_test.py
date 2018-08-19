@@ -9,7 +9,7 @@ import sys
 import unittest
 
 myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + "/../")
+sys.path.insert(0, myPath + '/../')
 
 from test import DBManagerStub
 from test.RequestStubs import GetRequest
@@ -20,7 +20,8 @@ from core import DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
 from viewcore import request_handler
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
+from viewcore.converter import german_to_rfc as rfc
 from viewcore.viewcore import database_instance
 
 class TestAddEinnahmeView(unittest.TestCase):
@@ -44,141 +45,141 @@ class TestAddEinnahmeView(unittest.TestCase):
     def test_add_ausgabe(self):
         self.set_up()
         views.index(VersionedPostRequest(
-            {"action":"add",
-             "date":"1.1.2017",
-             "kategorie":"Essen",
-             "name":"testname",
-             "wert":"2,00"
+            {'action':'add',
+             'date':rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,00'
              }
          ))
 
         testdb = database_instance()
         assert len(testdb.einzelbuchungen.content) == 1
-        assert testdb.einzelbuchungen.content.Wert[0] == float("2.00")
-        assert testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
+        assert testdb.einzelbuchungen.content.Wert[0] == float('2.00')
+        assert testdb.einzelbuchungen.content.Name[0] == 'testname'
+        assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
         next_id = request_handler.current_key()
         views.index(PostRequest(
-            {"action":"add",
-             "ID":next_id,
-             "date":"1.1.2017",
-             "kategorie":"Essen",
-             "name":"testname",
-             "wert":"2,00"
+            {'action':'add',
+             'ID':next_id,
+             'date': rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,00'
              }
          ))
 
         views.index(PostRequest(
-            {"action":"add",
-             "ID":next_id,
-             "date":"1.1.2017",
-             "kategorie":"overwritten",
-             "name":"overwritten",
-             "wert":"0,00"
+            {'action':'add',
+             'ID':next_id,
+             'date': rfc('1.1.2017'),
+             'kategorie':'overwritten',
+             'name':'overwritten',
+             'wert':'0,00'
              }
          ))
 
         testdb = database_instance()
         assert len(testdb.einzelbuchungen.content) == 1
-        assert testdb.einzelbuchungen.content.Wert[0] == float("2.00")
-        assert testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert testdb.einzelbuchungen.content.Datum[0] == datum("1.1.2017")
+        assert testdb.einzelbuchungen.content.Wert[0] == float('2.00')
+        assert testdb.einzelbuchungen.content.Name[0] == 'testname'
+        assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
 
     def test_edit_ausgabe(self):
         self.set_up()
 
         views.index(VersionedPostRequest(
-            {"action":"add",
-             "date":"1.1.2017",
-             "kategorie":"Essen",
-             "name":"testname",
-             "wert":"2,00"
+            {'action':'add',
+             'date': rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,00'
              }
          ))
 
         views.index(VersionedPostRequest(
-            {"action":"add",
-             "edit_index":"0",
-             "date":"5.1.2017",
-             "kategorie":"Essen",
-             "name":"testname",
-             "wert":"2,50"
+            {'action':'add',
+             'edit_index':'0',
+             'date': rfc('5.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,50'
              }
          ))
 
         testdb = database_instance()
         assert len(testdb.einzelbuchungen.content) == 1
-        assert testdb.einzelbuchungen.content.Wert[0] == float("2.50")
-        assert testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
+        assert testdb.einzelbuchungen.content.Wert[0] == float('2.50')
+        assert testdb.einzelbuchungen.content.Name[0] == 'testname'
+        assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.einzelbuchungen.content.Datum[0] == datum('5.1.2017')
 
 
     def test_edit_ausgabe_should_only_fire_once(self):
         self.set_up()
 
         views.index(VersionedPostRequest(
-            {"action":"add",
-             "date":"1.1.2017",
-             "kategorie":"Essen",
-             "name":"testname",
-             "wert":"2,00"
+            {'action':'add',
+             'date': rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,00'
              }
          ))
 
         next_id = request_handler.current_key()
         views.index(PostRequest(
-            {"action":"add",
-             "ID":next_id,
-             "edit_index":"0",
-             "date":"5.1.2017",
-             "kategorie":"Essen",
-             "name":"testname",
-             "wert":"2,50"
+            {'action':'add',
+             'ID':next_id,
+             'edit_index':'0',
+             'date': rfc('5.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,50'
              }
          ))
 
         views.index(PostRequest(
-            {"action":"add",
-             "ID":next_id,
-             "edit_index":"0",
-             "date":"5.1.2017",
-             "kategorie":"overwritten",
-             "name":"overwritten",
-             "wert":"0,0"
+            {'action':'add',
+             'ID':next_id,
+             'edit_index':'0',
+             'date': rfc('5.1.2017'),
+             'kategorie':'overwritten',
+             'name':'overwritten',
+             'wert':'0,0'
              }
          ))
 
         testdb = database_instance()
         assert len(testdb.einzelbuchungen.content) == 1
-        assert testdb.einzelbuchungen.content.Wert[0] == float("2.50")
-        assert testdb.einzelbuchungen.content.Name[0] == "testname"
-        assert testdb.einzelbuchungen.content.Kategorie[0] == "Essen"
-        assert testdb.einzelbuchungen.content.Datum[0] == datum("5.1.2017")
+        assert testdb.einzelbuchungen.content.Wert[0] == float('2.50')
+        assert testdb.einzelbuchungen.content.Name[0] == 'testname'
+        assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
+        assert testdb.einzelbuchungen.content.Datum[0] == datum('5.1.2017')
 
     def test_edit_einzelbuchung_shouldLoadInputValues(self):
         self.set_up()
 
         views.index(VersionedPostRequest(
-            {"action":"add",
-             "date":"1.1.2017",
-             "kategorie":"Essen",
-             "name":"testname",
-             "wert":"2,34"
+            {'action':'add',
+             'date': rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,34'
              }
          ))
 
         result = views.index(PostRequest(
-            {"action":"edit",
-             "edit_index":"0"
+            {'action':'edit',
+             'edit_index':'0'
              }
         ))
 
         assert result['edit_index'] == 0
-        assert result['default_item']['Name'] == "testname"
-        assert result['default_item']['Wert'] == "2,34"
+        assert result['default_item']['Name'] == 'testname'
+        assert result['default_item']['Wert'] == '2,34'

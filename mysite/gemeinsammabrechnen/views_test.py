@@ -14,7 +14,7 @@ from core.DatabaseModule import Database
 from core.database.Einzelbuchungen import Einzelbuchungen
 from gemeinsammabrechnen import views
 from viewcore import viewcore
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 from viewcore import configuration_provider
 
 class Gemeinsamabrechnen(unittest.TestCase):

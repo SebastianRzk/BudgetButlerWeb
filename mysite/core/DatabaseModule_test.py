@@ -15,7 +15,7 @@ from test import DBManagerStub
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../')
 
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 from viewcore import viewcore
 from viewcore import configuration_provider
 
