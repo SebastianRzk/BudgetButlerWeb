@@ -2,7 +2,6 @@ from viewcore import viewcore
 from viewcore.viewcore import post_action_is
 from viewcore import request_handler
 from viewcore import configuration_provider
-from importd import views as importview
 import requests
 from test.RequestStubs import PostRequest
 from test import RequestStubs
@@ -20,29 +19,6 @@ def _handle_request(request):
 
     if post_action_is(request, 'change_themecolor'):
         configuration_provider.set_configuration('THEME_COLOR', request.POST['themecolor'])
-
-    if post_action_is(request, 'set_kategorien'):
-        kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben()))
-        serverurl = request.POST['server'] + '/setkategorien.php'
-
-        if not serverurl.startswith('http://') or serverurl.startswith('https://'):
-             serverurl = 'https://' + serverurl
-
-        r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password'], 'kategorien': kategorien})
-
-    if post_action_is(request, 'load_online_transactions'):
-        serverurl = request.POST['server']
-
-        if not serverurl.startswith('http://') or serverurl.startswith('https://'):
-             serverurl = 'https://' + serverurl
-
-        r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.POST['email'], 'password': request.POST['password']})
-        print(r.content)
-        _write_to_file("../Online_Import/Import_" + str(datetime.now()), r.content.decode("utf-8"))
-
-        RequestStubs.CONFIGURED = True
-        importview.handle_request(PostRequest({'import' : r.content.decode("utf-8")}))
-        r = requests.post(serverurl + '/deleteitems.php', data={'email': request.POST['email'], 'password': request.POST['password']})
 
     if post_action_is(request, 'change_colorpalette'):
         request_colors = []
@@ -85,13 +61,6 @@ def _handle_request(request):
     context['themecolor'] = configuration_provider.get_configuration('THEME_COLOR')
     context['transaction_key'] = 'requested'
     return context
-
-
-
-def _write_to_file(filename, content):
-    f = open(filename, "w")
-    f.write(content)
-
 
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'konfiguration.html')

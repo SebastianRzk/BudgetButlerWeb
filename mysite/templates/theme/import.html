@@ -11,6 +11,42 @@
 		</form>
 	</div>
 </div>
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Online Kategorien installieren</h3>
+		</div>
+		<form role="form" action="/import/" method="post">{% csrf_token %}
+			<div class="box-body">
+				<div class="form-group">
+					<label>Server</label> <input type="text" name="server" class="form-control"/>
+					<label>Email</label> <input type="text" name="email" class="form-control"/>
+					<label>Passwort</label> <input type="password" name="password" class="form-control"/>
+				</div>
+				</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="set_kategorien" id="set_kategorien" class="btn bordered-hover">Daten aktualisieren</button>
+			</div>
+		</form>
+	</div>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Online-Daten importieren</h3>
+		</div>
+		<form role="form" action="/import/" method="post">{% csrf_token %}
+			<div class="box-body">
+				<div class="form-group">
+					<label>Server</label> <input type="text" name="server" class="form-control"/>
+					<label>Email</label> <input type="text" name="email" class="form-control"/>
+					<label>Passwort</label> <input type="password" name="password" class="form-control"/>
+				</div>
+				</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="load_online_transactions" id="load_online_transactions" class="btn bordered-hover">Daten importieren</button>
+			</div>
+		</form>
+	</div>
+</div>
 <div class="box theme-row">
 	<div class="box-header with-border">
 		<h3 class="box-title">Letzte importierte Erfassungen</h3>

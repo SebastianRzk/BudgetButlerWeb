@@ -15,9 +15,6 @@ from viewcore import viewcore
 from viewcore.converter import datum_from_german as datum
 from viewcore import request_handler
 
-
-
-
 # Create your tests here.
 class Importd(unittest.TestCase):
 
