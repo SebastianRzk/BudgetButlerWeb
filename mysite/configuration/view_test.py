@@ -19,9 +19,8 @@ from core import DBManager
 from core.DatabaseModule import Database
 from viewcore import viewcore
 from viewcore import request_handler
-from viewcore.converter import datum
 from viewcore import configuration_provider
-
+from viewcore.converter import datum_from_german as datum
 
 class TestKonfiguration(unittest.TestCase):
 

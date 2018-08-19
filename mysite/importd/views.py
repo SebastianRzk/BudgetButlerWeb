@@ -4,6 +4,12 @@ import pandas
 
 from viewcore import viewcore
 from viewcore import request_handler
+from viewcore.viewcore import post_action_is
+import requests
+from test.RequestStubs import PostRequest
+from test import RequestStubs
+from datetime import datetime
+from viewcore import configuration_provider
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -44,79 +50,114 @@ def handle_request(request):
     print(request)
     imported_values = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', ''))
     if request.method == "POST":
-        print(request.POST)
-        tables = {}
+        if post_action_is(request, 'load_online_transactions'):
+            serverurl = request.POST['server']
 
-        tables["sonst"] = ""
-        tables["#######MaschinenimportStart"] = ""
-        mode = "sonst"
-        content = request.POST['import'].replace('\r', '')
-        print('textfield content:', request.POST['import'].replace('\r', ''))
-        for line in content.split('\n'):
-            print(line)
-            line = line.strip()
-            if line == "":
-                continue
-            if line == "#######MaschinenimportStart":
-                mode = "#######MaschinenimportStart"
-                continue
+            if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+                 serverurl = 'https://' + serverurl
 
-            if line == "#######MaschinenimportEnd":
-                mode = "sonst"
-                continue
-            tables[mode] = tables[mode] + "\n" + line
+            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
+            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.POST['email'])
 
-        print(tables)
+            r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.POST['email'], 'password': request.POST['password']})
+            print(r.content)
+            _write_to_file("../Online_Import/Import_" + str(datetime.now()), r.content.decode("utf-8"))
 
-        imported_values = pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
-        datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
-        nicht_passende_kategorien = []
-        for imported_kategorie in set(imported_values.Kategorie):
-            if imported_kategorie not in datenbank_kategorien:
-                nicht_passende_kategorien.append(imported_kategorie)
+            RequestStubs.CONFIGURED = True
+            response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}))
+            r = requests.post(serverurl + '/deleteitems.php', data={'email': request.POST['email'], 'password': request.POST['password']})
+            return response
+        elif post_action_is(request, 'set_kategorien'):
+            kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben()))
+            serverurl = request.POST['server'] + '/setkategorien.php'
 
-        if not nicht_passende_kategorien:
-            print('keine unpassenden kategorien gefunden')
-            print('beginne mit dem direkten import')
-            _import(imported_values)
+            if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+                 serverurl = 'https://' + serverurl
 
+            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
+            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.POST['email'])
+
+            r = requests.post(serverurl, data={'email': request.POST['email'], 'password': request.POST['password'], 'kategorien': kategorien})
+        else:
+            print(request.POST)
+            tables = {}
+
+            tables["sonst"] = ""
+            tables["#######MaschinenimportStart"] = ""
+            mode = "sonst"
+            content = request.POST['import'].replace('\r', '')
+            print('textfield content:', request.POST['import'].replace('\r', ''))
+            for line in content.split('\n'):
+                print(line)
+                line = line.strip()
+                if line == "":
+                    continue
+                if line == "#######MaschinenimportStart":
+                    mode = "#######MaschinenimportStart"
+                    continue
+
+                if line == "#######MaschinenimportEnd":
+                    mode = "sonst"
+                    continue
+                tables[mode] = tables[mode] + "\n" + line
+
+            print(tables)
+
+            imported_values = pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
+            datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
+            nicht_passende_kategorien = []
+            for imported_kategorie in set(imported_values.Kategorie):
+                if imported_kategorie not in datenbank_kategorien:
+                    nicht_passende_kategorien.append(imported_kategorie)
+
+            if not nicht_passende_kategorien:
+                print('keine unpassenden kategorien gefunden')
+                print('beginne mit dem direkten import')
+                _import(imported_values)
+
+                context = viewcore.generate_base_context('import')
+                last_elements = []
+                for row_index, row in imported_values.iterrows():
+                    last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
+                context['ausgaben'] = last_elements
+
+                return 'import.html', context
+
+            elif _mapping_passt(request.POST, nicht_passende_kategorien):
+                print('import kann durchgeführt werden, weil mapping vorhanden')
+                imported_values = _map_kategorien(imported_values, nicht_passende_kategorien, request.POST)
+                _import(imported_values)
+
+                context = viewcore.generate_base_context('import')
+                last_elements = []
+                for row_index, row in imported_values.iterrows():
+                    last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
+                context['ausgaben'] = last_elements
+
+                return 'import.html', context
+
+            print("Nicht passende Kategorien: ", nicht_passende_kategorien)
+            options = ['neue Kategorie anlegen']
+
+            for kategorie_option in datenbank_kategorien:
+                options.append('als ' + str(kategorie_option) + ' importieren')
+            options = sorted(options)
+            options.insert(0, 'neue Kategorie anlegen')
             context = viewcore.generate_base_context('import')
-            last_elements = []
-            for row_index, row in imported_values.iterrows():
-                last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
-            context['ausgaben'] = last_elements
+            context['unpassende_kategorien'] = nicht_passende_kategorien
+            context['optionen'] = options
+            context['import'] = request.POST['import']
+            context['transaction_id'] = 'requested'
+            return 'import_mapping.html', context
 
-            return 'import.html', context
+    context = viewcore.generate_base_context('import')
+    context['ONLINE_DEFAULT_SERVER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER')
+    context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')
+    return 'import.html', context
 
-        elif _mapping_passt(request.POST, nicht_passende_kategorien):
-            print('import kann durchgeführt werden, weil mapping vorhanden')
-            imported_values = _map_kategorien(imported_values, nicht_passende_kategorien, request.POST)
-            _import(imported_values)
-
-            context = viewcore.generate_base_context('import')
-            last_elements = []
-            for row_index, row in imported_values.iterrows():
-                last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
-            context['ausgaben'] = last_elements
-
-            return 'import.html', context
-
-        print("Nicht passende Kategorien: ", nicht_passende_kategorien)
-        options = ['neue Kategorie anlegen']
-
-        for kategorie_option in datenbank_kategorien:
-            options.append('als ' + str(kategorie_option) + ' importieren')
-        options = sorted(options)
-        options.insert(0, 'neue Kategorie anlegen')
-        context = viewcore.generate_base_context('import')
-        context['unpassende_kategorien'] = nicht_passende_kategorien
-        context['optionen'] = options
-        context['import'] = request.POST['import']
-        context['transaction_id'] = 'requested'
-        return 'import_mapping.html', context
-
-    return 'import.html', viewcore.generate_base_context('import')
-
+def _write_to_file(filename, content):
+    f = open(filename, "w")
+    f.write(content)
 
 def _kategorien_map(actual, target, goal):
     if actual != target:

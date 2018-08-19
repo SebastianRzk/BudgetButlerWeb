@@ -7,7 +7,9 @@ DEFAULT_CONFIG = {
     'DATABASES': 'Test_User',
     'PARTNERNAME': 'kein_Partnername_gesetzt',
     'DESIGN_COLORS': '3c8dbc,f56954,00a65a,00c0ef,f39c12,d2d6de,001F3F,39CCCC,3D9970,01FF70,FF851B,F012BE,8E24AA,D81B60,222222,d2d6de',
-    'THEME_COLOR' : '#00acd6'
+    'THEME_COLOR' : '#00acd6',
+    'ONLINE_DEFAULT_SERVER' : '',
+    'ONLINE_DEFAULT_USER' : ''
 }
 
 def _from_file():
@@ -36,7 +38,7 @@ def _load_config():
     for line in lines:
         if ':' in line:
             line = line.strip()
-            loaded_config[line.split(':')[0]] = line.split(':')[1]
+            loaded_config[line.split(':', 1)[0]] = line.split(':', 1)[1]
     for key in dict(configuration_provider.DEFAULT_CONFIG):
         if key not in loaded_config:
             loaded_config[key] = configuration_provider.DEFAULT_CONFIG[key]

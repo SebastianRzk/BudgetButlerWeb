@@ -28,12 +28,12 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5', 'Maureen')
+        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '0.5', 'Maureen')
         define_kategorie(driver, '1test_kategorie')
-        self._add_ausgabe(driver, '01012011', '1name', '1test_kategorie', 1, 'test')
+        self._add_ausgabe(driver, '2011-01-01', '1name', '1test_kategorie', 1, 'test')
         define_kategorie(driver, '2test_kategorie')
-        self._add_ausgabe(driver, '01012012', '2name', '2test_kategorie', 2, 'test')
-        self._add_ausgabe(driver, '01012013', '3name', '1test_kategorie', 3, 'Maureen')
+        self._add_ausgabe(driver, '2012-01-01', '2name', '2test_kategorie', 2, 'test')
+        self._add_ausgabe(driver, '2013-01-01', '3name', '1test_kategorie', 3, 'Maureen')
 
         driver.get('http://localhost:8000/gemeinsameuebersicht/')
 
@@ -51,12 +51,12 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5', 'Maureen')
+        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '0.5', 'Maureen')
         define_kategorie(driver, '1test_kategorie')
-        self._add_ausgabe(driver, '01012011', '1name', '1test_kategorie', 1, 'test')
+        self._add_ausgabe(driver, '2011-01-01', '1name', '1test_kategorie', 1, 'test')
         define_kategorie(driver, '2test_kategorie')
-        self._add_ausgabe(driver, '01012012', '2name', '2test_kategorie', 2, 'test')
-        self._add_ausgabe(driver, '01012013', '3name', '1test_kategorie', 3, 'Maureen')
+        self._add_ausgabe(driver, '2012-01-01', '2name', '2test_kategorie', 2, 'test')
+        self._add_ausgabe(driver, '2013-01-01', '3name', '1test_kategorie', 3, 'Maureen')
 
         driver.get('http://localhost:8000/gemeinsameuebersicht/')
 
@@ -66,7 +66,7 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '2name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '2test_kategorie'
         assert get_selected_option(driver, 'person_auswahl') == 'test'
-        assert driver.find_element_by_name('date').get_attribute('value') == '01.01.2012'
+        assert driver.find_element_by_name('date').get_attribute('value') == '2012-01-01'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
         close_driver(driver)
@@ -75,12 +75,12 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '01012010', '0name', '0test_kategorie', '0.5', 'Maureen')
+        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '0.5', 'Maureen')
         define_kategorie(driver, '1test_kategorie')
-        self._add_ausgabe(driver, '01012011', '1name', '1test_kategorie', 1, 'test')
+        self._add_ausgabe(driver, '2011-01-01', '1name', '1test_kategorie', 1, 'test')
         define_kategorie(driver, '2test_kategorie')
-        self._add_ausgabe(driver, '01012012', '2name', '2test_kategorie', 2, 'test')
-        self._add_ausgabe(driver, '01012013', '3name', '1test_kategorie', 3, 'Maureen')
+        self._add_ausgabe(driver, '2012-01-01', '2name', '2test_kategorie', 2, 'test')
+        self._add_ausgabe(driver, '2013-01-01', '3name', '1test_kategorie', 3, 'Maureen')
 
         driver.get('http://localhost:8000/gemeinsameuebersicht/')
 
@@ -90,7 +90,7 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '0name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '0test_kategorie'
         assert get_selected_option(driver, 'person_auswahl') == 'Maureen'
-        assert driver.find_element_by_name('date').get_attribute('value') == '01.01.2010'
+        assert driver.find_element_by_name('date').get_attribute('value') == '2010-01-01'
         assert driver.find_element_by_name('wert').get_attribute('value') == '0,50'
 
 

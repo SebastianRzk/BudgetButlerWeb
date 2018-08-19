@@ -12,7 +12,7 @@ from test.RequestStubs import PostRequest
 from core.DatabaseModule import Database
 from jahresuebersicht import views
 from viewcore import viewcore
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 from viewcore import request_handler
 
 

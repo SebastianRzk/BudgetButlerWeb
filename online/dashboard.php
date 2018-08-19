@@ -89,7 +89,7 @@ if ($auth->isLoggedIn()) {
 				':name' => (string)$_POST['name'],
 				':kategorie' => (string)$_POST['kategorie'],
 				':datum' => (string)$_POST['date'],
-				':wert' => (string)$_POST['wert']));
+				':wert' => '-'.((string)$_POST['wert'])));
 		echo "<h2>Eintrag hinzugefügt</h2>";
 	}
 

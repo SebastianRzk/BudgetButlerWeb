@@ -65,7 +65,7 @@ class TestHeadlines(SeleniumTestClass):
     def test_importd(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:8000/import/')
-        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Datensätze importieren'
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Export / Import'
         close_driver(driver)
 
     def test_jahresuebersicht(self, get_driver, close_driver):

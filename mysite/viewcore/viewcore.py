@@ -97,6 +97,7 @@ def get_menu_list():
     menu.append({'url':'/adddauerauftrag/', 'name':'Neuer Dauerauftrag', 'icon':'fa fa-plus'})
     menu.append({'url':'/monatsuebersicht/', 'name': 'Monatsübersicht', 'icon':'fa fa-line-chart'})
     menu.append({'url':'/jahresuebersicht/', 'name': 'Jahresübersicht', 'icon':'fa fa-line-chart'})
+    menu.append({'url': '/import/', 'name': 'Export / Import', 'icon':'fa fa-cogs'})
     main_menu[EINZELBUCHUNGEN_SUBMENU_NAME] = menu
 
     menu = []
@@ -106,7 +107,6 @@ def get_menu_list():
     main_menu['Gemeinsame Finanzen'] = menu
 
     menu = []
-    menu.append({'url': '/import/', 'name': 'Datensätze importieren', 'icon':'fa fa-cogs'})
     menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon':'fa fa-cogs'})
     menu.append({'url':'/production/?database=' + viewcore.database_instance().name, 'name':'Datenbank neu laden', 'icon':'fa fa-refresh'})
     for database in DATABASES:

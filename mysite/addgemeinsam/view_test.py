@@ -18,8 +18,9 @@ from test.RequestStubs import VersionedPostRequest
 from addgemeinsam import views
 from core.DatabaseModule import Database
 from viewcore import viewcore
-from viewcore.converter import datum
 from viewcore import request_handler
+from viewcore.converter import datum_from_german as datum
+from viewcore.converter import german_to_rfc as rfc
 
 
 class TesteAddGemeinsamView(unittest.TestCase):
@@ -41,7 +42,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         context = views.index(PostRequest({'action':'edit', 'edit_index':'0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
         preset = context['default_item']
-        assert preset['datum'] == '10.10.2010'
+        assert preset['datum'] == rfc('10.10.2010')
         assert preset['edit_index'] == '0'
         assert preset['kategorie'] == 'kategorie'
         assert preset['name'] == 'ausgaben_name'
@@ -52,7 +53,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         self.set_up()
         views.index(VersionedPostRequest(
             {'action':'add',
-             'date':'1.1.2017',
+             'date': rfc('1.1.2017'),
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -70,7 +71,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         self.set_up()
         views.index(VersionedPostRequest(
             {'action':'add',
-             'date':'1.1.2017',
+             'date': rfc('1.1.2017'),
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -89,7 +90,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
-             'date':'1.1.2017',
+             'date': rfc('1.1.2017'),
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -99,7 +100,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         views.index(PostRequest(
             {'action':'add',
              'ID':next_id,
-             'date':'1.1.2017',
+             'date': rfc('1.1.2017'),
              'kategorie':'overwritten',
              'name':'overwritten',
              'person':'overwritten',
@@ -120,7 +121,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
         views.index(VersionedPostRequest(
             {'action':'add',
-             'date':'1.1.2017',
+             'date': rfc('1.1.2017'),
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -132,7 +133,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
             {'action':'add',
              'ID':request_handler.current_key(),
              'edit_index':'0',
-             'date':'5.1.2017',
+             'date': rfc('5.1.2017'),
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson2',
@@ -160,7 +161,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
         views.index(VersionedPostRequest(
             {'action':'add',
-             'date':'1.1.2017',
+             'date': rfc('1.1.2017'),
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson',
@@ -173,7 +174,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
             {'action':'add',
              'ID':next_id,
              'edit_index':'0',
-             'date':'5.1.2017',
+             'date': rfc('5.1.2017'),
              'kategorie':'Essen',
              'name':'testname',
              'person':'testperson2',
@@ -184,7 +185,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
             {'action':'add',
              'ID':next_id,
              'edit_index':'0',
-             'date':'5.1.2017',
+             'date': rfc('5.1.2017'),
              'kategorie':'overwritten',
              'name':'overwritten',
              'person':'overwritten',

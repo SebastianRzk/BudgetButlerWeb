@@ -10,7 +10,7 @@ from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
 from monatsuebersicht import views
 from viewcore import viewcore
-from viewcore.converter import datum
+from viewcore.converter import datum_from_german as datum
 from viewcore import request_handler
 
 

@@ -29,12 +29,12 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_dauerauftrag(driver, '01012010', '02022010', '0name', '0test_kategorie', '0.5', 'Einnahme')
+        self._add_dauerauftrag(driver, '2010-01-01', '2010-02-02', '0name', '0test_kategorie', '0.5', 'Einnahme')
         define_kategorie(driver, '1test_kategorie')
-        self._add_dauerauftrag(driver, '01012011', '02022011', '1name', '1test_kategorie', 1, 'Ausgabe')
+        self._add_dauerauftrag(driver, '2011-01-01', '2011-02-02', '1name', '1test_kategorie', 1, 'Ausgabe')
         define_kategorie(driver, '2test_kategorie')
-        self._add_dauerauftrag(driver, '01012012', '02022012', '2name', '2test_kategorie', 2, 'Ausgabe')
-        self._add_dauerauftrag(driver, '01012013', '02022013', '3name', '1test_kategorie', 3, 'Einnahme')
+        self._add_dauerauftrag(driver, '2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe')
+        self._add_dauerauftrag(driver, '2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
         driver.get('http://localhost:8000/dauerauftraguebersicht/')
 
@@ -51,12 +51,12 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_dauerauftrag(driver, '01012010', '02022010', '0name', '0test_kategorie', '0.5', 'Einnahme')
+        self._add_dauerauftrag(driver, '2010-01-01', '2010-02-02', '0name', '0test_kategorie', '0.5', 'Einnahme')
         define_kategorie(driver, '1test_kategorie')
-        self._add_dauerauftrag(driver, '01012011', '02022011', '1name', '1test_kategorie', 1, 'Ausgabe')
+        self._add_dauerauftrag(driver, '2011-01-01', '2011-02-02', '1name', '1test_kategorie', 1, 'Ausgabe')
         define_kategorie(driver, '2test_kategorie')
-        self._add_dauerauftrag(driver, '01012012', '02022012', '2name', '2test_kategorie', 2, 'Ausgabe')
-        self._add_dauerauftrag(driver, '01012013', '02022013', '3name', '1test_kategorie', 3, 'Einnahme')
+        self._add_dauerauftrag(driver, '2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe')
+        self._add_dauerauftrag(driver, '2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
         driver.get('http://localhost:8000/dauerauftraguebersicht/')
 
@@ -66,8 +66,8 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '2name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '2test_kategorie'
         assert get_selected_option(driver, 'typ_auswahl') == 'Ausgabe'
-        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01.01.2012'
-        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2012'
+        assert driver.find_element_by_name('startdatum').get_attribute('value') == '2012-01-01'
+        assert driver.find_element_by_name('endedatum').get_attribute('value') == '2012-02-02'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
         close_driver(driver)
@@ -76,12 +76,12 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_dauerauftrag(driver, '01012010', '02022010', '0name', '0test_kategorie', '0.5', 'Einnahme')
+        self._add_dauerauftrag(driver, '2010-01-01', '2010-02-02', '0name', '0test_kategorie', '0.5', 'Einnahme')
         define_kategorie(driver, '1test_kategorie')
-        self._add_dauerauftrag(driver, '01012011', '02022011', '1name', '1test_kategorie', 1, 'Ausgabe')
+        self._add_dauerauftrag(driver, '2011-01-01', '2011-02-02', '1name', '1test_kategorie', 1, 'Ausgabe')
         define_kategorie(driver, '2test_kategorie')
-        self._add_dauerauftrag(driver, '01012012', '02022012', '2name', '2test_kategorie', 2, 'Ausgabe')
-        self._add_dauerauftrag(driver, '01012013', '02022013', '3name', '1test_kategorie', 3, 'Einnahme')
+        self._add_dauerauftrag(driver, '2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe')
+        self._add_dauerauftrag(driver, '2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
         driver.get('http://localhost:8000/dauerauftraguebersicht/')
 
@@ -91,8 +91,8 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '0name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '0test_kategorie'
         assert get_selected_option(driver, 'typ_auswahl') == 'Einnahme'
-        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01.01.2010'
-        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2010'
+        assert driver.find_element_by_name('startdatum').get_attribute('value') == '2010-01-01'
+        assert driver.find_element_by_name('endedatum').get_attribute('value') == '2010-02-02'
         assert driver.find_element_by_name('wert').get_attribute('value') == '0,50'
 
         close_driver(driver)
