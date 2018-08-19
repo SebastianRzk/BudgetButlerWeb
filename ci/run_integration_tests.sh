@@ -4,7 +4,7 @@ wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodrive
 tar -xvzf geckodriver*
 chmod +x geckodriver
 export PATH=$PATH:$(pwd)/geckodriver
-
+ls -l
 echo "PATH:"
 echo $PATH
 
