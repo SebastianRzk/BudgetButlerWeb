@@ -53,8 +53,9 @@ def handle_request(request):
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.POST['server']
 
-            if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+            if not serverurl.startswith('http://') and not serverurl.startswith('https://'):
                  serverurl = 'https://' + serverurl
+            print(serverurl)
 
             configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
             configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.POST['email'])
