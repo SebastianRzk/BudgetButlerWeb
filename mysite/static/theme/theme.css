@@ -87,49 +87,9 @@ a:focus {
   -o-transition: -o-transform 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
   transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
 }
-.sidebar {
-  padding-bottom: 10px;
-}
 .fixed .sidebar {
   overflow: auto;
   height: 100%;
-}
-.sidebar-form input:focus {
-  border-color: transparent!important;
-}
-.user-panel {
-  padding: 10px;
-}
-.user-panel:before,
-.user-panel:after {
-  content: " ";
-  display: table;
-}
-.user-panel:after {
-  clear: both;
-}
-.user-panel > .image > img {
-  width: 45px;
-  height: 45px;
-}
-.user-panel > .info {
-  font-weight: 600;
-  padding: 50px 5px 5px 15px;
-  font-size: 14px;
-  line-height: 1;
-}
-.user-panel > .info > p {
-  margin-bottom: 9px;
-}
-.user-panel > .info > a {
-  text-decoration: none;
-  padding-right: 5px;
-  margin-top: 3px;
-  font-size: 11px;
-  font-weight: normal;
-}
-.user-panel > .info > a > .fa {
-  margin-right: 3px;
 }
 .sidebar-menu {
   list-style: none;
@@ -480,7 +440,6 @@ button:hover {
   grid-column: 1/2;
   grid-row: 2/3;
   background-color: white;
-  padding-top: 2ex;
 }
 
 .content {
@@ -494,7 +453,6 @@ button:hover {
 	grid-column: 1/2;
 	grid-row: 3/4;
   background-color: white;
-  padding-top: 2ex;
 }
 
 .theme-double-rows {
@@ -561,11 +519,19 @@ th {
   text-align: left;
 }
 
+td {
+  height: 5ex;
+}
+
 .btn-tool {
   border: none;
   background: transparent;
   color: #97a0b3;
   outline: none;
+}
+
+.btn-tool-large {
+  font-size: large;
 }
 
 .btn-icon {
@@ -576,4 +542,12 @@ th {
 
 .fa-large{
   font-size: 13pt;
+}
+
+.info {
+  height: 10 ex;
+}
+
+.sidebar {
+  padding-top: 3ex;
 }
