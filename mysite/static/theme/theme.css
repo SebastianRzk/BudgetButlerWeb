@@ -193,11 +193,6 @@ a:focus {
   border-color: #d2d6de;
   background-color: #fff;
 }
-/* button groups */
-.btn-group-vertical .btn.btn-flat:first-of-type,
-.btn-group-vertical .btn.btn-flat:last-of-type {
-  border-radius: 0;
-}
 /*
  * Component: Box
  * --------------
@@ -528,9 +523,6 @@ td {
   background: transparent;
   color: #97a0b3;
   outline: none;
-}
-
-.btn-tool-large {
   font-size: large;
 }
 
