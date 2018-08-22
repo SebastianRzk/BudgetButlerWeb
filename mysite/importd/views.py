@@ -9,6 +9,7 @@ import requests
 from test.RequestStubs import PostRequest
 from test import RequestStubs
 from datetime import datetime
+from core import FileSystem
 from viewcore import configuration_provider
 
 
@@ -46,7 +47,7 @@ def index(request):
     return request_handler.handle_request(request, lambda x: context , page)
 
 
-def handle_request(request):
+def handle_request(request, import_prefix=''):
     print(request)
     imported_values = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', ''))
     if request.method == "POST":
@@ -62,10 +63,9 @@ def handle_request(request):
 
             r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.POST['email'], 'password': request.POST['password']})
             print(r.content)
-            _write_to_file("../Online_Import/Import_" + str(datetime.now()), r.content.decode("utf-8"))
 
             RequestStubs.CONFIGURED = True
-            response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}))
+            response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet')
             r = requests.post(serverurl + '/deleteitems.php', data={'email': request.POST['email'], 'password': request.POST['password']})
             return response
         elif post_action_is(request, 'set_kategorien'):
@@ -82,12 +82,13 @@ def handle_request(request):
         else:
             print(request.POST)
             tables = {}
+            content = request.POST['import'].replace('\r', '')
+            FileSystem.instance().write('../Online_Import/' + import_prefix + 'Import_' + str(datetime.now()), content)
 
             tables["sonst"] = ""
             tables["#######MaschinenimportStart"] = ""
             mode = "sonst"
-            content = request.POST['import'].replace('\r', '')
-            print('textfield content:', request.POST['import'].replace('\r', ''))
+            print('textfield content:',content)
             for line in content.split('\n'):
                 print(line)
                 line = line.strip()
@@ -155,10 +156,6 @@ def handle_request(request):
     context['ONLINE_DEFAULT_SERVER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER')
     context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')
     return 'import.html', context
-
-def _write_to_file(filename, content):
-    f = open(filename, "w")
-    f.write(content)
 
 def _kategorien_map(actual, target, goal):
     if actual != target:
