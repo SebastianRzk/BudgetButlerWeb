@@ -5,40 +5,28 @@ Read panda files
 from _io import StringIO
 from datetime import datetime
 import os
+import sys
+_PATH = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _PATH + '/../')
 
 from core import DatabaseModule
+from core import FileSystem
 import pandas as pd
 
-
-def read_database(nutzername):
-    return read_function(nutzername)
-
-
-def from_file(nutzername):
-    if not os.path.isfile('../Database_' + nutzername + ".csv"):
+def read(nutzername):
+    if not FileSystem.instance().read('../Database_' + nutzername + '.csv'):
         neue_datenbank = DatabaseModule.Database(nutzername)
         write(neue_datenbank)
 
-    file = open('../Database_' + nutzername + ".csv", 'r')
-    return read_file(file, nutzername)
+    file_content = FileSystem.instance().read('../Database_' + nutzername + '.csv')
 
-def to_file(database):
-    file = open('../Database_' + database.name + ".csv", 'w')
-    write_file(database, file)
-    file.close()
-
-
-read_function = from_file
-write_function = to_file
-
-def read_file(file, nutzername):
     tables = {}
 
     tables["einzelbuchungen"] = ""
     tables["dauerauftraege"] = ""
     tables["gemeinsamebuchungen"] = ""
     mode = "einzelbuchungen"
-    for line in file:
+    for line in file_content:
         line = line.strip()
         if line == "":
             continue
@@ -70,12 +58,7 @@ def read_file(file, nutzername):
     print('READER: Refresh done')
     return database
 
-
 def write(database):
-    write_function(database)
-
-
-def write_file(database, file):
     einzelbuchungen = database.einzelbuchungen.content.copy()[database.einzelbuchungen.content.Dynamisch == False]
     einzelbuchungen_raw_data = einzelbuchungen[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
     content = einzelbuchungen_raw_data.to_csv(index=False)
@@ -86,5 +69,5 @@ def write_file(database, file):
     content += "\n Gemeinsame Buchungen \n"
     content += database.gemeinsamebuchungen.content.to_csv(index=False)
 
-    file.write(content)
+    FileSystem.instance().write('../Database_' + database.name + '.csv', content)
     print("WRITER: All Saved")

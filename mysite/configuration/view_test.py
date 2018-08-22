@@ -11,11 +11,11 @@ import unittest
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
-from test import DBManagerStub
+from test.FileSystemStub import FileSystemStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
 from configuration import views
-from core import DBManager
+from core import FileSystem
 from core.DatabaseModule import Database
 from viewcore import viewcore
 from viewcore import request_handler
@@ -25,9 +25,10 @@ from viewcore.converter import datum_from_german as datum
 class TestKonfiguration(unittest.TestCase):
 
     def set_up(self):
-        DBManagerStub.setup_db_for_test()
+        FileSystem.INSTANCE = FileSystemStub()
+        viewcore.DATABASE_INSTANCE = None
+        configuration_provider.LOADED_CONFIG = None
         request_handler.stub_me()
-        configuration_provider.stub_me()
 
     def test_init(self):
         self.set_up()

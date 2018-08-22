@@ -5,10 +5,10 @@ import unittest
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
-from test import DBManagerStub
+from test.FileSystemStub import FileSystemStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
-from core import DBManager
+from core import FileSystem
 from core.DatabaseModule import Database
 from dauerauftraguebersicht import views
 from viewcore import viewcore
@@ -18,7 +18,8 @@ from viewcore import request_handler
 class Dauerauftragsuebersicht(unittest.TestCase):
 
     def set_up(self):
-        DBManagerStub.setup_db_for_test()
+        FileSystem.INSTANCE = FileSystemStub()
+        viewcore.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):

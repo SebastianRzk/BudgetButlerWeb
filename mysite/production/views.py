@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from viewcore import viewcore
-from test import DBManagerStub
+from test.FileSystemStub import FileSystemStub
+from core import FileSystem
 from viewcore import configuration_provider
 # Create your views here.
 def leave_debug(request):
@@ -8,10 +9,10 @@ def leave_debug(request):
     return redirect('/dashboard/')
 
 def enter_testmode(request):
-    DBManagerStub.setup_db_for_test()
-    configuration_provider.stub_me('''
-    PARTNERNAME:Maureen
-    ''')
+    FileSystem.INSTANCE = FileSystemStub()
+    viewcore.DATABASE_INSTANCE = None
+    viewcore.DATABASES = ['test']
+    configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
     print('WARNUNG: ENTERING TESTMODE')
     return redirect('/dashboard/')
 

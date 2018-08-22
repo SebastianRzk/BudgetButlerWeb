@@ -11,7 +11,7 @@ import unittest
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../')
 
-from test import DBManagerStub
+from test.FileSystemStub import FileSystemStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
 from test.RequestStubs import VersionedPostRequest
@@ -20,13 +20,14 @@ from viewcore import viewcore
 from viewcore.converter import datum_from_german as datum
 from viewcore.converter import german_to_rfc as rfc
 from viewcore import request_handler
-
+from core import FileSystem
 
 class TesteAddDauerauftragView(unittest.TestCase):
     testdb = None
 
     def set_up(self):
-        DBManagerStub.setup_db_for_test()
+        FileSystem.INSTANCE = FileSystemStub()
+        viewcore.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):

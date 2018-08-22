@@ -10,7 +10,8 @@ import sys
 import unittest
 from pandas.core.frame import DataFrame
 from core.DatabaseModule import Database
-from test import DBManagerStub
+from test.FileSystemStub import FileSystemStub
+from core import FileSystem
 
 _PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _PATH + '/../')
@@ -24,10 +25,10 @@ class abrechnen(unittest.TestCase):
     abrechnung = """Abrechnung vom 01.01.2010
 ########################################
  Ergebnis:
-test muss an Maureen noch 5.00€ überweisen.
+Test_User muss an Maureen noch 5.00€ überweisen.
 
 Ausgaben von Maureen           -10.00
-Ausgaben von test                0.00
+Ausgaben von Test_User           0.00
 --------------------------------------
 Gesamt                         -10.00
  
@@ -47,7 +48,7 @@ Gesamt                         -10.00
 
 
 ########################################
- Ausgaben von test
+ Ausgaben von Test_User
 ########################################
  Datum      Kategorie    Name                    Wert
 
@@ -59,11 +60,10 @@ Datum,Kategorie,Name,Wert,Dynamisch
 """
 
     def set_up(self):
-        DBManagerStub.setup_db_for_test()
-        DBManagerStub.stub_abrechnungs_write()
-        configuration_provider.stub_me('''
-            PARTNERNAME:Maureen
-            ''')
+        FileSystem.INSTANCE = FileSystemStub()
+        viewcore.DATABASE_INSTANCE = None
+        viewcore.DATABASES = []
+        configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
 
     def test_abrechnen_shouldAddEinzelbuchungen(self):
         self.set_up()

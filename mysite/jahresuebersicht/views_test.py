@@ -6,10 +6,10 @@ from django.template.context_processors import request
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + "/../")
 
-from test import DBManagerStub
+from test.FileSystemStub import FileSystemStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
-from core.DatabaseModule import Database
+from core import FileSystem
 from jahresuebersicht import views
 from viewcore import viewcore
 from viewcore.converter import datum_from_german as datum
@@ -20,7 +20,8 @@ from viewcore import request_handler
 class Jahresuebersicht(unittest.TestCase):
 
     def set_up(self):
-        DBManagerStub.setup_db_for_test()
+        FileSystem.INSTANCE = FileSystemStub()
+        viewcore.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):

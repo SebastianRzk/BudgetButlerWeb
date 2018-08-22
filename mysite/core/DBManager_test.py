@@ -13,15 +13,25 @@ sys.path.insert(0, _PATH + '/../')
 
 from core import DBManager
 from viewcore import viewcore
-
+from core import FileSystem
+from test.FileSystemStub import FileSystemStub
 
 
 
 
 class DBManager_readDB(unittest.TestCase):
 
+    def mock_filesystem(self):
+        FileSystem.INSTANCE = FileSystemStub()
+
+    def write_db_file_stub(self,name, stub):
+        FileSystem.instance().write('../Database_' + name + '.csv', stub)
+
     def teste_read_with_full_database(self):
-        database = DBManager.read_file(StringIO(self.full_db) , 'testuser')
+        self.mock_filesystem()
+        self.write_db_file_stub('testuser', self.full_db)
+
+        database = DBManager.read('testuser')
 
         assert database.name == 'testuser'
         assert len(database.einzelbuchungen.content) == 22
@@ -32,18 +42,22 @@ class DBManager_readDB(unittest.TestCase):
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
     def teste_write_with_full_database(self):
-        database = DBManager.read_file(StringIO(self.full_db) , 'testuser')
-        string_writer = StringIO()
-        DBManager.write_file(database, string_writer)
+        self.mock_filesystem()
+        self.write_db_file_stub('testuser', self.full_db)
 
-        assert string_writer.getvalue() == self.full_db
+        database = DBManager.read('testuser')
+        DBManager.write(database)
+
+        assert FileSystem.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
 
     def teste_write_with_old_database_should_migrate(self):
-        database = DBManager.read_file(StringIO(self.full_db_old) , 'testuser')
-        string_writer = StringIO()
-        DBManager.write_file(database, string_writer)
+        self.mock_filesystem()
+        self.write_db_file_stub('testuser', self.full_db_old)
 
-        assert string_writer.getvalue() == self.full_db
+        database = DBManager.read('testuser')
+        DBManager.write(database)
+
+        assert FileSystem.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
 
 
     full_db_old = '''Datum,Kategorie,Name,Wert,Tags
