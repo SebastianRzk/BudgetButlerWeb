@@ -5,20 +5,15 @@ Created on 10.05.2017
 '''
 
 from datetime import date, timedelta
-import os
-import sys
 import unittest
 from pandas.core.frame import DataFrame
-from core.DatabaseModule import Database
-from test.FileSystemStub import FileSystemStub
-from core import FileSystem
 
-_PATH = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, _PATH + '/../')
-
-from viewcore.converter import datum_from_german as datum
-from viewcore import viewcore
-from viewcore import configuration_provider
+from mysite.core.DatabaseModule import Database
+from mysite.test.FileSystemStub import FileSystemStub
+from mysite.core import FileSystem
+from mysite.viewcore.converter import datum_from_german as datum
+from mysite.viewcore import viewcore
+from mysite.viewcore import configuration_provider
 
 
 class abrechnen(unittest.TestCase):

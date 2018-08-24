@@ -1,4 +1,4 @@
-from core import FileSystem
+from mysite.core import FileSystem
 import os
 
 INSTANCE = None

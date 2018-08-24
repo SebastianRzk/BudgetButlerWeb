@@ -1,6 +1,6 @@
-from viewcore import configuration_provider
-from core import FileSystem
 from functools import reduce
+from mysite.viewcore import configuration_provider
+from mysite.core import FileSystem
 
 LOADED_CONFIG = {}
 DEFAULT_CONFIG = {

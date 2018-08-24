@@ -3,6 +3,7 @@ from selenium import webdriver
 import os
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 import SeleniumTest
 
 CHROME_CACHE = []
@@ -45,12 +46,19 @@ def _launch_headles_firefox():
     firefox_options = Options()
     firefox_options.add_argument("-headless")
     firefox_options.add_argument("--window-size=1920,1080")
-    browser = webdriver.Firefox(firefox_options=firefox_options)
+
+    profile = FirefoxProfile()
+    profile.set_preference('browser.cache.disk.enable', False)
+    profile.set_preference('browser.cache.memory.enable', False)
+    profile.set_preference('browser.cache.offline.enable', False)
+    profile.set_preference('network.cookie.cookieBehavior', 2)
+
+    browser = webdriver.Firefox(firefox_options=firefox_options, firefox_profile=profile)
     SeleniumTest.CHROME_INSTANCES.append(browser)
     return browser
 
 def enter_test_mode(driver):
-    driver.get('http://localhost:8000/production/testmode')
+    driver.get('http://localhost:5000/production/testmode')
 
 
 def fill_element(driver, elementname, content):
@@ -59,7 +67,7 @@ def fill_element(driver, elementname, content):
     elem.send_keys(content)
 
 def define_kategorie(driver, kategorie_name):
-    driver.get('http://127.0.0.1:8000/configuration/')
+    driver.get('http://127.0.0.1:5000/configuration/')
     fill_element(driver, 'neue_kategorie', kategorie_name)
     button = driver.find_element_by_id('add_kategorie')
     button.click()

@@ -13,7 +13,7 @@ import time
 
 class TestUI(SeleniumTestClass):
     def teste_ausgaben(self, get_driver, close_driver):
-        self._generic_test(get_driver, close_driver, 'addeinzelbuchung', 'Neue Ausgabe')
+        self._generic_test(get_driver, close_driver, 'addausgabe', 'Neue Ausgabe')
 
     def teste_einnahmen(self, get_driver, close_driver):
         self._generic_test(get_driver, close_driver, 'addeinnahme', 'Neue Einnahme')
@@ -27,7 +27,7 @@ class TestUI(SeleniumTestClass):
     def _generic_test(self, get_driver, close_driver, pagename, pagetitle):
         driver = get_driver()
         enter_test_mode(driver)
-        driver.get('http://localhost:8000/' + pagename + '/')
+        driver.get('http://localhost:5000/' + pagename + '/')
 
         verify_no_kategories_defined(driver)
 

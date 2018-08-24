@@ -1,6 +1,5 @@
 <div class="box theme-row">
   <form role="form" action="/monatsuebersicht/" method="post">
-    {% csrf_token %}
     <div class="box-body">
       <div class="form-group">
         <label>Wähle Monat</label>
@@ -32,7 +31,6 @@
   </div>
   <div class="box-body">
   <form role="form" action="/monatsuebersicht/abrechnung/" method="post">
-    {% csrf_token %}
     <input type="hidden" name="date" value="{{selected_date}}">
     <input type="checkbox" name="content" value="zusammenfassung_einnahmen" checked>Zusammenfassung der Einnahmen</br>
     <input type="checkbox" name="content" value="zusammenfassung_ausgaben" checked>Zusammenfassung der Ausgaben</br>

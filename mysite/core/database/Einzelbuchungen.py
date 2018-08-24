@@ -8,8 +8,8 @@ from datetime import datetime
 
 import itertools as it
 import pandas as pd
-from viewcore import viewcore
-from core.database.DatabaseObject import DatabaseObject
+from mysite.viewcore import viewcore
+from mysite.core.database.DatabaseObject import DatabaseObject
 
 
 class Einzelbuchungen(DatabaseObject):

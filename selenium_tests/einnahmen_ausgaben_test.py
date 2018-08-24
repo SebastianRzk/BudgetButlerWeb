@@ -12,7 +12,7 @@ from SeleniumTest import get_selected_option
 
 class TestUI(SeleniumTestClass):
     def _add_ausgabe(self, driver, date, name, kategorie, wert):
-        driver.get('http://localhost:8000/addeinzelbuchung/')
+        driver.get('http://localhost:5000/addausgabe/')
         fill_element(driver, 'date', date)
         fill_element(driver, 'name', name)
         fill_element(driver, 'wert', wert)
@@ -35,14 +35,14 @@ class TestUI(SeleniumTestClass):
         self._add_ausgabe(driver, '2012-01-01', '2name', '2test_kategorie', 2)
         self._add_ausgabe(driver, '2013-01-01', '3name', '1test_kategorie', 3)
 
-        driver.get('http://localhost:8000/uebersicht/')
+        driver.get('http://localhost:5000/uebersicht/')
         open_table_button = driver.find_element_by_id('open_2012.1')
         open_table_button.click()
 
         assert driver.find_element_by_id('item_2_id').get_attribute('innerHTML') == '2'
         assert driver.find_element_by_id('item_2_name').get_attribute('innerHTML') == '2name'
         assert driver.find_element_by_id('item_2_kategorie').get_attribute('innerHTML') == '2test_kategorie'
-        assert driver.find_element_by_id('item_2_datum').get_attribute('innerHTML') == 'Jan. 1, 2012'
+        assert driver.find_element_by_id('item_2_datum').get_attribute('innerHTML') == '2012-01-01'
         assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
 
         edit_button = driver.find_element_by_id('edit_2')

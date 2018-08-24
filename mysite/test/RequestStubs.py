@@ -11,23 +11,21 @@ class GetRequest():
 
 from django.http import QueryDict
 from django.conf import settings
-from test import RequestStubs
+from mysite.test import RequestStubs
+from mysite.viewcore import request_handler
 
 CONFIGURED = False
 
 class PostRequest:
     method = "POST"
     def __init__(self, args):
-        self.POST = RequestStubs.to_query_dict(args)
-
-
-from viewcore import request_handler
+        self.values = RequestStubs.to_query_dict(args)
 
 
 class VersionedPostRequest(PostRequest):
     def __init__(self, args):
         args["ID"] = request_handler.current_key()
-        self.POST = RequestStubs.to_query_dict(args)
+        self.values = RequestStubs.to_query_dict(args)
 
 def to_query_dict(dictionary):
     if not RequestStubs.CONFIGURED:

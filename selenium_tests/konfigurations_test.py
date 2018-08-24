@@ -14,14 +14,14 @@ class TestUI(SeleniumTestClass):
     def teste_change_partnername(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
-        driver.get('http://localhost:8000/addgemeinsam/')
+        driver.get('http://localhost:5000/addgemeinsam/')
         assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Maureen'])
 
-        driver.get('http://localhost:8000/configuration/')
+        driver.get('http://localhost:5000/configuration/')
         fill_element(driver, 'partnername', 'Olaf')
         driver.find_element_by_id('set_partnername').click()
 
-        driver.get('http://localhost:8000/addgemeinsam/')
+        driver.get('http://localhost:5000/addgemeinsam/')
         assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Olaf'])
         close_driver(driver)
 
@@ -29,16 +29,16 @@ class TestUI(SeleniumTestClass):
         driver = get_driver()
         enter_test_mode(driver)
 
-        driver.get('http://127.0.0.1:8000/addeinzelbuchung/')
+        driver.get('http://127.0.0.1:5000/addausgabe/')
         add_button = driver.find_element_by_id('add')
         color_before = add_button.value_of_css_property("background-color")
         assert color_before == 'rgb(0, 172, 214)'
 
-        driver.get('http://127.0.0.1:8000/configuration/')
+        driver.get('http://127.0.0.1:5000/configuration/')
         driver.execute_script("document.getElementById('themecolor').setAttribute('value', '#000000')")
         driver.find_element_by_id('change_themecolor').click()
 
-        driver.get('http://127.0.0.1:8000/addeinzelbuchung/')
+        driver.get('http://127.0.0.1:5000/addausgabe/')
         add_button = driver.find_element_by_id('add')
         color_before = add_button.value_of_css_property("background-color")
         assert color_before == 'rgb(0, 0, 0)'

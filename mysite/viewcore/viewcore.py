@@ -4,9 +4,9 @@ Created on 24.04.2017
 @author: sebastian
 '''
 
-from core import DBManager
-from viewcore import viewcore
-from viewcore import configuration_provider
+from mysite.core import DBManager
+from mysite.viewcore import viewcore
+from mysite.viewcore import configuration_provider
 import datetime
 
 DATABASE_INSTANCE = None
@@ -92,7 +92,7 @@ def get_menu_list():
     menu = []
     menu.append({'url':'/uebersicht/', 'name':'Alle Einzelbuchungen', 'icon':'fa fa-list'})
     menu.append({'url':'/dauerauftraguebersicht/', 'name': 'Alle Daueraufträge', 'icon':'fa fa-list'})
-    menu.append({'url':'/addeinzelbuchung/', 'name':'Neue Ausgabe', 'icon':'fa fa-plus'})
+    menu.append({'url':'/addausgabe/', 'name':'Neue Ausgabe', 'icon':'fa fa-plus'})
     menu.append({'url':'/addeinnahme/', 'name':'Neue Einnahme', 'icon':'fa fa-plus'})
     menu.append({'url':'/adddauerauftrag/', 'name':'Neuer Dauerauftrag', 'icon':'fa fa-plus'})
     menu.append({'url':'/monatsuebersicht/', 'name': 'Monatsübersicht', 'icon':'fa fa-line-chart'})
@@ -186,9 +186,9 @@ def design_colors():
 def post_action_is(request, action_name):
     if request.method != 'POST':
         return False
-    if 'action' not in request.POST:
+    if 'action' not in request.values:
         return False
-    return request.POST['action'] == action_name
+    return request.values['action'] == action_name
 
 
 def today():

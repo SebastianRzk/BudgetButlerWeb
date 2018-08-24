@@ -6,9 +6,9 @@ Created on 18.08.2017
 
 from datetime import datetime, date
 
-from core.Frequency import FrequencsFunctions
+from mysite.core.Frequency import FrequencsFunctions
+from mysite.core.database.DatabaseObject import DatabaseObject
 import pandas as pd
-from core.database.DatabaseObject import DatabaseObject
 
 
 class Dauerauftraege(DatabaseObject):

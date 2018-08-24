@@ -3,7 +3,7 @@
 		<h3 class='box-title'> Datensatz hier einfügen (z.B. gemeinsame Abrechnung):</h3>
 	</div>
 	<div class='box-body pad'>
-		<form  id="form1" action="/import/" method="post">{% csrf_token %}
+		<form  id="form1" action="/import/" method="post">
 			<div class="box-footer">
 				<textarea  name='import' class="textarea" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
 				<button type="submit" value="OK" class="btn bordered-hover">Daten aus Abrechnung importieren</button>
@@ -16,7 +16,7 @@
 		<div class="box-header">
 			<h3 class="box-title">Online Kategorien installieren</h3>
 		</div>
-		<form role="form" action="/import/" method="post">{% csrf_token %}
+		<form role="form" action="/import/" method="post">
 			<div class="box-body">
 				<div class="form-group">
 					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}"/>
@@ -33,7 +33,7 @@
 		<div class="box-header">
 			<h3 class="box-title">Online-Daten importieren</h3>
 		</div>
-		<form role="form" action="/import/" method="post">{% csrf_token %}
+		<form role="form" action="/import/" method="post">
 			<div class="box-body">
 				<div class="form-group">
 					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}"/>

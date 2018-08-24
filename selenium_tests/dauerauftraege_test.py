@@ -13,7 +13,7 @@ from SeleniumTest import get_selected_option
 
 class TestUI(SeleniumTestClass):
     def _add_dauerauftrag(self, driver, startdatum, endedatum, name, kategorie, wert, typ):
-        driver.get('http://localhost:8000/adddauerauftrag/')
+        driver.get('http://localhost:5000/adddauerauftrag/')
         fill_element(driver, 'startdatum', startdatum)
         fill_element(driver, 'endedatum', endedatum)
         fill_element(driver, 'name', name)
@@ -36,13 +36,13 @@ class TestUI(SeleniumTestClass):
         self._add_dauerauftrag(driver, '2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe')
         self._add_dauerauftrag(driver, '2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
-        driver.get('http://localhost:8000/dauerauftraguebersicht/')
+        driver.get('http://localhost:5000/dauerauftraguebersicht/')
 
         assert driver.find_element_by_id('item_2_id').get_attribute('innerHTML') == '2'
         assert driver.find_element_by_id('item_2_name').get_attribute('innerHTML') == '2name'
         assert driver.find_element_by_id('item_2_kategorie').get_attribute('innerHTML') == '2test_kategorie'
-        assert driver.find_element_by_id('item_2_startdatum').get_attribute('innerHTML') == 'Jan. 1, 2012'
-        assert driver.find_element_by_id('item_2_endedatum').get_attribute('innerHTML') == 'Feb. 2, 2012'
+        assert driver.find_element_by_id('item_2_startdatum').get_attribute('innerHTML') == '2012-01-01'
+        assert driver.find_element_by_id('item_2_endedatum').get_attribute('innerHTML') == '2012-02-02'
         assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
         close_driver(driver)
 
@@ -58,7 +58,7 @@ class TestUI(SeleniumTestClass):
         self._add_dauerauftrag(driver, '2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe')
         self._add_dauerauftrag(driver, '2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
-        driver.get('http://localhost:8000/dauerauftraguebersicht/')
+        driver.get('http://localhost:5000/dauerauftraguebersicht/')
 
         edit_button = driver.find_element_by_id('edit_2')
         edit_button.click()
@@ -83,7 +83,7 @@ class TestUI(SeleniumTestClass):
         self._add_dauerauftrag(driver, '2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe')
         self._add_dauerauftrag(driver, '2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
-        driver.get('http://localhost:8000/dauerauftraguebersicht/')
+        driver.get('http://localhost:5000/dauerauftraguebersicht/')
 
         edit_button = driver.find_element_by_id('edit_0')
         edit_button.click()
