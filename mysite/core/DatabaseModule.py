@@ -12,9 +12,8 @@ from core.database.Einzelbuchungen import Einzelbuchungen
 from core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from pandas import DataFrame
 from viewcore import viewcore
+from core import FileSystem
 from viewcore.converter import datum, datum_to_german
-from viewcore.viewcore import name_of_partner
-from viewcore.viewcore import today
 
 
 class StringWriter():
@@ -91,7 +90,7 @@ class Database:
         dif_maureen = (ausgaben_gesamt / 2) - summe_maureen
 
         abrechnunsdatei = StringWriter()
-        abrechnunsdatei.write("Abrechnung vom " + datum_to_german(today()) + "\n")
+        abrechnunsdatei.write("Abrechnung vom " + datum_to_german(viewcore.today()) + "\n")
         self._write_trenner(abrechnunsdatei)
         abrechnunsdatei.write("Ergebnis:\n")
 
@@ -149,19 +148,13 @@ class Database:
         self.einzelbuchungen.append_row(ausgaben)
         self.gemeinsamebuchungen.empty()
         self.taint()
-        self.abrechnungs_write_function("../Abrechnungen/Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
+        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
 
     def _sum(self, data):
         if data.empty:
             return 0
         return data.sum()
-
-    def _write_to_file(self, filename, content):
-        f = open(filename, "w")
-        f.write(content)
-
-    abrechnungs_write_function = _write_to_file
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))

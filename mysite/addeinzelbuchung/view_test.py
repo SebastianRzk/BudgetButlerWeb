@@ -12,12 +12,13 @@ from django.template.context_processors import request
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
-from test import DBManagerStub
+from test.FileSystemStub import FileSystemStub
 from test.RequestStubs import GetRequest
 from test.RequestStubs import PostRequest
 from test.RequestStubs import VersionedPostRequest
 from addeinzelbuchung import views
-from core import DBManager
+from core import FileSystem
+from viewcore import viewcore
 from core.DatabaseModule import Database
 from viewcore.converter import datum_from_german as datum
 from viewcore.converter import german_to_rfc as rfc
@@ -28,7 +29,8 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     testdb = None
     def set_up(self):
-        DBManagerStub.setup_db_for_test()
+        FileSystem.INSTANCE = FileSystemStub()
+        viewcore.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):
@@ -62,6 +64,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
         request_key = request_handler.current_key()
+
         views.index(PostRequest(
             {'action':'add',
              'ID':request_key,
@@ -81,6 +84,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              'wert':'0,00'
              }
          ))
+
         testdb = database_instance()
         assert len(testdb.einzelbuchungen.content) == 1
         assert testdb.einzelbuchungen.content.Wert[0] == -1 * float('2.00')

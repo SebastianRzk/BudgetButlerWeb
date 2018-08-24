@@ -24,7 +24,7 @@ def database_instance():
         viewcore.DATABASES = configuration_provider.get_configuration('DATABASES').split(',')
 
     if viewcore.DATABASE_INSTANCE is None:
-        viewcore.DATABASE_INSTANCE = DBManager.read_database(viewcore.DATABASES[0])
+        viewcore.DATABASE_INSTANCE = DBManager.read(viewcore.DATABASES[0])
     return DATABASE_INSTANCE
 
 
@@ -83,7 +83,7 @@ def add_changed_stechzeiten(new_changed_stechzeiten_element):
 
 
 def switch_database_instance(database_name):
-    viewcore.DATABASE_INSTANCE = DBManager.read_database(database_name)
+    viewcore.DATABASE_INSTANCE = DBManager.read(database_name)
 
 
 def get_menu_list():

@@ -33,7 +33,7 @@ def close_driver(driver):
 def _launch_head_firefox():
     firefox_options = Options()
     firefox_options.add_argument("--window-size=1920,1080")
-    return webdriver.Firefox(firefox_options=chrome_options)
+    return webdriver.Firefox(firefox_options=firefox_options)
 
 def _launch_headles_firefox():
     if SeleniumTest.CHROME_CACHE:
