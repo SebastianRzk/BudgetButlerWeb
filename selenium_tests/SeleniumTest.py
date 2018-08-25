@@ -91,6 +91,9 @@ def get_selected_option(driver, option_id):
     selected_option = select.first_selected_option
     return selected_option.text
 
+def pagename(driver):
+    return driver.find_element_by_id('pagetitle').get_attribute('innerHTML')
+
 
 
 
