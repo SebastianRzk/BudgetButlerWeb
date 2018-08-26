@@ -2,6 +2,7 @@
 from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import post_action_is
 from mysite.viewcore import request_handler
+from mysite.viewcore.converter import datum_to_german
 import collections
 
 
@@ -25,6 +26,9 @@ def _handle_request(request):
 def _format_dauerauftrag_floatpoint(dauerauftraege):
     for dauerauftrag in dauerauftraege:
         dauerauftrag['Wert'] = '%.2f' % dauerauftrag['Wert']
+        dauerauftrag['Startdatum'] = datum_to_german(dauerauftrag['Startdatum'])
+        dauerauftrag['Endedatum'] = datum_to_german(dauerauftrag['Endedatum'])
+
     return dauerauftraege
 
 

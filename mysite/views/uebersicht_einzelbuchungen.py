@@ -2,6 +2,7 @@
 from mysite.viewcore import request_handler
 from mysite.viewcore.viewcore import post_action_is
 from mysite.viewcore import viewcore
+from mysite.viewcore.converter import datum_to_german
 
 def _handle_request(request):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -26,7 +27,7 @@ def _handle_request(request):
             link = 'addausgabe'
         ausgaben_liste.append({
             'index':row_index,
-            'datum':row.Datum,
+            'datum':datum_to_german(row.Datum),
             'name':row.Name,
             'kategorie':row.Kategorie,
             'wert':'%.2f' % row.Wert,

@@ -26,7 +26,7 @@ class Monatsuebersicht(unittest.TestCase):
         context = uebersicht_monat.index(GetRequest())
         assert context['%Errortext']
 
-    def teste_mitMehtAusgabenAlsEinnahmen(self):
+    def teste_mitMehrAusgabenAlsEinnahmen(self):
         self.set_up()
         db = viewcore.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
@@ -44,6 +44,27 @@ class Monatsuebersicht(unittest.TestCase):
         assert result_context['ausgaben'] == [('some kategorie', '-100.00', 'f56954')]
         assert result_context['ausgaben_labels'] == ['some kategorie']
         assert result_context['ausgaben_data'] == ['100.00']
+
+    def teste_gleitkommadarstellung_monats_zusammenfassung(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
+
+        result_context = uebersicht_monat.index(PostRequest({'date':'2010_10'}))
+
+        assert result_context['wert_uebersicht_gruppe_1'] == '0.00'
+        assert result_context['wert_uebersicht_gruppe_2'] == '100.00'
+
+    def teste_gleitkommadarstellung_jahress_zusammenfassung(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
+
+        result_context = uebersicht_monat.index(PostRequest({'date':'2010_10'}))
+
+        assert result_context['wert_uebersicht_jahr_gruppe_1'] == '0.00'
+        assert result_context['wert_uebersicht_jahr_gruppe_2'] == '100.00'
+
 
     def teste_mitUnterschiedlichenMonaten_shouldSelectNeusterMonat(self):
         self.set_up()

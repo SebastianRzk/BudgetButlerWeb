@@ -77,40 +77,40 @@ def _handle_request(request):
     if einnahmen_monat >= abs(ausgaben_monat):
         context['color_uebersicht_gruppe_1'] = "gray"
         context['name_uebersicht_gruppe_1'] = 'Gedeckte Ausgaben'
-        context['wert_uebersicht_gruppe_1'] = abs(ausgaben_monat)
+        context['wert_uebersicht_gruppe_1'] = '%.2f' % abs(ausgaben_monat)
 
         context['color_uebersicht_gruppe_2'] = "lightgreen"
         context['name_uebersicht_gruppe_2'] = 'Einnahmenüberschuss'
-        context['wert_uebersicht_gruppe_2'] = einnahmen_monat + ausgaben_monat
+        context['wert_uebersicht_gruppe_2'] = '%.2f' % (einnahmen_monat + ausgaben_monat)
 
     else:
         context['color_uebersicht_gruppe_1'] = "gray"
         context['name_uebersicht_gruppe_1'] = 'Gedeckte Ausgaben'
-        context['wert_uebersicht_gruppe_1'] = einnahmen_monat
+        context['wert_uebersicht_gruppe_1'] = '%.2f' % einnahmen_monat
 
         context['color_uebersicht_gruppe_2'] = "red"
         context['name_uebersicht_gruppe_2'] = 'Ungedeckte Ausgaben'
-        context['wert_uebersicht_gruppe_2'] = (ausgaben_monat + einnahmen_monat) * -1
+        context['wert_uebersicht_gruppe_2'] = '%.2f' % ((ausgaben_monat + einnahmen_monat) * -1)
 
     einnahmen_jahr = einzelbuchungen.select().select_einnahmen().select_year(year).sum()
     ausgaben_jahr = einzelbuchungen.select().select_ausgaben().select_year(year).sum()
     if einnahmen_jahr >= abs(ausgaben_jahr):
         context['color_uebersicht_jahr_gruppe_1'] = "gray"
         context['name_uebersicht_jahr_gruppe_1'] = 'Gedeckte Einnahmen'
-        context['wert_uebersicht_jahr_gruppe_1'] = abs(ausgaben_jahr)
+        context['wert_uebersicht_jahr_gruppe_1'] = '%.2f' % abs(ausgaben_jahr)
 
         context['color_uebersicht_jahr_gruppe_2'] = "lightgreen"
         context['name_uebersicht_jahr_gruppe_2'] = 'Einnahmenüberschuss'
-        context['wert_uebersicht_jahr_gruppe_2'] = einnahmen_jahr + ausgaben_jahr
+        context['wert_uebersicht_jahr_gruppe_2'] = '%.2f' % (einnahmen_jahr + ausgaben_jahr)
 
     else:
         context['color_uebersicht_jahr_gruppe_1'] = "gray"
         context['name_uebersicht_jahr_gruppe_1'] = 'Gedeckte Ausgaben'
-        context['wert_uebersicht_jahr_gruppe_1'] = einnahmen_jahr
+        context['wert_uebersicht_jahr_gruppe_1'] = '%.2f' % einnahmen_jahr
 
         context['color_uebersicht_jahr_gruppe_2'] = "red"
         context['name_uebersicht_jahr_gruppe_2'] = 'Ungedeckte Ausgaben'
-        context['wert_uebersicht_jahr_gruppe_2'] = (ausgaben_jahr + einnahmen_jahr) * -1
+        context['wert_uebersicht_jahr_gruppe_2'] = '%.2f' % ((ausgaben_jahr + einnahmen_jahr) * -1)
 
     return context
 

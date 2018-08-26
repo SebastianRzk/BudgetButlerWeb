@@ -31,3 +31,14 @@ class Dauerauftragsuebersicht(unittest.TestCase):
 
         assert len(dauerauftraege.content) == 1
         assert dauerauftraege.content.Name.tolist() == ['11']
+
+    def test_german_datum(self):
+        self.set_up()
+        dauerauftraege = viewcore.database_instance().dauerauftraege
+        dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
+
+        result = uebersicht_dauerauftrag.index(GetRequest())
+
+        result_dauerauftrag = result['dauerauftraege']['Vergangene  Daueraufträge'][0]
+        assert result_dauerauftrag['Startdatum'] == '01.01.2011'
+        assert result_dauerauftrag['Endedatum'] == '01.01.2011'
