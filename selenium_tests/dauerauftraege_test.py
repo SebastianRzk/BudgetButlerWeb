@@ -41,8 +41,8 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_id('item_2_id').get_attribute('innerHTML') == '2'
         assert driver.find_element_by_id('item_2_name').get_attribute('innerHTML') == '2name'
         assert driver.find_element_by_id('item_2_kategorie').get_attribute('innerHTML') == '2test_kategorie'
-        assert driver.find_element_by_id('item_2_startdatum').get_attribute('innerHTML') == '2012-01-01'
-        assert driver.find_element_by_id('item_2_endedatum').get_attribute('innerHTML') == '2012-02-02'
+        assert driver.find_element_by_id('item_2_startdatum').get_attribute('innerHTML') == '01.01.2012'
+        assert driver.find_element_by_id('item_2_endedatum').get_attribute('innerHTML') == '02.02.2012'
         assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
         close_driver(driver)
 
@@ -66,8 +66,8 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '2name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '2test_kategorie'
         assert get_selected_option(driver, 'typ_auswahl') == 'Ausgabe'
-        assert driver.find_element_by_name('startdatum').get_attribute('value') == '2012-01-01'
-        assert driver.find_element_by_name('endedatum').get_attribute('value') == '2012-02-02'
+        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01.01.2012'
+        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2012'
         assert driver.find_element_by_name('wert').get_attribute('value') == '2,00'
 
         close_driver(driver)
@@ -91,8 +91,8 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_name('name').get_attribute('value') == '0name'
         assert get_selected_option(driver, 'kategorie_auswahl') == '0test_kategorie'
         assert get_selected_option(driver, 'typ_auswahl') == 'Einnahme'
-        assert driver.find_element_by_name('startdatum').get_attribute('value') == '2010-01-01'
-        assert driver.find_element_by_name('endedatum').get_attribute('value') == '2010-02-02'
+        assert driver.find_element_by_name('startdatum').get_attribute('value') == '01.01.2010'
+        assert driver.find_element_by_name('endedatum').get_attribute('value') == '02.02.2010'
         assert driver.find_element_by_name('wert').get_attribute('value') == '0,50'
 
         close_driver(driver)
