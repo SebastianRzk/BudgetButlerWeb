@@ -2,6 +2,7 @@ from datetime import date
 
 from mysite.viewcore import viewcore
 from mysite.viewcore import request_handler
+from mysite.viewcore.converter import datum_to_german
 
 def _handle_request(_):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -10,7 +11,7 @@ def _handle_request(_):
     for row_index, row in selector.select_aktueller_monat().raw_table().iterrows():
         ausgaben_liste.append(
             {'index': row_index,
-             'datum': row.Datum,
+             'datum': datum_to_german(row.Datum),
              'name': row.Name,
              'kategorie': row.Kategorie,
              'wert': '%.2f' % row.Wert
