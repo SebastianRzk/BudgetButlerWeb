@@ -10,6 +10,7 @@ import itertools as it
 import pandas as pd
 from mysite.viewcore import viewcore
 from mysite.core.database.DatabaseObject import DatabaseObject
+from mysite.viewcore.converter import datum_to_german
 
 
 class Einzelbuchungen(DatabaseObject):
@@ -308,7 +309,7 @@ class EinzelbuchungsSelektor:
         for _, row in kopierte_tabelle.iterrows():
             if(kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != '':  # next cat or day
                 if datum_alt != row.Datum :
-                    zusammenfassung.append((datum_alt, tag_liste))
+                    zusammenfassung.append((datum_to_german(datum_alt), tag_liste))
                     tag_liste = []
                 tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
                 datum_alt = row.Datum
@@ -329,5 +330,5 @@ class EinzelbuchungsSelektor:
                 summe_alt += row.Wert
 
         tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
-        zusammenfassung.append([datum_alt, tag_liste])
+        zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
         return zusammenfassung

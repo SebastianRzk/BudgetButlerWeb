@@ -76,6 +76,15 @@ class Monatsuebersicht(unittest.TestCase):
 
         assert result_context['selected_date'] == '2011_10'
 
+    def teste_datumsdarstellung_einzelbuchungsliste(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        db.einzelbuchungen.add(datum('10.10.2011'), 'eine einnahme kategorie', 'some name', 10)
+
+        result_context = uebersicht_monat.index(GetRequest())
+
+        assert result_context['zusammenfassung'][0][0] == '10.10.2011'
+
 
 class Abrechnung(unittest.TestCase):
     def set_up(self):
