@@ -9,24 +9,25 @@ env:
   global:
   - TRAVIS_INTEGRATION=TRUE
 
-addons:
-  sonarcloud:
-    organization: "rosesthen00b-github"
-  firefox: "61.0"
-
-before_install:
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz
-  - mkdir geckodriver
-  - tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
-  - export PATH=$PATH:$PWD/geckodriver
-
 jobs:
   include:
     - stage: unit-tests
       script: sh ci/run_unit_tests.sh
+
     - stage: selenium-tests
+        addons:
+          firefox: "61.0"
+        before_install:
+          - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz
+          - mkdir geckodriver
+          - tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
+          - export PATH=$PATH:$PWD/geckodriver
       script: sh ci/run_integration_tests.sh
+
     - stage: notify-ci-services
+      addons:
+        sonarcloud:
+        organization: "rosesthen00b-github"
       script: sh ci/sonar_qube.sh
       script: coveralls
       script: codecov
