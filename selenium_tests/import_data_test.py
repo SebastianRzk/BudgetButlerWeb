@@ -38,7 +38,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert driver.find_element_by_id('item_0_id').get_attribute('innerHTML') == '0'
         assert driver.find_element_by_id('item_0_name').get_attribute('innerHTML') == 'Edeka'
         assert driver.find_element_by_id('item_0_kategorie').get_attribute('innerHTML') == 'Essen'
-        assert driver.find_element_by_id('item_0_datum').get_attribute('innerHTML') == '2017-03-06'
+        assert driver.find_element_by_id('item_0_datum').get_attribute('innerHTML') == '06.03.2017'
         assert driver.find_element_by_id('item_0_wert').get_attribute('innerHTML') == '-10.00'
 
         close_driver(driver)
@@ -65,7 +65,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert driver.find_element_by_id('item_0_id').get_attribute('innerHTML') == '0'
         assert driver.find_element_by_id('item_0_name').get_attribute('innerHTML') == 'Edeka'
         assert driver.find_element_by_id('item_0_kategorie').get_attribute('innerHTML') == 'nicht essen'
-        assert driver.find_element_by_id('item_0_datum').get_attribute('innerHTML') == '2017-03-06'
+        assert driver.find_element_by_id('item_0_datum').get_attribute('innerHTML') == '06.03.2017'
         assert driver.find_element_by_id('item_0_wert').get_attribute('innerHTML') == '-10.00'
 
         close_driver(driver)
@@ -89,7 +89,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert driver.find_element_by_id('item_0_id').get_attribute('innerHTML') == '0'
         assert driver.find_element_by_id('item_0_name').get_attribute('innerHTML') == 'Edeka'
         assert driver.find_element_by_id('item_0_kategorie').get_attribute('innerHTML') == 'Essen'
-        assert driver.find_element_by_id('item_0_datum').get_attribute('innerHTML') == '2017-03-06'
+        assert driver.find_element_by_id('item_0_datum').get_attribute('innerHTML') == '06.03.2017'
         assert driver.find_element_by_id('item_0_wert').get_attribute('innerHTML') == '-10.00'
 
         close_driver(driver)

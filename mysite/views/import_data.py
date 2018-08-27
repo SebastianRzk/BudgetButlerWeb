@@ -83,7 +83,7 @@ def handle_request(request, import_prefix=''):
             print(request.values)
             tables = {}
             content = request.values['import'].replace('\r', '')
-            FileSystem.instance().write('../Online_Import/' + import_prefix + 'Import_' + str(datetime.now()), content)
+            FileSystem.instance().write('../Import/' + import_prefix + 'Import_' + str(datetime.now()), content)
 
             tables["sonst"] = ""
             tables["#######MaschinenimportStart"] = ""

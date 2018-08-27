@@ -40,6 +40,21 @@ class Importd(unittest.TestCase):
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
 
+    def test_import_shouldWriteIntoAbrechnungen(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+        context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
+
+        written_abrechnung = None
+        for key in FileSystem.instance()._fs_stub.keys():
+            if key.startswith('../Import'):
+                written_abrechnung = FileSystem.instance()._fs_stub[key]
+
+        assert written_abrechnung == self._IMPORT_DATA
+
+
     def test_addeUnpassendenKategorie_shouldShowImportMappingPage(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
