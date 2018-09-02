@@ -27,6 +27,7 @@ jobs:
     - stage: selenium-tests
       script: sh ci/run_integration_tests.sh
     - stage: notify-ci-services
+      script: sh ci/run_unit_tests.sh
       script: sh ci/sonar_qube.sh
       script: coveralls
       script: codecov
