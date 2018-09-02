@@ -26,10 +26,10 @@ Install the requiurements
 
 	pip install -r requirements.txt
 
-Change into django module and run server:
+Change into offline app and run server:
 
 	cd mysite
-	python manage.py runserver
+	sh start.sh
 
 Open your webbrowser and visit:
 
