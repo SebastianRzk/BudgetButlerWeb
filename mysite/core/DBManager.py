@@ -4,13 +4,8 @@ Read panda files
 
 from _io import StringIO
 from datetime import datetime
-import os
-import sys
-_PATH = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, _PATH + '/../')
-
-from core import DatabaseModule
-from core import FileSystem
+from mysite.core import DatabaseModule
+from mysite.core import FileSystem
 import pandas as pd
 
 def read(nutzername):

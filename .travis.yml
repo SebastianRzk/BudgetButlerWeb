@@ -20,14 +20,16 @@ before_install:
   - tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
 
-script: 
-  - sh ci/run_unit_tests.sh
-  - sh ci/run_integration_tests.sh
-
-after_success:
-  - sh ci/sonar_qube.sh
-  - coveralls
-  - codecov
+jobs:
+  include:
+    - stage: unit-tests
+      script: sh ci/run_unit_tests.sh
+    - stage: selenium-tests
+      script: sh ci/run_integration_tests.sh
+    - stage: notify-ci-services
+      script: sh ci/sonar_qube.sh
+      script: coveralls
+      script: codecov
 
 
 

@@ -4,18 +4,12 @@ Created on 11.08.2017
 @author: sebastian
 '''
 from datetime import date
-import os
-import sys
 import unittest
 
-import core.DatabaseModule as db
-from core.database.Dauerauftraege import Dauerauftraege
-from core.database.Einzelbuchungen import Einzelbuchungen
-from viewcore.converter import datum_from_german as datum
-
-_PATH = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, _PATH + '/../../')
-
+import mysite.core.DatabaseModule as db
+from mysite.core.database.Dauerauftraege import Dauerauftraege
+from mysite.core.database.Einzelbuchungen import Einzelbuchungen
+from mysite.viewcore.converter import datum_from_german as datum
 
 class DauerauftraegeTest(unittest.TestCase):
 

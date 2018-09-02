@@ -1,5 +1,5 @@
 
-from core.ReportGenerator import ReportGenerator
+from mysite.core.ReportGenerator import ReportGenerator
 import unittest
 
 

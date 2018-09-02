@@ -4,16 +4,9 @@ Created on 10.05.2017
 @author: sebastian
 '''
 
-import sys, os
 import unittest
-
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + "/../")
-
-from viewcore import request_handler
-from test.RequestStubs import PostRequest
-
-
+from mysite.viewcore import request_handler
+from mysite.test.RequestStubs import PostRequest
 
 
 class TesteRequestHanlder(unittest.TestCase):

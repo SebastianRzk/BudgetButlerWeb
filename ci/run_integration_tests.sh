@@ -1,5 +1,6 @@
 set -e
-cd mysite && python manage.py runserver > build.log &
+cd mysite &&  FLASK_APP=start_as_flask.py flask run > build.log&
+
 
 cd selenium_tests
 pytest

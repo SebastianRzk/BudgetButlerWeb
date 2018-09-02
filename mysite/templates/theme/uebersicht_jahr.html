@@ -1,7 +1,6 @@
 <div class="box theme-row">
   <form role="form" action="/jahresuebersicht/" method="post">
     <div class="box-body">
-	    {% csrf_token %}
       <input type="hidden" name="mode" value="change_month"/>
 	    <div class="form-group">
 		    <label>Wähle Jahr</label>
@@ -109,13 +108,13 @@
 			var salesChartData = {
 					labels: {{monats_namen|safe	}},
 					datasets: [
-						{% for key,val in einnahmen.items %}
+						{% for key,val in einnahmen.items() %}
 						{
 							label: '{{key}}',
 							pointBorderColor: "#{{val.farbe}}",
 							borderColor: "#{{val.farbe}}",
 							pointStrokeColor: "#{{val.farbe}}",
-							data: {{val.values}}
+							data: {{val['values'] | safe}}
 						},
 						{%endfor%}
 					]
@@ -141,13 +140,13 @@
 			var salesChartData = {
 					labels: {{monats_namen|safe}},
 					datasets: [
-						{% for key,val in ausgaben.items %}
+						{% for key,val in ausgaben.items() %}
 						{
 							label: '{{key}}',
 							pointBorderColor: "#{{val.farbe}}",
 							borderColor: "#{{val.farbe}}",
 							pointStrokeColor: "#{{val.farbe}}",
-							data: {{val.values}}
+							data: {{val['values'] | safe}}
 						},
 						{%endfor%}
 					]
@@ -170,39 +169,37 @@
 			<button class="btn-tool pull-right" data-widget="collapse"><span class="fa fa-minus"></span></button>
 		</div>
 		<div class="box-body">
-			<form role="form" action="/jahresuebersicht/" method="post">
-				{% csrf_token %} <input type="hidden" name="mode" value="change_selected"> <input type="hidden" name="date"
-					value="{{selected_date}}">
-				<div class="table-responsive">
-					<table class="table no-margin">
-						<thead>
-							<tr>
-								<th>Kategorie</th>
-								<th class="table-wert">Wert</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for ausgabe in zusammenfassung_ausgaben %}
-							<tr>
-								<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-								<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
-							</tr>
-							{% endfor %}
-							<tfooter>
-							<tr>
-								<td style="vertical-align: middle">Summe</td>
-								<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben}}</td>
-								<td/>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-							</tr>
-							</tfooter>
-						</tbody>
-					</table>
-				</div>
-			</form>
+			<input type="hidden" name="mode" value="change_selected"> <input type="hidden" name="date"
+				value="{{selected_date}}">
+			<div class="table-responsive">
+				<table class="table no-margin">
+					<thead>
+						<tr>
+							<th>Kategorie</th>
+							<th class="table-wert">Wert</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for ausgabe in zusammenfassung_ausgaben %}
+						<tr>
+							<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
+							<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
+						</tr>
+						{% endfor %}
+						<tfooter>
+						<tr>
+							<td style="vertical-align: middle">Summe</td>
+							<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben}}</td>
+							<td/>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+						</tfooter>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 	<div class="box">

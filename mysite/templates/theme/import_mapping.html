@@ -1,5 +1,5 @@
 <div class="box">
-	<form  id="form1" action="/import/" method="post">{% csrf_token %}
+	<form  id="form1" action="/import/" method="post">
 		<input type="hidden" name="ID" value="{{ID}}">
 		<input type="hidden" name="import" value="{{import}}">
 		<div class="box-header with-border">
@@ -20,7 +20,7 @@
 							<td>{{unpassende_kategorie}}</td>
 							<td>
 								<div class="form-group">
-								<select  class="form-control" name="{{unpassende_kategorie}}_mapping">
+								<select  class="form-control" name="{{unpassende_kategorie}}_mapping" id="{{unpassende_kategorie}}_mapping">
 								{% for option in optionen %}
 								<option>{{option}}</option>
 								{% endfor %}

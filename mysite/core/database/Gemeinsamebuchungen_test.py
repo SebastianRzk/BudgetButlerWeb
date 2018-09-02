@@ -4,17 +4,10 @@ Created on 11.08.2017
 @author: sebastian
 '''
 from datetime import date
-import os
-import sys
+from mysite.viewcore.converter import datum_from_german as datum
+import mysite.core.DatabaseModule as db
+from mysite.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 import unittest
-
-_PATH = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, _PATH + '/../../')
-
-from viewcore.converter import datum_from_german as datum
-import core.DatabaseModule as db
-from core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
-
 
 class gemeinsame_buchungen(unittest.TestCase):
 

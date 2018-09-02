@@ -3,18 +3,12 @@ Created on 14.09.2017
 
 @author: sebastian
 '''
-from _io import StringIO
-import os
-import sys
 import unittest
 
-_PATH = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, _PATH + '/../')
-
-from core import DBManager
-from viewcore import viewcore
-from core import FileSystem
-from test.FileSystemStub import FileSystemStub
+from mysite.core import DBManager
+from mysite.viewcore import viewcore
+from mysite.core import FileSystem
+from mysite.test.FileSystemStub import FileSystemStub
 
 
 

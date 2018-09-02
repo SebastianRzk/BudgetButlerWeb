@@ -1,0 +1,55 @@
+{% for name, dauerauftraege in dauerauftraege.items()%}
+<div class="box">
+	<div class="box-header with-border">
+		<h3 class="box-title">{{name}}</h3>
+		<button class="btn-tool pull-right" data-widget="collapse"><span class="fa fa-minus"></span></button>
+	</div>
+	<div class="box-body">
+		<div class="table-responsive">
+			<table class="table no-margin">
+				<thead>
+					<tr>
+						<th>Nummer</th>
+						<th>Startdatum</th>
+						<th>Endedatum</th>
+						<th>Rhythmus</th>
+						<th>Name</th>
+						<th>Kategorie</th>
+						<th class="table-wert">Wert</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dauerauftrag in dauerauftraege %}
+					<tr>
+						<td id="item_{{dauerauftrag.index}}_id">{{dauerauftrag.index}}</td>
+						<td id="item_{{dauerauftrag.index}}_startdatum">{{dauerauftrag.Startdatum}}</td>
+						<td id="item_{{dauerauftrag.index}}_endedatum">{{dauerauftrag.Endedatum}}</td>
+						<td id="item_{{dauerauftrag.index}}_rhythmus">{{dauerauftrag.Rhythmus}}</td>
+						<td id="item_{{dauerauftrag.index}}_name">{{dauerauftrag.Name}}</td>
+						<td id="item_{{dauerauftrag.index}}_kategorie">{{dauerauftrag.Kategorie}}</td>
+						<td id="item_{{dauerauftrag.index}}_wert" class="table-wert">{{dauerauftrag.Wert}}</td>
+						<td>
+							<div class="pull-right">
+								<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
+									<input type="hidden" name="ID" value="{{ID}}">
+									<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
+									<button name="action" value="delete" class="btn bordered-hover"><span class="fa fa-trash-o"></span></button>
+								</form>
+							</div>
+							<div class="pull-right">
+								<form role="form" action="/adddauerauftrag/" method="post">
+									<input type="hidden" name="edit_index" value="{{dauerauftrag.index}}">
+									<button type="submit" name="action" value="edit" id="edit_{{dauerauftrag.index}}" class="btn bordered-hover"><span class="fa fa-pencil"></span></button>
+								</form>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endfor %}
+

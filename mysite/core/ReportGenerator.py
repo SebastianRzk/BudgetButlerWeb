@@ -1,7 +1,7 @@
 
 import math
 
-from viewcore.converter import from_double_to_german
+from mysite.viewcore.converter import from_double_to_german
 
 class ReportGenerator():
 

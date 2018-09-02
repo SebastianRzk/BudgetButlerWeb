@@ -1,6 +1,5 @@
 <div class="box theme-row">
   <form role="form" action="/monatsuebersicht/" method="post">
-    {% csrf_token %}
     <div class="box-body">
       <div class="form-group">
         <label>Wähle Monat</label>
@@ -32,7 +31,6 @@
   </div>
   <div class="box-body">
   <form role="form" action="/monatsuebersicht/abrechnung/" method="post">
-    {% csrf_token %}
     <input type="hidden" name="date" value="{{selected_date}}">
     <input type="checkbox" name="content" value="zusammenfassung_einnahmen" checked>Zusammenfassung der Einnahmen</br>
     <input type="checkbox" name="content" value="zusammenfassung_ausgaben" checked>Zusammenfassung der Ausgaben</br>
@@ -214,14 +212,14 @@
           <tbody>
             {% for ausgabe in ausgaben %}
             <tr>
-              <td style="vertical-align:middle"> <span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-              <td style="vertical-align:middle" class="table-wert">{{ausgabe.1}}</td>
+              <td> <span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
+              <td class="table-wert">{{ausgabe.1}}</td>
             </tr>
             {% endfor %}
             <tfooter>
             <tr>
-              <td style="vertical-align:middle">Summe</td>
-              <td style="vertical-align:middle" class="table-wert">{{gesamt}}</td>
+              <td>Summe</td>
+              <td class="table-wert">{{gesamt}}</td>
             </tr>
             </tfooter>
           </tbody>
@@ -247,14 +245,14 @@
           <tbody>
             {% for einnahme in einnahmen %}
             <tr>
-              <td style="vertical-align:middle"><span class="fa fa-circle" style="color: #{{einnahme.2}};"></span> {{einnahme.0}}</td>
-              <td style="vertical-align:middle" class="table-wert">{{einnahme.1}}</td>
+              <td><span class="fa fa-circle" style="color: #{{einnahme.2}};"></span> {{einnahme.0}}</td>
+              <td class="table-wert">{{einnahme.1}}</td>
             </tr>
             {% endfor %}
             <tfooter>
               <tr>
-                <td style="vertical-align:middle">Summe</td>
-                <td style="vertical-align:middle" class="table-wert">{{gesamt_einnahmen}}</td>
+                <td>Summe</td>
+                <td class="table-wert">{{gesamt_einnahmen}}</td>
               </tr>
             </tfooter>
           </tbody>
@@ -277,15 +275,15 @@
           <tr>
             <th>Kategorie</th>
             <th>Name</th>
-            <th>Wert</th>
+            <th class="table-wert">Wert</th>
           </tr>
         </thead>
         <tbody>
           {% for kategorie in tag.1 %}
           <tr>
-            <td style="vertical-align:middle"><span class="fa fa-circle" style="color: #{{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
-            <td style="vertical-align:middle">{{kategorie.name}}</td>
-            <td style="vertical-align:middle">{{kategorie.summe}}</td>
+            <td><span class="fa fa-circle" style="color: #{{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
+            <td>{{kategorie.name}}</td>
+            <td class="table-wert">{{kategorie.summe}}</td>
           </tr>
           {% endfor %}
         </tbody>

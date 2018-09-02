@@ -6,7 +6,7 @@ Created on 28.09.2017
 from datetime import datetime
 
 from pandas.core.frame import DataFrame
-from core.database.DatabaseObject import DatabaseObject
+from mysite.core.database.DatabaseObject import DatabaseObject
 
 
 class Gemeinsamebuchungen(DatabaseObject):

@@ -1,12 +1,8 @@
-import sys, os
 import unittest
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + "/../")
-'''
-'''
-from viewcore import configuration_provider
-from core import FileSystem
-from test.FileSystemStub import FileSystemStub
+
+from mysite.viewcore import configuration_provider
+from mysite.core import FileSystem
+from mysite.test.FileSystemStub import FileSystemStub
 
 
 
