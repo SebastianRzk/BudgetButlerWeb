@@ -3,7 +3,7 @@ from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import post_action_is
 from mysite.viewcore import request_handler
 from mysite.viewcore.converter import datum, dezimal_float, datum_to_string, \
-    from_double_to_german
+    from_double_to_german, datum_to_german
 
 
 def handle_request(request):
@@ -16,23 +16,25 @@ def handle_request(request):
         value = dezimal_float(request.values['wert']) * -1
         if 'edit_index' in request.values:
             database_index = int(request.values['edit_index'])
+            datum_object = datum(request.values['date'])
             einzelbuchungen.edit(
                 database_index,
-                datum(request.values['date']),
+                datum_object,
                 request.values['kategorie'],
                 request.values['name'],
                 value)
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'pencil',
-                    'datum':request.values['date'],
+                    'datum':datum_to_german(datum_object),
                     'kategorie':request.values['kategorie'],
                     'name':request.values['name'],
                     'wert':from_double_to_german(value)
                     })
         else:
+            datum_object = datum(request.values['date'])
             einzelbuchungen.add(
-                datum(request.values['date']),
+                datum_object,
                 request.values['kategorie'],
                 request.values['name'],
                 value)
@@ -40,7 +42,7 @@ def handle_request(request):
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'plus',
-                    'datum':request.values['date'],
+                    'datum':datum_to_german(datum_object),
                     'kategorie':request.values['kategorie'],
                     'name':request.values['name'],
                     'wert':from_double_to_german(value)

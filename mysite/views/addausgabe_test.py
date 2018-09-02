@@ -57,6 +57,25 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
         assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
 
+    def test_add_ausgabe_should_show_in_recently_added(self):
+        self.set_up()
+        result = addausgabe.handle_request(VersionedPostRequest(
+            {'action':'add',
+             'date': rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,00'
+             }
+         ))
+
+        result_element = list(result['letzte_erfassung'])[0]
+
+        assert result_element['fa'] == 'plus'
+        assert result_element['datum'] == '01.01.2017'
+        assert result_element['kategorie'] == 'Essen'
+        assert result_element['name'] == 'testname'
+        assert result_element['wert'] == '-2,00'
+
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
         request_key = request_handler.current_key()
