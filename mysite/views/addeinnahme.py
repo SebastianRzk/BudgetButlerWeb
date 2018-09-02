@@ -3,7 +3,7 @@ from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import post_action_is
 from mysite.viewcore import request_handler
 from mysite.viewcore.converter import datum, dezimal_float, from_double_to_german
-from mysite.viewcore.converter import datum_to_string
+from mysite.viewcore.converter import datum_to_string, datum_to_german
 
 
 def handle_request(request):
@@ -15,31 +15,33 @@ def handle_request(request):
 
     if post_action_is(request, 'add'):
         if 'edit_index' in request.values:
+            datum_object = datum(request.values['date'])
             einzelbuchungen.edit(
                 int(request.values['edit_index']),
-                datum(request.values['date']),
+                datum_object,
                 request.values['kategorie'],
                 request.values['name'],
                 dezimal_float(request.values['wert']))
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'pencil',
-                    'datum':request.values['date'],
+                    'datum':datum_to_german(datum_object),
                     'kategorie':request.values['kategorie'],
                     'name':request.values['name'],
                     'wert':from_double_to_german(dezimal_float(request.values['wert']))
                     })
 
         else:
+            datum_object = datum(request.values['date'])
             einzelbuchungen.add(
-                datum(request.values['date']),
+                datum_object,
                 request.values['kategorie'],
                 request.values['name'],
                 dezimal_float(request.values['wert']))
             viewcore.add_changed_einzelbuchungen(
                 {
                     'fa':'plus',
-                    'datum':request.values['date'],
+                    'datum':datum_to_german(datum_object),
                     'kategorie':request.values['kategorie'],
                     'name':request.values['name'],
                     'wert':from_double_to_german(dezimal_float(request.values['wert']))

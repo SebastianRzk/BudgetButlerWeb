@@ -89,6 +89,25 @@ class TestAddEinnahmeView(unittest.TestCase):
         assert db().einzelbuchungen.content.Kategorie[0] == 'Essen'
         assert db().einzelbuchungen.content.Datum[0] == datum('1.1.2017')
 
+    def test_add_einnahme_should_show_in_recently_added(self):
+        self.set_up()
+        result = addeinnahme.handle_request(VersionedPostRequest(
+            {'action':'add',
+             'date': rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'2,00'
+             }
+         ))
+
+        result_element = list(result['letzte_erfassung'])[0]
+
+        assert result_element['fa'] == 'plus'
+        assert result_element['datum'] == '01.01.2017'
+        assert result_element['kategorie'] == 'Essen'
+        assert result_element['name'] == 'testname'
+        assert result_element['wert'] == '2,00'
+
     def test_edit_ausgabe(self):
         self.set_up()
 

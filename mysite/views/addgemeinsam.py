@@ -3,7 +3,7 @@ import pandas
 
 from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import post_action_is
-from mysite.viewcore.converter import from_double_to_german, datum, datum_to_string
+from mysite.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from mysite.viewcore import request_handler
 
 
@@ -24,7 +24,7 @@ def handle_request(request):
             viewcore.add_changed_gemeinsamebuchungen(
                 {
                     'fa':'pencil',
-                    'datum':request.values['date'],
+                    'datum':datum_to_german(date),
                     'kategorie':request.values['kategorie'],
                     'name':request.values['name'],
                     'wert':from_double_to_german(value),
@@ -40,7 +40,7 @@ def handle_request(request):
             viewcore.add_changed_gemeinsamebuchungen(
                 {
                     'fa':'plus',
-                    'datum':date,
+                    'datum':datum_to_german(date),
                     'kategorie':request.values['kategorie'],
                     'name':request.values['name'],
                     'wert':from_double_to_german(value),

@@ -64,6 +64,27 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1.1.2017')
         assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
 
+    def test_add_gemeinsame_ausgabe_should_show_in_recently_added(self):
+        self.set_up()
+        result = addgemeinsam.handle_request(VersionedPostRequest(
+            {'action':'add',
+             'date': rfc('1.1.2017'),
+             'kategorie':'Essen',
+             'name':'testname',
+             'wert':'-2,00',
+             'person': 'testperson'
+             }
+         ))
+
+        result_element = list(result['letzte_erfassung'])[0]
+
+        assert result_element['fa'] == 'plus'
+        assert result_element['datum'] == '01.01.2017'
+        assert result_element['kategorie'] == 'Essen'
+        assert result_element['name'] == 'testname'
+        assert result_element['wert'] == '2,00'
+        assert result_element['person'] == 'testperson'
+
     def test_add_shouldAddDynamicEinzelbuchung(self):
         self.set_up()
         addgemeinsam.index(VersionedPostRequest(
