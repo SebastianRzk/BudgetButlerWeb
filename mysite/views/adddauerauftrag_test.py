@@ -77,6 +77,30 @@ class TesteAddDauerauftragView(unittest.TestCase):
         assert db().dauerauftraege.content.Endedatum[0] == datum('6.1.2017')
         assert db().dauerauftraege.content.Rhythmus[0] == 'monatlich'
 
+    def test_add_dauerauftrag_should_show_in_recently_added(self):
+        self.set_up()
+        result = adddauerauftrag.handle_request(VersionedPostRequest(
+            {'action':'add',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('6.1.2017'),
+             'typ': 'Ausgabe',
+             'kategorie':'Essen',
+             'name':'testname',
+             'rhythmus': 'monatlich',
+             'wert':'-2,00'
+             }
+         ))
+
+        result_element = list(result['letzte_erfassung'])[0]
+
+        assert result_element['fa'] == 'plus'
+        assert result_element['startdatum'] == '01.01.2017'
+        assert result_element['endedatum'] == '06.01.2017'
+        assert result_element['kategorie'] == 'Essen'
+        assert result_element['name'] == 'testname'
+        assert result_element['rhythmus'] == 'monatlich'
+        assert result_element['wert'] == '2,00'
+
     def test_add_dauerauftrag_einnahme(self):
         self.set_up()
         adddauerauftrag.index(VersionedPostRequest(

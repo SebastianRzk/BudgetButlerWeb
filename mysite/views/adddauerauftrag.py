@@ -2,7 +2,7 @@
 from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import post_action_is
 from mysite.viewcore import request_handler
-from mysite.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german
+from mysite.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, datum_to_german
 
 
 def handle_request(request):
@@ -12,35 +12,39 @@ def handle_request(request):
             value = value * -1
 
         if 'edit_index' in request.values:
+            startdatum = datum(request.values['startdatum'])
+            endedatum = datum(request.values['endedatum'])
             viewcore.database_instance().dauerauftraege.edit(
                 int(request.values['edit_index']),
-                datum(request.values['startdatum']),
-                datum(request.values['endedatum']),
+                startdatum,
+                endedatum,
                 request.values['kategorie'],
                 request.values['name'],
                 request.values['rhythmus'],
                 value)
             viewcore.add_changed_dauerauftraege({
                 'fa': 'pencil',
-                'startdatum': request.values['startdatum'],
-                'endedatum':  request.values['endedatum'],
+                'startdatum': datum_to_german(startdatum),
+                'endedatum':  datum_to_german(endedatum),
                 'kategorie': request.values['kategorie'],
                 'name': request.values['name'],
                 'rhythmus': request.values['rhythmus'],
                 'wert': from_double_to_german(value)
                 })
         else:
+            startdatum = datum(request.values['startdatum'])
+            endedatum = datum(request.values['endedatum'])
             viewcore.database_instance().dauerauftraege.add(
-                datum(request.values['startdatum']),
-                datum(request.values['endedatum']),
+                startdatum,
+                endedatum,
                 request.values['kategorie'],
                 request.values['name'],
                 request.values['rhythmus'],
                 value)
             viewcore.add_changed_dauerauftraege({
                 'fa': 'plus',
-                'startdatum': request.values['startdatum'],
-                'endedatum': request.values['endedatum'],
+                'startdatum': datum_to_german(startdatum),
+                'endedatum': datum_to_german(endedatum),
                 'kategorie': request.values['kategorie'],
                 'name': request.values['name'],
                 'rhythmus': request.values['rhythmus'],
