@@ -46,14 +46,14 @@ Abhängigkeiten mit pip installieren:
 
 ## Starten
 
-Im Projektverzeichnis in die Django-App navigieren und Django-Server starten:
+Im Projektverzeichnis in die Offline-App  navigieren und Flask-Server starten:
 
 	cd mysite
-	python manage.py runserver
+	sh start.sh
 
 Webbrowser öffnen und folgende Url besuchen:
 
-	http://127.0.0.1:8000/
+	http://127.0.0.1:5000/
 	
 ## Softwaretests ausführen
 
