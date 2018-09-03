@@ -1,7 +1,7 @@
 
 import pymysql.cursors
 import getpass
-
+import os
 
 
 #TABLES to install
@@ -16,7 +16,7 @@ _TABLES = {
       `wert` varchar(10) NOT NULL,
       `datum` char(10) NOT NULL
       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;''',
-    
+
     'kategorien': '''CREATE TABLE `kategorien` (
       `id` int(11) NOT NULL,
       `person` varchar(20) NOT NULL,
@@ -127,10 +127,16 @@ def _execute_queries(cursor, sql_dict, already_installed_tables):
         print('EXECUTING', '{', query, '}')
         cursor.execute(query)
 
-host = input('DB host: ')
-dbname = input('DB name: ')
-user = input('DB user: ')
-passwd = getpass.getpass('Password for ' + user + ': ')
+if 'TRAVIS_INTEGRATION' in os.environ:
+    host = 'localhost'
+    dbname = 'testdb'
+    user = 'root'
+    passwd = ''
+else:
+    host = input('DB host: ')
+    dbname = input('DB name: ')
+    user = input('DB user: ')
+    passwd = getpass.getpass('Password for ' + user + ': ')
 
 # Connect to the database
 connection = pymysql.connect(host=host,
