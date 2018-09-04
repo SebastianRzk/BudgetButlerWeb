@@ -11,6 +11,17 @@ _VIRTUALHOST_FILE_CONTENT = '''
                 Order allow,deny
                 allow from all
         </Directory>
+        # Wire up Apache to use Travis CI's php-fpm.
+        <IfModule mod_fastcgi.c>
+           AddHandler php5-fcgi .php
+           Action php5-fcgi /php5-fcgi
+           Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi
+           FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -host 127.0.0.1:9000 -pass-header Authorization
+           <Directory /usr/lib/cgi-bin>
+              Require all granted
+           </Directory>
+        </IfModule>
+
         ErrorLog /var/log/apache2/error.log
         LogLevel warn
         CustomLog /var/log/apache2/access.log combined
