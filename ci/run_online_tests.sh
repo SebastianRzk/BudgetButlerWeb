@@ -33,7 +33,7 @@ ls -l  /etc/apache2/sites-available/
 echo "Enable site"
 sudo a2ensite budget.online.conf
 echo "Copy apache configuration"
-sudo cp apache.conf /etc/apache2/
+#sudo cp apache.conf /etc/apache2/
 
 echo "reload apache"
 sudo service apache2 reload

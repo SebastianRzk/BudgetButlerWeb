@@ -52,8 +52,6 @@ virtualhost_file = open('budget.online.conf', 'w')
 virtualhost_file.write(content)
 virtualhost_file.close()
 
-return 0
-
 content = _APACHE_CONF.format(directory=path)
 print('apache conf:')
 print(content)
