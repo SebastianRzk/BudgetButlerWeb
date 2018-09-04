@@ -1,6 +1,10 @@
 set -e
 
 # Installation
+echo "create online"
+sh ci/install_online.sh
+
+echo "create app"
 cd online_install
 
 sudo apt update
