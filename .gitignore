@@ -4,3 +4,6 @@
 /Database_Test_User.csv
 **/*.pyc
 **/.pytest_cache
+/online/vendor
+/online/db.ini
+/online/composer.lock
