@@ -31,6 +31,11 @@ python install_database.py
 cd ..
 echo "database installed"
 
+echo "teste webseite"
 curl 'localhost/login.php'
+
+echo "error log:"
+cat /var/log/apache2/error.log
+
 echo "DONE"
 
