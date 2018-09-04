@@ -13,6 +13,7 @@ sudo chown -R travis:travis /var/lib/apache2/fastcgi
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 
 sudo chmod -R 777 /var/lib/apache2/fastcgi
+sudo chmod -R 777 /home/travis/build
 
 echo "Change online folder permissions"
 pwd
