@@ -13,7 +13,6 @@ sudo chown -R travis:travis /var/lib/apache2/fastcgi
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 
 sudo chmod -R 777 /var/lib/apache2/fastcgi
-sudo chmod -R 777 /home/travis/build
 
 echo "Change online folder permissions"
 pwd
@@ -24,6 +23,8 @@ ls -l "$TRAVIS_BUILD_DIR/online/"
 
 echo "Create virtualhost file"
 python create_virtualhost.py
+echo "install online app"
+sudo cp -rv ../online /var/www/budgetbutler
 echo "move virtualhost file"
 sudo cp budget.online.conf /etc/apache2/sites-available/
 echo "installed confs:"

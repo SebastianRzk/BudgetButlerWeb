@@ -2,10 +2,10 @@ import os
 
 _VIRTUALHOST_FILE_CONTENT = '''
 <VirtualHost *:80>
-        DocumentRoot {directory}
+        DocumentRoot /var/www/budgetbutler/
         ServerAdmin localhost
         ServerName localhost
-        <Directory {directory}>
+        <Directory /var/www/budgetbutler/>
                 Options Indexes FollowSymLinks MultiViews ExecCGI
                 AllowOverride None
                 Order allow,deny
@@ -52,6 +52,7 @@ virtualhost_file = open('budget.online.conf', 'w')
 virtualhost_file.write(content)
 virtualhost_file.close()
 
+return 0
 
 content = _APACHE_CONF.format(directory=path)
 print('apache conf:')
