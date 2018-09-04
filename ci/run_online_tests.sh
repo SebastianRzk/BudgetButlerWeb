@@ -6,6 +6,9 @@ cd online_install
 sudo apt update
 sudo apt install apache2
 
+echo "Change online folder permissions"
+sudo chmod -R 755 ../online/
+
 echo "Create virtualhost file"
 python create_virtualhost.py
 echo "move virtualhost file"
