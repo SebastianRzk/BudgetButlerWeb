@@ -10,6 +10,8 @@ echo "Change online folder permissions"
 pwd
 ls -l "$TRAVIS_BUILD_DIR/online/"
 chmod -R 755 "$TRAVIS_BUILD_DIR/online/"
+chmod -R 755 $TRAVIS_BUILD_DIR
+chmod -R 755 /home/travis/build
 ls -l "$TRAVIS_BUILD_DIR/online/"
 
 
