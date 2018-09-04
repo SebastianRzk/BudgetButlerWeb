@@ -35,7 +35,7 @@ echo "teste webseite"
 curl 'localhost/login.php'
 
 echo "error log:"
-cat /var/log/apache2/error.log
+sudo cat /var/log/apache2/error.log
 
 echo "DONE"
 
