@@ -12,6 +12,8 @@ sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
 sudo chown -R travis:travis /var/lib/apache2/fastcgi
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 
+sudo chmod -R 775 /var/lib/apache2/fastcgi
+
 echo "Change online folder permissions"
 pwd
 ls -l "$TRAVIS_BUILD_DIR/online/"
