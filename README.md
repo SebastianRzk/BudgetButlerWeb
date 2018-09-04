@@ -75,7 +75,9 @@ Open your webbrowser and visit:
 
 * Check permissions. Make sure that the file `db.ini` can not be accessed.
 
-* Login on `/login.php`. Initial credentials are `admin admin`
+* Login on `/login.php`. Initial credentials are:
+    * User: admin@admin.de 
+    * Password: admin`
 
 ## Screenshots
 [Link to screenshots page](docs/screenshots.md)
