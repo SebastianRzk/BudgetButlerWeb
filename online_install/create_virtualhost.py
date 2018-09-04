@@ -3,6 +3,8 @@ import os
 _VIRTUALHOST_FILE_CONTENT = '''
 <VirtualHost *:80>
         DocumentRoot {directory}
+        ServerAdmin localhost
+        ServerName localhost
         <Directory {directory}>
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
@@ -12,7 +14,7 @@ _VIRTUALHOST_FILE_CONTENT = '''
         ErrorLog /var/log/apache2/error.log
         LogLevel warn
         CustomLog /var/log/apache2/access.log combined
-        ServerSignature On 
+        ServerSignature On
 </VirtualHost>'''
 
 
