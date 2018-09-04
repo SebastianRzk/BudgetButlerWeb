@@ -7,7 +7,7 @@ sudo apt update
 sudo apt install apache2
 
 python create_virtualhost.py
-sudo cp budget.online.conf
+sudo cp budget.online.conf /etc/apache2/sites-available/
 
 sudo a2ensite budget.online.conf
 sudo rm /etc/apache2/apache.conf 
