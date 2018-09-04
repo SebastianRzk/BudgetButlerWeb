@@ -11,7 +11,7 @@ python create_virtualhost.py
 echo "move virtualhost file"
 sudo cp budget.online.conf /etc/apache2/sites-available/
 echo "installed confs:"
-ls -l  /etc/apache2/sites_available/
+ls -l  /etc/apache2/sites-available/
 
 echo "Enable site"
 sudo a2ensite budget.online.conf
