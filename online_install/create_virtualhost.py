@@ -6,7 +6,7 @@ _VIRTUALHOST_FILE_CONTENT = '''
         ServerAdmin localhost
         ServerName localhost
         <Directory {directory}>
-                Options Indexes FollowSymLinks MultiViews
+                Options Indexes FollowSymLinks MultiViews ExecCGI
                 AllowOverride None
                 Order allow,deny
                 allow from all
@@ -19,7 +19,7 @@ _VIRTUALHOST_FILE_CONTENT = '''
 
 _APACHE_CONF = '''
 <Directory {directory}>
-        Options Indexes FollowSymLinks
+        Options Indexes FollowSymLinks ExecCGI
         AllowOverride None
         Require all granted
 </Directory>'''
