@@ -25,7 +25,8 @@ else:
 
 path = path + '/online'
 content = _VIRTUALHOST_FILE_CONTENT.format(directory=path)
-
+print('content:')
+print(content)
 virtualhost_file = open('budget.online.conf', 'w')
 virtualhost_file.write(content)
 virtualhost_file.close()

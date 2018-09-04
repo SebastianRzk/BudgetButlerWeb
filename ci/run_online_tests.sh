@@ -7,6 +7,7 @@ sudo apt update
 sudo apt install apache2
 
 echo "Change online folder permissions"
+pwd
 ls -l "$TRAVIS_BUILD_DIR/online/"
 chmod -R 755 "$TRAVIS_BUILD_DIR/online/"
 ls -l "$TRAVIS_BUILD_DIR/online/"
