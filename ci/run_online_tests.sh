@@ -7,7 +7,10 @@ sudo apt update
 sudo apt install apache2
 
 echo "Change online folder permissions"
-chmod -R 755 ../online/
+ls -l "$TRAVIS_BUILD_DIR/online/"
+chmod -R 755 "$TRAVIS_BUILD_DIR/online/"
+ls -l "$TRAVIS_BUILD_DIR/online/"
+
 
 echo "Create virtualhost file"
 python create_virtualhost.py
