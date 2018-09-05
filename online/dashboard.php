@@ -99,7 +99,10 @@ if ($auth->isLoggedIn()) {
 		showAdmin();
 		if( isset($_POST['email']) and isset($_POST['username']) and isset($_POST['password'])){
 					try {
-			    $userId = $auth->register($_POST['email'], $_POST['password'], $_POST['username'], function ($selector, $token) {});
+		 		$userId = $auth->register($_POST['email'], $_POST['password'], $_POST['username'],
+		 			function ($selector, $token) {
+		 			getAuth()->confirmEmail($selector, $token);
+		 			});
 			    echo "well done";
 			}
 			catch (\Delight\Auth\InvalidEmailException $e) {
