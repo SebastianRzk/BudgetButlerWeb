@@ -1,7 +1,7 @@
 <html>
 <?php
 require_once('layout.php');
-head('logout');
+head('Logout');
 echo '<body class="smallbody">
   <div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
   <div class="content">

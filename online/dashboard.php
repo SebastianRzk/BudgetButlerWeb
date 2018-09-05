@@ -101,7 +101,7 @@ if ($auth->isLoggedIn()) {
 					try {
 		 		$userId = $auth->register($_POST['email'], $_POST['password'], $_POST['username'],
 		 			function ($selector, $token) {
-		 			getAuth()->confirmEmail($selector, $token);
+		 				getAuth()->confirmEmail($selector, $token);
 		 			});
 			    echo "well done";
 			}
