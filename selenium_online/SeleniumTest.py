@@ -5,6 +5,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 import SeleniumTest
+import time
 
 CHROME_CACHE = []
 CHROME_INSTANCES = []
@@ -94,6 +95,16 @@ def get_selected_option(driver, option_id):
 def pagename(driver):
     return driver.find_element_by_id('pagetitle').get_attribute('innerHTML')
 
+
+def generate_unique_name():
+    return 'user_' + str(round(time.time()))
+
+def login(driver, email, passwd):
+    driver.get('http://localhost/login.php')
+    fill_element(driver, 'email', email)
+    fill_element(driver, 'password', passwd)
+    driver.find_element_by_id('btn_login').click()
+    assert driver.title == 'BudgetButlerWeb - Dashboard'
 
 
 

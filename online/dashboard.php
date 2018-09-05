@@ -67,7 +67,7 @@ require_once('creds.php');
 	  <div>
 	  Passwort: <input type="password" id="password" name="password"></input>
 	  </div>
-	  <button type="submit" class="rightbutton">Abschicken</button>
+	  <button type="submit" class="rightbutton" id="btn_add_user">Abschicken</button>
 	  </form>';
     }
 
