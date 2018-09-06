@@ -27,9 +27,9 @@ def close_driver(driver):
     if driver in SeleniumTest.CHROME_INSTANCES:
         SeleniumTest.CHROME_INSTANCES.remove(driver)
 
-    if 'TRAVIS_INTEGRATION' in os.environ:
-        SeleniumTest.CHROME_CACHE.append(driver)
-        return
+    #if 'TRAVIS_INTEGRATION' in os.environ:
+    #    SeleniumTest.CHROME_CACHE.append(driver)
+    #    return
     driver.close()
 
 def _launch_head_firefox():
