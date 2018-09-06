@@ -59,6 +59,7 @@ class TestGemeinsam(SeleniumTestClass):
         login(driver, 'admin@admin.de', 'admin')
 
         driver.get('http://localhost/dashboard.php')
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'username')))
         fill_element(driver, 'username', new_user_id)
         fill_element(driver, 'email', new_user_email)
         fill_element(driver, 'password', passwd)
