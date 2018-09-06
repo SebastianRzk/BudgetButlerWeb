@@ -35,7 +35,7 @@ cd ..
 echo "database installed"
 
 echo "install online app"
-sudo cp -rv ../online /var/www/budgetbutler
+sudo cp -rv ./online /var/www/budgetbutler
 
 
 echo "apache error log before:"

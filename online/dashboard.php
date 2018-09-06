@@ -42,7 +42,7 @@ require_once('creds.php');
 		}
 	}
 
-	echo "<h2> Hallo ";
+	echo '<h2> Hallo ';
 	echo $auth->getUsername();
 	echo ' </h2>
 	<a href="/logout.php">Ausloggen</a>
@@ -50,7 +50,7 @@ require_once('creds.php');
 	<h2> Neue Ausgabe erfassen </h2>
 	<form action="/dashboard.php" method="post">
 	<div>Datum: <input type="date" required="required" name="date" id="date" value="';
-	echo date("Y-m-d");
+	echo date('Y-m-d');
 	echo '"> </div>
 	<div>Name: <input type="text" required="required" name="name" id="name"> </div>
 	<div>Kategorie <select id="kategorie" name="kategorie">
@@ -63,8 +63,12 @@ require_once('creds.php');
 	}
 
 	echo '
-	</select></div>
-	<div>Wert: <input type="text" name="wert" required="required" id="wert" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"> </div>
+	</select></div>';
+	if ($other_person_confirmed){
+		echo '<div>Gemeinsame Buchung<input type="checkbox" name="gemeinsam" value="gemeinsam" title="Gemeinsame Buchung" class="mycheckbox"></div>';
+	}
+
+	echo '<div>Wert: <input type="text" name="wert" required="required" id="wert" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"> </div>
 	<button type="submit" class="rightbutton">Speichern</button>
 	</form>
 	<h2> Passwort ändern </h2>
@@ -148,19 +152,26 @@ if ($auth->isLoggedIn()) {
 	}
 
 
-	if (isset($_POST['gemeinsam'])){
-		echo 'tofo';
-	}else {
-		if( isset($_POST['date']) ){
-			$sql = "INSERT INTO `eintraege` (`person`, `name`, `kategorie`, `wert`, `datum`) VALUES (:person, :name , :kategorie , :wert , :datum )";
-			$sth = $dbh->prepare($sql);
-			$sth->execute(array(
-					':person' => $auth->getUsername(),
-					':name' => (string)$_POST['name'],
-					':kategorie' => (string)$_POST['kategorie'],
-					':datum' => (string)$_POST['date'],
-					':wert' => '-'.((string)$_POST['wert'])));
-			echo "<h2>Eintrag hinzugefügt</h2>";
+	if( isset($_POST['date']) ){
+		$sql = 'INSERT INTO `eintraege` (`person`, `name`, `kategorie`, `wert`, `datum`) VALUES (:person, :name , :kategorie , :wert , :datum )';
+
+		if (isset($_POST['gemeinsam'])){
+			$sql = 'INSERT INTO `gemeinsame_eintraege` (`person`, `name`, `kategorie`, `wert`, `datum`) VALUES (:person, :name , :kategorie , :wert , :datum )';
+		}
+
+		$sth = $dbh->prepare($sql);
+		$sth->execute(array(
+				':person' => $auth->getUsername(),
+				':name' => (string)$_POST['name'],
+				':kategorie' => (string)$_POST['kategorie'],
+				':datum' => (string)$_POST['date'],
+				':wert' => '-'.((string)$_POST['wert'])));
+
+		if  (isset($_POST['gemeinsam'])){
+			echo '<h2> Gemeinsame Buchung hinzugefügt</h2>';
+		}
+		else {
+			echo '<h2>Eintrag hinzugefügt</h2>';
 		}
 	}
 
@@ -173,29 +184,29 @@ if ($auth->isLoggedIn()) {
 		 			function ($selector, $token) {
 		 				getAuth()->confirmEmail($selector, $token);
 		 			});
-			    echo "well done";
+			    echo 'well done';
 			}
 			catch (\Delight\Auth\InvalidEmailException $e) {
 			    // invalid email address
-			    echo "invalid email";
+			    echo 'invalid email';
 			}
 			catch (\Delight\Auth\InvalidPasswordException $e) {
 			    // invalid password
-			    echo "invalid pw";
+			    echo 'invalid pw';
 			}
 			catch (\Delight\Auth\UserAlreadyExistsException $e) {
 			    // user already exists
-				echo "user already exists";
+				echo 'user already exists';
 			}
 			catch (\Delight\Auth\TooManyRequestsException $e) {
 			    // too many requests
-			    echo "to many requests";
+			    echo 'to many requests';
 			}
 		}
 	}
 
 } else {
-	echo "<p> <a href=\"/login.php\">Einloggen </a> <p>";
+	echo '<p> <a href=\"/login.php\">Einloggen </a> <p>';
 }
 ?>
 </div>

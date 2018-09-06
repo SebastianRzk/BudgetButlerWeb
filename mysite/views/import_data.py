@@ -70,13 +70,15 @@ def handle_request(request, import_prefix=''):
             return response
         elif post_action_is(request, 'set_kategorien'):
             kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben()))
-            serverurl = request.values['server'] + '/setkategorien.php'
+            serverurl = request.values['server']
 
             if not serverurl.startswith('http://') or serverurl.startswith('https://'):
                  serverurl = 'https://' + serverurl
 
             configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
             configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.values['email'])
+
+            serverurl = serverurl +  + '/setkategorien.php'
 
             r = requests.post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
         else:

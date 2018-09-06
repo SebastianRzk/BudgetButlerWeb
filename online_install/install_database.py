@@ -21,7 +21,15 @@ _TABLES = {
        ( `ID` INT NOT NULL AUTO_INCREMENT , `SourcePerson` VARCHAR(249) NOT NULL
         , `DestinationPerson` VARCHAR(249) NOT NULL , PRIMARY KEY (`ID`))
          ENGINE = InnoDB;''',
-
+    'gemeinsame_eintraege': '''CREATE TABLE `gemeinsame_eintraege` (
+          `id` int(11) NOT NULL,
+          `person` varchar(20) NOT NULL,
+          `name` varchar(40) NOT NULL,
+          `kategorie` varchar(20) NOT NULL,
+          `wert` varchar(10) NOT NULL,
+          `datum` char(10) NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+        ''',
     'kategorien': '''CREATE TABLE `kategorien` (
       `id` int(11) NOT NULL,
       `person` varchar(20) NOT NULL,
@@ -87,6 +95,9 @@ _INDIZES = {
       ADD KEY `email_expires` (`email`,`expires`),
       ADD KEY `user_id` (`user_id`);''',
 
+    'gemeinsame_eintraege': '''ALTER TABLE `gemeinsame_eintraege`
+      ADD PRIMARY KEY (`id`);''',
+
     'users_remembered': '''ALTER TABLE `users_remembered`
       ADD PRIMARY KEY (`id`),
       ADD UNIQUE KEY `selector` (`selector`),
@@ -114,7 +125,9 @@ _AUTO_INCREMENT = {
 
     'users_remembered': 'ALTER TABLE `users_remembered` MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;',
 
-    'users_resets': 'ALTER TABLE `users_resets` MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;'
+    'users_resets': 'ALTER TABLE `users_resets` MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;',
+
+    'gemeinsame_eintraege': 'ALTER TABLE `gemeinsame_eintraege` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;'
 }
 
 _DATA = {
