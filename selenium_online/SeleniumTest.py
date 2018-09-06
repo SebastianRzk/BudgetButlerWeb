@@ -97,7 +97,7 @@ def pagename(driver):
 
 
 def generate_unique_name():
-    return 'user_' + str(round(time.time()))
+    return 'u' + str(time.time()).replace('.', '')
 
 def login(driver, email, passwd):
     driver.get('http://localhost/login.php')

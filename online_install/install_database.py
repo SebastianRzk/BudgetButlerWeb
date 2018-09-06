@@ -17,6 +17,11 @@ _TABLES = {
       `datum` char(10) NOT NULL
       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;''',
 
+      'gemeinsam_zuordnung':'''CREATE TABLE `gemeinsam_zuordnung`
+       ( `ID` INT NOT NULL AUTO_INCREMENT , `SourcePerson` VARCHAR(249) NOT NULL
+        , `DestinationPerson` VARCHAR(249) NOT NULL , PRIMARY KEY (`ID`))
+         ENGINE = InnoDB;''',
+
     'kategorien': '''CREATE TABLE `kategorien` (
       `id` int(11) NOT NULL,
       `person` varchar(20) NOT NULL,
