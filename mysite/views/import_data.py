@@ -78,7 +78,7 @@ def handle_request(request, import_prefix=''):
             configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
             configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.values['email'])
 
-            serverurl = serverurl +  + '/setkategorien.php'
+            serverurl = serverurl + '/setkategorien.php'
 
             r = requests.post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
         else:
