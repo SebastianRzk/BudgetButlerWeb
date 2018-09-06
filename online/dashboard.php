@@ -206,7 +206,7 @@ if ($auth->isLoggedIn()) {
 	}
 
 } else {
-	echo '<p> <a href=\"/login.php\">Einloggen </a> <p>';
+	echo '<p> <a href="/login.php">Einloggen </a> <p>';
 }
 ?>
 </div>
