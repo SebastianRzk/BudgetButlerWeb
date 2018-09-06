@@ -17,8 +17,6 @@ sudo chown -R travis:travis /var/lib/apache2/fastcgi
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 sudo chmod -R 777 /var/lib/apache2/fastcgi
 
-echo "install online app"
-sudo cp -rv ../online /var/www/budgetbutler
 echo "move virtualhost file"
 sudo cp budget.online.conf /etc/apache2/sites-available/
 echo "installed confs:"
@@ -35,6 +33,10 @@ pip install -r requirements.txt
 python install_database.py
 cd ..
 echo "database installed"
+
+echo "install online app"
+sudo cp -rv ../online /var/www/budgetbutler
+
 
 echo "apache error log before:"
 sudo cat /var/log/apache2/error.log
