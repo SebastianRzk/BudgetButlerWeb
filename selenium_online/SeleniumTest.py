@@ -6,6 +6,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 import SeleniumTest
 import time
+from random import randint
 
 CHROME_CACHE = []
 CHROME_INSTANCES = []
@@ -95,9 +96,8 @@ def get_selected_option(driver, option_id):
 def pagename(driver):
     return driver.find_element_by_id('pagetitle').get_attribute('innerHTML')
 
-
 def generate_unique_name():
-    return 'u' + str(time.time()).replace('.', '')
+    return 'u' + str(time.time()).replace('.', '') + str(randint(0,10000))
 
 def login(driver, email, passwd):
     driver.get('http://localhost/login.php')

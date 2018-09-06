@@ -28,7 +28,7 @@ class TestLogin(SeleniumTestClass):
         driver = get_driver()
 
         new_user_id = generate_unique_name()
-        new_user_email = new_user_id + '@sebastian.de'
+        new_user_email = new_user_id + '@s.de'
         passwd = 'funnypass'
 
         login(driver, 'admin@admin.de', 'admin')
