@@ -25,7 +25,7 @@ require_once('creds.php');
 			<div>
 			Passwort: <input type="password" name="password" id="password"></input>
 			</div>
-			<button class="rightbutton" type="submit">Login</button>
+			<button class="rightbutton" id="btn_login" type="submit">Login</button>
 			</form>';
 		echo $end;
 	}

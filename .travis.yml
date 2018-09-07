@@ -1,7 +1,10 @@
 language: python
 python:
   - "3.6"
+php:
+  - 7.1.9
 sudo: required
+
 install: 
   - sh ci/install_requirements.sh
 
@@ -14,11 +17,15 @@ addons:
     organization: "rosesthen00b-github"
   firefox: "61.0"
 
+services:
+  - mysql
+
 before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
+  - mysql -e 'CREATE DATABASE testdb;'
 
 jobs:
   include:
@@ -26,8 +33,9 @@ jobs:
       script: sh ci/run_unit_tests.sh
     - stage: selenium-tests
       script: sh ci/run_integration_tests.sh
+    - stage: test-online-app
+      script: sh ci/run_online_tests.sh
     - stage: notify-ci-services
       script: sh ci/notify_integration_services.sh
-
 
 
