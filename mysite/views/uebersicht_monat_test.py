@@ -112,13 +112,13 @@ class Abrechnung(unittest.TestCase):
     def test_optionen(self):
         self.set_up()
 
-        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'content': ['einnahmen']}))
+        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'einnahmen': 'einnahmen'}))
         self.contains_only_header(context['abrechnungstext'], '---Einnahmen---')
-        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'content': ['ausgaben']}))
+        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'ausgaben': 'ausgaben'}))
         self.contains_only_header(context['abrechnungstext'], '---Ausgaben---')
-        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'content': ['zusammenfassung_einnahmen']}))
+        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'zusammenfassung_einnahmen': 'zusammenfassung_einnahmen'}))
         self.contains_only_header(context['abrechnungstext'], 'Einnahmen ')
-        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'content': ['zusammenfassung_ausgaben']}))
+        context = uebersicht_monat.abrechnen(PostRequest({'date': '2011_9', 'zusammenfassung_ausgaben': 'zusammenfassung_ausgaben'}))
         self.contains_only_header(context['abrechnungstext'], 'Ausgaben ')
 
     def contains_only_header(self, report, header):
