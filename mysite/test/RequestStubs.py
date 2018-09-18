@@ -9,9 +9,6 @@ class GetRequest():
     POST = {}
 
 
-from django.http import QueryDict
-from django.conf import settings
-from mysite.test import RequestStubs
 from mysite.viewcore import request_handler
 
 CONFIGURED = False
@@ -19,23 +16,10 @@ CONFIGURED = False
 class PostRequest:
     method = "POST"
     def __init__(self, args):
-        self.values = RequestStubs.to_query_dict(args)
+        self.values = args
 
 
 class VersionedPostRequest(PostRequest):
     def __init__(self, args):
         args["ID"] = request_handler.current_key()
-        self.values = RequestStubs.to_query_dict(args)
-
-def to_query_dict(dictionary):
-    if not RequestStubs.CONFIGURED:
-        settings.configure()
-        RequestStubs.CONFIGURED = True
-    result = QueryDict('', mutable=True)
-    for element in dictionary:
-        if isinstance(dictionary[element], list):
-            for list_element in dictionary[element]:
-                result.update({element: list_element})
-        else:
-            result.update({element: dictionary[element]})
-    return result
+        self.values = args

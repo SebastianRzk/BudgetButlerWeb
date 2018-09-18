@@ -66,7 +66,7 @@ def view_uebersicht_monat():
 def view_uebersicht_einzelbuchungen():
     return uebersicht_einzelbuchungen.index(request)
 
-@app.route('/abrechnung/', methods=['GET', 'POST'])
+@app.route('/monatsuebersicht/abrechnung/', methods=['GET', 'POST'])
 def view_abrechnung_monat():
     return uebersicht_monat.abrechnen(request)
 

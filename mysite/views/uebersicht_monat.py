@@ -177,9 +177,6 @@ def _abrechnen(request):
 
         generator.add_half_line_elements(compiled_zusammenfassung)
 
-
-
-
     page = ''
     for line in generator.generate_pages():
         page = page + '<br>' + line
@@ -190,11 +187,9 @@ def _abrechnen(request):
 def _is_selected(request, name):
     if request.method != 'POST':
         return True
-
-    if 'content' not in request.values:
+    if name in request.values:
         return True
-    print('         ', any(name == s for s in request.values.getlist('content')))
-    return any(name == s for s in request.values.getlist('content'))
+    return False
 
 def abrechnen(request):
     return request_handler.handle_request(request, _abrechnen, 'present_abrechnung.html')

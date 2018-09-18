@@ -10,7 +10,7 @@
   display: grid;
   grid-template-columns: 1fr 40ex 1fr;
   grid-template-rows: 7fr 10ex 0fr 30ex 13fr;
-  grid-gap: 2ex;
+  row-gap: 2ex;
   height:100vh;
 }
 
