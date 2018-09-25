@@ -68,7 +68,7 @@ require_once('creds.php');
 		echo '<div>Gemeinsame Buchung<input type="checkbox" name="gemeinsam" value="gemeinsam" title="Gemeinsame Buchung" class="mycheckbox"></div>';
 	}
 
-	echo '<div>Wert: <input type="text" name="wert" required="required" id="wert" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"> </div>
+	echo '<div>Wert: <input type="number" name="wert" required="required" id="wert" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"> </div>
 	<button type="submit" class="rightbutton">Speichern</button>
 	</form>
 	<h2> Passwort ändern </h2>
