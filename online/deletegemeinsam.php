@@ -36,17 +36,14 @@ try {
 				}
 			}
 		}
-		echo '\n\n os:';
-		echo $other_person_selected;
-		echo '\n\n oc:';
-		echo $other_person_confirmed;
-		echo '\n\n';
 		if ($other_person_confirmed){
 			$sql = "DELETE FROM `eintraege` WHERE person = :person";
 			$sth = $dbh->prepare($sql);
 			$sth->execute(array(':person' => $other_name));
+			echo 'all deleted';
+		} else {
+			echo 'own deleted';
 		}
-
 
 	}
 }
