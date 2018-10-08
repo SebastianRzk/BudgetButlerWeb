@@ -20,11 +20,15 @@ def _mapping_passt(post_parameter, unpassende_kategorien):
     return True
 
 
-def _import(import_data):
+def _import(import_data, gemeinsam):
     print('importing data:')
     print(import_data)
-    viewcore.database_instance().einzelbuchungen.parse(import_data)
-    viewcore.database_instance().einzelbuchungen.taint()
+    if gemeinsam :
+        viewcore.database_instance().gemeinsamebuchungen.parse(import_data)
+        viewcore.database_instance().gemeinsamebuchungen.taint()
+    else:
+        viewcore.database_instance().einzelbuchungen.parse(import_data)
+        viewcore.database_instance().einzelbuchungen.taint()
 
 
 def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
@@ -47,19 +51,16 @@ def index(request):
     return request_handler.handle_request(request, lambda x: context , page)
 
 
-def handle_request(request, import_prefix=''):
+def handle_request(request, import_prefix='', gemeinsam=False):
     print(request)
     imported_values = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', ''))
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
 
-            if not serverurl.startswith('http://') and not serverurl.startswith('https://'):
-                 serverurl = 'https://' + serverurl
-            print(serverurl)
 
-            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
-            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.values['email'])
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
 
             r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
             print(r.content)
@@ -67,15 +68,26 @@ def handle_request(request, import_prefix=''):
             response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet')
             r = requests.post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
+        if post_action_is(request, 'load_online_gemeinsame_transactions'):
+            serverurl = request.values['server']
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
+            print(serverurl)
+
+            r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
+            print(r.content)
+
+            response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
+            r = requests.post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            return response
+
+
         elif post_action_is(request, 'set_kategorien'):
             kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben()))
             serverurl = request.values['server']
 
-            if not serverurl.startswith('http://') or serverurl.startswith('https://'):
-                 serverurl = 'https://' + serverurl
-
-            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
-            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.values['email'])
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
 
             serverurl = serverurl + '/setkategorien.php'
 
@@ -116,7 +128,7 @@ def handle_request(request, import_prefix=''):
             if not nicht_passende_kategorien:
                 print('keine unpassenden kategorien gefunden')
                 print('beginne mit dem direkten import')
-                _import(imported_values)
+                _import(imported_values, gemeinsam)
 
                 context = viewcore.generate_base_context('import')
                 last_elements = []
@@ -128,7 +140,7 @@ def handle_request(request, import_prefix=''):
             elif _mapping_passt(request.values, nicht_passende_kategorien):
                 print('import kann durchgeführt werden, weil mapping vorhanden')
                 imported_values = _map_kategorien(imported_values, nicht_passende_kategorien, request.values)
-                _import(imported_values)
+                _import(imported_values, gemeinsam)
 
                 context = viewcore.generate_base_context('import')
                 last_elements = []
@@ -161,4 +173,13 @@ def _kategorien_map(actual, target, goal):
     if actual != target:
         return actual
     return goal
+
+def _add_protokoll_if_needed(serverurl):
+    if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+        return 'https://' + serverurl
+    return serverurl
+
+def _save_server_creds(serverurl, email):
+    configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
+    configuration_provider.set_configuration('ONLINE_DEFAULT_USER', email)
 
