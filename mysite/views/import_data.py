@@ -11,6 +11,7 @@ from mysite.test.RequestStubs import PostRequest
 from mysite.test import RequestStubs
 from mysite.core import FileSystem
 from mysite.viewcore import configuration_provider
+from mysite.viewcore import requester
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -68,17 +69,18 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet')
             r = requests.post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
+
         if post_action_is(request, 'load_online_gemeinsame_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
             print(serverurl)
 
-            r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
-            print(r.content)
+            online_content = requester.instance().post(serverurl + '/getgemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            print(online_content)
+            response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
-            response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
-            r = requests.post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            requester.instance().post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
 
 

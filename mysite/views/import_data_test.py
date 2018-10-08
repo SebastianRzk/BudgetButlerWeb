@@ -10,6 +10,8 @@ from mysite.viewcore import viewcore
 from mysite.viewcore.converter import datum_from_german as datum
 from mysite.viewcore import request_handler
 from mysite.viewcore import configuration_provider
+from mysite.viewcore import requester
+from mysite.test.RequesterStub import RequesterStub
 
 # Create your tests here.
 class Importd(unittest.TestCase):
@@ -51,8 +53,6 @@ class Importd(unittest.TestCase):
         assert context['element_titel'] == 'Export / Import'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
-
-
     def test_gemeinsam_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -93,3 +93,26 @@ class Importd(unittest.TestCase):
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
         assert context['element_titel'] == 'Export / Import'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
+
+
+
+    def test_gemeinsamImport_addePassendeKategorie_shouldImportValue(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+
+
+        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM,
+                                           'https://test.test/deletegemeinsam.php' : ''})
+
+        context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+                                                      'email': '',
+                                                      'server': 'test.test',
+                                                      'password' : ''}))
+
+        assert context['element_titel'] == 'Export / Import'
+        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
+
+        assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
+        assert requester.instance().complete_call_count() == 2
