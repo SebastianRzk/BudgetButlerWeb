@@ -64,7 +64,6 @@ def handle_request(request, import_prefix=''):
             r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
             print(r.content)
 
-            RequestStubs.CONFIGURED = True
             response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet')
             r = requests.post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
