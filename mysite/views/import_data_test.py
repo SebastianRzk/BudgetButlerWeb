@@ -19,6 +19,7 @@ class Importd(unittest.TestCase):
     def set_up(self):
         FileSystem.INSTANCE = FileSystemStub()
         viewcore.DATABASE_INSTANCE = None
+        viewcore.DATABASES = []
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
         configuration_provider.set_configuration('DATABASES', 'Sebastian')
         request_handler.stub_me()
@@ -33,14 +34,6 @@ class Importd(unittest.TestCase):
     #######MaschinenimportStart
     Datum,Kategorie,Name,Wert,Dynamisch
     2017-03-06,Essen,Edeka,-10.0,True
-    #######MaschinenimportEnd
-    '''
-
-    _IMPORT_DATA_GEMEINSAM = '''
-    #######MaschinenimportStart
-    Datum,Kategorie,Name,Wert,Dynamisch,Person
-    2017-03-06,Essen,Edeka,-10.0,True,Sebastian
-    2017-03-06,Essen,Edeka,-20.0,True,Maureen
     #######MaschinenimportEnd
     '''
 
@@ -94,7 +87,12 @@ class Importd(unittest.TestCase):
         assert context['element_titel'] == 'Export / Import'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
-
+    _IMPORT_DATA_GEMEINSAM = '''#######MaschinenimportStart
+Datum,Kategorie,Name,Wert,Dynamisch,Person
+2017-03-06,Essen,Edeka,-10.0,True,Sebastian
+2017-03-06,Essen,Edeka,-20.0,True,Maureen
+#######MaschinenimportEnd
+'''
 
     def test_gemeinsamImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
@@ -104,7 +102,8 @@ class Importd(unittest.TestCase):
 
 
         requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM,
-                                           'https://test.test/deletegemeinsam.php' : ''})
+                                           'https://test.test/deletegemeinsam.php' : '',
+                                           'https://test.test/getusername.php': 'Sebastian'})
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
                                                       'email': '',
@@ -115,4 +114,111 @@ class Importd(unittest.TestCase):
         assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
-        assert requester.instance().complete_call_count() == 2
+        assert requester.instance().complete_call_count() == 3
+
+    _IMPORT_DATA_GEMEINSAM_WRONG_PARTNER = '''
+    #######MaschinenimportStart
+    Datum,Kategorie,Name,Wert,Dynamisch,Person
+    2017-03-06,Essen,Edeka,-10.0,True,Sebastian
+    2017-03-06,Essen,Edeka,-20.0,True,Unbekannt
+    #######MaschinenimportEnd
+    '''
+
+    def test_gemeinsamImport_withUnpassendenPartnername_shouldImportValueAndRepalceName(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+
+
+        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM_WRONG_PARTNER,
+                                           'https://test.test/deletegemeinsam.php': '',
+                                           'https://test.test/getusername.php': 'Sebastian'})
+
+        context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+                                                      'email': '',
+                                                      'server': 'test.test',
+                                                      'password' : ''}))
+
+        assert context['element_titel'] == 'Export / Import'
+        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
+
+        assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
+        assert requester.instance().complete_call_count() == 3
+
+
+    def test_gemeinsamImport_withUnpassendenKategorie_shouldImportValueAndRepalceName(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'KeinEssen', 'some name', -1.54)
+
+
+
+        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM,
+                                           'https://test.test/deletegemeinsam.php': '',
+                                           'https://test.test/getusername.php': 'Sebastian'})
+
+        context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+                                                      'email': '',
+                                                      'server': 'test.test',
+                                                      'password' : ''}))
+
+
+        print(context)
+        assert context['element_titel'] == 'Kategorien zuweisen'
+        assert context['import'] == self._IMPORT_DATA_GEMEINSAM
+        assert context['unpassende_kategorien'] == ['Essen']
+
+
+        context = import_data.index(PostRequest({'action': 'map_and_push',
+                                                      'Essen_mapping': 'neue Kategorie anlegen',
+                                                      'import': self._IMPORT_DATA_GEMEINSAM}))
+
+
+
+        assert context['element_titel'] == 'Export / Import'
+        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
+
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Kategorie[1] == 'Essen'
+
+        assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
+        assert requester.instance().complete_call_count() == 3
+
+
+
+    _IMPORT_DATA_GEMEINSAM_WRONG_SELF = '''
+    #######MaschinenimportStart
+    Datum,Kategorie,Name,Wert,Dynamisch,Person
+    2017-03-06,Essen,Edeka,-10.0,True,Sebastian_Online
+    2017-03-06,Essen,Edeka,-20.0,True,Maureen
+    #######MaschinenimportEnd
+    '''
+
+    def test_gemeinsamImport_withUnpassendenUsername_shouldImportValueAndRepalceName(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+
+
+        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM_WRONG_SELF,
+                                           'https://test.test/deletegemeinsam.php': '',
+                                           'https://test.test/getusername.php': 'Sebastian_Online'})
+
+        context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+                                                      'email': '',
+                                                      'server': 'test.test',
+                                                      'password' : ''}))
+
+        assert context['element_titel'] == 'Export / Import'
+        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
+        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
+
+        assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
+        assert requester.instance().complete_call_count() == 3

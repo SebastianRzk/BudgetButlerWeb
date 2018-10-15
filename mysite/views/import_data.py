@@ -24,6 +24,8 @@ def _mapping_passt(post_parameter, unpassende_kategorien):
 def _import(import_data, gemeinsam):
     print('importing data:')
     print(import_data)
+    if not gemeinsam and 'Person' in import_data.columns:
+        gemeinsam = True
     if gemeinsam :
         viewcore.database_instance().gemeinsamebuchungen.parse(import_data)
         viewcore.database_instance().gemeinsamebuchungen.taint()
@@ -76,8 +78,18 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             _save_server_creds(serverurl, request.values['email'])
             print(serverurl)
 
+            online_username = requester.instance().post(serverurl + '/getusername.php', data={'email': request.values['email'], 'password': request.values['password']})
+            print('online username: ', online_username)
             online_content = requester.instance().post(serverurl + '/getgemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
             print(online_content)
+
+            table = _parse_table(online_content)
+            print('table before person mapping', table)
+            table.Person = table.Person.map(lambda x: viewcore.database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
+            online_content = "#######MaschinenimportStart\n"
+            online_content = online_content + table.to_csv(index=False)
+            online_content = online_content + "#######MaschinenimportEnd\n"
+
             response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
             requester.instance().post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
@@ -96,31 +108,10 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             r = requests.post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
         else:
             print(request.values)
-            tables = {}
             content = request.values['import'].replace('\r', '')
             FileSystem.instance().write('../Import/' + import_prefix + 'Import_' + str(datetime.now()), content)
 
-            tables["sonst"] = ""
-            tables["#######MaschinenimportStart"] = ""
-            mode = "sonst"
-            print('textfield content:',content)
-            for line in content.split('\n'):
-                print(line)
-                line = line.strip()
-                if line == "":
-                    continue
-                if line == "#######MaschinenimportStart":
-                    mode = "#######MaschinenimportStart"
-                    continue
-
-                if line == "#######MaschinenimportEnd":
-                    mode = "sonst"
-                    continue
-                tables[mode] = tables[mode] + "\n" + line
-
-            print(tables)
-
-            imported_values = pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
+            imported_values = _parse_table(content)
             datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
             nicht_passende_kategorien = []
             for imported_kategorie in set(imported_values.Kategorie):
@@ -184,4 +175,28 @@ def _add_protokoll_if_needed(serverurl):
 def _save_server_creds(serverurl, email):
     configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
     configuration_provider.set_configuration('ONLINE_DEFAULT_USER', email)
+
+def _parse_table(content):
+    tables = {}
+    tables["sonst"] = ""
+    tables["#######MaschinenimportStart"] = ""
+    mode = "sonst"
+    print('textfield content:',content)
+    for line in content.split('\n'):
+        print(line)
+        line = line.strip()
+        if line == "":
+            continue
+        if line == "#######MaschinenimportStart":
+            mode = "#######MaschinenimportStart"
+            continue
+
+        if line == "#######MaschinenimportEnd":
+            mode = "sonst"
+            continue
+        tables[mode] = tables[mode] + "\n" + line
+
+    print(tables)
+
+    return pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
 
