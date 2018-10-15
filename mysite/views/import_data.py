@@ -24,8 +24,6 @@ def _mapping_passt(post_parameter, unpassende_kategorien):
 def _import(import_data, gemeinsam):
     print('importing data:')
     print(import_data)
-    if not gemeinsam and 'Person' in import_data.columns:
-        gemeinsam = True
     if gemeinsam :
         viewcore.database_instance().gemeinsamebuchungen.parse(import_data)
         viewcore.database_instance().gemeinsamebuchungen.taint()
@@ -117,6 +115,9 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             for imported_kategorie in set(imported_values.Kategorie):
                 if imported_kategorie not in datenbank_kategorien:
                     nicht_passende_kategorien.append(imported_kategorie)
+
+            if 'Person' in imported_values.columns:
+                gemeinsam = True
 
             if not nicht_passende_kategorien:
                 print('keine unpassenden kategorien gefunden')

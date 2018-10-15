@@ -177,7 +177,6 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
                                                       'import': self._IMPORT_DATA_GEMEINSAM}))
 
 
-
         assert context['element_titel'] == 'Export / Import'
         assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
         assert viewcore.database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
