@@ -149,7 +149,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
         assert requester.instance().complete_call_count() == 3
 
 
-    def test_gemeinsamImport_withUnpassendenKategorie_shouldImportValueAndRepalceName(self):
+    def test_gemeinsamImport_withUnpassendenKategorie_shouldImportValueAndRequestmapping(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'KeinEssen', 'some name', -1.54)
