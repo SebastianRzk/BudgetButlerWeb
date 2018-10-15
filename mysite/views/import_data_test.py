@@ -165,8 +165,6 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
                                                       'server': 'test.test',
                                                       'password' : ''}))
 
-
-        print(context)
         assert context['element_titel'] == 'Kategorien zuweisen'
         assert context['import'] == self._IMPORT_DATA_GEMEINSAM
         assert context['unpassende_kategorien'] == ['Essen']
