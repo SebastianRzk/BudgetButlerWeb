@@ -5,7 +5,7 @@
 	<div class='box-body pad'>
 		<form  id="form1" action="/import/" method="post">
 			<div class="box-footer">
-				<textarea  name='import' class="textarea" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+				<textarea name='import' class="textarea" required="required" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
 				<button type="submit" value="OK" name="btn_import" class="btn bordered-hover">Daten aus Abrechnung importieren</button>
 			</div>
 		</form>
@@ -19,9 +19,9 @@
 		<form role="form" action="/import/" method="post">
 			<div class="box-body">
 				<div class="form-group">
-					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}"/>
-					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}"/>
-					<label>Passwort</label> <input type="password" name="password" class="form-control"/>
+					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}" required="required"/>
+					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}" required="required"/>
+					<label>Passwort</label> <input type="password" name="password" class="form-control" required="required"/>
 				</div>
 				</div>
 			<div class="box-footer">
@@ -36,9 +36,9 @@
 		<form role="form" action="/import/" method="post">
 			<div class="box-body">
 				<div class="form-group">
-					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}"/>
-					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}"/>
-					<label>Passwort</label> <input type="password" name="password" class="form-control"/>
+					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}" required="required"/>
+					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}" required="required"/>
+					<label>Passwort</label> <input type="password" name="password" class="form-control" required="required"/>
 				  <input type="checkbox" required="required"> Mir ist bewusst, dass die Einträge ggf. auch von meiner Partnerperson abgerufen und gelöscht werden können.</input>
 				</div>
 				</div>
@@ -56,9 +56,9 @@
 		<form role="form" action="/import/" method="post">
 			<div class="box-body">
 				<div class="form-group">
-					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}"/>
-					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}"/>
-					<label>Passwort</label> <input type="password" name="password" class="form-control"/>
+					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}" required="required"/>
+					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}" required="required"/>
+					<label>Passwort</label> <input type="password" name="password" class="form-control" required="required"/>
 				</div>
 				</div>
 			<div class="box-footer">
