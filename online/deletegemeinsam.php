@@ -7,7 +7,7 @@ try {
 		$dbh = getPDO();
 
 
-		$sql = "DELETE FROM `eintraege` WHERE person = :person";
+		$sql = "DELETE FROM `gemeinsame_eintraege` WHERE person = :person";
 		$sth = $dbh->prepare($sql);
 		$sth->execute(array(':person' => $auth->getUsername()));
 
@@ -37,7 +37,7 @@ try {
 			}
 		}
 		if ($other_person_confirmed){
-			$sql = "DELETE FROM `eintraege` WHERE person = :person";
+			$sql = "DELETE FROM `gemeinsame_eintraege` WHERE person = :person";
 			$sth = $dbh->prepare($sql);
 			$sth->execute(array(':person' => $other_name));
 			echo 'all deleted';

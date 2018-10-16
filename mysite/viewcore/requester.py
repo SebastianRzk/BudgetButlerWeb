@@ -1,4 +1,5 @@
 from mysite.viewcore import requester
+import requests
 
 INSTANCE = None
 
@@ -10,7 +11,8 @@ def instance():
 
 class Requester:
 
-    def post(serverurl, data):
+    def post(self, serverurl, data):
         response = requests.post(serverurl, data=data)
-        return response.content.decode("utf-8")
-        
+        decoded_response = response.content.decode("utf-8")
+        print('decoded repsonse:', decoded_response)
+        return decoded_response

@@ -32,12 +32,9 @@ try {
 				}
 			}
 		}
-		echo '\n\n os:';
-		echo $other_person_selected;
-		echo '\n\n oc:';
-		echo $other_person_confirmed;
 		echo '\n\n';
 		if ($other_person_confirmed){
+			echo "Connection confirmed \r\n";
 			$sql = "SELECT * FROM `gemeinsame_eintraege` WHERE person = :person OR person = :other_person";
 			$sth = $dbh->prepare($sql);
 			$sth->execute(array(	':person' => $auth->getUsername(),
@@ -46,6 +43,7 @@ try {
 		}
 		else {
 			// Wenn nicht gegeben
+			echo "Connection not confirmed \r\n";
 			$sql = "SELECT * FROM `gemeinsame_eintraege` WHERE person = :person";
 			$sth = $dbh->prepare($sql);
 			$sth->execute(array(':person' => $auth->getUsername()));
@@ -57,7 +55,7 @@ try {
 			$row = $item['datum'].','.str_replace(',',' ',$item['kategorie']).','.str_replace(',',' ',$item['name']).','.str_replace(',','.',$item['wert']). ','. str_replace(',','.',$item['person']).',False';
 			$result = $result."\r\n".$row;
 		}
-		$result = $result."\n#######MaschinenimportEnd\r\n\r\n";
+		$result = $result."\r\n#######MaschinenimportEnd\r\n\r\n";
 		echo $result;
 	}
 }
