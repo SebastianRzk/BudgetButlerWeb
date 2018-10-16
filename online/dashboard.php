@@ -23,6 +23,7 @@ require_once('creds.php');
 	$sth->execute(array(':sourceperson' => $auth->getUsername()));
 	$other = $sth->fetchAll();
 
+
 	$other_person_selected = false;
 	$other_person_confirmed = false;
 
@@ -45,32 +46,39 @@ require_once('creds.php');
 	echo '<h2> Hallo ';
 	echo $auth->getUsername();
 	echo ' </h2>
-	<a href="/logout.php">Ausloggen</a>
+	<a href="/logout.php">Ausloggen</a>';
 
-	<h2> Neue Ausgabe erfassen </h2>
-	<form action="/dashboard.php" method="post">
-	<div>Datum: <input type="date" required="required" name="date" id="date" value="';
-	echo date('Y-m-d');
-	echo '"> </div>
-	<div>Name: <input type="text" required="required" name="name" id="name"> </div>
-	<div>Kategorie <select id="kategorie" name="kategorie">
-	';
-
-	foreach($kategorien as $k) {
-		echo '<option>';
-		echo $k['name'];
-		echo '</option>';
+	if(sizeof($kategorien) == 0) {
+		echo '<h2> Noch nicht eingerichtet </h2>
+		Bitte synchonisieren Sie ihre locale BudgetButlerWeb installation mit BudgetButlerWeb Online <br>
+		Menüpunnkt: "Import / Export" im Feld "Online Kategorien installieren"';
 	}
+	else {
+		echo ' <h2> Neue Ausgabe erfassen </h2>
+		<form action="/dashboard.php" method="post">
+		<div>Datum: <input type="date" required="required" name="date" id="date" value="';
+		echo date('Y-m-d');
+		echo '"> </div>
+		<div>Name: <input type="text" required="required" name="name" id="name"> </div>
+		<div>Kategorie <select id="kategorie" name="kategorie">
+		';
 
+		foreach($kategorien as $k) {
+			echo '<option>';
+			echo $k['name'];
+			echo '</option>';
+		}
+
+		echo '
+		</select></div>';
+		if ($other_person_confirmed){
+			echo '<div>Gemeinsame Buchung<input type="checkbox" name="gemeinsam" value="gemeinsam" title="Gemeinsame Buchung" class="mycheckbox"></div>';
+		}
+		echo '<div>Wert: <input type="number" name="wert" required="required" id="wert" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"> </div>
+		<button type="submit" class="rightbutton">Speichern</button>
+		</form>';
+	}
 	echo '
-	</select></div>';
-	if ($other_person_confirmed){
-		echo '<div>Gemeinsame Buchung<input type="checkbox" name="gemeinsam" value="gemeinsam" title="Gemeinsame Buchung" class="mycheckbox"></div>';
-	}
-
-	echo '<div>Wert: <input type="number" name="wert" required="required" id="wert" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"> </div>
-	<button type="submit" class="rightbutton">Speichern</button>
-	</form>
 	<h2> Passwort ändern </h2>
 	<form action="/dashboard.php" method="post">
 		<div> Altes Passwort <input type="password" required="required" name="oldPassword" ></input> </div>
