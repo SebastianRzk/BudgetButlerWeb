@@ -72,7 +72,7 @@ def handle_request(request):
         }
 
     context['transaction_key'] = 'requested'
-    context['kategorien'] = sorted(einzelbuchungen.get_kategorien_ausgaben())
+    context['kategorien'] = sorted(einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(viewcore.get_changed_einzelbuchungen())
     return context
 

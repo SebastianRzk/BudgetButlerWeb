@@ -25,7 +25,7 @@ class DBManager_readDB(unittest.TestCase):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db)
 
-        database = DBManager.read('testuser')
+        database = DBManager.read('testuser', set())
 
         assert database.name == 'testuser'
         assert len(database.einzelbuchungen.content) == 22
@@ -39,7 +39,7 @@ class DBManager_readDB(unittest.TestCase):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db)
 
-        database = DBManager.read('testuser')
+        database = DBManager.read('testuser', set())
         DBManager.write(database)
 
         assert FileSystem.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
@@ -48,7 +48,7 @@ class DBManager_readDB(unittest.TestCase):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db_old)
 
-        database = DBManager.read('testuser')
+        database = DBManager.read('testuser', set())
         DBManager.write(database)
 
         assert FileSystem.instance().read('../Database_testuser.csv') == self.full_db.split('\n')

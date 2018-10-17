@@ -8,7 +8,7 @@ from mysite.core import DatabaseModule
 from mysite.core import FileSystem
 import pandas as pd
 
-def read(nutzername):
+def read(nutzername, ausgeschlossene_kategorien):
     if not FileSystem.instance().read('../Database_' + nutzername + '.csv'):
         neue_datenbank = DatabaseModule.Database(nutzername)
         write(neue_datenbank)
@@ -37,7 +37,7 @@ def read(nutzername):
 
         tables[mode] = tables[mode] + "\n" + line
 
-    database = DatabaseModule.Database(nutzername)
+    database = DatabaseModule.Database(nutzername, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
     raw_data = pd.read_csv(StringIO(tables["einzelbuchungen"]))
     database.einzelbuchungen.parse(raw_data)

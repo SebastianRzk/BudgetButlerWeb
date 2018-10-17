@@ -419,3 +419,37 @@ class einzelbuchungs_selector(unittest.TestCase):
 
         assert component_under_test.select().group_by_kategorie().Wert.tolist() == [-20, 8]
         assert component_under_test.select().group_by_kategorie().index.tolist() == ['A', 'B']
+
+
+class kategorien_selector(unittest.TestCase):
+
+    def test_schliesse_kategorien_aus_ausgaben(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.ausgeschlossene_kategorien = set(['NeinEins'])
+        component_under_test.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', -10)
+        component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
+        component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
+
+        assert component_under_test.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien = True) == set(['JaEins', 'JaZwei'])
+
+
+    def test_schliesse_kategorien_aus_einnahmen(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.ausgeschlossene_kategorien = set(['NeinEins'])
+        component_under_test.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', 10)
+        component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', 10)
+        component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', 10)
+
+        assert component_under_test.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien = True) == set(['JaEins', 'JaZwei'])
+
+
+
+    def test_schliesse_kategorien_aus_allen_buchungen(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.ausgeschlossene_kategorien = set(['NeinEins', 'NeinZwei'])
+        component_under_test.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', 10)
+        component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', 10)
+        component_under_test.add(datum('20.01.1990'), 'NeinZwei', 'SomeTitle', -10)
+        component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
+
+        assert component_under_test.get_alle_kategorien(hide_ausgeschlossene_kategorien = True) == set(['JaEins', 'JaZwei'])

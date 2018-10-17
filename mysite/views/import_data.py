@@ -11,6 +11,7 @@ from mysite.test.RequestStubs import PostRequest
 from mysite.test import RequestStubs
 from mysite.core import FileSystem
 from mysite.viewcore import configuration_provider
+from mysite.viewcore import requester
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -20,11 +21,15 @@ def _mapping_passt(post_parameter, unpassende_kategorien):
     return True
 
 
-def _import(import_data):
+def _import(import_data, gemeinsam):
     print('importing data:')
     print(import_data)
-    viewcore.database_instance().einzelbuchungen.parse(import_data)
-    viewcore.database_instance().einzelbuchungen.taint()
+    if gemeinsam :
+        viewcore.database_instance().gemeinsamebuchungen.parse(import_data)
+        viewcore.database_instance().gemeinsamebuchungen.taint()
+    else:
+        viewcore.database_instance().einzelbuchungen.parse(import_data)
+        viewcore.database_instance().einzelbuchungen.taint()
 
 
 def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
@@ -47,77 +52,77 @@ def index(request):
     return request_handler.handle_request(request, lambda x: context , page)
 
 
-def handle_request(request, import_prefix=''):
+def handle_request(request, import_prefix='', gemeinsam=False):
     print(request)
     imported_values = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', ''))
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
 
-            if not serverurl.startswith('http://') and not serverurl.startswith('https://'):
-                 serverurl = 'https://' + serverurl
-            print(serverurl)
 
-            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
-            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.values['email'])
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
 
             r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
             print(r.content)
 
-            RequestStubs.CONFIGURED = True
             response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet')
             r = requests.post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
+
+        if post_action_is(request, 'load_online_gemeinsame_transactions'):
+            serverurl = request.values['server']
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
+            print(serverurl)
+
+            online_username = requester.instance().post(serverurl + '/getusername.php', data={'email': request.values['email'], 'password': request.values['password']})
+            print('online username: ', online_username)
+            online_content = requester.instance().post(serverurl + '/getgemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            print(online_content)
+
+            table = _parse_table(online_content)
+            print('table before person mapping', table)
+            table.Person = table.Person.map(lambda x: viewcore.database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
+            online_content = "#######MaschinenimportStart\n"
+            online_content = online_content + table.to_csv(index=False)
+            online_content = online_content + "#######MaschinenimportEnd\n"
+
+            response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
+
+            requester.instance().post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            return response
+
+
         elif post_action_is(request, 'set_kategorien'):
-            kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben()))
+            kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
 
-            if not serverurl.startswith('http://') or serverurl.startswith('https://'):
-                 serverurl = 'https://' + serverurl
-
-            configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
-            configuration_provider.set_configuration('ONLINE_DEFAULT_USER', request.values['email'])
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
 
             serverurl = serverurl + '/setkategorien.php'
 
-            r = requests.post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
+            requester.instance().post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
         else:
             print(request.values)
-            tables = {}
             content = request.values['import'].replace('\r', '')
             FileSystem.instance().write('../Import/' + import_prefix + 'Import_' + str(datetime.now()), content)
 
-            tables["sonst"] = ""
-            tables["#######MaschinenimportStart"] = ""
-            mode = "sonst"
-            print('textfield content:',content)
-            for line in content.split('\n'):
-                print(line)
-                line = line.strip()
-                if line == "":
-                    continue
-                if line == "#######MaschinenimportStart":
-                    mode = "#######MaschinenimportStart"
-                    continue
-
-                if line == "#######MaschinenimportEnd":
-                    mode = "sonst"
-                    continue
-                tables[mode] = tables[mode] + "\n" + line
-
-            print(tables)
-
-            imported_values = pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
+            imported_values = _parse_table(content)
             datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
             nicht_passende_kategorien = []
             for imported_kategorie in set(imported_values.Kategorie):
                 if imported_kategorie not in datenbank_kategorien:
                     nicht_passende_kategorien.append(imported_kategorie)
 
+            if 'Person' in imported_values.columns:
+                gemeinsam = True
+
             if not nicht_passende_kategorien:
                 print('keine unpassenden kategorien gefunden')
                 print('beginne mit dem direkten import')
-                _import(imported_values)
+                _import(imported_values, gemeinsam)
 
                 context = viewcore.generate_base_context('import')
                 last_elements = []
@@ -129,7 +134,7 @@ def handle_request(request, import_prefix=''):
             elif _mapping_passt(request.values, nicht_passende_kategorien):
                 print('import kann durchgeführt werden, weil mapping vorhanden')
                 imported_values = _map_kategorien(imported_values, nicht_passende_kategorien, request.values)
-                _import(imported_values)
+                _import(imported_values, gemeinsam)
 
                 context = viewcore.generate_base_context('import')
                 last_elements = []
@@ -162,4 +167,37 @@ def _kategorien_map(actual, target, goal):
     if actual != target:
         return actual
     return goal
+
+def _add_protokoll_if_needed(serverurl):
+    if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+        return 'https://' + serverurl
+    return serverurl
+
+def _save_server_creds(serverurl, email):
+    configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
+    configuration_provider.set_configuration('ONLINE_DEFAULT_USER', email)
+
+def _parse_table(content):
+    tables = {}
+    tables["sonst"] = ""
+    tables["#######MaschinenimportStart"] = ""
+    mode = "sonst"
+    print('textfield content:',content)
+    for line in content.split('\n'):
+        print(line)
+        line = line.strip()
+        if line == "":
+            continue
+        if line == "#######MaschinenimportStart":
+            mode = "#######MaschinenimportStart"
+            continue
+
+        if line == "#######MaschinenimportEnd":
+            mode = "sonst"
+            continue
+        tables[mode] = tables[mode] + "\n" + line
+
+    print(tables)
+
+    return pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
 

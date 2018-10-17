@@ -34,6 +34,11 @@ def _handle_request(request):
         viewcore.database_instance().gemeinsamebuchungen.rename(viewcore.name_of_partner(), request.values['partnername'])
         configuration_provider.set_configuration('PARTNERNAME', request.values['partnername'])
 
+    if post_action_is(request, 'set_ausgeschlossene_kategorien'):
+        configuration_provider.set_configuration('AUSGESCHLOSSENE_KATEGORIEN', request.values['ausgeschlossene_kategorien'])
+        new_set = set(list(request.values['ausgeschlossene_kategorien'].split(',')))
+        viewcore.database_instance().einzelbuchungen.ausgeschlossene_kategorien = new_set
+
     farbmapping = []
     for colornumber in range(0, 20):
         checked = False
@@ -63,6 +68,7 @@ def _handle_request(request):
     context['partnername'] = viewcore.name_of_partner()
     context['themecolor'] = configuration_provider.get_configuration('THEME_COLOR')
     context['transaction_key'] = 'requested'
+    context['ausgeschlossene_kategorien'] = configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN')
     return context
 
 def index(request):

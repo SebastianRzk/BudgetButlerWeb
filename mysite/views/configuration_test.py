@@ -56,6 +56,12 @@ class TestKonfiguration(unittest.TestCase):
         configuration.index(PostRequest({'action':'change_themecolor', 'themecolor':'#000000'}))
         assert configuration_provider.get_configuration('THEME_COLOR') == '#000000'
 
+    def test_change_themecolor_should_change_partnername(self):
+        self.set_up()
+        assert configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == ''
+        configuration.index(PostRequest({'action':'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien':'Alkohol'}))
+        assert configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == 'Alkohol'
+
     def test_change_partnername_should_mirgrate_old_partnernames(self):
         self.set_up()
         name_of_partner = viewcore.name_of_partner()
