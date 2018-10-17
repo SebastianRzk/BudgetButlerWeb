@@ -6,6 +6,7 @@ from mysite.test.RequestStubs import GetRequest
 from mysite.test.RequestStubs import PostRequest
 from mysite.core import FileSystem
 from mysite.views import import_data
+from mysite.views import configuration
 from mysite.viewcore import viewcore
 from mysite.viewcore.converter import datum_from_german as datum
 from mysite.viewcore import request_handler
@@ -201,8 +202,6 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
-
-
         requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM_WRONG_SELF,
                                            'https://test.test/deletegemeinsam.php': '',
                                            'https://test.test/getusername.php': 'Sebastian_Online'})
@@ -219,3 +218,22 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
         assert requester.instance().complete_call_count() == 3
+
+    def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlossene_kategorien(self):
+        self.set_up()
+
+        viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', -10)
+        viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
+        viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
+
+        configuration.index(PostRequest({'action':'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien':'NeinEins'}))
+
+        requester.INSTANCE = RequesterStub({'https://test.test/setkategorien.php': ''})
+
+        context = import_data.index(PostRequest({'action': 'set_kategorien',
+                                              'email': '',
+                                              'server': 'test.test',
+                                              'password' : ''}))
+
+        assert requester.instance().data_of_request('https://test.test/setkategorien.php')[0]['kategorien'] == 'JaEins,JaZwei'
+

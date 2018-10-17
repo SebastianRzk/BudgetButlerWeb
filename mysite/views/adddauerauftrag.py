@@ -84,7 +84,7 @@ def handle_request(request):
         }
 
     context['transaction_key'] = 'requested'
-    context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
+    context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(viewcore.get_changed_dauerauftraege())
     context['rhythmen'] = ['monatlich']
     return context

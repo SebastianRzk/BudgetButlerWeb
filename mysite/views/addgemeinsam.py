@@ -75,7 +75,7 @@ def handle_request(request):
         }
 
     context['personen'] = [viewcore.database_instance().name, viewcore.name_of_partner()]
-    context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben())
+    context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(viewcore.get_changed_gemeinsamebuchungen())
     context['transaction_key'] = 'requested'
     return context

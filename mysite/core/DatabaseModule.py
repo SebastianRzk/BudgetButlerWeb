@@ -38,11 +38,12 @@ class Database:
     Database
     '''
 
-    def __init__(self, name):
+    def __init__(self, name, ausgeschlossene_kategorien=set()):
         self.name = name
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsamebuchungen = Gemeinsamebuchungen()
         self.einzelbuchungen = Einzelbuchungen()
+        self.einzelbuchungen.ausgeschlossene_kategorien = ausgeschlossene_kategorien
         self.tainted = 0
 
     def taint(self):

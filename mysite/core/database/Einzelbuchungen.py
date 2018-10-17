@@ -16,6 +16,7 @@ from mysite.viewcore.converter import datum_to_german
 class Einzelbuchungen(DatabaseObject):
     tmp_kategorie = None
     content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
+    ausgeschlossene_kategorien = set()
 
     def parse(self, raw_table):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
@@ -109,25 +110,33 @@ class Einzelbuchungen(DatabaseObject):
         jahre = self.content.Datum.copy().map(lambda x: str(x.year))
         return set(jahre)
 
-    def get_alle_kategorien(self):
-        return self.get_kategorien_ausgaben().union(self.get_kategorien_einnahmen())
+    def get_alle_kategorien(self, hide_ausgeschlossene_kategorien=False):
+        return self.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien).union(self.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien))
 
-    def get_kategorien_ausgaben(self):
+    def get_kategorien_ausgaben(self, hide_ausgeschlossene_kategorien=False):
         '''
         returns all imported kategorien
         '''
         kategorien = set(self.content[self.content.Wert < 0].Kategorie)
         if self.tmp_kategorie:
             kategorien.add(self.tmp_kategorie)
+
+        if hide_ausgeschlossene_kategorien:
+            kategorien = kategorien - self.ausgeschlossene_kategorien
+
         return kategorien
 
-    def get_kategorien_einnahmen(self):
+    def get_kategorien_einnahmen(self, hide_ausgeschlossene_kategorien=False):
         '''
         returns all imported kategorien
         '''
         kategorien = set(self.content[self.content.Wert > 0].Kategorie)
         if self.tmp_kategorie:
             kategorien.add(self.tmp_kategorie)
+
+        if hide_ausgeschlossene_kategorien:
+            kategorien = kategorien - self.ausgeschlossene_kategorien
+
         return kategorien
 
     def add_kategorie(self, tmp_kategorie):

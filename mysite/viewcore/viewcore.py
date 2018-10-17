@@ -1,4 +1,4 @@
-'''
+'''''
 Created on 24.04.2017
 
 @author: sebastian
@@ -24,7 +24,8 @@ def database_instance():
         viewcore.DATABASES = configuration_provider.get_configuration('DATABASES').split(',')
 
     if viewcore.DATABASE_INSTANCE is None:
-        viewcore.DATABASE_INSTANCE = DBManager.read(viewcore.DATABASES[0])
+        ausgeschlossene_kategorien =  set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
+        viewcore.DATABASE_INSTANCE = DBManager.read(viewcore.DATABASES[0], ausgeschlossene_kategorien = ausgeschlossene_kategorien)
     return DATABASE_INSTANCE
 
 
@@ -83,7 +84,8 @@ def add_changed_stechzeiten(new_changed_stechzeiten_element):
 
 
 def switch_database_instance(database_name):
-    viewcore.DATABASE_INSTANCE = DBManager.read(database_name)
+    ausgeschlossene_kategorien =  set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
+    viewcore.DATABASE_INSTANCE = DBManager.read(database_name, ausgeschlossene_kategorien = ausgeschlossene_kategorien)
 
 
 def get_menu_list():

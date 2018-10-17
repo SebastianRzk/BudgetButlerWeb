@@ -96,9 +96,6 @@ def view_configuration():
     return configuration.index(request)
 
 
-
-
-
 @app.route('/theme/')
 def theme_color():
     return theme.index(request)

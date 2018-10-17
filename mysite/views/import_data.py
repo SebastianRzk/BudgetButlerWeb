@@ -95,7 +95,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
 
 
         elif post_action_is(request, 'set_kategorien'):
-            kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben()))
+            kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
 
             serverurl = _add_protokoll_if_needed(serverurl)
@@ -103,7 +103,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
 
             serverurl = serverurl + '/setkategorien.php'
 
-            r = requests.post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
+            requester.instance().post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
         else:
             print(request.values)
             content = request.values['import'].replace('\r', '')

@@ -98,4 +98,23 @@
 			</div>
 		</form>
 	</div>
-</div>
+	<div>
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">Kategorien in Formularen ausschließen</h3>
+			</div>
+			<form role="form" action="/configuration/" method="post">
+				<div class="box-body">
+					<div class="form-group">
+						<label>Ausgeschlossene Kategorien (mit einem Komma getrennt)</label> <input type="text" name="ausgeschlossene_kategorien" class="form-control" value="{{ausgeschlossene_kategorien}}" placeholder="Enter ..." />
+					</div>
+					</div>
+				<div class="box-footer">
+					<input type="hidden" name="ID" value="{{ID}}">
+					<button type="submit" name="action" value="set_ausgeschlossene_kategorien" id="set_ausgeschlossene_kategorien" class="btn bordered-hover">Daten aktualisieren</button>
+				</div>
+			</form>
+		</div>
+	<div></div>
+	</div>
+	</div>
