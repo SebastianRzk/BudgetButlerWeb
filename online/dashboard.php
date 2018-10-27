@@ -50,8 +50,8 @@ require_once('creds.php');
 
 	if(sizeof($kategorien) == 0) {
 		echo '<h2> Noch nicht eingerichtet </h2>
-		Bitte synchonisieren Sie ihre locale BudgetButlerWeb installation mit BudgetButlerWeb Online <br>
-		Menüpunnkt: "Import / Export" im Feld "Online Kategorien installieren"';
+		<p>Bitte synchonisieren Sie ihre lokale BudgetButlerWeb installation mit BudgetButlerWeb Online </p>
+		<p>Menüpunkt: "Import / Export" im Feld "Online Kategorien installieren"</p>';
 	}
 	else {
 		echo ' <h2> Neue Ausgabe erfassen </h2>
