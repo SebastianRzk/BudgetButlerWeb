@@ -8,27 +8,32 @@ $end = '</div></body></html>';
 
 require_once('creds.php');
    try {
+	$auth = getAuth();
 	if( isset($_POST['email']) and isset($_POST['password'])){
-		$auth = getAuth();
 		$auth->login($_POST['email'], $_POST['password']);
-		require_once('dashboard.php');
-	} else {
-		echo $start;
-		head('Login');
-		echo '<body class="smallbody">
-			<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
-			<div class="content">
-			<form action="/login.php" method="post">
-			<div>
-			Email: <input type="text" name="email" id="email"></input>
-			</div>
-			<div>
-			Passwort: <input type="password" name="password" id="password"></input>
-			</div>
-			<button class="rightbutton" id="btn_login" type="submit">Login</button>
-			</form>';
-		echo $end;
 	}
+
+	if ($auth->isLoggedIn()) {
+		header('Location: /dashboard.php');
+		die();
+	}
+
+	echo $start;
+	head('Login');
+	echo '<body class="smallbody">
+		<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
+		<div class="content">
+		<form action="/login.php" method="post">
+		<div>
+		Email: <input type="text" name="email" id="email"></input>
+		</div>
+		<div>
+		Passwort: <input type="password" name="password" id="password"></input>
+		</div>
+		<button class="rightbutton" id="btn_login" type="submit">Login</button>
+		</form>';
+	echo $end;
+
 }
 catch (\Delight\Auth\InvalidEmailException $e) {
 	// wrong email address
@@ -68,5 +73,4 @@ catch (\Delight\Auth\TooManyRequestsException $e) {
 
 
 ?>
-
 
