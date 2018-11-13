@@ -25,6 +25,16 @@ class Importd(unittest.TestCase):
         configuration_provider.set_configuration('DATABASES', 'Sebastian')
         request_handler.stub_me()
 
+    def test_padProtocoll_withNoProtocoll_shouldAddHTPPS(self):
+        self.set_up()
+        assert import_data._add_protokoll_if_needed('myurl') == 'https://myurl'
+
+    def test_padProtocoll_withExistingProtocoll_shouldNotChangeProtocoll(self):
+        self.set_up()
+        assert import_data._add_protokoll_if_needed('http://myurl') == 'http://myurl'
+        assert import_data._add_protokoll_if_needed('https://myurl') == 'https://myurl'
+
+
     def test_init_shouldReturnIndexPage(self):
         self.set_up()
         context = import_data.index(GetRequest())

@@ -169,7 +169,7 @@ def _kategorien_map(actual, target, goal):
     return goal
 
 def _add_protokoll_if_needed(serverurl):
-    if not serverurl.startswith('http://') or serverurl.startswith('https://'):
+    if not serverurl.startswith('http://') and not serverurl.startswith('https://'):
         return 'https://' + serverurl
     return serverurl
 
