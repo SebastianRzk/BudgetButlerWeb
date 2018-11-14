@@ -131,7 +131,8 @@ echo '
 
 $auth = getAuth();
 
-if ($auth->isLoggedIn()) {
+authenticated(function(){
+	$auth = getAuth();
 	$dbh = getPDO();
 
 	if( isset($_POST['oldPassword']) )
@@ -212,11 +213,8 @@ if ($auth->isLoggedIn()) {
 			}
 		}
 	}
+});
 
-} else {
-	header('Location: /login.php');
-	die();
-}
 ?>
 </div>
 </body>

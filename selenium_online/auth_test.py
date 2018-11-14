@@ -47,3 +47,68 @@ class TestLogin(SeleniumTestClass):
         driver.get('http://localhost/logout.php')
         assert driver.title == 'BudgetButlerWeb - Logout'
         close_driver(driver)
+
+class TestAutoRedirectWhenNotLoggedIn(SeleniumTestClass):
+
+    def test_dashboard(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost/logout.php')
+
+        driver.get('http://localhost/dashboard.php')
+        assert driver.title == 'BudgetButlerWeb - Login'
+        close_driver(driver)
+
+
+    def test_deletegemeinsam(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost/logout.php')
+
+        driver.get('http://localhost/deletegemeinsam.php')
+        assert driver.title == 'BudgetButlerWeb - Login'
+        close_driver(driver)
+
+
+    def test_deleteitems(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost/logout.php')
+
+        driver.get('http://localhost/deleteitems.php')
+        assert driver.title == 'BudgetButlerWeb - Login'
+        close_driver(driver)
+
+
+    def test_getabrechnung(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost/logout.php')
+
+        driver.get('http://localhost/getabrechnung.php')
+        assert driver.title == 'BudgetButlerWeb - Login'
+        close_driver(driver)
+
+
+    def test_getgemeinsam(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost/logout.php')
+
+        driver.get('http://localhost/getgemeinsam.php')
+        assert driver.title == 'BudgetButlerWeb - Login'
+        close_driver(driver)
+
+
+    def test_getusername(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost/logout.php')
+
+        driver.get('http://localhost/getusername.php')
+        assert driver.title == 'BudgetButlerWeb - Login'
+        close_driver(driver)
+
+
+    def test_setkategorien(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost/logout.phpp')
+
+        driver.get('http://localhost/setkategorien.php')
+        assert driver.title == 'BudgetButlerWeb - Login'
+        close_driver(driver)
+

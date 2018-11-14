@@ -7,6 +7,11 @@ $startBody = '<body class="smallbody">
 $end = '</div></body></html>';
 
 function auth_failed() {
+	$start = '<html>';
+	$startBody = '<body class="smallbody">
+		<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
+		<div class="content">';
+	$end = '</div></body></html>';
 	echo  $start;
 	head('Anmeldung fehlgeschlagen');
 	echo $startBody;

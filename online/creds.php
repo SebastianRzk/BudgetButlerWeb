@@ -21,4 +21,37 @@ function getAuth(){
 	// $db = new \Delight\Db\PdoDsn('sqlite:../Databases/my-database.sqlite');
 	return new \Delight\Auth\Auth($db);
 }
+
+function authenticated($myfunc){
+	try {
+		if (getAuth()->isLoggedIn()) {
+			$myfunc();
+		} else {
+			if( isset($_POST['email']) and isset($_POST['password'])){
+				$auth = getAuth();
+				$auth->login($_POST['email'], $_POST['password']);
+				$myfunc();
+			} else {
+				header('Location: /login.php');
+				die();
+			}
+		}
+	}
+	catch (\Delight\Auth\InvalidEmailException $e) {
+		header('Location: /login.php');
+		die();
+	}
+	catch (\Delight\Auth\InvalidPasswordException $e) {
+		header('Location: /login.php');
+		die();
+	}
+	catch (\Delight\Auth\EmailNotVerifiedException $e) {
+		header('Location: /login.php');
+		die();
+	}
+	catch (\Delight\Auth\TooManyRequestsException $e) {
+		header('Location: /login.php');
+		die();
+	}
+}
 ?>
