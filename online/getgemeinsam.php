@@ -60,19 +60,16 @@ try {
 	}
 }
 catch (\Delight\Auth\InvalidEmailException $e) {
-    // wrong email address
-    echo "wrong email";
+	echo "failed";
 }
 catch (\Delight\Auth\InvalidPasswordException $e) {
-	echo "wrong pass";
+	echo "failed";
 }
 catch (\Delight\Auth\EmailNotVerifiedException $e) {
-    // email not verified
-	echo "email not verified";
+	echo "failed";
 }
 catch (\Delight\Auth\TooManyRequestsException $e) {
-    // too many requests
-    echo "too many requests";
+	echo "failed";
 }
 
 

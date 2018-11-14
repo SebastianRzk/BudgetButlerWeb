@@ -6,7 +6,6 @@ try {
 		$auth->login($_POST['email'], $_POST['password']);
 		$dbh = getPDO();
 
-
 		$sql = "DELETE FROM `gemeinsame_eintraege` WHERE person = :person";
 		$sth = $dbh->prepare($sql);
 		$sth->execute(array(':person' => $auth->getUsername()));
@@ -44,24 +43,19 @@ try {
 		} else {
 			echo 'own deleted';
 		}
-
 	}
 }
 catch (\Delight\Auth\InvalidEmailException $e) {
-    // wrong email address
-    echo "wrong email";
+	echo "failed";
 }
 catch (\Delight\Auth\InvalidPasswordException $e) {
-	echo "wrong pass";
+	echo "failed";
 }
 catch (\Delight\Auth\EmailNotVerifiedException $e) {
-    // email not verified
-	echo "email not verified";
+	echo "failed";
 }
 catch (\Delight\Auth\TooManyRequestsException $e) {
-    // too many requests
-    echo "too many requests";
+	echo "failed";
 }
-
 
 ?>

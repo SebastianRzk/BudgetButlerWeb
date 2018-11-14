@@ -6,8 +6,17 @@ $startBody = '<body class="smallbody">
 	<div class="content">';
 $end = '</div></body></html>';
 
+function auth_failed() {
+	echo  $start;
+	head('Anmeldung fehlgeschlagen');
+	echo $startBody;
+	echo "Anmeldung fehlgeschlagen<br>";
+	echo '<a href="/login.php">Einloggen</a>';
+	echo $end;
+}
+
 require_once('creds.php');
-   try {
+try {
 	$auth = getAuth();
 	if( isset($_POST['email']) and isset($_POST['password'])){
 		$auth->login($_POST['email'], $_POST['password']);
@@ -36,41 +45,15 @@ require_once('creds.php');
 
 }
 catch (\Delight\Auth\InvalidEmailException $e) {
-	// wrong email address
-	echo  $start;
-	head('Wrong Email');
-	echo $startBody;
-	echo "wrong email<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
 catch (\Delight\Auth\InvalidPasswordException $e) {
-	echo  $start;
-	head('Wrong Password');
-	echo $startBody;
-	echo "wrong pass<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
 catch (\Delight\Auth\EmailNotVerifiedException $e) {
-	// email not verified
-	echo  $start;
-	head('Not verified');
-	echo $startBody;
-	echo "email not verified<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
 catch (\Delight\Auth\TooManyRequestsException $e) {
-    // too many requests
-	echo  $start;
-	head('Too many requests');
-	echo $startBody;
-	echo "Too many requests<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
-
-
 ?>
-

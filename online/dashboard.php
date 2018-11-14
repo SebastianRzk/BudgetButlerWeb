@@ -8,9 +8,9 @@ echo '<body class="fullsizebody">
 ';
 
 require_once('creds.php');
-    function showOk($auth)
-    {
-    	$dbh = getPDO();
+function showOk($auth)
+{
+	$dbh = getPDO();
 	$sql = 'SELECT name
 	FROM kategorien
 	WHERE person = :person';
@@ -110,24 +110,24 @@ require_once('creds.php');
 				<button type=submit class="rightbutton" id="add_other_person">Verknüpfung für gemeinsame Buchungen erzeugen</button>
 			</form>';
 	}
-    }
+}
 
-    function showAdmin(){
-	echo '
+function showAdmin(){
+echo '
 	<h2> Nutzer registrieren</h2>
 	<form action="/dashboard.php" method="post">
-	  <div>
-	  Nutzername: <input type="text" id="username" name="username"></input>
-	  </div>
-	  <div>
-	  Email: <input type="text" id="email" name="email"></input>
-	  </div>
-	  <div>
-	  Passwort: <input type="password" id="password" name="password"></input>
-	  </div>
-	  <button type="submit" class="rightbutton" id="btn_add_user">Abschicken</button>
-	  </form>';
-    }
+	<div>
+	Nutzername: <input type="text" id="username" name="username"></input>
+	</div>
+	<div>
+	Email: <input type="text" id="email" name="email"></input>
+	</div>
+	<div>
+	Passwort: <input type="password" id="password" name="password"></input>
+	</div>
+	<button type="submit" class="rightbutton" id="btn_add_user">Abschicken</button>
+	</form>';
+}
 
 $auth = getAuth();
 
@@ -214,7 +214,8 @@ if ($auth->isLoggedIn()) {
 	}
 
 } else {
-	echo '<p> <a href="/login.php">Einloggen </a> <p>';
+	header('Location: /login.php');
+	die();
 }
 ?>
 </div>
