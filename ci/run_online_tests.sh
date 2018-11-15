@@ -43,7 +43,7 @@ sudo cat /var/log/apache2/error.log
 
 echo "teste webseite"
 curl 'localhost/login.php'
-
+curl --data "email=admin@admin.de&password=admin" localhost/dashboard.php
 echo "error log:"
 sudo cat /var/log/apache2/error.log
 
