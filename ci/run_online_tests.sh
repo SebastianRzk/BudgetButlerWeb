@@ -49,7 +49,9 @@ sudo cat /var/log/apache2/error.log
 
 # tests
 echo "start tests"
-#pytest selenium_online
+cd selenium_online
+pytest
+cd .. 
 echo "tests deactivated"
 echo "DONE"
 
