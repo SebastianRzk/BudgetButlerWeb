@@ -1,5 +1,5 @@
 <?php
-require_once('layout.php');
+require_once(__DIR__.'/layout.php');
 $start = '<html>';
 $startBody = '<body class="smallbody">
 	<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
@@ -16,11 +16,11 @@ function auth_failed() {
 	head('Anmeldung fehlgeschlagen');
 	echo $startBody;
 	echo "Anmeldung fehlgeschlagen<br>";
-	echo '<a href="/login.php">Einloggen</a>';
+	echo '<a href="login.php">Einloggen</a>';
 	echo $end;
 }
 
-require_once('creds.php');
+require_once(__DIR__.'/creds.php');
 try {
 	$auth = getAuth();
 	if( isset($_POST['email']) and isset($_POST['password'])){
@@ -28,7 +28,7 @@ try {
 	}
 
 	if ($auth->isLoggedIn()) {
-		header('Location: /dashboard.php');
+		header('Location: dashboard.php');
 		die();
 	}
 
@@ -37,7 +37,7 @@ try {
 	echo '<body class="smallbody">
 		<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
 		<div class="content">
-		<form action="/login.php" method="post">
+		<form action="login.php" method="post">
 		<div>
 		Email: <input type="text" name="email" id="email"></input>
 		</div>

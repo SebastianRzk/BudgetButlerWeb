@@ -1,13 +1,13 @@
 <html>
 <?php
-require_once('layout.php');
+require_once(__DIR__.'/layout.php');
 head('Dashboard');
 echo '<body class="fullsizebody">
 <div class="fullsizecontent">
 <div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
 ';
 
-require_once('creds.php');
+require_once(__DIR__.'/creds.php');
 function showOk($auth)
 {
 	$dbh = getPDO();
@@ -46,7 +46,7 @@ function showOk($auth)
 	echo '<h2> Hallo ';
 	echo $auth->getUsername();
 	echo ' </h2>
-	<a href="/logout.php">Ausloggen</a>';
+	<a href="logout.php">Ausloggen</a>';
 
 	if(sizeof($kategorien) == 0) {
 		echo '<h2> Noch nicht eingerichtet </h2>
@@ -55,7 +55,7 @@ function showOk($auth)
 	}
 	else {
 		echo ' <h2> Neue Ausgabe erfassen </h2>
-		<form action="/dashboard.php" method="post">
+		<form action="dashboard.php" method="post">
 		<div>Datum: <input type="date" required="required" name="date" id="date" value="';
 		echo date('Y-m-d');
 		echo '"> </div>
@@ -80,7 +80,7 @@ function showOk($auth)
 	}
 	echo '
 	<h2> Passwort ändern </h2>
-	<form action="/dashboard.php" method="post">
+	<form action="dashboard.php" method="post">
 		<div> Altes Passwort <input type="password" required="required" name="oldPassword" ></input> </div>
 		<div> Neues Passwort <input type="password" required="required" name="newPassword" ></input> </div>
 		<button type=submit class="rightbutton">Password ändern </button>
@@ -97,7 +97,7 @@ function showOk($auth)
 			echo '<p id="gemeinschaftsstatus">Warten auf Partner.</p>';
 		}
 		echo '
-			<form action="/dashboard.php" method="post">
+			<form action="dashboard.php" method="post">
 				<input type="hidden" required="required" name="delete_other" ></input>
 				<button type=submit class="rightbutton", id="btn_delete_other">Verknüpfung für gemeinsame Buchungen löschen</button>
 			</form>';
@@ -105,7 +105,7 @@ function showOk($auth)
 	else
 	{
 		echo '
-			<form action="/dashboard.php" method="post" id="other_person_form">
+			<form action="dashboard.php" method="post" id="other_person_form">
 				<div> Andere Person <input type="text" required="required" name="other_person" ></input> </div>
 				<button type=submit class="rightbutton" id="add_other_person">Verknüpfung für gemeinsame Buchungen erzeugen</button>
 			</form>';
@@ -115,7 +115,7 @@ function showOk($auth)
 function showAdmin(){
 echo '
 	<h2> Nutzer registrieren</h2>
-	<form action="/dashboard.php" method="post">
+	<form action="dashboard.php" method="post">
 	<div>
 	Nutzername: <input type="text" id="username" name="username"></input>
 	</div>

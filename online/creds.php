@@ -32,25 +32,25 @@ function authenticated($myfunc){
 				$auth->login($_POST['email'], $_POST['password']);
 				$myfunc();
 			} else {
-				header('Location: /login.php');
+				header('Location: login.php');
 				die();
 			}
 		}
 	}
 	catch (\Delight\Auth\InvalidEmailException $e) {
-		header('Location: /login.php');
+		header('Location: login.php');
 		die();
 	}
 	catch (\Delight\Auth\InvalidPasswordException $e) {
-		header('Location: /login.php');
+		header('Location: login.php');
 		die();
 	}
 	catch (\Delight\Auth\EmailNotVerifiedException $e) {
-		header('Location: /login.php');
+		header('Location: login.php');
 		die();
 	}
 	catch (\Delight\Auth\TooManyRequestsException $e) {
-		header('Location: /login.php');
+		header('Location: login.php');
 		die();
 	}
 }

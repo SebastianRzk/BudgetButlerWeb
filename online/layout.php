@@ -10,7 +10,7 @@ function head($pagetitle){
 	echo '</title>';
 	header('X-Frame-Options: DENY');
 	header("X-XSS-Protection: 1; mode=block");
-	echo '<link rel="shortcut icon" type="image/png" href="/logo.png">';
+	echo '<link rel="shortcut icon" type="image/png" href="logo.png">';
 	echo '</head>';
 }
 ?>
