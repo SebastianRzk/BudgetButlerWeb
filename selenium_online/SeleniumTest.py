@@ -12,8 +12,6 @@ import SeleniumTest
 import time
 from random import randint
 
-CHROME_CACHE = []
-CHROME_INSTANCES = []
 
 class SeleniumTestClass:
 
@@ -29,12 +27,6 @@ class SeleniumTestClass:
         metafunc.parametrize(argnames=['get_driver', 'close_driver'], argvalues=chrome, scope="module")
 
 def close_driver(driver):
-    if driver in SeleniumTest.CHROME_INSTANCES:
-        SeleniumTest.CHROME_INSTANCES.remove(driver)
-
-    #if 'TRAVIS_INTEGRATION' in os.environ:
-    #    SeleniumTest.CHROME_CACHE.append(driver)
-    #    return
     driver.close()
 
 def _launch_head_firefox():
@@ -43,12 +35,6 @@ def _launch_head_firefox():
     return webdriver.Firefox(firefox_options=firefox_options)
 
 def _launch_headles_firefox():
-    if SeleniumTest.CHROME_CACHE:
-        browser = SeleniumTest.CHROME_CACHE[0]
-        SeleniumTest.CHROME_CACHE.remove(browser)
-        SeleniumTest.CHROME_INSTANCES.append(browser)
-        return browser
-
     firefox_options = Options()
     firefox_options.add_argument("-headless")
     firefox_options.add_argument("--window-size=1920,1080")
@@ -57,10 +43,9 @@ def _launch_headles_firefox():
     profile.set_preference('browser.cache.disk.enable', False)
     profile.set_preference('browser.cache.memory.enable', False)
     profile.set_preference('browser.cache.offline.enable', False)
-    profile.set_preference('network.cookie.cookieBehavior', 2)
+    #profile.set_preference('network.cookie.cookieBehavior', 2)
 
     browser = webdriver.Firefox(firefox_options=firefox_options, firefox_profile=profile)
-    SeleniumTest.CHROME_INSTANCES.append(browser)
     return browser
 
 def enter_test_mode(driver):
@@ -102,7 +87,6 @@ def pagename(driver):
 
 def generate_unique_name():
     return 'u' + str(time.time()).replace('.', '') + str(randint(0,10000))
-
 
 def wait_for_dashboard(driver):
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'fullsizecontent')))
