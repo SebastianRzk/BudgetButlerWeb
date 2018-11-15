@@ -4,6 +4,10 @@ import os
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 import SeleniumTest
 import time
 from random import randint
@@ -99,11 +103,16 @@ def pagename(driver):
 def generate_unique_name():
     return 'u' + str(time.time()).replace('.', '') + str(randint(0,10000))
 
+
+def wait_for_dashboard(driver):
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'fullsizecontent')))
+
 def login(driver, email, passwd):
     driver.get('http://localhost/login.php')
     fill_element(driver, 'email', email)
     fill_element(driver, 'password', passwd)
     driver.find_element_by_id('btn_login').click()
+    wait_for_dashboard(driver)
     assert driver.title == 'BudgetButlerWeb - Dashboard'
 
 
