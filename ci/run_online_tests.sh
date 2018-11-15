@@ -8,7 +8,7 @@ echo "create app"
 cd online_install
 
 sudo apt update
-sudo apt install apache2 libapache2-mod-fastcgi 
+sudo apt install apache2 libapache2-mod-fastcgi php5-mysql
 sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 sudo a2enmod rewrite actions fastcgi alias
 echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -43,13 +43,15 @@ sudo cat /var/log/apache2/error.log
 
 echo "teste webseite"
 curl 'localhost/login.php'
-
+curl --data "email=admin@admin.de&password=admin" localhost/dashboard.php
 echo "error log:"
 sudo cat /var/log/apache2/error.log
 
 # tests
 echo "start tests"
-#pytest selenium_online
+cd selenium_online
+pytest
+cd .. 
 echo "tests deactivated"
 echo "DONE"
 

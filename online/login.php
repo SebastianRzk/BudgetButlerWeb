@@ -1,20 +1,34 @@
 <?php
-require_once('layout.php');
+require_once(__DIR__.'/layout.php');
 $start = '<html>';
 $startBody = '<body class="smallbody">
 	<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
 	<div class="content">';
 $end = '</div></body></html>';
 
-require_once('creds.php');
-   try {
+function auth_failed() {
+	$start = '<html>';
+	$startBody = '<body class="smallbody">
+		<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
+		<div class="content">';
+	$end = '</div></body></html>';
+	echo  $start;
+	head('Anmeldung fehlgeschlagen');
+	echo $startBody;
+	echo "Anmeldung fehlgeschlagen<br>";
+	echo '<a href="login.php">Einloggen</a>';
+	echo $end;
+}
+
+require_once(__DIR__.'/creds.php');
+try {
 	$auth = getAuth();
 	if( isset($_POST['email']) and isset($_POST['password'])){
 		$auth->login($_POST['email'], $_POST['password']);
 	}
 
 	if ($auth->isLoggedIn()) {
-		header('Location: /dashboard.php');
+		header('Location: dashboard.php');
 		die();
 	}
 
@@ -23,7 +37,7 @@ require_once('creds.php');
 	echo '<body class="smallbody">
 		<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
 		<div class="content">
-		<form action="/login.php" method="post">
+		<form action="login.php" method="post">
 		<div>
 		Email: <input type="text" name="email" id="email"></input>
 		</div>
@@ -36,41 +50,15 @@ require_once('creds.php');
 
 }
 catch (\Delight\Auth\InvalidEmailException $e) {
-	// wrong email address
-	echo  $start;
-	head('Wrong Email');
-	echo $startBody;
-	echo "wrong email<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
 catch (\Delight\Auth\InvalidPasswordException $e) {
-	echo  $start;
-	head('Wrong Password');
-	echo $startBody;
-	echo "wrong pass<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
 catch (\Delight\Auth\EmailNotVerifiedException $e) {
-	// email not verified
-	echo  $start;
-	head('Not verified');
-	echo $startBody;
-	echo "email not verified<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
 catch (\Delight\Auth\TooManyRequestsException $e) {
-    // too many requests
-	echo  $start;
-	head('Too many requests');
-	echo $startBody;
-	echo "Too many requests<br>";
-	echo '<a href="/login.php">Einloggen</a>';
-	echo $end;
+	auth_failed();
 }
-
-
 ?>
-

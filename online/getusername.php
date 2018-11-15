@@ -1,7 +1,6 @@
 <?php
-require_once('creds.php');
-if( isset($_POST['email']) and isset($_POST['password'])){
+require_once(__DIR__.'/creds.php');
+authenticated(function(){
 	$auth = getAuth();
-	$auth->login($_POST['email'], $_POST['password']);
 	echo $auth->getUsername();
-}
+});
