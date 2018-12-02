@@ -7,7 +7,6 @@ from datetime import date
 import unittest
 
 from mysite.viewcore.converter import datum_from_german as datum
-import mysite.core.DatabaseModule as db
 from mysite.core.database.Einzelbuchungen import Einzelbuchungen
 
 
@@ -256,7 +255,7 @@ class gesamtausgaben_jahr(unittest.TestCase):
         component_under_test = Einzelbuchungen()
         component_under_test.add(datum('10.8.2011'), 'B', '', -10)
 
-        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == { 'B':'2.00'}
+        assert component_under_test.durchschnittliche_ausgaben_pro_monat(2011) == {'B':'2.00'}
 
     def teste_durchschnittliche_ausgaben_pro_monat_mitNurLetztemMonat_sollteAusgabenDurchEinsTeilen(self):
         component_under_test = Einzelbuchungen()
@@ -416,7 +415,6 @@ class einzelbuchungs_selector(unittest.TestCase):
         component_under_test.add(datum('20.01.1990'), 'A', '', -10)
         component_under_test.add(datum('20.01.1990'), 'B', '', 8)
 
-
         assert component_under_test.select().group_by_kategorie().Wert.tolist() == [-20, 8]
         assert component_under_test.select().group_by_kategorie().index.tolist() == ['A', 'B']
 
@@ -430,7 +428,7 @@ class kategorien_selector(unittest.TestCase):
         component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
         component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
 
-        assert component_under_test.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien = True) == set(['JaEins', 'JaZwei'])
+        assert component_under_test.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True) == set(['JaEins', 'JaZwei'])
 
 
     def test_schliesse_kategorien_aus_einnahmen(self):
@@ -440,7 +438,7 @@ class kategorien_selector(unittest.TestCase):
         component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', 10)
         component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', 10)
 
-        assert component_under_test.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien = True) == set(['JaEins', 'JaZwei'])
+        assert component_under_test.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien=True) == set(['JaEins', 'JaZwei'])
 
 
 
@@ -452,4 +450,4 @@ class kategorien_selector(unittest.TestCase):
         component_under_test.add(datum('20.01.1990'), 'NeinZwei', 'SomeTitle', -10)
         component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
 
-        assert component_under_test.get_alle_kategorien(hide_ausgeschlossene_kategorien = True) == set(['JaEins', 'JaZwei'])
+        assert component_under_test.get_alle_kategorien(hide_ausgeschlossene_kategorien=True) == set(['JaEins', 'JaZwei'])

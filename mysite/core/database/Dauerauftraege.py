@@ -16,8 +16,8 @@ class Dauerauftraege(DatabaseObject):
     content = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
 
     def parse(self, raw_table):
-        raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
-        raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
+        raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
+        raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
         self.content = self.content.append(raw_table, ignore_index=True)
         self.content = self.content.sort_values(by=['Startdatum'])
 
