@@ -2,9 +2,9 @@
 <?php
 require_once(__DIR__.'/layout.php');
 head('Dashboard');
-echo '<body class="fullsizebody">
-<div class="fullsizecontent">
-<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
+echo '<body>
+<header><img src="logo.png" alt="BudgetButlerWeb"></header>
+<div class="content">
 ';
 
 require_once(__DIR__.'/creds.php');
@@ -43,18 +43,23 @@ function showOk($auth)
 		}
 	}
 
-	echo '<h2> Hallo ';
+	echo '<h2>Hallo ';
 	echo $auth->getUsername();
-	echo ' </h2>
-	<a href="logout.php">Ausloggen</a>';
+	echo '</h2>';
 
+	echo '<nav><a href="logout.php">Ausloggen</a></nav>';
 	if(sizeof($kategorien) == 0) {
-		echo '<h2> Noch nicht eingerichtet </h2>
+		echo '
+		<section>
+		<h2> Noch nicht eingerichtet </h2>
 		<p>Bitte synchonisieren Sie ihre lokale BudgetButlerWeb installation mit BudgetButlerWeb Online </p>
-		<p>Menüpunkt: "Import / Export" im Feld "Online Kategorien installieren"</p>';
+		<p>Menüpunkt: "Import / Export" im Feld "Online Kategorien installieren"</p>
+		</section>';
 	}
 	else {
-		echo ' <h2> Neue Ausgabe erfassen </h2>
+		echo '
+		<section>
+		<h2> Neue Ausgabe erfassen </h2>
 		<form action="dashboard.php" method="post">
 		<div>Datum: <input type="date" required="required" name="date" id="date" value="';
 		echo date('Y-m-d');
@@ -76,19 +81,23 @@ function showOk($auth)
 		}
 		echo '<div>Wert: <input type="number" name="wert" required="required" id="wert" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"> </div>
 		<button type="submit" class="rightbutton">Speichern</button>
-		</form>';
+		</form>
+		</section>';
 	}
 	echo '
+	<section>
 	<h2> Passwort ändern </h2>
 	<form action="dashboard.php" method="post">
 		<div> Altes Passwort <input type="password" required="required" name="oldPassword" ></input> </div>
 		<div> Neues Passwort <input type="password" required="required" name="newPassword" ></input> </div>
 		<button type=submit class="rightbutton">Password ändern </button>
 	</form>
+	</section>
 	';
 
-	echo '<p>
-			<h2> Gemeinsame Buchungen aktivieren </h2>';
+	echo '
+	<section>
+	<h2> Gemeinsame Buchungen aktivieren </h2>';
 
 	if ($other_person_selected){
 		if ($other_person_confirmed){
@@ -110,10 +119,12 @@ function showOk($auth)
 				<button type=submit class="rightbutton" id="add_other_person">Verknüpfung für gemeinsame Buchungen erzeugen</button>
 			</form>';
 	}
+	echo '</section>';
 }
 
 function showAdmin(){
 echo '
+	<section>
 	<h2> Nutzer registrieren</h2>
 	<form action="dashboard.php" method="post">
 	<div>
@@ -126,7 +137,8 @@ echo '
 	Passwort: <input type="password" id="password" name="password"></input>
 	</div>
 	<button type="submit" class="rightbutton" id="btn_add_user">Abschicken</button>
-	</form>';
+	</form>
+	</section>';
 }
 
 $auth = getAuth();
@@ -214,7 +226,6 @@ authenticated(function(){
 		}
 	}
 });
-
 ?>
 </div>
 </body>
