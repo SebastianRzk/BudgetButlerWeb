@@ -7,3 +7,7 @@
 /online/vendor
 /online/db.ini
 /online/composer.lock
+/.idea
+*.log
+/venv
+*.iml
