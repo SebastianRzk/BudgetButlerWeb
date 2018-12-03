@@ -34,7 +34,7 @@ def close_driver(driver):
 def _launch_head_firefox():
     firefox_options = Options()
     firefox_options.add_argument("--window-size=1920,1080")
-    return webdriver.Firefox(firefox_options=firefox_options)
+    return webdriver.Firefox(options=firefox_options)
 
 def _launch_headles_firefox():
     if SeleniumTest.CHROME_CACHE:
@@ -53,7 +53,7 @@ def _launch_headles_firefox():
     profile.set_preference('browser.cache.offline.enable', False)
     profile.set_preference('network.cookie.cookieBehavior', 2)
 
-    browser = webdriver.Firefox(firefox_options=firefox_options, firefox_profile=profile)
+    browser = webdriver.Firefox(options=firefox_options, firefox_profile=profile)
     SeleniumTest.CHROME_INSTANCES.append(browser)
     return browser
 

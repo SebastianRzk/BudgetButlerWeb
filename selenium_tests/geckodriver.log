@@ -1,0 +1,1603 @@
+1543845076973	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.NKa9kMCnvdVJ"
+
+(firefox:7554): Gtk-WARNING **: 14:51:18.074: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:7554): Gtk-WARNING **: 14:51:18.074: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845079750	Marionette	INFO	Listening on port 32997
+1543845079801	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845081506	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.xKLHytlPHEXl"
+
+(firefox:7726): Gtk-WARNING **: 14:51:22.319: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:7726): Gtk-WARNING **: 14:51:22.319: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845084114	Marionette	INFO	Listening on port 41231
+1543845084124	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845085696	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.CfKAcd4hIXcP"
+
+(firefox:7932): Gtk-WARNING **: 14:51:27.000: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:7932): Gtk-WARNING **: 14:51:27.000: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845089974	Marionette	INFO	Listening on port 36095
+1543845090041	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845091786	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.t0KtriuDJjar"
+
+(firefox:8091): Gtk-WARNING **: 14:51:33.380: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:8091): Gtk-WARNING **: 14:51:33.380: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845094528	Marionette	INFO	Stopped listening on port 36095
+1543845095619	Marionette	INFO	Stopped listening on port 41231
+1543845095950	Marionette	INFO	Listening on port 46243
+1543845096016	Marionette	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+[Child 7627, Chrome_ChildThread] WARNING: pipe error (3): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+[Child 8163, Chrome_ChildThread] WARNING: pipe error (3): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543845154809	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.Zrr8ZZpFZmD9"
+
+(firefox:8445): Gtk-WARNING **: 14:52:35.413: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:8445): Gtk-WARNING **: 14:52:35.413: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845156807	Marionette	INFO	Listening on port 38857
+1543845156830	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+1543845160516	Marionette	INFO	Stopped listening on port 38857
+1543845162032	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.gOMX3jdSk6Hf"
+
+(firefox:8710): Gtk-WARNING **: 14:52:42.638: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:8710): Gtk-WARNING **: 14:52:42.638: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845163649	Marionette	INFO	Listening on port 34067
+1543845163745	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addeinnahme/, line 274: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addeinnahme/, line 278: TypeError: $(...).inputmask is not a function
+1543845167198	Marionette	INFO	Stopped listening on port 34067
+1543845168722	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.DXPjspCRaa1L"
+
+(firefox:8960): Gtk-WARNING **: 14:52:49.313: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:8960): Gtk-WARNING **: 14:52:49.313: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845170639	Marionette	INFO	Listening on port 41225
+1543845170736	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 301: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+1543845174191	Marionette	INFO	Stopped listening on port 41225
+[Parent 8960, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543845175822	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.N8333BXhgFd2"
+
+(firefox:9229): Gtk-WARNING **: 14:52:56.424: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:9229): Gtk-WARNING **: 14:52:56.424: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845177510	Marionette	INFO	Listening on port 35031
+1543845177549	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+1543845180986	Marionette	INFO	Stopped listening on port 35031
+1543845182503	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ASpAQXedHara"
+
+(firefox:9484): Gtk-WARNING **: 14:53:03.102: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:9484): Gtk-WARNING **: 14:53:03.103: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845184182	Marionette	INFO	Listening on port 43921
+1543845184228	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+1543845190428	Marionette	INFO	Stopped listening on port 43921
+1543845191955	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.gHYGMD0LKKAG"
+
+(firefox:9774): Gtk-WARNING **: 14:53:12.579: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:9774): Gtk-WARNING **: 14:53:12.579: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845193686	Marionette	INFO	Listening on port 41891
+1543845193765	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543845199964	Marionette	INFO	Stopped listening on port 41891
+[Parent 9774, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543845201489	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.awiSs57FabCJ"
+
+(firefox:10076): Gtk-WARNING **: 14:53:22.108: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:10076): Gtk-WARNING **: 14:53:22.108: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845203220	Marionette	INFO	Listening on port 37273
+1543845203301	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543845209504	Marionette	INFO	Stopped listening on port 37273
+1543845211034	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ikBA95kuoBFe"
+
+(firefox:10361): Gtk-WARNING **: 14:53:31.622: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:10361): Gtk-WARNING **: 14:53:31.622: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845212659	Marionette	INFO	Listening on port 35985
+1543845212755	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 291: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 295: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 323: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 327: TypeError: $(...).inputmask is not a function
+1543845218327	Marionette	INFO	Stopped listening on port 35985
+1543845219867	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.liFzDSRI3YU8"
+
+(firefox:10656): Gtk-WARNING **: 14:53:40.510: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:10656): Gtk-WARNING **: 14:53:40.510: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845221579	Marionette	INFO	Listening on port 45933
+1543845221684	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+1543845228043	Marionette	INFO	Stopped listening on port 45933
+[Parent 10656, Gecko_IOThread] WARNING: pipe error (96): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543845229709	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.HkHNQVexEZzc"
+
+(firefox:10945): Gtk-WARNING **: 14:53:50.465: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:10945): Gtk-WARNING **: 14:53:50.465: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845231558	Marionette	INFO	Listening on port 40435
+1543845231622	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543845238189	Marionette	INFO	Stopped listening on port 40435
+1543845239822	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.WiQ2BToZZT35"
+
+(firefox:11242): Gtk-WARNING **: 14:54:00.633: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:11242): Gtk-WARNING **: 14:54:00.633: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845241744	Marionette	INFO	Listening on port 34321
+1543845241834	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543845247526	Marionette	INFO	Stopped listening on port 34321
+1543845249061	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.zi0xfnij3xIh"
+
+(firefox:11525): Gtk-WARNING **: 14:54:09.820: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:11525): Gtk-WARNING **: 14:54:09.820: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845251100	Marionette	INFO	Listening on port 34105
+1543845251178	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845253331	Marionette	INFO	Stopped listening on port 34105
+[Parent 11525, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543845254874	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.mG3NAZHDGWfM"
+
+(firefox:11785): Gtk-WARNING **: 14:54:15.493: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:11785): Gtk-WARNING **: 14:54:15.493: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845256655	Marionette	INFO	Listening on port 40769
+1543845256697	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845259548	Marionette	INFO	Stopped listening on port 40769
+[Parent 11785, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+[Parent 11785, Gecko_IOThread] WARNING: pipe error (92): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543845261103	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.hU29p9EhtcIy"
+
+(firefox:12055): Gtk-WARNING **: 14:54:21.785: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:12055): Gtk-WARNING **: 14:54:21.785: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845263079	Marionette	INFO	Listening on port 45227
+1543845263127	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845265891	Marionette	INFO	Stopped listening on port 45227
+1543845267543	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.A8JHaiv0aLK2"
+
+(firefox:12314): Gtk-WARNING **: 14:54:28.255: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:12314): Gtk-WARNING **: 14:54:28.255: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845269581	Marionette	INFO	Listening on port 39817
+1543845269658	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543845271641	Marionette	INFO	Stopped listening on port 39817
+[Parent 12314, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543845273292	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.UjOOXPnaRjF5"
+
+(firefox:12588): Gtk-WARNING **: 14:54:34.003: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:12588): Gtk-WARNING **: 14:54:34.003: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845275397	Marionette	INFO	Listening on port 44219
+1543845275408	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543845277701	Marionette	INFO	Stopped listening on port 44219
+1543845279351	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.dLYTSIM32ynn"
+
+(firefox:12850): Gtk-WARNING **: 14:54:40.107: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:12850): Gtk-WARNING **: 14:54:40.107: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845281474	Marionette	INFO	Listening on port 46249
+1543845281568	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 301: TypeError: $(...).inputmask is not a function
+1543845282392	Marionette	INFO	Stopped listening on port 46249
+1543845284062	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.bUfZBYXmtbuP"
+
+(firefox:13105): Gtk-WARNING **: 14:54:44.749: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:13105): Gtk-WARNING **: 14:54:44.750: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845286083	Marionette	INFO	Listening on port 32935
+1543845286182	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addeinnahme/, line 274: TypeError: $(...).inputmask is not a function
+1543845286930	Marionette	INFO	Stopped listening on port 32935
+1543845288604	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.3AfJ1dBVy4Le"
+
+(firefox:13348): Gtk-WARNING **: 14:54:49.270: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:13348): Gtk-WARNING **: 14:54:49.270: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845290485	Marionette	INFO	Listening on port 44581
+1543845290542	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543845291318	Marionette	INFO	Stopped listening on port 44581
+JavaScript error: resource://activity-stream/lib/TopSitesFeed.jsm, line 86: TypeError: setting getter-only property "_currentSearchHostname"
+JavaScript error: resource://gre/modules/IndexedDB.jsm, line 349: UnknownError: The operation failed for reasons unrelated to the database itself and not covered by any other error code.
+1543845293093	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.UUWky4l1ZZud"
+
+(firefox:13591): Gtk-WARNING **: 14:54:53.787: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:13591): Gtk-WARNING **: 14:54:53.787: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845295133	Marionette	INFO	Listening on port 43269
+1543845295224	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543845296010	Marionette	INFO	Stopped listening on port 43269
+1543845297677	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.0EAeYXTuY6R6"
+
+(firefox:13842): Gtk-WARNING **: 14:54:58.370: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:13842): Gtk-WARNING **: 14:54:58.370: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845299617	Marionette	INFO	Listening on port 40699
+1543845299708	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845300684	Marionette	INFO	Stopped listening on port 40699
+1543845302361	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.r3tCmXdbWtmS"
+
+(firefox:14079): Gtk-WARNING **: 14:55:03.056: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:14079): Gtk-WARNING **: 14:55:03.056: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845304348	Marionette	INFO	Listening on port 41719
+1543845304388	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845305352	Marionette	INFO	Stopped listening on port 41719
+1543845307011	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.6M7tvLN62PhQ"
+
+(firefox:14329): Gtk-WARNING **: 14:55:07.670: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:14329): Gtk-WARNING **: 14:55:07.670: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845308889	Marionette	INFO	Listening on port 38043
+1543845308928	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845309609	Marionette	INFO	Stopped listening on port 38043
+1543845311149	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.JeivyJPX46fj"
+
+(firefox:14564): Gtk-WARNING **: 14:55:11.771: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:14564): Gtk-WARNING **: 14:55:11.771: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845312984	Marionette	INFO	Listening on port 43035
+1543845313063	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845313707	Marionette	INFO	Stopped listening on port 43035
+[Parent 14564, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543845315267	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.k5fSz97bab2Y"
+
+(firefox:14809): Gtk-WARNING **: 14:55:15.951: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:14809): Gtk-WARNING **: 14:55:15.951: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845316985	Marionette	INFO	Listening on port 34147
+1543845317084	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845317649	Marionette	INFO	Stopped listening on port 34147
+JavaScript error: resource://activity-stream/lib/TopSitesFeed.jsm, line 86: TypeError: setting getter-only property "_currentSearchHostname"
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 841: Error: Connection is not open.
+1543845319293	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.gS26zW7LKmm2"
+
+(firefox:15034): Gtk-WARNING **: 14:55:19.918: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:15034): Gtk-WARNING **: 14:55:19.919: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845321055	Marionette	INFO	Listening on port 34397
+1543845321106	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845321750	Marionette	INFO	Stopped listening on port 34397
+1543845323291	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.oLHJvFrvg0sR"
+
+(firefox:15271): Gtk-WARNING **: 14:55:23.924: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:15271): Gtk-WARNING **: 14:55:23.924: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845325153	Marionette	INFO	Listening on port 37333
+1543845325203	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845326245	Marionette	INFO	Stopped listening on port 37333
+1543845327822	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.nHzk5Pn8eoTs"
+
+(firefox:15515): Gtk-WARNING **: 14:55:28.445: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:15515): Gtk-WARNING **: 14:55:28.445: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845329603	Marionette	INFO	Listening on port 43627
+1543845329645	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543845330195	Marionette	INFO	Stopped listening on port 43627
+JavaScript error: resource://activity-stream/lib/TopSitesFeed.jsm, line 86: TypeError: setting getter-only property "_currentSearchHostname"
+1543845331841	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.QPcVfauBmR82"
+
+(firefox:15755): Gtk-WARNING **: 14:55:32.452: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:15755): Gtk-WARNING **: 14:55:32.453: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543845333587	Marionette	INFO	Listening on port 36755
+1543845333656	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addeinnahme/, line 278: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+1543845336153	Marionette	INFO	Stopped listening on port 36755
+[Parent 15755, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[Parent 15755, Gecko_IOThread] WARNING: pipe error (96): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846120210	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.qDMUYcf3BSGd"
+
+(firefox:16521): Gtk-WARNING **: 15:08:40.939: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:16521): Gtk-WARNING **: 15:08:40.939: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846122353	Marionette	INFO	Listening on port 39895
+1543846122430	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+1543846126082	Marionette	INFO	Stopped listening on port 39895
+[Parent 16521, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543846127732	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.wfBRHVz97Gkw"
+
+(firefox:16773): Gtk-WARNING **: 15:08:48.417: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:16773): Gtk-WARNING **: 15:08:48.417: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846129651	Marionette	INFO	Listening on port 46535
+1543846129759	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addeinnahme/, line 274: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addeinnahme/, line 278: TypeError: $(...).inputmask is not a function
+1543846133223	Marionette	INFO	Stopped listening on port 46535
+1543846134849	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.3hbWb3kNKEJl"
+
+(firefox:17019): Gtk-WARNING **: 15:08:55.547: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:17019): Gtk-WARNING **: 15:08:55.547: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846137173	Marionette	INFO	Listening on port 35787
+1543846137186	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 301: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+1543846140848	Marionette	INFO	Stopped listening on port 35787
+[Parent 17019, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846142526	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ir7il2p8TwWT"
+
+(firefox:17274): Gtk-WARNING **: 15:09:03.477: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:17274): Gtk-WARNING **: 15:09:03.477: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846144943	Marionette	INFO	Listening on port 40079
+1543846145047	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+1543846148603	Marionette	INFO	Stopped listening on port 40079
+1543846150145	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.guNzCd5V3dV4"
+
+(firefox:17523): Gtk-WARNING **: 15:09:10.838: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:17523): Gtk-WARNING **: 15:09:10.838: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846152447	Marionette	INFO	Listening on port 46527
+1543846152480	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+1543846158808	Marionette	INFO	Stopped listening on port 46527
+1543846160336	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.1hw1AYFwh6Jv"
+
+(firefox:17806): Gtk-WARNING **: 15:09:21.099: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:17806): Gtk-WARNING **: 15:09:21.099: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846162761	Marionette	INFO	Listening on port 37947
+1543846162857	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543846171455	Marionette	INFO	Stopped listening on port 37947
+1543846173130	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.zFQ5ugchePkH"
+
+(firefox:18097): Gtk-WARNING **: 15:09:34.172: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:18097): Gtk-WARNING **: 15:09:34.172: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846176115	Marionette	INFO	Listening on port 34179
+1543846176157	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543846185752	Marionette	INFO	Stopped listening on port 34179
+1543846187589	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.PuDgLE68GzSP"
+
+(firefox:18393): Gtk-WARNING **: 15:09:48.388: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:18393): Gtk-WARNING **: 15:09:48.388: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846189572	Marionette	INFO	Listening on port 42691
+1543846189614	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 291: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 295: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 323: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 327: TypeError: $(...).inputmask is not a function
+1543846194754	Marionette	INFO	Stopped listening on port 42691
+[Parent 18393, Gecko_IOThread] WARNING: pipe error (81): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846196342	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.YvsFnE0FlWuo"
+
+(firefox:18678): Gtk-WARNING **: 15:09:56.954: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:18678): Gtk-WARNING **: 15:09:56.954: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846198164	Marionette	INFO	Listening on port 37425
+1543846198290	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+1543846204022	Marionette	INFO	Stopped listening on port 37425
+1543846205816	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.SBUiO8fMPicK"
+
+(firefox:18970): Gtk-WARNING **: 15:10:06.767: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:18970): Gtk-WARNING **: 15:10:06.768: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846208025	Marionette	INFO	Listening on port 33741
+1543846208050	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543846215388	Marionette	INFO	Stopped listening on port 33741
+1543846217412	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.jtvlLolAIVKx"
+
+(firefox:19248): Gtk-WARNING **: 15:10:18.633: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:19248): Gtk-WARNING **: 15:10:18.633: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846220505	Marionette	INFO	Listening on port 36253
+1543846220540	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543846229687	Marionette	INFO	Stopped listening on port 36253
+1543846231375	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.hcqs6DguBWd0"
+
+(firefox:19532): Gtk-WARNING **: 15:10:32.727: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:19532): Gtk-WARNING **: 15:10:32.727: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846234914	Marionette	INFO	Listening on port 42105
+1543846235009	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846238184	Marionette	INFO	Stopped listening on port 42105
+1543846240152	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.fJPE9jqWGO9N"
+
+(firefox:19784): Gtk-WARNING **: 15:10:41.444: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:19784): Gtk-WARNING **: 15:10:41.445: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846244361	Marionette	INFO	Listening on port 36619
+1543846244418	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846248022	Marionette	INFO	Stopped listening on port 36619
+1543846249662	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.bAij57j0Wkag"
+
+(firefox:20038): Gtk-WARNING **: 15:10:50.556: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:20038): Gtk-WARNING **: 15:10:50.556: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846252333	Marionette	INFO	Listening on port 43987
+1543846252393	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846254690	Marionette	INFO	Stopped listening on port 43987
+1543846255531	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.uayBesyHoZ5w"
+
+(firefox:20297): Gtk-WARNING **: 15:10:56.918: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:20297): Gtk-WARNING **: 15:10:56.918: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846259477	Marionette	INFO	Listening on port 40785
+1543846259590	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543846261941	Marionette	INFO	Stopped listening on port 40785
+1543846263846	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.MOQ8oHcy6rrR"
+
+(firefox:20551): Gtk-WARNING **: 15:11:05.292: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:20551): Gtk-WARNING **: 15:11:05.292: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846268372	Marionette	INFO	Listening on port 38185
+1543846268391	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543846271246	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.oywTQ9CYnBXc"
+
+(firefox:20775): Gtk-WARNING **: 15:11:12.060: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:20775): Gtk-WARNING **: 15:11:12.060: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846273419	Marionette	INFO	Listening on port 37955
+1543846273476	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543846275659	Marionette	INFO	Stopped listening on port 37955
+1543846277335	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.JmXfS4Eehpbi"
+
+(firefox:21026): Gtk-WARNING **: 15:11:17.982: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:21026): Gtk-WARNING **: 15:11:17.982: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846279314	Marionette	INFO	Listening on port 36777
+1543846279360	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 301: TypeError: $(...).inputmask is not a function
+1543846280047	Marionette	INFO	Stopped listening on port 36777
+1543846281697	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.t3tEBt1uHntY"
+1543846282046	Marionette	INFO	Stopped listening on port 38185
+
+(firefox:21266): Gtk-WARNING **: 15:11:22.707: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:21266): Gtk-WARNING **: 15:11:22.707: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846284394	Marionette	INFO	Listening on port 33053
+1543846284430	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addeinnahme/, line 274: TypeError: $(...).inputmask is not a function
+1543846285282	Marionette	INFO	Stopped listening on port 33053
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x160011,name=PBackgroundStorage::Msg_Observe) Channel error: cannot send/recv
+
+1543846286938	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.dDQaw1M2HNd7"
+
+(firefox:21518): Gtk-WARNING **: 15:11:27.605: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:21518): Gtk-WARNING **: 15:11:27.605: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846289279	Marionette	INFO	Listening on port 44447
+1543846289359	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543846290081	Marionette	INFO	Stopped listening on port 44447
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x160011,name=PBackgroundStorage::Msg_Observe) Channel error: cannot send/recv
+
+1543846291751	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.QWpzsbWC6kMV"
+
+(firefox:21756): Gtk-WARNING **: 15:11:32.445: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:21756): Gtk-WARNING **: 15:11:32.445: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846294009	Marionette	INFO	Listening on port 43329
+1543846294081	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543846294820	Marionette	INFO	Stopped listening on port 43329
+[Parent 21756, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543846296516	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.mazIr5V2TpFp"
+
+(firefox:22002): Gtk-WARNING **: 15:11:37.175: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:22002): Gtk-WARNING **: 15:11:37.175: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846298595	Marionette	INFO	Listening on port 34615
+1543846298639	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846299506	Marionette	INFO	Stopped listening on port 34615
+1543846301384	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.GNlmMqsTifeT"
+
+(firefox:22242): Gtk-WARNING **: 15:11:42.072: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:22242): Gtk-WARNING **: 15:11:42.072: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846303493	Marionette	INFO	Listening on port 35389
+1543846303602	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846304343	Marionette	INFO	Stopped listening on port 35389
+1543846306066	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.6LRYqu8b87Xv"
+
+(firefox:22490): Gtk-WARNING **: 15:11:46.796: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:22490): Gtk-WARNING **: 15:11:46.796: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846308313	Marionette	INFO	Listening on port 36285
+1543846308399	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846309304	Marionette	INFO	Stopped listening on port 36285
+JavaScript error: resource://gre/modules/IndexedDB.jsm, line 349: UnknownError: The operation failed for reasons unrelated to the database itself and not covered by any other error code.
+1543846311224	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.qeDbwV02ygyp"
+
+(firefox:22726): Gtk-WARNING **: 15:11:52.125: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:22726): Gtk-WARNING **: 15:11:52.125: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846313563	Marionette	INFO	Listening on port 40179
+1543846313658	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846314485	Marionette	INFO	Stopped listening on port 40179
+1543846316143	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.S4Qwlj4SH5p4"
+
+(firefox:22968): Gtk-WARNING **: 15:11:56.910: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:22968): Gtk-WARNING **: 15:11:56.910: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846318429	Marionette	INFO	Listening on port 33789
+1543846318469	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846319275	Marionette	INFO	Stopped listening on port 33789
+JavaScript error: resource://gre/modules/IndexedDB.jsm, line 349: UnknownError: The operation failed for reasons unrelated to the database itself and not covered by any other error code.
+1543846320946	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.794WGPJVoUf1"
+
+(firefox:23209): Gtk-WARNING **: 15:12:01.701: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:23209): Gtk-WARNING **: 15:12:01.701: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846323118	Marionette	INFO	Listening on port 36155
+1543846323174	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846324056	Marionette	INFO	Stopped listening on port 36155
+1543846325958	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.FDlqrcjXXCQ4"
+
+(firefox:23448): Gtk-WARNING **: 15:12:06.857: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:23448): Gtk-WARNING **: 15:12:06.857: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846328678	Marionette	INFO	Listening on port 38999
+1543846328776	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846329409	Marionette	INFO	Stopped listening on port 38999
+1543846331083	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.jd9hpYzCRvgu"
+
+(firefox:23687): Gtk-WARNING **: 15:12:11.695: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:23687): Gtk-WARNING **: 15:12:11.695: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846332745	Marionette	INFO	Listening on port 35785
+1543846332805	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846333438	Marionette	INFO	Stopped listening on port 35785
+JavaScript error: resource://activity-stream/lib/TopSitesFeed.jsm, line 86: TypeError: setting getter-only property "_currentSearchHostname"
+1543846335074	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.K6weLhGeHGT3"
+
+(firefox:23936): Gtk-WARNING **: 15:12:15.687: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:23936): Gtk-WARNING **: 15:12:15.687: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846336848	Marionette	INFO	Listening on port 33169
+1543846336889	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addeinnahme/, line 278: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+1543846339227	Marionette	INFO	Stopped listening on port 33169
+1543846751460	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.TgYoepmbHw05"
+
+(firefox:24340): Gtk-WARNING **: 15:19:12.150: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:24340): Gtk-WARNING **: 15:19:12.150: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846753412	Marionette	INFO	Listening on port 33873
+1543846753494	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+1543846757022	Marionette	INFO	Stopped listening on port 33873
+1543846758551	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.864Doj3UbdX8"
+
+(firefox:24580): Gtk-WARNING **: 15:19:19.174: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:24580): Gtk-WARNING **: 15:19:19.174: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846760277	Marionette	INFO	Listening on port 40739
+1543846760363	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addeinnahme/, line 274: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addeinnahme/, line 278: TypeError: $(...).inputmask is not a function
+1543846763851	Marionette	INFO	Stopped listening on port 40739
+1543846765371	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ulJhUKHSk5yt"
+
+(firefox:24829): Gtk-WARNING **: 15:19:25.979: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:24829): Gtk-WARNING **: 15:19:25.979: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846767081	Marionette	INFO	Listening on port 42035
+1543846767187	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 301: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+1543846770747	Marionette	INFO	Stopped listening on port 42035
+1543846772364	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.EQeBSQ6AHi2A"
+
+(firefox:25082): Gtk-WARNING **: 15:19:32.978: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:25082): Gtk-WARNING **: 15:19:32.978: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846774049	Marionette	INFO	Listening on port 40771
+1543846774098	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+1543846777675	Marionette	INFO	Stopped listening on port 40771
+[Parent 25082, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846779366	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.OP3DwHeRMRcG"
+
+(firefox:25336): Gtk-WARNING **: 15:19:40.438: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:25336): Gtk-WARNING **: 15:19:40.438: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846781789	Marionette	INFO	Listening on port 34911
+1543846781883	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+1543846787998	Marionette	INFO	Stopped listening on port 34911
+[Parent 25336, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846789510	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.HPDRLYDTfyNT"
+
+(firefox:25607): Gtk-WARNING **: 15:19:50.184: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:25607): Gtk-WARNING **: 15:19:50.184: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846791341	Marionette	INFO	Listening on port 40991
+1543846791424	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543846798666	Marionette	INFO	Stopped listening on port 40991
+[Parent 25607, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543846800297	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.Cl7Zt66vtMEo"
+
+(firefox:25891): Gtk-WARNING **: 15:20:01.055: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:25891): Gtk-WARNING **: 15:20:01.055: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846802329	Marionette	INFO	Listening on port 40995
+1543846802411	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543846809628	Marionette	INFO	Stopped listening on port 40995
+[Parent 25891, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846811396	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.y6m2JO1NsNjv"
+
+(firefox:26168): Gtk-WARNING **: 15:20:12.429: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:26168): Gtk-WARNING **: 15:20:12.429: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846814137	Marionette	INFO	Listening on port 35137
+1543846814255	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 291: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 295: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 323: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 327: TypeError: $(...).inputmask is not a function
+1543846820263	Marionette	INFO	Stopped listening on port 35137
+1543846821900	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.kgSYDrZVedON"
+
+(firefox:26453): Gtk-WARNING **: 15:20:22.514: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:26453): Gtk-WARNING **: 15:20:22.514: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846823726	Marionette	INFO	Listening on port 45859
+1543846823814	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+1543846830391	Marionette	INFO	Stopped listening on port 45859
+[Parent 26453, Gecko_IOThread] WARNING: pipe error (85): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846831922	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.s3CfZ44Vumt5"
+
+(firefox:26732): Gtk-WARNING **: 15:20:32.938: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:26732): Gtk-WARNING **: 15:20:32.938: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846834527	Marionette	INFO	Listening on port 43383
+1543846834538	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543846840691	Marionette	INFO	Stopped listening on port 43383
+[Parent 26732, Gecko_IOThread] WARNING: pipe error (96): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846842231	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.jcEjw1lUUVJU"
+
+(firefox:27011): Gtk-WARNING **: 15:20:43.058: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:27011): Gtk-WARNING **: 15:20:43.058: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846844303	Marionette	INFO	Listening on port 35181
+1543846844354	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543846851006	Marionette	INFO	Stopped listening on port 35181
+1543846852667	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.aLPwdXQTs3jc"
+
+(firefox:27292): Gtk-WARNING **: 15:20:53.374: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:27292): Gtk-WARNING **: 15:20:53.374: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846854641	Marionette	INFO	Listening on port 40073
+1543846854689	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846856922	Marionette	INFO	Stopped listening on port 40073
+[Parent 27292, Gecko_IOThread] WARNING: pipe error (96): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846858597	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.Qpcns6c2GWoj"
+
+(firefox:27536): Gtk-WARNING **: 15:20:59.417: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:27536): Gtk-WARNING **: 15:20:59.417: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846861220	Marionette	INFO	Listening on port 38671
+1543846861301	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846865601	Marionette	INFO	Stopped listening on port 38671
+[Parent 27536, Gecko_IOThread] WARNING: pipe error (94): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543846867190	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.giSQkC0QytL4"
+
+(firefox:27793): Gtk-WARNING **: 15:21:08.206: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:27793): Gtk-WARNING **: 15:21:08.206: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846869989	Marionette	INFO	Listening on port 34231
+1543846870013	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543846872983	Marionette	INFO	Stopped listening on port 34231
+1543846874670	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.VRTCbCZvyyiF"
+
+(firefox:28064): Gtk-WARNING **: 15:21:15.453: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:28064): Gtk-WARNING **: 15:21:15.453: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543846877877	Marionette	INFO	Listening on port 39747
+1543846877899	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847012656	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ms7doJqoyRMt"
+
+(firefox:28472): Gtk-WARNING **: 15:23:33.286: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:28472): Gtk-WARNING **: 15:23:33.286: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847014414	Marionette	INFO	Listening on port 45447
+1543847014469	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847016190	Marionette	INFO	Stopped listening on port 45447
+1543847017733	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ijQk5yH2b7TY"
+
+(firefox:28744): Gtk-WARNING **: 15:23:38.351: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:28744): Gtk-WARNING **: 15:23:38.351: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847019478	Marionette	INFO	Listening on port 35275
+1543847019548	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847021795	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.KjtI6zCKq2VU"
+
+(firefox:29001): Gtk-WARNING **: 15:23:42.387: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:29001): Gtk-WARNING **: 15:23:42.387: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847023429	Marionette	INFO	Listening on port 39203
+1543847023506	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543847025297	Marionette	INFO	Stopped listening on port 39203
+[Parent 29001, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543847089806	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.llTGwrWqqVA1"
+
+(firefox:29338): Gtk-WARNING **: 15:24:50.414: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:29338): Gtk-WARNING **: 15:24:50.414: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847091565	Marionette	INFO	Listening on port 33879
+1543847091638	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847093405	Marionette	INFO	Stopped listening on port 33879
+1543847094966	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.02rW36wL23Ro"
+
+(firefox:29601): Gtk-WARNING **: 15:24:55.622: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:29601): Gtk-WARNING **: 15:24:55.622: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847096786	Marionette	INFO	Listening on port 37481
+1543847096895	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847099016	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ZgQFyzoybj8d"
+
+(firefox:29851): Gtk-WARNING **: 15:24:59.646: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:29851): Gtk-WARNING **: 15:24:59.646: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847101873	Marionette	INFO	Listening on port 45401
+1543847101934	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543847103905	Marionette	INFO	Stopped listening on port 45401
+[Parent 29601, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543847106315	Marionette	INFO	Stopped listening on port 37481
+1543847143202	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.Gvm8l9vtT1No"
+
+(firefox:30210): Gtk-WARNING **: 15:25:43.798: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:30210): Gtk-WARNING **: 15:25:43.798: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847144982	Marionette	INFO	Listening on port 40475
+1543847145023	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847146746	Marionette	INFO	Stopped listening on port 40475
+1543847148281	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.PqCB6P8YLzyR"
+
+(firefox:30478): Gtk-WARNING **: 15:25:48.913: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:30478): Gtk-WARNING **: 15:25:48.913: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847150076	Marionette	INFO	Listening on port 35839
+1543847150094	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847152237	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.MYM9iFFkslXw"
+
+(firefox:30733): Gtk-WARNING **: 15:25:52.826: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:30733): Gtk-WARNING **: 15:25:52.826: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847153909	Marionette	INFO	Listening on port 42771
+1543847153958	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543847155709	Marionette	INFO	Stopped listening on port 42771
+1543847954297	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ACUupivmuEjU"
+
+(firefox:31577): Gtk-WARNING **: 15:39:14.906: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:31577): Gtk-WARNING **: 15:39:14.906: Theme parsing error: <data>:1:77: Expected ')' in color definition
+[Parent 31577, Gecko_IOThread] WARNING: pipe error (83): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[Child 31678, Chrome_ChildThread] WARNING: pipe error (52): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543847980793	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.1AdoaxAbY2T0"
+
+(firefox:31759): Gtk-WARNING **: 15:39:41.390: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:31759): Gtk-WARNING **: 15:39:41.390: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847983306	Marionette	INFO	Listening on port 41313
+1543847983411	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847985530	Marionette	INFO	Stopped listening on port 41313
+1543847987091	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.MDcVCkouwQ6z"
+
+(firefox:32020): Gtk-WARNING **: 15:39:47.719: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:32020): Gtk-WARNING **: 15:39:47.719: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847988888	Marionette	INFO	Listening on port 41589
+1543847988909	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543847991365	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.1jONH2q6FT1V"
+
+(firefox:32271): Gtk-WARNING **: 15:39:52.265: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:32271): Gtk-WARNING **: 15:39:52.265: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543847994360	Marionette	INFO	Listening on port 39605
+1543847994392	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543847996322	Marionette	INFO	Stopped listening on port 39605
+1543848055654	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.9GlBkLjQeLhJ"
+
+(firefox:32607): Gtk-WARNING **: 15:40:56.523: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:32607): Gtk-WARNING **: 15:40:56.524: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848058043	Marionette	INFO	Listening on port 41541
+1543848058090	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848060213	Marionette	INFO	Stopped listening on port 41541
+1543848061791	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.qojSAmzzI4ri"
+
+(firefox:32864): Gtk-WARNING **: 15:41:02.467: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:32864): Gtk-WARNING **: 15:41:02.467: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848063653	Marionette	INFO	Listening on port 46405
+1543848063705	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848066130	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.swt5QBNJFkwG"
+
+(firefox:33098): Gtk-WARNING **: 15:41:07.064: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:33098): Gtk-WARNING **: 15:41:07.064: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848069174	Marionette	INFO	Listening on port 36201
+1543848069249	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543848071127	Marionette	INFO	Stopped listening on port 36201
+[Parent 33098, Gecko_IOThread] WARNING: pipe error (80): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543848266194	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.40Edfj0nl797"
+
+(firefox:33512): Gtk-WARNING **: 15:44:26.858: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:33512): Gtk-WARNING **: 15:44:26.858: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848268129	Marionette	INFO	Listening on port 42531
+1543848268206	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848270100	Marionette	INFO	Stopped listening on port 42531
+1543848271649	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.CvjA7pJOpp62"
+
+(firefox:33783): Gtk-WARNING **: 15:44:32.335: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:33783): Gtk-WARNING **: 15:44:32.335: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848273468	Marionette	INFO	Listening on port 39159
+1543848273560	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848275942	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.HcioxiUvcfVQ"
+
+(firefox:34034): Gtk-WARNING **: 15:44:36.637: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:34034): Gtk-WARNING **: 15:44:36.637: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848278575	Marionette	INFO	Listening on port 41931
+1543848278657	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543848280736	Marionette	INFO	Stopped listening on port 41931
+[Parent 34034, Gecko_IOThread] WARNING: pipe error (96): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543848305621	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.qqnTKpeEGIVv"
+
+(firefox:34353): Gtk-WARNING **: 15:45:06.241: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:34353): Gtk-WARNING **: 15:45:06.241: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848307424	Marionette	INFO	Listening on port 40281
+1543848307438	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848309302	Marionette	INFO	Stopped listening on port 40281
+[Parent 34353, Gecko_IOThread] WARNING: pipe error (94): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543848310836	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.nWGxJBkHbYwG"
+
+(firefox:34617): Gtk-WARNING **: 15:45:11.442: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:34617): Gtk-WARNING **: 15:45:11.442: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848312594	Marionette	INFO	Listening on port 34387
+1543848312652	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848315091	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.LcLTuZC7r7Qb"
+
+(firefox:34880): Gtk-WARNING **: 15:45:15.766: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:34880): Gtk-WARNING **: 15:45:15.766: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848317873	Marionette	INFO	Listening on port 40123
+1543848317930	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543848319922	Marionette	INFO	Stopped listening on port 40123
+1543848451217	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ixtwgFFM2Hr9"
+
+(firefox:35287): Gtk-WARNING **: 15:47:31.833: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:35287): Gtk-WARNING **: 15:47:31.833: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848452961	Marionette	INFO	Listening on port 35229
+1543848453047	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848454682	Marionette	INFO	Stopped listening on port 35229
+[Parent 35287, Gecko_IOThread] WARNING: pipe error (96): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543848456212	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.gAaa8NE5mGQa"
+
+(firefox:35561): Gtk-WARNING **: 15:47:36.821: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:35561): Gtk-WARNING **: 15:47:36.821: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848457869	Marionette	INFO	Listening on port 35585
+1543848457941	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848460429	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.xroHa9HUQtWE"
+
+(firefox:35803): Gtk-WARNING **: 15:47:41.021: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:35803): Gtk-WARNING **: 15:47:41.021: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848463116	Marionette	INFO	Listening on port 44821
+1543848463149	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543848465049	Marionette	INFO	Stopped listening on port 44821
+1543848599959	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.didRdLQWbhZU"
+
+(firefox:36194): Gtk-WARNING **: 15:50:00.673: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:36194): Gtk-WARNING **: 15:50:00.673: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848601950	Marionette	INFO	Listening on port 34139
+1543848601977	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848603622	Marionette	INFO	Stopped listening on port 34139
+1543848605158	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.dqeYXUMgqM9s"
+
+(firefox:36461): Gtk-WARNING **: 15:50:05.778: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:36461): Gtk-WARNING **: 15:50:05.778: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848606889	Marionette	INFO	Listening on port 35289
+1543848606970	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543848608723	Marionette	INFO	Stopped listening on port 35289
+1543848610254	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.uLCk7dUreEmo"
+
+(firefox:36719): Gtk-WARNING **: 15:50:10.872: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:36719): Gtk-WARNING **: 15:50:10.872: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543848612002	Marionette	INFO	Listening on port 46819
+1543848612076	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543848613601	Marionette	INFO	Stopped listening on port 46819
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:721:13
+
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:721:13
+
+console.error: BroadcastService: 
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:721:13
+
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:721:13
+
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:721:13
+
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:721:13
+
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:721:13
+
+1543849318874	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.aHv9K2qPB8ef"
+
+(firefox:37733): Gtk-WARNING **: 16:01:59.508: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:37733): Gtk-WARNING **: 16:01:59.508: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849320502	Marionette	INFO	Listening on port 41707
+1543849320603	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543849322814	Marionette	INFO	Stopped listening on port 41707
+1543849324380	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.FV05IkAmIziW"
+
+(firefox:37995): Gtk-WARNING **: 16:02:05.139: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:37995): Gtk-WARNING **: 16:02:05.139: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849326264	Marionette	INFO	Listening on port 36705
+1543849326301	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543849328363	Marionette	INFO	Stopped listening on port 36705
+[Parent 37995, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849329915	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.XcgYq3MwJelF"
+
+(firefox:38252): Gtk-WARNING **: 16:02:10.635: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:38252): Gtk-WARNING **: 16:02:10.635: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849331639	Marionette	INFO	Listening on port 45019
+1543849331726	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543849333503	Marionette	INFO	Stopped listening on port 45019
+[Parent 38252, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[Parent 38252, Gecko_IOThread] WARNING: pipe error (94): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849390432	Marionette	INFO	Stopped listening on port 35275
+[Parent 35561, Gecko_IOThread] WARNING: pipe error (85): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849395085	Marionette	INFO	Stopped listening on port 35585
+[Parent 34617, Gecko_IOThread] WARNING: pipe error (94): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[Parent 34617, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849399993	Marionette	INFO	Stopped listening on port 34387
+[Parent 33783, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543849407074	Marionette	INFO	Stopped listening on port 39159
+[Parent 32864, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543849411309	Marionette	INFO	Stopped listening on port 46405
+1543849417129	Marionette	INFO	Stopped listening on port 41589
+1543849421047	Marionette	INFO	Stopped listening on port 35839
+1543849444874	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.PH0vp1FYvAXe"
+
+(firefox:38670): Gtk-WARNING **: 16:04:05.563: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:38670): Gtk-WARNING **: 16:04:05.563: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849446811	Marionette	INFO	Listening on port 35469
+1543849446886	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+1543849450555	Marionette	INFO	Stopped listening on port 35469
+[Parent 38670, Gecko_IOThread] WARNING: pipe error (92): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849452096	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.t99mEhcwv7Wz"
+
+(firefox:38929): Gtk-WARNING **: 16:04:12.871: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:38929): Gtk-WARNING **: 16:04:12.871: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849453963	Marionette	INFO	Listening on port 39227
+1543849454008	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addeinnahme/, line 274: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addeinnahme/, line 278: TypeError: $(...).inputmask is not a function
+1543849457707	Marionette	INFO	Stopped listening on port 39227
+[Parent 38929, Gecko_IOThread] WARNING: pipe error (92): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849459250	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.uBPAWXWLsach"
+
+(firefox:39197): Gtk-WARNING **: 16:04:20.230: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:39197): Gtk-WARNING **: 16:04:20.230: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849461795	Marionette	INFO	Listening on port 44609
+1543849461869	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 301: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+1543849465837	Marionette	INFO	Stopped listening on port 44609
+[Parent 39197, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543849467362	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.Z1zhZ8azdpzJ"
+
+(firefox:39451): Gtk-WARNING **: 16:04:28.137: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:39451): Gtk-WARNING **: 16:04:28.137: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849469281	Marionette	INFO	Listening on port 45057
+1543849469375	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+1543849473187	Marionette	INFO	Stopped listening on port 45057
+1543849475044	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.Z1Ep70KweAfh"
+
+(firefox:39722): Gtk-WARNING **: 16:04:35.812: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:39722): Gtk-WARNING **: 16:04:35.812: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849476981	Marionette	INFO	Listening on port 36435
+1543849477061	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+1543849483313	Marionette	INFO	Stopped listening on port 36435
+[Parent 39722, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+[Parent 39722, Gecko_IOThread] WARNING: pipe error (85): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849484839	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.L8vgnSpp3lAJ"
+
+(firefox:40029): Gtk-WARNING **: 16:04:45.672: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:40029): Gtk-WARNING **: 16:04:45.672: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849487092	Marionette	INFO	Listening on port 43177
+1543849487177	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543849493450	Marionette	INFO	Stopped listening on port 43177
+[Parent 40029, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849494979	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.09s9z3pJLPnd"
+
+(firefox:40316): Gtk-WARNING **: 16:04:55.739: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:40316): Gtk-WARNING **: 16:04:55.739: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849496897	Marionette	INFO	Listening on port 39619
+1543849496999	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 319: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 333: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 343: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 353: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 359: TypeError: $(...).inputmask is not a function
+1543849503066	Marionette	INFO	Stopped listening on port 39619
+1543849504653	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.mm0yoFMOiSbM"
+
+(firefox:40599): Gtk-WARNING **: 16:05:05.719: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:40599): Gtk-WARNING **: 16:05:05.719: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849507102	Marionette	INFO	Listening on port 43763
+1543849507174	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 291: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 295: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 315: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 323: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 327: TypeError: $(...).inputmask is not a function
+1543849513708	Marionette	INFO	Stopped listening on port 43763
+[Parent 40599, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849515240	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.rqWHdT93OnV2"
+
+(firefox:40896): Gtk-WARNING **: 16:05:15.955: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:40896): Gtk-WARNING **: 16:05:15.955: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849517079	Marionette	INFO	Listening on port 46091
+1543849517151	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+1543849523179	Marionette	INFO	Stopped listening on port 46091
+[Parent 40896, Gecko_IOThread] WARNING: pipe error (92): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849524720	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.pJjXiE7lhkTs"
+
+(firefox:41165): Gtk-WARNING **: 16:05:25.464: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:41165): Gtk-WARNING **: 16:05:25.464: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849526752	Marionette	INFO	Listening on port 43899
+1543849526838	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543849534484	Marionette	INFO	Stopped listening on port 43899
+1543849536131	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.73obWFeHfk0p"
+
+(firefox:41421): Gtk-WARNING **: 16:05:36.993: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:41421): Gtk-WARNING **: 16:05:36.994: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849538141	Marionette	INFO	Listening on port 38023
+1543849538167	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 294: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 303: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 307: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 316: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 320: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 329: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 338: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 344: TypeError: $(...).inputmask is not a function
+1543849550184	Marionette	INFO	Stopped listening on port 38023
+[Parent 41421, Gecko_IOThread] WARNING: pipe error (62): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849552162	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.KNHYLxXUGICD"
+
+(firefox:41714): Gtk-WARNING **: 16:05:53.705: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:41714): Gtk-WARNING **: 16:05:53.705: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849556175	Marionette	INFO	Listening on port 35533
+1543849556199	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849559732	Marionette	INFO	Stopped listening on port 35533
+[Parent 41714, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[Parent 41714, Gecko_IOThread] WARNING: pipe error (96): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[Parent 41714, Gecko_IOThread] WARNING: pipe error (95): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849561402	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.v0lO2uNn2zBJ"
+
+(firefox:41962): Gtk-WARNING **: 16:06:02.954: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:41962): Gtk-WARNING **: 16:06:02.954: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849564364	Marionette	INFO	Listening on port 36641
+1543849564426	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849567986	Marionette	INFO	Stopped listening on port 36641
+[Parent 41962, Gecko_IOThread] WARNING: pipe error (94): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849569655	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.aoS7RA8SCuOe"
+
+(firefox:42243): Gtk-WARNING **: 16:06:10.649: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:42243): Gtk-WARNING **: 16:06:10.650: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849571972	Marionette	INFO	Listening on port 36945
+1543849572072	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849575235	Marionette	INFO	Stopped listening on port 36945
+[Parent 42243, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543849576998	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.fWcRmtE4x3TD"
+
+(firefox:42515): Gtk-WARNING **: 16:06:17.933: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:42515): Gtk-WARNING **: 16:06:17.933: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849579290	Marionette	INFO	Listening on port 46349
+1543849579321	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543849581721	Marionette	INFO	Stopped listening on port 46349
+1543849583389	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.abm9unFpljpw"
+
+(firefox:42771): Gtk-WARNING **: 16:06:24.367: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:42771): Gtk-WARNING **: 16:06:24.368: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849585655	Marionette	INFO	Listening on port 39271
+1543849585709	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543849588118	Marionette	INFO	Stopped listening on port 39271
+1543849589829	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ANcvEY72a1nt"
+
+(firefox:43020): Gtk-WARNING **: 16:06:30.739: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:43020): Gtk-WARNING **: 16:06:30.740: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849592108	Marionette	INFO	Listening on port 39523
+1543849592147	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+JavaScript error: http://127.0.0.1:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543849594433	Marionette	INFO	Stopped listening on port 39523
+1543849596097	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.GyPwnlrQfZ5R"
+
+(firefox:43297): Gtk-WARNING **: 16:06:37.013: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:43297): Gtk-WARNING **: 16:06:37.014: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849598370	Marionette	INFO	Listening on port 43249
+1543849598414	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 301: TypeError: $(...).inputmask is not a function
+1543849599216	Marionette	INFO	Stopped listening on port 43249
+1543849601028	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.VewBpSuVC8UC"
+
+(firefox:43542): Gtk-WARNING **: 16:06:42.054: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:43542): Gtk-WARNING **: 16:06:42.054: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849603347	Marionette	INFO	Listening on port 46009
+1543849603452	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addeinnahme/, line 274: TypeError: $(...).inputmask is not a function
+1543849604321	Marionette	INFO	Stopped listening on port 46009
+1543849606077	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.G4PWcyAYMTQu"
+
+(firefox:43779): Gtk-WARNING **: 16:06:46.972: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:43779): Gtk-WARNING **: 16:06:46.972: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849608347	Marionette	INFO	Listening on port 36681
+1543849608401	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 279: TypeError: $(...).inputmask is not a function
+1543849609180	Marionette	INFO	Stopped listening on port 36681
+1543849610964	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.6942byKL3q2c"
+
+(firefox:43989): Gtk-WARNING **: 16:06:51.803: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:43989): Gtk-WARNING **: 16:06:51.803: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849613021	Marionette	INFO	Listening on port 36999
+1543849613088	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addgemeinsam/, line 290: TypeError: $(...).inputmask is not a function
+1543849613752	Marionette	INFO	Stopped listening on port 36999
+[Parent 43989, Gecko_IOThread] WARNING: pipe error (78): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+[Parent 43989, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543849615472	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ACYkn59xgagn"
+
+(firefox:44232): Gtk-WARNING **: 16:06:56.226: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:44232): Gtk-WARNING **: 16:06:56.226: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849617406	Marionette	INFO	Listening on port 44157
+1543849617486	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849618257	Marionette	INFO	Stopped listening on port 44157
+1543849619923	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.mtCgPiccclWz"
+
+(firefox:44445): Gtk-WARNING **: 16:07:00.710: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:44445): Gtk-WARNING **: 16:07:00.710: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849621868	Marionette	INFO	Listening on port 39041
+1543849621939	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849622644	Marionette	INFO	Stopped listening on port 39041
+1543849624413	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.6UHcAXAg8mNM"
+
+(firefox:44693): Gtk-WARNING **: 16:07:05.185: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:44693): Gtk-WARNING **: 16:07:05.185: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849626363	Marionette	INFO	Listening on port 41015
+1543849626426	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849627076	Marionette	INFO	Stopped listening on port 41015
+[Parent 44693, Gecko_IOThread] WARNING: pipe error (85): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849628731	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.TEx2707qMBdp"
+
+(firefox:44943): Gtk-WARNING **: 16:07:09.573: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:44943): Gtk-WARNING **: 16:07:09.573: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849630795	Marionette	INFO	Listening on port 43693
+1543849630850	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849631759	Marionette	INFO	Stopped listening on port 43693
+1543849633468	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.E9C5mLWSbvrk"
+
+(firefox:45187): Gtk-WARNING **: 16:07:14.345: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:45187): Gtk-WARNING **: 16:07:14.346: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849635704	Marionette	INFO	Listening on port 39979
+1543849635789	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849636491	Marionette	INFO	Stopped listening on port 39979
+[Parent 45187, Gecko_IOThread] WARNING: pipe error (94): Die Verbindung wurde vom Kommunikationspartner zurückgesetzt: file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 356
+1543849638280	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ct8GDCgOmVy5"
+
+(firefox:45407): Gtk-WARNING **: 16:07:19.250: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:45407): Gtk-WARNING **: 16:07:19.250: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849640645	Marionette	INFO	Listening on port 43977
+1543849640704	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849641485	Marionette	INFO	Stopped listening on port 43977
+1543849643280	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.5w7ff5l8rMqk"
+
+(firefox:45655): Gtk-WARNING **: 16:07:24.170: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:45655): Gtk-WARNING **: 16:07:24.170: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849645501	Marionette	INFO	Listening on port 46813
+1543849645609	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849646731	Marionette	INFO	Stopped listening on port 46813
+[Parent 45655, Gecko_IOThread] WARNING: pipe error: Datenübergabe unterbrochen (broken pipe): file /build/firefox/src/mozilla-unified/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 729
+1543849648516	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.cKtVAtlYn0BQ"
+
+(firefox:45906): Gtk-WARNING **: 16:07:29.415: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:45906): Gtk-WARNING **: 16:07:29.415: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849650695	Marionette	INFO	Listening on port 38421
+1543849650731	Marionette	WARN	TLS certificate errors will be ignored for this session
+1543849651524	Marionette	INFO	Stopped listening on port 38421
+1543849653303	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--window-size=1920,1080" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.IRQ5J4xZ5J2C"
+
+(firefox:46141): Gtk-WARNING **: 16:07:34.363: Theme parsing error: <data>:1:34: Expected ')' in color definition
+
+(firefox:46141): Gtk-WARNING **: 16:07:34.363: Theme parsing error: <data>:1:77: Expected ')' in color definition
+1543849655911	Marionette	INFO	Listening on port 34433
+1543849655921	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addeinnahme/, line 278: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/adddauerauftrag/, line 305: TypeError: $(...).inputmask is not a function
+JavaScript error: http://localhost:5000/addausgabe/, line 283: TypeError: $(...).inputmask is not a function
+1543849659061	Marionette	INFO	Stopped listening on port 34433
