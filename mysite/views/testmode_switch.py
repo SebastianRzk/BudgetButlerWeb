@@ -6,8 +6,8 @@ from mysite.viewcore import configuration_provider
 
 
 def leave_debug(request):
-    viewcore.switch_database_instance(request.GET['database'])
-    return redirect('/dashboard/', code=301)
+    viewcore.switch_database_instance(request.args['database'])
+    return redirect('/', code=301)
 
 def enter_testmode(request):
     FileSystem.INSTANCE = FileSystemStub()
