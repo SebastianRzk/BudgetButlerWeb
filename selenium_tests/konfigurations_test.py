@@ -28,10 +28,9 @@ class TestUI(SeleniumTestClass):
     def teste_change_partner(self, get_driver, close_driver):
         # checks if the forwarding works correctly when changing the database via the URL
         driver = get_driver()
-        names = ['test', 'Maureen']
         enter_test_mode(driver)
         driver.get('http://localhost:5000/addgemeinsam/')
-        assert set(get_options(driver, 'person_auswahl')) == set(names)
+        assert set(get_options(driver, 'person_auswahl')) == set('test', 'Maureen')
 
         driver.get('http://localhost:5000/production/?database=test')
         assert driver.find_element_by_class_name('info')\
