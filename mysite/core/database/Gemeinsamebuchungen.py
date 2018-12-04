@@ -13,7 +13,7 @@ class Gemeinsamebuchungen(DatabaseObject):
     content = DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
 
     def parse(self, raw_table):
-        raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, "%Y-%m-%d").date())
+        raw_table['Datum'] = raw_table['Datum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
         self.content = self.content.append(raw_table, ignore_index=True)
         self._sort()
 
@@ -25,7 +25,7 @@ class Gemeinsamebuchungen(DatabaseObject):
 
     def anteil_gemeinsamer_buchungen(self):
         anteil_gemeinsamer_buchungen = DataFrame()
-        for ind, row in self.content.iterrows():
+        for _, row in self.content.iterrows():
             einzelbuchung = DataFrame([[row.Datum, row.Kategorie, str(row.Name) + " (noch nicht abgerechnet, von " + str(row.Person) + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
             anteil_gemeinsamer_buchungen = anteil_gemeinsamer_buchungen.append(einzelbuchung, ignore_index=True)
         return anteil_gemeinsamer_buchungen
@@ -60,4 +60,3 @@ class Gemeinsamebuchungen(DatabaseObject):
 
     def fuer(self, person):
         return self.content[self.content.Person == person]
-

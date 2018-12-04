@@ -72,7 +72,7 @@ class Einzelbuchungen(DatabaseObject):
         return self._berechne_prozentual(tabelle)
 
     def _berechne_prozentual(self, tabelle):
-        if len(tabelle) == 0:
+        if tabelle.empty:
             return {}
 
         tabelle_gesamtsumme = tabelle.Wert.sum()
@@ -261,7 +261,7 @@ class EinzelbuchungsSelektor:
         data.Datum = data.Datum.map(lambda x: (x.year * 13) + x.month)
         grouped = data.groupby(by='Datum').sum()
         result = []
-        for monat, reihe in grouped.iterrows():
+        for _, reihe in grouped.iterrows():
             result.append("%.2f" % abs(reihe.Wert))
         return result
 
@@ -293,7 +293,7 @@ class EinzelbuchungsSelektor:
         datum_alt = None
         for _, row in kopierte_tabelle.iterrows():
             if datum_alt and datum_alt != row.Datum:  # next cat or day
-                if datum_alt != row.Datum :
+                if datum_alt != row.Datum:
                     zusammenfassung.append((datum_alt, tag_liste))
                     tag_liste = []
             tag_liste.append({'kategorie':row.Kategorie, 'name':row.Name, 'summe': row.Wert})
@@ -317,7 +317,7 @@ class EinzelbuchungsSelektor:
         more_than_one = False
         for _, row in kopierte_tabelle.iterrows():
             if(kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != '':  # next cat or day
-                if datum_alt != row.Datum :
+                if datum_alt != row.Datum:
                     zusammenfassung.append((datum_to_german(datum_alt), tag_liste))
                     tag_liste = []
                 tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})

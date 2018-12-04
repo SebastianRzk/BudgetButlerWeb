@@ -6,9 +6,7 @@ Created on 11.08.2017
 from datetime import date
 import unittest
 
-import mysite.core.DatabaseModule as db
 from mysite.core.database.Dauerauftraege import Dauerauftraege
-from mysite.core.database.Einzelbuchungen import Einzelbuchungen
 from mysite.viewcore.converter import datum_from_german as datum
 
 class DauerauftraegeTest(unittest.TestCase):

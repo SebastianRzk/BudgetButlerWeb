@@ -3,11 +3,10 @@ Created on 11.08.2017
 
 @author: sebastian
 '''
-from datetime import date
-from mysite.viewcore.converter import datum_from_german as datum
-import mysite.core.DatabaseModule as db
-from mysite.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 import unittest
+
+from mysite.viewcore.converter import datum_from_german as datum
+from mysite.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 
 class gemeinsame_buchungen(unittest.TestCase):
 
@@ -66,4 +65,3 @@ class gemeinsame_buchungen(unittest.TestCase):
         assert component_under_test.taint_number() == 0
         component_under_test.rename('sebastian', 'sebastian2')
         assert component_under_test.taint_number() == 1
-
