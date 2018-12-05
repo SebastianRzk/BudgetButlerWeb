@@ -1,15 +1,15 @@
 <?php
 require_once(__DIR__.'/layout.php');
 $start = '<html>';
-$startBody = '<body class="smallbody">
-	<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
+$startBody = '<body>
+	<header><img src="logo.png" alt="BudgetButlerWeb"></header>
 	<div class="content">';
 $end = '</div></body></html>';
 
 function auth_failed() {
 	$start = '<html>';
-	$startBody = '<body class="smallbody">
-		<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
+	$startBody = '<body>
+		<header><img src="logo.png" alt="BudgetButlerWeb"></header>
 		<div class="content">';
 	$end = '</div></body></html>';
 	echo  $start;
@@ -34,8 +34,8 @@ try {
 
 	echo $start;
 	head('Login');
-	echo '<body class="smallbody">
-		<div class="mainimage"><img src="logo.png" class="bblogo" alt="BudgetButlerWeb" width="100%"></div>
+	echo '<body>
+		<header><img src="logo.png" class="bblogo" alt="BudgetButlerWeb"></header>
 		<div class="content">
 		<form action="login.php" method="post">
 		<div>
