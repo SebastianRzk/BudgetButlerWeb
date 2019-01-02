@@ -189,10 +189,22 @@ authenticated(function(){
 				':wert' => '-'.((string)$_POST['wert'])));
 
 		if  (isset($_POST['gemeinsam'])){
-			echo '<h2> Gemeinsame Buchung hinzugefügt</h2>';
+			$sql = 'SELECT COUNT(*) from `gemeinsame_eintraege` WHERE person = :person';
+			$sth = $dbh->prepare($sql);
+			$sth->execute(array(
+				':person' => $auth->getUsername()));
+			echo '<h2 class="success"> Gemeinsame Buchung Nummer ';
+			echo $sth->fetchColumn();
+			echo ' hinzugefügt</h2>';
 		}
 		else {
-			echo '<h2>Eintrag hinzugefügt</h2>';
+			$sql = 'SELECT COUNT(*) from `eintraege` WHERE person = :person';
+			$sth = $dbh->prepare($sql);
+			$sth->execute(array(
+				':person' => $auth->getUsername()));
+			echo '<h2 class="success"> Eintrag Nummer ';
+			echo $sth->fetchColumn();
+			echo ' hinzugefügt</h2>';
 		}
 	}
 
