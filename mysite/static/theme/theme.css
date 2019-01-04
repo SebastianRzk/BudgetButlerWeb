@@ -543,3 +543,8 @@ td {
 .sidebar {
   padding-top: 3ex;
 }
+
+.success {
+  border: 2px solid green;
+  background-color: #90EE90;
+}

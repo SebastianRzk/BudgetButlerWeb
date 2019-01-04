@@ -57,6 +57,23 @@ class Importd(unittest.TestCase):
         assert context['element_titel'] == 'Export / Import'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
+    def test_import_withOneBuchung_should_showSuccessSingleMessage(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+        context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
+        assert context['message_content'] ==  '1 Buchung wurde importiert'
+
+    def test_import_withOneBuchung_should_showSuccessMessage(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+        context = import_data.index(PostRequest({'import':self._IMPORT_DATA_GEMEINSAM}))
+        assert context['message_content'] ==  '2 Buchungen wurden importiert'
+
+
     def test_gemeinsam_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen

@@ -6,6 +6,7 @@ from datetime import datetime
 
 from mysite.viewcore import viewcore
 from mysite.viewcore import request_handler
+from mysite.viewcore.base_html import set_success_message
 from mysite.viewcore.viewcore import post_action_is
 from mysite.test.RequestStubs import PostRequest
 from mysite.test import RequestStubs
@@ -51,10 +52,17 @@ def index(request):
     context['transaction_key'] = 'requested'
     return request_handler.handle_request(request, lambda x: context , page)
 
+def _get_success_message(last_elements):
+    number = len(last_elements)
+    if number == 1:
+        return '1 Buchung wurde importiert'
+    return '{anzahl} Buchungen wurden importiert'.format(anzahl=number)
+
 
 def handle_request(request, import_prefix='', gemeinsam=False):
     print(request)
     imported_values = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', ''))
+    context = viewcore.generate_base_context('import')
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
@@ -124,41 +132,35 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                 print('beginne mit dem direkten import')
                 _import(imported_values, gemeinsam)
 
-                context = viewcore.generate_base_context('import')
                 last_elements = []
                 for row_index, row in imported_values.iterrows():
                     last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
                 context['ausgaben'] = last_elements
-                return 'import.html', context
-
+                context = set_success_message(context, _get_success_message(last_elements))
             elif _mapping_passt(request.values, nicht_passende_kategorien):
                 print('import kann durchgeführt werden, weil mapping vorhanden')
                 imported_values = _map_kategorien(imported_values, nicht_passende_kategorien, request.values)
                 _import(imported_values, gemeinsam)
 
-                context = viewcore.generate_base_context('import')
                 last_elements = []
                 for row_index, row in imported_values.iterrows():
                     last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
                 context['ausgaben'] = last_elements
+                context = set_success_message(context, _get_success_message(last_elements))
+            else:
+                print("Nicht passende Kategorien: ", nicht_passende_kategorien)
+                options = ['neue Kategorie anlegen']
+                for kategorie_option in datenbank_kategorien:
+                    options.append('als ' + str(kategorie_option) + ' importieren')
+                options = sorted(options)
+                options.insert(0, 'neue Kategorie anlegen')
+                context['element_titel'] = 'Kategorien zuweisen'
+                context['unpassende_kategorien'] = nicht_passende_kategorien
+                context['optionen'] = options
+                context['import'] = request.values['import']
+                context['transaction_id'] = 'requested'
+                return 'import_mapping.html', context
 
-                return 'import.html', context
-
-            print("Nicht passende Kategorien: ", nicht_passende_kategorien)
-            options = ['neue Kategorie anlegen']
-            for kategorie_option in datenbank_kategorien:
-                options.append('als ' + str(kategorie_option) + ' importieren')
-            options = sorted(options)
-            options.insert(0, 'neue Kategorie anlegen')
-            context = viewcore.generate_base_context('import')
-            context['element_titel'] = 'Kategorien zuweisen'
-            context['unpassende_kategorien'] = nicht_passende_kategorien
-            context['optionen'] = options
-            context['import'] = request.values['import']
-            context['transaction_id'] = 'requested'
-            return 'import_mapping.html', context
-
-    context = viewcore.generate_base_context('import')
     context['ONLINE_DEFAULT_SERVER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER')
     context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')
     return 'import.html', context
