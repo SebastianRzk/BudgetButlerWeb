@@ -27,3 +27,11 @@ class RequesterStub:
         if url not in self.call_count:
             return None
         return self.call_count[url]
+
+
+from requests.exceptions import ConnectionError
+
+class RequesterErrorStub:
+    def post(self, url, data):
+        raise ConnectionError('Just for the test')
+

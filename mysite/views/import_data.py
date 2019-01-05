@@ -48,9 +48,7 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
 
 
 def index(request):
-    page, context = handle_request(request)
-    context['transaction_key'] = 'requested'
-    return request_handler.handle_request(request, lambda x: context , page)
+    return request_handler.handle_request(request, handle_request , 'import.html')
 
 def _get_success_message(last_elements):
     number = len(last_elements)
@@ -63,6 +61,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
     print(request)
     imported_values = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', ''))
     context = viewcore.generate_base_context('import')
+    context['transaction_key'] = 'requested'
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
@@ -159,11 +158,11 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                 context['optionen'] = options
                 context['import'] = request.values['import']
                 context['transaction_id'] = 'requested'
-                return 'import_mapping.html', context
+                context['special_page'] = 'import_mapping.html'
 
     context['ONLINE_DEFAULT_SERVER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER')
     context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')
-    return 'import.html', context
+    return context
 
 def _kategorien_map(actual, target, goal):
     if actual != target:

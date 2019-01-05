@@ -548,3 +548,8 @@ td {
   border: 2px solid green;
   background-color: #90EE90;
 }
+
+.error {
+  border: 2px solid red;
+  background-color: #FAAFBA;
+}
