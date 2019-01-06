@@ -13,6 +13,7 @@ from mysite.viewcore import request_handler
 from mysite.viewcore import configuration_provider
 from mysite.viewcore import requester
 from mysite.test.RequesterStub import RequesterStub
+from mysite.test.RequesterStub import RequesterErrorStub
 
 # Create your tests here.
 class Importd(unittest.TestCase):
@@ -57,12 +58,29 @@ class Importd(unittest.TestCase):
         assert context['element_titel'] == 'Export / Import'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
+    def test_import_withOneBuchung_should_showSuccessSingleMessage(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+        context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
+        assert context['message_content'] ==  '1 Buchung wurde importiert'
+
+    def test_import_withOneBuchung_should_showSuccessMessage(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+        context = import_data.index(PostRequest({'import':self._IMPORT_DATA_GEMEINSAM}))
+        assert context['message_content'] ==  '2 Buchungen wurden importiert'
+
+
     def test_gemeinsam_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
-        html, context = import_data.handle_request(PostRequest({'import':self._IMPORT_DATA_GEMEINSAM}), gemeinsam=True)
+        context = import_data.handle_request(PostRequest({'import':self._IMPORT_DATA_GEMEINSAM}), gemeinsam=True)
         assert context['element_titel'] == 'Export / Import'
         assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
 
@@ -88,6 +106,7 @@ class Importd(unittest.TestCase):
 
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
         assert context['element_titel'] == 'Kategorien zuweisen'
+
 
     def test_addeUnpassendenKategorie_mitPassendemMapping_shouldImportValue(self):
         self.set_up()
@@ -158,6 +177,19 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
         assert requester.instance().complete_call_count() == 3
+
+    def test_import_withError_shouldShowMessage(self):
+        self.set_up()
+        requester.INSTANCE = RequesterErrorStub()
+
+        context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+                                                      'email': '',
+                                                      'server': 'test.test',
+                                                      'password' : ''}))
+
+        assert context['message'] == True
+        assert context['message_type'] == 'error'
+        assert context['message_content'] == 'Verbindung zum Server konnte nicht aufgebaut werden.'
 
 
     def test_gemeinsamImport_withUnpassendenKategorie_shouldImportValueAndRequestmapping(self):

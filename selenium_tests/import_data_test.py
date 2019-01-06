@@ -94,6 +94,19 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         close_driver(driver)
 
+    def test_should_showSuccessMessage(self, get_driver, close_driver):
+        driver = get_driver()
+        enter_test_mode(driver)
+
+        define_kategorie(driver, 'Essen')
+        driver.get('http://localhost:5000/import/')
+        fill_element(driver, 'import', self._data)
+        driver.find_element_by_name('btn_import').click()
+
+        assert pagename(driver) == 'Export / Import'
+        assert driver.find_element_by_id('message-box-content').get_attribute('innerHTML') == '1 Buchung wurde importiert'
+        close_driver(driver)
+
 
 
 

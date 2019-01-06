@@ -5,9 +5,11 @@ Created on 04.12.2017
 '''
 from flask import render_template
 from flask import redirect
+from requests.exceptions import ConnectionError
 from mysite.test.RequestStubs import GetRequest
 from mysite.viewcore import request_handler
 from mysite.viewcore import viewcore
+from mysite.viewcore.base_html import set_error_message
 import random
 
 DATABASE_VERSION = 0
@@ -30,8 +32,16 @@ def handle_request(request, request_action, html_base_page):
         request_handler.DATABASE_VERSION = request_handler.DATABASE_VERSION + 1
         print('new db version: ' + str(request_handler.DATABASE_VERSION))
 
-    context = request_action(request)
-    viewcore.save_tainted()
+    context = viewcore.generate_base_context('Fehler')
+    try:
+        context = request_action(request)
+        viewcore.save_tainted()
+    except ConnectionError as err:
+        set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
+        context['%Errortext'] = ''
+    except Exception as e:
+        set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
+        context['%Errortext'] = ''
 
     if request.method == 'POST' and 'redirect' in request.values:
         return request_handler.REDIRECTOR('/' + str(request.values['redirect']) + '/')
@@ -42,6 +52,8 @@ def handle_request(request, request_action, html_base_page):
     if '%Errortext' in context:
         rendered_content = context['%Errortext']
     else:
+        if 'special_page' in context:
+            html_base_page = context['special_page']
         rendered_content = request_handler.RENDER_FULL_FUNC(theme(html_base_page), **context)
 
     context['content'] = rendered_content
@@ -59,6 +71,14 @@ def stub_me():
     request_handler.RENDER_FULL_FUNC = full_render_stub
     request_handler.REDIRECTOR = lambda x: x
 
+def stub_me_theme():
+    request_handler.RENDER_FULL_FUNC = full_render_stub_theme
+    request_handler.REDIRECTOR = lambda x: x
+
 def full_render_stub(theme, **context):
     return context
 
+def full_render_stub_theme(theme, **context):
+    if not 'content' in context:
+        return theme
+    return context

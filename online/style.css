@@ -44,3 +44,9 @@ header {
 .mycheckbox {
   width: 2ex;
 }
+
+.success {
+  border: 2px solid green;
+  border-radius: 5px;
+  background-color: #90EE90;
+}
