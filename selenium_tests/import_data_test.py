@@ -104,11 +104,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         driver.find_element_by_name('btn_import').click()
 
         assert pagename(driver) == 'Export / Import'
-
-        driver.get('http://localhost:5000/uebersicht/')
-        open_table_button = driver.find_element_by_id('open_2017.3')
-        open_table_button.click()
-
         assert driver.find_element_by_id('message-box-content').get_attribute('innerHTML') == '1 Buchung wurde importiert'
         close_driver(driver)
 
