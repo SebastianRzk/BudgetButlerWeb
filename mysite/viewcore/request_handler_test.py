@@ -60,4 +60,4 @@ class TesteRequestHandler(unittest.TestCase):
         print(result['message_content'])
         assert result['message']
         assert result['message_type'] == 'error'
-        assert result['message_content'] == 'Ein Fehler ist aufgetreten: \n '
+        assert result['message_content'] == 'Ein Fehler ist aufgetreten: <br>\n '
