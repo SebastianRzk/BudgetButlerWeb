@@ -1,3 +1,37 @@
+<div class="box">
+	<div class="box-header with-border">
+		<h3 class="box-title">Abrechnungszeitraum</h3>
+	</div>
+	<div class="box-body">
+	  <form role="form" action="/gemeinsamabrechnen/" method="post">
+      <div id="abrechnungsinfo">{{count}} Einträge im Zeitraum von {{mindate}} bis {{maxdate}} stehen zur Abrechnung bereit.</div>
+      <div id="set_abrechnungsinfo">{{set_count}} Einträge im Zeitraum von {{set_mindate}} bis {{set_maxdate}} sind zur Abrechnung ausgewählt.</div>
+			<div class="box-body">
+				<div class="form-group">
+					<label>Startdatum (einschließich):</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<span class="fa fa-calendar"></span>
+						</div>
+						<input value="{{set_mindate}}" type="date" min="2000-01-01" max="2030-12-31" name="date" class="form-control" required="required" autofocus="autofocus"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Endedatum (einschließich):</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<span class="fa fa-calendar"></span>
+						</div>
+						<input value="{{set_maxdate}}" type="date" min="2000-01-01" max="2030-12-31" name="date" class="form-control" required="required" autofocus="autofocus"/>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="add" id="add" class="btn bordered-hover">Abrechnung vorbereiten</button>
+			</div>
+		</form>
+  </div>
+</div>
 <div class="theme-double-columns">
 	<div class="box">
 		<div class="box-header with-border">

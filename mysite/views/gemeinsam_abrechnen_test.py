@@ -39,8 +39,22 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
     def test_shortResult_withEqualValue_shouldReturnEqualSentence(self):
         self.set_up()
+
+        name_partner = viewcore.name_of_partner()
+        self_name = viewcore.database_instance().name
+        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+
+        gemeinsame_buchungen.add(datum('01.01.2010'), 'Some Cat.', '', -11, self_name)
+        gemeinsame_buchungen.add(datum('01.01.2010'), 'Some Cat.', '', -11, name_partner)
+
         result = gemeinsam_abrechnen.index(GetRequest())
         assert result['ergebnis'] == 'Die gemeinsamen Ausgaben sind ausgeglichen.'
+
+    def test_withEmptyDatabse_shouldReturnError(self):
+        self.set_up()
+
+        result = gemeinsam_abrechnen.index(GetRequest())
+        assert '%Errortext' in result
 
     def test_shortResult_withPartnerMoreSpendings_shouldReturnEqualSentence(self):
         self.set_up()

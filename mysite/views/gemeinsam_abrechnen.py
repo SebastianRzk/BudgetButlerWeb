@@ -1,14 +1,24 @@
 from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import name_of_partner
 from mysite.viewcore import request_handler
+from mysite.viewcore.converter import datum_to_string
 
 
 def _handle_request(_):
     name_self = viewcore.database_instance().name
     name_partner = viewcore.name_of_partner()
 
-    ausgabe_sebastian = viewcore.database_instance().gemeinsamebuchungen.fuer(name_self)
-    ausgabe_maureen = viewcore.database_instance().gemeinsamebuchungen.fuer(name_partner)
+    alle_gemeinsamen_buchungen = viewcore.database_instance().gemeinsamebuchungen
+    selected_gemeinsamen_buchungen = alle_gemeinsamen_buchungen
+
+    context = viewcore.generate_base_context('gemeinsamabrechnen')
+
+    if alle_gemeinsamen_buchungen.is_empty():
+        context['%Errortext'] = 'Keine gemeinsame Buchungen erfasst'
+        return context
+
+    ausgabe_sebastian = alle_gemeinsamen_buchungen.fuer(name_self)
+    ausgabe_maureen = alle_gemeinsamen_buchungen.fuer(name_partner)
     ausgabe_sebastian = _sum(ausgabe_sebastian.Wert)
     ausgabe_maureen = _sum(ausgabe_maureen.Wert)
     ausgabe_gesamt = ausgabe_maureen + ausgabe_sebastian
@@ -23,9 +33,7 @@ def _handle_request(_):
 
     if dif_sebastian > 0:
         ergebnis = name_self + ' bekommt von ' + name_partner + ' noch ' + str('%.2f' % dif_sebastian) + '€.'
-    print("ergebnis:", ergebnis)
 
-    context = viewcore.generate_base_context('gemeinsamabrechnen')
 
     context['ausgabe_maureen'] = "%.2f" % abs(ausgabe_maureen)
     context['ausgabe_sebastian'] = "%.2f" % abs(ausgabe_sebastian)
@@ -33,6 +41,17 @@ def _handle_request(_):
     context['ergebnis'] = ergebnis
     context['myname'] = name_self
     context['partnername'] = name_partner
+
+    context['mindate'] = datum_to_string(alle_gemeinsamen_buchungen.min_date())
+    context['maxdate'] = datum_to_string(alle_gemeinsamen_buchungen.max_date())
+    context['count'] = len(alle_gemeinsamen_buchungen.get_content())
+
+    #TODO hier arbeiten
+    if not selected_gemeinsamen_buchungen.is_empty():
+        context['set_mindate'] = datum_to_string(selected_gemeinsamen_buchungen.min_date())
+        context['set_maxdate'] = datum_to_string(selected_gemeinsamen_buchungen.max_date())
+        context['set_count'] = len(selected_gemeinsamen_buchungen.get_content())
+
     return context
 
 
