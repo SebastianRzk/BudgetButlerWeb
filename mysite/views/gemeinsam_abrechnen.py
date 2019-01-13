@@ -1,14 +1,35 @@
 from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import name_of_partner
+from mysite.viewcore.viewcore import get_post_parameter_or_default
 from mysite.viewcore import request_handler
+from mysite.viewcore.converter import datum_to_string
+from mysite.viewcore.converter import datum_to_german
+from mysite.viewcore.converter import datum_from_german
+from mysite.viewcore.converter import datum
 
 
-def _handle_request(_):
+def _handle_request(request):
     name_self = viewcore.database_instance().name
     name_partner = viewcore.name_of_partner()
 
-    ausgabe_sebastian = viewcore.database_instance().gemeinsamebuchungen.fuer(name_self)
-    ausgabe_maureen = viewcore.database_instance().gemeinsamebuchungen.fuer(name_partner)
+    alle_gemeinsamen_buchungen = viewcore.database_instance().gemeinsamebuchungen
+
+    context = viewcore.generate_base_context('gemeinsamabrechnen')
+    if alle_gemeinsamen_buchungen.is_empty():
+        context['%Errortext'] = 'Keine gemeinsame Buchungen erfasst'
+        return context
+
+    mindate = alle_gemeinsamen_buchungen.min_date()
+    maxdate = alle_gemeinsamen_buchungen.max_date()
+
+    set_mindate = get_post_parameter_or_default(request, 'set_mindate', mindate, mapping_function=datum)
+    set_maxdate = get_post_parameter_or_default(request, 'set_maxdate', maxdate, mapping_function=datum)
+    selected_gemeinsamen_buchungen = alle_gemeinsamen_buchungen.select_range(set_mindate, set_maxdate)
+
+
+
+    ausgabe_sebastian = selected_gemeinsamen_buchungen.fuer(name_self)
+    ausgabe_maureen = selected_gemeinsamen_buchungen.fuer(name_partner)
     ausgabe_sebastian = _sum(ausgabe_sebastian.Wert)
     ausgabe_maureen = _sum(ausgabe_maureen.Wert)
     ausgabe_gesamt = ausgabe_maureen + ausgabe_sebastian
@@ -23,9 +44,7 @@ def _handle_request(_):
 
     if dif_sebastian > 0:
         ergebnis = name_self + ' bekommt von ' + name_partner + ' noch ' + str('%.2f' % dif_sebastian) + '€.'
-    print("ergebnis:", ergebnis)
 
-    context = viewcore.generate_base_context('gemeinsamabrechnen')
 
     context['ausgabe_maureen'] = "%.2f" % abs(ausgabe_maureen)
     context['ausgabe_sebastian'] = "%.2f" % abs(ausgabe_sebastian)
@@ -33,6 +52,17 @@ def _handle_request(_):
     context['ergebnis'] = ergebnis
     context['myname'] = name_self
     context['partnername'] = name_partner
+
+    context['mindate'] = datum_to_german(mindate)
+    context['maxdate'] = datum_to_german(maxdate)
+    context['count'] = len(alle_gemeinsamen_buchungen.get_content())
+
+    context['set_mindate_rfc'] = datum_to_string(set_mindate)
+    context['set_maxdate_rfc'] = datum_to_string(set_maxdate)
+    context['set_mindate'] = datum_to_german(set_mindate)
+    context['set_maxdate'] = datum_to_german(set_maxdate)
+    context['set_count'] = len(selected_gemeinsamen_buchungen.get_content())
+
     return context
 
 
@@ -50,12 +80,13 @@ def abrechnen(request):
     return request_handler.handle_request(request, _handle_abrechnen_request, 'present_abrechnung.html')
 
 
-def _handle_abrechnen_request(_):
-    print("Abrechnen")
+def _handle_abrechnen_request(request):
     context = viewcore.generate_base_context('gemeinsamabrechnen')
-    abrechnungs_text = viewcore.database_instance().abrechnen()
+
+    set_mindate = get_post_parameter_or_default(request, 'set_mindate', None, mapping_function=datum_from_german)
+    set_maxdate = get_post_parameter_or_default(request, 'set_maxdate', None, mapping_function=datum_from_german)
+
+    abrechnungs_text = viewcore.database_instance().abrechnen(mindate=set_mindate, maxdate=set_maxdate)
     context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
-    viewcore.database_instance().einzelbuchungen.taint()
-    viewcore.database_instance().gemeinsamebuchungen.taint()
 
     return context

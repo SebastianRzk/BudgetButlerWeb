@@ -66,7 +66,7 @@
 		  {% if message %}
 		  <div class="box theme-row {{message_type}}">
         <div class="box-body">
-        <strong id="message-box-content">{{message_content}}</strong>
+        <strong id="message-box-content">{{message_content | safe}}</strong>
         </div>
 		  </div>
 		  {% endif %}

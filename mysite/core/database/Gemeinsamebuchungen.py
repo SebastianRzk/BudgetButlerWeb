@@ -30,8 +30,8 @@ class Gemeinsamebuchungen(DatabaseObject):
             anteil_gemeinsamer_buchungen = anteil_gemeinsamer_buchungen.append(einzelbuchung, ignore_index=True)
         return anteil_gemeinsamer_buchungen
 
-    def empty(self):
-        self.content = self.content[self.content.Wert == 0]
+    def drop(self, indices_to_drop):
+        self.content = self.content.drop(indices_to_drop, axis=0)
 
     def _sort(self):
         self.content = self.content.sort_values(by='Datum')
@@ -60,3 +60,35 @@ class Gemeinsamebuchungen(DatabaseObject):
 
     def fuer(self, person):
         return self.content[self.content.Person == person]
+
+    def select_range(self, mindate, maxdate):
+        data = self.content.copy()
+        data = data[data.Datum >= mindate]
+        data = data[data.Datum <= maxdate]
+
+        new_gemeinsame_buchungen = Gemeinsamebuchungen()
+        new_gemeinsame_buchungen.content = data
+
+        return new_gemeinsame_buchungen
+
+    def min_date(self):
+        return self.content.Datum.min()
+
+    def max_date(self):
+        return self.content.Datum.max()
+
+    def is_empty(self):
+        return self.content.empty
+
+
+    def get_content(self):
+        result = []
+        for index,row in self.content.iterrows():
+            result.append({
+                'Datum': row.Datum,
+                'Name': row.Name,
+                'Kategorie': row.Kategorie,
+                'Person': row.Person,
+                'Wert': row.Wert
+            })
+        return result

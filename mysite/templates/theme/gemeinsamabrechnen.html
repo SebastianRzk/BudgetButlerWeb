@@ -1,4 +1,40 @@
 <div class="theme-double-columns">
+  <div class="box">
+	  <div class="box-header with-border">
+		  <h3 class="box-title">Abrechnungszeitraum</h3>
+	  </div>
+	  <div class="box-body">
+	    <form role="form" action="/gemeinsamabrechnen/" method="post">
+        <p><div id="abrechnungsinfo">{{count}} Einträge im Zeitraum von {{mindate}} bis {{maxdate}} stehen zur Abrechnung bereit.</div></p>
+        <p><div id="set_abrechnungsinfo">{{set_count}} Einträge im Zeitraum von {{set_mindate}} bis {{set_maxdate}} sind zur Abrechnung ausgewählt.</div></p>
+			  <div class="box-body">
+				  <div class="form-group">
+					  <label>Startdatum (einschließich):</label>
+					  <div class="input-group">
+						  <div class="input-group-addon">
+							  <span class="fa fa-calendar"></span>
+						  </div>
+						  <input value="{{set_mindate_rfc}}" type="date" min="2000-01-01" max="2030-12-31" name="set_mindate" class="form-control" required="required" autofocus="autofocus"/>
+					  </div>
+				  </div>
+				  <div class="form-group">
+					  <label>Endedatum (einschließich):</label>
+					  <div class="input-group">
+						  <div class="input-group-addon">
+							  <span class="fa fa-calendar"></span>
+						  </div>
+						  <input value="{{set_maxdate_rfc}}" type="date" min="2000-01-01" max="2030-12-31" name="set_maxdate" class="form-control" required="required" autofocus="autofocus"/>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="box-footer">
+				  <button type="submit" name="action" value="add" id="add" class="btn bordered-hover">Abrechnung vorbereiten</button>
+			  </div>
+		  </form>
+    </div>
+  </div>
+</div>
+<div class="theme-double-columns">
 	<div class="box">
 		<div class="box-header with-border">
 			<h3 class="box-title">Ausgaben pro Person</h3>
@@ -70,7 +106,11 @@
 			{{ergebnis}}
 		</div>
 		<div class="box-footer clearfix">
-			<a href="/abrechnen" class="btn bordered-hover pull-left">Jetzt Abrechnen!</a>
+		  <form role="form" action="/abrechnen/" method="post">
+	     <input value="{{set_mindate}}" type="hidden" name="set_mindate"></input>
+	     <input value="{{set_maxdate}}" type="hidden" name="set_maxdate"></input>
+		   <button type="submit" class="btn bordered-hover pull-left">Jetzt Abrechnen!</button>
+		  </form>
 		</div>
 	</div>
 </div>

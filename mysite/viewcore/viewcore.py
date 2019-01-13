@@ -193,6 +193,16 @@ def post_action_is(request, action_name):
         return False
     return request.values['action'] == action_name
 
+def get_post_parameter_or_default(request, key, default, mapping_function= lambda x: x):
+    if request.method != 'POST':
+        return default
+
+    if not key in request.values:
+        return default
+
+    return mapping_function(request.values[key])
+
+
 
 def today():
     return viewcore.TODAY()
