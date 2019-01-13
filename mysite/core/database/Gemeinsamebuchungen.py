@@ -30,8 +30,8 @@ class Gemeinsamebuchungen(DatabaseObject):
             anteil_gemeinsamer_buchungen = anteil_gemeinsamer_buchungen.append(einzelbuchung, ignore_index=True)
         return anteil_gemeinsamer_buchungen
 
-    def empty(self):
-        self.content = self.content[self.content.Wert == 0]
+    def drop(self, indices_to_drop):
+        self.content = self.content.drop(indices_to_drop, axis=0)
 
     def _sort(self):
         self.content = self.content.sort_values(by='Datum')

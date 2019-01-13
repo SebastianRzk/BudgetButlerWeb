@@ -74,15 +74,25 @@ class Database:
     def _write_trenner(self, abrechnunsdatei):
         return abrechnunsdatei.write("".rjust(40, "#") + "\n ")
 
-    def abrechnen(self):
+    def abrechnen(self, mindate=None, maxdate=None):
         '''
         rechnet gemeinsame ausgaben aus der Datenbank ab
         '''
+        gemeinsamebuchungen = self.gemeinsamebuchungen
+
+        if mindate == None:
+            mindate = gemeinsamebuchungen.min_date()
+
+        if maxdate == None:
+            maxdate = gemeinsamebuchungen.max_date()
+
+        gemeinsamebuchungen = gemeinsamebuchungen.select_range(mindate, maxdate)
+
         name_self = viewcore.database_instance().name
         name_partner = viewcore.name_of_partner()
 
-        ausgaben_maureen = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == name_partner]
-        ausgaben_sebastian = self.gemeinsamebuchungen.content[self.gemeinsamebuchungen.content.Person == name_self]
+        ausgaben_maureen = gemeinsamebuchungen.content[gemeinsamebuchungen.content.Person == name_partner]
+        ausgaben_sebastian = gemeinsamebuchungen.content[gemeinsamebuchungen.content.Person == name_self]
         summe_maureen = self._sum(ausgaben_maureen['Wert'])
         summe_sebastian = self._sum(ausgaben_sebastian['Wert'])
 
@@ -111,7 +121,7 @@ class Database:
         self._write_trenner(abrechnunsdatei)
 
         abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
-        for _, row in self.gemeinsamebuchungen.content.iterrows():
+        for _, row in gemeinsamebuchungen.content.iterrows():
             abrechnunsdatei.write(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'] / 2)).rjust(7, " ") + "\n")
 
         abrechnunsdatei.write("\n")
@@ -136,7 +146,7 @@ class Database:
             abrechnunsdatei.write(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
 
         ausgaben = DataFrame()
-        for _ , row in self.gemeinsamebuchungen.content.iterrows():
+        for _ , row in gemeinsamebuchungen.content.iterrows():
             buchung = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] / 2)))
             buchung.Dynamisch = False
             ausgaben = ausgaben.append(buchung)
@@ -147,7 +157,9 @@ class Database:
         abrechnunsdatei.write("#######MaschinenimportEnd\n")
 
         self.einzelbuchungen.append_row(ausgaben)
-        self.gemeinsamebuchungen.empty()
+        self.einzelbuchungen.taint()
+
+        self.gemeinsamebuchungen.drop(gemeinsamebuchungen.content.index.tolist())
         self.taint()
         FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()

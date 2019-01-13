@@ -38,3 +38,14 @@ class ViewcoreTest(unittest.TestCase):
         viewcore.stub_today_with(datum('01.01.2012'))
         viewcore.reset_viewcore_stubs()
         assert viewcore.today() == datetime.datetime.now().date()
+
+    def test_getPostParameterOrDefault_withGetRequest_shouldReturnDefault(self):
+        assert viewcore.get_post_parameter_or_default(GetRequest(), 'test', 'default') == 'default'
+
+    def test_getPostParameterOrDefault_withPostRequestAndNoMatchingParameter_shouldReturnDefault(self):
+        assert viewcore.get_post_parameter_or_default(PostRequest({}), 'test', 'default') == 'default'
+
+    def test_getPostParameterOrDefault_withPostRequestAndMatchingParameter_shouldReturnValue(self):
+        request = PostRequest({'test' : 'value'})
+        assert viewcore.get_post_parameter_or_default(request, 'test', 'default') == 'value'
+        

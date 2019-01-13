@@ -112,6 +112,71 @@ class gemeinsame_buchungen(unittest.TestCase):
             'Person': 'sebastian'
         }]
 
+
+    def test_drop_withMatchingIndex_shouldRemoveData(self):
+        component_under_test = Gemeinsamebuchungen()
+        component_under_test.add(
+            datum('1.1.2010'),
+            'kategorie1',
+            'name1',
+            1.23,
+            'person1')
+
+        component_under_test.add(
+            datum('2.2.2020'),
+            'kategorie2',
+            'name2',
+            3.45,
+            'person2')
+
+        component_under_test.drop([1])
+
+        assert component_under_test.get_content() == [
+            {
+                'Datum': datum('01.01.2010'),
+                'Kategorie': 'kategorie1',
+                'Name': 'name1',
+                'Person': 'person1',
+                'Wert': 1.23
+            }
+        ]
+
+    def test_drop_withNoMatchingIndex_shouldRemoveNothing(self):
+        component_under_test = Gemeinsamebuchungen()
+        component_under_test.add(
+            datum('1.1.2010'),
+            'kategorie1',
+            'name1',
+            1.23,
+            'person1')
+
+        component_under_test.add(
+            datum('2.2.2020'),
+            'kategorie2',
+            'name2',
+            3.45,
+            'person2')
+
+        component_under_test.drop([])
+
+        assert component_under_test.get_content() == [
+            {
+                'Datum': datum('01.01.2010'),
+                'Kategorie': 'kategorie1',
+                'Name': 'name1',
+                'Person': 'person1',
+                'Wert': 1.23
+            },
+            {
+                'Datum': datum('02.02.2020'),
+                'Kategorie': 'kategorie2',
+                'Name': 'name2',
+                'Person': 'person2',
+                'Wert': 3.45
+            }
+        ]
+
+
     def test_getContent_withNoEntry_shouldReturnEmptyList(self):
         component_under_test = Gemeinsamebuchungen()
 
@@ -148,5 +213,4 @@ class gemeinsame_buchungen(unittest.TestCase):
                 'Person': 'person2',
                 'Wert': 3.45
             }
-
         ]
