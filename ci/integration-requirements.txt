@@ -1,5 +1,5 @@
 -r ../requirements.txt
-pytest-cov=2.5.0
+pytest-cov==2.5.0
 pyyaml>3.11
 selenium>3.6
 codecov>=2.0.15
