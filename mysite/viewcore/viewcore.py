@@ -69,19 +69,6 @@ def add_changed_dauerauftraege(new_changed_dauerauftraege_event):
     context = get_changed_dauerauftraege()
     context.append(new_changed_dauerauftraege_event)
 
-
-def get_changed_stechzeiten():
-    context = _get_context()
-    if "stechzeiten_changed" not in context.keys():
-        context["stechzeiten_changed"] = []
-    return context["stechzeiten_changed"]
-
-
-def add_changed_stechzeiten(new_changed_stechzeiten_element):
-    context = get_changed_stechzeiten()
-    context.append(new_changed_stechzeiten_element)
-
-
 def switch_database_instance(database_name):
     ausgeschlossene_kategorien =  set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
     viewcore.DATABASE_INSTANCE = DBManager.read(database_name, ausgeschlossene_kategorien = ausgeschlossene_kategorien)

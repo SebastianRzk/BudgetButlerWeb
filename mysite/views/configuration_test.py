@@ -50,13 +50,13 @@ class TestKonfiguration(unittest.TestCase):
         configuration.index(PostRequest({'action':'set_partnername', 'partnername':'testpartner'}))
         assert viewcore.name_of_partner() == 'testpartner'
 
-    def test_change_themecolor_should_change_partnername(self):
+    def test_change_themecolor_should_change_themecolor(self):
         self.set_up()
         assert configuration_provider.get_configuration('THEME_COLOR') == '#00acd6'
         configuration.index(PostRequest({'action':'change_themecolor', 'themecolor':'#000000'}))
         assert configuration_provider.get_configuration('THEME_COLOR') == '#000000'
 
-    def test_change_themecolor_should_change_partnername(self):
+    def test_change_schliesse_kateorien_aus_should_change_add_ausgeschlossene_kategorien(self):
         self.set_up()
         assert configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == ''
         configuration.index(PostRequest({'action':'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien':'Alkohol'}))
