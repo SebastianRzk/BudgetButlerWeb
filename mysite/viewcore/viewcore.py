@@ -3,8 +3,6 @@ Created on 24.04.2017
 
 @author: sebastian
 '''
-from pygments.lexer import default
-
 from mysite.core import DBManager
 from mysite.viewcore import viewcore
 from mysite.viewcore import configuration_provider
