@@ -80,6 +80,7 @@ def _handle_request(request):
         ergebnis_satz = name_self + ' bekommt von ' + name_partner + ' noch ' + str('%.2f' % sebastian_dif) + '€.'
     ergebnis += ergebnis_satz
 
+    context['str_ergebnis'] = ergebnis_satz.replace('<br>', '\n')
     context['ausgabe_maureen'] = "%.2f" % abs(ausgabe_maureen)
     context['ausgabe_sebastian'] = "%.2f" % abs(ausgabe_sebastian)
     context['sebastian_diff'] = "%.2f" % sebastian_dif
@@ -132,8 +133,16 @@ def _handle_abrechnen_request(request):
 
     set_mindate = get_post_parameter_or_default(request, 'set_mindate', None, mapping_function=datum_from_german)
     set_maxdate = get_post_parameter_or_default(request, 'set_maxdate', None, mapping_function=datum_from_german)
+    set_self_kategorie = get_post_parameter_or_default(request, 'set_self_kategorie', None)
+    set_other_kategorie = get_post_parameter_or_default(request, 'set_other_kategorie', None)
 
-    abrechnungs_text = viewcore.database_instance().abrechnen(mindate=set_mindate, maxdate=set_maxdate)
+    abrechnungs_text = viewcore.database_instance().abrechnen(mindate=set_mindate,
+                                                              maxdate=set_maxdate,
+                                                              set_ergebnis=request.values['set_ergebnis'],
+                                                              verhaeltnis=int(request.values['set_verhaeltnis']),
+                                                              set_self_kategorie=set_self_kategorie,
+                                                              set_other_kategorie=set_other_kategorie
+                                                              )
     context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
 
     return context

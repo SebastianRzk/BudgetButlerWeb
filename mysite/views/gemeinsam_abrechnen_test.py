@@ -32,7 +32,8 @@ class Gemeinsamabrechnen(unittest.TestCase):
         self.set_up()
         testdb = viewcore.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
-        gemeinsam_abrechnen.abrechnen(PostRequest({}))
+        gemeinsam_abrechnen.abrechnen(PostRequest({'set_ergebnis':'',
+                                                   'set_verhaeltnis':'50'}))
 
         assert testdb.einzelbuchungen.anzahl() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'

@@ -179,10 +179,19 @@
 			{{ergebnis | safe}}
 		</div>
 		<div class="box-footer clearfix">
-		  <form role="form" action="/abrechnen/" method="post">
-	     <input value="{{set_mindate}}" type="hidden" name="set_mindate"/>
-		   <button type="submit" class="btn bordered-hover pull-left">Jetzt Abrechnen!</button>
-		  </form>
+            <form role="form" action="/abrechnen/" method="post">
+                <input value="{{set_mindate}}" type="hidden" name="set_mindate"/>
+                <input value="{{set_maxdate}}" type="hidden" name="set_maxate"/>
+                <input value="{{set_verhaeltnis}}" type="hidden" name="set_verhaeltnis"/>
+                <input value="{{str_ergebnis}}" type="hidden" name="set_ergebnis"/>
+                {% if set_self_kategorie %}
+                    <input value="{{set_self_kategorie_value}}" type="hidden" name="set_self_kategorie"/>
+                {% endif %}
+                {% if set_other_kategorie %}
+                    <input value="{{set_other_kategorie_value}}" type="hidden" name="set_other_kategorie"/>
+                {% endif %}
+                <button type="submit" class="btn bordered-hover pull-left">Jetzt Abrechnen!</button>
+            </form>
 		</div>
 	</div>
 </div>

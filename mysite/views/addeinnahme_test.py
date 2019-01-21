@@ -16,7 +16,6 @@ from mysite.test.RequestStubs import GetRequest
 from mysite.test.RequestStubs import PostRequest
 from mysite.test.RequestStubs import VersionedPostRequest
 from views import addeinnahme
-from mysite.core.DatabaseModule import Database
 from mysite.core import FileSystem
 from mysite.viewcore import viewcore
 from mysite.viewcore.viewcore import database_instance as db

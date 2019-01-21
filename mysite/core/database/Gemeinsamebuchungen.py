@@ -31,7 +31,9 @@ class Gemeinsamebuchungen(DatabaseObject):
         return anteil_gemeinsamer_buchungen
 
     def drop(self, indices_to_drop):
+        print(self.content)
         self.content = self.content.drop(indices_to_drop, axis=0)
+        print(self.content)
 
     def _sort(self):
         self.content = self.content.sort_values(by='Datum')
