@@ -70,11 +70,11 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
-            r = requests.post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
-            print(r.content)
+            r = requester.instance().post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
+            print(r)
 
-            response = handle_request(PostRequest({'import' : r.content.decode("utf-8")}), import_prefix='Internet')
-            r = requests.post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
+            response = handle_request(PostRequest({'import' : r}), import_prefix='Internet')
+            r = requester.instance().post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
 
         if post_action_is(request, 'load_online_gemeinsame_transactions'):

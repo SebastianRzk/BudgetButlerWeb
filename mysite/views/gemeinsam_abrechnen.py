@@ -47,6 +47,9 @@ def _handle_request(request):
 
     ergebnis = ''
 
+    if set_verhaeltnis != 50:
+        ergebnis += '{self_name} übernimmt einen Anteil von {verhaeltnis}% der Ausgaben.<br>'.format(self_name=name_self, verhaeltnis=set_verhaeltnis)
+
     if is_post_parameter_set(request, 'set_limit'):
         ergebnis_satz = '''Durch das Limit bei {name} von {limit_value} EUR wurde das Verhältnis von {verhaeltnis_alt} auf {verhaeltnis_neu} aktualisiert<br>'''
         verhaeltnis_alt = set_verhaeltnis
@@ -80,7 +83,7 @@ def _handle_request(request):
         ergebnis_satz = name_self + ' bekommt von ' + name_partner + ' noch ' + str('%.2f' % sebastian_dif) + '€.'
     ergebnis += ergebnis_satz
 
-    context['str_ergebnis'] = ergebnis_satz.replace('<br>', '\n')
+    context['str_ergebnis'] = ergebnis.replace('<br>', '\n')
     context['ausgabe_maureen'] = "%.2f" % abs(ausgabe_maureen)
     context['ausgabe_sebastian'] = "%.2f" % abs(ausgabe_sebastian)
     context['sebastian_diff'] = "%.2f" % sebastian_dif
@@ -101,6 +104,7 @@ def _handle_request(request):
     context['set_mindate'] = datum_to_german(set_mindate)
     context['set_maxdate'] = datum_to_german(set_maxdate)
     context['set_count'] = len(selected_gemeinsamen_buchungen.get_content())
+    context['set_verhaeltnis_real'] = int(set_verhaeltnis)
 
     context['kategorien'] = db.einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True)
 

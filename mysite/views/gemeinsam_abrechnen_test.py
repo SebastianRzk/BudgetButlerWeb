@@ -78,7 +78,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
         result = gemeinsam_abrechnen.index(PostRequest({'set_verhaeltnis': 60}))
 
-        assert result['ergebnis'] == 'Maureen bekommt von Test_User noch 10.00€.'
+        assert result['ergebnis'] == 'Test_User übernimmt einen Anteil von 60% der Ausgaben.<br>Maureen bekommt von Test_User noch 10.00€.'
         assert result['sebastian_soll'] == '60.00'
         assert result['maureen_soll'] == '40.00'
         assert result['sebastian_diff'] == '-10.00'
@@ -124,6 +124,8 @@ class Gemeinsamabrechnen(unittest.TestCase):
         assert result['maureen_soll'] == '40.00'
         assert result['sebastian_diff'] == '-10.00'
         assert result['maureen_diff'] == '10.00'
+        assert result['set_verhaeltnis'] == 50
+        assert result['set_verhaeltnis_real'] == 60
 
     def test_result_withLimitSelfAndValueUnderLimit_shouldReturnDefaultVerhaeltnis(self):
         self.set_up()

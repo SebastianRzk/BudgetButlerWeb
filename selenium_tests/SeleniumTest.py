@@ -31,6 +31,10 @@ def close_driver(driver):
         return
     driver.close()
 
+def content_of(driver, element_id):
+    return driver.find_element_by_id(element_id).get_attribute('innerHTML')
+
+
 def _launch_head_firefox():
     firefox_options = Options()
     firefox_options.add_argument("--window-size=1920,1080")
@@ -92,7 +96,7 @@ def get_selected_option(driver, option_id):
     return selected_option.text
 
 def pagename(driver):
-    return driver.find_element_by_id('pagetitle').get_attribute('innerHTML')
+    return content_of(driver, 'pagetitle')
 
 
 
