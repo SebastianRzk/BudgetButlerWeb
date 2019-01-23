@@ -8,7 +8,6 @@ from SeleniumTest import fill_element
 from SeleniumTest import enter_test_mode
 from SeleniumTest import define_kategorie
 from SeleniumTest import select_option
-from time import sleep
 from SeleniumTest import get_selected_option
 
 class TestUI(SeleniumTestClass):

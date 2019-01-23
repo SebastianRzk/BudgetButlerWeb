@@ -28,6 +28,12 @@ class StringWriter():
         '''write line into virtual file'''
         self.value = self.value + new_line
 
+    def write_line(self, new_line):
+        self.write(str(new_line) + '\n')
+
+    def write_empty_line(self, count=1):
+        self.write('\n' * count)
+
     def to_string(self):
         ''' get filecontent'''
         return self.value
@@ -74,7 +80,7 @@ class Database:
     def _write_trenner(self, abrechnunsdatei):
         return abrechnunsdatei.write("".rjust(40, "#") + "\n ")
 
-    def abrechnen(self, mindate=None, maxdate=None):
+    def abrechnen(self, mindate=None, maxdate=None, set_ergebnis=None, verhaeltnis=50, set_self_kategorie=None, set_other_kategorie=None):
         '''
         rechnet gemeinsame ausgaben aus der Datenbank ab
         '''
@@ -90,79 +96,113 @@ class Database:
 
         name_self = viewcore.database_instance().name
         name_partner = viewcore.name_of_partner()
+        gemeinsame_buchungen_content = gemeinsamebuchungen.content
 
-        ausgaben_maureen = gemeinsamebuchungen.content[gemeinsamebuchungen.content.Person == name_partner]
-        ausgaben_sebastian = gemeinsamebuchungen.content[gemeinsamebuchungen.content.Person == name_self]
+        ausgaben_maureen = gemeinsame_buchungen_content[gemeinsame_buchungen_content.Person == name_partner]
+        ausgaben_sebastian = gemeinsame_buchungen_content[gemeinsame_buchungen_content.Person == name_self]
         summe_maureen = self._sum(ausgaben_maureen['Wert'])
         summe_sebastian = self._sum(ausgaben_sebastian['Wert'])
 
         ausgaben_gesamt = summe_maureen + summe_sebastian
 
-        dif_maureen = (ausgaben_gesamt / 2) - summe_maureen
-
         abrechnunsdatei = StringWriter()
-        abrechnunsdatei.write("Abrechnung vom " + datum_to_german(viewcore.today()) + "\n")
+        zeitraum = datum_to_german(mindate) + '-' + datum_to_german(maxdate)
+        abrechnunsdatei.write_line('Abrechnung vom ' + datum_to_german(viewcore.today()) + ' (' + zeitraum + ')')
         self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write("Ergebnis:\n")
+        abrechnunsdatei.write_line('Ergebnis:')
 
-        if dif_maureen > 0:
-            abrechnunsdatei.write(name_self + ' muss an ' + name_partner + ' noch ' + str('%.2f' % dif_maureen) + "€ überweisen.\n")
-        else:
-            abrechnunsdatei.write(name_partner + ' muss an ' + name_self + ' noch ' + str("%.2f" % (dif_maureen * -1)) + "€ überweisen.\n")
+        abrechnunsdatei.write_line(set_ergebnis)
 
-        abrechnunsdatei.write("\n")
-        abrechnunsdatei.write(('Ausgaben von ' + name_partner).ljust(30, " ") + str("%.2f" % summe_maureen).rjust(7, " ") + "\n")
-        abrechnunsdatei.write(('Ausgaben von ' + name_self).ljust(30, " ") + str("%.2f" % summe_sebastian).rjust(7, " ") + "\n")
-        abrechnunsdatei.write("".ljust(38, "-") + "\n")
-        abrechnunsdatei.write("Gesamt".ljust(30, " ") + str("%.2f" % ausgaben_gesamt).rjust(7, " ") + "\n \n \n")
+        abrechnunsdatei.write_empty_line()
+        self._write_large_table_row(abrechnunsdatei, 'Ausgaben von ' + name_partner, summe_maureen)
+        self._write_large_table_row(abrechnunsdatei, 'Ausgaben von ' + name_self, summe_sebastian)
+        abrechnunsdatei.write_line("".ljust(38, "-"))
+        self._write_large_table_row(abrechnunsdatei, "Gesamt", ausgaben_gesamt)
 
-        self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write("Gesamtausgaben pro Person \n")
-        self._write_trenner(abrechnunsdatei)
+        if verhaeltnis == 50:
+            haelfte_gemeinsame_buchungen = gemeinsame_buchungen_content.copy()
+            haelfte_gemeinsame_buchungen.Wert = haelfte_gemeinsame_buchungen.Wert.map(lambda x: x*0.5)
+            self.write_into_file(abrechnunsdatei, haelfte_gemeinsame_buchungen , 'Gesamtausgaben pro Person ')
 
-        abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
-        for _, row in gemeinsamebuchungen.content.iterrows():
-            abrechnunsdatei.write(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'] / 2)).rjust(7, " ") + "\n")
+        self.write_into_file(abrechnunsdatei, ausgaben_maureen, 'Ausgaben von ' + name_partner)
 
-        abrechnunsdatei.write("\n")
-        abrechnunsdatei.write("\n")
+        self.write_into_file(abrechnunsdatei, ausgaben_sebastian, 'Ausgaben von ' + name_self)
 
-        self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write('Ausgaben von ' + name_partner + '\n')
-        self._write_trenner(abrechnunsdatei)
+        ausgaben_fuer_maureen = DataFrame()
+        faktor_maureen = self._faktor_other(verhaeltnis)
 
-        abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
-        for _ , row in ausgaben_maureen.iterrows():
-            abrechnunsdatei.write(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
+        ausgaben_fuer_sebastian = DataFrame()
+        faktor_sebastian = self._faktor_self(verhaeltnis)
 
-        abrechnunsdatei.write("\n")
-        abrechnunsdatei.write("\n")
-        self._write_trenner(abrechnunsdatei)
-        abrechnunsdatei.write('Ausgaben von ' + name_self + '\n')
-        self._write_trenner(abrechnunsdatei)
+        summe_halb = gemeinsame_buchungen_content.Wert.sum()*0.5
 
-        abrechnunsdatei.write("Datum".ljust(10, " ") + " Kategorie    " + "Name".ljust(20, " ") + " " + "Wert".rjust(7, " ") + "\n")
-        for _ , row in ausgaben_sebastian.iterrows():
-            abrechnunsdatei.write(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " ") + "\n")
+        if set_self_kategorie:
+            faktor_sebastian = 0.5
 
-        ausgaben = DataFrame()
-        for _ , row in gemeinsamebuchungen.content.iterrows():
-            buchung = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] / 2)))
-            buchung.Dynamisch = False
-            ausgaben = ausgaben.append(buchung)
+        if set_other_kategorie:
+            faktor_maureen = 0.5
 
-        abrechnunsdatei.write("\n\n")
-        abrechnunsdatei.write("#######MaschinenimportStart\n")
-        abrechnunsdatei.write(ausgaben.to_csv(index=False))
-        abrechnunsdatei.write("#######MaschinenimportEnd\n")
 
-        self.einzelbuchungen.append_row(ausgaben)
+        for _ , row in gemeinsame_buchungen_content.iterrows():
+            buchung_maureen = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] * faktor_maureen)))
+            buchung_maureen.Dynamisch = False
+            ausgaben_fuer_maureen = ausgaben_fuer_maureen.append(buchung_maureen)
+
+            buchung_sebastian = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] * faktor_sebastian)))
+            buchung_sebastian.Dynamisch = False
+            ausgaben_fuer_sebastian = ausgaben_fuer_sebastian.append(buchung_sebastian)
+
+        if set_self_kategorie:
+            extra_wert =  (ausgaben_gesamt * self._faktor_self(verhaeltnis)) - summe_halb
+            extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_self_kategorie, set_self_kategorie, ("%.2f" % extra_wert))
+            extra_ausgleichs_buchung.Dynamisch = False
+            ausgaben_fuer_sebastian = ausgaben_fuer_sebastian.append(extra_ausgleichs_buchung)
+
+        if set_other_kategorie:
+            extra_wert =  (ausgaben_gesamt * self._faktor_other(verhaeltnis)) - summe_halb
+            extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_other_kategorie, set_other_kategorie, ("%.2f" % extra_wert))
+            extra_ausgleichs_buchung.Dynamisch = False
+            ausgaben_fuer_maureen = ausgaben_fuer_maureen.append(extra_ausgleichs_buchung)
+
+        abrechnunsdatei.write_empty_line(count=2)
+        abrechnunsdatei.write_line("#######MaschinenimportStart")
+        abrechnunsdatei.write(ausgaben_fuer_maureen.to_csv(index=False))
+        abrechnunsdatei.write_line("#######MaschinenimportEnd")
+
+        self.einzelbuchungen.append_row(ausgaben_fuer_sebastian)
         self.einzelbuchungen.taint()
 
-        self.gemeinsamebuchungen.drop(gemeinsamebuchungen.content.index.tolist())
+        self.gemeinsamebuchungen.drop(gemeinsame_buchungen_content.index.tolist())
         self.taint()
         FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
         return abrechnunsdatei.to_string()
+
+    def _faktor_self(self, verhaeltnis):
+        return verhaeltnis / 100
+
+    def _faktor_other(self, verhaeltnis):
+        return self._faktor_self(100 - verhaeltnis)
+
+    def _write_large_table_row(self, abrechnunsdatei, name, summe_sebastian):
+        abrechnunsdatei.write_line(name.ljust(30, " ") + str("%.2f" % summe_sebastian).rjust(7, " "))
+
+    def write_into_file(self, abrechnunsdatei, ausgaben_sebastian, title):
+        abrechnunsdatei.write_empty_line(count=2)
+        self._write_trenner(abrechnunsdatei)
+        abrechnunsdatei.write_line(title)
+        self._write_trenner(abrechnunsdatei)
+        self._write_tabelle(abrechnunsdatei, ausgaben_sebastian)
+
+    def _write_tabelle(self, writer, tabelle):
+        writer.write_line(self._to_left("Datum", 10) + self._to_left(" Kategorie", 14) + self._to_left("Name", 21) + self._to_right("Wert", 7))
+        for _ , row in tabelle.iterrows():
+            writer.write_line(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " "))
+
+    def _to_left(self, target_string, size):
+        return target_string.ljust(size, ' ')
+
+    def _to_right(self, target_string, size):
+        return target_string.rjust(size, ' ')
 
     def _sum(self, data):
         if data.empty:

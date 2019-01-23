@@ -1,4 +1,3 @@
-from datetime import date
 import unittest
 
 from mysite.test.FileSystemStub import FileSystemStub
@@ -123,6 +122,26 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 2017-03-06,Essen,Edeka,-20.0,True,Maureen
 #######MaschinenimportEnd
 '''
+
+    def test_einzelbuchungImport_addePassendeKategorie_shouldImportValue(self):
+        self.set_up()
+        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+
+        requester.INSTANCE = RequesterStub({'https://test.test/getabrechnung.php': self._IMPORT_DATA,
+                                            'https://test.test/deleteitems.php': '',
+                                            'https://test.test/getusername.php': 'Sebastian'})
+
+        context = import_data.index(PostRequest({'action': 'load_online_transactions',
+                                                 'email': '',
+                                                 'server': 'test.test',
+                                                 'password': ''}))
+
+        assert context['element_titel'] == 'Export / Import'
+        assert len(viewcore.database_instance().einzelbuchungen.content) == 2
+
+        assert requester.instance().call_count_of('https://test.test/deleteitems.php') == 1
+        assert requester.instance().complete_call_count() == 2
 
     def test_gemeinsamImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()

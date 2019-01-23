@@ -41,6 +41,7 @@ def handle_request(request, request_action, html_base_page):
         context['%Errortext'] = ''
     except Exception as e:
         set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
+        print(e)
         context['%Errortext'] = ''
 
     if request.method == 'POST' and 'redirect' in request.values:

@@ -17,17 +17,17 @@ from mysite.viewcore import configuration_provider
 
 
 class abrechnen(unittest.TestCase):
-    abrechnung = """Abrechnung vom 01.01.2010
+    abrechnung = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
 ########################################
  Ergebnis:
-Test_User muss an Maureen noch 5.00€ überweisen.
+%Ergebnis%
 
 Ausgaben von Maureen           -10.00
 Ausgaben von Test_User           0.00
 --------------------------------------
 Gesamt                         -10.00
- 
- 
+
+
 ########################################
  Gesamtausgaben pro Person 
 ########################################
@@ -54,6 +54,67 @@ Datum,Kategorie,Name,Wert,Dynamisch
 #######MaschinenimportEnd
 """
 
+    abrechnung_verhaeltnis =  """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
+########################################
+ Ergebnis:
+%Ergebnis%
+
+Ausgaben von Maureen          -100.00
+Ausgaben von Test_User           0.00
+--------------------------------------
+Gesamt                        -100.00
+
+
+########################################
+ Ausgaben von Maureen
+########################################
+ Datum      Kategorie    Name                    Wert
+17.03.2017  some kategorie some name            -100.00
+
+
+########################################
+ Ausgaben von Test_User
+########################################
+ Datum      Kategorie    Name                    Wert
+
+
+#######MaschinenimportStart
+Datum,Kategorie,Name,Wert,Dynamisch
+2017-03-17,some kategorie,some name,-30.00,False
+#######MaschinenimportEnd
+"""
+
+    abrechnung_verhaeltnis_other = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
+########################################
+ Ergebnis:
+%Ergebnis%
+
+Ausgaben von Maureen          -100.00
+Ausgaben von Test_User           0.00
+--------------------------------------
+Gesamt                        -100.00
+
+
+########################################
+ Ausgaben von Maureen
+########################################
+ Datum      Kategorie    Name                    Wert
+17.03.2017  some kategorie some name            -100.00
+
+
+########################################
+ Ausgaben von Test_User
+########################################
+ Datum      Kategorie    Name                    Wert
+
+
+#######MaschinenimportStart
+Datum,Kategorie,Name,Wert,Dynamisch
+2017-03-17,some kategorie,some name,-50.00,False
+2017-03-17,Ausgleich,Ausgleich,20.00,False
+#######MaschinenimportEnd
+"""
+
     def set_up(self):
         FileSystem.INSTANCE = FileSystemStub()
         viewcore.DATABASE_INSTANCE = None
@@ -64,6 +125,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         self.set_up()
         db = viewcore.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
+
         db.abrechnen()
 
         assert len(db.einzelbuchungen.content) == 1
@@ -73,12 +135,134 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert uebertragene_buchung['Kategorie'] == 'some kategorie'
         assert uebertragene_buchung['Wert'] == '5.00'
 
+
+    def test_abrechnen_withDateRange_shouldOnlyImportMatchingElements(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        db.gemeinsamebuchungen.add(datum('17.03.2010'), 'to early', 'to early', 99, viewcore.name_of_partner())
+        db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
+        db.gemeinsamebuchungen.add(datum('17.03.2020'), 'to late', 'to late', 99, viewcore.name_of_partner())
+
+        db.abrechnen(mindate=datum('01.01.2017'), maxdate=datum('01.12.2017'))
+
+        assert len(db.einzelbuchungen.content) == 1
+        uebertragene_buchung = db.einzelbuchungen.get(0)
+        assert uebertragene_buchung['Name'] == 'some name'
+        assert uebertragene_buchung['Datum'] == datum('17.03.2017')
+        assert uebertragene_buchung['Kategorie'] == 'some kategorie'
+        assert uebertragene_buchung['Wert'] == '5.00'
+
+        assert len(db.gemeinsamebuchungen.get_content()) == 2
+        uebertragene_buchung = db.gemeinsamebuchungen.get_content()[0]
+        assert uebertragene_buchung['Name'] == 'to early'
+        uebertragene_buchung = db.gemeinsamebuchungen.get_content()[1]
+        assert uebertragene_buchung['Name'] == 'to late'
+
+    def test_abrechnen_withDateRange_shouldOnlyImportMatchingElements(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        viewcore.stub_today_with(datum('01.01.2010'))
+        db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+
+        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70)
+
+        assert len(db.einzelbuchungen.content) == 1
+        uebertragene_buchung = db.einzelbuchungen.get(0)
+        assert uebertragene_buchung['Name'] == 'some name'
+        assert uebertragene_buchung['Datum'] == datum('17.03.2017')
+        assert uebertragene_buchung['Kategorie'] == 'some kategorie'
+        assert uebertragene_buchung['Wert'] == '-70.00'
+
+        assert abrechnungs_text == self.abrechnung_verhaeltnis
+
+
+    def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        viewcore.stub_today_with(datum('01.01.2010'))
+        db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+
+        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70, set_self_kategorie='Ausgleich')
+
+        assert len(db.einzelbuchungen.content) == 2
+
+        if db.einzelbuchungen.get(0)['Name'] == 'Ausgleich':
+            uebertragene_buchung = db.einzelbuchungen.get(1)
+            ausgleichsbuchung = db.einzelbuchungen.get(0)
+        else:
+            uebertragene_buchung = db.einzelbuchungen.get(0)
+            ausgleichsbuchung = db.einzelbuchungen.get(1)
+
+        assert uebertragene_buchung['Name'] == 'some name'
+        assert uebertragene_buchung['Datum'] == datum('17.03.2017')
+        assert uebertragene_buchung['Kategorie'] == 'some kategorie'
+        assert uebertragene_buchung['Wert'] == '-50.00'
+
+        uebertragene_buchung = db.einzelbuchungen.get(1)
+        assert ausgleichsbuchung['Name'] == 'Ausgleich'
+        assert ausgleichsbuchung['Datum'] == datum('17.03.2017')
+        assert ausgleichsbuchung['Kategorie'] == 'Ausgleich'
+        assert ausgleichsbuchung['Wert'] == '-20.00'
+
+        assert abrechnungs_text == self.abrechnung_verhaeltnis
+
+
+    def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie_inverse(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        viewcore.stub_today_with(datum('01.01.2010'))
+        db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+
+        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=30, set_self_kategorie='Ausgleich')
+
+        assert len(db.einzelbuchungen.content) == 2
+
+        if db.einzelbuchungen.get(0)['Name'] == 'Ausgleich':
+            uebertragene_buchung = db.einzelbuchungen.get(1)
+            ausgleichsbuchung = db.einzelbuchungen.get(0)
+        else:
+            uebertragene_buchung = db.einzelbuchungen.get(0)
+            ausgleichsbuchung = db.einzelbuchungen.get(1)
+
+        assert uebertragene_buchung['Name'] == 'some name'
+        assert uebertragene_buchung['Datum'] == datum('17.03.2017')
+        assert uebertragene_buchung['Kategorie'] == 'some kategorie'
+        assert uebertragene_buchung['Wert'] == '-50.00'
+
+        uebertragene_buchung = db.einzelbuchungen.get(1)
+        assert ausgleichsbuchung['Name'] == 'Ausgleich'
+        assert ausgleichsbuchung['Datum'] == datum('17.03.2017')
+        assert ausgleichsbuchung['Kategorie'] == 'Ausgleich'
+        assert ausgleichsbuchung['Wert'] == '20.00'
+
+
+
+    def test_abrechnen_withOtherKategorieSet_shouldAddOtherKategorie(self):
+        self.set_up()
+        db = viewcore.database_instance()
+        viewcore.stub_today_with(datum('01.01.2010'))
+        db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+
+        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70, set_other_kategorie='Ausgleich')
+
+        assert len(db.einzelbuchungen.content) == 1
+
+        uebertragene_buchung = db.einzelbuchungen.get(0)
+
+        assert uebertragene_buchung['Name'] == 'some name'
+        assert uebertragene_buchung['Datum'] == datum('17.03.2017')
+        assert uebertragene_buchung['Kategorie'] == 'some kategorie'
+        assert uebertragene_buchung['Wert'] == '-70.00'
+
+        assert abrechnungs_text == self.abrechnung_verhaeltnis_other
+
+
     def test_abrechnen_shouldPrintFileContent(self):
         self.set_up()
         db = viewcore.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
         viewcore.stub_today_with(datum('01.01.2010'))
-        abrechnungs_text = db.abrechnen()
+        abrechnungs_text = db.abrechnen(set_ergebnis="%Ergebnis%")
         viewcore.reset_viewcore_stubs()
 
         assert abrechnungs_text == self.abrechnung

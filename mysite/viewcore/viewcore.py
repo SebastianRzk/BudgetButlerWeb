@@ -3,7 +3,6 @@ Created on 24.04.2017
 
 @author: sebastian
 '''
-
 from mysite.core import DBManager
 from mysite.viewcore import viewcore
 from mysite.viewcore import configuration_provider
@@ -69,19 +68,6 @@ def get_changed_dauerauftraege():
 def add_changed_dauerauftraege(new_changed_dauerauftraege_event):
     context = get_changed_dauerauftraege()
     context.append(new_changed_dauerauftraege_event)
-
-
-def get_changed_stechzeiten():
-    context = _get_context()
-    if "stechzeiten_changed" not in context.keys():
-        context["stechzeiten_changed"] = []
-    return context["stechzeiten_changed"]
-
-
-def add_changed_stechzeiten(new_changed_stechzeiten_element):
-    context = get_changed_stechzeiten()
-    context.append(new_changed_stechzeiten_element)
-
 
 def switch_database_instance(database_name):
     ausgeschlossene_kategorien =  set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
@@ -187,22 +173,19 @@ def design_colors():
 
 
 def post_action_is(request, action_name):
-    if request.method != 'POST':
-        return False
-    if 'action' not in request.values:
+    if not is_post_parameter_set(request, 'action'):
         return False
     return request.values['action'] == action_name
 
 def get_post_parameter_or_default(request, key, default, mapping_function= lambda x: x):
-    if request.method != 'POST':
+    if not is_post_parameter_set(request, key):
         return default
-
-    if not key in request.values:
-        return default
-
     return mapping_function(request.values[key])
 
-
+def is_post_parameter_set(request, parameter):
+    if request.method != 'POST':
+        return False
+    return parameter in request.values.keys()
 
 def today():
     return viewcore.TODAY()
