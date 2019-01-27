@@ -440,7 +440,9 @@ button:hover {
 .content {
 	grid-column: 2/3;
 	grid-row: 1/4;
-	height:100vh;
+	height: 100%;
+    min-height: 100vh;
+    width: 70vw;
 	padding-top: 3ex;
 }
 
@@ -457,10 +459,24 @@ button:hover {
 }
 
 .theme-row {
-  width:100%;
+  width: 100%;
 }
+@media (min-width: 1201px) {
+  .input-theme {
+    display: grid;
+    grid: 'input-box kategorie-box' 'last-elements last-elements';
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 3ex;
+  }
 
-@media (max-width: 1000px) {
+  .theme-double-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 3ex;
+  }
+}
+@media (max-width: 1200px) {
   .input-theme {
     display: grid;
     grid: 'input-box'
@@ -477,20 +493,11 @@ button:hover {
   }
 }
 
-@media (min-width: 1000px) {
-  .input-theme {
-    display: grid;
-    grid: 'input-box kategorie-box'
-          'last-elements last-elements';
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    grid-gap: 3ex;
-  }
-  .theme-double-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 3ex;
-  }
+.diagramm-canvas{
+  width: 100%;
+  max-width: 100%;
+  max-height: 40ex;
+  height:40ex
 }
 
 .input-box{
