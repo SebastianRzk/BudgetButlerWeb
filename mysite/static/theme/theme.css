@@ -302,32 +302,12 @@ a:focus {
   text-align: right;
 }
 /*
- * Component: Label
- * ----------------
- */
-.label-default {
-  background-color: #d2d6de;
-  color: #444;
-}
-/*
  * General: Miscellaneous
  * ----------------------
  */
 /* 10px padding and margins */
 .pad {
   padding: 10px;
-}
-.margin {
-  margin: 10px;
-}
-.margin-bottom {
-  margin-bottom: 20px;
-}
-
-.text-bold,
-.text-bold.table td,
-.text-bold.table th {
-  font-weight: 700;
 }
 
 .table-wert {
