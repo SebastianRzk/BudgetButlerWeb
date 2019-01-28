@@ -1,5 +1,7 @@
 <?php
 function head($pagetitle){
+    startHtml();
+    startBody();
 	echo '<head>';
 	echo '<link rel="stylesheet" type="text/css" href="style.css">';
 	echo '<meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />';
@@ -12,5 +14,19 @@ function head($pagetitle){
 	header("X-XSS-Protection: 1; mode=block");
 	echo '<link rel="shortcut icon" type="image/png" href="logo.png">';
 	echo '</head>';
+}
+
+function startHtml(){
+    echo '<html>';
+}
+
+function startBody(){
+    echo '<body><div class="box">
+	<header><img src="logo.png" class="bblogo" alt="BudgetButlerWeb"></header>
+	<div class="content">';
+}
+
+function endBodyAndHtml(){
+    echo '</div></div></body></html>';
 }
 ?>

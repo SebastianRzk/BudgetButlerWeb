@@ -1,23 +1,11 @@
 <?php
 require_once(__DIR__.'/layout.php');
-$start = '<html>';
-$startBody = '<body>
-	<header><img src="logo.png" alt="BudgetButlerWeb"></header>
-	<div class="content">';
-$end = '</div></body></html>';
 
 function auth_failed() {
-	$start = '<html>';
-	$startBody = '<body>
-		<header><img src="logo.png" alt="BudgetButlerWeb"></header>
-		<div class="content">';
-	$end = '</div></body></html>';
-	echo  $start;
 	head('Anmeldung fehlgeschlagen');
-	echo $startBody;
 	echo "Anmeldung fehlgeschlagen<br>";
 	echo '<a href="login.php">Einloggen</a>';
-	echo $end;
+	echo endBodyAndHtml();
 }
 
 require_once(__DIR__.'/creds.php');
@@ -32,12 +20,8 @@ try {
 		die();
 	}
 
-	echo $start;
 	head('Login');
-	echo '<body>
-		<header><img src="logo.png" class="bblogo" alt="BudgetButlerWeb"></header>
-		<div class="content">
-		<form action="login.php" method="post">
+	echo '<form action="login.php" method="post">
 		<div>
 		Email: <input type="text" name="email" id="email"></input>
 		</div>
@@ -46,7 +30,7 @@ try {
 		</div>
 		<button class="rightbutton" id="btn_login" type="submit">Login</button>
 		</form>';
-	echo $end;
+	echo endBodyAndHtml();
 
 }
 catch (\Delight\Auth\InvalidEmailException $e) {

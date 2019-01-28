@@ -1,19 +1,42 @@
 body {
-  display: grid;
-  grid-template-columns: 1fr 35ex 1fr;
-  grid-template-rows: 5ex 10ex auto;
-  grid-gap: 2ex;
-  height:100vh;
+  background-color: rgb(240,240,240);
+  font-size: 110%;
 }
 
 input{
   width: 100%;
+  border-style: none none solid none;
+  border-color: black;
+  font-size: 110%;
+  padding-top: 0.2rem;
 }
 
 .content {
   grid-row: 3/4;
   grid-column: 2/3;
   margin-top: 0ex;
+}
+
+.box {
+  background-color: white;
+  width: 20rem;
+  padding: 1.5rem;
+  padding-bottom: 3rem;
+  border-radius: 0.5rem;
+
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  box-shadow: 0 0.4rem 1rem 0 rgba(0, 0, 0, 0.2), 0 0.4rem 1rem 0 rgba(0, 0, 0, 0.2);
+}
+
+button {
+  font-size: 120%;
+}
+
+option {
+  font-size: 110%;
 }
 
 .rightbutton{
@@ -37,8 +60,8 @@ img {
 }
 
 header {
-  grid-row: 2/3;
-  grid-column: 2/3;
+  max-height: 6rem;
+  height: 6rem;
 }
 
 .mycheckbox {
@@ -49,4 +72,48 @@ header {
   border: 2px solid green;
   border-radius: 5px;
   background-color: #90EE90;
+}
+
+button {
+	background-color: #00acd6;
+	color: #FFF;
+    margin-top: 0.25rem;
+    padding: 0.25rem;
+    border-style: none;
+}
+
+button:hover {
+  background-color: #FFF;
+  color: #00acd6;
+  border: 1px solid #00acd6;
+}
+
+@media screen and (max-width: 500px){
+  body{
+    font-size: 150%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .box{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+    width: 80%;
+    max-width: 80%;
+  }
+
+  input {
+    font-size: 150%;
+  }
+
+  button {
+    font-size: 150%;
+    padding: 0.5rem;
+  }
+
+  option {
+   font-size: 150%;
+  }
+
 }

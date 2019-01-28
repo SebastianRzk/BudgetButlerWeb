@@ -11,7 +11,7 @@ _TABLES = {
     'eintraege': '''CREATE TABLE `eintraege` (
       `id` int(11) NOT NULL,
       `person` varchar(20) NOT NULL,
-      `name` varchar(40) NOT NULL,
+      `name` varchar(100) NOT NULL,
       `kategorie` varchar(20) NOT NULL,
       `wert` varchar(10) NOT NULL,
       `datum` char(10) NOT NULL
@@ -24,7 +24,7 @@ _TABLES = {
     'gemeinsame_eintraege': '''CREATE TABLE `gemeinsame_eintraege` (
           `id` int(11) NOT NULL,
           `person` varchar(20) NOT NULL,
-          `name` varchar(40) NOT NULL,
+          `name` varchar(100) NOT NULL,
           `kategorie` varchar(20) NOT NULL,
           `wert` varchar(10) NOT NULL,
           `datum` char(10) NOT NULL
