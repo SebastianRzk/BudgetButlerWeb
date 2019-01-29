@@ -13,7 +13,8 @@ import pandas as pd
 
 class Dauerauftraege(DatabaseObject):
 
-    content = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
+    def __init__(self):
+        super().__init__(['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
 
     def parse(self, raw_table):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())

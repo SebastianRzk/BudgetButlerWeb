@@ -10,7 +10,9 @@ from mysite.core.database.DatabaseObject import DatabaseObject
 
 
 class Gemeinsamebuchungen(DatabaseObject):
-    content = DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
+
+    def __init__(self):
+        super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
 
     def parse(self, raw_table):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())

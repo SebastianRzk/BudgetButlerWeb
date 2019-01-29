@@ -15,8 +15,10 @@ from mysite.viewcore.converter import datum_to_german
 
 class Einzelbuchungen(DatabaseObject):
     tmp_kategorie = None
-    content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
     ausgeschlossene_kategorien = set()
+
+    def __init__(self):
+        super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
 
     def parse(self, raw_table):
         raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
