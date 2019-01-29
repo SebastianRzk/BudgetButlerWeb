@@ -51,12 +51,14 @@ class Einzelbuchungen(DatabaseObject):
         self.taint()
 
     def edit(self, index, buchungs_datum, kategorie, name, wert):
-        self.content.loc[self.content.index[[index]], 'Datum'] = buchungs_datum
-        self.content.loc[self.content.index[[index]], 'Wert'] = wert
-        self.content.loc[self.content.index[[index]], 'Kategorie'] = kategorie
-        self.content.loc[self.content.index[[index]], 'Name'] = name
-        self._sort()
-        self.taint()
+        self.edit_element(index, {
+            'Datum': buchungs_datum,
+            'Wert': wert,
+            'Kategorie': kategorie,
+            'Name': name
+        })
+
+
 
     def anzahl(self):
         return len(self.content)

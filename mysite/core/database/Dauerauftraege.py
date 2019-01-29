@@ -82,13 +82,17 @@ class Dauerauftraege(DatabaseObject):
         '''
         edit dauerauftrag for given index
         '''
-        self.content.loc[self.content.index[[index]], 'Startdatum'] = startdatum
-        self.content.loc[self.content.index[[index]], 'Endedatum'] = endedatum
-        self.content.loc[self.content.index[[index]], 'Wert'] = wert
-        self.content.loc[self.content.index[[index]], "Kategorie"] = kategorie
-        self.content.loc[self.content.index[[index]], 'Name'] = name
-        self.content.loc[self.content.index[[index]], 'Rhythmus'] = rhythmus
-        self.taint()
+        self.edit_element(index, {
+            'Startdatum': startdatum,
+            'Endedatum': endedatum,
+            'Wert': wert,
+            'Kategorie': kategorie,
+            'Name': name,
+            'Rhythmus': rhythmus
+        })
+
+    def _sort(self):
+        pass
 
     def delete(self, dauerauftrag_index):
         self.content = self.content.drop(dauerauftrag_index)

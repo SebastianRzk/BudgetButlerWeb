@@ -15,6 +15,12 @@ class DatabaseObject:
         row = self.content.loc[db_index]
         return {**row.to_dict(), **{'index': db_index}}
 
+    def edit_element(self, index, new_element_map):
+        for column_name in new_element_map.keys():
+            self.content.loc[self.content.index[[index]], column_name] = new_element_map[column_name]
+        self._sort()
+        self.taint()
+
     def taint(self):
         self.tainted = self.tainted + 1
 

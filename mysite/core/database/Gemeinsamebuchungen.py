@@ -45,13 +45,13 @@ class Gemeinsamebuchungen(DatabaseObject):
         self.taint()
 
     def edit(self, index, datum, name, kategorie, wert, person):
-        self.content.loc[self.content.index[[index]], 'Datum'] = datum
-        self.content.loc[self.content.index[[index]], 'Wert'] = wert
-        self.content.loc[self.content.index[[index]], 'Kategorie'] = kategorie
-        self.content.loc[self.content.index[[index]], 'Name'] = name
-        self.content.loc[self.content.index[[index]], 'Person'] = person
-        self._sort()
-        self.taint()
+        self.edit_element(index, {
+            'Datum': datum,
+            'Wert': wert,
+            'Kategorie': kategorie,
+            'Name': name,
+            'Person': person
+        })
 
     def rename(self, old_name, new_name):
         self.content.Person = self.content.Person.map(lambda x: self._rename_value(old_name, new_name, x))
