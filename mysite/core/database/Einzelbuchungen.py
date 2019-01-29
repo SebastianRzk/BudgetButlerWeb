@@ -43,10 +43,6 @@ class Einzelbuchungen(DatabaseObject):
         self.taint()
         self._sort()
 
-    def get(self, db_index):
-        row = self.content.loc[db_index]
-        return self._row_to_dict(self.content.columns, db_index, row)
-
     def get_all(self):
         return self.content
 

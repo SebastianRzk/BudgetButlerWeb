@@ -11,6 +11,9 @@ class DatabaseObject:
         self.tainted = 0
         self.content = pd.DataFrame({}, columns=stored_columns)
 
+    def get(self, db_index):
+        row = self.content.loc[db_index]
+        return {**row.to_dict(), **{'index': db_index}}
 
     def taint(self):
         self.tainted = self.tainted + 1

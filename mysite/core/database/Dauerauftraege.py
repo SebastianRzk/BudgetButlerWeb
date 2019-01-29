@@ -62,10 +62,6 @@ class Dauerauftraege(DatabaseObject):
         dauerauftraege = dauerauftraege[dauerauftraege.Startdatum < date.today()]
         return self.frame_to_list_of_dicts(dauerauftraege)
 
-    def get(self, db_index):
-        db_row = self.content.loc[db_index]
-        return self._row_to_dict(self.content.columns, db_index, db_row)
-
     def past(self):
         '''
         return vergangene dauerauftraege
