@@ -21,6 +21,10 @@ class DatabaseObject:
         self._sort()
         self.taint()
 
+    def delete(self, index):
+        self.content = self.content.drop(index)
+        self.taint()
+
     def taint(self):
         self.tainted = self.tainted + 1
 

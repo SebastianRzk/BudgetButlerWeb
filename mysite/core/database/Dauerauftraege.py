@@ -94,10 +94,6 @@ class Dauerauftraege(DatabaseObject):
     def _sort(self):
         pass
 
-    def delete(self, dauerauftrag_index):
-        self.content = self.content.drop(dauerauftrag_index)
-        self.taint()
-
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
 

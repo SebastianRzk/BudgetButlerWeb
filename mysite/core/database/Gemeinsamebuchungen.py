@@ -40,10 +40,6 @@ class Gemeinsamebuchungen(DatabaseObject):
     def _sort(self):
         self.content = self.content.sort_values(by='Datum')
 
-    def delete(self, einzelbuchung_index):
-        self.content = self.content.drop(einzelbuchung_index)
-        self.taint()
-
     def edit(self, index, datum, name, kategorie, wert, person):
         self.edit_element(index, {
             'Datum': datum,

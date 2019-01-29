@@ -46,10 +46,6 @@ class Einzelbuchungen(DatabaseObject):
     def get_all(self):
         return self.content
 
-    def delete(self, einzelbuchung_index):
-        self.content = self.content.drop(einzelbuchung_index)
-        self.taint()
-
     def edit(self, index, buchungs_datum, kategorie, name, wert):
         self.edit_element(index, {
             'Datum': buchungs_datum,
@@ -57,8 +53,6 @@ class Einzelbuchungen(DatabaseObject):
             'Kategorie': kategorie,
             'Name': name
         })
-
-
 
     def anzahl(self):
         return len(self.content)
