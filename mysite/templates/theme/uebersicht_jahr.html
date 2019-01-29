@@ -28,7 +28,7 @@
 		<h3 class="box-title">Durchschnittliche Ausgaben pro Monat</h3>
 	</div>
   <div class="box-body">
-	  <canvas id="averagecanvas" style="width: 100%; height: 50ex;"></canvas>
+	  <canvas id="averagecanvas" class="diagramm-canvas"></canvas>
   </div>
   <script>
     var color = Chart.helpers.color;
@@ -50,6 +50,7 @@
             data: barChartData,
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 legend: {
                     display: false,
                 },
@@ -71,10 +72,10 @@
 			<h3 class="box-title">Buchungen {{jahr}}</h3>
 	</div>
   <div class="box-body">
-		<canvas id="buchungenCanvas" style="width: 100%; height: 50ex;"></canvas>
+		<canvas id="buchungenCanvas" class="diagramm-canvas"></canvas>
 		<script>
 			var salesChartData = {
-					labels: {{monats_namen|safe	}},
+					labels: {{monats_namen|safe}},
 					datasets: [
 						{% for dataset in buchungen %}
 						{
@@ -88,8 +89,11 @@
 					]
 				};
 				var canvas = document.getElementById("buchungenCanvas");
+                canvas.style.height = canvas.scrollHeight + "px";
+				canvas.style.width = canvas.scrollWidth + "px";
 				new Chart(canvas, {
 					type: 'line',
+                    maintainAspectRatio: false,
 					data: salesChartData,
 					options: {
 					responsive: true,
@@ -103,10 +107,10 @@
 		<h3 class="box-title">Einnahmen</h3>
 	</div>
   <div class="box-body">
-		<canvas id="lineChartCanvasEinnahmen" style="width: 100%; height: 50ex;"></canvas>
+		<canvas id="lineChartCanvasEinnahmen" class="diagramm-canvas"></canvas>
 		<script>
 			var salesChartData = {
-					labels: {{monats_namen|safe	}},
+					labels: {{monats_namen|safe}},
 					datasets: [
 						{% for key,val in einnahmen.items() %}
 						{
@@ -120,12 +124,22 @@
 					]
 				};
 				var canvas = document.getElementById("lineChartCanvasEinnahmen");
+                canvas.style.height = canvas.scrollHeight + "px";
+				canvas.style.width = canvas.scrollWidth + "px";
+                function beforePrintHandler () {
+                  for (var id in Chart.instances) {
+                    Chart.instances[id].resize()
+                  }
+                }
 				new Chart(canvas, {
 					type: 'line',
+                    maintainAspectRatio: false,
 					data: salesChartData,
 					options: {
 					responsive: true,
+                        onResize: beforePrintHandler
 				}});
+
 		</script>
 	</div>
 </div>
@@ -135,7 +149,7 @@
 		<h3 class="box-title">Ausgaben</h3>
 	</div>
   <div class="box-body">
-		<canvas id="lineChartCanvas" style="width: 100%; height: 50ex;"></canvas>
+		<canvas id="lineChartCanvas" class="diagramm-canvas"></canvas>
 		<script>
 			var salesChartData = {
 					labels: {{monats_namen|safe}},
@@ -152,13 +166,17 @@
 					]
 				};
 				var canvas = document.getElementById("lineChartCanvas");
+				canvas.style.height = canvas.scrollHeight + "px";
+				canvas.style.width = canvas.scrollWidth + "px";
 				new Chart(canvas, {
 					type: 'line',
+                    maintainAspectRatio: false,
 					data: salesChartData,
 					options: {
 					responsive: true,
 				}});
-		</script>
+            console.log(canvas);
+        </script>
 	</div>
 </div>
 
@@ -243,7 +261,7 @@
 		</div>
 		<div class="box-body">
 			<div class="chart-responsive">
-				<canvas id="zusammenfassungPieProzentualAusgaben" style="height:40ex;"></canvas>
+				<canvas id="zusammenfassungPieProzentualAusgaben" class="diagramm-canvas"></canvas>
 			</div>
 		</div>
 		<script>
@@ -270,7 +288,7 @@
 		</div>
 		<div class="box-body">
 			<div class="chart-responsive">
-				<canvas id="zusammenfassungPieProzentualEinnahmen" style="height:40ex;"></canvas>
+				<canvas id="zusammenfassungPieProzentualEinnahmen" class="diagramm-canvas"></canvas>
 			</div>
 		</div>
 		<script>

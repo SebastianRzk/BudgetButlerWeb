@@ -1,11 +1,6 @@
-<html>
 <?php
 require_once(__DIR__.'/layout.php');
 head('Dashboard');
-echo '<body>
-<header><img src="logo.png" alt="BudgetButlerWeb"></header>
-<div class="content">
-';
 
 require_once(__DIR__.'/creds.php');
 function showOk($auth)
@@ -238,7 +233,5 @@ authenticated(function(){
 		}
 	}
 });
+endBodyAndHtml();
 ?>
-</div>
-</body>
-</html>
