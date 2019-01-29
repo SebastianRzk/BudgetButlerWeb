@@ -12,8 +12,6 @@ input{
 }
 
 .content {
-  grid-row: 3/4;
-  grid-column: 2/3;
   margin-top: 0ex;
 }
 
@@ -88,26 +86,28 @@ button:hover {
 }
 
 @media screen and (max-width: 500px){
-  body{
-    font-size: 150%;
-    width: 100%;
-    max-width: 100%;
+  body {
+    margin: 0%;
   }
 
   .box{
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    margin-top: 0.5rem;
     width: 80%;
-    max-width: 80%;
+    margin: 5%;
+    padding: 5%;
+    padding-bottom: 3em;
+  }
+
+  form > div {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   input {
-    font-size: 150%;
+    padding-top: 0.5rem;
+    font-size: 100%;
   }
 
   button {
-    font-size: 150%;
     padding: 0.5rem;
   }
 
