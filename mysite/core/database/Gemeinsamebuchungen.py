@@ -14,11 +14,6 @@ class Gemeinsamebuchungen(DatabaseObject):
     def __init__(self):
         super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
 
-    def parse(self, raw_table):
-        raw_table['Datum'] = raw_table['Datum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
-        self.content = self.content.append(raw_table, ignore_index=True)
-        self._sort()
-
     def add(self, ausgaben_datum, kategorie, ausgaben_name, wert, person):
         row = DataFrame([[ausgaben_datum, kategorie, ausgaben_name, wert, person]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
         self.content = self.content.append(row, ignore_index=True)

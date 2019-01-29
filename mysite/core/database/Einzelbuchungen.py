@@ -4,7 +4,6 @@ Created on 10.08.2017
 @author: sebastian
 '''
 from datetime import date
-from datetime import datetime
 
 import itertools as it
 import pandas as pd
@@ -19,12 +18,6 @@ class Einzelbuchungen(DatabaseObject):
 
     def __init__(self):
         super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
-
-    def parse(self, raw_table):
-        raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
-        raw_table['Dynamisch'] = False
-        self.content = self.content.append(raw_table, ignore_index=True)
-        self._sort()
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
