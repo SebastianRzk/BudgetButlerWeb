@@ -10,6 +10,7 @@
 html,
 body {
   min-height: 100%;
+  background-color: rgb(240,240,240);
 }
 body {
   -webkit-font-smoothing: antialiased;
@@ -385,7 +386,6 @@ button:hover {
 
 .main-header {
 	background-color: #FFF;
-	border: 1px solid #ecf0f5;
 }
 
 .main-sidebar {
@@ -403,7 +403,6 @@ button:hover {
 	grid-template-rows: 6ex 5ex auto;
 	grid-template-columns: 30ex auto 6ex;
 	grid-column-gap: 5vh;
-  background-color: #ecf0f5;
 }
 
 .title {
