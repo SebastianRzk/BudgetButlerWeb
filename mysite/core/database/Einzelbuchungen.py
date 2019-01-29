@@ -4,7 +4,6 @@ Created on 10.08.2017
 @author: sebastian
 '''
 from datetime import date
-from datetime import datetime
 
 import itertools as it
 import pandas as pd
@@ -15,14 +14,10 @@ from mysite.viewcore.converter import datum_to_german
 
 class Einzelbuchungen(DatabaseObject):
     tmp_kategorie = None
-    content = pd.DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
     ausgeschlossene_kategorien = set()
 
-    def parse(self, raw_table):
-        raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
-        raw_table['Dynamisch'] = False
-        self.content = self.content.append(raw_table, ignore_index=True)
-        self._sort()
+    def __init__(self):
+        super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
@@ -41,24 +36,16 @@ class Einzelbuchungen(DatabaseObject):
         self.taint()
         self._sort()
 
-    def get(self, db_index):
-        row = self.content.loc[db_index]
-        return self._row_to_dict(self.content.columns, db_index, row)
-
     def get_all(self):
         return self.content
 
-    def delete(self, einzelbuchung_index):
-        self.content = self.content.drop(einzelbuchung_index)
-        self.taint()
-
     def edit(self, index, buchungs_datum, kategorie, name, wert):
-        self.content.loc[self.content.index[[index]], 'Datum'] = buchungs_datum
-        self.content.loc[self.content.index[[index]], 'Wert'] = wert
-        self.content.loc[self.content.index[[index]], 'Kategorie'] = kategorie
-        self.content.loc[self.content.index[[index]], 'Name'] = name
-        self._sort()
-        self.taint()
+        self.edit_element(index, {
+            'Datum': buchungs_datum,
+            'Wert': wert,
+            'Kategorie': kategorie,
+            'Name': name
+        })
 
     def anzahl(self):
         return len(self.content)

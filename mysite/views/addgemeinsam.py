@@ -52,14 +52,14 @@ def handle_request(request):
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
-        db_row = viewcore.database_instance().gemeinsamebuchungen.content.iloc[db_index]
+        db_row = viewcore.database_instance().gemeinsamebuchungen.get(db_index)
         default_item = {
             'edit_index': str(db_index),
-            'datum': datum_to_string(db_row.Datum),
-            'name': db_row.Name,
-            'wert': from_double_to_german(db_row.Wert * -1),
-            'kategorie': db_row.Kategorie,
-            'person': db_row.Person
+            'datum': datum_to_string(db_row['Datum']),
+            'name': db_row['Name'],
+            'wert': from_double_to_german(db_row['Wert'] * -1),
+            'kategorie': db_row['Kategorie'],
+            'person': db_row['Person']
         }
 
         context['default_item'] = default_item

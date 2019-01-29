@@ -40,6 +40,31 @@ class gemeinsame_buchungen(unittest.TestCase):
             'sebastian')
         assert component_under_test.taint_number() == 1
 
+    def test_edit_shouldEdit(self):
+        component_under_test = Gemeinsamebuchungen()
+        component_under_test.add(
+            datum('1.1.2011'),
+            'yyName',
+            'yyKategorie',
+            1.23,
+            'sebastian')
+        component_under_test.de_taint()
+        assert component_under_test.taint_number() == 0
+        component_under_test.edit(
+            0,
+            datum('2.2.2012'),
+            'zzName',
+            'zzKategorie',
+            2.34,
+            'sebastian')
+        assert component_under_test.get(0) == {
+            'index': 0,
+            'Datum': datum('2.2.2012'),
+            'Kategorie': 'zzKategorie',
+            'Name': 'zzName',
+            'Wert': 2.34,
+            'Person': 'sebastian'}
+
     def test_delete_shouldTaint(self):
         component_under_test = Gemeinsamebuchungen()
         component_under_test.add(

@@ -13,7 +13,8 @@ import pandas as pd
 
 class Dauerauftraege(DatabaseObject):
 
-    content = pd.DataFrame({}, columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
+    def __init__(self):
+        super().__init__(['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
 
     def parse(self, raw_table):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
@@ -61,10 +62,6 @@ class Dauerauftraege(DatabaseObject):
         dauerauftraege = dauerauftraege[dauerauftraege.Startdatum < date.today()]
         return self.frame_to_list_of_dicts(dauerauftraege)
 
-    def get(self, db_index):
-        db_row = self.content.loc[db_index]
-        return self._row_to_dict(self.content.columns, db_index, db_row)
-
     def past(self):
         '''
         return vergangene dauerauftraege
@@ -85,17 +82,17 @@ class Dauerauftraege(DatabaseObject):
         '''
         edit dauerauftrag for given index
         '''
-        self.content.loc[self.content.index[[index]], 'Startdatum'] = startdatum
-        self.content.loc[self.content.index[[index]], 'Endedatum'] = endedatum
-        self.content.loc[self.content.index[[index]], 'Wert'] = wert
-        self.content.loc[self.content.index[[index]], "Kategorie"] = kategorie
-        self.content.loc[self.content.index[[index]], 'Name'] = name
-        self.content.loc[self.content.index[[index]], 'Rhythmus'] = rhythmus
-        self.taint()
+        self.edit_element(index, {
+            'Startdatum': startdatum,
+            'Endedatum': endedatum,
+            'Wert': wert,
+            'Kategorie': kategorie,
+            'Name': name,
+            'Rhythmus': rhythmus
+        })
 
-    def delete(self, dauerauftrag_index):
-        self.content = self.content.drop(dauerauftrag_index)
-        self.taint()
+    def _sort(self):
+        pass
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))

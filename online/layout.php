@@ -1,7 +1,8 @@
 <?php
 function head($pagetitle){
+	header('X-Frame-Options: DENY');
+	header("X-XSS-Protection: 1; mode=block");
     startHtml();
-    startBody();
 	echo '<head>';
 	echo '<link rel="stylesheet" type="text/css" href="style.css">';
 	echo '<meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />';
@@ -11,13 +12,13 @@ function head($pagetitle){
     echo '<link rel="icon" type="image/png" href="logos/logo32.png" sizes="32x32">';
     echo '<link rel="icon" type="image/png" href="logos/logo96.png" sizes="96x96">';
     echo '<link rel="apple-touch-icon" href="logos/logo120.png">';
+    echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>';
     echo '<link rel="apple-touch-icon" sizes="180x180" href="logos/logo180.png">';
 	echo '<title>BudgetButlerWeb - ';
 	echo $pagetitle;
 	echo '</title>';
-	header('X-Frame-Options: DENY');
-	header("X-XSS-Protection: 1; mode=block");
 	echo '</head>';
+    startBody();
 }
 
 function startHtml(){

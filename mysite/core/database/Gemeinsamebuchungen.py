@@ -10,12 +10,9 @@ from mysite.core.database.DatabaseObject import DatabaseObject
 
 
 class Gemeinsamebuchungen(DatabaseObject):
-    content = DataFrame({}, columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
 
-    def parse(self, raw_table):
-        raw_table['Datum'] = raw_table['Datum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
-        self.content = self.content.append(raw_table, ignore_index=True)
-        self._sort()
+    def __init__(self):
+        super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
 
     def add(self, ausgaben_datum, kategorie, ausgaben_name, wert, person):
         row = DataFrame([[ausgaben_datum, kategorie, ausgaben_name, wert, person]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
@@ -38,18 +35,14 @@ class Gemeinsamebuchungen(DatabaseObject):
     def _sort(self):
         self.content = self.content.sort_values(by='Datum')
 
-    def delete(self, einzelbuchung_index):
-        self.content = self.content.drop(einzelbuchung_index)
-        self.taint()
-
     def edit(self, index, datum, name, kategorie, wert, person):
-        self.content.loc[self.content.index[[index]], 'Datum'] = datum
-        self.content.loc[self.content.index[[index]], 'Wert'] = wert
-        self.content.loc[self.content.index[[index]], 'Kategorie'] = kategorie
-        self.content.loc[self.content.index[[index]], 'Name'] = name
-        self.content.loc[self.content.index[[index]], 'Person'] = person
-        self._sort()
-        self.taint()
+        self.edit_element(index, {
+            'Datum': datum,
+            'Wert': wert,
+            'Kategorie': kategorie,
+            'Name': name,
+            'Person': person
+        })
 
     def rename(self, old_name, new_name):
         self.content.Person = self.content.Person.map(lambda x: self._rename_value(old_name, new_name, x))
