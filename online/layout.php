@@ -1,12 +1,12 @@
 <?php
 function head($pagetitle){
 	header('X-Frame-Options: DENY');
-	header("X-XSS-Protection: 1; mode=block");
+	header('X-XSS-Protection: 1; mode=block');
+	header('X-Content-Type-Options=nosniff');
     startHtml();
 	echo '<head>';
-	echo '<link rel="stylesheet" type="text/css" href="style.css">';
-	echo '<meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />';
 	echo '<meta http-equiv="Content-Security-Policy" content="default-src: https:">';
+	echo '<link rel="stylesheet" type="text/css" href="style.css">';
 	echo '<meta name="referer" content="no-referer"/>';
 	echo '<link rel="icon" type="image/png" href="logos/logo16.png" sizes="16x16">';
     echo '<link rel="icon" type="image/png" href="logos/logo32.png" sizes="32x32">';
