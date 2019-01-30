@@ -23,13 +23,6 @@ class Einzelbuchungen(DatabaseObject):
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
-    def _row_to_dict(self, columns, index, row_data):
-        row = {}
-        row['index'] = index
-        for key in columns:
-            row[key] = row_data[key]
-        return row
-
     def add(self, datum, kategorie, name, wert, dynamisch=False):
         neue_einzelbuchung = pd.DataFrame([[datum, kategorie, name, wert, [], dynamisch]], columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
         self.content = self.content.append(neue_einzelbuchung, ignore_index=True)
