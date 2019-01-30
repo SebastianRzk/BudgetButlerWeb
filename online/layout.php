@@ -2,7 +2,7 @@
 function head($pagetitle){
 	header('X-Frame-Options: DENY');
 	header('X-XSS-Protection: 1; mode=block');
-	header('X-Content-Type-Options=nosniff');
+	header('X-Content-Type-Options: nosniff');
     startHtml();
 	echo '<head>';
 	echo '<meta http-equiv="Content-Security-Policy" content="default-src: https:">';
