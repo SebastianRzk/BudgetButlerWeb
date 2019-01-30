@@ -27,7 +27,7 @@
 			<ul class="sidebar-menu">
 				<li class="active treeview">
 					<a href="/">
-						<span class="fa fa-th"></span> <span>Übersicht</span> <small class="label pull-right bg-green"></small>
+						<span class="fa fa-th"></span> <span>Übersicht</span>
 					</a>
 				</li>
 				{% for submenuid,submenu in menu.items()%}
@@ -39,7 +39,6 @@
 					<a href="#">
 						<span class="fa fa-dashboard"></span>
 						<span>{{submenuid}}</span>
-						<span class="fa fa-angle-left pull-right"></span>
 					</a>
 					<ul class="treeview-menu">
 						{%for menuitem in submenu%}
@@ -49,7 +48,7 @@
 						<li class="">
 						{% endif %}
 							<a href="{{menuitem.url}}">
-								<span class="{{menuitem.icon}}"></span> <span>{{menuitem.name}}</span> <small class="label pull-right bg-green"></small>
+								<span class="{{menuitem.icon}}"></span> <span>{{menuitem.name}}</span>
 							</a>
 						</li>
 						{%endfor%}
