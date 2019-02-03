@@ -18,7 +18,7 @@ sudo chown -R travis:travis /var/lib/apache2/fastcgi
 sudo chmod -R 777 /var/lib/apache2/fastcgi
 
 echo "removing secure headers to run budget butler without https on localhost"
-sed -i '/ini_set('session.cookie_secure', 1);/c\#ini_set('session.cookie_secure', 1);' ./online/creds.php
+sed -i '/ini_set('session.cookie_secure', 1);/c\#ini_set('session.cookie_secure', 1);' ../online/creds.php
 
 
 echo "move virtualhost file"
