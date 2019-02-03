@@ -7,6 +7,10 @@ function getPDO(){
 }
 
 function getAuth(){
+    ini_set('session.cookie_secure', 1);
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_path', '/');
+    //ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
 	$config_array  = parse_ini_file('db.ini');
 	// $db = new \PDO('mysql:dbname=my-database;host=localhost;charset=utf8mb4', 'my-username', 'my-password');
 	// or
