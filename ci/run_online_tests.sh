@@ -17,6 +17,10 @@ sudo chown -R travis:travis /var/lib/apache2/fastcgi
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 sudo chmod -R 777 /var/lib/apache2/fastcgi
 
+echo "removing secure headers to run budget butler without https on localhost"
+sed -i '/ini_set('session.cookie_secure', 1);/c\#ini_set('session.cookie_secure', 1);' /online/creds.php
+
+
 echo "move virtualhost file"
 sudo cp budget.online.conf /etc/apache2/sites-available/
 echo "installed confs:"
@@ -54,4 +58,3 @@ pytest
 cd .. 
 echo "tests deactivated"
 echo "DONE"
-
