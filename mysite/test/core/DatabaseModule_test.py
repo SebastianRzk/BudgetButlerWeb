@@ -4,7 +4,6 @@ Created on 10.05.2017
 @author: sebastian
 '''
 
-from datetime import date, timedelta
 import unittest
 from pandas.core.frame import DataFrame
 

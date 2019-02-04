@@ -4,8 +4,6 @@ Created on 10.05.2017
 @author: sebastian
 '''
 
-import os
-import sys
 import unittest
 
 from mysite.test.FileSystemStub import FileSystemStub
@@ -13,7 +11,6 @@ from mysite.test.RequestStubs import GetRequest
 from mysite.test.RequestStubs import PostRequest
 from mysite.views import configuration
 from mysite.core import FileSystem
-from mysite.core.DatabaseModule import Database
 from mysite.viewcore import viewcore
 from mysite.viewcore import request_handler
 from mysite.viewcore import configuration_provider

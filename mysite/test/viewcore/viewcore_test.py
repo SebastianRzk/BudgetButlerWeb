@@ -2,13 +2,10 @@ import sys, os
 import unittest
 import datetime
 
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + "/../")
-
-from viewcore import viewcore
-from test.RequestStubs import GetRequest
-from test.RequestStubs import PostRequest
-from viewcore.converter import datum_from_german as datum
+from mysite.viewcore import viewcore
+from mysite.test.RequestStubs import GetRequest
+from mysite.test.RequestStubs import PostRequest
+from mysite.viewcore.converter import datum_from_german as datum
 
 
 

@@ -4,7 +4,6 @@ from mysite.test.FileSystemStub import FileSystemStub
 from mysite.test.RequestStubs import GetRequest
 from mysite.test.RequestStubs import PostRequest
 from mysite.core import FileSystem
-from mysite.core.DatabaseModule import Database
 from mysite.views import uebersicht_dauerauftrag
 from mysite.viewcore import viewcore
 from mysite.viewcore.converter import datum_from_german as datum
