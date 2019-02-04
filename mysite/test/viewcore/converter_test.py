@@ -4,19 +4,8 @@ Created on 10.05.2017
 @author: sebastian
 '''
 
-import sys, os
 import unittest
-
-import pandas
-from pandas.core.frame import DataFrame
-
-
-
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + "/../")
-'''
-'''
-from viewcore.converter import *
+from mysite.viewcore.converter import *
 
 class TesteConverter(unittest.TestCase):
 

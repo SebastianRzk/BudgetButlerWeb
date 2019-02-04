@@ -1,5 +1,3 @@
-import os
-import sys
 import unittest
 
 from mysite.viewcore import request_handler
@@ -7,7 +5,6 @@ from mysite.test.FileSystemStub import FileSystemStub
 from mysite.test.RequestStubs import GetRequest
 from mysite.test.RequestStubs import PostRequest
 from mysite.core import FileSystem
-from mysite.core.database.Einzelbuchungen import Einzelbuchungen
 from mysite.views import gemeinsam_abrechnen
 from mysite.viewcore import viewcore
 from mysite.viewcore.converter import datum_from_german as datum

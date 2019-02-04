@@ -4,8 +4,6 @@ Created on 10.05.2017
 @author: sebastian
 '''
 
-import os
-import sys
 import unittest
 
 from mysite.test.FileSystemStub import FileSystemStub
@@ -15,7 +13,6 @@ from mysite.test.RequestStubs import VersionedPostRequest
 from mysite.views import addausgabe
 from mysite.core import FileSystem
 from mysite.viewcore import viewcore
-from mysite.core.DatabaseModule import Database
 from mysite.viewcore.converter import datum_from_german as datum
 from mysite.viewcore.converter import german_to_rfc as rfc
 from mysite.viewcore import request_handler

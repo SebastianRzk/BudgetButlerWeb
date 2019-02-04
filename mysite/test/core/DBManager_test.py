@@ -6,7 +6,6 @@ Created on 14.09.2017
 import unittest
 
 from mysite.core import DBManager
-from mysite.viewcore import viewcore
 from mysite.core import FileSystem
 from mysite.test.FileSystemStub import FileSystemStub
 

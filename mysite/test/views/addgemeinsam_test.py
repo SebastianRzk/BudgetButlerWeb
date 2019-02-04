@@ -4,8 +4,6 @@ Created on 10.05.2017
 @author: sebastian
 '''
 
-import os
-import sys
 import unittest
 
 from mysite.test.FileSystemStub import FileSystemStub
