@@ -5,6 +5,20 @@
 	  </div>
 	  <div class="box-body">
 	    <form role="form" action="/gemeinsamabrechnen/" method="post">
+            {% if set_self_kategorie %}
+                <input value="{{set_self_kategorie_value}}" type="hidden" name="set_self_kategorie"/>
+                <input value="{{set_self_kategorie_value}}" type="hidden" name="set_self_kategorie_value"/>
+            {% endif %}
+            {% if set_other_kategorie %}
+                <input value="{{set_other_kategorie_value}}" type="hidden" name="set_other_kategorie"/>
+                <input value="{{set_other_kategorie_value}}" type="hidden" name="set_other_kategorie_value"/>
+            {% endif %}
+            {% if set_limit %}
+                <input value="on" type="hidden" name="set_limit"/>
+                <input value="{{set_limit_fuer}}" type="hidden" name="set_limit_fuer"/>
+                <input type="hidden" name="set_limit_value" id="set_limit_value" min="0" max="2000" value="{{ set_limit_value }}"/>
+            {% endif %}
+            <input value="{{set_verhaeltnis}}" type="hidden" name="set_verhaeltnis"/>
         <p><div id="abrechnungsinfo">{{count}} Einträge im Zeitraum von {{mindate}} bis {{maxdate}} stehen zur Abrechnung bereit.</div></p>
         <p><div id="set_abrechnungsinfo">{{set_count}} Einträge im Zeitraum von {{set_mindate}} bis {{set_maxdate}} sind zur Abrechnung ausgewählt.</div></p>
 			  <div class="box-body">
@@ -39,6 +53,8 @@
 	  </div>
 	  <div class="box-body">
 	    <form role="form" action="/gemeinsamabrechnen/" method="post">
+            <input value="{{set_mindate_rfc}}" type="hidden" name="set_mindate"/>
+            <input value="{{set_maxdate_rfc}}" type="hidden" name="set_maxdate"/>
 			  <div class="box-body">
 				  <div class="form-group">
 					  <label>Anteil, den {{myname}} übernimmt (in Prozent)</label>
@@ -47,7 +63,7 @@
 					  </div><br/>
 					  <label>Erweiterte Einstellungen</label>
 					  <div class="input-group">
-                          {% if set_limit == 'on' %}
+                          {% if set_limit %}
                             <input type="checkbox" name="set_limit" id="set_limit" checked="checked"/>
                           {% else %}
                             <input type="checkbox" name="set_limit" id="set_limit"/>
@@ -181,7 +197,7 @@
 		<div class="box-footer clearfix">
             <form role="form" action="/abrechnen/" method="post">
                 <input value="{{set_mindate}}" type="hidden" name="set_mindate"/>
-                <input value="{{set_maxdate}}" type="hidden" name="set_maxate"/>
+                <input value="{{set_maxdate}}" type="hidden" name="set_maxdate"/>
                 <input value="{{set_verhaeltnis_real}}" type="hidden" name="set_verhaeltnis"/>
                 <input value="{{str_ergebnis}}" type="hidden" name="set_ergebnis"/>
                 {% if set_self_kategorie %}

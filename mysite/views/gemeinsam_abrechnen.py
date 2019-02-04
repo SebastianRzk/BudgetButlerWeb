@@ -55,14 +55,11 @@ def _handle_request(request):
         verhaeltnis_alt = set_verhaeltnis
         limited_person = request.values['set_limit_fuer']
         limit_value = int(request.values['set_limit_value'])
-        print('here', limited_person, limit_value)
 
         if limited_person == name_partner:
             maureen_soll = abs(ausgabe_gesamt * ((100 - set_verhaeltnis) / 100))
-            print('Maureen soll', maureen_soll)
             if maureen_soll > limit_value:
                 set_verhaeltnis = 100 - abs((limit_value / ausgabe_gesamt) * 100)
-                print('Neu berechnet')
                 ergebnis += ergebnis_satz.format(name=name_partner, limit_value = limit_value, verhaeltnis_alt=verhaeltnis_alt, verhaeltnis_neu=set_verhaeltnis)
         else:
             sebastian_soll = abs(ausgabe_gesamt * (set_verhaeltnis / 100))
