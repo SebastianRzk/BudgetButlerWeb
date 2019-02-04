@@ -4,6 +4,7 @@
 
 from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
+from SeleniumTest import fill_element_by_id
 from SeleniumTest import enter_test_mode
 from SeleniumTest import define_kategorie
 from SeleniumTest import select_option
@@ -60,7 +61,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert content_of(driver, 'ausgabe_maureen_soll') == "50.00"
         assert content_of(driver, 'ausgabe_maureen_diff') == "50.00"
 
-        fill_element(driver, 'set_verhaeltnis', '70')
+        fill_element_by_id(driver, 'abrechnungsverhaeltnis', '70')
         driver.find_element_by_id('abrechnung_aktualisieren').click()
 
         assert content_of(driver, 'ausgabe_sebastian') == "0.00"
@@ -199,13 +200,13 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         driver.find_element_by_id('set_limit').click()
         select_option(driver, 'set_limit_fuer', 'test')
-        fill_element(driver, 'set_limit_value', '30')
+        fill_element_by_id(driver, 'set_limit_value', '30')
 
         driver.find_element_by_id('set_self_kategorie').click()
         select_option(driver, 'set_self_kategorie_value', '1test_kategorie')
 
         driver.find_element_by_id('set_other_kategorie').click()
-        fill_element(driver, 'set_other_kategorie_value', 'test ausgleich')
+        fill_element_by_id(driver, 'set_other_kategorie_value', 'test ausgleich')
 
         driver.find_element_by_id('abrechnung_aktualisieren').click()
 
@@ -218,7 +219,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert content_of(driver, 'ausgabe_maureen_diff') == "30.00"
 
         driver.find_element_by_id('abrechnen').click()
-        print('[',content_of(driver, 'abrechnung').replace('<br>', '\n'),']')
         assert content_of(driver, 'abrechnung').replace('<br>', '\n') == self.set_limit_abrechnung_ausgleich
 
         driver.get('http://localhost:5000/uebersicht/')

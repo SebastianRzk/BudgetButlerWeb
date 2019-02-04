@@ -70,18 +70,24 @@ def fill_element(driver, elementname, content):
     elem.clear()
     elem.send_keys(content)
 
-def define_kategorie(driver, kategorie_name):
-    driver.get('http://127.0.0.1:5000/configuration/')
-    fill_element(driver, 'neue_kategorie', kategorie_name)
-    button = driver.find_element_by_id('add_kategorie')
-    button.click()
-
 def select_option(driver, option_id, item):
     el = driver.find_element_by_id(option_id)
     for option in el.find_elements_by_tag_name('option'):
         if option.text == item:
             option.click()  # select() in earlier versions of webdriver
             break
+
+
+def fill_element_by_id(driver, elementname, content):
+    elem = driver.find_element_by_id(elementname)
+    elem.clear()
+    elem.send_keys(content)
+
+def define_kategorie(driver, kategorie_name):
+    driver.get('http://127.0.0.1:5000/configuration/')
+    fill_element(driver, 'neue_kategorie', kategorie_name)
+    button = driver.find_element_by_id('add_kategorie')
+    button.click()
 
 def get_options(driver, option_id):
     el = driver.find_element_by_id(option_id)
