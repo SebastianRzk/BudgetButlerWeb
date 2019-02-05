@@ -27,10 +27,9 @@ Install the requirements
 
 	pip install -r requirements.txt
 
-Change into offline app and run server:
+Run offline applicaton server:
 
-	cd mysite
-	sh start.sh
+	sh start_butler_offline.sh
 
 Open your webbrowser and visit:
 
