@@ -61,7 +61,7 @@ Open your webbrowser and visit:
 
 * Change into online installation directory and run
 
-    cd ../online_install
+    cd ../butler_online_install
     pip install -r requirements.txt
 
 * Execute the database install script:

@@ -6,7 +6,7 @@ echo "create butler_online"
 sh ci/install_online.sh
 
 echo "create app"
-cd online_install
+cd butler_online_install
 
 sudo apt update
 sudo apt install apache2 libapache2-mod-fastcgi php5-mysql
