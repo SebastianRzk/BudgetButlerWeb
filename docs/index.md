@@ -24,14 +24,16 @@
 * Farben der Kategorien anpassen
 * Verwendung mehrerer Datenbanken
 
-## Systemvoraussetzungen
+## Offline Anwendung
+
+### Systemvoraussetzungen
 
 * Python 3.6
 * Pip
 * Moderner Webbrowser (z.B.. Firefox or Chromium)
 * (git)
 
-## Installation
+### Installation
 Das Git-Repository clonen:
 
 	git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
@@ -44,18 +46,17 @@ Abhängigkeiten mit pip installieren:
 
 	pip install -r requirements.txt
 
-## Starten
+### Server Starten
 
-Im Projektverzeichnis in die Offline-App  navigieren und Flask-Server starten:
+Flask-Server starten:
 
-	cd mysite
-	sh start.sh
+	sh start_butler_offline.sh
 
 Webbrowser öffnen und folgende Url besuchen:
 
 	http://127.0.0.1:5000/
 	
-## Softwaretests ausführen
+### Softwaretests ausführen
 
 Alle Softwaretestsmit pytest starten:
 
@@ -63,9 +64,9 @@ Alle Softwaretestsmit pytest starten:
 
 Testabdeckung mit pytest berechnen:
 
-	py.test --cov=mysite
+	pytest butler_offline --cov
 
-## Updates
+### Updates
 
 BudgetButlerWeb aktualisieren:
 

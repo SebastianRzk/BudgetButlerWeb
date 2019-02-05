@@ -1,11 +1,12 @@
+#!/usr/bin/env bash
 set -e
 
 # Installation
-echo "create online"
+echo "create butler_online"
 sh ci/install_online.sh
 
 echo "create app"
-cd online_install
+cd butler_online_install
 
 sudo apt update
 sudo apt install apache2 libapache2-mod-fastcgi php5-mysql
@@ -18,7 +19,7 @@ sudo chown -R travis:travis /var/lib/apache2/fastcgi
 sudo chmod -R 777 /var/lib/apache2/fastcgi
 
 echo "removing secure headers to run budget butler without https on localhost"
-sed -i "/ini_set('session.cookie_secure', 1/c\ #line deleted for selenium test" ../online/creds.php
+sed -i "/ini_set('session.cookie_secure', 1/c\ #line deleted for selenium test" ../butler_online/creds.php
 
 
 echo "move virtualhost file"
@@ -38,8 +39,8 @@ python install_database.py
 cd ..
 echo "database installed"
 
-echo "install online app"
-sudo cp -rv ./online /var/www/budgetbutler
+echo "install butler_online app"
+sudo cp -rv ./butler_online /var/www/budgetbutler
 
 
 echo "apache error log before:"
@@ -53,7 +54,7 @@ sudo cat /var/log/apache2/error.log
 
 # tests
 echo "start tests"
-cd selenium_online
+cd butler_online_selenium_tests
 pytest
 cd .. 
 echo "tests deactivated"

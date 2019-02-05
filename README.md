@@ -27,10 +27,9 @@ Install the requirements
 
 	pip install -r requirements.txt
 
-Change into offline app and run server:
+Run offline applicaton server:
 
-	cd mysite
-	sh start.sh
+	sh start_butler_offline.sh
 
 Open your webbrowser and visit:
 
@@ -52,7 +51,7 @@ Open your webbrowser and visit:
 
 * Change into project directory
 
-	cd BudgetButlerWeb/online
+	cd BudgetButlerWeb/butler_online
 
 * Install the requirements
 
@@ -62,16 +61,16 @@ Open your webbrowser and visit:
 
 * Change into online installation directory and run
 
-    cd ../online_install
+    cd ../butler_online_install
     pip install -r requirements.txt
 
 * Execute the database install script:
 
     python install_database.py
 
-* Change the host in `online/db.ini` if necessary
+* Change the host in `butler_online/db.ini` if necessary
 
-* Load the contents of the `online` folder onto the server
+* Load the contents of the `butler_online` folder onto the server
 
 * Check permissions. Make sure that the file `db.ini` can not be accessed.
 
