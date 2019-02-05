@@ -29,13 +29,13 @@ before_install:
 
 jobs:
   include:
-    - stage: unit-tests
+    - stage: butler_offline::unit_test
       script: sh ci/run_unit_tests.sh
-    - stage: selenium-tests
+    - stage: butler_offline::selenium_test
       script: sh ci/run_integration_tests.sh
-    - stage: test-online-app
+    - stage: butler_online::selenium_test
       script: sh ci/run_online_tests.sh
-    - stage: notify-ci-services
+    - stage: notify_ci_services
       script: sh ci/notify_integration_services.sh
 
 

@@ -1,4 +1,4 @@
 set -e
-cd online 
+cd online_butler
 composer install
 cd ..

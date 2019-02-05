@@ -200,7 +200,7 @@ config = '''db_name = {dbname}
 db_usr = {dbuser}
 db_pw ={dbpw}
 '''.format(dbname=dbname, dbuser=user, dbpw=passwd)
-config_file = open('../online/db.ini', 'w')
+config_file = open('../butler_online/db.ini', 'w')
 config_file.write(config)
 config_file.close()
 

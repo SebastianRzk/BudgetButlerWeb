@@ -51,7 +51,7 @@ Open your webbrowser and visit:
 
 * Change into project directory
 
-	cd BudgetButlerWeb/online
+	cd BudgetButlerWeb/butler_online
 
 * Install the requirements
 
@@ -68,9 +68,9 @@ Open your webbrowser and visit:
 
     python install_database.py
 
-* Change the host in `online/db.ini` if necessary
+* Change the host in `butler_online/db.ini` if necessary
 
-* Load the contents of the `online` folder onto the server
+* Load the contents of the `butler_online` folder onto the server
 
 * Check permissions. Make sure that the file `db.ini` can not be accessed.
 

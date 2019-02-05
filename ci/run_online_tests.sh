@@ -1,7 +1,7 @@
 set -e
 
 # Installation
-echo "create online"
+echo "create butler_online"
 sh ci/install_online.sh
 
 echo "create app"
@@ -38,8 +38,8 @@ python install_database.py
 cd ..
 echo "database installed"
 
-echo "install online app"
-sudo cp -rv ./online /var/www/budgetbutler
+echo "install butler_online app"
+sudo cp -rv ./butler_online /var/www/budgetbutler
 
 
 echo "apache error log before:"
