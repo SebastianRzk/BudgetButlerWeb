@@ -281,7 +281,7 @@
         <tbody>
           {% for kategorie in tag.1 %}
           <tr>
-            <td><span class="fa fa-circle" style="color: #{{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
+            <td class="table-kategorie"><span class="fa fa-circle" style="color: #{{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
             <td>{{kategorie.name}}</td>
             <td class="table-wert">{{kategorie.summe}}</td>
           </tr>
