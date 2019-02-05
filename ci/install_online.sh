@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-cd online_butler
+cd butler_online
 composer install
 cd ..
