@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 
 # Installation
@@ -53,7 +54,7 @@ sudo cat /var/log/apache2/error.log
 
 # tests
 echo "start tests"
-cd selenium_online
+cd butler_online_selenium_tests
 pytest
 cd .. 
 echo "tests deactivated"
