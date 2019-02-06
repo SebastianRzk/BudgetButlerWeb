@@ -199,11 +199,6 @@ class Database:
     def _to_right(self, target_string, size):
         return target_string.rjust(size, ' ')
 
-    def _sum(self, data):
-        if data.empty:
-            return 0
-        return data.sum()
-
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
 

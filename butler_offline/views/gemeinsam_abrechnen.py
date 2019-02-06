@@ -119,12 +119,6 @@ def index(request):
     return request_handler.handle_request(request, _handle_request, 'gemeinsamabrechnen.html')
 
 
-def _sum(data):
-    if data.empty:
-        return 0
-    return data.sum()
-
-
 def abrechnen(request):
     return request_handler.handle_request(request, _handle_abrechnen_request, 'present_abrechnung.html')
 
