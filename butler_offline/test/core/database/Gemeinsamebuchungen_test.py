@@ -109,8 +109,9 @@ class gemeinsame_buchungen(unittest.TestCase):
 
         component_under_test.drop([1])
 
-        assert component_under_test.get_content() == [
+        assert component_under_test.select().to_list() == [
             {
+                'index': 0,
                 'Datum': datum('01.01.2010'),
                 'Kategorie': 'kategorie1',
                 'Name': 'name1',
@@ -137,8 +138,9 @@ class gemeinsame_buchungen(unittest.TestCase):
 
         component_under_test.drop([])
 
-        assert component_under_test.get_content() == [
+        assert component_under_test.select().to_list() == [
             {
+                'index': 0,
                 'Datum': datum('01.01.2010'),
                 'Kategorie': 'kategorie1',
                 'Name': 'name1',
@@ -146,6 +148,7 @@ class gemeinsame_buchungen(unittest.TestCase):
                 'Wert': 1.23
             },
             {
+                'index': 1,
                 'Datum': datum('02.02.2020'),
                 'Kategorie': 'kategorie2',
                 'Name': 'name2',
@@ -158,7 +161,7 @@ class gemeinsame_buchungen(unittest.TestCase):
     def test_getContent_withNoEntry_shouldReturnEmptyList(self):
         component_under_test = Gemeinsamebuchungen()
 
-        assert component_under_test.get_content() == []
+        assert component_under_test.select().to_list() == []
 
     def test_getContent_withEntries_shouldReturnListOfDicts(self):
         component_under_test = Gemeinsamebuchungen()
@@ -176,8 +179,9 @@ class gemeinsame_buchungen(unittest.TestCase):
             3.45,
             'person2')
 
-        assert component_under_test.get_content() == [
+        assert component_under_test.select().to_list() == [
             {
+                'index': 0,
                 'Datum': datum('01.01.2010'),
                 'Kategorie': 'kategorie1',
                 'Name': 'name1',
@@ -185,6 +189,7 @@ class gemeinsame_buchungen(unittest.TestCase):
                 'Wert': 1.23
             },
             {
+                'index': 1,
                 'Datum': datum('02.02.2020'),
                 'Kategorie': 'kategorie2',
                 'Name': 'name2',

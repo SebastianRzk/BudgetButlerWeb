@@ -151,10 +151,10 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert uebertragene_buchung['Kategorie'] == 'some kategorie'
         assert uebertragene_buchung['Wert'] == '5.00'
 
-        assert len(db.gemeinsamebuchungen.get_content()) == 2
-        uebertragene_buchung = db.gemeinsamebuchungen.get_content()[0]
+        assert len(db.gemeinsamebuchungen.select().to_list()) == 2
+        uebertragene_buchung = db.gemeinsamebuchungen.select().to_list()[0]
         assert uebertragene_buchung['Name'] == 'to early'
-        uebertragene_buchung = db.gemeinsamebuchungen.get_content()[1]
+        uebertragene_buchung = db.gemeinsamebuchungen.select().to_list()[1]
         assert uebertragene_buchung['Name'] == 'to late'
 
     def test_abrechnen_withDateRange_shouldOnlyImportMatchingElements(self):

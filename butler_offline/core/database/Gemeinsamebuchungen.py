@@ -63,19 +63,5 @@ class Gemeinsamebuchungen(DatabaseObject):
     def is_empty(self):
         return self.content.empty
 
-
-    def get_content(self):
-        result = []
-        for index,row in self.content.iterrows():
-            result.append({
-                'Datum': row.Datum,
-                'Name': row.Name,
-                'Kategorie': row.Kategorie,
-                'Person': row.Person,
-                'Wert': row.Wert
-            })
-        return result
-
-
     def select(self):
         return GemeinsamSelector(self.content)
