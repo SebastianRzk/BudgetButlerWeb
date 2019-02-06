@@ -7,6 +7,7 @@ from datetime import datetime
 
 from pandas.core.frame import DataFrame
 from butler_offline.core.database.DatabaseObject import DatabaseObject
+from butler_offline.core.database.Selector import GemeinsamSelector
 
 
 class Gemeinsamebuchungen(DatabaseObject):
@@ -87,3 +88,7 @@ class Gemeinsamebuchungen(DatabaseObject):
                 'Wert': row.Wert
             })
         return result
+
+
+    def select(self):
+        return GemeinsamSelector(self.content)

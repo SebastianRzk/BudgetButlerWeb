@@ -84,26 +84,25 @@ class Database:
         '''
         rechnet gemeinsame ausgaben aus der Datenbank ab
         '''
-        gemeinsamebuchungen = self.gemeinsamebuchungen
 
         if mindate == None:
-            mindate = gemeinsamebuchungen.min_date()
+            mindate = self.gemeinsamebuchungen.min_date()
 
         if maxdate == None:
-            maxdate = gemeinsamebuchungen.max_date()
+            maxdate = self.gemeinsamebuchungen.max_date()
 
-        gemeinsamebuchungen = gemeinsamebuchungen.select_range(mindate, maxdate)
+        selector = self.gemeinsamebuchungen.select().select_range(mindate, maxdate)
 
         name_self = viewcore.database_instance().name
         name_partner = viewcore.name_of_partner()
-        gemeinsame_buchungen_content = gemeinsamebuchungen.content
+        gemeinsame_buchungen_content = selector.content
 
-        ausgaben_maureen = gemeinsame_buchungen_content[gemeinsame_buchungen_content.Person == name_partner]
-        ausgaben_sebastian = gemeinsame_buchungen_content[gemeinsame_buchungen_content.Person == name_self]
-        summe_maureen = self._sum(ausgaben_maureen['Wert'])
-        summe_sebastian = self._sum(ausgaben_sebastian['Wert'])
+        select_maureen = selector.fuer(name_partner)
+        select_sebastian = selector.fuer(name_self)
+        summe_maureen = select_maureen.sum()
+        summe_sebastian = select_sebastian.sum()
 
-        ausgaben_gesamt = summe_maureen + summe_sebastian
+        ausgaben_gesamt = selector.sum()
 
         abrechnunsdatei = StringWriter()
         zeitraum = datum_to_german(mindate) + '-' + datum_to_german(maxdate)
@@ -120,13 +119,9 @@ class Database:
         self._write_large_table_row(abrechnunsdatei, "Gesamt", ausgaben_gesamt)
 
         if verhaeltnis == 50:
-            haelfte_gemeinsame_buchungen = gemeinsame_buchungen_content.copy()
-            haelfte_gemeinsame_buchungen.Wert = haelfte_gemeinsame_buchungen.Wert.map(lambda x: x*0.5)
-            self.write_into_file(abrechnunsdatei, haelfte_gemeinsame_buchungen , 'Gesamtausgaben pro Person ')
-
-        self.write_into_file(abrechnunsdatei, ausgaben_maureen, 'Ausgaben von ' + name_partner)
-
-        self.write_into_file(abrechnunsdatei, ausgaben_sebastian, 'Ausgaben von ' + name_self)
+            self.write_into_file(abrechnunsdatei, selector.faktor(0.5).to_list() , 'Gesamtausgaben pro Person ')
+        self.write_into_file(abrechnunsdatei, select_maureen.to_list(), 'Ausgaben von ' + name_partner)
+        self.write_into_file(abrechnunsdatei, select_sebastian.to_list(), 'Ausgaben von ' + name_self)
 
         ausgaben_fuer_maureen = DataFrame()
         faktor_maureen = self._faktor_other(verhaeltnis)
@@ -134,7 +129,7 @@ class Database:
         ausgaben_fuer_sebastian = DataFrame()
         faktor_sebastian = self._faktor_self(verhaeltnis)
 
-        summe_halb = gemeinsame_buchungen_content.Wert.sum()*0.5
+        summe_halb = selector.faktor(0.5).sum()
 
         if set_self_kategorie:
             faktor_sebastian = 0.5
@@ -195,7 +190,7 @@ class Database:
 
     def _write_tabelle(self, writer, tabelle):
         writer.write_line(self._to_left("Datum", 10) + self._to_left(" Kategorie", 14) + self._to_left("Name", 21) + self._to_right("Wert", 7))
-        for _ , row in tabelle.iterrows():
+        for row in tabelle:
             writer.write_line(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " "))
 
     def _to_left(self, target_string, size):

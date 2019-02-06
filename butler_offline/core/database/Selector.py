@@ -110,6 +110,7 @@ class Selektor:
     def sum(self):
         if self.content.empty:
             return 0
+        print(self.content)
         return self.content.Wert.sum()
 
     def zusammenfassung(self):
@@ -170,3 +171,34 @@ class Selektor:
         tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
         zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
         return zusammenfassung
+
+    def faktor(self, faktor):
+        data = self.content.copy()
+        data.Wert = data.Wert.map(lambda x: x*faktor)
+        return Selektor(data)
+
+    def count(self):
+        return len(self.content)
+
+    def to_list(self):
+        result = []
+        for index, row in self.content.iterrows():
+            result.append({**row.to_dict(), **{'index': index}})
+        return result
+
+
+class GemeinsamSelector(Selektor):
+
+    def __init__(self, content):
+        super().__init__(content)
+
+    def fuer(self, person):
+        return GemeinsamSelector(self.content[self.content.Person == person])
+
+    def select_range(self, mindate, maxdate):
+        data = self.content.copy()
+        data = data[data.Datum >= mindate]
+        data = data[data.Datum <= maxdate]
+
+        return GemeinsamSelector(data)
+
