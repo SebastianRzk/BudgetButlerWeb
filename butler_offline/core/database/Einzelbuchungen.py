@@ -7,7 +7,6 @@ from datetime import date
 
 import pandas as pd
 
-from butler_offline.core.database.Selector import Selektor
 from butler_offline.viewcore import viewcore
 from butler_offline.core.database.DatabaseObject import DatabaseObject
 
@@ -152,8 +151,3 @@ class Einzelbuchungen(DatabaseObject):
         for kategorie, wert in data.iterrows():
             result[kategorie] = "%.2f" % wert
         return result
-
-    def select(self):
-        return Selektor(self.content)
-
-

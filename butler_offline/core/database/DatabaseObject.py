@@ -5,6 +5,7 @@ Created on 03.05.2018
 '''
 import pandas as pd
 from datetime import datetime
+from butler_offline.core.database.Selector import Selektor
 from butler_offline.core.database.StatedObject import StatedObject
 
 class DatabaseObject(StatedObject):
@@ -34,3 +35,5 @@ class DatabaseObject(StatedObject):
         self.content = self.content.drop(index)
         self.taint()
 
+    def select(self):
+        return Selektor(self.content)
