@@ -54,19 +54,6 @@ class Gemeinsamebuchungen(DatabaseObject):
             return new
         return x
 
-    def fuer(self, person):
-        return self.content[self.content.Person == person]
-
-    def select_range(self, mindate, maxdate):
-        data = self.content.copy()
-        data = data[data.Datum >= mindate]
-        data = data[data.Datum <= maxdate]
-
-        new_gemeinsame_buchungen = Gemeinsamebuchungen()
-        new_gemeinsame_buchungen.content = data
-
-        return new_gemeinsame_buchungen
-
     def min_date(self):
         return self.content.Datum.min()
 

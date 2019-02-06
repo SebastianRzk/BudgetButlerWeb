@@ -94,7 +94,7 @@ def _handle_request(request):
 
     context['mindate'] = datum_to_german(mindate)
     context['maxdate'] = datum_to_german(maxdate)
-    context['count'] = len(alle_gemeinsamen_buchungen.get_content())
+    context['count'] = alle_gemeinsamen_buchungen.select().count()
 
     context['set_mindate_rfc'] = datum_to_string(set_mindate)
     context['set_maxdate_rfc'] = datum_to_string(set_maxdate)
