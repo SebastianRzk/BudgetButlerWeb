@@ -26,7 +26,7 @@ def _handle_request(request):
 
     set_mindate = get_post_parameter_or_default(request, 'set_mindate', mindate, mapping_function=datum)
     set_maxdate = get_post_parameter_or_default(request, 'set_maxdate', maxdate, mapping_function=datum)
-    selected_gemeinsamen_buchungen = alle_gemeinsamen_buchungen.select_range(set_mindate, set_maxdate)
+    selector = alle_gemeinsamen_buchungen.select().select_range(set_mindate, set_maxdate)
 
     replay_value_if_defined(context, 'set_verhaeltnis', request, default=50)
     set_verhaeltnis = int(context['set_verhaeltnis'])
@@ -39,11 +39,11 @@ def _handle_request(request):
     replay_value_if_defined(context, 'set_other_kategorie_value', request, 'Korrekturbuchung')
 
 
-    ausgabe_sebastian = selected_gemeinsamen_buchungen.fuer(name_self)
-    ausgabe_maureen = selected_gemeinsamen_buchungen.fuer(name_partner)
-    ausgabe_sebastian = _sum(ausgabe_sebastian.Wert)
-    ausgabe_maureen = _sum(ausgabe_maureen.Wert)
-    ausgabe_gesamt = ausgabe_maureen + ausgabe_sebastian
+    select_sebastian = selector.fuer(name_self)
+    select_maureen = selector.fuer(name_partner)
+    ausgabe_sebastian = select_sebastian.sum()
+    ausgabe_maureen = select_maureen.sum()
+    ausgabe_gesamt = selector.sum()
 
     ergebnis = ''
 
@@ -100,7 +100,7 @@ def _handle_request(request):
     context['set_maxdate_rfc'] = datum_to_string(set_maxdate)
     context['set_mindate'] = datum_to_german(set_mindate)
     context['set_maxdate'] = datum_to_german(set_maxdate)
-    context['set_count'] = len(selected_gemeinsamen_buchungen.get_content())
+    context['set_count'] = selector.count()
     context['set_verhaeltnis_real'] = int(set_verhaeltnis)
 
     context['kategorien'] = db.einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True)
