@@ -5,11 +5,12 @@ Created on 03.05.2018
 '''
 import pandas as pd
 from datetime import datetime
+from butler_offline.core.database.StatedObject import StatedObject
 
-class DatabaseObject:
+class DatabaseObject(StatedObject):
 
     def __init__(self, stored_columns=[]):
-        self.tainted = 0
+        super().__init__()
         self.content = pd.DataFrame({}, columns=stored_columns)
 
     def get(self, db_index):
@@ -33,11 +34,3 @@ class DatabaseObject:
         self.content = self.content.drop(index)
         self.taint()
 
-    def taint(self):
-        self.tainted = self.tainted + 1
-
-    def taint_number(self):
-        return self.tainted
-
-    def de_taint(self):
-        self.tainted = 0
