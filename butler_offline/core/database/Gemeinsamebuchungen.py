@@ -7,6 +7,7 @@ from datetime import datetime
 
 from pandas.core.frame import DataFrame
 from butler_offline.core.database.DatabaseObject import DatabaseObject
+from butler_offline.core.database.Selector import GemeinsamSelector
 
 
 class Gemeinsamebuchungen(DatabaseObject):
@@ -53,19 +54,6 @@ class Gemeinsamebuchungen(DatabaseObject):
             return new
         return x
 
-    def fuer(self, person):
-        return self.content[self.content.Person == person]
-
-    def select_range(self, mindate, maxdate):
-        data = self.content.copy()
-        data = data[data.Datum >= mindate]
-        data = data[data.Datum <= maxdate]
-
-        new_gemeinsame_buchungen = Gemeinsamebuchungen()
-        new_gemeinsame_buchungen.content = data
-
-        return new_gemeinsame_buchungen
-
     def min_date(self):
         return self.content.Datum.min()
 
@@ -75,15 +63,5 @@ class Gemeinsamebuchungen(DatabaseObject):
     def is_empty(self):
         return self.content.empty
 
-
-    def get_content(self):
-        result = []
-        for index,row in self.content.iterrows():
-            result.append({
-                'Datum': row.Datum,
-                'Name': row.Name,
-                'Kategorie': row.Kategorie,
-                'Person': row.Person,
-                'Wert': row.Wert
-            })
-        return result
+    def select(self):
+        return GemeinsamSelector(self.content)
