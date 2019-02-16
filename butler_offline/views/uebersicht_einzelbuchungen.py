@@ -7,7 +7,6 @@ from butler_offline.viewcore.converter import datum_to_german
 def _handle_request(request):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     if post_action_is(request, 'delete'):
-        print("Delete: ", request.values['delete_index'])
         einzelbuchungen.delete(int(request.values['delete_index']))
 
     db = einzelbuchungen.get_all()

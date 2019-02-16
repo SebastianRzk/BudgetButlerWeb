@@ -110,7 +110,6 @@ class Selektor:
     def sum(self):
         if self.content.empty:
             return 0
-        print(self.content)
         return self.content.Wert.sum()
 
     def zusammenfassung(self):

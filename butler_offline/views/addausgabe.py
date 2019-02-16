@@ -49,7 +49,6 @@ def handle_request(request):
                     })
 
     if post_action_is(request, 'edit'):
-        print('Please edit:', request.values['edit_index'])
         db_index = int(request.values['edit_index'])
 
         selected_item = einzelbuchungen.get(db_index)
