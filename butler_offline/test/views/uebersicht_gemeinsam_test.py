@@ -42,5 +42,14 @@ class Gemeinsamuebersicht(unittest.TestCase):
         result = uebersicht_gemeinsam.index(GetRequest())
 
         assert len(result['ausgaben']) == 2
-        assert result['ausgaben'][0][2] == 'name1'
-        assert result['ausgaben'][1][2] == 'name3'
+        assert result['ausgaben'][0]['Name'] == 'name1'
+        assert result['ausgaben'][1]['Name'] == 'name3'
+
+    def test_list(self):
+        self.set_up()
+
+        db().gemeinsamebuchungen.add(datum('01.01.2011'), 'kat1', 'name1', 1, 'pers1')
+
+        result = uebersicht_gemeinsam.index(GetRequest())
+        print(result['ausgaben'])
+        assert result['ausgaben'] == [{'Datum': '01.01.2011', 'Kategorie': 'kat1', 'Name': 'name1', 'Wert': '1,00', 'Person': 'pers1', 'index': 0}]

@@ -17,12 +17,12 @@
 					<tbody>
 						{% for ausgabe in ausgaben %}
 						<tr>
-							<td id="item_{{ausgabe.0}}_id">{{ausgabe.0}}</td>
-							<td id="item_{{ausgabe.0}}_datum">{{ausgabe.1}}</td>
-							<td id="item_{{ausgabe.0}}_name">{{ausgabe.2}}</td>
-							<td id="item_{{ausgabe.0}}_kategorie">{{ausgabe.3}}</td>
-							<td class="table-wert" id="item_{{ausgabe.0}}_wert">{{ausgabe.4}}</td>
-							<td id="item_{{ausgabe.0}}_person">{{ausgabe.5}}</td>
+							<td id="item_{{ausgabe.index}}_id">{{ausgabe.index}}</td>
+							<td id="item_{{ausgabe.index}}_datum">{{ausgabe.datum}}</td>
+							<td id="item_{{ausgabe.index}}_name">{{ausgabe.Name}}</td>
+							<td id="item_{{ausgabe.index}}_kategorie">{{ausgabe.Kategorie}}</td>
+							<td class="table-wert" id="item_{{ausgabe.index}}_wert">{{ausgabe.Wert}}</td>
+							<td id="item_{{ausgabe.index}}_person">{{ausgabe.Person}}</td>
 							<td>
 								<div class="pull-right">
 									<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.2}} löschen?');" role="form" action="/gemeinsameuebersicht/" method="post">

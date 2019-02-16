@@ -1,6 +1,7 @@
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.converter import to_descriptive_list
 
 
 def _handle_request(request):
@@ -8,13 +9,9 @@ def _handle_request(request):
         print("Delete: ", request.values['delete_index'])
         viewcore.database_instance().gemeinsamebuchungen.delete(int(request.values['delete_index']))
 
-    ausgaben_liste = []
-    data = viewcore.database_instance().gemeinsamebuchungen.content.sort_values(by='Datum')
-    for row_index, row in data.iterrows():
-        ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, '%.2f' % row.Wert, row.Person))
-
     context = viewcore.generate_transactional_context('gemeinsameuebersicht')
-    context['ausgaben'] = ausgaben_liste
+    context['ausgaben'] = to_descriptive_list(viewcore.database_instance().gemeinsamebuchungen.select().to_list())
+
     return context
 
 
