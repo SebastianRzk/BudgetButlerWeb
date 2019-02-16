@@ -27,4 +27,5 @@ class TestUebersicht(unittest.TestCase):
         db.einzelbuchungen.add(today, 'eine einnahme kategorie', 'some name', 10)
 
         result = dashboard.index(GetRequest())
-        assert result['ausgaben_des_aktuellen_monats'][0]['datum'] == datum_to_german(today)
+        print(result['ausgaben_des_aktuellen_monats'])
+        assert result['ausgaben_des_aktuellen_monats'] == [{'index': 0, 'Datum': '16.02.2019', 'Name': 'some name', 'Kategorie': 'eine einnahme kategorie', 'Wert': '10,00', 'Dynamisch': False, 'Tags': []}]

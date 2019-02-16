@@ -2,26 +2,17 @@ from datetime import date
 
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum_to_german
+from butler_offline.viewcore.converter import to_descriptive_list
 
 def _handle_request(_):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     selector = einzelbuchungen.select()
-    ausgaben_liste = []
-    for row_index, row in selector.select_aktueller_monat().raw_table().iterrows():
-        ausgaben_liste.append(
-            {'index': row_index,
-             'datum': datum_to_german(row.Datum),
-             'name': row.Name,
-             'kategorie': row.Kategorie,
-             'wert': '%.2f' % row.Wert
-            })
 
     context = {
         'zusammenfassung_monatsliste': _monatsliste(),
         'zusammenfassung_einnahmenliste': _list_to_json(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
         'zusammenfassung_ausgabenliste': _list_to_json(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
-        'ausgaben_des_aktuellen_monats': ausgaben_liste,
+        'ausgaben_des_aktuellen_monats': to_descriptive_list(selector.select_aktueller_monat().to_list())
     }
     context = {**context, **viewcore.generate_base_context('dashboard')}
     return context
