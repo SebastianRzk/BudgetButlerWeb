@@ -46,9 +46,6 @@ def handle_request(request, request_action, html_base_page):
     if request.method == 'POST' and 'redirect' in request.values:
         return request_handler.REDIRECTOR('/' + str(request.values['redirect']) + '/')
 
-    if 'transaction_key' in context:
-        context['ID'] = current_key()
-
     if '%Errortext' in context:
         rendered_content = context['%Errortext']
     else:
