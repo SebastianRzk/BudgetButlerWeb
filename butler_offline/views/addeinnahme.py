@@ -7,7 +7,7 @@ from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 
 
 def handle_request(request):
-    context = viewcore.generate_base_context('addeinnahme')
+    context = viewcore.generate_transactional_context('addeinnahme')
     context['element_titel'] = 'Neue Einnahme'
     context['page_subtitle'] = 'Daten der Einnahme:'
     context['approve_title'] = 'Einnahme hinzufügen'
@@ -70,7 +70,6 @@ def handle_request(request):
 
     context['kategorien'] = sorted(einzelbuchungen.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(viewcore.get_changed_einzelbuchungen())
-    context['transaction_key'] = 'requested'
     return context
 
 

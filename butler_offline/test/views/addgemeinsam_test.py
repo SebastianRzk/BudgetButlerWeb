@@ -44,6 +44,11 @@ class TesteAddGemeinsamView(unittest.TestCase):
         assert preset['wert'] == '10,00'
         assert preset['person'] == 'Sebastian'
 
+    def test_transaction_id_should_be_in_context(self):
+        self.set_up()
+        context = addgemeinsam.index(GetRequest())
+        assert 'ID' in context
+
     def test_add_shouldAddGemeinsameBuchung(self):
         self.set_up()
         addgemeinsam.index(VersionedPostRequest(

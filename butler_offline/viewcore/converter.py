@@ -27,3 +27,11 @@ def datum_from_german(datum_str):
 
 def german_to_rfc(datum_str):
     return datum_to_string(datum_from_german(datum_str))
+
+def to_descriptive_list(db_list):
+    for element in db_list:
+        if 'Datum' in element:
+            element['Datum'] = datum_to_german(element['Datum'])
+        if 'Wert' in element:
+            element['Wert'] = from_double_to_german(element['Wert'])
+    return db_list

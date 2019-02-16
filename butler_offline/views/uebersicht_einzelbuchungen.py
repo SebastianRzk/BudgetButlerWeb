@@ -7,7 +7,6 @@ from butler_offline.viewcore.converter import datum_to_german
 def _handle_request(request):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     if post_action_is(request, 'delete'):
-        print("Delete: ", request.values['delete_index'])
         einzelbuchungen.delete(int(request.values['delete_index']))
 
     db = einzelbuchungen.get_all()
@@ -38,9 +37,8 @@ def _handle_request(request):
     if datum_alt != None:
         ausgaben_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = ausgaben_liste
 
-    context = viewcore.generate_base_context('uebersicht')
+    context = viewcore.generate_transactional_context('uebersicht')
     context['alles'] = ausgaben_monatlich
-    context['transaction_key'] = 'requested'
     return context
 
 def index(request):

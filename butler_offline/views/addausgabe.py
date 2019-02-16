@@ -7,7 +7,7 @@ from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_str
 
 
 def handle_request(request):
-    context = viewcore.generate_base_context('addeinzelbuchung')
+    context = viewcore.generate_transactional_context('addeinzelbuchung')
     context['element_titel'] = 'Neue Ausgabe'
     context['approve_title'] = 'Ausgabe hinzufügen'
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -49,7 +49,6 @@ def handle_request(request):
                     })
 
     if post_action_is(request, 'edit'):
-        print('Please edit:', request.values['edit_index'])
         db_index = int(request.values['edit_index'])
 
         selected_item = einzelbuchungen.get(db_index)
@@ -71,7 +70,6 @@ def handle_request(request):
             'Wert' : '',
         }
 
-    context['transaction_key'] = 'requested'
     context['kategorien'] = sorted(einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(viewcore.get_changed_einzelbuchungen())
     return context

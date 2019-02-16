@@ -16,6 +16,11 @@ class TestUebersicht(unittest.TestCase):
         viewcore.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
+    def test_transaction_id_should_be_in_context(self):
+        self.set_up()
+        context = uebersicht_einzelbuchungen.index(GetRequest())
+        assert 'ID' in context
+
     def add_test_data(self):
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('12.12.2012'), 'Test einnahme kategorie', 'test einnahme name', 100)

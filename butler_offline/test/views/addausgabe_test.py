@@ -31,6 +31,11 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
         context = addausgabe.handle_request(GetRequest())
         assert context['approve_title'] == 'Ausgabe hinzufügen'
 
+    def test_transaction_id_should_be_in_context(self):
+        self.set_up()
+        context = addausgabe.index(GetRequest())
+        assert 'ID' in context
+
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
         database_instance().einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)

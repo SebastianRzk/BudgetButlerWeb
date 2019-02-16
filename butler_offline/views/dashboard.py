@@ -2,54 +2,36 @@ from datetime import date
 
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum_to_german
+from butler_offline.viewcore.converter import to_descriptive_list
+from butler_offline.viewcore.viewcore import today
 
 def _handle_request(_):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     selector = einzelbuchungen.select()
-    ausgaben_liste = []
-    for row_index, row in selector.select_aktueller_monat().raw_table().iterrows():
-        ausgaben_liste.append(
-            {'index': row_index,
-             'datum': datum_to_german(row.Datum),
-             'name': row.Name,
-             'kategorie': row.Kategorie,
-             'wert': '%.2f' % row.Wert
-            })
 
     context = {
-        'zusammenfassung_monatsliste': _monatsliste(),
-        'zusammenfassung_einnahmenliste': _list_to_json(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
-        'zusammenfassung_ausgabenliste': _list_to_json(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
-        'ausgaben_des_aktuellen_monats': ausgaben_liste,
+        'zusammenfassung_monatsliste': str(_monatsliste()),
+        'zusammenfassung_einnahmenliste': str(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
+        'zusammenfassung_ausgabenliste': str(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
+        'ausgaben_des_aktuellen_monats': to_descriptive_list(selector.select_aktueller_monat().to_list())
     }
     context = {**context, **viewcore.generate_base_context('dashboard')}
     return context
 
-
-def _list_to_json(liste):
-    result = '['
-    for item in liste:
-        if len(result) > 1:
-            result = result + ', '
-        result = result + str(item)
-    return result + ']'
-
-
 def _monatsliste():
-    month_map = {1: '"Januar"',
-                 2: '"Februar"',
-                 3: '"März"',
-                 4: '"April"',
-                 5: '"Mai"',
-                 6: '"Juni"',
-                 7: '"Juli"',
-                 8: '"August"',
-                 9: '"September"',
-                 10: '"Oktober"',
-                 11: '"November"',
-                 12: '"Dezember"'}
-    aktueller_monat = date.today().month
+    month_map = {1: 'Januar',
+                 2: 'Februar',
+                 3: 'März',
+                 4: 'April',
+                 5: 'Mai',
+                 6: 'Juni',
+                 7: 'Juli',
+                 8: 'August',
+                 9: 'September',
+                 10: 'Oktober',
+                 11: 'November',
+                 12: 'Dezember'}
+    aktueller_monat = today().month
 
     result_list = []
 
@@ -61,7 +43,7 @@ def _monatsliste():
             berechneter_monat = berechneter_monat + 12
         result_list.append(month_map[berechneter_monat])
 
-    return _list_to_json(result_list)
+    return result_list
 
 
 def index(request):

@@ -51,7 +51,7 @@ def handle_request(request):
                 'wert': from_double_to_german(value)
                 })
 
-    context = viewcore.generate_base_context('adddauerauftrag')
+    context = viewcore.generate_transactional_context('adddauerauftrag')
     context['approve_title'] = 'Dauerauftrag hinzufügen'
 
     if post_action_is(request, 'edit'):
@@ -83,7 +83,6 @@ def handle_request(request):
             'Name': ''
         }
 
-    context['transaction_key'] = 'requested'
     context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(viewcore.get_changed_dauerauftraege())
     context['rhythmen'] = ['monatlich']

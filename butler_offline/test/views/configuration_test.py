@@ -28,6 +28,11 @@ class TestKonfiguration(unittest.TestCase):
         self.set_up()
         configuration.index(GetRequest())
 
+    def test_transaction_id_should_be_in_context(self):
+        self.set_up()
+        context = configuration.index(GetRequest())
+        assert 'ID' in context
+
     def test_addKategorie(self):
         self.set_up()
         configuration.index(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
