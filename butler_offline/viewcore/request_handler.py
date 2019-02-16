@@ -6,7 +6,6 @@ Created on 04.12.2017
 from flask import render_template
 from flask import redirect
 from requests.exceptions import ConnectionError
-from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.base_html import set_error_message

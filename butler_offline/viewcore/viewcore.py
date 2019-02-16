@@ -6,7 +6,9 @@ Created on 24.04.2017
 from butler_offline.core import DBManager
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import configuration_provider
+from butler_offline.viewcore.request_handler import current_key
 import datetime
+
 
 DATABASE_INSTANCE = None
 DATABASES = []
@@ -135,6 +137,11 @@ def generate_base_context(pagename):
         'nutzername': database_instance().name,
         'extra_scripts': ''
     }
+
+def generate_transactional_context(pagename):
+    context = generate_base_context(pagename)
+    context['ID'] = current_key()
+    return context
 
 
 def generate_error_context(pagename, errortext):
