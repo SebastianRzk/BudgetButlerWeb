@@ -29,6 +29,12 @@ class Importd(unittest.TestCase):
         self.set_up()
         assert import_data._add_protokoll_if_needed('myurl') == 'https://myurl'
 
+    def test_transaction_id_should_be_in_context(self):
+        self.set_up()
+        context = import_data.index(GetRequest())
+        print(context)
+        assert 'ID' in context
+
     def test_padProtocoll_withExistingProtocoll_shouldNotChangeProtocoll(self):
         self.set_up()
         assert import_data._add_protokoll_if_needed('http://myurl') == 'http://myurl'
@@ -38,7 +44,6 @@ class Importd(unittest.TestCase):
     def test_init_shouldReturnIndexPage(self):
         self.set_up()
         context = import_data.index(GetRequest())
-        print(context)
         assert context['element_titel'] == 'Export / Import'
 
     _IMPORT_DATA = '''

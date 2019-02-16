@@ -13,13 +13,12 @@ def _handle_request(request):
         print("Delete: ", request.values['delete_index'])
         dauerauftraege.delete(int(request.values['delete_index']))
 
-    context = viewcore.generate_base_context('dauerauftraguebersicht')
+    context = viewcore.generate_transactional_context('dauerauftraguebersicht')
     data = collections.OrderedDict()
     data['Aktuelle Daueraufträge'] = _format_dauerauftrag_floatpoint(dauerauftraege.aktuelle())
     data['Zukünftige Daueraufträge'] = _format_dauerauftrag_floatpoint(dauerauftraege.future())
     data['Vergangene  Daueraufträge'] = _format_dauerauftrag_floatpoint(dauerauftraege.past())
     context['dauerauftraege'] = data
-    context['transaction_key'] = 'requested'
     return context
 
 

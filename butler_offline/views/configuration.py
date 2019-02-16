@@ -57,7 +57,7 @@ def _handle_request(request):
             'kategorie' : kategorie
             })
 
-    context = viewcore.generate_base_context('configuration')
+    context = viewcore.generate_transactional_context('configuration')
     context['palette'] = farbmapping
     default_databases = ''
     for db in viewcore.DATABASES:
@@ -67,7 +67,6 @@ def _handle_request(request):
     context['default_databases'] = default_databases
     context['partnername'] = viewcore.name_of_partner()
     context['themecolor'] = configuration_provider.get_configuration('THEME_COLOR')
-    context['transaction_key'] = 'requested'
     context['ausgeschlossene_kategorien'] = configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN')
     return context
 

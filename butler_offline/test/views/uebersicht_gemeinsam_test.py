@@ -17,6 +17,11 @@ class Gemeinsamuebersicht(unittest.TestCase):
         viewcore.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
+    def test_transaction_id_should_be_in_context(self):
+        self.set_up()
+        context = uebersicht_gemeinsam.index(GetRequest())
+        assert 'ID' in context
+
     def test_init(self):
         self.set_up()
         uebersicht_gemeinsam.index(GetRequest())

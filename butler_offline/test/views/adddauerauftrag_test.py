@@ -31,7 +31,6 @@ class TesteAddDauerauftragView(unittest.TestCase):
     def test_transaction_id_should_be_in_context(self):
         self.set_up()
         context = adddauerauftrag.index(GetRequest())
-        print(context)
         assert 'ID' in context
 
     def test_init(self):

@@ -38,9 +38,8 @@ def _handle_request(request):
     if datum_alt != None:
         ausgaben_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = ausgaben_liste
 
-    context = viewcore.generate_base_context('uebersicht')
+    context = viewcore.generate_transactional_context('uebersicht')
     context['alles'] = ausgaben_monatlich
-    context['transaction_key'] = 'requested'
     return context
 
 def index(request):

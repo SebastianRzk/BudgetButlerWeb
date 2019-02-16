@@ -20,6 +20,12 @@ class Dauerauftragsuebersicht(unittest.TestCase):
         self.set_up()
         uebersicht_dauerauftrag.index(GetRequest())
 
+
+    def test_transaction_id_should_be_in_context(self):
+        self.set_up()
+        context = uebersicht_dauerauftrag.index(GetRequest())
+        assert 'ID' in context
+
     def test_delete(self):
         self.set_up()
         dauerauftraege = viewcore.database_instance().dauerauftraege

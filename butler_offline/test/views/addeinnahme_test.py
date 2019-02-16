@@ -32,7 +32,6 @@ class TestAddEinnahmeView(unittest.TestCase):
     def test_transaction_id_should_be_in_context(self):
         self.set_up()
         context = addeinnahme.index(GetRequest())
-        print(context)
         assert 'ID' in context
 
     def test_init(self):

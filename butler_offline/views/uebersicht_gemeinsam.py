@@ -13,9 +13,8 @@ def _handle_request(request):
     for row_index, row in data.iterrows():
         ausgaben_liste.append((row_index, row.Datum, row.Name, row.Kategorie, '%.2f' % row.Wert, row.Person))
 
-    context = viewcore.generate_base_context('gemeinsameuebersicht')
+    context = viewcore.generate_transactional_context('gemeinsameuebersicht')
     context['ausgaben'] = ausgaben_liste
-    context['transaction_key'] = 'requested'
     return context
 
 
