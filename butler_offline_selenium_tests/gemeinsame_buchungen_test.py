@@ -40,7 +40,7 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_id('item_2_name').get_attribute('innerHTML') == '2name'
         assert driver.find_element_by_id('item_2_kategorie').get_attribute('innerHTML') == '2test_kategorie'
         assert driver.find_element_by_id('item_2_datum').get_attribute('innerHTML') == '01.01.2012'
-        assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2.00'
+        assert driver.find_element_by_id('item_2_wert').get_attribute('innerHTML') == '-2,00'
         assert driver.find_element_by_id('item_2_person').get_attribute('innerHTML') == 'test'
 
         close_driver(driver)
