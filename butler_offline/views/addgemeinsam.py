@@ -1,6 +1,3 @@
-import datetime
-import pandas
-
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
@@ -47,7 +44,7 @@ def handle_request(request):
                     'person':request.values['person']
                     })
 
-    context = viewcore.generate_base_context("addgemeinsam")
+    context = viewcore.generate_transactional_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
@@ -77,7 +74,6 @@ def handle_request(request):
     context['personen'] = [viewcore.database_instance().name, viewcore.name_of_partner()]
     context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(viewcore.get_changed_gemeinsamebuchungen())
-    context['transaction_key'] = 'requested'
     return context
 
 
