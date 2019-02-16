@@ -7,7 +7,7 @@ from butler_offline.views import dashboard
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
 from datetime import datetime
-from butler_offline.viewcore.converter import datum_to_german
+from datetime import date
 
 class TestUebersicht(unittest.TestCase):
 
@@ -19,6 +19,16 @@ class TestUebersicht(unittest.TestCase):
     def test_init_withEmptyDatabase(self):
         self.set_up()
         dashboard.index(GetRequest())
+
+    def test_should_return_month_list(self):
+        self.set_up()
+        feburary = date(2018,2,13)
+        viewcore.stub_today_with(feburary)
+
+        result = dashboard.index(GetRequest())
+
+        assert result['zusammenfassung_monatsliste'] == "['August', 'September', 'Oktober', 'November', 'Dezember', 'Januar', 'Februar']"
+
 
     def test_withEntry_shouldReturnGermanDate(self):
         self.set_up()
