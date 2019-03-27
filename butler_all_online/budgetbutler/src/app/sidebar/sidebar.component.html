@@ -1,0 +1,13 @@
+<div style="text-align:center">
+  <h2>
+    BudgetButlerWEB
+  </h2>
+  <div *ngIf="authService.isLoggedIn">
+    Hallo, {{authService.username}}
+    <button (click)="logout()">Logout</button>
+  </div>
+</div>
+<ol>
+  <li>Eins</li>
+  <li>Zweo</li>
+</ol>

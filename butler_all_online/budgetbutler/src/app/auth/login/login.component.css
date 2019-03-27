@@ -1,0 +1,14 @@
+.login-card {
+    max-width: 40ex;
+    vertical-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+button {
+    width: 100%;
+}
