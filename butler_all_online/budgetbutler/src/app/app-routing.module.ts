@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 
  
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   { canActivate: [AuthGuard], path: '', children:
     [
       { path: 'dashboard', component: DashboardComponent},
+      { path: 'addausgabe', component: AddausgabeComponent},
       { path: '', component: DashboardComponent}
     ]},
 ];

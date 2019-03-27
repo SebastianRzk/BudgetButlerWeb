@@ -1,3 +1,21 @@
 sidebar {
     background-color: white;
 }
+
+.greeter {
+    width: 100%;
+}
+
+.navigation-button {
+    width: 100%;
+    text-align: start;
+}
+
+
+.navigation {
+    padding-top: 3ex;
+}
+
+.sublinklist {
+    margin-left: 3ex;
+}

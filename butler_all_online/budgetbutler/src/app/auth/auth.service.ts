@@ -47,6 +47,7 @@ export class AuthService {
         data => {
           if (data != null && 'token' in data ) {
             this.isLoggedIn = true;
+            this.username = data.username;
             this.router.navigate(['dashboard']);
           } else {
             this.isLoggedIn = false;

@@ -1,0 +1,10 @@
+<mat-card class="erfassung">
+  <mat-card-title>Neue Ausgabe erfassen</mat-card-title>
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Datum der Ausgabe">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  
+
+</mat-card>
