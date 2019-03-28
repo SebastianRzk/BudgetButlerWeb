@@ -10,7 +10,7 @@ import { routerNgProbeToken } from '@angular/router/src/router_module';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   menu = [
     {
@@ -28,7 +28,7 @@ export class SidebarComponent implements OnInit {
           title: 'Neue Ausgabe',
           type: 'link',
           url: 'addausgabe',
-          icon: 'add'
+          icon: 'add_circle_outline'
         }
       ]
     },
@@ -41,7 +41,7 @@ export class SidebarComponent implements OnInit {
           title: 'Neue gemeinsame Ausgabe',
           type: 'link',
           url: 'addgemeinsam',
-          icon: 'add'
+          icon: 'add_box'
         }
       ]
     }
@@ -55,7 +55,6 @@ export class SidebarComponent implements OnInit {
   }
 
   navigateTo(url: string){
-    console.log("Navigating to: " + url);
     this.router.navigate([url]);
   }
 

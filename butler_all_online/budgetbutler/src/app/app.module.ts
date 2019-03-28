@@ -10,7 +10,11 @@ import {MatSelectModule,
   MatInputModule,
   MatSlideToggleModule,
   MatDatepickerModule,
-  MatNativeDateModule} from '@angular/material';
+  MatNativeDateModule,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  ShowOnDirtyErrorStateMatcher,
+  ErrorStateMatcher} from '@angular/material';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -31,7 +35,7 @@ import { AddausgabeComponent } from './addausgabe/addausgabe.component';
     LoginComponent,
     DashboardComponent,
     SidebarComponent,
-    AddausgabeComponent
+    AddausgabeComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,14 @@ import { AddausgabeComponent } from './addausgabe/addausgabe.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale('de');
+  }
+
+ }

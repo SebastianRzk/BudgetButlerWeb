@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
-import { tap, delay } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+import { HttpClient} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ApiproviderService } from '../apiprovider.service';
 
@@ -24,7 +23,7 @@ export class AuthService {
     body.append('password', password);
 
     return this.httpClient.post<AuthContainer>(this.api.getUrl('login.php'), body).pipe(
-      tap( // Log the result or error
+      tap(
         data => {
           if (data != null && 'token' in data ) {
             this.isLoggedIn = true;
@@ -48,7 +47,11 @@ export class AuthService {
           if (data != null && 'token' in data ) {
             this.isLoggedIn = true;
             this.username = data.username;
-            this.router.navigate(['dashboard']);
+            if (this.redirectUrl) {
+              this.router.navigate([this.redirectUrl]);
+            } else {
+              this.router.navigate(['dashboard']);
+            }
           } else {
             this.isLoggedIn = false;
           }
