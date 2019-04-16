@@ -23,7 +23,7 @@ try {
 	head('Login');
 	echo '<form action="login.php" method="post">
 		<div>
-		Email: <input type="text" name="email" id="email"></input>
+		Email: <input type="email" name="email" id="email"></input>
 		</div>
 		<div>
 		Passwort: <input type="password" name="password" id="password"></input>
