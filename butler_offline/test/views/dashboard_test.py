@@ -6,6 +6,7 @@ from butler_offline.core import FileSystem
 from butler_offline.views import dashboard
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.converter import datum_to_german
 from datetime import datetime
 from datetime import date
 
@@ -38,4 +39,4 @@ class TestUebersicht(unittest.TestCase):
 
         result = dashboard.index(GetRequest())
         print(result['ausgaben_des_aktuellen_monats'])
-        assert result['ausgaben_des_aktuellen_monats'] == [{'index': 0, 'Datum': '16.02.2019', 'Name': 'some name', 'Kategorie': 'eine einnahme kategorie', 'Wert': '10,00', 'Dynamisch': False, 'Tags': []}]
+        assert result['ausgaben_des_aktuellen_monats'] == [{'index': 0, 'Datum': datum_to_german(today), 'Name': 'some name', 'Kategorie': 'eine einnahme kategorie', 'Wert': '10,00', 'Dynamisch': False, 'Tags': []}]
