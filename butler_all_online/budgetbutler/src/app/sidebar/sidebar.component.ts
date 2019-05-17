@@ -29,6 +29,12 @@ export class SidebarComponent implements OnInit {
           type: 'link',
           url: 'addausgabe',
           icon: 'add_circle_outline'
+        },
+        {
+          title: 'Alle Buchungen',
+          type: 'link',
+          url: 'allebuchungen',
+          icon: 'format_list_bulleted'
         }
       ]
     },

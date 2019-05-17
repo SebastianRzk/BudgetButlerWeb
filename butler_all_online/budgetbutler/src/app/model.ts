@@ -11,4 +11,4 @@ export class Result {
     public message: string;
 }
 
-export const ERROR_RESULT: Result = {result: 'ERROR', message: 'Übertragen der Daten'};
+export const ERROR_RESULT: Result = { result: 'ERROR', message: 'Übertragen der Daten' };

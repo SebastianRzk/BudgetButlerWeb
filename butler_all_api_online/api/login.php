@@ -15,7 +15,7 @@ try {
 		$result = new Auth();
 		$result->token = $_COOKIE["PHPSESSID"];
 		$result->username = $auth->getUsername();
-		return json_encode($result);
+		echo json_encode($result);
 	}
 }
 catch (\Delight\Auth\InvalidEmailException $e) {

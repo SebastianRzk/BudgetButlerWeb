@@ -11,3 +11,7 @@ form {
     width: 100%;
     padding-right: 1.5ex;
 }
+
+mat-card {
+    margin-bottom: 3ex;
+}

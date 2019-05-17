@@ -14,7 +14,9 @@ import {MatSelectModule,
   DateAdapter,
   MAT_DATE_LOCALE,
   ShowOnDirtyErrorStateMatcher,
-  ErrorStateMatcher} from '@angular/material';
+  ErrorStateMatcher,
+  MatTableModule,
+  MatSortModule} from '@angular/material';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -27,6 +29,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ChartsModule } from 'ng2-charts';
 import { AddausgabeComponent } from './addausgabe/addausgabe.component';
+import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component';
 
 
 @NgModule({
@@ -36,6 +39,7 @@ import { AddausgabeComponent } from './addausgabe/addausgabe.component';
     DashboardComponent,
     SidebarComponent,
     AddausgabeComponent,
+    AllebuchungenComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +56,8 @@ import { AddausgabeComponent } from './addausgabe/addausgabe.component';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatTableModule,
+    MatSortModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     AppRoutingModule,

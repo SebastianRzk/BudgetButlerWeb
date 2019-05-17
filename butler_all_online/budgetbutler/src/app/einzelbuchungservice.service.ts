@@ -18,4 +18,8 @@ export class EinzelbuchungserviceService {
       error => this.notification.handleServerResult(ERROR_RESULT, 'Speichern der Ausgabe')
     );
   }
+
+  public getAll() {
+    return this.httpClient.get<Einzelbuchung[]>(this.api.getUrl('einzelbuchung.php'));
+  }
 }
