@@ -15,7 +15,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent},
       { path: 'addausgabe', component: AddausgabeComponent},
       { path: 'allebuchungen', component: AllebuchungenComponent},
-      { path: '', component: DashboardComponent}
+      { path: '', component: AddausgabeComponent}
     ]},
 ];
  
