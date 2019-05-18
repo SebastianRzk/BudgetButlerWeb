@@ -3,6 +3,7 @@ import { Sort } from '@angular/material';
 import { Einzelbuchung } from '../model';
 import { EinzelbuchungserviceService as EinzelbuchungService } from '../einzelbuchungservice.service';
 import { NotificationService } from '../notification.service';
+import { getLocaleDateTimeFormat } from '@angular/common';
 
 @Component({
   selector: 'app-allebuchungen',
@@ -12,6 +13,7 @@ import { NotificationService } from '../notification.service';
 export class AllebuchungenComponent implements OnInit {
 
   displayedColumns: string[] = ['Datum', 'Name', 'Kategorie', 'Wert', 'Aktion'];
+  displayedMobileColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
   einzelbuchungen: Einzelbuchung[];
 
   constructor(private einzelbuchungService: EinzelbuchungService, private notificationService: NotificationService) {
@@ -29,6 +31,11 @@ export class AllebuchungenComponent implements OnInit {
 
   toLocaleString(date: string) {
     return new Date(date).toLocaleDateString('de-DE');
+  }
+
+  toLocaleShortString(date: string) {
+    const datum = new Date(date);
+    return datum.getDate() + '.' + datum.getMonth();
   }
 
   delete(einzelbuchung: Einzelbuchung) {

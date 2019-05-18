@@ -16,7 +16,8 @@ import {MatSelectModule,
   ShowOnDirtyErrorStateMatcher,
   ErrorStateMatcher,
   MatTableModule,
-  MatSortModule} from '@angular/material';
+  MatSortModule,
+  MatChipsModule} from '@angular/material';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -54,6 +55,7 @@ import { MobileComponent } from './sidebar/mobile/mobile.component';
     MatNativeDateModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatChipsModule,
     MatCardModule,
     MatFormFieldModule,
     MatIconModule,
