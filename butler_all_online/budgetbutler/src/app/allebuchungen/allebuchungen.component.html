@@ -5,30 +5,32 @@
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
     
-      <!-- Position Column -->
       <ng-container matColumnDef="Datum">
         <th mat-header-cell *matHeaderCellDef> Datum </th>
         <td mat-cell *matCellDef="let element"> {{toLocaleString(element.datum)}}
           </td>
       </ng-container>
     
-      <!-- Name Column -->
       <ng-container matColumnDef="Name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
     
-      <!-- Weight Column -->
       <ng-container matColumnDef="Kategorie">
         <th mat-header-cell *matHeaderCellDef> Kategorie </th>
         <td mat-cell *matCellDef="let element"> {{element.kategorie}} </td>
       </ng-container>
     
-      <!-- Symbol Column -->
       <ng-container matColumnDef="Wert">
         <th mat-header-cell *matHeaderCellDef> Wert </th>
         <td mat-cell *matCellDef="let element"> {{element.wert}} </td>
       </ng-container>
+
+      <ng-container matColumnDef="Aktion">
+        <th mat-header-cell *matHeaderCellDef> Aktion </th>
+        <td mat-cell *matCellDef="let element"> <button (click)="delete(element)">Löschen?</button></td>
+      </ng-container>
+    
     
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

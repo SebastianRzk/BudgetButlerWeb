@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 import { routerNgProbeToken } from '@angular/router/src/router_module';
+import { MenuitemService } from '../menuitem.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,50 +11,12 @@ import { routerNgProbeToken } from '@angular/router/src/router_module';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(public authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router, private menuItemService: MenuitemService) { }
 
-  menu = [
-    {
-      title: 'Dashboard',
-      type: 'link',
-      url: 'dashboard',
-      icon: 'bar_chart'
-    },
-    {
-      title: 'Einzelbuchungen',
-      type: 'node',
-      opened: true,
-      children: [
-        {
-          title: 'Neue Ausgabe',
-          type: 'link',
-          url: 'addausgabe',
-          icon: 'add_circle_outline'
-        },
-        {
-          title: 'Alle Buchungen',
-          type: 'link',
-          url: 'allebuchungen',
-          icon: 'format_list_bulleted'
-        }
-      ]
-    },
-    {
-      title: 'Gemeinsame Buchungen',
-      type: 'node',
-      opened: false,
-      children: [
-        {
-          title: 'Neue gemeinsame Ausgabe',
-          type: 'link',
-          url: 'addgemeinsam',
-          icon: 'add_box'
-        }
-      ]
-    }
-  ];
+  menu = []
 
   ngOnInit() {
+    this.menu = this.menuItemService.get();
   }
 
   logout(){

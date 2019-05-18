@@ -59,14 +59,11 @@ function handle_delete($auth, $dbh){
 	$jsondata = file_get_contents('php://input');
 	$requestedEinzelbuchung = json_decode($jsondata, true);
 
-
-	//delete habit-elements
-	$sql = "DELETE FROM einzelbuchungen WHERE  einzelbuchungen.id = :id AND einzelbuchungen.user = :user)";
-
+	$sql = "DELETE FROM `einzelbuchungen` WHERE `id` = :id AND `user` = :user";
 	$sth = $dbh->prepare($sql);
 	$sth->execute(array(
 		':user' => $auth->getUsername(),
-		':id' => $requestedEinzelbuchung['id']
+		':id' => (int) $requestedEinzelbuchung['id']
 		));
 	echo json_encode(new Result());
 }
@@ -75,7 +72,7 @@ function handle_edit($auth, $dbh){
 	$jsondata = file_get_contents('php://input');
 	$requestedEinzelbuchung = json_decode($jsondata, true);
 
-	$sql = "SELECT id FROM einzelbuchungen WHERE  einzelbuchungen.id = :id AND einzelbuchungen.user = :user)";
+	$sql = "SELECT id FROM einzelbuchungen WHERE  einzelbuchungen.id = :id AND einzelbuchungen.user = :user";
 
 	$sth = $dbh->prepare($sql);
 	$sth->execute(array(':user' => $auth->getUsername(),

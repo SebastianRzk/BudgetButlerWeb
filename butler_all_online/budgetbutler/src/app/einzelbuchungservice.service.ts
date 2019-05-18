@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Einzelbuchung, Result, ERROR_RESULT } from './model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiproviderService } from './apiprovider.service';
 import { NotificationService } from './notification.service';
 import { toEinzelbuchungTO } from './converter';
@@ -22,4 +22,15 @@ export class EinzelbuchungserviceService {
   public getAll() {
     return this.httpClient.get<Einzelbuchung[]>(this.api.getUrl('einzelbuchung.php'));
   }
+
+  public delete(einzelbuchung: Einzelbuchung){
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), body: toEinzelbuchungTO(einzelbuchung)
+     };
+    this.httpClient.delete<Result>(this.api.getUrl('einzelbuchung.php'), httpOptions).subscribe(
+      data => this.notification.handleServerResult(data, 'Löschen der Ausgabe'),
+      error => this.notification.handleServerResult(ERROR_RESULT, 'Löschen der Ausgabe')
+    );
+  }
+
 }

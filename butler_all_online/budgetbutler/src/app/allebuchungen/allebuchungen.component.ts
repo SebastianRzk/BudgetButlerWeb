@@ -11,19 +11,28 @@ import { NotificationService } from '../notification.service';
 })
 export class AllebuchungenComponent implements OnInit {
 
-  displayedColumns: string[] = ['Datum', 'Name', 'Kategorie', 'Wert'];
+  displayedColumns: string[] = ['Datum', 'Name', 'Kategorie', 'Wert', 'Aktion'];
   einzelbuchungen: Einzelbuchung[];
 
   constructor(private einzelbuchungService: EinzelbuchungService, private notificationService: NotificationService) {
   }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData = () => {
     this.einzelbuchungService.getAll().subscribe(
       data => this.einzelbuchungen = data,
       error => this.notificationService.handleServerResult(error, 'Laden aller Einzelbuchungen'));
   }
 
-  toLocaleString(date: string){
+  toLocaleString(date: string) {
     return new Date(date).toLocaleDateString('de-DE');
+  }
+
+  delete(einzelbuchung: Einzelbuchung) {
+    this.einzelbuchungService.delete(einzelbuchung);
+    this.loadData();
   }
 }

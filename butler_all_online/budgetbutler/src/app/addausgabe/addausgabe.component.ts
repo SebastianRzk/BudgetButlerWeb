@@ -41,6 +41,7 @@ export class AddausgabeComponent implements OnInit {
 
   ngOnInit() {
     this.kategorieService.getAll().subscribe(data => {
+      data.sort();
       this.kategorien = data;
       if (data.length > 0) {
         this.kategorie.setValue(data[0]);

@@ -25,6 +25,54 @@
   -moz-osx-font-smoothing: grayscale;
 }
   
+
 body {
   margin: 0px;
+}
+
+
+.app-content{
+  width: 100vw;
+  height: 100vh;
+}
+
+
+@media (min-width: 800px) { 
+  .app-content{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 30ex 1fr;
+ }
+
+  .mobile-only {
+      display: none;
+  }
+
+  .content-area{
+    grid-column: 2/3;
+    grid-row: 1/2;
+    background-color: #f1f1f1;
+    padding: 2ex;
+  }
+
+  sidebar{
+      grid-column: 1/2;
+      grid-row: 1/2;
+      padding: 1ex;
+  }
+}
+
+@media (max-width: 799px) { 
+  .desktop-only {
+      display: none;
+  }
+
+  .content-area{
+    background-color: #f1f1f1;
+    padding: 2ex;
+  }
+
+  app-sidebar {
+    width: 100%;
+  }
 }

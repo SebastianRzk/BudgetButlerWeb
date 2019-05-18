@@ -30,6 +30,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { ChartsModule } from 'ng2-charts';
 import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component';
+import { MobileComponent } from './sidebar/mobile/mobile.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component'
     SidebarComponent,
     AddausgabeComponent,
     AllebuchungenComponent,
+    MobileComponent,
   ],
   imports: [
     BrowserModule,
