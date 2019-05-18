@@ -1,5 +1,15 @@
 import { Injectable } from '@angular/core';
 
+
+export class MenuItem {
+  title: string;
+  type: string;
+  url?: string;
+  icon?: string;
+  opened?: boolean;
+  children?: MenuItem[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -7,7 +17,7 @@ export class MenuitemService {
 
   constructor() { }
 
-  get() {
+  get(): MenuItem[] {
     return [
       {
         title: 'Dashboard',
