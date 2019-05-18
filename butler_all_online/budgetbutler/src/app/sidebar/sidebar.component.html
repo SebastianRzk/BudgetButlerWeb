@@ -3,14 +3,14 @@
     <app-mobile-sidebar></app-mobile-sidebar>
   </div>
   
-  <div class="desktop-only">
+  <div class="desktop-only desktop-menu">
     <h2>
       BudgetButlerWEB
     </h2>
 
     <div class="greeter">Hallo, {{authService.username}}</div>
-    <button mat-button (click)="logout()" class="navigation-button">Logout</button>
     <div class="navigation">
+      <button mat-button (click)="logout()" class="navigation-button">Logout</button>
       <div *ngFor="let menuItem of menu">
         <button mat-stroked-button class="navigation-button" *ngIf="menuItem.type === 'link'"
           (click)="navigateTo(menuItem.url)">

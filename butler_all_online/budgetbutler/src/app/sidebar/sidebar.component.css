@@ -2,6 +2,10 @@ sidebar {
     background-color: white;
 }
 
+.desktop-menu {
+    padding: 1ex;
+}
+
 .greeter {
     width: 100%;
 }
