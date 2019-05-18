@@ -65,30 +65,10 @@ function handle_delete($auth, $dbh){
 		':user' => $auth->getUsername(),
 		':id' => (int) $requestedEinzelbuchung['id']
 		));
-	echo json_encode(new Result());
-}
 
-function handle_edit($auth, $dbh){
-	$jsondata = file_get_contents('php://input');
-	$requestedEinzelbuchung = json_decode($jsondata, true);
-
-	$sql = "SELECT id FROM einzelbuchungen WHERE  einzelbuchungen.id = :id AND einzelbuchungen.user = :user";
-
-	$sth = $dbh->prepare($sql);
-	$sth->execute(array(':user' => $auth->getUsername(),
-			    ':id' => (int) $requestedEinzelbuchung['id']));
-	$sqlHabit = $sth->fetchAll();
-	if(count($sqlHabit) == 1){
-		$sql = "UPDATE `einzelbuchungen` SET `datum`= :datum, `name` = :name, `kategorie` = :kategorie, `wert` = :wert WHERE `id` = :id";
-		$sth = $dbh->prepare($sql);
-	$sth->execute(array(':user' => $auth->getUsername(),
-			    ':datum' => $requestedEinzelbuchung['datum'],
-			    ':name' => $requestedEinzelbuchung['name'],
-			    ':kategorie' => $requestedEinzelbuchung['kategorie'],
-			    ':wert' => $requestedEinzelbuchung['wert']));
-	}
-
-	echo json_encode(new Result());
+    $result = new Result();
+    $result->message = "Ausgaben erfolgreich gelöscht";
+    echo json_encode($result);
 }
 
 
@@ -104,7 +84,9 @@ function handle_put($auth, $dbh){
 			    ':name' => getOrDefault($requestedEinzelbuchung, 'name', 'kein Name angegeben'),
 			    ':kategorie' => getOrDefault($requestedEinzelbuchung, 'kategorie', 'keine Kategorie angegeben'),
 			    ':wert' => getOrDefault($requestedEinzelbuchung, 'wert', 0)));
-	echo json_encode(new Result());
+    $result = new Result();
+    $result->message = "Ausgaben erfolgreich hinzugefügt";
+    echo json_encode($result);
 }
 
 ?>

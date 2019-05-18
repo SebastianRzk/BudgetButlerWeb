@@ -28,7 +28,7 @@ export class AuthService {
           if (data != null && 'token' in data ) {
             this.isLoggedIn = true;
             this.username = data.username;
-            this.router.navigate(['dashboard']);
+            this.router.navigate(['addausgabe']);
           } else {
             this.isLoggedIn = false;
           }
@@ -50,7 +50,7 @@ export class AuthService {
             if (this.redirectUrl) {
               this.router.navigate([this.redirectUrl]);
             } else {
-              this.router.navigate(['dashboard']);
+              this.router.navigate(['addausgabe']);
             }
           } else {
             this.isLoggedIn = false;

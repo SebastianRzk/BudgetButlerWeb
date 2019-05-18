@@ -35,7 +35,7 @@ export class AllebuchungenComponent implements OnInit {
 
   toLocaleShortString(date: string) {
     const datum = new Date(date);
-    return datum.getDate() + '.' + datum.getMonth();
+    return datum.getDate() + '.' + (datum.getMonth() + 1);
   }
 
   delete(einzelbuchung: Einzelbuchung) {

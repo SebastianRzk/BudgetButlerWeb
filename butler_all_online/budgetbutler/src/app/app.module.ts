@@ -17,7 +17,8 @@ import {MatSelectModule,
   ErrorStateMatcher,
   MatTableModule,
   MatSortModule,
-  MatChipsModule} from '@angular/material';
+  MatChipsModule,
+  MatSnackBarModule} from '@angular/material';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -32,6 +33,7 @@ import { ChartsModule } from 'ng2-charts';
 import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component';
 import { MobileComponent } from './sidebar/mobile/mobile.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 @NgModule({
@@ -43,6 +45,7 @@ import { MobileComponent } from './sidebar/mobile/mobile.component';
     AddausgabeComponent,
     AllebuchungenComponent,
     MobileComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +60,7 @@ import { MobileComponent } from './sidebar/mobile/mobile.component';
     MatButtonModule,
     MatChipsModule,
     MatCardModule,
+    MatSnackBarModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,

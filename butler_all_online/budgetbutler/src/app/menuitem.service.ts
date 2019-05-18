@@ -56,7 +56,14 @@ export class MenuitemService {
             icon: 'add_box'
           }
         ]
+      },
+      {
+        title: 'Einstellungen',
+        type: 'link',
+        url: 'settings',
+        icon: 'settings'
       }
+
     ];
   }
 

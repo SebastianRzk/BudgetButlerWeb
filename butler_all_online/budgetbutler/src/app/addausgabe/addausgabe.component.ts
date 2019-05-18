@@ -7,13 +7,7 @@ import { toEinzelbuchungTO } from '../converter';
 import { ErrorStateMatcher } from '@angular/material';
 import { KategorieService } from '../kategorie.service';
 import { AbstractControlStatus } from '@angular/forms/src/directives/ng_control_status';
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return (!!(control && control.invalid && (control.dirty || control.touched || isSubmitted))) || (control.value === '');
-  }
-}
+import { NotEmptyErrorStateMatcher } from '../matcher';
 
 
 @Component({
@@ -28,10 +22,10 @@ export class AddausgabeComponent implements OnInit {
   kategorie = new FormControl('', Validators.required);
   kategorien: string[] = [];
   wert = new FormControl('', Validators.required);
-  einzelbuchungMatcher = new MyErrorStateMatcher();
+  einzelbuchungMatcher = new NotEmptyErrorStateMatcher();
 
 
-  neueKategorieMatcher = new MyErrorStateMatcher();
+  neueKategorieMatcher = new NotEmptyErrorStateMatcher();
   neueKategorie = new FormControl('', Validators.required);
 
 
