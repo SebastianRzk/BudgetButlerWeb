@@ -1,15 +1,6 @@
-.erfassung {
-    max-width: 40ex;
-}
-
 form {
     width: 100%;
     margin-top: 3ex;
-}
-
-.full-size-form-field {
-    width: 100%;
-    padding-right: 1.5ex;
 }
 
 mat-card {

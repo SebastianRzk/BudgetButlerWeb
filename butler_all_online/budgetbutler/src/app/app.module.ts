@@ -35,6 +35,31 @@ import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component'
 import { MobileComponent } from './sidebar/mobile/mobile.component';
 import { SettingsComponent } from './settings/settings.component';
 
+export const ALL_IMPORTS = [
+  BrowserModule,
+  FormsModule,
+  ChartsModule,
+  MatSlideToggleModule,
+  MatSelectModule,
+  MatButtonModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatCheckboxModule,
+  MatButtonModule,
+  MatChipsModule,
+  MatCardModule,
+  MatSnackBarModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatTableModule,
+  MatSortModule,
+  ReactiveFormsModule,
+  BrowserAnimationsModule,
+  AppRoutingModule,
+  HttpClientModule
+]
+
 
 @NgModule({
   declarations: [

@@ -22,4 +22,28 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
   }
 
+  computeErrorMesage() {
+    if (this.altesPasswort.value.length < 8) {
+      this.errorMessage = 'Bitte altes Passwort eingeben.';
+      return;
+    }
+
+    if (this.neuesPasswort.value !== this.neuesPasswortWiederholung.value) {
+      this.errorMessage = 'Passwörter sind nicht identisch.';
+      return;
+    }
+
+    if (this.neuesPasswort.value.length < 8) {
+      this.errorMessage = 'Das neue Passwort muss mehr als 8 Zeichen lang sein.';
+      return;
+    }
+
+    if (this.neuesPasswort.value === this.altesPasswort.value) {
+      this.errorMessage = 'Das alte und das neue Passwort dürfen nicht identisch sein.';
+      return;
+    }
+
+    this.errorMessage = '';
+  }
+
 }

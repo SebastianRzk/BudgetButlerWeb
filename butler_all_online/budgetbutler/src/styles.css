@@ -75,3 +75,18 @@ body {
     width: 100%;
   }
 }
+
+
+/*
+Masken Eigenschaften
+*/
+
+.erfassung {
+  max-width: 40ex;
+}
+
+
+.full-size-form-field {
+  width: 100%;
+  padding-right: 1.5ex;
+}

@@ -1,20 +1,18 @@
 <mat-card class="erfassung">
   <form>
     <mat-card-title>Passwort ändern</mat-card-title>
-    <mat-form-field>
+    <mat-form-field class="full-size-form-field">
       <input matInput placeholder="Altes Passwort" [formControl]="altesPasswort" [errorStateMatcher]="passwortMatcher">
     </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Neues Passwort" [formControl]="neuesPasswort" [errorStateMatcher]="passwortMatcher">
+    <mat-form-field class="full-size-form-field">
+      <input matInput placeholder="Neues Passwort" [formControl]="neuesPasswort" [errorStateMatcher]="passwortMatcher" (change)="computeErrorMesage()">
     </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Neues Passwort wiederholen" [formControl]="neuesPasswortWiederholung"
-        [errorStateMatcher]="passwortMatcher">
+    <mat-form-field class="full-size-form-field">
+      <input matInput placeholder="Neues Passwort wiederholen" [formControl]="neuesPasswortWiederholung" [errorStateMatcher]="passwortMatcher" (change)="computeErrorMesage()">
     </mat-form-field>
     <mat-chip-list *ngIf="errorMessage">
-      <mat-chip>{{errorMessage}}</mat-chip>
+      <mat-chip selected [color]="warn" class="full-size-form-field">{{errorMessage}}</mat-chip>
     </mat-chip-list>
-    <button mat-raised-button color="primary" class="full-size-form-field" (click)="changePassword()">Passwort
-      ändern</button>
+    <button mat-raised-button color="primary" class="full-size-form-field" (click)="changePassword()" class="full-size-form-field" [disabled]="!!errorMessage">Passwort ändern</button>
   </form>
 </mat-card>
