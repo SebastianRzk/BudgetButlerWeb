@@ -4,6 +4,7 @@ import { Einzelbuchung } from '../model';
 import { EinzelbuchungserviceService as EinzelbuchungService } from '../einzelbuchungservice.service';
 import { NotificationService } from '../notification.service';
 import { getLocaleDateTimeFormat } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-allebuchungen',
@@ -14,7 +15,7 @@ export class AllebuchungenComponent implements OnInit {
 
   displayedColumns: string[] = ['Datum', 'Name', 'Kategorie', 'Wert', 'Aktion'];
   displayedMobileColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
-  einzelbuchungen: Einzelbuchung[];
+  einzelbuchungen: Observable<Einzelbuchung[]>;
 
   constructor(private einzelbuchungService: EinzelbuchungService, private notificationService: NotificationService) {
   }
@@ -24,9 +25,7 @@ export class AllebuchungenComponent implements OnInit {
   }
 
   loadData = () => {
-    this.einzelbuchungService.getAll().subscribe(
-      data => this.einzelbuchungen = data,
-      error => this.notificationService.handleServerResult(error, 'Laden aller Einzelbuchungen'));
+    this.einzelbuchungen = this.einzelbuchungService.getAll();
   }
 
   toLocaleString(date: string) {

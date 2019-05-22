@@ -8,6 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule, MatChipsModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ALTES_PASSWORT_FEHLT, PASSWORT_ZU_KURZ, PASSWORT_IDENTISCH, PASSWOERTER_NICHT_GLEICH } from '../errormessages';
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -54,13 +55,13 @@ describe('SettingsComponent', () => {
 
   it('should show error message when nothing given', () => {
     component.computeErrorMesage();
-    expect(component.errorMessage).toEqual('Bitte altes Passwort eingeben.');
+    expect(component.errorMessage).toEqual(ALTES_PASSWORT_FEHLT);
   });
 
   it('should show error message when no new pw given', () => {
     component.altesPasswort.setValue(onePassword);
     component.computeErrorMesage();
-    expect(component.errorMessage).toEqual('Das neue Passwort muss mehr als 8 Zeichen lang sein.');
+    expect(component.errorMessage).toEqual(PASSWORT_ZU_KURZ);
   });
 
   it('should show error message when all pw are equal', () => {
@@ -68,7 +69,7 @@ describe('SettingsComponent', () => {
     component.neuesPasswort.setValue(onePassword);
     component.neuesPasswortWiederholung.setValue(onePassword);
     component.computeErrorMesage();
-    expect(component.errorMessage).toEqual('Das alte und das neue Passwort dürfen nicht identisch sein.');
+    expect(component.errorMessage).toEqual(PASSWORT_IDENTISCH);
   });
 
   it('should show error message when new pw to short', () => {
@@ -76,7 +77,7 @@ describe('SettingsComponent', () => {
     component.neuesPasswort.setValue(tooShortPassword);
     component.neuesPasswortWiederholung.setValue(tooShortPassword);
     component.computeErrorMesage();
-    expect(component.errorMessage).toEqual('Das neue Passwort muss mehr als 8 Zeichen lang sein.');
+    expect(component.errorMessage).toEqual(PASSWORT_ZU_KURZ);
   });
 
   it('should show error message when new pws are not equal', () => {
@@ -84,7 +85,7 @@ describe('SettingsComponent', () => {
     component.neuesPasswort.setValue(anotherPassword);
     component.neuesPasswortWiederholung.setValue(anotherPassword + 'wrong');
     component.computeErrorMesage();
-    expect(component.errorMessage).toEqual('Passwörter sind nicht identisch.');
+    expect(component.errorMessage).toEqual(PASSWOERTER_NICHT_GLEICH);
   });
 
   it('should show no error message when everything is ok', () => {

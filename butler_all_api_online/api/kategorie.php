@@ -1,12 +1,4 @@
 <?php
-
-
-class Topic {
-	public $name = "undefined";
-	public $id = 0;
-	public $habits = array();
-}
-
 require_once(__DIR__.'/creds.php');
 
 authenticated(function(){

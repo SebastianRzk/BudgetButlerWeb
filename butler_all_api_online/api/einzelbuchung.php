@@ -9,12 +9,8 @@ class Einzelbuchung {
 	public $wert = "undefined";
 }
 
-class Result {
-	public $result = "OK";
-	public $message = "";
-}
-
 require_once(__DIR__.'/creds.php');
+require_once(__DIR__.'/model.php');
 
 authenticated(function(){
 	$auth = getAuth();

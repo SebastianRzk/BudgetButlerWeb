@@ -6,11 +6,18 @@ function getPDO(){
 	return new PDO('mysql:dbname='.$config_array['db_name'].';host=localhost;charset=utf8mb4', $config_array['db_usr'], $config_array['db_pw']);
 }
 
+function online(){
+	return false;
+}
+
 function getAuth(){
-    //ini_set('session.cookie_secure', 1);
-  //  ini_set('session.cookie_httponly', 1);
-    //ini_set('session.cookie_path', '/');
-    //ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
+	if(online()){
+		ini_set('session.cookie_secure', 1);
+		ini_set('session.cookie_httponly', 1);
+		ini_set('session.cookie_path', '/');
+		ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
+	}
+
 	$config_array  = parse_ini_file('db.ini');
 	// $db = new \PDO('mysql:dbname=my-database;host=localhost;charset=utf8mb4', 'my-username', 'my-password');
 	// or
@@ -57,5 +64,22 @@ function authenticated($myfunc){
 		header('Location: login.php');
 		die();
 	}
+}
+
+class Auth {
+	public $token = "";
+	public $username = "";
+	public $role = "user";
+}
+
+function getUserAuth($auth){
+	$result = new Auth();
+	$result->token = $_COOKIE["PHPSESSID"];
+	$result->username = $auth->getUsername();
+
+	if ($auth->getUsername() == "admin"){
+		$result->role = "admin";
+	}
+	return $result;
 }
 ?>

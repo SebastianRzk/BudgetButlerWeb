@@ -83,8 +83,13 @@ Masken Eigenschaften
 
 .erfassung {
   max-width: 40ex;
+  margin: 2ex;
 }
 
+.wide {
+  max-width: 80ex;
+  margin: 2ex;
+}
 
 .full-size-form-field {
   width: 100%;

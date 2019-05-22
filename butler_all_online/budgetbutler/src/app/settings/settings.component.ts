@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { NotEmptyErrorStateMatcher } from '../matcher';
+import { AuthService } from '../auth/auth.service';
+import { ALTES_PASSWORT_FEHLT, PASSWOERTER_NICHT_GLEICH, PASSWORT_ZU_KURZ, PASSWORT_IDENTISCH } from '../errormessages';
 
 @Component({
   selector: 'app-settings',
@@ -17,33 +19,48 @@ export class SettingsComponent implements OnInit {
 
   public errorMessage = '';
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
 
   computeErrorMesage() {
     if (this.altesPasswort.value.length < 8) {
-      this.errorMessage = 'Bitte altes Passwort eingeben.';
+      this.errorMessage = ALTES_PASSWORT_FEHLT;
       return;
     }
 
     if (this.neuesPasswort.value !== this.neuesPasswortWiederholung.value) {
-      this.errorMessage = 'Passwörter sind nicht identisch.';
+      this.errorMessage = PASSWOERTER_NICHT_GLEICH;
       return;
     }
 
     if (this.neuesPasswort.value.length < 8) {
-      this.errorMessage = 'Das neue Passwort muss mehr als 8 Zeichen lang sein.';
+      this.errorMessage = PASSWORT_ZU_KURZ;
       return;
     }
 
     if (this.neuesPasswort.value === this.altesPasswort.value) {
-      this.errorMessage = 'Das alte und das neue Passwort dürfen nicht identisch sein.';
+      this.errorMessage = PASSWORT_IDENTISCH;
       return;
     }
 
     this.errorMessage = '';
   }
+
+
+  changePassword(){
+    this.computeErrorMesage();
+    
+    if(this.errorMessage !== ''){
+      return;
+    }
+
+    this.authService.changePassword(this.altesPasswort.value, this.neuesPasswort.value);
+    this.altesPasswort.setValue('');
+    this.neuesPasswort.setValue('');
+    this.neuesPasswortWiederholung.setValue('');
+  }
+  
 
 }
