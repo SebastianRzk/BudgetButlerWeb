@@ -73,33 +73,33 @@ export class AuthService {
   public getLogin: () => Observable<AuthContainer> = () => this.httpClient.get<AuthContainer>(this.api.getUrl('login.php'));
 
 
-changePassword(oldPassword: string, newPassword: string) {
-  const body: ChangePasswordContainer = {
-    oldPassword: oldPassword,
-    newPassword: newPassword
-  };
-  return this.httpClient.post<Result>(this.api.getUrl('changepassword.php'), body).
-    subscribe(
-      data => {
-        this.notificationService.handleServerResult(data, 'Passwort ändern');
-      },
-      error => {
-        console.log('Mischt', error);
-        this.isLoggedIn = false;
-      }
-    );
-}
+  changePassword(oldPassword: string, newPassword: string) {
+    const body: ChangePasswordContainer = {
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    };
+    return this.httpClient.post<Result>(this.api.getUrl('changepassword.php'), body).
+      subscribe(
+        data => {
+          this.notificationService.handleServerResult(data, 'Passwort ändern');
+        },
+        error => {
+          console.log('Mischt', error);
+          this.isLoggedIn = false;
+        }
+      );
+  }
 
 
-isAdmin = () => this.username === 'admin';
+  isAdmin = () => this.username === 'admin';
 
-logout(): void {
-  this.httpClient.get(this.api.getUrl('logout.php')).subscribe(() => {
+  logout(): void {
+    this.httpClient.get(this.api.getUrl('logout.php')).subscribe(() => {
+      this.isLoggedIn = false;
+      this.router.navigate(['login']);
+    });
     this.isLoggedIn = false;
-    this.router.navigate(['login']);
-  });
-  this.isLoggedIn = false;
-}
+  }
 }
 
 class AuthContainer {

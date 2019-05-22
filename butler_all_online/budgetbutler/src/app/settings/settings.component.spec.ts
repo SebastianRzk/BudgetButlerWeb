@@ -9,6 +9,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule, MatChipsModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ALTES_PASSWORT_FEHLT, PASSWORT_ZU_KURZ, PASSWORT_IDENTISCH, PASSWOERTER_NICHT_GLEICH } from '../errormessages';
+import { AdduserComponent } from './adduser/adduser.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -21,10 +23,8 @@ describe('SettingsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        LoginComponent,
-        SidebarComponent,
         SettingsComponent,
-        MobileComponent,
+        AdduserComponent
       ],
       imports: [
         HttpClientTestingModule,
@@ -41,6 +41,7 @@ describe('SettingsComponent', () => {
         MatInputModule,
         MatSnackBarModule,
         ReactiveFormsModule,
+        RouterTestingModule,
         BrowserAnimationsModule,
       ]
     })

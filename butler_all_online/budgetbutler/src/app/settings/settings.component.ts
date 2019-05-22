@@ -49,10 +49,10 @@ export class SettingsComponent implements OnInit {
   }
 
 
-  changePassword(){
+  changePassword() {
     this.computeErrorMesage();
-    
-    if(this.errorMessage !== ''){
+
+    if (this.errorMessage !== '') {
       return;
     }
 
@@ -61,6 +61,6 @@ export class SettingsComponent implements OnInit {
     this.neuesPasswort.setValue('');
     this.neuesPasswortWiederholung.setValue('');
   }
-  
+
 
 }
