@@ -96,6 +96,7 @@ Masken Eigenschaften
 
 
 .wide {
+  width: 100%;
   max-width: 80ex;
   margin: 2ex;
 }
