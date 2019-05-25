@@ -16,10 +16,10 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
-    this.authService.checkLoginState().subscribe(() => {});
+    this.authService.checkLoginState().toPromise().then(() => {});
   }
 
   login() {
-    this.authService.login(this.email, this.password).subscribe(() => {});
+    this.authService.login(this.email, this.password).toPromise().then(() => {});
   }
 }

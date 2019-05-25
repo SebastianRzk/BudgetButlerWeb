@@ -79,7 +79,7 @@ export class AuthService {
       newPassword: newPassword
     };
     return this.httpClient.post<Result>(this.api.getUrl('changepassword.php'), body).
-      subscribe(
+      toPromise().then(
         data => {
           this.notificationService.handleServerResult(data, 'Passwort ändern');
         },
@@ -94,7 +94,7 @@ export class AuthService {
   isAdmin = () => this.username === 'admin';
 
   logout(): void {
-    this.httpClient.get(this.api.getUrl('logout.php')).subscribe(() => {
+    this.httpClient.get(this.api.getUrl('logout.php')).toPromise().then(() => {
       this.isLoggedIn = false;
       this.router.navigate(['login']);
     });

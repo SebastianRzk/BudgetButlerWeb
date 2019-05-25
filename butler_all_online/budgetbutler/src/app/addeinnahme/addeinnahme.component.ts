@@ -30,7 +30,7 @@ export class AddeinnahmeComponent implements OnInit {
     private kategorieService: KategorieService) { }
 
   ngOnInit() {
-    this.kategorieService.getAll().subscribe(data => {
+    this.kategorieService.getAll().toPromise().then(data => {
       data.sort();
       this.kategorien = data;
       if (data.length > 0) {

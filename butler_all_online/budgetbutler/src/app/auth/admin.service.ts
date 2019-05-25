@@ -32,7 +32,7 @@ export class AdminService {
 
     this.httpClient.
       post<Result>(this.apiprovider.getUrl('adduser.php'), data).
-      subscribe(result => this.notificationService.handleServerResult(result, 'Erstelle Benutzer'));
+      toPromise().then(result => this.notificationService.handleServerResult(result, 'Erstelle Benutzer'));
 
   }
 }

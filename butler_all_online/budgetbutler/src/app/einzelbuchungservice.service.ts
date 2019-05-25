@@ -13,7 +13,7 @@ export class EinzelbuchungserviceService {
   constructor(private httpClient: HttpClient, private api: ApiproviderService, private notification: NotificationService) { }
 
   public save(einzelBuchung: Einzelbuchung) {
-    this.httpClient.put<Result>(this.api.getUrl('einzelbuchung.php'), toEinzelbuchungTO(einzelBuchung)).subscribe(
+    this.httpClient.put<Result>(this.api.getUrl('einzelbuchung.php'), toEinzelbuchungTO(einzelBuchung)).toPromise().then(
       data => this.notification.handleServerResult(data, 'Speichern der Ausgabe'),
       error => this.notification.handleServerResult(ERROR_RESULT, 'Speichern der Ausgabe')
     );
@@ -27,7 +27,7 @@ export class EinzelbuchungserviceService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), body: toEinzelbuchungTO(einzelbuchung)
      };
-    this.httpClient.delete<Result>(this.api.getUrl('einzelbuchung.php'), httpOptions).subscribe(
+    this.httpClient.delete<Result>(this.api.getUrl('einzelbuchung.php'), httpOptions).toPromise().then(
       data => this.notification.handleServerResult(data, 'Löschen der Ausgabe'),
       error => this.notification.handleServerResult(ERROR_RESULT, 'Löschen der Ausgabe')
     );
