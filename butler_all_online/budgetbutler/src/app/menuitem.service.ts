@@ -37,6 +37,12 @@ export class MenuitemService {
             icon: 'add_circle_outline'
           },
           {
+            title: 'Neue Einnahme',
+            type: 'link',
+            url: 'addeinnahme',
+            icon: 'add_circle_outline'
+          },
+          {
             title: 'Alle Buchungen',
             type: 'link',
             url: 'allebuchungen',

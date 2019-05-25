@@ -4,17 +4,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MobileComponent } from '../sidebar/mobile/mobile.component';
-import { AddausgabeComponent } from './addausgabe.component';
+import { AddeinnahmeComponent } from './addeinnahme.component';
 
 
 describe('AddausgabeComponent', () => {
-  let component: AddausgabeComponent;
-  let fixture: ComponentFixture<AddausgabeComponent>;
+  let component: AddeinnahmeComponent;
+  let fixture: ComponentFixture<AddeinnahmeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AddausgabeComponent,
+        AddeinnahmeComponent,
         MobileComponent,
       ],
       imports: [
@@ -38,7 +38,7 @@ describe('AddausgabeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddausgabeComponent);
+    fixture = TestBed.createComponent(AddeinnahmeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

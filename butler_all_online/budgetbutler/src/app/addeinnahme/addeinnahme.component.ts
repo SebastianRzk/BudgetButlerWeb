@@ -7,11 +7,11 @@ import { Einzelbuchung } from '../model';
 
 
 @Component({
-  selector: 'app-addausgabe',
-  templateUrl: './addausgabe.component.html',
-  styleUrls: ['./addausgabe.component.css']
+  selector: 'app-addeinnahme',
+  templateUrl: './addeinnahme.component.html',
+  styleUrls: ['./addeinnahme.component.css']
 })
-export class AddausgabeComponent implements OnInit {
+export class AddeinnahmeComponent implements OnInit {
 
   datum = new FormControl(new Date(), Validators.required);
   name = new FormControl('', Validators.required);
@@ -47,7 +47,7 @@ export class AddausgabeComponent implements OnInit {
   }
 
   hinzufuegen() {
-    if (!this.isEinzelbuchungFormOk()) {
+    if (! this.isEinzelbuchungFormOk()) {
       return;
     }
 
@@ -56,7 +56,7 @@ export class AddausgabeComponent implements OnInit {
       name: this.name.value,
       datum: this.datum.value,
       kategorie: this.kategorie.value,
-      wert: this.wert.value * -1
+      wert: this.wert.value
     };
     this.datum.reset(new Date());
     this.name.reset();

@@ -63,7 +63,7 @@ function handle_delete($auth, $dbh){
 		));
 
     $result = new Result();
-    $result->message = "Ausgaben erfolgreich gelöscht";
+    $result->message = "Buchung erfolgreich gelöscht";
     echo json_encode($result);
 }
 
@@ -81,7 +81,7 @@ function handle_put($auth, $dbh){
 			    ':kategorie' => getOrDefault($requestedEinzelbuchung, 'kategorie', 'keine Kategorie angegeben'),
 			    ':wert' => getOrDefault($requestedEinzelbuchung, 'wert', 0)));
     $result = new Result();
-    $result->message = "Ausgaben erfolgreich hinzugefügt";
+    $result->message = "Buchung erfolgreich hinzugefügt";
     echo json_encode($result);
 }
 

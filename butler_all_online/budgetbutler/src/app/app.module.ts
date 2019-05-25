@@ -35,6 +35,7 @@ import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component'
 import { MobileComponent } from './sidebar/mobile/mobile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdduserComponent } from './settings/adduser/adduser.component';
+import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
 
 export const ALL_IMPORTS = [
   BrowserModule,
@@ -73,6 +74,7 @@ export const ALL_IMPORTS = [
     MobileComponent,
     SettingsComponent,
     AdduserComponent,
+    AddeinnahmeComponent,
   ],
   imports: [
     BrowserModule,
