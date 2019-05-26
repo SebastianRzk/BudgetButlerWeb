@@ -7,7 +7,7 @@ function getPDO(){
 }
 
 function online(){
-	return false;
+	return true;
 }
 
 function getAuth(){
