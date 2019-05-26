@@ -127,18 +127,6 @@ class SelectorTest(unittest.TestCase):
 
         assert component_under_test.select().select_month(2).sum() == 0
 
-    def test_select_withThisMonthSelection_andMatchingMonth_shouldReturnValue(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(date.today(), '', '', -10)
-
-        assert component_under_test.select().select_aktueller_monat().sum() == -10
-
-    def test_select_withThisMonthSelection_andNonMatchingDate_shouldReturnValue(self):
-        component_under_test = Einzelbuchungen()
-        component_under_test.add(datum('20.01.1990'), '', '', -10)
-
-        assert component_under_test.select().select_aktueller_monat().sum() == 0
-
     def test_group_by_kategorie_withEmptyDB_shouldReturnEmptyTable(self):
         component_under_test = Einzelbuchungen()
 

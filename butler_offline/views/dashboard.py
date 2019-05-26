@@ -13,7 +13,7 @@ def _handle_request(_):
         'zusammenfassung_monatsliste': str(_monatsliste()),
         'zusammenfassung_einnahmenliste': str(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
         'zusammenfassung_ausgabenliste': str(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
-        'ausgaben_des_aktuellen_monats': to_descriptive_list(selector.select_aktueller_monat().to_list())
+        'ausgaben_des_aktuellen_monats': to_descriptive_list(selector.select_year(today().year).select_month(today().month).to_list())
     }
     context = {**context, **viewcore.generate_base_context('dashboard')}
     return context

@@ -36,10 +36,6 @@ class Selektor:
     def select_ausgaben(self):
         return Selektor(self.content[self.content.Wert < 0])
 
-    def select_aktueller_monat(self):
-        selector = self.select_year(date.today().year)
-        return selector.select_month(date.today().month)
-
     def raw_table(self):
         return self.content
 
