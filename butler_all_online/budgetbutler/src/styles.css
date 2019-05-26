@@ -1,0 +1,107 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -moz-font-feature-settings: 'liga';
+  -moz-osx-font-smoothing: grayscale;
+}
+  
+
+body {
+  margin: 0px;
+}
+
+
+.app-content{
+  width: 100vw;
+  height: 100vh;
+}
+
+
+@media (min-width: 800px) { 
+  .app-content{
+    display: flex;
+    background-color: #f1f1f1;
+ }
+
+  .mobile-only {
+      display: none;
+  }
+
+  .content-area{
+    padding: 2ex;
+  }
+
+  sidebar{
+      padding: 1ex;
+  }
+
+  app-sidebar {
+    background-color: white;
+    max-width: 30ex;
+    height: 100vh;
+  }
+
+  .erfassung {
+    max-width: 40ex;
+    margin: 2ex;
+  }
+}
+
+@media (max-width: 799px) { 
+  .app-content {
+    background-color: #f1f1f1;
+  }
+
+  .desktop-only {
+      display: none;
+  }
+
+  .content-area{
+    padding-top: 1ex;
+  }
+
+  app-sidebar {
+    width: 100%;
+  }
+
+  .erfassung {
+    margin: 2ex;
+  }
+}
+
+
+/*
+Masken Eigenschaften
+*/
+
+
+
+.wide {
+  width: 100%;
+  max-width: 80ex;
+  margin: 2ex;
+}
+
+.full-size-form-field {
+  width: 100%;
+  padding-right: 1.5ex;
+}

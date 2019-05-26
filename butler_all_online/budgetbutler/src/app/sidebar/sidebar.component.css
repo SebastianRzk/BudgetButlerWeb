@@ -1,0 +1,23 @@
+
+.desktop-menu {
+    padding: 1ex;
+}
+
+.greeter {
+    width: 100%;
+}
+
+.navigation-button {
+    width: 100%;
+    text-align: start;
+}
+
+
+.navigation {
+    padding-top: 3ex;
+}
+
+.sublinklist {
+    margin-left: 3ex;
+    margin-bottom: 1.5ex;
+}

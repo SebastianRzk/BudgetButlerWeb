@@ -1,0 +1,21 @@
+<mat-card *ngIf="isAdmin | async" class="erfassung">
+  <form>
+    <mat-card-title>Neuen Benutzer erstellen</mat-card-title>
+    <mat-form-field class="full-size-form-field">
+      <input matInput placeholder="Nutzername" [formControl]="username" [errorStateMatcher]="errorMatcher">
+    </mat-form-field>
+    <mat-form-field class="full-size-form-field">
+      <input matInput placeholder="Email" [formControl]="email" [errorStateMatcher]="errorMatcher">
+    </mat-form-field>
+    <mat-form-field class="full-size-form-field">
+      <input matInput placeholder="Passwort" [type]="'password'" [formControl]="passwort" [errorStateMatcher]="errorMatcher" (change)="computeErrorMesage()">
+    </mat-form-field>
+    <mat-form-field class="full-size-form-field">
+      <input matInput placeholder="Passwort wiederholen" [type]="'password'" [formControl]="passwortWiederholung" [errorStateMatcher]="errorMatcher" (change)="computeErrorMesage()">
+    </mat-form-field>
+    <mat-chip-list *ngIf="errorMessage">
+      <mat-chip selected [color]="warn" class="full-size-form-field">{{errorMessage}}</mat-chip>
+    </mat-chip-list>
+    <button mat-raised-button color="primary" class="full-size-form-field" (click)="addUser()" class="full-size-form-field" [disabled]="!!errorMessage">Nutzer erstellen</button>
+  </form>
+</mat-card>

@@ -1,0 +1,15 @@
+<button *ngIf="!menuOpened" (click)="toggleMenu()">
+  <mat-icon aria-hidden="false" aria-label="Open menu">menu</mat-icon>
+</button>
+<button *ngIf="menuOpened" (click)="toggleMenu()">
+  <mat-icon aria-hidden="false" aria-label="Close menu">close</mat-icon>
+</button>
+<div *ngIf="menuOpened">
+  <div *ngFor="let menuItem of menu">
+    <button mat-stroked-button class="navigation-button" (click)="navigateTo(menuItem.url)">
+      <mat-icon aria-hidden="false" aria-label="Example home icon">{{menuItem.icon}}</mat-icon>
+      {{menuItem.title}}
+    </button>
+  </div>
+  <button mat-button (click)="logout()" class="navigation-button"><mat-icon aria-hidden="false" aria-label="Logout">exit_to_app</mat-icon>Logout</button>
+</div>

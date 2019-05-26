@@ -34,8 +34,8 @@ class TestUebersicht(unittest.TestCase):
     def test_withEntry_shouldReturnGermanDate(self):
         self.set_up()
         db = viewcore.database_instance()
-        today = datetime.now().date()
-        db.einzelbuchungen.add(today, 'eine einnahme kategorie', 'some name', 10)
+        viewcore.stub_today_with(date(2019,2,17))
+        db.einzelbuchungen.add(date(2019,2,16), 'eine einnahme kategorie', 'some name', 10)
 
         result = dashboard.index(GetRequest())
         print(result['ausgaben_des_aktuellen_monats'])

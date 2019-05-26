@@ -1,0 +1,19 @@
+.mat-table {
+    width: 100%;
+}
+
+
+.mobile-headers {
+    padding-left: 1ex;
+}
+
+.datum-mobile, .mobile-headers {
+    vertical-align: top;
+    padding-top: 1ex;
+    padding-left: 1ex !important;
+}
+
+.mobile-eigenschaften {
+    padding-top: 1ex;
+    padding-bottom: 1ex;
+}

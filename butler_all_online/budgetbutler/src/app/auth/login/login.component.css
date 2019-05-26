@@ -1,0 +1,17 @@
+.login-card {
+    max-width: 40ex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-page {
+    width: 98vw;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+button {
+    width: 100%;
+}
