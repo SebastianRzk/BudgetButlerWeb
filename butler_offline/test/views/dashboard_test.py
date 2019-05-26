@@ -39,4 +39,4 @@ class TestUebersicht(unittest.TestCase):
 
         result = dashboard.index(GetRequest())
         print(result['ausgaben_des_aktuellen_monats'])
-        assert result['ausgaben_des_aktuellen_monats'] == [{'index': 0, 'Datum': datum_to_german(today), 'Name': 'some name', 'Kategorie': 'eine einnahme kategorie', 'Wert': '10,00', 'Dynamisch': False, 'Tags': []}]
+        assert result['ausgaben_des_aktuellen_monats'] == [{'index': 0, 'Datum': '16.02.2019', 'Name': 'some name', 'Kategorie': 'eine einnahme kategorie', 'Wert': '10,00', 'Dynamisch': False, 'Tags': []}]
