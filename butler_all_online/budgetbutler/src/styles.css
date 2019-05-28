@@ -48,6 +48,7 @@ body {
 
   .content-area{
     padding: 2ex;
+    width: 100%;
   }
 
   sidebar{
@@ -77,6 +78,7 @@ body {
 
   .content-area{
     padding-top: 1ex;
+    width: 100%;
   }
 
   app-sidebar {
