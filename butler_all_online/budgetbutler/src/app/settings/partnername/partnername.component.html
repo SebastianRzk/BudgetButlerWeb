@@ -1,0 +1,19 @@
+<mat-card class="erfassung">
+  <mat-card-title>Partner konfigurieren</mat-card-title>
+  <mat-card-content>
+    <form>
+      <mat-form-field class="full-size-form-field">
+        <input matInput placeholder="Partnername" [formControl]="partnerName" [errorStateMatcher]="errorStateMatcher">
+      </mat-form-field>
+      <mat-checkbox [formControl]="gebeErweiterteRechte">Mein Partner darf meine Buchungen bearbeiten.</mat-checkbox>
+
+      <ul>
+        <li *ngFor="let message of status">{{message}}</li>
+      </ul>
+      <button *ngIf="verknuepfungAktiv" mat-raised-button color="primary" class="full-size-form-field"
+        (click)="onChange()" class="full-size-form-field">Verknüpfung löschen</button>
+      <button *ngIf="verknuepfungAktiv===false" mat-raised-button color="primary" class="full-size-form-field"
+        (click)="onChange()" class="full-size-form-field">Partner speichern</button>
+    </form>
+  </mat-card-content>
+</mat-card>

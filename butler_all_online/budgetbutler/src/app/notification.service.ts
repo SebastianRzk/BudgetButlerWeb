@@ -11,6 +11,7 @@ export class NotificationService {
 
   public handleServerResult(result: Result, actionDescription: string) {
     this.log(result, actionDescription);
+    return result;
   }
 
   public log(result: Result, actionDescription: string) {
