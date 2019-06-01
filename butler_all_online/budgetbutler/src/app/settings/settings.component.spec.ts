@@ -1,16 +1,14 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SettingsComponent } from './settings.component';
-import { LoginComponent } from '../auth/login/login.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule, MatChipsModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ALTES_PASSWORT_FEHLT, PASSWORT_ZU_KURZ, PASSWORT_IDENTISCH, PASSWOERTER_NICHT_GLEICH } from '../errormessages';
-import { AdduserComponent } from './adduser/adduser.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ALTES_PASSWORT_FEHLT, PASSWOERTER_NICHT_GLEICH, PASSWORT_IDENTISCH, PASSWORT_ZU_KURZ } from '../errormessages';
+import { AdduserComponent } from './adduser/adduser.component';
+import { PartnernameComponent } from './partnername/partnername.component';
+import { SettingsComponent } from './settings.component';
+
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -24,12 +22,14 @@ describe('SettingsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         SettingsComponent,
-        AdduserComponent
+        AdduserComponent,
+        PartnernameComponent,
       ],
       imports: [
         HttpClientTestingModule,
         FormsModule,
         MatSelectModule,
+        MatCheckboxModule,
         MatButtonModule,
         MatDatepickerModule,
         MatNativeDateModule,

@@ -22,7 +22,7 @@ authenticated(function(){
 		handle_delete($auth, $dbh);
 	}
 	else {
-		$sql = "SELECT * FROM `einzelbuchungen` WHERE user = :user";
+		$sql = "SELECT * FROM `einzelbuchungen` WHERE user = :user ORDER BY `datum`";
 		$sth = $dbh->prepare($sql);
 		$sth->execute(array(':user' => $auth->getUsername()));
 
