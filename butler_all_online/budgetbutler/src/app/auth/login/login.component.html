@@ -1,15 +1,20 @@
-<mat-card class="login-card">
-  <mat-card-title>LOGIN</mat-card-title>
-  <p>
-    <form (ngSubmit)="login()">
-      <mat-form-field>
-        <input matInput placeholder="Enter your email" [(ngModel)]="email" name="email">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" [(ngModel)]="password"
-          name="password">
-        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </mat-form-field>
-      <button type="submit" *ngIf="!authService.isLoggedIn">Login</button>
-    </form>
-</mat-card>
+<div class="login-page">
+  <div class="logo">
+    <img src="assets/logo.svg" alt="BudgetButlerWeb">
+  </div>
+  <mat-card class="login-card">
+    <mat-card-title>LOGIN</mat-card-title>
+    <p>
+      <form (ngSubmit)="login()">
+        <mat-form-field>
+          <input matInput placeholder="Enter your email" [(ngModel)]="email" name="email">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" [(ngModel)]="password"
+            name="password">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </mat-form-field>
+        <button type="submit" *ngIf="!authService.isLoggedIn">Login</button>
+      </form>
+  </mat-card>
+</div>
