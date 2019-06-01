@@ -66,6 +66,12 @@ body {
     max-width: 40ex;
     margin: 2ex;
   }
+
+  .wide {
+    width: 100%;
+    max-width: 80ex;
+    margin: 2ex;
+  }
 }
 
 @media (max-width: 799px) { 
@@ -89,6 +95,10 @@ body {
   .erfassung {
     margin: 2ex;
   }
+
+  .wide {
+    margin: 1ex;
+  }
 }
 
 
@@ -98,11 +108,7 @@ Masken Eigenschaften
 
 
 
-.wide {
-  width: 100%;
-  max-width: 80ex;
-  margin: 2ex;
-}
+
 
 .full-size-form-field {
   width: 100%;
