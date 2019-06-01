@@ -6,6 +6,7 @@ from butler_offline.core import FileSystem
 from butler_offline.views import dashboard
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.converter import datum_to_german
 from datetime import datetime
 from datetime import date
 
