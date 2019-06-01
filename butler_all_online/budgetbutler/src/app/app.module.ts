@@ -110,6 +110,7 @@ export const ALL_IMPORTS = [
 export class AppModule {
   constructor(private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale('de');
+    this.dateAdapter.getFirstDayOfWeek = () => 1;
   }
 
  }
