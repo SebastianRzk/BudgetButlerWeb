@@ -18,8 +18,10 @@
     </ng-container>
 
     <ng-container matColumnDef="Wert">
-      <th mat-header-cell *matHeaderCellDef> Wert </th>
-      <td mat-cell *matCellDef="let element"> {{element.wert}} </td>
+      <th mat-header-cell *matHeaderCellDef><p> Wert </p></th>
+      <td mat-cell *matCellDef="let element">
+        <p>{{element.wert}}</p>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="Aktion">

@@ -2,6 +2,10 @@
     width: 100%;
 }
 
+p {
+    text-align: end;
+    padding-right: 2ex;
+}
 
 .mobile-headers {
     padding-left: 1ex;
