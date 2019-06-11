@@ -37,6 +37,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AdduserComponent } from './settings/adduser/adduser.component';
 import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
 import { PartnernameComponent } from './settings/partnername/partnername.component';
+import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
 
 export const ALL_IMPORTS = [
   BrowserModule,
@@ -77,6 +78,7 @@ export const ALL_IMPORTS = [
     AdduserComponent,
     AddeinnahmeComponent,
     PartnernameComponent,
+    AddgemeinsameausgabeComponent,
   ],
   imports: [
     BrowserModule,

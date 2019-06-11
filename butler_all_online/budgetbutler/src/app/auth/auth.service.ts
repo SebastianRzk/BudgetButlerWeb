@@ -102,7 +102,7 @@ export class AuthService {
   }
 }
 
-class AuthContainer {
+export class AuthContainer {
   token: string;
   username: string;
   role: string;
