@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { KategorieService } from '../kategorie.service';
 import { NotEmptyErrorStateMatcher } from '../matcher';
@@ -16,27 +17,16 @@ export class AddausgabeComponent implements OnInit {
   datum = new FormControl(new Date(), Validators.required);
   name = new FormControl('', Validators.required);
   kategorie = new FormControl('', Validators.required);
-  kategorien: string[] = [];
+  kategorien: Observable<string[]>;
   wert = new FormControl('', Validators.required);
   einzelbuchungMatcher = new NotEmptyErrorStateMatcher();
-
-
-  neueKategorieMatcher = new NotEmptyErrorStateMatcher();
-  neueKategorie = new FormControl('', Validators.required);
-
 
   constructor(
     private einzelbuchungsService: EinzelbuchungserviceService,
     private kategorieService: KategorieService) { }
 
   ngOnInit() {
-    this.kategorieService.getAll().toPromise().then(data => {
-      data.sort();
-      this.kategorien = data;
-      if (data.length > 0) {
-        this.kategorie.setValue(data[0]);
-      }
-    });
+    this.kategorien = this.kategorieService.getAll();
   }
 
   private isEinzelbuchungFormOk(): boolean {
@@ -64,15 +54,4 @@ export class AddausgabeComponent implements OnInit {
     this.wert.reset();
     this.einzelbuchungsService.save(neueBuchung);
   }
-
-  setKategorie() {
-    if (this.neueKategorie.value === '') {
-      return;
-    }
-    const value: string = this.neueKategorie.value;
-    this.kategorien.push(value);
-    this.neueKategorie.reset();
-    this.kategorie.setValue(value);
-  }
-
 }
