@@ -28,8 +28,12 @@ export class AllebuchungenComponent implements OnInit {
     this.einzelbuchungen = this.einzelbuchungService.getAll();
   }
 
-  toLocaleString(date: string) {
+  toLocaleString = (date: string) => {
     return new Date(date).toLocaleDateString('de-DE');
+  }
+
+  toLocaleWert = (data: string) => {
+    return Number(data).toFixed(2);
   }
 
   toLocaleShortString(date: string) {
