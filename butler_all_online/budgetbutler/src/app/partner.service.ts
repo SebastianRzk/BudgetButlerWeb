@@ -50,7 +50,6 @@ export class PartnerService {
       recData => {
         const authdata: AuthContainer = recData[0];
         const partnerdata: PartnerInfo = recData[1];
-        console.log(partnerdata)
         if (partnerdata.partnername && partnerdata.partnername !== '') {
           return [authdata.username, partnerdata.partnername];
         }

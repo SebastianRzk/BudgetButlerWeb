@@ -32,19 +32,19 @@ export class AddgemeinsameausgabeComponent implements OnInit {
   ngOnInit() {
     this.kategorien = this.kategorieService.getAll();
     this.personen = this.partnerService.getPartnerNames();
-    this.personen.then(data => { this.person.setValue(data[0])
-    console.log(data)});
+    this.personen.then(data => this.person.setValue(data[0]));
   }
 
-  private isEinzelbuchungFormOk(): boolean {
+  private isFormOk(): boolean {
     return !this.einzelbuchungMatcher.isErrorState(this.datum, null) &&
       !this.einzelbuchungMatcher.isErrorState(this.name, null) &&
       !this.einzelbuchungMatcher.isErrorState(this.kategorie, null) &&
+      !this.einzelbuchungMatcher.isErrorState(this.person, null) &&
       !this.einzelbuchungMatcher.isErrorState(this.wert, null);
   }
 
   hinzufuegen() {
-    if (! this.isEinzelbuchungFormOk()) {
+    if (! this.isFormOk()) {
       return;
     }
 
@@ -53,8 +53,9 @@ export class AddgemeinsameausgabeComponent implements OnInit {
       name: this.name.value,
       datum: this.datum.value,
       kategorie: this.kategorie.value,
-      wert: this.wert.value
+      wert: this.wert.value * -1
     };
+
     this.datum.reset(new Date());
     this.name.reset();
     this.kategorie.reset(this.kategorien[0]);
