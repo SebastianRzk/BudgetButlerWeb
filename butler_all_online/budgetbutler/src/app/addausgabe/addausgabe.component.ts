@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { KategorieService } from '../kategorie.service';
 import { NotEmptyErrorStateMatcher } from '../matcher';
-import { Einzelbuchung } from '../model';
+import { Einzelbuchung, EinzelbuchungAnlegen } from '../model';
 
 
 @Component({
@@ -41,8 +41,7 @@ export class AddausgabeComponent implements OnInit {
       return;
     }
 
-    const neueBuchung: Einzelbuchung = {
-      id: 0,
+    const neueBuchung: EinzelbuchungAnlegen = {
       name: this.name.value,
       datum: this.datum.value,
       kategorie: this.kategorie.value,

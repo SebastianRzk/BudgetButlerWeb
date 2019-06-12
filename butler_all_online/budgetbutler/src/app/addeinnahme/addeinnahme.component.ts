@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { KategorieService } from '../kategorie.service';
 import { NotEmptyErrorStateMatcher } from '../matcher';
-import { Einzelbuchung } from '../model';
+import { Einzelbuchung, EinzelbuchungAnlegen } from '../model';
 import { Observable } from 'rxjs';
 
 
@@ -37,12 +37,11 @@ export class AddeinnahmeComponent implements OnInit {
   }
 
   hinzufuegen() {
-    if (! this.isEinzelbuchungFormOk()) {
+    if (!this.isEinzelbuchungFormOk()) {
       return;
     }
 
-    const neueBuchung: Einzelbuchung = {
-      id: 0,
+    const neueBuchung: EinzelbuchungAnlegen = {
       name: this.name.value,
       datum: this.datum.value,
       kategorie: this.kategorie.value,

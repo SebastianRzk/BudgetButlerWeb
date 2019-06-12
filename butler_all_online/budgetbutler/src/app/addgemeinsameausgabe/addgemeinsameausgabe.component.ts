@@ -3,9 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { KategorieService } from '../kategorie.service';
 import { NotEmptyErrorStateMatcher } from '../matcher';
-import { Einzelbuchung } from '../model';
+import { Einzelbuchung, GemeinsameBuchungAnlegen } from '../model';
 import { Observable } from 'rxjs';
 import { PartnerService } from '../partner.service';
+import { GemeinsamebuchungService } from '../gemeinsamebuchung.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class AddgemeinsameausgabeComponent implements OnInit {
   einzelbuchungMatcher = new NotEmptyErrorStateMatcher();
 
   constructor(
-    private einzelbuchungsService: EinzelbuchungserviceService,
+    private gemeinsameBuchungenService: GemeinsamebuchungService,
     private kategorieService: KategorieService,
     private partnerService: PartnerService) { }
 
@@ -48,18 +49,18 @@ export class AddgemeinsameausgabeComponent implements OnInit {
       return;
     }
 
-    const neueBuchung: Einzelbuchung = {
-      id: 0,
+    const neueBuchung: GemeinsameBuchungAnlegen = {
       name: this.name.value,
       datum: this.datum.value,
       kategorie: this.kategorie.value,
-      wert: this.wert.value * -1
+      wert: this.wert.value * -1,
+      zielperson: this.person.value
     };
 
     this.datum.reset(new Date());
     this.name.reset();
     this.kategorie.reset(this.kategorien[0]);
     this.wert.reset();
-    this.einzelbuchungsService.save(neueBuchung);
+    this.gemeinsameBuchungenService.save(neueBuchung);
   }
 }
