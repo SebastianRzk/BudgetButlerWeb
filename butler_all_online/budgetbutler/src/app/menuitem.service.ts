@@ -58,7 +58,7 @@ export class MenuitemService {
           {
             title: 'Neue gemeinsame Ausgabe',
             type: 'link',
-            url: 'addgemeinsam',
+            url: 'addgemeinsameausgabe',
             icon: 'add_box'
           }
         ]

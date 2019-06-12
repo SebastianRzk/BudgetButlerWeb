@@ -1,5 +1,5 @@
 <mat-card class="erfassung">
-  <mat-card-title>Neue Einnahme erfassen</mat-card-title>
+  <mat-card-title>Neue gemeinsame Ausgabe erfassen</mat-card-title>
   <form>
     <mat-form-field class="full-size-form-field">
       <input matInput [matDatepicker]="picker" placeholder="Datum der Ausgabe" required [formControl]="datum"
@@ -18,10 +18,16 @@
       </select>
     </mat-form-field>
     <mat-form-field class="full-size-form-field">
+      <mat-label>Person</mat-label>
+      <select matNativeControl required [formControl]="person" [errorStateMatcher]="einzelbuchungMatcher">
+        <option *ngFor="let person of personen | async" value="{{person}}">{{person}}</option>
+      </select>
+    </mat-form-field>
+    <mat-form-field class="full-size-form-field">
       <input matInput placeholder="Wert" value="" type="number" required [formControl]="wert"
         [errorStateMatcher]="einzelbuchungMatcher">
     </mat-form-field>
     <button mat-raised-button color="primary" class="full-size-form-field" (click)="hinzufuegen()">
-      Einnahme hinzufügen</button>
+      Ausgabe hinzufügen</button>
   </form>
 </mat-card>

@@ -8,6 +8,7 @@ import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
+import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
 
  
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent},
       { path: 'addausgabe', component: AddausgabeComponent},
       { path: 'addeinnahme', component: AddeinnahmeComponent},
+      { path: 'addgemeinsameausgabe', component: AddgemeinsameausgabeComponent},
       { path: 'allebuchungen', component: AllebuchungenComponent},
       { path: 'settings', component: SettingsComponent},
       { path: '', component: AddausgabeComponent}

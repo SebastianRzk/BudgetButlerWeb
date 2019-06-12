@@ -20,7 +20,7 @@ export class PartnernameComponent implements OnInit {
   constructor(private partnerService: PartnerService) {
   }
 
-  onChange: () => void = () => {
+  onClick: () => void = () => {
     if (this.verknuepfungAktiv) {
       this.partnerService.deletePartner().toPromise().then(data => this.ngOnInit());
     } else {
