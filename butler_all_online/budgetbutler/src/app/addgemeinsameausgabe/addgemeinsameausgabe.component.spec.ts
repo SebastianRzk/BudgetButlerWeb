@@ -13,6 +13,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 
 describe('AddgemeinsameausgabeComponent', () => {
@@ -27,6 +28,7 @@ describe('AddgemeinsameausgabeComponent', () => {
       ],
       imports: [
         HttpClientTestingModule,
+        RouterTestingModule,
         FormsModule,
         MatSelectModule,
         MatButtonModule,

@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('PartnernameComponent', () => {
   let component: PartnernameComponent;
@@ -19,7 +20,7 @@ describe('PartnernameComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PartnernameComponent],
       imports: [MatCardModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatSnackBarModule,
-        ReactiveFormsModule, FormsModule, BrowserAnimationsModule,
+        ReactiveFormsModule, FormsModule, BrowserAnimationsModule, RouterTestingModule,
         HttpClientTestingModule,
       ]
     })
