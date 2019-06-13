@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Sort } from '@angular/material';
+import { Sort } from '@angular/material/sort';
 import { Einzelbuchung } from '../model';
 import { EinzelbuchungserviceService as EinzelbuchungService } from '../einzelbuchungservice.service';
 import { NotificationService } from '../notification.service';

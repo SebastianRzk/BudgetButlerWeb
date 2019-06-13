@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { EinzelbuchungserviceService } from './einzelbuchungservice.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('EinzelbuchungserviceService', () => {
   beforeEach(() => TestBed.configureTestingModule({

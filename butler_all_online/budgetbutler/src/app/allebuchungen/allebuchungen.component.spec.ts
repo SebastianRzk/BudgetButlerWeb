@@ -1,7 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AllebuchungenComponent } from './allebuchungen.component';
-import { MatChipsModule, MatButtonModule, MatCardModule, MatIconModule, MatSnackBarModule, MatFormFieldModule, MatTableModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 import { LoginComponent } from '../auth/login/login.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { MobileComponent } from '../sidebar/mobile/mobile.component';

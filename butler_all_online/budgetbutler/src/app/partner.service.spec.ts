@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PartnerService } from './partner.service';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PartnerService', () => {
