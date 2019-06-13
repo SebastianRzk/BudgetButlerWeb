@@ -25,6 +25,11 @@ export class GemeinsameBuchungAnlegen {
     public zielperson: string;
 }
 
+export class GemeinsameBuchung extends GemeinsameBuchungAnlegen {
+    public id: number;
+    public user: string;
+}
+
 export class GemeinsameBuchungLoeschen {
     public id: number;
 }

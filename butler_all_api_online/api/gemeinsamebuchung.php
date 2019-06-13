@@ -28,15 +28,13 @@ authenticated(function(){
 		$partnerstatus =  get_partnerstatus($auth, $dbh);
 		if (strcmp($partnerstatus->confirmed, "1") != 0) {
 			$sql = "SELECT * FROM `gemeinsamebuchungen` WHERE user = :user ORDER BY `datum`";
-			$sth->execute(array(':user' => $auth->getUsername()));
 			$sth = $dbh->prepare($sql);
-
+			$sth->execute(array(':user' => $auth->getUsername()));
 		} else {
 			$sql = "SELECT * FROM `gemeinsamebuchungen` WHERE user = :user OR user = :partner ORDER BY `datum`";
+			$sth = $dbh->prepare($sql);
 			$sth->execute(array(':user' => $auth->getUsername(),
 			':partner' => $partnerstatus->partnername));
-			$sth = $dbh->prepare($sql);
-
 		}
 
 		$sqlbuchungen = $sth->fetchAll();

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiproviderService } from './apiprovider.service';
 import { toGemeinsameBuchungAnlegenTO } from './converter';
-import { Einzelbuchung, ERROR_RESULT, GemeinsameBuchungLoeschen, Result, GemeinsameBuchungAnlegen } from './model';
+import { Einzelbuchung, ERROR_RESULT, GemeinsameBuchungLoeschen, Result, GemeinsameBuchungAnlegen, GemeinsameBuchung } from './model';
 import { NotificationService } from './notification.service';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class GemeinsamebuchungService {
   }
 
   public getAll() {
-    return this.httpClient.get<Einzelbuchung[]>(this.api.getUrl('gemeinsamebuchung.php'));
+    return this.httpClient.get<GemeinsameBuchung[]>(this.api.getUrl('gemeinsamebuchung.php'));
   }
 
   public delete(buchung: GemeinsameBuchungLoeschen){

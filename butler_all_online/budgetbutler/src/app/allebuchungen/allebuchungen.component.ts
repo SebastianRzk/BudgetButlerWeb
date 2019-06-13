@@ -17,7 +17,7 @@ export class AllebuchungenComponent implements OnInit {
   displayedMobileColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
   einzelbuchungen: Observable<Einzelbuchung[]>;
 
-  constructor(private einzelbuchungService: EinzelbuchungService, private notificationService: NotificationService) {
+  constructor(private einzelbuchungService: EinzelbuchungService) {
   }
 
   ngOnInit(): void {

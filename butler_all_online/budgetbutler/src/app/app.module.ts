@@ -38,6 +38,7 @@ import { AdduserComponent } from './settings/adduser/adduser.component';
 import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
 import { PartnernameComponent } from './settings/partnername/partnername.component';
 import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
+import { AllegemeinsamebuchungenComponent } from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
 
 export const ALL_IMPORTS = [
   BrowserModule,
@@ -79,6 +80,7 @@ export const ALL_IMPORTS = [
     AddeinnahmeComponent,
     PartnernameComponent,
     AddgemeinsameausgabeComponent,
+    AllegemeinsamebuchungenComponent,
   ],
   imports: [
     BrowserModule,
