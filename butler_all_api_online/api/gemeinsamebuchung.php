@@ -26,7 +26,7 @@ authenticated(function(){
 	else {
 		$sth = "";
 		$partnerstatus =  get_partnerstatus($auth, $dbh);
-		if (strcmp($partnerstatus->confirmed, "1") != 0) {
+		if ($partnerstatus->confirmed == false) {
 			$sql = "SELECT * FROM `gemeinsamebuchungen` WHERE user = :user ORDER BY `datum`";
 			$sth = $dbh->prepare($sql);
 			$sth->execute(array(':user' => $auth->getUsername()));
@@ -77,13 +77,12 @@ function handle_delete($auth, $dbh){
 
 	$partnerstatus =  get_partnerstatus($auth, $dbh);
 	$sql = "DELETE FROM `gemeinsamebuchungen` WHERE `id` = :id AND `user` = :user";
-	if (strcmp($partnerstatus->erweiterteRechteBekommen, "1") != 0) {
-
-	$sth = $dbh->prepare($sql);
-	$sth->execute(array(
-		':user' => $partnerstatus->partnername,
-		':id' => (int) $requestetBuchung['id']
-		));
+	if ($partnerstatus->erweiterteRechteBekommen) {
+		$sth = $dbh->prepare($sql);
+		$sth->execute(array(
+			':user' => $partnerstatus->partnername,
+			':id' => (int) $requestetBuchung['id']
+			));
 	}
 
 

@@ -24,7 +24,7 @@ export class PartnernameComponent implements OnInit {
     if (this.verknuepfungAktiv) {
       this.partnerService.deletePartner().toPromise().then(data => this.ngOnInit());
     } else {
-      this.partnerService.setPartner(this.partnerName.value, this.erweiterteRechte).toPromise().then(data => this.ngOnInit());
+      this.partnerService.setPartner(this.partnerName.value, this.gebeErweiterteRechte.value).toPromise().then(data => this.ngOnInit());
     }
   }
 
