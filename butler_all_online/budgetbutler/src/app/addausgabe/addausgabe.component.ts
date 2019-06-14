@@ -3,8 +3,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { KategorieService } from '../kategorie.service';
-import { NotEmptyErrorStateMatcher } from '../matcher';
-import { Einzelbuchung, EinzelbuchungAnlegen } from '../model';
+import { MyErrorStateMatcher } from '../matcher';
+import { EinzelbuchungAnlegen } from '../model';
 
 
 @Component({
@@ -17,9 +17,11 @@ export class AddausgabeComponent implements OnInit {
   datum = new FormControl(new Date(), Validators.required);
   name = new FormControl('', Validators.required);
   kategorie = new FormControl('', Validators.required);
-  kategorien: Observable<string[]>;
   wert = new FormControl('', Validators.required);
-  einzelbuchungMatcher = new NotEmptyErrorStateMatcher();
+
+
+  kategorien: Observable<string[]>;
+  einzelbuchungMatcher = new MyErrorStateMatcher();
 
   constructor(
     private einzelbuchungsService: EinzelbuchungserviceService,
@@ -30,10 +32,10 @@ export class AddausgabeComponent implements OnInit {
   }
 
   private isEinzelbuchungFormOk(): boolean {
-    return !this.einzelbuchungMatcher.isErrorState(this.datum, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.name, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.kategorie, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.wert, null);
+    return this.datum.valid &&
+      this.name.valid &&
+      this.kategorie.valid &&
+      this.wert.valid
   }
 
   hinzufuegen() {

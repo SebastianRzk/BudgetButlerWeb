@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { NotEmptyErrorStateMatcher } from '../matcher';
 import { AuthService } from '../auth/auth.service';
-import { ALTES_PASSWORT_FEHLT, PASSWOERTER_NICHT_GLEICH, PASSWORT_ZU_KURZ, PASSWORT_IDENTISCH } from '../errormessages';
+import { ALTES_PASSWORT_FEHLT, PASSWOERTER_NICHT_GLEICH, PASSWORT_IDENTISCH, PASSWORT_ZU_KURZ } from '../errormessages';
+import { MyErrorStateMatcher } from '../matcher';
 
 @Component({
   selector: 'app-settings',
@@ -15,7 +15,7 @@ export class SettingsComponent implements OnInit {
   public neuesPasswort = new FormControl('', Validators.required);
   public neuesPasswortWiederholung = new FormControl('', Validators.required);
 
-  public passwortMatcher = new NotEmptyErrorStateMatcher();
+  public passwortMatcher = new MyErrorStateMatcher();
 
   public errorMessage = '';
 

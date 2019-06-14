@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
-import { KategorieService } from '../kategorie.service';
-import { NotEmptyErrorStateMatcher } from '../matcher';
-import { Einzelbuchung, GemeinsameBuchungAnlegen } from '../model';
 import { Observable } from 'rxjs';
-import { PartnerService } from '../partner.service';
 import { GemeinsamebuchungService } from '../gemeinsamebuchung.service';
+import { KategorieService } from '../kategorie.service';
+import { MyErrorStateMatcher } from '../matcher';
+import { GemeinsameBuchungAnlegen } from '../model';
+import { PartnerService } from '../partner.service';
 
 
 @Component({
@@ -23,7 +22,7 @@ export class AddgemeinsameausgabeComponent implements OnInit {
   wert = new FormControl('', Validators.required);
   person = new FormControl('', Validators.required);
   personen: Promise<string[]>;
-  einzelbuchungMatcher = new NotEmptyErrorStateMatcher();
+  einzelbuchungMatcher = new MyErrorStateMatcher();
 
   constructor(
     private gemeinsameBuchungenService: GemeinsamebuchungService,
@@ -37,15 +36,15 @@ export class AddgemeinsameausgabeComponent implements OnInit {
   }
 
   private isFormOk(): boolean {
-    return !this.einzelbuchungMatcher.isErrorState(this.datum, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.name, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.kategorie, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.person, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.wert, null);
+    return this.datum.valid &&
+      this.name.valid &&
+      this.kategorie.valid &&
+      this.person.valid &&
+      this.wert.valid;
   }
 
   hinzufuegen() {
-    if (! this.isFormOk()) {
+    if (!this.isFormOk()) {
       return;
     }
 

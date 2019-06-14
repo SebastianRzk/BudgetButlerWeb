@@ -34,11 +34,11 @@ export class PartnernameComponent implements OnInit {
 
     if (data.partnername !== '') {
       this.verknuepfungAktiv = true;
-      this.partnerName = new FormControl({ value: data.partnername, disabled: true });
-      this.gebeErweiterteRechte = new FormControl({value: data.erweiterteRechteGeben, disabled: true});
+      this.partnerName.disable()
+      this.gebeErweiterteRechte.disable()
     } else {
-      this.partnerName = new FormControl({ value: '', disabled: false });
-      this.gebeErweiterteRechte = new FormControl({value: false, disabled: false});
+      this.partnerName.enable();
+      this.gebeErweiterteRechte.enable()
       this.verknuepfungAktiv = false;
       return;
     }
