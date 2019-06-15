@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
-import { KategorieService } from '../kategorie.service';
-import { NotEmptyErrorStateMatcher } from '../matcher';
-import { Einzelbuchung } from '../model';
 import { Observable } from 'rxjs';
+import { GemeinsamebuchungService } from '../gemeinsamebuchung.service';
+import { KategorieService } from '../kategorie.service';
+import { MyErrorStateMatcher } from '../matcher';
+import { GemeinsameBuchungAnlegen } from '../model';
 import { PartnerService } from '../partner.service';
 
 
@@ -22,10 +22,10 @@ export class AddgemeinsameausgabeComponent implements OnInit {
   wert = new FormControl('', Validators.required);
   person = new FormControl('', Validators.required);
   personen: Promise<string[]>;
-  einzelbuchungMatcher = new NotEmptyErrorStateMatcher();
+  einzelbuchungMatcher = new MyErrorStateMatcher();
 
   constructor(
-    private einzelbuchungsService: EinzelbuchungserviceService,
+    private gemeinsameBuchungenService: GemeinsamebuchungService,
     private kategorieService: KategorieService,
     private partnerService: PartnerService) { }
 
@@ -36,30 +36,30 @@ export class AddgemeinsameausgabeComponent implements OnInit {
   }
 
   private isFormOk(): boolean {
-    return !this.einzelbuchungMatcher.isErrorState(this.datum, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.name, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.kategorie, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.person, null) &&
-      !this.einzelbuchungMatcher.isErrorState(this.wert, null);
+    return this.datum.valid &&
+      this.name.valid &&
+      this.kategorie.valid &&
+      this.person.valid &&
+      this.wert.valid;
   }
 
   hinzufuegen() {
-    if (! this.isFormOk()) {
+    if (!this.isFormOk()) {
       return;
     }
 
-    const neueBuchung: Einzelbuchung = {
-      id: 0,
+    const neueBuchung: GemeinsameBuchungAnlegen = {
       name: this.name.value,
       datum: this.datum.value,
       kategorie: this.kategorie.value,
-      wert: this.wert.value * -1
+      wert: this.wert.value * -1,
+      zielperson: this.person.value
     };
 
     this.datum.reset(new Date());
     this.name.reset();
     this.kategorie.reset(this.kategorien[0]);
     this.wert.reset();
-    this.einzelbuchungsService.save(neueBuchung);
+    this.gemeinsameBuchungenService.save(neueBuchung);
   }
 }

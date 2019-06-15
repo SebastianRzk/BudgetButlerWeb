@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
-import { routerNgProbeToken } from '@angular/router/src/router_module';
+import { AuthService } from '../auth/auth.service';
 import { MenuitemService } from '../menuitem.service';
 
 @Component({

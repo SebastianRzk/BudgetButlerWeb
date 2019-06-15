@@ -1,52 +1,53 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { AllegemeinsamebuchungenComponent } from './allegemeinsamebuchungen.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { LoginComponent } from '../auth/login/login.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { MobileComponent } from '../sidebar/mobile/mobile.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MobileComponent } from 'src/app/sidebar/mobile/mobile.component';
-import { SidebarComponent } from 'src/app/sidebar/sidebar.component';
-import { LoginComponent } from './login.component';
 
-
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+describe('AllebuchungenComponent', () => {
+  let component: AllegemeinsamebuchungenComponent;
+  let fixture: ComponentFixture<AllegemeinsamebuchungenComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         LoginComponent,
         SidebarComponent,
+        AllegemeinsamebuchungenComponent,
         MobileComponent,
       ],
       imports: [
         HttpClientTestingModule,
+        RouterTestingModule,
         FormsModule,
-        MatButtonModule,
-        MatNativeDateModule,
+        MatChipsModule,
         MatButtonModule,
         MatCardModule,
-        MatFormFieldModule,
         MatIconModule,
-        MatInputModule,
+        MatFormFieldModule,
+        MatTableModule,
         MatSnackBarModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        RouterTestingModule
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(AllegemeinsamebuchungenComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

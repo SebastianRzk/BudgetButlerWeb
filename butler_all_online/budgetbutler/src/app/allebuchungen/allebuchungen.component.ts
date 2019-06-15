@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Sort } from '@angular/material';
+import { Sort } from '@angular/material/sort';
 import { Einzelbuchung } from '../model';
 import { EinzelbuchungserviceService as EinzelbuchungService } from '../einzelbuchungservice.service';
 import { NotificationService } from '../notification.service';
@@ -17,7 +17,7 @@ export class AllebuchungenComponent implements OnInit {
   displayedMobileColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
   einzelbuchungen: Observable<Einzelbuchung[]>;
 
-  constructor(private einzelbuchungService: EinzelbuchungService, private notificationService: NotificationService) {
+  constructor(private einzelbuchungService: EinzelbuchungService) {
   }
 
   ngOnInit(): void {

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { NotEmptyErrorStateMatcher } from '../../matcher';
-import { PASSWORT_ZU_KURZ, PASSWOERTER_NICHT_GLEICH } from '../../errormessages';
-import { Observable } from 'rxjs';
-import { AuthService } from '../../auth/auth.service';
+import { MyErrorStateMatcher } from 'src/app/matcher';
 import { AdminService } from '../../auth/admin.service';
+import { PASSWOERTER_NICHT_GLEICH, PASSWORT_ZU_KURZ } from '../../errormessages';
 
 @Component({
   selector: 'app-adduser',
@@ -13,7 +11,7 @@ import { AdminService } from '../../auth/admin.service';
 })
 export class AdduserComponent implements OnInit {
 
-  public errorMatcher = new NotEmptyErrorStateMatcher();
+  public errorMatcher = new MyErrorStateMatcher();
 
   public username = new FormControl('', Validators.required);
   public email = new FormControl('', Validators.required);

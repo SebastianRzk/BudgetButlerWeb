@@ -8,8 +8,8 @@ authenticated(function(){
 	$sth = $dbh->prepare($sql);
 	$sth->execute(array(':user' => $auth->getUsername()));
 
-    $result = new Result();
-    $result->message = "Ausgaben erfolgreich gelöscht";
-    echo json_encode($result);
+	$result = new Result();
+	$result->message = "Ausgaben erfolgreich gelöscht";
+	echo json_encode($result);
 });
 ?>

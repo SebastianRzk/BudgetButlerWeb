@@ -60,6 +60,12 @@ export class MenuitemService {
             type: 'link',
             url: 'addgemeinsameausgabe',
             icon: 'add_box'
+          },
+          {
+            title: 'Alle gemeinsame Buchungen',
+            type: 'link',
+            url: 'allegemeinsamebuchungen',
+            icon: 'format_list_bulleted'
           }
         ]
       },

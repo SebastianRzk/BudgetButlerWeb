@@ -7,7 +7,15 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DashboardComponent', () => {

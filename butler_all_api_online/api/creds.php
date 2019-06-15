@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require_once(__DIR__.'/model.php');
 
 function getPDO(){
 	$config_array  = parse_ini_file('db.ini');
@@ -80,6 +81,42 @@ function getUserAuth($auth){
 	if ($auth->getUsername() == "admin"){
 		$result->role = "admin";
 	}
+	return $result;
+}
+
+
+function get_partnerstatus($auth, $dbh) {
+	$sql = 'select partner, erweiterteRechte from partner where user = :user';
+	$sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+	$sth->execute(array(':user' => $auth->getUsername()));
+	$other = $sth->fetchAll();
+
+	$other_person_confirmed = false;
+	$erweiterteRechteGeben = false;
+	$erweiterteRechteBekommen = false;
+	$other_name = '';
+
+	if (sizeof($other) > 0){
+		$other_name = array_values($other)[0]['partner'];
+		$erweiterteRechteGeben = array_values($other)[0]['erweiterteRechte'] == 1;
+
+		$sql = 'select partner, erweiterteRechte from partner where user = :user';
+		$sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+		$sth->execute(array(':user' => $other_name));
+		$sourceperson = $sth->fetchAll();
+		if (sizeof($sourceperson) > 0) {
+			$sourceperson_name = array_values($sourceperson)[0]['partner'];
+			if (strcmp($sourceperson_name, $auth->getUsername()) == 0){
+				$other_person_confirmed = true;
+				$erweiterteRechteBekommen = array_values($sourceperson)[0]['erweiterteRechte'] == 1;
+			}
+		}
+	}
+	$result = new PartnerInfo();
+	$result->partnername = $other_name;
+  	$result->confirmed = $other_person_confirmed;
+	$result->erweiterteRechteGeben = $erweiterteRechteGeben;
+	$result->erweiterteRechteBekommen = $erweiterteRechteBekommen;
 	return $result;
 }
 ?>
