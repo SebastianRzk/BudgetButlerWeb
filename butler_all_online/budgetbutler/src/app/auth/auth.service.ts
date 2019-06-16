@@ -7,6 +7,7 @@ import { ApiproviderService } from '../apiprovider.service';
 import { NotificationService } from '../notification.service';
 import { Result } from '../model';
 import { Observable } from 'rxjs';
+import { ADD_SCHNELLEINSTIEG_ROUTE } from '../app-routes';
 
 
 
@@ -35,7 +36,7 @@ export class AuthService {
           if (data != null && 'token' in data) {
             this.isLoggedIn = true;
             this.username = data.username;
-            this.router.navigate(['addausgabe']);
+            this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
           } else {
             this.isLoggedIn = false;
           }
@@ -57,7 +58,7 @@ export class AuthService {
             if (this.redirectUrl) {
               this.router.navigate([this.redirectUrl]);
             } else {
-              this.router.navigate(['addausgabe']);
+              this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
             }
           } else {
             this.isLoggedIn = false;
