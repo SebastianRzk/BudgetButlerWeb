@@ -26,6 +26,12 @@ export class MenuitemService {
         icon: 'bar_chart'
       },
       {
+        title: 'Schnellerfassung',
+        type: 'link',
+        url: 'add',
+        icon: 'add_circle_outline'
+      },
+      {
         title: 'Einzelbuchungen',
         type: 'node',
         opened: true,
@@ -59,7 +65,7 @@ export class MenuitemService {
             title: 'Neue gemeinsame Ausgabe',
             type: 'link',
             url: 'addgemeinsameausgabe',
-            icon: 'add_box'
+            icon: 'add_circle_outline'
           },
           {
             title: 'Alle gemeinsame Buchungen',

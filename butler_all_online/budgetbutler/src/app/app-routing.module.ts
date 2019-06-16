@@ -10,6 +10,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
 import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
 import { AllegemeinsamebuchungenComponent } from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
+import { AddschnelleinstiegComponent } from './addschnelleinstieg/addschnelleinstieg.component';
 
  
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent},
       { path: 'addausgabe', component: AddausgabeComponent},
       { path: 'addeinnahme', component: AddeinnahmeComponent},
+      { path: 'add', component: AddschnelleinstiegComponent},
       { path: 'addgemeinsameausgabe', component: AddgemeinsameausgabeComponent},
       { path: 'allebuchungen', component: AllebuchungenComponent},
       { path: 'allegemeinsamebuchungen', component: AllegemeinsamebuchungenComponent},
