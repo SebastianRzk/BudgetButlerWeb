@@ -15,7 +15,7 @@ export class SidebarComponent implements OnInit {
   menu = []
 
   ngOnInit() {
-    this.menu = this.menuItemService.get();
+    this.menu = this.menuItemService.getAllDesktopElements();
   }
 
   logout(){

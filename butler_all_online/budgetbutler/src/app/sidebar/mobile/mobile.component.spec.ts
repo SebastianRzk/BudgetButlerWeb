@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MoreComponent } from './more/more.component';
 
 describe('MobileComponent', () => {
   let component: MobileComponent;
@@ -12,7 +13,7 @@ describe('MobileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MobileComponent],
+      declarations: [MobileComponent, MoreComponent],
       imports: [MatIconModule,
         RouterTestingModule,
         MatSnackBarModule,

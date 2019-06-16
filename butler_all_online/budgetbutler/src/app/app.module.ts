@@ -36,6 +36,7 @@ import { PartnernameComponent } from './settings/partnername/partnername.compone
 import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
 import { AllegemeinsamebuchungenComponent } from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
 import { AddschnelleinstiegComponent } from './addschnelleinstieg/addschnelleinstieg.component';
+import { MoreComponent } from './sidebar/mobile/more/more.component';
 
 export const ALL_IMPORTS = [
   BrowserModule,
@@ -79,6 +80,7 @@ export const ALL_IMPORTS = [
     AddgemeinsameausgabeComponent,
     AllegemeinsamebuchungenComponent,
     AddschnelleinstiegComponent,
+    MoreComponent,
   ],
   imports: [
     BrowserModule,

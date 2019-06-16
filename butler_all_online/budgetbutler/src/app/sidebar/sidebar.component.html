@@ -10,7 +10,7 @@
 
     <div class="greeter">Hallo, {{authService.username}}</div>
     <div class="navigation">
-      <button mat-button (click)="logout()" class="navigation-button">Logout</button>
+      <button mat-stroked-button (click)="logout()" class="navigation-button">Logout</button>
       <div *ngFor="let menuItem of menu">
         <button mat-stroked-button class="navigation-button" *ngIf="menuItem.type === 'link'"
           (click)="navigateTo(menuItem.url)">

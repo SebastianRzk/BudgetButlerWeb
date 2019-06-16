@@ -13,6 +13,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { AddausgabeComponent } from './addausgabe.component';
+import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 
 describe('AddausgabeComponent', () => {
@@ -24,6 +25,7 @@ describe('AddausgabeComponent', () => {
       declarations: [
         AddausgabeComponent,
         MobileComponent,
+        MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,

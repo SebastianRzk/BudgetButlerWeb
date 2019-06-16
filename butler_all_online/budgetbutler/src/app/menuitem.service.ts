@@ -11,6 +11,63 @@ export class MenuItem {
   children?: MenuItem[];
 }
 
+const DASHBOARD = {
+  title: 'Dashboard',
+  type: 'link',
+  url: DASHBOARD_ROUTE,
+  icon: 'bar_chart'
+};
+
+const SCHNELLEINSTIEG = {
+  title: 'Schnellerfassung',
+  type: 'link',
+  url: ADD_SCHNELLEINSTIEG_ROUTE,
+  icon: 'add_circle_outline'
+};
+
+const NEUE_AUSGABE = {
+  title: 'Neue Ausgabe',
+  type: 'link',
+  url: ADD_AUSGABE_ROUTE,
+  icon: 'add_circle_outline'
+};
+
+const NEUE_EINNAHME = {
+  title: 'Neue Einnahme',
+  type: 'link',
+  url: ADD_EINNAHME_ROUTE,
+  icon: 'add_circle_outline'
+};
+
+const ALLE_EINZELBUCHUNGEN = {
+  title: 'Übersicht persönliche Buchungen',
+  type: 'link',
+  url: ALLE_EINZELBUCHUNGEN_ROUTE,
+  icon: 'format_list_bulleted'
+};
+
+const NEUE_GEMEINSAME_BUCHUNG = {
+  title: 'Neue gemeinsame Ausgabe',
+  type: 'link',
+  url: ADD_GEMEINSAME_BUCHUNG_ROUTE,
+  icon: 'add_circle_outline'
+};
+
+const ALLE_GEMEINSAME_BUCHUNGEN = {
+  title: 'Übersicht gemeinsame Buchungen',
+  type: 'link',
+  url: ALLE_GEMEINSAME_BUCHUNGEN_ROUTE,
+  icon: 'format_list_bulleted'
+};
+
+const EINSTELLUNGEN = {
+  title: 'Einstellungen',
+  type: 'link',
+  url: SETTINGS_ROUTE,
+  icon: 'settings'
+};
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,43 +75,18 @@ export class MenuitemService {
 
   constructor() { }
 
-  get(): MenuItem[] {
+  getAllDesktopElements(): MenuItem[] {
     return [
-      {
-        title: 'Dashboard',
-        type: 'link',
-        url: DASHBOARD_ROUTE,
-        icon: 'bar_chart'
-      },
-      {
-        title: 'Schnellerfassung',
-        type: 'link',
-        url: ADD_SCHNELLEINSTIEG_ROUTE,
-        icon: 'add_circle_outline'
-      },
+      DASHBOARD,
+      SCHNELLEINSTIEG,
       {
         title: 'Einzelbuchungen',
         type: 'node',
         opened: false,
         children: [
-          {
-            title: 'Neue Ausgabe',
-            type: 'link',
-            url: ADD_AUSGABE_ROUTE,
-            icon: 'add_circle_outline'
-          },
-          {
-            title: 'Neue Einnahme',
-            type: 'link',
-            url: ADD_EINNAHME_ROUTE,
-            icon: 'add_circle_outline'
-          },
-          {
-            title: 'Alle Buchungen',
-            type: 'link',
-            url: ALLE_EINZELBUCHUNGEN_ROUTE,
-            icon: 'format_list_bulleted'
-          }
+          NEUE_AUSGABE,
+          NEUE_EINNAHME,
+          ALLE_EINZELBUCHUNGEN
         ]
       },
       {
@@ -62,45 +94,30 @@ export class MenuitemService {
         type: 'node',
         opened: false,
         children: [
-          {
-            title: 'Neue gemeinsame Ausgabe',
-            type: 'link',
-            url: ADD_GEMEINSAME_BUCHUNG_ROUTE,
-            icon: 'add_circle_outline'
-          },
-          {
-            title: 'Alle gemeinsame Buchungen',
-            type: 'link',
-            url: ALLE_GEMEINSAME_BUCHUNGEN_ROUTE,
-            icon: 'format_list_bulleted'
-          }
+          NEUE_GEMEINSAME_BUCHUNG,
+          ALLE_GEMEINSAME_BUCHUNGEN
         ]
       },
-      {
-        title: 'Einstellungen',
-        type: 'link',
-        url: SETTINGS_ROUTE,
-        icon: 'settings'
-      }
-
+      EINSTELLUNGEN
     ];
   }
 
-  getFlat() {
-    const elements = [];
-    this.get().forEach(
-      item => {
-        if (item.type === 'link') {
-          elements.push(item);
-        } else {
-          item.children.forEach(
-            child => {
-              elements.push({ ...child });
-            }
-          );
-        }
-      }
-    );
-    return elements;
+  getMainMobileMenuElements() {
+    return [
+      SCHNELLEINSTIEG,
+      ALLE_EINZELBUCHUNGEN,
+      ALLE_GEMEINSAME_BUCHUNGEN,
+    ];
+  }
+
+
+  getAdditionalMobileMenuElements() {
+    return [
+      DASHBOARD,
+      NEUE_EINNAHME,
+      NEUE_AUSGABE,
+      NEUE_GEMEINSAME_BUCHUNG,
+      EINSTELLUNGEN
+    ];
   }
 }

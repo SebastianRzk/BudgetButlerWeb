@@ -16,7 +16,7 @@ export class MobileComponent implements OnInit {
   constructor(private menuitemService: MenuitemService, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
-    this.menu = this.menuitemService.getFlat();
+    this.menu = this.menuitemService.getMainMobileMenuElements();
   }
 
   toggleMenu() {
