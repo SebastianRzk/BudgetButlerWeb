@@ -1,6 +1,6 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
- 
+
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -11,26 +11,29 @@ import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
 import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
 import { AllegemeinsamebuchungenComponent } from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
 import { AddschnelleinstiegComponent } from './addschnelleinstieg/addschnelleinstieg.component';
+import { DASHBOARD_ROUTE, ADD_AUSGABE_ROUTE, ADD_EINNAHME_ROUTE, ADD_SCHNELLEINSTIEG_ROUTE, ADD_GEMEINSAME_BUCHUNG_ROUTE, ALLE_EINZELBUCHUNGEN_ROUTE, ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, SETTINGS_ROUTE, ROOT_ROUTE } from './app-routes';
 
- 
+
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { canActivate: [AuthGuard], path: '', children:
-    [
-      { path: 'dashboard', component: DashboardComponent},
-      { path: 'addausgabe', component: AddausgabeComponent},
-      { path: 'addeinnahme', component: AddeinnahmeComponent},
-      { path: 'add', component: AddschnelleinstiegComponent},
-      { path: 'addgemeinsameausgabe', component: AddgemeinsameausgabeComponent},
-      { path: 'allebuchungen', component: AllebuchungenComponent},
-      { path: 'allegemeinsamebuchungen', component: AllegemeinsamebuchungenComponent},
-      { path: 'settings', component: SettingsComponent},
-      { path: '', component: AddausgabeComponent}
-    ]},
+  {
+    canActivate: [AuthGuard], path: '', children:
+      [
+        { path: DASHBOARD_ROUTE, component: DashboardComponent },
+        { path: ADD_AUSGABE_ROUTE, component: AddausgabeComponent },
+        { path: ADD_EINNAHME_ROUTE, component: AddeinnahmeComponent },
+        { path: ADD_SCHNELLEINSTIEG_ROUTE, component: AddschnelleinstiegComponent },
+        { path: ADD_GEMEINSAME_BUCHUNG_ROUTE, component: AddgemeinsameausgabeComponent },
+        { path: ALLE_EINZELBUCHUNGEN_ROUTE, component: AllebuchungenComponent },
+        { path: ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, component: AllegemeinsamebuchungenComponent },
+        { path: SETTINGS_ROUTE, component: SettingsComponent },
+        { path: ROOT_ROUTE, component: AddschnelleinstiegComponent }
+      ]
+  },
 ];
- 
+
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
