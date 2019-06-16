@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -29,6 +30,7 @@ describe('DashboardComponent', () => {
         SidebarComponent,
         DashboardComponent,
         MobileComponent,
+        MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,

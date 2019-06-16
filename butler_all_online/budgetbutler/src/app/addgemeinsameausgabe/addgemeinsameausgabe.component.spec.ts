@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 
 describe('AddgemeinsameausgabeComponent', () => {
@@ -25,6 +26,7 @@ describe('AddgemeinsameausgabeComponent', () => {
       declarations: [
         AddgemeinsameausgabeComponent,
         MobileComponent,
+        MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,

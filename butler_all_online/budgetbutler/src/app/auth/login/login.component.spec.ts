@@ -13,6 +13,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MobileComponent } from 'src/app/sidebar/mobile/mobile.component';
 import { SidebarComponent } from 'src/app/sidebar/sidebar.component';
 import { LoginComponent } from './login.component';
+import { MoreComponent } from 'src/app/sidebar/mobile/more/more.component';
 
 
 describe('LoginComponent', () => {
@@ -24,6 +25,7 @@ describe('LoginComponent', () => {
       declarations: [
         LoginComponent,
         SidebarComponent,
+        MoreComponent,
         MobileComponent,
       ],
       imports: [

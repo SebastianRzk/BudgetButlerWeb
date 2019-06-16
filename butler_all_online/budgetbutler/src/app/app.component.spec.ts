@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { MobileComponent } from './sidebar/mobile/mobile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MoreComponent } from './sidebar/mobile/more/more.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -23,6 +24,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         SidebarComponent,
+        MoreComponent,
         MobileComponent,
         AddausgabeComponent
       ],

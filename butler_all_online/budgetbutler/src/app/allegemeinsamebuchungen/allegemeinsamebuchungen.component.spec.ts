@@ -15,6 +15,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 describe('AllebuchungenComponent', () => {
   let component: AllegemeinsamebuchungenComponent;
@@ -27,6 +28,7 @@ describe('AllebuchungenComponent', () => {
         SidebarComponent,
         AllegemeinsamebuchungenComponent,
         MobileComponent,
+        MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,

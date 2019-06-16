@@ -13,9 +13,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { AddeinnahmeComponent } from './addeinnahme.component';
+import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 
-describe('AddausgabeComponent', () => {
+describe('AddeinnahmeComponent', () => {
   let component: AddeinnahmeComponent;
   let fixture: ComponentFixture<AddeinnahmeComponent>;
 
@@ -24,6 +25,7 @@ describe('AddausgabeComponent', () => {
       declarations: [
         AddeinnahmeComponent,
         MobileComponent,
+        MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,

@@ -11,24 +11,25 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MobileComponent } from '../sidebar/mobile/mobile.component';
-import { AddausgabeComponent } from './addausgabe.component';
+import { AddschnelleinstiegComponent } from './addschnelleinstieg.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 
-describe('AddausgabeComponent', () => {
-  let component: AddausgabeComponent;
-  let fixture: ComponentFixture<AddausgabeComponent>;
+describe('AddSchnelleinstiegComponent', () => {
+  let component: AddschnelleinstiegComponent;
+  let fixture: ComponentFixture<AddschnelleinstiegComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AddausgabeComponent,
-        MobileComponent,
+        AddschnelleinstiegComponent,
         MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,
+        RouterTestingModule,
         FormsModule,
         MatSelectModule,
         MatButtonModule,
@@ -38,6 +39,7 @@ describe('AddausgabeComponent', () => {
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
+        MatCheckboxModule,
         MatInputModule,
         MatSnackBarModule,
         ReactiveFormsModule,
@@ -48,7 +50,7 @@ describe('AddausgabeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddausgabeComponent);
+    fixture = TestBed.createComponent(AddschnelleinstiegComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
