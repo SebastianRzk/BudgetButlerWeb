@@ -10,8 +10,8 @@ composer install
 cd -
 
 echo "build ng frontend"
-npm install
 cd butler_all_online/budgetbutler
+npm install
 ng build --prod
 cd -
 
