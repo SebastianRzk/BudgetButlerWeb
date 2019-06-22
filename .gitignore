@@ -2,6 +2,7 @@
 /.project
 /.pydevproject
 /Database_Test_User.csv
+/Import/*
 **/*.pyc
 **/.pytest_cache
 /online/vendor
