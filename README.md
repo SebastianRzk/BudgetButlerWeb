@@ -40,8 +40,15 @@ Open your webbrowser and visit:
 
 ### Requirements
 
+#### Server requirements
+
 * Database
 * PHP-server
+
+#### Building requirements
+
+* npm
+* composer
 
 ### Installation
 
@@ -51,32 +58,23 @@ Open your webbrowser and visit:
 
 * Change into project directory
 
-	cd BudgetButlerWeb/butler_online
+	cd BudgetButlerWeb
 
-* Install the requirements
+* Trigger the install into `butler_all_online_distribution`
 
-	composer install
+	sh butler_all_online_install/compose.sh
 
-* Create the database on your server
+* Change the database credentials in `butler_all_online_distribution/api/db.ini` if necessary
 
-* Change into online installation directory and run
+* Load the content of the `butler_all_online_distribution` folder onto the server
 
-    cd ../butler_online_install
-    pip install -r requirements.txt
-
-* Execute the database install script:
-
-    python install_database.py
-
-* Change the host in `butler_online/db.ini` if necessary
-
-* Load the contents of the `butler_online` folder onto the server
+* install the sql from `butler_all_online_install/`
 
 * Check permissions. Make sure that the file `db.ini` can not be accessed.
 
-* Login on `/login.php`. Initial credentials are:
+* Login on `/`. Initial credentials are:
     * User: admin@admin.de 
-    * Password: admin`
+    * Password: adminadminadmin
 
 ## Screenshots
 [Link to screenshots page](docs/screenshots.md)

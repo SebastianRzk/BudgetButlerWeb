@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "my-desktop": {
+    "budgetbutler": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/my-desktop",
+            "outputPath": "dist/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -58,18 +58,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "my-desktop:build"
+            "browserTarget": "budgetbutler:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "my-desktop:build:production"
+              "browserTarget": "budgetbutler:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "my-desktop:build"
+            "browserTarget": "budgetbutler:build"
           }
         },
         "test": {
@@ -103,7 +103,7 @@
         }
       }
     },
-    "my-desktop-e2e": {
+    "budgetbutler-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -112,11 +112,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "my-desktop:serve"
+            "devServerTarget": "budgetbutler:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "my-desktop:serve:production"
+              "devServerTarget": "budgetbutler:serve:production"
             }
           }
         },
@@ -132,5 +132,5 @@
       }
     }
   },
-  "defaultProject": "my-desktop"
+  "defaultProject": "budgetbutler"
 }
