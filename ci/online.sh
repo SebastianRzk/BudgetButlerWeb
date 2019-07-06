@@ -7,10 +7,6 @@ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/loca
 
 
 sudo apt install chromium-browser
-curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-
 
 # Installation
 echo "create butler_online"
