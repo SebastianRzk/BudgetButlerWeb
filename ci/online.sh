@@ -21,4 +21,4 @@ npm install -g @angular/cli
 npm install
 ng build --prod
 
-ng test --watch=false
+ng test --watch=false --progress=false --browsers=ChromeHeadlessCI

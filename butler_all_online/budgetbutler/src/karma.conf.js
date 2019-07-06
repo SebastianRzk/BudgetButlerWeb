@@ -20,13 +20,11 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly', 'text-summary'],
       fixWebpackSourcePaths: true
     },
-    browsers: ['ChromeHeadlessNoSandbox'],
-
-    // you can define custom flags
+    browsers: ['Chrome'],
     customLaunchers: {
-      ChromeHeadlessNoSandbox: {
+      ChromeHeadlessCI: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
+        flags: ['--no-sandbox', '--disable-gpu']
       }
     },
 
