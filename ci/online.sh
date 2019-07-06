@@ -2,7 +2,7 @@
 set -e
 sudo apt update
 
-sudo apt-get install curl php7-cli git
+sudo apt-get install curl php7.0-cli git
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # fix chrome
