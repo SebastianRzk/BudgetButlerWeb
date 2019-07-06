@@ -5,9 +5,6 @@ sudo apt update
 sudo apt-get install curl php7.0-cli git
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
-# fix chrome
-sudo ln -s /var/lib/dbus/machine-id /etc/machine-id
-
 # Installation
 echo "create butler_online"
 cd butler_all_online_api/api
