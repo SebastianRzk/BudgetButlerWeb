@@ -6,7 +6,10 @@ sudo apt-get install curl php5-cli git
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 
-sudo apt install npm chromium-browser
+sudo apt install chromium-browser
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
 
 
 # Installation
