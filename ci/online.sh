@@ -5,9 +5,6 @@ sudo apt update
 sudo apt-get install curl php5-cli git
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
-
-sudo apt install chromium-browser
-
 # Installation
 echo "create butler_online"
 cd butler_all_online_api/api
@@ -24,5 +21,4 @@ npm install -g @angular/cli
 npm install
 ng build --prod
 
-export CHROME_BIN=/usr/bin/chromium-browser
 ng test --watch=false
