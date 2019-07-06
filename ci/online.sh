@@ -2,9 +2,8 @@
 set -e
 sudo apt update
 
-sudo apt install curl php-cli php-mbstring git unzip
-curl -sS https://getcomposer.org/installer -o composer-setup.php
-sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+sudo apt-get install curl php5-cli git
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 
 sudo apt install npm chromium-browser
