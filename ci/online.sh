@@ -11,13 +11,13 @@ sudo apt install npm chromium-browser
 
 # Installation
 echo "create butler_online"
-pushd butler_all_online_api/api
+cd butler_all_online_api/api
 composer install
-popd ..
+cd -
 
 
 echo "create app"
-pushd butler_all_online/budgetbutler
+cd butler_all_online/budgetbutler
 
 npm install -g @angular/cli
 
