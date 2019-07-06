@@ -6,7 +6,7 @@ sudo apt-get install curl php5-cli git
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # fix chrome
-ln -s /var/lib/dbus/machine-id /etc/machine-id
+sudo ln -s /var/lib/dbus/machine-id /etc/machine-id
 
 # Installation
 echo "create butler_online"
