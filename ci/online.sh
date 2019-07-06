@@ -21,7 +21,7 @@ cd butler_all_online/budgetbutler
 npm install -g @angular/cli
 
 
-ng install
+npm install
 ng build --prod
 
 export CHROME_BIN=/usr/bin/chromium-browser
