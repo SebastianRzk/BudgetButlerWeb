@@ -34,7 +34,7 @@ jobs:
     - stage: butler_offline::selenium_test
       script: sh ci/run_integration_tests.sh
     - stage: butler_online
-      script: ci/online.sh
+      script: sh ci/online.sh
     - stage: notify_ci_services
       script: sh ci/notify_integration_services.sh
 
