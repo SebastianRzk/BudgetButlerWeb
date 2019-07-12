@@ -22,3 +22,7 @@ npm install
 ng build --prod
 
 ng test --watch=false --progress=false --browsers=ChromeHeadlessCI
+
+cd ..
+cd ..
+sh butler_all_online_install/compose.sh

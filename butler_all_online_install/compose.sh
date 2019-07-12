@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+echo "------------------------------------------------"
+echo "------------------------------------------------"
+echo "~~~~~~~~~~~~~~~~~Start  Building~~~~~~~~~~~~~~~~"
+echo "~~~~~~~~~~~~~~~~~BudgetButlerWeb~~~~~~~~~~~~~~~~"
+echo "------------------------------------------------"
+echo "------------------------------------------------"
+
 echo "Löschen von alten ergebnissen"
 rm -rfv butler_all_online_distribution
 
@@ -24,4 +31,11 @@ cp butler_all_online_distribution/api/robots.txt butler_all_online_distribution/
 cp butler_all_online_install/.htaccess butler_all_online_distribution/
 rm butler_all_online_distribution/3rdpartylicenses.txt
 
-echo "server erstellt"
+
+echo "------------------------------------------------"
+echo "------------------------------------------------"
+echo "~~~~~~~~~~~~~~~~~~Done Building~~~~~~~~~~~~~~~~~"
+echo "~~~~~~~~~~~~~~~~~BudgetButlerWeb~~~~~~~~~~~~~~~~"
+echo "------------------------------------------------"
+echo "------------------------------------------------"
+
