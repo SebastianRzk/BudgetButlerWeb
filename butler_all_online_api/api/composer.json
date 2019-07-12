@@ -1,5 +1,11 @@
 {
     "require": {
-        "delight-im/auth": "^8.0"
+        "delight-im/auth": "^8.0",
+        "doctrine/orm": "^2.6.2",
+        "symfony/yaml": "2.*"
+    },
+    "autoload": {
+        "psr-0": {"": "src/"}
     }
 }
+

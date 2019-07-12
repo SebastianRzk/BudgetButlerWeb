@@ -119,4 +119,18 @@ function get_partnerstatus($auth, $dbh) {
 	$result->erweiterteRechteBekommen = $erweiterteRechteBekommen;
 	return $result;
 }
+
+function doctrineConnection() {
+	$config = new \Doctrine\DBAL\Configuration();
+	$config_array  = parse_ini_file('db.ini');
+	$connectionParams = array(
+	    'dbname' => $config_array['db_name'],
+	    'user' => $config_array['db_usr'],
+	    'password' => $config_array['db_pw'],
+	    'host' => 'localhost',
+	    'driver' => 'pdo_mysql',
+	);
+	return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+}
+
 ?>
