@@ -47,7 +47,13 @@ class TestHeadlines(SeleniumTestClass):
     def test_dauerauftragsuebersicht(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:5000/dauerauftraguebersicht/')
-        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Alle Daueraufträge'
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Daueraufträge'
+        close_driver(driver)
+
+    def test_einzelbuchungsuebersicht(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Einzelbuchungen'
         close_driver(driver)
 
     def test_gemeinsam_abrechnen(self, get_driver, close_driver):
@@ -59,7 +65,7 @@ class TestHeadlines(SeleniumTestClass):
     def test_gemeinsam_uebersicht(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:5000/gemeinsameuebersicht/')
-        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Alle gem. Buchungen'
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Buchungen'
         close_driver(driver)
 
     def test_importd(self, get_driver, close_driver):

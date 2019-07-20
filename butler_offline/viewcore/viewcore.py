@@ -80,8 +80,8 @@ def get_menu_list():
     main_menu = {}
 
     menu = []
-    menu.append({'url':'/uebersicht/', 'name':'Alle Einzelbuchungen', 'icon':'fa fa-list'})
-    menu.append({'url':'/dauerauftraguebersicht/', 'name': 'Alle Daueraufträge', 'icon':'fa fa-list'})
+    menu.append({'url':'/uebersicht/', 'name':'Übersicht Einzelbuchungen', 'icon':'fa fa-list'})
+    menu.append({'url':'/dauerauftraguebersicht/', 'name': 'Übersicht Daueraufträge', 'icon':'fa fa-list'})
     menu.append({'url':'/addausgabe/', 'name':'Neue Ausgabe', 'icon':'fa fa-plus'})
     menu.append({'url':'/addeinnahme/', 'name':'Neue Einnahme', 'icon':'fa fa-plus'})
     menu.append({'url':'/adddauerauftrag/', 'name':'Neuer Dauerauftrag', 'icon':'fa fa-plus'})
@@ -91,7 +91,7 @@ def get_menu_list():
     main_menu[EINZELBUCHUNGEN_SUBMENU_NAME] = menu
 
     menu = []
-    menu.append({'url':'/gemeinsameuebersicht/', 'name': 'Alle gem. Buchungen', 'icon':'fa fa-list'})
+    menu.append({'url':'/gemeinsameuebersicht/', 'name': 'Übersicht Buchungen', 'icon':'fa fa-list'})
     menu.append({'url':'/addgemeinsam/', 'name':'Neue gemeinsame Ausgabe', 'icon':'fa fa-plus'})
     menu.append({'url': '/gemeinsamabrechnen/', 'name': 'Gemeinsam abrechnen', 'icon':'fa fa-cogs'})
     menu.append({'url': '/import/', 'name': 'Export / Import', 'icon':'fa fa-cogs'})
