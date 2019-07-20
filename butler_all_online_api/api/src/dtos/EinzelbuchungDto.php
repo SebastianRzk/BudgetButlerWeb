@@ -1,4 +1,4 @@
-<?php class EinzelbuchungDTO {
+<?php class EinzelbuchungDto {
 	public $id = 0;
 	public $datum = "";
 	public $name = "undefined";

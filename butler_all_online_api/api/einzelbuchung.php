@@ -1,16 +1,9 @@
 <?php
-
-
-class Einzelbuchung {
-	public $id = 0;
-	public $datum = "";
-	public $name = "undefined";
-	public $kategorie = "undefined";
-	public $wert = "undefined";
-}
-
 require_once(__DIR__.'/util/creds.php');
+require_once(__DIR__.'/entityManager.php');
 require_once(__DIR__.'/model.php');
+require_once(__DIR__.'/src/Einzelbuchung.php');
+
 
 authenticated(function(){
 	$auth = getAuth();
@@ -22,24 +15,11 @@ authenticated(function(){
 		handle_delete($auth, $dbh);
 	}
 	else {
-		$sql = "SELECT * FROM `einzelbuchungen` WHERE user = :user ORDER BY `datum`";
-		$sth = $dbh->prepare($sql);
-		$sth->execute(array(':user' => $auth->getUsername()));
-
-		$sqlbuchungen = $sth->fetchAll();
-
-		$result = array();
-
-		foreach($sqlbuchungen as $sqlbuchung) {
-			$einzelbuchung = new Einzelbuchung();
-			$einzelbuchung->id = $sqlbuchung['id'];
-			$einzelbuchung->datum = $sqlbuchung['datum'];
-			$einzelbuchung->name = $sqlbuchung['name'];
-			$einzelbuchung->kategorie = $sqlbuchung['kategorie'];
-			$einzelbuchung->wert = $sqlbuchung['wert'];
-			array_push($result, $einzelbuchung);
-		}
-		echo json_encode($result);
+		$query = getEntityManager()->createQuery('SELECT u FROM Einzelbuchung u WHERE u.user = :username ORDER BY u.datum');
+		$query->setParameter('username', $auth->getUsername());
+		$einzelbuchungen = $query->getResult();
+		$dtos = array_map(function ($x){ return $x->asDto();},$einzelbuchungen);
+		echo json_encode($dtos);
 	}
 });
 
@@ -54,17 +34,14 @@ function getOrDefault($param, $key, $default){
 function handle_delete($auth, $dbh){
 	$jsondata = file_get_contents('php://input');
 	$requestedEinzelbuchung = json_decode($jsondata, true);
+	$entityManager = getEntityManager();
+	$einzelbuchung = $entityManager->getRepository('Einzelbuchung')->findOneBy(array('user' => $auth->getUsername(), 'id' => $requestedEinzelbuchung['id']));
+	$entityManager->remove($einzelbuchung);
+	$entityManager->flush();
 
-	$sql = "DELETE FROM `einzelbuchungen` WHERE `id` = :id AND `user` = :user";
-	$sth = $dbh->prepare($sql);
-	$sth->execute(array(
-		':user' => $auth->getUsername(),
-		':id' => (int) $requestedEinzelbuchung['id']
-		));
-
-    $result = new Result();
-    $result->message = "Buchung erfolgreich gelöscht";
-    echo json_encode($result);
+	$result = new Result();
+	$result->message = "Buchung erfolgreich gelöscht";
+	echo json_encode($result);
 }
 
 

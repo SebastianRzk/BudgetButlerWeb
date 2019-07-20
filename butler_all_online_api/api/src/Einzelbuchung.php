@@ -1,7 +1,6 @@
 <?php
 
-require_once __DIR__."/dtos/Einzelbuchung.php";
-// src/Product.php
+require_once __DIR__."/dtos/EinzelbuchungDto.php";
 /**
  * @Entity @Table(name="einzelbuchungen")
  **/
@@ -11,6 +10,8 @@ class Einzelbuchung
     protected $id;
     /** @Column(type="string") **/
     protected $name;
+    /** @Column(type="string") **/
+    protected $user;
     /** @Column(type="string") **/
     protected $kategorie;
     /** @Column(type="date") **/
@@ -38,10 +39,10 @@ class Einzelbuchung
         return $this->wert;
     }
 
-    public function asDTO() {
-	$dto = new EinzelbuchungDTO();
+    public function asDto() {
+	$dto = new EinzelbuchungDto();
 	$dto->id = $this->id;
-	$dto->datum = $this->getDatum();
+	$dto->datum = $this->getDatum()->format('Y-m-d');
 	$dto->name = $this->getName();
 	$dto->kategorie = $this->getKategorie();
 	$dto->wert = $this->getWert();

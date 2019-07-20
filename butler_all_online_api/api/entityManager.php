@@ -2,9 +2,9 @@
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-require_once "vendor/autoload.php";
+require_once __DIR__."/vendor/autoload.php";
 require_once __DIR__."/util/creds.php";
-function entityManager() {
+function getEntityManager() {
 	// Create a simple "default" Doctrine ORM configuration for Annotations
 	$isDevMode = true;
 	$config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/src"), $isDevMode);

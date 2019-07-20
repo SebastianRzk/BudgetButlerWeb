@@ -1,9 +1,9 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-require_once(__DIR__.'/model.php');
+require __DIR__ . '/../vendor/autoload.php';
+require_once(__DIR__.'/../model.php');
 
 function getPDO(){
-	$config_array  = parse_ini_file('db.ini');
+	$config_array  = parse_ini_file(__DIR__.'/../db.ini');
 	return new PDO('mysql:dbname='.$config_array['db_name'].';host=localhost;charset=utf8mb4', $config_array['db_usr'], $config_array['db_pw']);
 }
 
@@ -129,6 +129,7 @@ function doctrineConnection() {
 	    'password' => $config_array['db_pw'],
 	    'host' => 'localhost',
 	    'driver' => 'pdo_mysql',
+	    'charset'  => 'utf8mb4'
 	);
 	return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
 }
