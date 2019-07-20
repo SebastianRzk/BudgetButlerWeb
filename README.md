@@ -11,7 +11,7 @@
 
 * Python 3.6
 * Pip
-* Modern Webbrowser (e.G. Firefox or Chromium)
+* Firefox (if you don't want to use the .desktop shortcut, you can use any modern browser)
 * (git)
 
 ### Install and run 
@@ -27,11 +27,15 @@ Install the requirements
 
 	pip install -r requirements.txt
 
-Run offline applicaton server:
+Create a application shortcut with
+
+	sh ./create_shortcut.sh
+
+Or start the application with:
 
 	sh start_butler_offline.sh
 
-Open your webbrowser and visit:
+And open your webbrowser and visit:
 
 	http://127.0.0.1:5000/
 
