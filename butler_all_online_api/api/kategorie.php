@@ -1,19 +1,14 @@
 <?php
-require_once(__DIR__.'/creds.php');
+require_once(__DIR__.'/util/creds.php');
+require_once(__DIR__.'/entityManager.php');
 
 authenticated(function(){
 	$auth = getAuth();
-	$sql = "SELECT name FROM `kategorie` WHERE user = :user";
-	$sth = getPDO()->prepare($sql);
-	$sth->execute(array(':user' => $auth->getUsername()));
-
-	$sqlkategorien = $sth->fetchAll();
-	$result = array();
-
-	foreach($sqlkategorien as $sqlkategorie) {
-		array_push($result, $sqlkategorie['name']);
-	}
-	echo json_encode($result);
+	$query = getEntityManager()->createQuery('SELECT u FROM Kategorie u WHERE u.user = :username');
+	$query->setParameter('username', $auth->getUsername());
+	$kategorien = $query->getResult();
+	$dtos = array_map(function ($x){ return $x->asDto();},$kategorien);
+	echo json_encode($dtos);
 });
 
 

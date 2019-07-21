@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ApiproviderService } from '../apiprovider.service';
 import { NotificationService } from '../notification.service';
-import { Result } from '../model';
+import { Result, ERROR_LOGIN_RESULT } from '../model';
 import { Observable } from 'rxjs';
 import { ADD_SCHNELLEINSTIEG_ROUTE } from '../app-routes';
 
@@ -38,11 +38,12 @@ export class AuthService {
             this.username = data.username;
             this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
           } else {
+            this.notificationService.log(ERROR_LOGIN_RESULT, "Login");
             this.isLoggedIn = false;
           }
         },
         error => {
-          console.log('Mischt', error);
+          this.notificationService.log(ERROR_LOGIN_RESULT, "Login fehlgeschlagen");
           this.isLoggedIn = false;
         }
       ));

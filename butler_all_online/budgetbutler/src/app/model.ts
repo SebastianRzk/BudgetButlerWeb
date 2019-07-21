@@ -39,4 +39,5 @@ export class Result {
     public message: string;
 }
 
-export const ERROR_RESULT: Result = { result: 'ERROR', message: 'Fehler beim erstellen der Buchung' };
+export const ERROR_RESULT: Result = { result: 'ERROR', message: 'Fehler beim Erstellen der Buchung' };
+export const ERROR_LOGIN_RESULT: Result = { result: 'FEHLER', message: 'Fehler beim Login' };

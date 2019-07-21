@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/creds.php');
+require_once(__DIR__.'/util/creds.php');
 authenticated(function(){
 	$auth = getAuth();
 	$dbh = getPDO();

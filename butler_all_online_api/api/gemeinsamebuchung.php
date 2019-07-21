@@ -1,18 +1,9 @@
 <?php
-
-
-class GemeinsameBuchung {
-	public $id = 0;
-	public $datum = "";
-	public $name = "undefined";
-	public $user = "undefined";
-	public $zielperson = "undefined";
-	public $kategorie = "undefined";
-	public $wert = "undefined";
-}
-
-require_once(__DIR__.'/creds.php');
+require_once(__DIR__.'/util/creds.php');
 require_once(__DIR__.'/model.php');
+require_once(__DIR__.'/entityManager.php');
+require_once(__DIR__.'/src/GemeinsameBuchung.php');
+
 
 authenticated(function(){
 	$auth = getAuth();
@@ -27,32 +18,15 @@ authenticated(function(){
 		$sth = "";
 		$partnerstatus =  get_partnerstatus($auth, $dbh);
 		if ($partnerstatus->confirmed == false) {
-			$sql = "SELECT * FROM `gemeinsamebuchungen` WHERE user = :user ORDER BY `datum`";
-			$sth = $dbh->prepare($sql);
-			$sth->execute(array(':user' => $auth->getUsername()));
+			$query = getEntityManager()->createQuery('SELECT u FROM GemeinsameBuchung u WHERE u.user = :username ORDER BY u.datum');
+			$query->setParameter('username', $auth->getUsername());
 		} else {
-			$sql = "SELECT * FROM `gemeinsamebuchungen` WHERE user = :user OR user = :partner ORDER BY `datum`";
-			$sth = $dbh->prepare($sql);
-			$sth->execute(array(':user' => $auth->getUsername(),
-			':partner' => $partnerstatus->partnername));
+			$query = getEntityManager()->createQuery('SELECT u FROM GemeinsameBuchung u WHERE u.user = :username OR u.user = :partner ORDER BY u.datum');
+			$query->setParameter('username', $auth->getUsername());
+			$query->setParameter(':partner', $partnerstatus->partnername);
 		}
-
-		$sqlbuchungen = $sth->fetchAll();
-
-		$result = array();
-
-		foreach($sqlbuchungen as $sqlbuchung) {
-			$gemeinsameBuchung = new GemeinsameBuchung();
-			$gemeinsameBuchung->id = $sqlbuchung['id'];
-			$gemeinsameBuchung->datum = $sqlbuchung['datum'];
-			$gemeinsameBuchung->user = $sqlbuchung['user'];
-			$gemeinsameBuchung->zielperson = $sqlbuchung['zielperson'];
-			$gemeinsameBuchung->name = $sqlbuchung['name'];
-			$gemeinsameBuchung->kategorie = $sqlbuchung['kategorie'];
-			$gemeinsameBuchung->wert = $sqlbuchung['wert'];
-			array_push($result, $gemeinsameBuchung);
-		}
-		echo json_encode($result);
+		$dtos = array_map(function ($x){ return $x->asDto();},$query->getResult());
+		echo json_encode($dtos);
 	}
 });
 
@@ -66,24 +40,22 @@ function getOrDefault($param, $key, $default){
 
 function handle_delete($auth, $dbh){
 	$jsondata = file_get_contents('php://input');
-	$requestetBuchung = json_decode($jsondata, true);
+	$requestedBuchung = json_decode($jsondata, true)['id'];
 
-	$sql = "DELETE FROM `gemeinsamebuchungen` WHERE `id` = :id AND `user` = :user";
-	$sth = $dbh->prepare($sql);
-	$sth->execute(array(
-		':user' => $auth->getUsername(),
-		':id' => (int) $requestetBuchung['id']
-		));
-
+	$entityManager = getEntityManager();
 	$partnerstatus =  get_partnerstatus($auth, $dbh);
-	$sql = "DELETE FROM `gemeinsamebuchungen` WHERE `id` = :id AND `user` = :user";
+
 	if ($partnerstatus->erweiterteRechteBekommen) {
-		$sth = $dbh->prepare($sql);
-		$sth->execute(array(
-			':user' => $partnerstatus->partnername,
-			':id' => (int) $requestetBuchung['id']
-			));
+		$query = getEntityManager()->createQuery('SELECT u FROM GemeinsameBuchung u WHERE ( u.user = :username OR u.user = :partner ) AND id = :id');
+		$query->setParameter('username', $auth->getUsername());
+		$query->setParameter(':partner', $partnerstatus->partnername);
+		$query->setParameter(':id', $requestedBuchung);
+		$einzelbuchung = $query->getSingleResult();
+	} else {
+		$einzelbuchung = $entityManager->getRepository('GemeinsameBuchung')->findOneBy(array('user' => $auth->getUsername(), 'id' => $requestedBuchung));
 	}
+	$entityManager->remove($einzelbuchung);
+	$entityManager->flush();
 
 
 	$result = new Result();
