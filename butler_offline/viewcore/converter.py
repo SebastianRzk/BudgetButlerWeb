@@ -3,10 +3,10 @@ Created on 10.05.2017
 
 @author: sebastian
 '''
-import datetime
+from datetime import datetime
 
 def datum(string):
-    return datetime.datetime.strptime(string , '%Y-%m-%d').date()
+    return datetime.strptime(string , '%Y-%m-%d').date()
 
 def dezimal_float(string):
     string = string.replace(",", ".")
@@ -23,7 +23,7 @@ def datum_to_german(datum_obj):
     return datum_obj.strftime('%d.%m.%Y')
 
 def datum_from_german(datum_str):
-    return datetime.datetime.strptime(datum_str , '%d.%m.%Y').date()
+    return datetime.strptime(datum_str , '%d.%m.%Y').date()
 
 def german_to_rfc(datum_str):
     return datum_to_string(datum_from_german(datum_str))
