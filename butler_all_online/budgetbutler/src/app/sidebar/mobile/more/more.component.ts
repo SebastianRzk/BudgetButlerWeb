@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MenuitemService } from 'src/app/menuitem.service';
 import { Router } from '@angular/router';
 
@@ -8,9 +8,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./more.component.css']
 })
 export class MoreComponent implements OnInit {
-  more: boolean = false;
   public menuOpened = false;
   public menu = [];
+
+  @Input()
+  public closeParent: () => void;
+
 
   constructor(private menuitemService: MenuitemService, private router: Router) { }
 
@@ -20,12 +23,13 @@ export class MoreComponent implements OnInit {
 
   navigateTo(url: string){
     this.menuOpened = false;
+    this.closeParent();
     this.router.navigate([url]);
   }
 
 
   toggleMenu = () => {
-    this.more = !this.more;
+    this.menuOpened = !this.menuOpened;
   }
 
 }

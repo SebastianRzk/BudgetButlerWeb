@@ -19,7 +19,7 @@ export class MobileComponent implements OnInit {
     this.menu = this.menuitemService.getMainMobileMenuElements();
   }
 
-  toggleMenu() {
+  toggleMenu = () => {
     this.menuOpened = !this.menuOpened;
   }
 

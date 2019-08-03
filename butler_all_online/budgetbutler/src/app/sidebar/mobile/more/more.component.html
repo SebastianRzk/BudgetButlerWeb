@@ -1,7 +1,7 @@
-<button mat-stroked-button  *ngIf="!more" (click)="toggleMenu()">
+<button mat-stroked-button  *ngIf="!menuOpened" (click)="toggleMenu()">
    mehr ...
 </button>
-<div *ngIf="more">
+<div *ngIf="menuOpened">
     <div *ngFor="let menuItem of menu">
       <button mat-stroked-button class="navigation-button" (click)="navigateTo(menuItem.url)">
         ...<mat-icon aria-hidden="false" aria-label="Example home icon">{{menuItem.icon}}</mat-icon>
@@ -9,6 +9,6 @@
       </button>
     </div>
   </div>
-<button mat-stroked-button  *ngIf="more" (click)="toggleMenu()">
+<button mat-stroked-button  *ngIf="menuOpened" (click)="toggleMenu()">
   ... weniger
 </button>
