@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 
 from butler_offline.test.FileSystemStub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
@@ -127,13 +128,20 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 2017-03-06,Essen,Edeka,-20.0,True,Maureen
 #######MaschinenimportEnd
 '''
+    _JSON_IMPORT_DATA = '''
+    [
+    {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3"},
+    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9"}
+    ]
+    '''
+
 
     def test_einzelbuchungImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
-        requester.INSTANCE = RequesterStub({'https://test.test/getabrechnung.php': self._IMPORT_DATA,
+        requester.INSTANCE = RequesterStub({'https://test.test/einzelbuchung.php': self._JSON_IMPORT_DATA,
                                             'https://test.test/deleteitems.php': '',
                                             'https://test.test/getusername.php': 'Sebastian'})
 
@@ -143,10 +151,27 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
                                                  'password': ''}))
 
         assert context['element_titel'] == 'Export / Import'
-        assert len(viewcore.database_instance().einzelbuchungen.content) == 2
+        assert len(viewcore.database_instance().einzelbuchungen.content) == 3
+        assert viewcore.database_instance().einzelbuchungen.get(1) == {'Datum': datum('11.07.2019'),
+            'Dynamisch': False,
+            'Kategorie': 'Essen',
+            'Name': 'Testausgabe2',
+            'Tags': np.nan,
+            'Wert': -0.9,
+            'index': 1}
+        assert viewcore.database_instance().einzelbuchungen.get(2) == {'Datum': datum('15.07.2019'),
+            'Dynamisch': False,
+            'Kategorie': 'Essen',
+            'Name': 'Testausgabe1',
+            'Tags': np.nan,
+            'Wert': -1.3,
+            'index': 2}
+
+
 
         assert requester.instance().call_count_of('https://test.test/deleteitems.php') == 1
         assert requester.instance().complete_call_count() == 2
+
 
     def test_gemeinsamImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
