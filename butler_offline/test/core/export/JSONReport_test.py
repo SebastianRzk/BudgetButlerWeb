@@ -23,3 +23,4 @@ def test_dataframe_from_json_string():
 
     assert dataframe.Wert[0] == -1.3
     assert dataframe.Wert[1] == -0.9
+    
