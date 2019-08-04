@@ -11,7 +11,7 @@
       {{menuItem.title}}
     </button>
   </div>
-  <app-more></app-more>
+  <app-more  [closeParent]="toggleMenu"></app-more>
   <button mat-stroked-button (click)="logout()" class="navigation-button">
     <mat-icon aria-hidden="false" aria-label="Logout">exit_to_app</mat-icon>Logout
   </button>

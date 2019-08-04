@@ -157,7 +157,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         uebertragene_buchung = db.gemeinsamebuchungen.select().to_list()[1]
         assert uebertragene_buchung['Name'] == 'to late'
 
-    def test_abrechnen_withDateRange_shouldOnlyImportMatchingElements(self):
+    def test_abrechnen_withDateRange(self):
         self.set_up()
         db = viewcore.database_instance()
         viewcore.stub_today_with(datum('01.01.2010'))

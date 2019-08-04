@@ -4,15 +4,18 @@ import pandas
 import requests
 from datetime import datetime
 
+from butler_offline.core import FileSystem
+from butler_offline.core.export.JSONToTextMapper import JSONToTextMapper
+
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.base_html import set_success_message
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test import RequestStubs
-from butler_offline.core import FileSystem
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
+
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -69,10 +72,13 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
-            r = requester.instance().post(serverurl + '/getabrechnung.php', data={'email': request.values['email'], 'password': request.values['password']})
-            print(r)
+            json_report = requester.instance().post(serverurl + '/einzelbuchung.php', data={'email': request.values['email'], 'password': request.values['password']})
+            print(json_report)
+            print('Mapping to text report')
+            text_report = JSONToTextMapper().map(json_report)
+            print(text_report)
 
-            response = handle_request(PostRequest({'import' : r}), import_prefix='Internet')
+            response = handle_request(PostRequest({'import' : text_report}), import_prefix='Internet')
             r = requester.instance().post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
 

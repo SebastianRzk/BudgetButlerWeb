@@ -39,6 +39,12 @@ class Einzelbuchung
         return $this->wert;
     }
 
+	public function setName($name) { $this->name = $name;}
+	public function setKategorie($kategorie) { $this->kategorie = $kategorie;}
+	public function setUser($user) { $this->user = $user;}
+	public function setDatum($datum) { $this->datum = $datum;}
+	public function setWert($wert) { $this->wert = $wert;}
+
     public function asDto() {
 	$dto = new EinzelbuchungDto();
 	$dto->id = $this->id;

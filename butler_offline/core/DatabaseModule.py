@@ -13,37 +13,13 @@ from butler_offline.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.viewcore import viewcore
 from butler_offline.core import FileSystem
 from butler_offline.viewcore.converter import datum, datum_to_german
+from butler_offline.core.export.StringWriter import StringWriter
+from butler_offline.core.export.TextReport import TextReport
 
 from pandas import DataFrame
 
-class StringWriter():
-    '''
-    Shadowes file
-    '''
-
-    def __init__(self):
-        self.value = ""
-
-    def write(self, new_line):
-        '''write line into virtual file'''
-        self.value = self.value + new_line
-
-    def write_line(self, new_line):
-        self.write(str(new_line) + '\n')
-
-    def write_empty_line(self, count=1):
-        self.write('\n' * count)
-
-    def to_string(self):
-        ''' get filecontent'''
-        return self.value
-
 
 class Database:
-    '''
-    Database
-    '''
-
     def __init__(self, name, ausgeschlossene_kategorien=set()):
         self.name = name
         self.dauerauftraege = Dauerauftraege()
@@ -159,18 +135,15 @@ class Database:
             extra_ausgleichs_buchung.Dynamisch = False
             ausgaben_fuer_maureen = ausgaben_fuer_maureen.append(extra_ausgleichs_buchung)
 
-        abrechnunsdatei.write_empty_line(count=2)
-        abrechnunsdatei.write_line("#######MaschinenimportStart")
-        abrechnunsdatei.write(ausgaben_fuer_maureen.to_csv(index=False))
-        abrechnunsdatei.write_line("#######MaschinenimportEnd")
+        report = TextReport().generate_report(ausgaben_fuer_maureen, abrechnunsdatei.to_string())
 
         self.einzelbuchungen.append_row(ausgaben_fuer_sebastian)
         self.einzelbuchungen.taint()
 
         self.gemeinsamebuchungen.drop(gemeinsame_buchungen_content.index.tolist())
         self.taint()
-        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(datetime.now()), abrechnunsdatei.to_string())
-        return abrechnunsdatei.to_string()
+        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(datetime.now()), report)
+        return report
 
     def _faktor_self(self, verhaeltnis):
         return verhaeltnis / 100

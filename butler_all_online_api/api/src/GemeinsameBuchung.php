@@ -51,6 +51,13 @@ class GemeinsameBuchung
         return $this->zielperson;
     }
 
+    public function setName($name) { $this->name = $name;}
+    public function setKategorie($kategorie) { $this->kategorie = $kategorie;}
+    public function setUser($user) { $this->user = $user;}
+    public function setDatum($datum) { $this->datum = $datum;}
+    public function setWert($wert) { $this->wert = $wert;}
+    public function setZielperson($zielperson) { $this->zielperson = $zielperson;}
+
     public function asDto() {
 	$dto = new GemeinsameBuchungDto();
 	$dto->id = $this->id;

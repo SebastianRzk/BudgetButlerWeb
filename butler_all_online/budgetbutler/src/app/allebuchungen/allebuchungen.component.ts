@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Sort } from '@angular/material/sort';
-import { Einzelbuchung } from '../model';
-import { EinzelbuchungserviceService as EinzelbuchungService } from '../einzelbuchungservice.service';
-import { NotificationService } from '../notification.service';
-import { getLocaleDateTimeFormat } from '@angular/common';
 import { Observable } from 'rxjs';
+import { EinzelbuchungserviceService as EinzelbuchungService } from '../einzelbuchungservice.service';
+import { Einzelbuchung } from '../model';
 
 @Component({
   selector: 'app-allebuchungen',

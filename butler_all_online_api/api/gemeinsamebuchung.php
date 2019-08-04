@@ -67,28 +67,26 @@ function handle_delete($auth, $dbh){
 function handle_put($auth, $dbh){
 	$jsondata = file_get_contents('php://input');
 	$requestetBuchung = json_decode($jsondata, true);
-	if (strcmp($requestetBuchung['zielperson'], $auth->getUsername()) == 0) {
-		$sql = "INSERT INTO `gemeinsamebuchungen`(`user`, `zielperson` ,`datum`, `name`, `kategorie`, `wert`) VALUES (:user,:zielperson, :datum,:name,:kategorie,:wert)";
 
-		$sth = $dbh->prepare($sql);
-		$sth->execute(array(':user' => $auth->getUsername(),
-				    ':zielperson' => $auth->getUsername(),
-				    ':datum' => getOrDefault($requestetBuchung, 'datum', '01-01-2019'),
-				    ':name' => getOrDefault($requestetBuchung, 'name', 'kein Name angegeben'),
-				    ':kategorie' => getOrDefault($requestetBuchung, 'kategorie', 'keine Kategorie angegeben'),
-				    ':wert' => getOrDefault($requestetBuchung, 'wert', 0)));
+
+	$neueBuchung = new GemeinsameBuchung();
+	$neueBuchung->setUser($auth->getUsername());
+	$neueBuchung->setDatum(date_create(getOrDefault($requestetBuchung, 'datum', '01-01-2019')));
+	$neueBuchung->setName(getOrDefault($requestetBuchung, 'name', 'kein Name angegeben'));
+	$neueBuchung->setKategorie(getOrDefault($requestetBuchung, 'kategorie', 'keine Kategorie angegeben'));
+	$neueBuchung->setWert(getOrDefault($requestetBuchung, 'wert', 0));
+
+	if (strcmp($requestetBuchung['zielperson'], $auth->getUsername()) == 0) {
+		$neueBuchung->setZielperson($auth->getUsername());
 	} else {
 		$partnerstatus = get_partnerstatus($auth, $dbh);
-		$sql = "INSERT INTO `gemeinsamebuchungen`(`user`, `zielperson` ,`datum`, `name`, `kategorie`, `wert`) VALUES (:user,:zielperson, :datum,:name,:kategorie,:wert)";
-
-		$sth = $dbh->prepare($sql);
-		$sth->execute(array(':zielperson' => $partnerstatus->partnername,
-				    ':user' => $auth->getUsername(),
-				    ':datum' => getOrDefault($requestetBuchung, 'datum', '01-01-2019'),
-				    ':name' => getOrDefault($requestetBuchung, 'name', 'kein Name angegeben'),
-				    ':kategorie' => getOrDefault($requestetBuchung, 'kategorie', 'keine Kategorie angegeben'),
-				    ':wert' => getOrDefault($requestetBuchung, 'wert', 0)));
+		$neueBuchung->setZielperson($partnerstatus->partnername);
 	}
+
+	$entityManager = getEntityManager();
+	$entityManager->persist($neueBuchung);
+	$entityManager->flush();
+
 	$result = new Result();
 	$result->message = "Buchung erfolgreich hinzugefügt";
 	echo json_encode($result);
