@@ -32,8 +32,7 @@ function getOrDefault($param, $key, $default){
 
 
 function handle_delete($auth, $dbh){
-	$jsondata = file_get_contents('php://input');
-	$requestedEinzelbuchung = json_decode($jsondata, true);
+	$requestedEinzelbuchung = json_decode(file_get_contents('php://input'), true);
 	$entityManager = getEntityManager();
 	$einzelbuchung = $entityManager->getRepository('Einzelbuchung')->findOneBy(array('user' => $auth->getUsername(), 'id' => $requestedEinzelbuchung['id']));
 	$entityManager->remove($einzelbuchung);
@@ -46,20 +45,22 @@ function handle_delete($auth, $dbh){
 
 
 function handle_put($auth, $dbh){
-	$jsondata = file_get_contents('php://input');
-	$requestedEinzelbuchung = json_decode($jsondata, true);
+	$requestedEinzelbuchung = json_decode(file_get_contents('php://input'), true);
 
-	$sql = "INSERT INTO `einzelbuchungen`(`user`, `datum`, `name`, `kategorie`, `wert`) VALUES (:user,:datum,:name,:kategorie,:wert)";
+	$neueBuchung = new Einzelbuchung();
+	$neueBuchung->setUser($auth->getUsername());
+	$neueBuchung->setDatum(date_create(getOrDefault($requestedEinzelbuchung, 'datum', '01-01-2019')));
+	$neueBuchung->setName(getOrDefault($requestedEinzelbuchung, 'name', 'kein Name angegeben'));
+	$neueBuchung->setKategorie(getOrDefault($requestedEinzelbuchung, 'kategorie', 'keine Kategorie angegeben'));
+	$neueBuchung->setWert(getOrDefault($requestedEinzelbuchung, 'wert', 0));
 
-	$sth = $dbh->prepare($sql);
-	$sth->execute(array(':user' => $auth->getUsername(),
-			    ':datum' => getOrDefault($requestedEinzelbuchung, 'datum', '01-01-2019'),
-			    ':name' => getOrDefault($requestedEinzelbuchung, 'name', 'kein Name angegeben'),
-			    ':kategorie' => getOrDefault($requestedEinzelbuchung, 'kategorie', 'keine Kategorie angegeben'),
-			    ':wert' => getOrDefault($requestedEinzelbuchung, 'wert', 0)));
-    $result = new Result();
-    $result->message = "Buchung erfolgreich hinzugefügt";
-    echo json_encode($result);
+	$entityManager = getEntityManager();
+	$entityManager->persist($neueBuchung);
+	$entityManager->flush();
+
+	$result = new Result();
+	$result->message = "Buchung erfolgreich hinzugefügt";
+	echo json_encode($result);
 }
 
 ?>
