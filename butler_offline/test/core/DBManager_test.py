@@ -7,6 +7,7 @@ import unittest
 
 from butler_offline.core import DBManager
 from butler_offline.core.DBManager import MultiPartCsvReader
+from butler_offline.core.DBManager import DatabaseParser
 from butler_offline.core import FileSystem
 from butler_offline.test.FileSystemStub import FileSystemStub
 
@@ -89,7 +90,7 @@ Datum,Kategorie,Name,Wert,Person
 '''
 
 
-class MultiPartCsvReader_readDB(unittest.TestCase):
+class MultiPartCsvReader_test(unittest.TestCase):
 
     def test_read(self):
         test_content = [
@@ -102,4 +103,36 @@ class MultiPartCsvReader_readDB(unittest.TestCase):
 
         assert reader.get_string('A') == '1,2\n2,3\n3,4'
         assert reader.get_string('B') == '3,4\n4,5'
-        assert reader.get_string('C') == ''     
+        assert reader.get_string('C') == ''
+
+class DatabaseParser_test(unittest.TestCase):
+    def test_read(self):
+        database_parser = DatabaseParser()
+
+        database_parser.from_string(self.full_db)
+
+        assert database_parser.einzelbuchungen() == self.einzelbuchungen
+        assert database_parser.dauerauftraege() == self.dauerauftraege
+        assert database_parser.gemeinsame_buchungen() == self.gemeinsame_buchungen
+
+
+
+    einzelbuchungen = '''Datum,Kategorie,Name,Wert,Tags
+2017-10-10,Essen,Essen gehen,-10.0,[]
+2017-11-11,Essen,Nochwas,-1.0,[]'''
+
+    dauerauftraege = '''Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
+2017-09-18,Essen,Other Something,monatlich,2017-01-12,-1.0
+2017-09-30,Miete,Miete,monatlich,2017-01-13,-1.0'''
+
+    gemeinsame_buchungen = '''Datum,Kategorie,Name,Wert,Person
+2017-12-30,Miete,monatlich,-200.0,Sebastian
+2017-12-31,Miete,monatlich,-200.0,Maureen'''
+
+    full_db = '''
+{einzelbuchungen}
+Dauerauftraege
+{dauerauftraege}
+Gemeinsame Buchungen
+{gemeinsame_buchungen}
+'''.format(einzelbuchungen=einzelbuchungen, dauerauftraege=dauerauftraege, gemeinsame_buchungen=gemeinsame_buchungen).split('\n')  

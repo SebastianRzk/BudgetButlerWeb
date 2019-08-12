@@ -15,21 +15,19 @@ def read(nutzername, ausgeschlossene_kategorien):
 
     file_content = FileSystem.instance().read(database_path_from(nutzername))
 
-    reader = MultiPartCsvReader(
-            set(['Einzelbuchungen', 'Dauerauftraege', 'Gemeinsame Buchungen']),
-            'Einzelbuchungen')
-    reader.from_string(file_content)
+    parser = DatabaseParser()
+    parser.from_string(file_content)
 
     database = DatabaseModule.Database(nutzername, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
-    raw_data = pd.read_csv(StringIO(reader.get_string('Einzelbuchungen')))
+    raw_data = pd.read_csv(StringIO(parser.einzelbuchungen()))
     database.einzelbuchungen.parse(raw_data)
     print("READER: Einzelbuchungen gelesen")
 
-    database.dauerauftraege.parse(pd.read_csv(StringIO(reader.get_string('Dauerauftraege'))))
+    database.dauerauftraege.parse(pd.read_csv(StringIO(parser.dauerauftraege())))
     print("READER: Daueraufträge gelesen")
 
-    database.gemeinsamebuchungen.parse(pd.read_csv(StringIO(reader.get_string('Gemeinsame Buchungen'))))
+    database.gemeinsamebuchungen.parse(pd.read_csv(StringIO(parser.gemeinsame_buchungen())))
     print("READER: Gemeinsame Buchungen gelesen")
 
     print('READER: Refreshe Database')
@@ -56,8 +54,28 @@ def write(database):
 def database_path_from(username):
     return '../Database_' + username + '.csv'
 
-class MultiPartCsvReader:
 
+class DatabaseParser:
+    def __init__(self):
+        self._reader = MultiPartCsvReader(
+            set(['Einzelbuchungen', 'Dauerauftraege', 'Gemeinsame Buchungen']),
+            'Einzelbuchungen')
+
+    def from_string(self, lines):
+        self._reader.from_string(lines)
+
+    def einzelbuchungen(self):
+        return self._reader.get_string('Einzelbuchungen')
+
+    def dauerauftraege(self):
+        return self._reader.get_string('Dauerauftraege')
+
+    def gemeinsame_buchungen(self):
+        return self._reader.get_string('Gemeinsame Buchungen')
+
+
+
+class MultiPartCsvReader:
     def __init__(self, token, start_token):
         self._token = token
         self._start_token = start_token
