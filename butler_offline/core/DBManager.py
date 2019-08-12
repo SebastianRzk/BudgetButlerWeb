@@ -9,11 +9,11 @@ from butler_offline.core import FileSystem
 import pandas as pd
 
 def read(nutzername, ausgeschlossene_kategorien):
-    if not FileSystem.instance().read('../Database_' + nutzername + '.csv'):
+    if not FileSystem.instance().read(database_path_from(nutzername)):
         neue_datenbank = DatabaseModule.Database(nutzername)
         write(neue_datenbank)
 
-    file_content = FileSystem.instance().read('../Database_' + nutzername + '.csv')
+    file_content = FileSystem.instance().read(database_path_from(nutzername))
 
     tables = {}
 
@@ -64,5 +64,10 @@ def write(database):
     content += "\n Gemeinsame Buchungen \n"
     content += database.gemeinsamebuchungen.content.to_csv(index=False)
 
-    FileSystem.instance().write('../Database_' + database.name + '.csv', content)
+    FileSystem.instance().write(database_path_from(database.name), content)
     print("WRITER: All Saved")
+
+
+
+def database_path_from(username):
+    return '../Database_' + username + '.csv'

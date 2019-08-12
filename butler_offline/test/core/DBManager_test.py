@@ -20,6 +20,9 @@ class DBManager_readDB(unittest.TestCase):
     def write_db_file_stub(self,name, stub):
         FileSystem.instance().write('../Database_' + name + '.csv', stub)
 
+    def test_database_path_from(self):
+        assert DBManager.database_path_from('Sebastian') == '../Database_Sebastian.csv'
+
     def teste_read_with_full_database(self):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db)
