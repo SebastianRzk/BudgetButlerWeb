@@ -16,17 +16,13 @@ class FileSystemImpl:
         if not os.path.isfile(file_path):
             return None
 
-        file = open(file_path, 'r')
-        file_content = []
+        with open(file_path) as file:
+            file_content = []
 
-        for line in file:
-            file_content.append(line)
-
-        file.close()
-
+            for line in file:
+                file_content.append(line)
         return file_content
 
     def write(self, file_path, file_content):
-        file = open(file_path, 'w')
-        file.write(file_content)
-        file.close()
+        with open(file_path, 'w') as file:
+            file.write(file_content)
