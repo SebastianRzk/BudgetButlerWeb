@@ -15,6 +15,7 @@ from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test import RequestStubs
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
+from butler_offline.views.online_services.session import get_username
 
 
 
@@ -67,8 +68,6 @@ def handle_request(request, import_prefix='', gemeinsam=False):
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
-
-
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
@@ -87,9 +86,9 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
             print(serverurl)
-
-            online_username = requester.instance().post(serverurl + '/getusername.php', data={'email': request.values['email'], 'password': request.values['password']})
+            online_username = get_username(serverurl, request.values['email'], request.values['password'])
             print('butler_online username: ', online_username)
+
             online_content = requester.instance().post(serverurl + '/getgemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
             print(online_content)
 
