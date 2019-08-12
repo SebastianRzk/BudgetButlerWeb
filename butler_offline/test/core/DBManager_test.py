@@ -6,6 +6,7 @@ Created on 14.09.2017
 import unittest
 
 from butler_offline.core import DBManager
+from butler_offline.core.DBManager import MultiPartCsvReader
 from butler_offline.core import FileSystem
 from butler_offline.test.FileSystemStub import FileSystemStub
 
@@ -86,3 +87,19 @@ Datum,Kategorie,Name,Wert,Person
 2017-12-30,Miete,monatlich,-200.0,Sebastian
 2017-12-31,Miete,monatlich,-200.0,Maureen
 '''
+
+
+class MultiPartCsvReader_readDB(unittest.TestCase):
+
+    def test_read(self):
+        test_content = [
+            '1,2', '2,3', '3,4',
+            'B', '3,4', '4,5'
+        ]
+
+        reader = MultiPartCsvReader(set(['A', 'B', 'C']), 'A')
+        reader.from_string(test_content)
+
+        assert reader.get_string('A') == '1,2\n2,3\n3,4'
+        assert reader.get_string('B') == '3,4\n4,5'
+        assert reader.get_string('C') == ''     

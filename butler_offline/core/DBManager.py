@@ -15,38 +15,22 @@ def read(nutzername, ausgeschlossene_kategorien):
 
     file_content = FileSystem.instance().read(database_path_from(nutzername))
 
-    tables = {}
-
-    tables["einzelbuchungen"] = ""
-    tables["dauerauftraege"] = ""
-    tables["gemeinsamebuchungen"] = ""
-    mode = "einzelbuchungen"
-    for line in file_content:
-        line = line.strip()
-        if line == "":
-            continue
-        if line == 'Dauerauftraege':
-            mode = 'dauerauftraege'
-            continue
-
-        if line == 'Gemeinsame Buchungen':
-            mode = 'gemeinsamebuchungen'
-            continue
-        if not ',' in line:
-            break
-
-        tables[mode] = tables[mode] + "\n" + line
+    reader = MultiPartCsvReader(
+            set(['Einzelbuchungen', 'Dauerauftraege', 'Gemeinsame Buchungen']),
+            'Einzelbuchungen')
+    reader.from_string(file_content)
 
     database = DatabaseModule.Database(nutzername, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
-    raw_data = pd.read_csv(StringIO(tables["einzelbuchungen"]))
+    raw_data = pd.read_csv(StringIO(reader.get_string('Einzelbuchungen')))
     database.einzelbuchungen.parse(raw_data)
     print("READER: Einzelbuchungen gelesen")
 
-    database.dauerauftraege.parse(pd.read_csv(StringIO(tables["dauerauftraege"])))
+    database.dauerauftraege.parse(pd.read_csv(StringIO(reader.get_string('Dauerauftraege'))))
     print("READER: Daueraufträge gelesen")
 
-    database.gemeinsamebuchungen.parse(pd.read_csv(StringIO(tables["gemeinsamebuchungen"])))
+    database.gemeinsamebuchungen.parse(pd.read_csv(StringIO(reader.get_string('Gemeinsame Buchungen'))))
+    print("READER: Gemeinsame Buchungen gelesen")
 
     print('READER: Refreshe Database')
     database.refresh()
@@ -71,3 +55,31 @@ def write(database):
 
 def database_path_from(username):
     return '../Database_' + username + '.csv'
+
+class MultiPartCsvReader:
+
+    def __init__(self, token, start_token):
+        self._token = token
+        self._start_token = start_token
+        self._tables = {}
+
+    def from_string(self, lines):
+        self._tables = dict.fromkeys(self._token, '')
+        mode = self._start_token
+
+        for line in lines:
+            line = line.strip()
+            if line == "":
+                continue
+
+            if line in self._token:
+                mode = line
+                continue
+
+            if not ',' in line:
+                break
+
+            self._tables[mode] = self._tables[mode] + "\n" + line
+
+    def get_string(self, token):
+        return self._tables[token].strip()
