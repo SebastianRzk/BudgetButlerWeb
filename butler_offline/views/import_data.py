@@ -16,6 +16,7 @@ from butler_offline.test import RequestStubs
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_username
+from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
 
 
 
@@ -71,7 +72,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
-            json_report = requester.instance().post(serverurl + '/einzelbuchung.php', data={'email': request.values['email'], 'password': request.values['password']})
+            json_report = get_einzelbuchungen(serverurl, request.values['email'], request.values['password'])
             print(json_report)
             print('Mapping to text report')
             text_report = JSONToTextMapper().map(json_report)

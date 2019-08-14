@@ -4,7 +4,7 @@ from butler_offline.views.online_services.session import get_username
 from butler_offline.test.RequesterStub import RequesterStub
 from unittest import TestCase
 
-class TesteAddEinzelbuchungView(TestCase):
+class TestSession(TestCase):
     auth_response = '''
     {
         "username": "Sebastian",

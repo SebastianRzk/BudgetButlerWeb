@@ -3,8 +3,7 @@ import pandas as pd
 from datetime import datetime
 
 class JSONReport:
-    def dataframe_from_json_string(self, data):
-        json_data = json.loads(data)
+    def dataframe_from_json(self, json_data):
         dataframe = pd.DataFrame(json_data)
         dataframe['Datum'] = dataframe.datum.map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         dataframe['Kategorie'] = dataframe.kategorie
