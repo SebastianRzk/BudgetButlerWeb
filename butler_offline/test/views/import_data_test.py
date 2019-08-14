@@ -134,7 +134,13 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
     {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9"}
     ]
     '''
-
+    _JSON_DATA_USERNAME = '''
+    {
+        "username": "Sebastian",
+        "token": "0x00",
+        "role": "User"
+    }
+    '''
 
     def test_einzelbuchungImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
@@ -143,7 +149,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         requester.INSTANCE = RequesterStub({'https://test.test/einzelbuchung.php': self._JSON_IMPORT_DATA,
                                             'https://test.test/deleteitems.php': '',
-                                            'https://test.test/getusername.php': 'Sebastian'})
+                                            'https://test.test/login.php': self._JSON_DATA_USERNAME})
 
         context = import_data.index(PostRequest({'action': 'load_online_transactions',
                                                  'email': '',
@@ -182,7 +188,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM,
                                            'https://test.test/deletegemeinsam.php' : '',
-                                           'https://test.test/getusername.php': 'Sebastian'})
+                                           'https://test.test/login.php': self._JSON_DATA_USERNAME})
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
                                                       'email': '',
@@ -212,7 +218,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM_WRONG_PARTNER,
                                            'https://test.test/deletegemeinsam.php': '',
-                                           'https://test.test/getusername.php': 'Sebastian'})
+                                           'https://test.test/login.php': self._JSON_DATA_USERNAME})
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
                                                       'email': '',
@@ -250,7 +256,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM,
                                            'https://test.test/deletegemeinsam.php': '',
-                                           'https://test.test/getusername.php': 'Sebastian'})
+                                           'https://test.test/login.php': self._JSON_DATA_USERNAME})
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
                                                       'email': '',
@@ -288,6 +294,14 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
     #######MaschinenimportEnd
     '''
 
+    _JSON_DATA_USERNAME_NOT_MATCHING = '''
+    {
+        "username": "Sebastian_Online",
+        "token": "0x00",
+        "role": "User"
+    }
+    '''
+
     def test_gemeinsamImport_withUnpassendenUsername_shouldImportValueAndRepalceName(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -295,7 +309,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM_WRONG_SELF,
                                            'https://test.test/deletegemeinsam.php': '',
-                                           'https://test.test/getusername.php': 'Sebastian_Online'})
+                                           'https://test.test/login.php': self._JSON_DATA_USERNAME_NOT_MATCHING})
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
                                                       'email': '',

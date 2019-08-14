@@ -1,6 +1,7 @@
 from butler_offline.core.export.JSONToTextMapper import JSONToTextMapper
+import json
 
-def test_dataframe_from_json_string():
+def test_dataframe_from_json():
     input_json = '''
     [
     {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Kategorie1","wert":"-1.3"},
@@ -17,6 +18,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
 #######MaschinenimportEnd
 '''
 
-    text_report = JSONToTextMapper().map(input_json)
+    text_report = JSONToTextMapper().map(json.loads(input_json))
     assert text_report == expected_text_report
     

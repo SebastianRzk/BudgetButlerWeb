@@ -1,7 +1,8 @@
 from butler_offline.core.export.JSONReport import JSONReport
 from butler_offline.viewcore.converter import datum_from_german
+import json
 
-def test_dataframe_from_json_string():
+def test_dataframe_from_json():
     input_json = '''
     [
     {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Kategorie1","wert":"-1.3"},
@@ -9,7 +10,7 @@ def test_dataframe_from_json_string():
     ]
     '''
 
-    dataframe = JSONReport().dataframe_from_json_string(input_json)
+    dataframe = JSONReport().dataframe_from_json(json.loads(input_json))
 
     assert len(dataframe) == 2
     assert dataframe.Datum[0] == datum_from_german('15.07.2019')

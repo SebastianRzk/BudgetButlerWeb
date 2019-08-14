@@ -46,17 +46,16 @@ function handle_delete($auth, $dbh){
 	$partnerstatus =  get_partnerstatus($auth, $dbh);
 
 	if ($partnerstatus->erweiterteRechteBekommen) {
-		$query = getEntityManager()->createQuery('SELECT u FROM GemeinsameBuchung u WHERE ( u.user = :username OR u.user = :partner ) AND id = :id');
+		$query = getEntityManager()->createQuery('DELETE GemeinsameBuchung u WHERE ( u.user = :username OR u.user = :partner ) AND u.id = :id');
 		$query->setParameter('username', $auth->getUsername());
-		$query->setParameter(':partner', $partnerstatus->partnername);
-		$query->setParameter(':id', $requestedBuchung);
-		$einzelbuchung = $query->getSingleResult();
+		$query->setParameter('partner', $partnerstatus->partnername);
+		$query->setParameter('id', $requestedBuchung);
+		$query->execute();
 	} else {
 		$einzelbuchung = $entityManager->getRepository('GemeinsameBuchung')->findOneBy(array('user' => $auth->getUsername(), 'id' => $requestedBuchung));
+		$entityManager->remove($einzelbuchung);
+		$entityManager->flush();
 	}
-	$entityManager->remove($einzelbuchung);
-	$entityManager->flush();
-
 
 	$result = new Result();
 	$result->message = "Buchung erfolgreich gelöscht";
