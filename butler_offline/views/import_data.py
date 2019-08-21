@@ -17,6 +17,9 @@ from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_username
 from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
+from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen
+from butler_offline.core.export.JSONReport import JSONReport
+from butler_offline.core.export.TextReport import TextReport
 
 
 
@@ -90,16 +93,13 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             online_username = get_username(serverurl, request.values['email'], request.values['password'])
             print('butler_online username: ', online_username)
 
-            online_content = requester.instance().post(serverurl + '/getgemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            online_content = get_gemeinsame_buchungen(serverurl, request.values['email'], request.values['password'])
             print(online_content)
+            table = JSONReport().dataframe_from_json_gemeinsam(online_content)
 
-            table = _parse_table(online_content)
             print('table before person mapping', table)
             table.Person = table.Person.map(lambda x: viewcore.database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
-            online_content = "#######MaschinenimportStart\n"
-            online_content = online_content + table.to_csv(index=False)
-            online_content = online_content + "#######MaschinenimportEnd\n"
-
+            online_content = TextReport().generate_report(table)
             response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
             requester.instance().post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
