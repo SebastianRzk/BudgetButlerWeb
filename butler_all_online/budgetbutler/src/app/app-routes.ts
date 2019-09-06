@@ -1,6 +1,5 @@
 
 
-export const DASHBOARD_ROUTE = 'dashboard';
 export const ADD_AUSGABE_ROUTE = 'addausgabe';
 export const ADD_EINNAHME_ROUTE = 'addeinnahme';
 export const ADD_SCHNELLEINSTIEG_ROUTE = 'add';

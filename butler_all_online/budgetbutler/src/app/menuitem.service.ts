@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DASHBOARD_ROUTE, ADD_SCHNELLEINSTIEG_ROUTE, ADD_AUSGABE_ROUTE, ADD_EINNAHME_ROUTE, ALLE_EINZELBUCHUNGEN_ROUTE, ADD_GEMEINSAME_BUCHUNG_ROUTE, ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, SETTINGS_ROUTE } from './app-routes';
+import { ADD_SCHNELLEINSTIEG_ROUTE, ADD_AUSGABE_ROUTE, ADD_EINNAHME_ROUTE, ALLE_EINZELBUCHUNGEN_ROUTE, ADD_GEMEINSAME_BUCHUNG_ROUTE, ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, SETTINGS_ROUTE } from './app-routes';
 
 
 export class MenuItem {
@@ -10,13 +10,6 @@ export class MenuItem {
   opened?: boolean;
   children?: MenuItem[];
 }
-
-const DASHBOARD = {
-  title: 'Dashboard',
-  type: 'link',
-  url: DASHBOARD_ROUTE,
-  icon: 'bar_chart'
-};
 
 const SCHNELLEINSTIEG = {
   title: 'Schnellerfassung',
@@ -77,7 +70,6 @@ export class MenuitemService {
 
   getAllDesktopElements(): MenuItem[] {
     return [
-      DASHBOARD,
       SCHNELLEINSTIEG,
       {
         title: 'Einzelbuchungen',
@@ -113,7 +105,6 @@ export class MenuitemService {
 
   getAdditionalMobileMenuElements() {
     return [
-      DASHBOARD,
       NEUE_EINNAHME,
       NEUE_AUSGABE,
       NEUE_GEMEINSAME_BUCHUNG,
