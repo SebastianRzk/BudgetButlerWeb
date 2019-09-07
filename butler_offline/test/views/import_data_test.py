@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import datetime
 
 from butler_offline.test.FileSystemStub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
@@ -11,6 +12,7 @@ from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import configuration_provider
+from butler_offline.viewcore.viewcore import database_instance
 from butler_offline.viewcore import requester
 from butler_offline.test.RequesterStub import RequesterStub
 from butler_offline.test.RequesterStub import RequesterErrorStub
@@ -80,6 +82,13 @@ class Importd(unittest.TestCase):
         assert context['message_content'] ==  '2 Buchungen wurden importiert'
 
 
+    _JSON_IMPORT_DATA_GEMEINSAM = '''
+    [
+    {"id":"122","datum":"2019-01-01","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user": "unknown", "zielperson": "Sebastian"},
+    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user": "unknown", "zielperson": "Partner"}
+    ]
+    '''
+
     def test_gemeinsam_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -87,7 +96,8 @@ class Importd(unittest.TestCase):
 
         context = import_data.handle_request(PostRequest({'import':self._IMPORT_DATA_GEMEINSAM}), gemeinsam=True)
         assert context['element_titel'] == 'Export / Import'
-        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
+
+        assert len(database_instance().gemeinsamebuchungen.content) == 2
 
     def test_import_shouldWriteIntoAbrechnungen(self):
         self.set_up()
@@ -122,18 +132,21 @@ class Importd(unittest.TestCase):
         assert context['element_titel'] == 'Export / Import'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
-    _IMPORT_DATA_GEMEINSAM = '''#######MaschinenimportStart
-Datum,Kategorie,Name,Wert,Dynamisch,Person
-2017-03-06,Essen,Edeka,-10.0,True,Sebastian
-2017-03-06,Essen,Edeka,-20.0,True,Maureen
+    _IMPORT_DATA_GEMEINSAM = '''\n
+#######MaschinenimportStart
+Datum,Kategorie,Name,Wert,Person,Dynamisch
+2019-01-01,Essen,Testausgabe1,-1.3,Sebastian,False
+2019-07-11,Essen,Testausgabe2,-0.9,Maureen,False
 #######MaschinenimportEnd
 '''
+
     _JSON_IMPORT_DATA = '''
     [
     {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3"},
     {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9"}
     ]
     '''
+
     _JSON_DATA_USERNAME = '''
     {
         "username": "Sebastian",
@@ -186,7 +199,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
 
 
-        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM,
+        requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM,
                                            'https://test.test/deletegemeinsam.php' : '',
                                            'https://test.test/login.php': self._JSON_DATA_USERNAME})
 
@@ -196,17 +209,19 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
                                                       'password' : ''}))
 
         assert context['element_titel'] == 'Export / Import'
-        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
+        assert len(database_instance().gemeinsamebuchungen.content) == 2
+        assert database_instance().gemeinsamebuchungen.get(0)['Name'] == 'Testausgabe1'
+        assert database_instance().gemeinsamebuchungen.get(0)['Person'] == 'Sebastian'
+        assert database_instance().gemeinsamebuchungen.get(1)['Name'] == 'Testausgabe2'
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
         assert requester.instance().complete_call_count() == 3
 
-    _IMPORT_DATA_GEMEINSAM_WRONG_PARTNER = '''
-    #######MaschinenimportStart
-    Datum,Kategorie,Name,Wert,Dynamisch,Person
-    2017-03-06,Essen,Edeka,-10.0,True,Sebastian
-    2017-03-06,Essen,Edeka,-20.0,True,Unbekannt
-    #######MaschinenimportEnd
+    _JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER = '''
+    [
+    {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user":"SebastianFalsch","zielperson":"PartnerFalsch"},
+    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user":"SebastianFalsch","zielperson":"Sebastian"}
+    ]
     '''
 
     def test_gemeinsamImport_withUnpassendenPartnername_shouldImportValueAndRepalceName(self):
@@ -216,7 +231,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
 
 
-        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM_WRONG_PARTNER,
+        requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER,
                                            'https://test.test/deletegemeinsam.php': '',
                                            'https://test.test/login.php': self._JSON_DATA_USERNAME})
 
@@ -227,8 +242,23 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         assert context['element_titel'] == 'Export / Import'
         assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
+        assert viewcore.database_instance().gemeinsamebuchungen.get(0) == {
+            'Datum': datetime.date(2019, 7, 11),
+            'Dynamisch': False,
+            'Kategorie': 'Essen',
+            'Name': 'Testausgabe2',
+            'Person': 'Sebastian',
+            'Wert': -0.9,
+            'index': 0}
+
+        assert viewcore.database_instance().gemeinsamebuchungen.get(1) == {
+            'Datum': datetime.date(2019, 7, 15),
+            'Dynamisch': False,
+            'Kategorie': 'Essen',
+            'Name': 'Testausgabe1',
+            'Person': 'Maureen',
+            'Wert': -1.3,
+            'index': 1}
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
         assert requester.instance().complete_call_count() == 3
@@ -254,7 +284,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
 
 
-        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM,
+        requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM,
                                            'https://test.test/deletegemeinsam.php': '',
                                            'https://test.test/login.php': self._JSON_DATA_USERNAME})
 
@@ -286,17 +316,16 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
 
 
-    _IMPORT_DATA_GEMEINSAM_WRONG_SELF = '''
-    #######MaschinenimportStart
-    Datum,Kategorie,Name,Wert,Dynamisch,Person
-    2017-03-06,Essen,Edeka,-10.0,True,Sebastian_Online
-    2017-03-06,Essen,Edeka,-20.0,True,Maureen
-    #######MaschinenimportEnd
+    _JSON_IMPORT_DATA_GEMEINSAM_WRONG_SELF = '''
+    [
+    {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user":"SebastianFalsch","zielperson":"Partner"},
+    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user":"SebastianFalsch","zielperson":"SebastianFalsch"}
+    ]
     '''
 
     _JSON_DATA_USERNAME_NOT_MATCHING = '''
     {
-        "username": "Sebastian_Online",
+        "username": "SebastianFalsch",
         "token": "0x00",
         "role": "User"
     }
@@ -307,7 +336,7 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
-        requester.INSTANCE = RequesterStub({'https://test.test/getgemeinsam.php': self._IMPORT_DATA_GEMEINSAM_WRONG_SELF,
+        requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM_WRONG_SELF,
                                            'https://test.test/deletegemeinsam.php': '',
                                            'https://test.test/login.php': self._JSON_DATA_USERNAME_NOT_MATCHING})
 
@@ -318,8 +347,24 @@ Datum,Kategorie,Name,Wert,Dynamisch,Person
 
         assert context['element_titel'] == 'Export / Import'
         assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
+
+        assert viewcore.database_instance().gemeinsamebuchungen.get(0) == {
+            'Datum': datetime.date(2019, 7, 11),
+            'Dynamisch': False,
+            'Kategorie': 'Essen',
+            'Name': 'Testausgabe2',
+            'Person': 'Sebastian',
+            'Wert': -0.9,
+            'index': 0}
+
+        assert viewcore.database_instance().gemeinsamebuchungen.get(1) == {
+            'Datum': datetime.date(2019, 7, 15),
+            'Dynamisch': False,
+            'Kategorie': 'Essen',
+            'Name': 'Testausgabe1',
+            'Person': 'Maureen',
+            'Wert': -1.3,
+            'index': 1}
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
         assert requester.instance().complete_call_count() == 3
