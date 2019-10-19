@@ -95,6 +95,7 @@ def get_menu_list():
     menu.append({'url':'/addgemeinsam/', 'name':'Neue gemeinsame Ausgabe', 'icon':'fa fa-plus'})
     menu.append({'url': '/gemeinsamabrechnen/', 'name': 'Gemeinsam abrechnen', 'icon':'fa fa-cogs'})
     menu.append({'url': '/import/', 'name': 'Export / Import', 'icon':'fa fa-cogs'})
+    menu.append({'url': '/uebersichtabrechnungen/', 'name': 'Übersicht Abrechnungen', 'icon': 'fa fa-list'})
     main_menu['Gemeinsame Finanzen'] = menu
 
     menu = []

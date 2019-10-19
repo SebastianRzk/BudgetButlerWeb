@@ -4,8 +4,7 @@ Created on 23.11.2017
 @author: sebastian
 '''
 from SeleniumTest import SeleniumTestClass
-from time import sleep
-from SeleniumTest import get_selected_option
+
 
 class TestHeadlines(SeleniumTestClass):
     def test_add_dauerauftrag(self, get_driver, close_driver):
@@ -84,4 +83,10 @@ class TestHeadlines(SeleniumTestClass):
         driver = get_driver()
         driver.get('http://localhost:5000/monatsuebersicht/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Monatsübersicht'
+        close_driver(driver)
+
+    def test_uebesicht_abrechnungen(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersichtabrechnungen/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Abrechnungen'
         close_driver(driver)
