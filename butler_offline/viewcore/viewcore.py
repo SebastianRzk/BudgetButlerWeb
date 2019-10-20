@@ -3,18 +3,20 @@ Created on 24.04.2017
 
 @author: sebastian
 '''
+from datetime import datetime
+
 from butler_offline.core import DBManager
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.request_handler import current_key
 import datetime
 
-
 DATABASE_INSTANCE = None
 DATABASES = []
 CONTEXT = {}
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
-TODAY = lambda: datetime.datetime.now().date()
+TODAY = lambda: viewcore.now().date()
+NOW = lambda: datetime.datetime.now()
 
 
 def database_instance():
@@ -25,8 +27,10 @@ def database_instance():
         viewcore.DATABASES = configuration_provider.get_configuration('DATABASES').split(',')
 
     if viewcore.DATABASE_INSTANCE is None:
-        ausgeschlossene_kategorien =  set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
-        viewcore.DATABASE_INSTANCE = DBManager.read(viewcore.DATABASES[0], ausgeschlossene_kategorien = ausgeschlossene_kategorien)
+        ausgeschlossene_kategorien = set(
+            configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
+        viewcore.DATABASE_INSTANCE = DBManager.read(viewcore.DATABASES[0],
+                                                    ausgeschlossene_kategorien=ausgeschlossene_kategorien)
     return DATABASE_INSTANCE
 
 
@@ -71,39 +75,41 @@ def add_changed_dauerauftraege(new_changed_dauerauftraege_event):
     context = get_changed_dauerauftraege()
     context.append(new_changed_dauerauftraege_event)
 
+
 def switch_database_instance(database_name):
-    ausgeschlossene_kategorien =  set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
-    viewcore.DATABASE_INSTANCE = DBManager.read(database_name, ausgeschlossene_kategorien = ausgeschlossene_kategorien)
+    ausgeschlossene_kategorien = set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
+    viewcore.DATABASE_INSTANCE = DBManager.read(database_name, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
 
 def get_menu_list():
     main_menu = {}
 
     menu = []
-    menu.append({'url':'/uebersicht/', 'name':'Übersicht Einzelbuchungen', 'icon':'fa fa-list'})
-    menu.append({'url':'/dauerauftraguebersicht/', 'name': 'Übersicht Daueraufträge', 'icon':'fa fa-list'})
-    menu.append({'url':'/addausgabe/', 'name':'Neue Ausgabe', 'icon':'fa fa-plus'})
-    menu.append({'url':'/addeinnahme/', 'name':'Neue Einnahme', 'icon':'fa fa-plus'})
-    menu.append({'url':'/adddauerauftrag/', 'name':'Neuer Dauerauftrag', 'icon':'fa fa-plus'})
-    menu.append({'url':'/monatsuebersicht/', 'name': 'Monatsübersicht', 'icon':'fa fa-line-chart'})
-    menu.append({'url':'/jahresuebersicht/', 'name': 'Jahresübersicht', 'icon':'fa fa-line-chart'})
-    menu.append({'url': '/import/', 'name': 'Export / Import', 'icon':'fa fa-cogs'})
+    menu.append({'url': '/uebersicht/', 'name': 'Übersicht Einzelbuchungen', 'icon': 'fa fa-list'})
+    menu.append({'url': '/dauerauftraguebersicht/', 'name': 'Übersicht Daueraufträge', 'icon': 'fa fa-list'})
+    menu.append({'url': '/addausgabe/', 'name': 'Neue Ausgabe', 'icon': 'fa fa-plus'})
+    menu.append({'url': '/addeinnahme/', 'name': 'Neue Einnahme', 'icon': 'fa fa-plus'})
+    menu.append({'url': '/adddauerauftrag/', 'name': 'Neuer Dauerauftrag', 'icon': 'fa fa-plus'})
+    menu.append({'url': '/monatsuebersicht/', 'name': 'Monatsübersicht', 'icon': 'fa fa-line-chart'})
+    menu.append({'url': '/jahresuebersicht/', 'name': 'Jahresübersicht', 'icon': 'fa fa-line-chart'})
+    menu.append({'url': '/import/', 'name': 'Export / Import', 'icon': 'fa fa-cogs'})
     main_menu[EINZELBUCHUNGEN_SUBMENU_NAME] = menu
 
     menu = []
-    menu.append({'url':'/gemeinsameuebersicht/', 'name': 'Übersicht Buchungen', 'icon':'fa fa-list'})
-    menu.append({'url':'/addgemeinsam/', 'name':'Neue gemeinsame Ausgabe', 'icon':'fa fa-plus'})
-    menu.append({'url': '/gemeinsamabrechnen/', 'name': 'Gemeinsam abrechnen', 'icon':'fa fa-cogs'})
-    menu.append({'url': '/import/', 'name': 'Export / Import', 'icon':'fa fa-cogs'})
+    menu.append({'url': '/gemeinsameuebersicht/', 'name': 'Übersicht Buchungen', 'icon': 'fa fa-list'})
+    menu.append({'url': '/addgemeinsam/', 'name': 'Neue gemeinsame Ausgabe', 'icon': 'fa fa-plus'})
+    menu.append({'url': '/gemeinsamabrechnen/', 'name': 'Gemeinsam abrechnen', 'icon': 'fa fa-cogs'})
+    menu.append({'url': '/import/', 'name': 'Export / Import', 'icon': 'fa fa-cogs'})
     menu.append({'url': '/uebersichtabrechnungen/', 'name': 'Übersicht Abrechnungen', 'icon': 'fa fa-list'})
     main_menu['Gemeinsame Finanzen'] = menu
 
     menu = []
-    menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon':'fa fa-cogs'})
-    menu.append({'url':'/production/?database=' + viewcore.database_instance().name, 'name':'Datenbank neu laden', 'icon':'fa fa-refresh'})
+    menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon': 'fa fa-cogs'})
+    menu.append({'url': '/production/?database=' + viewcore.database_instance().name, 'name': 'Datenbank neu laden',
+                 'icon': 'fa fa-refresh'})
     for database in DATABASES:
         if database != database_instance().name:
-            menu.append({'url':'/production/?database=' + database, 'name':'To ' + database, 'icon':'fa fa-cogs'})
+            menu.append({'url': '/production/?database=' + database, 'name': 'To ' + database, 'icon': 'fa fa-cogs'})
 
     main_menu['Einstellungen'] = menu
     return main_menu
@@ -131,13 +137,14 @@ def get_key_for_name(pagename):
 def generate_base_context(pagename):
     return {
         'active': get_key_for_name(pagename),
-        'active_page_url':'/' + pagename + '/',
+        'active_page_url': '/' + pagename + '/',
         'active_name': get_name_from_key(pagename),
-        'element_titel':get_name_from_key(pagename),
-        'menu' : get_menu_list(),
+        'element_titel': get_name_from_key(pagename),
+        'menu': get_menu_list(),
         'nutzername': database_instance().name,
         'extra_scripts': ''
     }
+
 
 def generate_transactional_context(pagename):
     context = generate_base_context(pagename)
@@ -185,21 +192,28 @@ def post_action_is(request, action_name):
         return False
     return request.values['action'] == action_name
 
-def get_post_parameter_or_default(request, key, default, mapping_function= lambda x: x):
+
+def get_post_parameter_or_default(request, key, default, mapping_function=lambda x: x):
     if not is_post_parameter_set(request, key):
         return default
     return mapping_function(request.values[key])
+
 
 def is_post_parameter_set(request, parameter):
     if request.method != 'POST':
         return False
     return parameter in request.values.keys()
 
+
 def today():
     return viewcore.TODAY()
 
+def now():
+    return viewcore.NOW()
+
 
 def stub_today_with(new_today):
+    viewcore.NOW = lambda: datetime.datetime(new_today.year, new_today.month, new_today.day)
     viewcore.TODAY = lambda: new_today
 
 

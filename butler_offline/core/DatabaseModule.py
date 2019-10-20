@@ -4,9 +4,6 @@ Created on 17.09.2016
 @author: sebastian
 '''
 
-from datetime import datetime, date, timedelta
-
-from butler_offline.core.Frequency import FrequencsFunctions
 from butler_offline.core.database.Dauerauftraege import Dauerauftraege
 from butler_offline.core.database.Einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
@@ -142,7 +139,7 @@ class Database:
 
         self.gemeinsamebuchungen.drop(gemeinsame_buchungen_content.index.tolist())
         self.taint()
-        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(datetime.now()), report)
+        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(viewcore.now()), report)
         return report
 
     def _faktor_self(self, verhaeltnis):

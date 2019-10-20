@@ -1,10 +1,12 @@
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.core import FileSystem
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.converter import datum_to_german
 
 
 def _handle_request(request):
+
+    all_files = FileSystem.INSTANCE.list_files('')
+
     zusammenfassungen = [
         {
             'name': 'Zusammenfassung 2019',
@@ -13,6 +15,7 @@ def _handle_request(request):
         }
 
     ]
+    zusammenfassungen = []
 
     abrechnungen = [
         {
@@ -24,6 +27,7 @@ def _handle_request(request):
             'content': '''ABRECHNUNG         2000'''
         }
     ]
+    abrechnungen = []
 
     context = viewcore.generate_transactional_context('uebersichtabrechnungen')
     context['zusammenfassungen'] = zusammenfassungen

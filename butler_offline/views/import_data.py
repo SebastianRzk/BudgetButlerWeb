@@ -1,10 +1,9 @@
 from _io import StringIO
 
 import pandas
-import requests
 from datetime import datetime
 
-from butler_offline.core import FileSystem
+from butler_offline.core.FileSystem import write_import
 from butler_offline.core.export.JSONToTextMapper import JSONToTextMapper
 
 from butler_offline.viewcore import viewcore
@@ -12,7 +11,6 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.base_html import set_success_message
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test import RequestStubs
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_username
@@ -119,7 +117,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
         else:
             print(request.values)
             content = request.values['import'].replace('\r', '')
-            FileSystem.instance().write('../Import/' + import_prefix + 'Import_' + str(datetime.now()), content)
+            write_import(import_prefix + 'Import_' + str(datetime.now()), content)
 
             imported_values = _parse_table(content)
             datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
