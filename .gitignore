@@ -1,4 +1,4 @@
-/butler_all_online_distribution
+/butler_online_distribution
 /.buildconfig
 /.project
 /.pydevproject
@@ -13,3 +13,4 @@
 *.log
 /venv
 *.iml
+config
