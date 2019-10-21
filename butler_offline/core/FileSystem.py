@@ -1,12 +1,21 @@
 from butler_offline.core import FileSystem
 import os
+import glob
 
 INSTANCE = None
+
 
 def instance():
     if FileSystem.INSTANCE == None:
         FileSystem.INSTANCE = FileSystemImpl()
     return FileSystem.INSTANCE
+
+
+IMPORT_PATH = '../Import/'
+
+
+def write_import(file_name, file_content):
+    instance().write(IMPORT_PATH + file_name, file_content)
 
 
 class FileSystemImpl:
@@ -26,3 +35,6 @@ class FileSystemImpl:
     def write(self, file_path, file_content):
         with open(file_path, 'w') as file:
             file.write(file_content)
+
+    def list_files(self, path):
+        return glob.glob(path)

@@ -7,13 +7,13 @@ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/loca
 
 # Installation
 echo "create butler_online"
-cd butler_all_online_api/api
+cd butler_online_api/api
 composer install
 cd -
 
 
 echo "create app"
-cd butler_all_online/budgetbutler
+cd butler_online/budgetbutler
 
 npm install -g @angular/cli
 
@@ -25,4 +25,4 @@ ng test --watch=false --progress=false --browsers=ChromeHeadlessCI
 
 cd ..
 cd ..
-sh butler_all_online_install/compose.sh
+sh butler_online_install/compose.sh

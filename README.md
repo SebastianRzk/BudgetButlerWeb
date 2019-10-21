@@ -6,7 +6,7 @@
 
 [Link to the project page on github](https://RosesTheN00b.github.io/BudgetButlerWeb/)
 
-## local app
+## Local app
 ### Requirements
 
 * Python 3.6
@@ -40,7 +40,7 @@ And open your webbrowser and visit:
 	http://127.0.0.1:5000/
 
 
-## online app
+## Online app
 
 ### Requirements
 
@@ -64,15 +64,15 @@ And open your webbrowser and visit:
 
 	cd BudgetButlerWeb
 
-* Trigger the install into `butler_all_online_distribution`
+* Trigger the install into `butler_online_distribution`
 
-	sh butler_all_online_install/compose.sh
+	sh butler_online_install/compose.sh
 
-* Change the database credentials in `butler_all_online_distribution/api/db.ini` if necessary
+* Change the database credentials in `butler_online_distribution/api/db.ini` if necessary
 
-* Load the content of the `butler_all_online_distribution` folder onto the server
+* Load the content of the `butler_online_distribution` folder onto the server
 
-* install the sql from `butler_all_online_install/`
+* install the sql from `butler_online_install/`
 
 * Check permissions. Make sure that the file `db.ini` can not be accessed.
 

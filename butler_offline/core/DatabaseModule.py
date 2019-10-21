@@ -3,16 +3,14 @@ Created on 17.09.2016
 
 @author: sebastian
 '''
-
-from datetime import datetime, date, timedelta
-
-from butler_offline.core.Frequency import FrequencsFunctions
+import butler_offline.core.time
 from butler_offline.core.database.Dauerauftraege import Dauerauftraege
 from butler_offline.core.database.Einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.viewcore import viewcore
 from butler_offline.core import FileSystem
-from butler_offline.viewcore.converter import datum, datum_to_german
+from butler_offline.core import time
+from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.core.export.StringWriter import StringWriter
 from butler_offline.core.export.TextReport import TextReport
 
@@ -56,7 +54,8 @@ class Database:
     def _write_trenner(self, abrechnunsdatei):
         return abrechnunsdatei.write("".rjust(40, "#") + "\n ")
 
-    def abrechnen(self, mindate=None, maxdate=None, set_ergebnis=None, verhaeltnis=50, set_self_kategorie=None, set_other_kategorie=None):
+    def abrechnen(self, mindate=None, maxdate=None, set_ergebnis=None, verhaeltnis=50, set_self_kategorie=None,
+                  set_other_kategorie=None):
         '''
         rechnet gemeinsame ausgaben aus der Datenbank ab
         '''
@@ -82,7 +81,7 @@ class Database:
 
         abrechnunsdatei = StringWriter()
         zeitraum = datum_to_german(mindate) + '-' + datum_to_german(maxdate)
-        abrechnunsdatei.write_line('Abrechnung vom ' + datum_to_german(viewcore.today()) + ' (' + zeitraum + ')')
+        abrechnunsdatei.write_line('Abrechnung vom ' + datum_to_german(time.today()) + ' (' + zeitraum + ')')
         self._write_trenner(abrechnunsdatei)
         abrechnunsdatei.write_line('Ergebnis:')
 
@@ -95,7 +94,7 @@ class Database:
         self._write_large_table_row(abrechnunsdatei, "Gesamt", ausgaben_gesamt)
 
         if verhaeltnis == 50:
-            self.write_into_file(abrechnunsdatei, selector.faktor(0.5).to_list() , 'Gesamtausgaben pro Person ')
+            self.write_into_file(abrechnunsdatei, selector.faktor(0.5).to_list(), 'Gesamtausgaben pro Person ')
         self.write_into_file(abrechnunsdatei, select_maureen.to_list(), 'Ausgaben von ' + name_partner)
         self.write_into_file(abrechnunsdatei, select_sebastian.to_list(), 'Ausgaben von ' + name_self)
 
@@ -113,25 +112,28 @@ class Database:
         if set_other_kategorie:
             faktor_maureen = 0.5
 
-
-        for _ , row in gemeinsame_buchungen_content.iterrows():
-            buchung_maureen = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] * faktor_maureen)))
+        for _, row in gemeinsame_buchungen_content.iterrows():
+            buchung_maureen = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'],
+                                                       ("%.2f" % (row['Wert'] * faktor_maureen)))
             buchung_maureen.Dynamisch = False
             ausgaben_fuer_maureen = ausgaben_fuer_maureen.append(buchung_maureen)
 
-            buchung_sebastian = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'], ("%.2f" % (row['Wert'] * faktor_sebastian)))
+            buchung_sebastian = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'],
+                                                         ("%.2f" % (row['Wert'] * faktor_sebastian)))
             buchung_sebastian.Dynamisch = False
             ausgaben_fuer_sebastian = ausgaben_fuer_sebastian.append(buchung_sebastian)
 
         if set_self_kategorie:
-            extra_wert =  (ausgaben_gesamt * self._faktor_self(verhaeltnis)) - summe_halb
-            extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_self_kategorie, set_self_kategorie, ("%.2f" % extra_wert))
+            extra_wert = (ausgaben_gesamt * self._faktor_self(verhaeltnis)) - summe_halb
+            extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_self_kategorie, set_self_kategorie,
+                                                                ("%.2f" % extra_wert))
             extra_ausgleichs_buchung.Dynamisch = False
             ausgaben_fuer_sebastian = ausgaben_fuer_sebastian.append(extra_ausgleichs_buchung)
 
         if set_other_kategorie:
-            extra_wert =  (ausgaben_gesamt * self._faktor_other(verhaeltnis)) - summe_halb
-            extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_other_kategorie, set_other_kategorie, ("%.2f" % extra_wert))
+            extra_wert = (ausgaben_gesamt * self._faktor_other(verhaeltnis)) - summe_halb
+            extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_other_kategorie, set_other_kategorie,
+                                                                ("%.2f" % extra_wert))
             extra_ausgleichs_buchung.Dynamisch = False
             ausgaben_fuer_maureen = ausgaben_fuer_maureen.append(extra_ausgleichs_buchung)
 
@@ -142,7 +144,7 @@ class Database:
 
         self.gemeinsamebuchungen.drop(gemeinsame_buchungen_content.index.tolist())
         self.taint()
-        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(datetime.now()), report)
+        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(time.now()), report)
         return report
 
     def _faktor_self(self, verhaeltnis):
@@ -162,9 +164,13 @@ class Database:
         self._write_tabelle(abrechnunsdatei, ausgaben_sebastian)
 
     def _write_tabelle(self, writer, tabelle):
-        writer.write_line(self._to_left("Datum", 10) + self._to_left(" Kategorie", 14) + self._to_left("Name", 21) + self._to_right("Wert", 7))
+        writer.write_line(
+            self._to_left("Datum", 10) + self._to_left(" Kategorie", 14) + self._to_left("Name", 21) + self._to_right(
+                "Wert", 7))
         for row in tabelle:
-            writer.write_line(datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row['Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " "))
+            writer.write_line(
+                datum_to_german(row['Datum']) + "  " + row['Kategorie'].ljust(len("Kategorie   "), " ") + " " + row[
+                    'Name'].ljust(20, " ") + " " + str("%.2f" % (row['Wert'])).rjust(7, " "))
 
     def _to_left(self, target_string, size):
         return target_string.ljust(size, ' ')
@@ -173,7 +179,8 @@ class Database:
         return target_string.rjust(size, ' ')
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
-        return DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
+        return DataFrame([[laufdatum, kategorie, name, wert, True]],
+                         columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
 
     def func_woechentlich(self, buchungs_datum):
         return buchungs_datum.isocalendar()[1]

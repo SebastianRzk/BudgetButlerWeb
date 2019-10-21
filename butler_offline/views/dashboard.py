@@ -3,7 +3,8 @@ from datetime import date
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import to_descriptive_list
-from butler_offline.viewcore.viewcore import today
+from butler_offline.core.time import today
+
 
 def _handle_request(_):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen

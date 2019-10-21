@@ -4,6 +4,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_to_german
 
+
 def _handle_request(request):
     einzelbuchungen = viewcore.database_instance().einzelbuchungen
     if post_action_is(request, 'delete'):
@@ -40,6 +41,7 @@ def _handle_request(request):
     context = viewcore.generate_transactional_context('uebersicht')
     context['alles'] = ausgaben_monatlich
     return context
+
 
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'uebersicht.html')
