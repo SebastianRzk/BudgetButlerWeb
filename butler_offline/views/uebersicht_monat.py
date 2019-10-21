@@ -1,8 +1,9 @@
-
+from butler_offline.core import time
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.core.ReportGenerator import ReportGenerator
 from butler_offline.viewcore.converter import datum_to_string
+
 
 def _handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
@@ -57,7 +58,6 @@ def _handle_request(request):
     context['einnahmen_data'] = einnahmen_data
     context['einnahmen_colors'] = einnahmen_colors
 
-
     zusammenfassung = table_data_selection.get_month_summary()
     for tag, kategorien_liste in zusammenfassung:
         for einheit in kategorien_liste:
@@ -68,7 +68,6 @@ def _handle_request(request):
     context['gesamt'] = "%.2f" % ausgaben_monat
     einnahmen_monat = table_einnahmen.sum()
     context['gesamt_einnahmen'] = "%.2f" % einnahmen_monat
-
 
     selected_date = str(year) + "_" + str(month).rjust(2, "0")
     context['selected_date'] = selected_date
@@ -114,12 +113,14 @@ def _handle_request(request):
 
     return context
 
+
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'uebersicht_monat.html')
 
+
 def _abrechnen(request):
     context = viewcore.generate_base_context('monatsuebersicht')
-    date = viewcore.today()
+    date = time.today()
     year = date.year
     month = date.month
     quantity = 60
@@ -184,6 +185,7 @@ def _abrechnen(request):
     context['element_titel'] = 'Abrechnung vom {month}/{year}'.format(month=month, year=year)
     return context
 
+
 def _is_selected(request, name):
     if request.method != 'POST':
         return True
@@ -191,7 +193,6 @@ def _is_selected(request, name):
         return True
     return False
 
+
 def abrechnen(request):
     return request_handler.handle_request(request, _abrechnen, 'present_abrechnung.html')
-
-

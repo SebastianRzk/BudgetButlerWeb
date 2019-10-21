@@ -10,6 +10,7 @@ from pandas.core.frame import DataFrame
 from butler_offline.core.DatabaseModule import Database
 from butler_offline.test.FileSystemStub import FileSystemStub
 from butler_offline.core import FileSystem
+from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import configuration_provider
@@ -160,7 +161,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def test_abrechnen_withDateRange(self):
         self.set_up()
         db = viewcore.database_instance()
-        viewcore.stub_today_with(datum('01.01.2010'))
+        time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
         abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70)
@@ -178,7 +179,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie(self):
         self.set_up()
         db = viewcore.database_instance()
-        viewcore.stub_today_with(datum('01.01.2010'))
+        time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
         abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70, set_self_kategorie='Ausgleich')
@@ -209,7 +210,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie_inverse(self):
         self.set_up()
         db = viewcore.database_instance()
-        viewcore.stub_today_with(datum('01.01.2010'))
+        time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
         abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=30, set_self_kategorie='Ausgleich')
@@ -239,7 +240,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def test_abrechnen_withOtherKategorieSet_shouldAddOtherKategorie(self):
         self.set_up()
         db = viewcore.database_instance()
-        viewcore.stub_today_with(datum('01.01.2010'))
+        time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
         abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70, set_other_kategorie='Ausgleich')
@@ -260,9 +261,9 @@ Datum,Kategorie,Name,Wert,Dynamisch
         self.set_up()
         db = viewcore.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
-        viewcore.stub_today_with(datum('01.01.2010'))
+        time.stub_today_with(datum('01.01.2010'))
         abrechnungs_text = db.abrechnen(set_ergebnis="%Ergebnis%")
-        viewcore.reset_viewcore_stubs()
+        time.reset_viewcore_stubs()
 
         assert abrechnungs_text == self.abrechnung
 

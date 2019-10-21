@@ -1,5 +1,6 @@
 import unittest
 
+from butler_offline.core import time
 from butler_offline.viewcore import request_handler
 from butler_offline.test.FileSystemStub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
@@ -9,7 +10,6 @@ from butler_offline.views import gemeinsam_abrechnen
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import configuration_provider
-from datetime import datetime
 
 
 class Gemeinsamabrechnen(unittest.TestCase):
@@ -18,8 +18,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
         configuration_provider.LOADED_CONFIG = None
         viewcore.DATABASE_INSTANCE = None
         viewcore.DATABASES = []
-        viewcore.stub_today_with(datum('01.01.2019'))
-        print(viewcore.database_instance().name)
+        time.stub_today_with(datum('01.01.2019'))
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
         request_handler.stub_me()
 

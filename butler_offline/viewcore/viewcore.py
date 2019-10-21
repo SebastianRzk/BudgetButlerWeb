@@ -3,20 +3,16 @@ Created on 24.04.2017
 
 @author: sebastian
 '''
-from datetime import datetime
 
 from butler_offline.core import DBManager
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.request_handler import current_key
-import datetime
 
 DATABASE_INSTANCE = None
 DATABASES = []
 CONTEXT = {}
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
-TODAY = lambda: viewcore.now().date()
-NOW = lambda: datetime.datetime.now()
 
 
 def database_instance():
@@ -203,19 +199,3 @@ def is_post_parameter_set(request, parameter):
     if request.method != 'POST':
         return False
     return parameter in request.values.keys()
-
-
-def today():
-    return viewcore.TODAY()
-
-def now():
-    return viewcore.NOW()
-
-
-def stub_today_with(new_today):
-    viewcore.NOW = lambda: datetime.datetime(new_today.year, new_today.month, new_today.day)
-    viewcore.TODAY = lambda: new_today
-
-
-def reset_viewcore_stubs():
-    viewcore.TODAY = lambda: datetime.datetime.now().date()

@@ -1,5 +1,6 @@
 import unittest
 
+from butler_offline.core import time
 from butler_offline.test.FileSystemStub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
@@ -98,9 +99,9 @@ class Abrechnung(unittest.TestCase):
 
     def test_get_should_return_actual_month(self    ):
         self.set_up()
-        viewcore.stub_today_with(datum('10.10.2012'))
+        time.stub_today_with(datum('10.10.2012'))
         context = uebersicht_monat.abrechnen(GetRequest())
-        viewcore.reset_viewcore_stubs()
+        time.reset_viewcore_stubs()
 
         assert context['element_titel'] == 'Abrechnung vom 10/2012'
 
