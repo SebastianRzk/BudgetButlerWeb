@@ -5,7 +5,7 @@ from butler_offline.viewcore import viewcore
 
 def _handle_request(request):
 
-    all_files = FileSystem.INSTANCE.list_files('')
+    #all_files = FileSystem.INSTANCE.list_files('')
 
     zusammenfassungen = [
         {
