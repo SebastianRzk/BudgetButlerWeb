@@ -8,7 +8,7 @@ from butler_offline.core.database.Dauerauftraege import Dauerauftraege
 from butler_offline.core.database.Einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.viewcore import viewcore
-from butler_offline.core import FileSystem
+from butler_offline.core.FileSystem import write_abrechnung
 from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.core.export.StringWriter import StringWriter
@@ -144,7 +144,7 @@ class Database:
 
         self.gemeinsamebuchungen.drop(gemeinsame_buchungen_content.index.tolist())
         self.taint()
-        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(time.now()), report)
+        write_abrechnung("Abrechnung_" + str(time.now()), report)
         return report
 
     def _faktor_self(self, verhaeltnis):
