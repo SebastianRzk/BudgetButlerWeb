@@ -23,6 +23,18 @@ def write_abrechnung(file_name, file_content):
     instance().write(ABRECHNUNG_PATH + file_name, file_content)
 
 
+def all_abrechnungen():
+    filenames = instance().list_files(ABRECHNUNG_PATH)
+
+    all_contents = []
+    for filename in filenames:
+        all_contents.append({
+            'name': filename,
+            'content': instance().read(filename)
+        })
+    return all_contents
+
+
 class FileSystemImpl:
     def read(self, file_path):
 

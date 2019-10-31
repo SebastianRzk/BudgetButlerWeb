@@ -75,3 +75,4 @@ class ReportGenerator():
         if number >= len(self._half_lines):
             return ''.ljust(self._col_width, ' ')
         return self._half_lines[number]
+

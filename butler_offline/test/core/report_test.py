@@ -1,4 +1,4 @@
-from butler_offline.core.ReportGenerator import ReportGenerator
+from butler_offline.core.report import ReportGenerator
 import unittest
 
 

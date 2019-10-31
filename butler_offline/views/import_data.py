@@ -1,4 +1,3 @@
-from _io import StringIO
 
 import pandas
 from datetime import datetime
@@ -17,7 +16,7 @@ from butler_offline.views.online_services.session import get_username
 from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
 from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen
 from butler_offline.core.export.JSONReport import JSONReport
-from butler_offline.core.export.TextReport import TextReport
+from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 
 
 
@@ -97,7 +96,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
 
             print('table before person mapping', table)
             table.Person = table.Person.map(lambda x: viewcore.database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
-            online_content = TextReport().generate_report(table)
+            online_content = TextReportWriter().generate_report(table)
             response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
             requester.instance().post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
@@ -119,7 +118,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             content = request.values['import'].replace('\r', '')
             write_import(import_prefix + 'Import_' + str(datetime.now()), content)
 
-            imported_values = _parse_table(content)
+            imported_values = TextReportReader().read(content)
             datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
             nicht_passende_kategorien = []
             for imported_kategorie in set(imported_values.Kategorie):
@@ -179,28 +178,3 @@ def _add_protokoll_if_needed(serverurl):
 def _save_server_creds(serverurl, email):
     configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
     configuration_provider.set_configuration('ONLINE_DEFAULT_USER', email)
-
-def _parse_table(content):
-    tables = {}
-    tables["sonst"] = ""
-    tables["#######MaschinenimportStart"] = ""
-    mode = "sonst"
-    print('textfield content:',content)
-    for line in content.split('\n'):
-        print(line)
-        line = line.strip()
-        if line == "":
-            continue
-        if line == "#######MaschinenimportStart":
-            mode = "#######MaschinenimportStart"
-            continue
-
-        if line == "#######MaschinenimportEnd":
-            mode = "sonst"
-            continue
-        tables[mode] = tables[mode] + "\n" + line
-
-    print(tables)
-
-    return pandas.read_csv(StringIO(tables["#######MaschinenimportStart"]))
-
