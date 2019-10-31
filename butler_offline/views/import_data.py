@@ -3,7 +3,7 @@ import pandas
 from datetime import datetime
 
 from butler_offline.core.FileSystem import write_import
-from butler_offline.core.export.JSONToTextMapper import JSONToTextMapper
+from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
 
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
@@ -15,7 +15,7 @@ from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_username
 from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
 from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen
-from butler_offline.core.export.JSONReport import JSONReport
+from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 
 

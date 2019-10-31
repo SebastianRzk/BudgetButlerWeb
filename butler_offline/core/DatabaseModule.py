@@ -11,7 +11,7 @@ from butler_offline.viewcore import viewcore
 from butler_offline.core.FileSystem import write_abrechnung
 from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.core.export.StringWriter import StringWriter
+from butler_offline.core.export.string_writer import StringWriter
 from butler_offline.core.export.text_report import TextReportWriter
 
 from pandas import DataFrame

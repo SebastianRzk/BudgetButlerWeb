@@ -1,4 +1,4 @@
-from butler_offline.core.export.StringWriter import StringWriter
+from butler_offline.core.export.string_writer import StringWriter
 import pandas
 from _io import StringIO
 

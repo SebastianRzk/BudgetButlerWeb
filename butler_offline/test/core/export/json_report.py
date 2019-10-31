@@ -1,4 +1,4 @@
-from butler_offline.core.export.JSONReport import JSONReport
+from butler_offline.core.export.json_report import JSONReport
 from butler_offline.viewcore.converter import datum_from_german
 import json
 

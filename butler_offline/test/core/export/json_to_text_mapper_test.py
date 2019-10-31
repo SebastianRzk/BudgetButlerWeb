@@ -1,4 +1,4 @@
-from butler_offline.core.export.JSONToTextMapper import JSONToTextMapper
+from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
 import json
 
 def test_dataframe_from_json():

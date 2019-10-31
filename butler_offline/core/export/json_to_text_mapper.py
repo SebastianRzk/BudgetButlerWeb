@@ -1,5 +1,5 @@
 
-from butler_offline.core.export.JSONReport import JSONReport
+from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter
 
 class JSONToTextMapper:
