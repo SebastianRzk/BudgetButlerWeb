@@ -1,11 +1,15 @@
 from butler_offline.viewcore import request_handler
-from butler_offline.core import FileSystem
+from butler_offline.core.FileSystem import all_abrechnungen
 from butler_offline.viewcore import viewcore
 
 
 def _handle_request(request):
 
-    #all_files = FileSystem.INSTANCE.list_files('')
+    all_files = all_abrechnungen()
+    all_parsed_files = []
+
+
+
 
     zusammenfassungen = [
         {

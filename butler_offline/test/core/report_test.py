@@ -1,4 +1,4 @@
-from butler_offline.core.ReportGenerator import ReportGenerator
+from butler_offline.core.report import ReportGenerator
 import unittest
 
 
@@ -48,33 +48,6 @@ class ReportGenerator_test(unittest.TestCase):
             print(l + "|")
         assert generator.get_raw_half_lines() == ['Einnahmen                             ',
                                                   '   A                             +0,00']
-
-    def test_generate_page(self):
-        generator = ReportGenerator('SamplePage', 10)
-
-        data = {
-            'Einnahmen': {'Firma1': 123.45,
-                          'Firma2': 34.12,
-                          'Firma3': 222.22},
-            'Ausgaben': {'Essen': -300.40,
-                         'Miete': -450.00,
-                         'Versicherung': -200.00,
-                         'Sport': -50.00}
-        }
-        generator.add_half_line_elements(data)
-
-        assert generator.generate_pages() == [
-            'SamplePage                                                                      ',
-            '--------------------------------------------------------------------------------',
-            'Einnahmen                                    Miete                       -450,00',
-            '   Firma1                      +123,45       Versicherung                -200,00',
-            '   Firma2                       +34,12       Sport                        -50,00',
-            '   Firma3                      +222,22                                          ',
-            'Ausgaben                                                                        ',
-            '   Essen                       -300,40                                          ',
-            '--------------------------------------------------------------------------------',
-            '                                                                       Blatt 1/1',
-            '', '']
 
     def test_generate_multible_pages(self):
         generator = ReportGenerator('SamplePage', 7)

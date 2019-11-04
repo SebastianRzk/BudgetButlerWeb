@@ -8,11 +8,11 @@ from butler_offline.core.database.Dauerauftraege import Dauerauftraege
 from butler_offline.core.database.Einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.viewcore import viewcore
-from butler_offline.core import FileSystem
+from butler_offline.core.FileSystem import write_abrechnung
 from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.core.export.StringWriter import StringWriter
-from butler_offline.core.export.TextReport import TextReport
+from butler_offline.core.export.string_writer import StringWriter
+from butler_offline.core.export.text_report import TextReportWriter
 
 from pandas import DataFrame
 
@@ -137,14 +137,14 @@ class Database:
             extra_ausgleichs_buchung.Dynamisch = False
             ausgaben_fuer_maureen = ausgaben_fuer_maureen.append(extra_ausgleichs_buchung)
 
-        report = TextReport().generate_report(ausgaben_fuer_maureen, abrechnunsdatei.to_string())
+        report = TextReportWriter().generate_report(ausgaben_fuer_maureen, abrechnunsdatei.to_string())
 
         self.einzelbuchungen.append_row(ausgaben_fuer_sebastian)
         self.einzelbuchungen.taint()
 
         self.gemeinsamebuchungen.drop(gemeinsame_buchungen_content.index.tolist())
         self.taint()
-        FileSystem.instance().write("../Abrechnungen/Abrechnung_" + str(time.now()), report)
+        write_abrechnung("Abrechnung_" + str(time.now()), report)
         return report
 
     def _faktor_self(self, verhaeltnis):
