@@ -3,14 +3,14 @@ Read panda files
 '''
 
 from _io import StringIO
-from datetime import datetime
-from butler_offline.core import DatabaseModule
+
 from butler_offline.core import FileSystem
+from butler_offline.core.database import Database
 import pandas as pd
 
 def read(nutzername, ausgeschlossene_kategorien):
     if not FileSystem.instance().read(database_path_from(nutzername)):
-        neue_datenbank = DatabaseModule.Database(nutzername)
+        neue_datenbank = Database(nutzername)
         write(neue_datenbank)
 
     file_content = FileSystem.instance().read(database_path_from(nutzername))
@@ -18,7 +18,7 @@ def read(nutzername, ausgeschlossene_kategorien):
     parser = DatabaseParser()
     parser.from_string(file_content)
 
-    database = DatabaseModule.Database(nutzername, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
+    database = Database(nutzername, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
     raw_data = pd.read_csv(StringIO(parser.einzelbuchungen()))
     database.einzelbuchungen.parse(raw_data)
