@@ -1,7 +1,7 @@
 import unittest
 from datetime import date
 
-from butler_offline.core.database.Einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore.converter import datum_from_german as datum
 
 
@@ -141,7 +141,7 @@ class SelectorTest(unittest.TestCase):
         assert component_under_test.select().group_by_kategorie().Wert.tolist() == [-20, 8]
         assert component_under_test.select().group_by_kategorie().index.tolist() == ['A', 'B']
 
-from butler_offline.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 
 class GemeinsamSelectorTest(unittest.TestCase):
     def test_selectRange_withEntriesContainigMatchingDates_shouldReturnEntries(self):

@@ -6,8 +6,8 @@ Created on 28.09.2017
 from datetime import datetime
 
 from pandas.core.frame import DataFrame
-from butler_offline.core.database.DatabaseObject import DatabaseObject
-from butler_offline.core.database.Selector import GemeinsamSelector
+from butler_offline.core.database.database_object import DatabaseObject
+from butler_offline.core.database.selector import GemeinsamSelector
 
 
 class Gemeinsamebuchungen(DatabaseObject):

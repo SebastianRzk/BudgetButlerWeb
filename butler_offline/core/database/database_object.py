@@ -5,8 +5,8 @@ Created on 03.05.2018
 '''
 import pandas as pd
 from datetime import datetime
-from butler_offline.core.database.Selector import Selektor
-from butler_offline.core.database.StatedObject import StatedObject
+from butler_offline.core.database.selector import Selektor
+from butler_offline.core.database.stated_object import StatedObject
 
 class DatabaseObject(StatedObject):
 

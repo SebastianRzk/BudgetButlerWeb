@@ -6,7 +6,7 @@ Created on 11.08.2017
 from datetime import date
 import unittest
 
-from butler_offline.core.database.Dauerauftraege import Dauerauftraege
+from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.viewcore.converter import datum_from_german as datum
 
 class DauerauftraegeTest(unittest.TestCase):
