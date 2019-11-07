@@ -6,7 +6,7 @@ Created on 11.08.2017
 import unittest
 
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.core.database.Gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 
 class gemeinsame_buchungen(unittest.TestCase):
 

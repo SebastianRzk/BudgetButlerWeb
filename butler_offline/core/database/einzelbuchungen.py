@@ -8,7 +8,7 @@ from datetime import date
 import pandas as pd
 
 from butler_offline.viewcore import viewcore
-from butler_offline.core.database.DatabaseObject import DatabaseObject
+from butler_offline.core.database.database_object import DatabaseObject
 
 
 class Einzelbuchungen(DatabaseObject):

@@ -5,11 +5,11 @@ Created on 10.05.2017
 '''
 
 import unittest
-from pandas.core.frame import DataFrame
+from pandas import DataFrame
 
-from butler_offline.core.DatabaseModule import Database
 from butler_offline.test.FileSystemStub import FileSystemStub
 from butler_offline.core import FileSystem
+from butler_offline.core.database import Database
 from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import viewcore

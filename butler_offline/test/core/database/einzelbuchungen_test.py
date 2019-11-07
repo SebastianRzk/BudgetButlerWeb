@@ -7,7 +7,7 @@ from datetime import date
 import unittest
 
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.core.database.Einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 
 
 class EinzelbuchungenTest(unittest.TestCase):
