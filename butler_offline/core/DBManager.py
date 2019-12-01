@@ -4,16 +4,16 @@ Read panda files
 
 from _io import StringIO
 
-from butler_offline.core import FileSystem
+from butler_offline.core import file_system
 from butler_offline.core.database import Database
 import pandas as pd
 
 def read(nutzername, ausgeschlossene_kategorien):
-    if not FileSystem.instance().read(database_path_from(nutzername)):
+    if not file_system.instance().read(database_path_from(nutzername)):
         neue_datenbank = Database(nutzername)
         write(neue_datenbank)
 
-    file_content = FileSystem.instance().read(database_path_from(nutzername))
+    file_content = file_system.instance().read(database_path_from(nutzername))
 
     parser = DatabaseParser()
     parser.from_string(file_content)
@@ -46,7 +46,7 @@ def write(database):
     content += "\n Gemeinsame Buchungen \n"
     content += database.gemeinsamebuchungen.content.to_csv(index=False)
 
-    FileSystem.instance().write(database_path_from(database.name), content)
+    file_system.instance().write(database_path_from(database.name), content)
     print("WRITER: All Saved")
 
 

@@ -2,7 +2,7 @@
 import pandas
 from datetime import datetime
 
-from butler_offline.core.FileSystem import write_import
+from butler_offline.core.file_system import write_import
 from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
 
 from butler_offline.viewcore import viewcore

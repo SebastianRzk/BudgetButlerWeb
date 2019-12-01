@@ -1,6 +1,6 @@
 from functools import reduce
 from butler_offline.viewcore import configuration_provider
-from butler_offline.core import FileSystem
+from butler_offline.core import file_system
 
 LOADED_CONFIG = {}
 DEFAULT_CONFIG = {
@@ -14,7 +14,7 @@ DEFAULT_CONFIG = {
 }
 
 def _load_config():
-    lines = FileSystem.instance().read('../config')
+    lines = file_system.instance().read('../config')
     if not lines:
         return dict(configuration_provider.DEFAULT_CONFIG)
     loaded_config = {}
@@ -33,7 +33,7 @@ def _save_config(config):
     for key in config:
         content.append('{key}:{value}'.format(key=key, value=config[key]))
     content = reduce(lambda x, y: str(x) + '\n' + str(y), content)
-    FileSystem.instance().write('../config', content)
+    file_system.instance().write('../config', content)
 
 def get_configuration(key):
     if not configuration_provider.LOADED_CONFIG:

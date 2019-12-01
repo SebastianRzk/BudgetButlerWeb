@@ -1,15 +1,15 @@
 import unittest
 
 from butler_offline.viewcore import configuration_provider
-from butler_offline.core import FileSystem
-from butler_offline.test.FileSystemStub import FileSystemStub
+from butler_offline.core import file_system
+from butler_offline.test.core.file_system_stub import FileSystemStub
 
 
 
 class TesteConverter(unittest.TestCase):
 
     def set_up(self):
-        FileSystem.INSTANCE = FileSystemStub()
+        file_system.INSTANCE = FileSystemStub()
         configuration_provider.LOADED_CONFIG = None
 
     def test_configuration_provider_shouldLoadDefault_ifNoFileProvided(self):
