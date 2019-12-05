@@ -30,7 +30,7 @@
 
 * Python 3.6
 * Pip
-* Moderner Webbrowser (z.B.. Firefox or Chromium)
+* Moderner Webbrowser (z.B. Firefox oder Chromium)
 * (git)
 
 ### Installation
