@@ -4,11 +4,9 @@ Created on 10.05.2017
 @author: sebastian
 '''
 
-import os
-import sys
 import unittest
 
-from butler_offline.test.FileSystemStub import FileSystemStub
+from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest
@@ -18,13 +16,13 @@ from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.viewcore.viewcore import database_instance as db
 from butler_offline.viewcore import request_handler
-from butler_offline.core import FileSystem
+from butler_offline.core import file_system
 
 class TesteAddDauerauftragView(unittest.TestCase):
     testdb = None
 
     def set_up(self):
-        FileSystem.INSTANCE = FileSystemStub()
+        file_system.INSTANCE = FileSystemStub()
         viewcore.DATABASE_INSTANCE = None
         request_handler.stub_me()
 

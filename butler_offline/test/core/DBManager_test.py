@@ -8,8 +8,8 @@ import unittest
 from butler_offline.core import DBManager
 from butler_offline.core.DBManager import MultiPartCsvReader
 from butler_offline.core.DBManager import DatabaseParser
-from butler_offline.core import FileSystem
-from butler_offline.test.FileSystemStub import FileSystemStub
+from butler_offline.core import file_system
+from butler_offline.test.core.file_system_stub import FileSystemStub
 
 
 
@@ -17,10 +17,10 @@ from butler_offline.test.FileSystemStub import FileSystemStub
 class DBManager_readDB(unittest.TestCase):
 
     def mock_filesystem(self):
-        FileSystem.INSTANCE = FileSystemStub()
+        file_system.INSTANCE = FileSystemStub()
 
     def write_db_file_stub(self,name, stub):
-        FileSystem.instance().write('../Database_' + name + '.csv', stub)
+        file_system.instance().write('../Database_' + name + '.csv', stub)
 
     def test_database_path_from(self):
         assert DBManager.database_path_from('Sebastian') == '../Database_Sebastian.csv'
@@ -46,7 +46,7 @@ class DBManager_readDB(unittest.TestCase):
         database = DBManager.read('testuser', set())
         DBManager.write(database)
 
-        assert FileSystem.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
+        assert file_system.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
 
     def teste_write_with_old_database_should_migrate(self):
         self.mock_filesystem()
@@ -55,7 +55,7 @@ class DBManager_readDB(unittest.TestCase):
         database = DBManager.read('testuser', set())
         DBManager.write(database)
 
-        assert FileSystem.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
+        assert file_system.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
 
 
     full_db_old = '''Datum,Kategorie,Name,Wert,Tags

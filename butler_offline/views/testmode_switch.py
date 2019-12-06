@@ -2,8 +2,8 @@ from flask import redirect
 
 from butler_offline.core import time
 from butler_offline.viewcore import viewcore
-from butler_offline.test.FileSystemStub import FileSystemStub
-from butler_offline.core import FileSystem
+from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.core import file_system
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.converter import datum_from_german as datum
 
@@ -14,7 +14,7 @@ def leave_debug(request):
     return redirect('/', code=301)
 
 def enter_testmode(request):
-    FileSystem.INSTANCE = FileSystemStub()
+    file_system.INSTANCE = FileSystemStub()
     viewcore.DATABASE_INSTANCE = None
     viewcore.DATABASES = ['test']
     viewcore.CONTEXT = {}

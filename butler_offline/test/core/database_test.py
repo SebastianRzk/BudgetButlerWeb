@@ -7,8 +7,8 @@ Created on 10.05.2017
 import unittest
 from pandas import DataFrame
 
-from butler_offline.test.FileSystemStub import FileSystemStub
-from butler_offline.core import FileSystem
+from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.core import file_system
 from butler_offline.core.database import Database
 from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -116,7 +116,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 """
 
     def set_up(self):
-        FileSystem.INSTANCE = FileSystemStub()
+        file_system.INSTANCE = FileSystemStub()
         viewcore.DATABASE_INSTANCE = None
         viewcore.DATABASES = []
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')

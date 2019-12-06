@@ -1,4 +1,4 @@
-from butler_offline.core import FileSystem
+from butler_offline.core import file_system
 import os
 import glob
 
@@ -6,9 +6,9 @@ INSTANCE = None
 
 
 def instance():
-    if FileSystem.INSTANCE == None:
-        FileSystem.INSTANCE = FileSystemImpl()
-    return FileSystem.INSTANCE
+    if file_system.INSTANCE == None:
+        file_system.INSTANCE = FileSystemImpl()
+    return file_system.INSTANCE
 
 
 IMPORT_PATH = '../Import/'

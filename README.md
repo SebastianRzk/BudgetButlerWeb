@@ -11,7 +11,7 @@
 
 * Python 3.6
 * Pip
-* Firefox (if you don't want to use the .desktop shortcut, you can use any modern browser)
+* Chromium (if you don't want to use the .desktop shortcut, you can use any modern browser)
 * (git)
 
 ### Install and run 

@@ -2,10 +2,10 @@ import unittest
 import numpy as np
 import datetime
 
-from butler_offline.test.FileSystemStub import FileSystemStub
+from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.core import FileSystem
+from butler_offline.core import file_system
 from butler_offline.views import import_data
 from butler_offline.views import configuration
 from butler_offline.viewcore import viewcore
@@ -21,7 +21,7 @@ from butler_offline.test.RequesterStub import RequesterErrorStub
 class Importd(unittest.TestCase):
 
     def set_up(self):
-        FileSystem.INSTANCE = FileSystemStub()
+        file_system.INSTANCE = FileSystemStub()
         viewcore.DATABASE_INSTANCE = None
         viewcore.DATABASES = []
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
@@ -107,9 +107,9 @@ class Importd(unittest.TestCase):
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
 
         written_abrechnung = None
-        for key in FileSystem.instance()._fs_stub.keys():
+        for key in file_system.instance()._fs_stub.keys():
             if key.startswith('../Import'):
-                written_abrechnung = FileSystem.instance()._fs_stub[key]
+                written_abrechnung = file_system.instance()._fs_stub[key]
 
         assert written_abrechnung == self._IMPORT_DATA
 

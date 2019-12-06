@@ -6,7 +6,7 @@ Created on 18.08.2017
 
 from datetime import datetime, date
 
-from butler_offline.core.Frequency import FrequencsFunctions
+from butler_offline.core.frequency import FrequencsFunctions
 from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
 
