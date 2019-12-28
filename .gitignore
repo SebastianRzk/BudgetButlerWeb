@@ -12,5 +12,6 @@
 /.idea
 *.log
 /venv
+/.venv
 *.iml
 config

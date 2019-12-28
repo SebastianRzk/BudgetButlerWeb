@@ -1,9 +1,7 @@
 # BudgetButlerWeb
 [![Build Status](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb) [![codecov](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb)
 
-* [Hauptseite](index.md)
-* [Screenshots](screenshots.md)
-* [TODOs](todo.md)
+* TOC {:toc}
 
 ## Idee
 
@@ -42,17 +40,13 @@ Ins Projektverzeichnis wechseln:
 
 	cd BudgetButlerWeb
 
-Abhängigkeiten mit pip installieren:
-
-	pip install -r requirements.txt
-
 ### Server Starten
 
 Flask-Server starten:
 
 	sh start_butler_offline.sh
 
-Webbrowser öffnen und folgende Url besuchen:
+BudgetButlerWeb ist unter folgender Adresse zu erreichen:
 
 	http://127.0.0.1:5000/
 	
@@ -72,9 +66,6 @@ BudgetButlerWeb aktualisieren:
 
 	git pull
 
-Mit pip-review die Abhängigkeiten aktualisieren:
-
-	sudo pip-review --local --interactive
 
 
 
