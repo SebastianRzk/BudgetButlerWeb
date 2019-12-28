@@ -46,7 +46,7 @@ Flask-Server starten:
 
 	sh start_butler_offline.sh
 
-Webbrowser öffnen und folgende Url besuchen:
+BudgetButlerWeb ist unter folgender Adresse zu erreichen:
 
 	http://127.0.0.1:5000/
 	
