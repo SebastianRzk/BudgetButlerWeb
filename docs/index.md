@@ -42,10 +42,6 @@ Ins Projektverzeichnis wechseln:
 
 	cd BudgetButlerWeb
 
-Abhängigkeiten mit pip installieren:
-
-	pip install -r requirements.txt
-
 ### Server Starten
 
 Flask-Server starten:
@@ -72,9 +68,6 @@ BudgetButlerWeb aktualisieren:
 
 	git pull
 
-Mit pip-review die Abhängigkeiten aktualisieren:
-
-	sudo pip-review --local --interactive
 
 
 
