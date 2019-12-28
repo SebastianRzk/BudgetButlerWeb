@@ -2,3 +2,4 @@ title: BudgetButlerWeb
 description: Simple and fast money manager
 show_downloads: true
 theme: jekyll-theme-tactile
+markdown: kramdown

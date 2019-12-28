@@ -1,8 +1,6 @@
 # Screenshots
 
-* [Hauptseite](index.md)
-* [Screenshots](screenshots.md)
-* [TODOs](todo.md)
+* TOC {:toc}
 
 ## Startseite
 
