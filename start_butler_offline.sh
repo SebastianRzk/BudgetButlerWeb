@@ -15,7 +15,7 @@ if [[ ! -d $VENV_DIR ]]; then
 
     python -m venv $VENV_DIR
     source $VENV_DIR/bin/activate
-    pip install -r ./requirements.txt
+    pip install -r ./butler_offline/requirements.txt
 
     echo ""
     echo "#################################"

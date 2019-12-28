@@ -23,11 +23,7 @@ Change into project directory
 
 	cd BudgetButlerWeb
 
-Install the requirements
-
-	pip install -r requirements.txt
-
-Create a application shortcut with
+(Optional) Create a application shortcut with
 
 	sh ./create_shortcut.sh
 
