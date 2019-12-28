@@ -2,7 +2,8 @@
 
 set -e
 
-VENV_DIR=".venv"
+parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+VENV_DIR=$parent_path/.venv
 
 if [[ ! -d $VENV_DIR ]]; then
     echo ""
@@ -15,7 +16,7 @@ if [[ ! -d $VENV_DIR ]]; then
 
     python -m venv $VENV_DIR
     source $VENV_DIR/bin/activate
-    pip install -r ./butler_offline/requirements.txt
+    pip install -r $parent_path/butler_offline/requirements.txt
 
     echo ""
     echo "#################################"
@@ -37,7 +38,6 @@ echo "#################################"
 echo ""
 
 echo "Starting BudgetButlerWeb local server"
-parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path/butler_offline"
 export FLASK_APP=start_as_flask.py 
 
