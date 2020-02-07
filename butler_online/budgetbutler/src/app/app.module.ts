@@ -15,6 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -26,7 +27,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component';
-import { MobileComponent } from './sidebar/mobile/mobile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdduserComponent } from './settings/adduser/adduser.component';
 import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
@@ -34,7 +34,6 @@ import { PartnernameComponent } from './settings/partnername/partnername.compone
 import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
 import { AllegemeinsamebuchungenComponent } from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
 import { AddschnelleinstiegComponent } from './addschnelleinstieg/addschnelleinstieg.component';
-import { MoreComponent } from './sidebar/mobile/more/more.component';
 
 export const ALL_IMPORTS = [
   BrowserModule,
@@ -48,6 +47,7 @@ export const ALL_IMPORTS = [
   MatButtonModule,
   MatChipsModule,
   MatCardModule,
+  MatSidenavModule,
   MatSnackBarModule,
   MatFormFieldModule,
   MatIconModule,
@@ -68,7 +68,6 @@ export const ALL_IMPORTS = [
     SidebarComponent,
     AddausgabeComponent,
     AllebuchungenComponent,
-    MobileComponent,
     SettingsComponent,
     AdduserComponent,
     AddeinnahmeComponent,
@@ -76,7 +75,6 @@ export const ALL_IMPORTS = [
     AddgemeinsameausgabeComponent,
     AllegemeinsamebuchungenComponent,
     AddschnelleinstiegComponent,
-    MoreComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,9 +85,9 @@ export const ALL_IMPORTS = [
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
-    MatButtonModule,
     MatChipsModule,
     MatCardModule,
+    MatSidenavModule,
     MatSnackBarModule,
     MatFormFieldModule,
     MatIconModule,

@@ -11,9 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { AddausgabeComponent } from './addausgabe.component';
-import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 
 describe('AddausgabeComponent', () => {
@@ -23,9 +21,7 @@ describe('AddausgabeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AddausgabeComponent,
-        MobileComponent,
-        MoreComponent,
+        AddausgabeComponent
       ],
       imports: [
         HttpClientTestingModule,

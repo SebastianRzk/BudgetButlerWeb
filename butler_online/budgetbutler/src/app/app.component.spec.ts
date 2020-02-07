@@ -10,13 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 import { AppComponent } from './app.component';
-import { MobileComponent } from './sidebar/mobile/mobile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MoreComponent } from './sidebar/mobile/more/more.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -24,8 +23,6 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         SidebarComponent,
-        MoreComponent,
-        MobileComponent,
         AddausgabeComponent
       ],
       imports: [
@@ -35,6 +32,7 @@ describe('AppComponent', () => {
         MatSelectModule,
         MatButtonModule,
         MatDatepickerModule,
+        MatSidenavModule,
         MatNativeDateModule,
         MatButtonModule,
         MatCardModule,

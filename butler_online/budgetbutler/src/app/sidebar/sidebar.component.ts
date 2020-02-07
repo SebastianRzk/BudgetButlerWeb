@@ -33,4 +33,5 @@ export class SidebarComponent implements OnInit {
   close(menuItem) {
     menuItem.opened = false;
   }
+
 }

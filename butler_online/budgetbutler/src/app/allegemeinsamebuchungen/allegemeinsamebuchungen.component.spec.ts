@@ -10,12 +10,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { LoginComponent } from '../auth/login/login.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { MobileComponent } from '../sidebar/mobile/mobile.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 describe('AllebuchungenComponent', () => {
   let component: AllegemeinsamebuchungenComponent;
@@ -27,8 +25,6 @@ describe('AllebuchungenComponent', () => {
         LoginComponent,
         SidebarComponent,
         AllegemeinsamebuchungenComponent,
-        MobileComponent,
-        MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,

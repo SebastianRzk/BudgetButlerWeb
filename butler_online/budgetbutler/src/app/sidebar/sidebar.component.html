@@ -1,40 +1,51 @@
 <div *ngIf="authService.isLoggedIn" class="menu-element">
-  <div class="mobile-only">
-    <app-mobile-sidebar></app-mobile-sidebar>
+  <div class="full-with-on-mobile">
+    <button mat-raised-button type="button" mat-button (click)="drawer.open()" class="open-menu-button full-height">
+      <mat-icon>menu</mat-icon>Menu
+    </button>
   </div>
-  
-  <div class="desktop-only desktop-menu">
-    <h2>
-      BudgetButlerWEB
-    </h2>
+  <mat-drawer-container>
+    <mat-drawer #drawer mode="side">
+      <p>
+        <button type="button" mat-button (click)="drawer.close()" class="navigation-button full-height">
+          <mat-icon>arrow_back</mat-icon>Schließen
+        </button>
+      </p>
 
-    <div class="greeter">Hallo, {{authService.username}}</div>
-    <div class="navigation">
-      <button mat-stroked-button (click)="logout()" class="navigation-button">Logout</button>
-      <div *ngFor="let menuItem of menu">
-        <button mat-stroked-button class="navigation-button" *ngIf="menuItem.type === 'link'"
-          (click)="navigateTo(menuItem.url)">
-          <mat-icon aria-hidden="false" aria-label="Example home icon">{{menuItem.icon}}</mat-icon>
-          {{menuItem.title}}
-        </button>
-        <button mat-stroked-button class="navigation-button"
-          *ngIf="menuItem.type === 'node' && menuItem.opened === false" (click)="open(menuItem)">
-          <mat-icon aria-hidden="false" aria-label="Example home icon">keyboard_arrow_right</mat-icon>
-          {{menuItem.title}}
-        </button>
-        <button mat-button class="navigation-button" *ngIf="menuItem.type === 'node' && menuItem.opened === true"
-          (click)="close(menuItem)">
-          <mat-icon aria-hidden="false" aria-label="Example home icon">keyboard_arrow_down</mat-icon>
-          {{menuItem.title}}
-        </button>
-        <div class="sublinklist" *ngIf="menuItem.opened">
-          <button class="navigation-button" mat-button *ngFor="let subMenuItem of menuItem.children"
-            (click)="navigateTo(subMenuItem.url)">
-            <mat-icon aria-hidden="false" aria-label="Example home icon">{{subMenuItem.icon}}</mat-icon>
-            {{subMenuItem.title}}
-          </button>
-        </div>
+      <div class="desktop-only">
+        <h2>
+          BudgetButlerWEB
+        </h2>
+        <div class="greeter">Hallo, {{authService.username}}</div>
       </div>
-    </div>
-  </div>
+      <div class="navigation">
+        <button mat-stroked-button (click)="logout()" class="navigation-button full-height">Logout</button>
+        <div *ngFor="let menuItem of menu">
+          <button mat-stroked-button class="navigation-button full-height" *ngIf="menuItem.type === 'link'"
+            (click)="navigateTo(menuItem.url)">
+            <mat-icon aria-hidden="false" >{{menuItem.icon}}</mat-icon>
+            {{menuItem.title}}
+          </button>
+          <button mat-stroked-button class="navigation-button full-height"
+            *ngIf="menuItem.type === 'node' && menuItem.opened === false" (click)="open(menuItem)">
+            <mat-icon aria-hidden="false" >keyboard_arrow_right</mat-icon>
+            {{menuItem.title}}
+          </button>
+          <button mat-button class="navigation-button full-height"
+            *ngIf="menuItem.type === 'node' && menuItem.opened === true" (click)="close(menuItem)">
+            <mat-icon aria-hidden="false" >keyboard_arrow_down</mat-icon>
+            {{menuItem.title}}
+          </button>
+          <div class="sublinklist" *ngIf="menuItem.opened">
+            <button class="navigation-button full-height" mat-button *ngFor="let subMenuItem of menuItem.children"
+              (click)="navigateTo(subMenuItem.url)">
+              <mat-icon aria-hidden="false" >{{subMenuItem.icon}}</mat-icon>
+              {{subMenuItem.title}}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </mat-drawer>
+  </mat-drawer-container>
 </div>
