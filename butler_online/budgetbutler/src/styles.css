@@ -53,6 +53,10 @@ app-sidebar {
     padding-bottom: 2ex;
   }
 
+  .mobile-only {
+    display: none;
+  }
+
   .erfassung {
     max-width: 40ex;
     margin: 2ex;

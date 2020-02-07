@@ -22,7 +22,8 @@ export class SidebarComponent implements OnInit {
     this.authService.logout();
   }
 
-  navigateTo(url: string){
+  navigateTo(url: string, drawer){
+    drawer.close();
     this.router.navigate([url]);
   }
 
