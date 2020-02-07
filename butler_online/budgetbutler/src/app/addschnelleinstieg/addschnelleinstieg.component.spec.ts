@@ -14,7 +14,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddschnelleinstiegComponent } from './addschnelleinstieg.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MoreComponent } from '../sidebar/mobile/more/more.component';
 
 
 describe('AddSchnelleinstiegComponent', () => {
@@ -25,7 +24,6 @@ describe('AddSchnelleinstiegComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         AddschnelleinstiegComponent,
-        MoreComponent,
       ],
       imports: [
         HttpClientTestingModule,

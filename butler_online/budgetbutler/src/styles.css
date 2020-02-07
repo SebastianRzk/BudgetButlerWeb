@@ -36,6 +36,10 @@ body {
   min-height: 100vh;
 }
 
+app-sidebar {
+  min-height: 100vh;
+}
+
 
 @media (min-width: 800px) { 
   .app-content{
@@ -43,23 +47,10 @@ body {
     background-color: #f1f1f1;
  }
 
-  .mobile-only {
-      display: none;
-  }
-
   .content-area{
-    padding: 2ex;
-    width: 100%;
-  }
-
-  sidebar{
-      padding: 1ex;
-  }
-
-  app-sidebar {
-    background-color: white;
-    max-width: 30ex;
-    min-height: 100vh;
+    padding-left: 2ex;
+    padding-right: 2ex;
+    padding-bottom: 2ex;
   }
 
   .erfassung {
@@ -80,15 +71,11 @@ body {
   }
 
   .desktop-only {
-      display: none;
+    display: none;
   }
 
   .content-area{
     padding-top: 1ex;
-    width: 100%;
-  }
-
-  app-sidebar {
     width: 100%;
   }
 
@@ -99,16 +86,20 @@ body {
   .wide {
     margin: 1ex;
   }
+
+  .full-height {
+    height: 6ex;
+  }
+
+  .full-with-on-mobile {
+    width: 100%;
+  }
 }
 
 
 /*
 Masken Eigenschaften
 */
-
-
-
-
 
 .full-size-form-field {
   width: 100%;

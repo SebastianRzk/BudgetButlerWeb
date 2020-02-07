@@ -4,6 +4,7 @@
 }
 
 .greeter {
+    padding-left: 2ex;
     width: 100%;
 }
 
@@ -20,4 +21,19 @@
 .sublinklist {
     margin-left: 3ex;
     margin-bottom: 1.5ex;
+    display: grid;
+}
+
+h2 {
+    padding: 1ex;
+}
+
+mat-drawer {
+    height: 100%;
+    position: fixed;
+}
+
+.open-menu-button {
+    padding: 1ex;
+    width: 100%
 }
