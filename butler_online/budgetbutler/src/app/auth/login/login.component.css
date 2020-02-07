@@ -26,3 +26,13 @@ img {
     margin-right: auto;
     margin-bottom: 5ex;
 }
+
+.login-page {
+    width: 100vw;
+    padding-top: 3ex;
+    display: block;
+}
+
+.login-page-content {
+    margin:auto;
+}

@@ -22,7 +22,7 @@
         <button mat-stroked-button (click)="logout()" class="navigation-button full-height">Logout</button>
         <div *ngFor="let menuItem of menu">
           <button mat-stroked-button class="navigation-button full-height" *ngIf="menuItem.type === 'link'"
-            (click)="navigateTo(menuItem.url)">
+            (click)="navigateTo(menuItem.url, drawer)">
             <mat-icon aria-hidden="false" >{{menuItem.icon}}</mat-icon>
             {{menuItem.title}}
           </button>
@@ -38,7 +38,7 @@
           </button>
           <div class="sublinklist" *ngIf="menuItem.opened">
             <button class="navigation-button full-height" mat-button *ngFor="let subMenuItem of menuItem.children"
-              (click)="navigateTo(subMenuItem.url)">
+              (click)="navigateTo(subMenuItem.url, drawer)">
               <mat-icon aria-hidden="false" >{{subMenuItem.icon}}</mat-icon>
               {{subMenuItem.title}}
             </button>
