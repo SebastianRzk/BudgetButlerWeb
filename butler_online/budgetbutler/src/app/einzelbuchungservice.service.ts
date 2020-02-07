@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiproviderService } from './apiprovider.service';
 import { NotificationService } from './notification.service';
 import { toEinzelbuchungAnlegenTO } from './converter';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,11 @@ export class EinzelbuchungserviceService {
     );
   }
 
-  public getAll() {
+  public getAll(): Observable<Einzelbuchung[]> {
     return this.httpClient.get<Einzelbuchung[]>(this.api.getUrl('einzelbuchung.php'));
   }
 
-  public delete(einzelbuchungLoeschen: EinzelbuchungLoeschen){
+  public delete(einzelbuchungLoeschen: EinzelbuchungLoeschen) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), body: einzelbuchungLoeschen
      };
