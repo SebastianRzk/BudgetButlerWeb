@@ -1,5 +1,5 @@
-<div *ngIf="authService.isLoggedIn" class="menu-element">
-  <div class="full-with-on-mobile">
+<div *ngIf="authService.isLoggedIn" class="menu-element full-height">
+  <div *ngIf="!drawer.opened" class="full-with-on-mobile">
     <button mat-raised-button type="button" mat-button (click)="drawer.open()" class="open-menu-button full-height">
       <mat-icon>menu</mat-icon>Menu
     </button>
