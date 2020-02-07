@@ -93,22 +93,4 @@ export class MenuitemService {
       EINSTELLUNGEN
     ];
   }
-
-  getMainMobileMenuElements() {
-    return [
-      SCHNELLEINSTIEG,
-      ALLE_EINZELBUCHUNGEN,
-      ALLE_GEMEINSAME_BUCHUNGEN,
-    ];
-  }
-
-
-  getAdditionalMobileMenuElements() {
-    return [
-      NEUE_EINNAHME,
-      NEUE_AUSGABE,
-      NEUE_GEMEINSAME_BUCHUNG,
-      EINSTELLUNGEN
-    ];
-  }
 }
