@@ -1,5 +1,5 @@
-import { Einzelbuchung, GemeinsameBuchungAnlegen, EinzelbuchungAnlegen } from './model';
-import { EinzelbuchungTO, GemeinsameBuchungAnlegenTO, EinzelbuchungAnlegenTO } from './modelTo';
+import { GemeinsameBuchungAnlegen, EinzelbuchungAnlegen } from './model';
+import { GemeinsameBuchungAnlegenTO, EinzelbuchungAnlegenTO } from './modelTo';
 
 const toISOFormat = (datum: Date) => '' + datum.getFullYear() + '-' + (datum.getMonth() + 1) + '-' + datum.getDate();
 
