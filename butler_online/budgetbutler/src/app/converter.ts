@@ -1,10 +1,10 @@
-import { Einzelbuchung, GemeinsameBuchungAnlegen, EinzelbuchungAnlegen } from "./model";
+import { Einzelbuchung, GemeinsameBuchungAnlegen, EinzelbuchungAnlegen } from './model';
 import { EinzelbuchungTO, GemeinsameBuchungAnlegenTO, EinzelbuchungAnlegenTO } from './modelTo';
 
-const toISOFormat = (datum: Date) => "" + datum.getFullYear() + "-" + (datum.getMonth() + 1) + "-" + datum.getDate();
+const toISOFormat = (datum: Date) => '' + datum.getFullYear() + '-' + (datum.getMonth() + 1) + '-' + datum.getDate();
 
 export const toEinzelbuchungAnlegenTO = (einzelbuchung: EinzelbuchungAnlegen): EinzelbuchungAnlegenTO => {
-    if (typeof einzelbuchung.datum == 'string') {
+    if (typeof einzelbuchung.datum === 'string') {
         return {
             datum: einzelbuchung.datum,
             name: einzelbuchung.name,
@@ -21,7 +21,7 @@ export const toEinzelbuchungAnlegenTO = (einzelbuchung: EinzelbuchungAnlegen): E
 }
 
 export const toGemeinsameBuchungAnlegenTO = (gemeinsameBuchungAnlegen: GemeinsameBuchungAnlegen): GemeinsameBuchungAnlegenTO => {
-    if (typeof gemeinsameBuchungAnlegen.datum == 'string') {
+    if (typeof gemeinsameBuchungAnlegen.datum === 'string') {
         return {
             name: gemeinsameBuchungAnlegen.name,
             datum: gemeinsameBuchungAnlegen.datum,
@@ -37,6 +37,6 @@ export const toGemeinsameBuchungAnlegenTO = (gemeinsameBuchungAnlegen: Gemeinsam
         wert: gemeinsameBuchungAnlegen.wert,
         zielperson: gemeinsameBuchungAnlegen.zielperson,
     }
-   
+
 }
 
