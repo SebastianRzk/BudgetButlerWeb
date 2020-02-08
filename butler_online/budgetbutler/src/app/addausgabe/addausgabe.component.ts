@@ -22,7 +22,6 @@ export class AddausgabeComponent implements OnInit {
   });
 
   kategorien: Observable<string[]>;
-  einzelbuchungMatcher = new MyErrorStateMatcher();
 
   constructor(
     private einzelbuchungsService: EinzelbuchungserviceService,

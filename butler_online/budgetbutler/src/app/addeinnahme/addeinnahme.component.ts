@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { KategorieService } from '../kategorie.service';
@@ -14,14 +14,14 @@ import { EinzelbuchungAnlegen } from '../model';
 })
 export class AddeinnahmeComponent implements OnInit {
 
-  datum = new FormControl(new Date(), Validators.required);
-  name = new FormControl('', Validators.required);
-  kategorie = new FormControl('', Validators.required);
-  kategorien: Observable<string[]>;
-  wert = new FormControl('', Validators.required);
+  buchungForm = new FormGroup({
+    datum: new FormControl(new Date(), Validators.required),
+    name: new FormControl('', Validators.required),
+    kategorie: new FormControl('', Validators.required),
+    wert: new FormControl('', Validators.required)
+  });
 
-  
-  einzelbuchungMatcher = new MyErrorStateMatcher();
+  kategorien: Observable<string[]>;
 
   constructor(
     private einzelbuchungsService: EinzelbuchungserviceService,
@@ -31,28 +31,18 @@ export class AddeinnahmeComponent implements OnInit {
     this.kategorien = this.kategorieService.getAll();
   }
 
-  private isEinzelbuchungFormOk(): boolean {
-    return this.datum.valid &&
-      this.name.valid &&
-      this.kategorie.valid &&
-      this.wert.valid;
-  }
-
-  hinzufuegen() {
-    if (!this.isEinzelbuchungFormOk()) {
+  onFormSubmit() {
+    if (!this.buchungForm.valid) {
       return;
     }
 
     const neueBuchung: EinzelbuchungAnlegen = {
-      name: this.name.value,
-      datum: this.datum.value,
-      kategorie: this.kategorie.value,
-      wert: this.wert.value
+      name: this.buchungForm.get('name').value,
+      datum: this.buchungForm.get('datum').value,
+      kategorie: this.buchungForm.get('kategorie').value,
+      wert: this.buchungForm.get('wert').value
     };
-    this.datum.reset(new Date());
-    this.name.reset();
-    this.kategorie.reset(this.kategorien[0]);
-    this.wert.reset();
     this.einzelbuchungsService.save(neueBuchung);
+    this.buchungForm.reset({ datum: new Date() })
   }
 }
