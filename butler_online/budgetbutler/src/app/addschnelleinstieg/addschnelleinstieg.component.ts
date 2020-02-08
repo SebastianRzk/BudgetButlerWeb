@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { Observable } from 'rxjs';
-import { MyErrorStateMatcher } from '../matcher';
 import { KategorieService } from '../kategorie.service';
 import { EinzelbuchungAnlegen, GemeinsameBuchungAnlegen } from '../model';
 import { GemeinsamebuchungService } from '../gemeinsamebuchung.service';
@@ -24,7 +23,6 @@ export class AddschnelleinstiegComponent implements OnInit {
   });
 
   kategorien: Observable<string[]>;
-  einzelbuchungMatcher = new MyErrorStateMatcher();
   personenName: string;
 
   constructor(

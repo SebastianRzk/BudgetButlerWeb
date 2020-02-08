@@ -3,7 +3,6 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
 import { KategorieService } from '../kategorie.service';
-import { MyErrorStateMatcher } from '../matcher';
 import { EinzelbuchungAnlegen } from '../model';
 
 

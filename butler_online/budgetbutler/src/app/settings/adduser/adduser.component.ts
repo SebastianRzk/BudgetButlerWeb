@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { MyErrorStateMatcher } from 'src/app/matcher';
 import { AdminService } from '../../auth/admin.service';
 import { PASSWOERTER_NICHT_GLEICH, PASSWORT_ZU_KURZ } from '../errormessages';
 
@@ -10,8 +9,6 @@ import { PASSWOERTER_NICHT_GLEICH, PASSWORT_ZU_KURZ } from '../errormessages';
   styleUrls: ['./adduser.component.css']
 })
 export class AdduserComponent implements OnInit {
-
-  public errorMatcher = new MyErrorStateMatcher();
 
   newUserForm = new FormGroup({
     username: new FormControl('', Validators.required),

@@ -3,7 +3,6 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { GemeinsamebuchungService } from '../gemeinsamebuchung.service';
 import { KategorieService } from '../kategorie.service';
-import { MyErrorStateMatcher } from '../matcher';
 import { GemeinsameBuchungAnlegen } from '../model';
 import { PartnerService } from '../partner.service';
 
