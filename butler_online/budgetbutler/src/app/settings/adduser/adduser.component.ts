@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MyErrorStateMatcher } from 'src/app/matcher';
 import { AdminService } from '../../auth/admin.service';
-import { PASSWOERTER_NICHT_GLEICH, PASSWORT_ZU_KURZ } from '../../errormessages';
+import { PASSWOERTER_NICHT_GLEICH, PASSWORT_ZU_KURZ } from '../errormessages';
 
 @Component({
   selector: 'app-adduser',
