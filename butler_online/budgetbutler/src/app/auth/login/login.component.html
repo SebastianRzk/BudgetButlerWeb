@@ -6,13 +6,13 @@
     <mat-card class="login-card">
       <mat-card-title>LOGIN</mat-card-title>
       <p>
-        <form (ngSubmit)="login()">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
           <mat-form-field>
-            <input matInput placeholder="Enter your email" [(ngModel)]="email" name="email">
+            <input matInput placeholder="Enter your email" formControlName="email" name="email" required>
           </mat-form-field>
           <mat-form-field>
-            <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" [(ngModel)]="password"
-              name="password">
+            <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password"
+              name="password" required>
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
           <button type="submit" class="full-height" *ngIf="!authService.isLoggedIn">Login</button>

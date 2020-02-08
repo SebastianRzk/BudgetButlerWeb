@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
-import { ALTES_PASSWORT_FEHLT, PASSWOERTER_NICHT_GLEICH, PASSWORT_IDENTISCH, PASSWORT_ZU_KURZ } from '../errormessages';
-import { MyErrorStateMatcher } from '../matcher';
+import { ALTES_PASSWORT_FEHLT, PASSWOERTER_NICHT_GLEICH, PASSWORT_IDENTISCH, PASSWORT_ZU_KURZ } from './errormessages';
 
 @Component({
   selector: 'app-settings',
@@ -11,11 +10,11 @@ import { MyErrorStateMatcher } from '../matcher';
 })
 export class SettingsComponent implements OnInit {
 
-  public altesPasswort = new FormControl('', Validators.required);
-  public neuesPasswort = new FormControl('', Validators.required);
-  public neuesPasswortWiederholung = new FormControl('', Validators.required);
-
-  public passwortMatcher = new MyErrorStateMatcher();
+  neuesPasswortForm = new FormGroup({
+    altesPasswort: new FormControl('', Validators.required),
+    neuesPasswort: new FormControl('', Validators.required),
+    neuesPasswortWiederholung: new FormControl('', Validators.required)
+  });
 
   public errorMessage = '';
 
@@ -25,22 +24,22 @@ export class SettingsComponent implements OnInit {
   }
 
   computeErrorMesage() {
-    if (this.altesPasswort.value.length < 8) {
+    if (this.neuesPasswortForm.get('altesPasswort').value.length < 8) {
       this.errorMessage = ALTES_PASSWORT_FEHLT;
       return;
     }
 
-    if (this.neuesPasswort.value !== this.neuesPasswortWiederholung.value) {
+    if (this.neuesPasswortForm.get('neuesPasswort').value !== this.neuesPasswortForm.get('neuesPasswortWiederholung').value) {
       this.errorMessage = PASSWOERTER_NICHT_GLEICH;
       return;
     }
 
-    if (this.neuesPasswort.value.length < 8) {
+    if (this.neuesPasswortForm.get('neuesPasswort').value.length < 8) {
       this.errorMessage = PASSWORT_ZU_KURZ;
       return;
     }
 
-    if (this.neuesPasswort.value === this.altesPasswort.value) {
+    if (this.neuesPasswortForm.get('neuesPasswort').value === this.neuesPasswortForm.get('altesPasswort').value) {
       this.errorMessage = PASSWORT_IDENTISCH;
       return;
     }
@@ -56,10 +55,8 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    this.authService.changePassword(this.altesPasswort.value, this.neuesPasswort.value);
-    this.altesPasswort.setValue('');
-    this.neuesPasswort.setValue('');
-    this.neuesPasswortWiederholung.setValue('');
+    this.authService.changePassword(this.neuesPasswortForm.get('altesPasswort').value, this.neuesPasswortForm.get('neuesPasswort').value);
+    this.neuesPasswortForm.reset();
   }
 
 

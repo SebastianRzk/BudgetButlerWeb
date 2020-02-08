@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -8,9 +9,13 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  loginForm = new FormGroup({
+    email: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required)
+  })
+
   hide = true;
-  email = '';
-  password = '';
 
   constructor(public authService: AuthService, public router: Router) {}
 
@@ -20,6 +25,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.login(this.email, this.password).toPromise().then(() => {});
+    if(!this.loginForm.valid){
+      return
+    }
+    this.authService.login(this.loginForm.get('email').value, this.loginForm.get('password').value).toPromise().then(() => {});
   }
 }

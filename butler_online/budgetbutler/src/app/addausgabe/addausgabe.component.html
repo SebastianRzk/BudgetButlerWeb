@@ -1,27 +1,24 @@
 <mat-card class="erfassung">
   <mat-card-title>Neue Ausgabe erfassen</mat-card-title>
-  <form>
+  <form [formGroup]="buchungForm" (ngSubmit)="onFormSubmit()">
     <mat-form-field class="full-size-form-field">
-      <input matInput [matDatepicker]="picker" placeholder="Datum der Ausgabe" required [formControl]="datum"
-        [errorStateMatcher]="einzelbuchungMatcher">
+      <input matInput [matDatepicker]="picker" placeholder="Datum der Ausgabe" formControlName="datum" required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Name der Ausgabe" value="" [formControl]="name" required
-        [errorStateMatcher]="einzelbuchungMatcher">
+      <input matInput placeholder="Name der Ausgabe" value="" formControlName="name" required>
     </mat-form-field>
     <mat-form-field class="full-size-form-field">
       <mat-label>Kategorie</mat-label>
-      <select matNativeControl required [formControl]="kategorie" [errorStateMatcher]="einzelbuchungMatcher">
+      <select matNativeControl formControlName="kategorie" required>
         <option *ngFor="let kategorie of kategorien | async" value="{{kategorie}}">{{kategorie}}</option>
       </select>
     </mat-form-field>
     <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Wert" value="" type="number" required [formControl]="wert"
-        [errorStateMatcher]="einzelbuchungMatcher">
+      <input matInput placeholder="Wert" value="" type="number" formControlName="wert" required>
     </mat-form-field>
-    <button mat-raised-button color="primary" class="full-size-form-field" (click)="hinzufuegen()">Ausgabe
+    <button mat-raised-button color="primary" class="full-size-form-field" type="submit">Ausgabe
       hinzufügen</button>
   </form>
 </mat-card>

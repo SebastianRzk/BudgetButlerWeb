@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiproviderService } from './apiprovider.service';
 import { toGemeinsameBuchungAnlegenTO } from './converter';
-import { Einzelbuchung, ERROR_RESULT, GemeinsameBuchungLoeschen, Result, GemeinsameBuchungAnlegen, GemeinsameBuchung } from './model';
+import { ERROR_RESULT, GemeinsameBuchungLoeschen, Result, GemeinsameBuchungAnlegen, GemeinsameBuchung } from './model';
 import { NotificationService } from './notification.service';
 
 @Injectable({
