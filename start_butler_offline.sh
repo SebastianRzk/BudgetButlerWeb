@@ -41,6 +41,8 @@ echo "Starting BudgetButlerWeb local server"
 cd "$parent_path/butler_offline"
 export FLASK_APP=start_as_flask.py 
 
-eval  "sleep 4s && chromium --app=http://localhost:5000" &
-flask run
+flask run &
 
+sleep 4s && chromium --app=http://localhost:5000
+
+pkill -P $$
