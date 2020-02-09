@@ -46,8 +46,16 @@ cd "$parent_path/butler_offline"
 
 flask run &
 
+tries=0
 until $(curl --output /dev/null --silent --head --fail $HOST); do
-    printf 'Waiting for server to be up...'
+    echo "Waiting for server to be up..."
+
+    tries=$tries+1
+    if [[ tries -gt 20 ]]; then
+        echo "Server is not coming up. Exiting..."
+        exit 1
+    fi
+
     sleep 1
 done
 
