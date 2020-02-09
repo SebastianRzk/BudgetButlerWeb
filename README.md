@@ -12,7 +12,8 @@
 * Python 3.6
 * Pip
 * Chromium (if you don't want to use the .desktop shortcut, you can use any modern browser)
-* (git)
+* Startup script: shell, curl, Chromium
+* Versioning: git
 
 ### Install and run 
 Clone the repository:
