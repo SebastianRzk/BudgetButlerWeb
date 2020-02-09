@@ -30,7 +30,8 @@
 * Python 3.6
 * Pip
 * Moderner Webbrowser (z.B. Firefox oder Chromium)
-* (git)
+* Startup-Skript: shell, curl, Chromium
+* Versionierung: git
 
 ### Installation
 Das Git-Repository clonen:
