@@ -47,6 +47,31 @@ class Gemeinsamebuchungen(DatabaseObject):
         self.content.Person = self.content.Person.map(lambda x: self._rename_value(old_name, new_name, x))
         self.taint()
 
+    def get_renamed_list(self, old_username, new_username, old_partnername, new_partnername):
+        data = self.content.copy()
+        data.Person = data.Person.map(lambda x: self._rename_person(x, {old_username: new_username, old_partnername: new_partnername}))
+        result = []
+
+        for index, row in data.iterrows():
+            result.append({
+            'Datum': row.Datum,
+            'Wert': row.Wert,
+            'Kategorie': row.Kategorie,
+            'Name': row.Name,
+            'Person': row.Person
+        })
+        return result
+
+    def drop_all(self):
+        self.content = self.content.iloc[0:0]
+        self.taint()
+
+
+    def _rename_person(self, person_name, mapping):
+        if person_name in mapping:
+            return mapping[person_name]
+        return person_name
+
     def _rename_value(self, old, new, x):
         if x == old:
             return new
