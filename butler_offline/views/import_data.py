@@ -113,6 +113,32 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = serverurl + '/setkategorien.php'
 
             requester.instance().post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
+
+        elif post_action_is(request, 'upload_gemeinsame_transactions'):
+            serverurl = request.values['server']
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
+            print(serverurl)
+            online_username = get_username(serverurl, request.values['email'], request.values['password'])
+            print('butler_online username: ', online_username)
+
+            online_content = get_gemeinsame_buchungen(serverurl, request.values['email'], request.values['password'])
+            print(online_content)
+            table = JSONReport().dataframe_from_json_gemeinsam(online_content)
+
+            print('table before person mapping', table)
+            table.Person = table.Person.map(lambda
+                                                x: viewcore.database_instance().name if x == online_username else configuration_provider.get_configuration(
+                'PARTNERNAME'))
+            online_content = TextReportWriter().generate_report(table)
+            response = handle_request(PostRequest({'import': online_content}), import_prefix='Internet_Gemeinsam',
+                                      gemeinsam=True)
+
+            requester.instance().post(serverurl + '/deletegemeinsam.php',
+                                      data={'email': request.values['email'], 'password': request.values['password']})
+            return response
+
+
         else:
             print(request.values)
             content = request.values['import'].replace('\r', '')
