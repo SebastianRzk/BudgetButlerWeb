@@ -129,7 +129,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             offline_username = viewcore.database_instance().name
             print('butler offlline username:', offline_username)
 
-            buchungen = viewcore.database_instance().gemeinsamebuchungen.test_get_renamed_list(offline_username,
+            buchungen = viewcore.database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
                                                                                                offline_username,
                                                                                                offline_partnername,
                                                                                                online_partnername)
@@ -138,17 +138,17 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             for buchung in buchungen:
                 request_data.append(
                     {
-                        'datum': datum_to_string(buchung.Datum),
-                        'name': buchung.Name,
-                        'wert': buchung.Wert,
-                        'kategorie': buchung.Kategorie,
-                        'person': buchung.Person
+                        'datum': datum_to_string(buchung['Datum']),
+                        'name': buchung['Name'],
+                        'wert': buchung['Wert'],
+                        'kategorie': buchung['Kategorie'],
+                        'person': buchung['Person']
                     }
                 )
             anzahl_buchungen = len(buchungen)
             result = upload_gemeinsame_buchungen(serverurl, request.values['email'], request.values['password'], request_data)
             if result:
-                set_success_message(context, '{anzahl_buchungen} wurden erfolgreich hochgeladen'.format(anzahl_buchungen=anzahl_buchungen))
+                set_success_message(context, '{anzahl_buchungen} Buchungen wurden erfolgreich hochgeladen.'.format(anzahl_buchungen=anzahl_buchungen))
                 viewcore.database_instance().gemeinsamebuchungen.drop_all()
             else:
                 set_error_message(context, 'Fehler beim Hochladen der gemeinsamen Buchungen.')

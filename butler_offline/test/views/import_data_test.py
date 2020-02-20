@@ -155,6 +155,12 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
     }
     '''
 
+    _JSON_DATA_PARTNER = '''
+    {
+        "partnername": "OnlinePartner"
+    }
+    '''
+
     def test_einzelbuchungImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
@@ -386,4 +392,48 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                                               'password' : ''}))
 
         assert requester.instance().data_of_request('https://test.test/setkategorien.php')[0]['kategorien'] == 'JaEins,JaZwei'
+
+    def test_upload_data(self):
+        self.set_up()
+
+        viewcore.database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'Sebastian')
+        viewcore.database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Maureen')
+
+        requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
+                                            'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
+                                           'https://test.test/api/login.php': self._JSON_DATA_USERNAME})
+
+        result = import_data.index(PostRequest({'action': 'upload_gemeinsame_transactions',
+                                              'email': '',
+                                              'server': 'test.test/api',
+                                              'password' : ''}))
+
+        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 0
+        assert result['message'] == True
+        assert result['message_type'] == 'success'
+        assert result['message_content'] == '2 Buchungen wurden erfolgreich hochgeladen.'
+
+        assert requester.INSTANCE.data_of_request('https://test.test/api/gemeinsamebuchung.php') == [
+            {
+                'email': '',
+                'password': '',
+                'data': [
+                    {
+                        'datum': '2020-01-01',
+                        'kategorie': 'kategorie1',
+                        'name': 'name1',
+                        'person': 'Sebastian',
+                        'wert': 1.11
+                    }
+                    ,
+                    {
+                        'datum': '2020-02-02',
+                        'kategorie': 'kategorie2',
+                        'name': 'name2',
+                        'person': 'OnlinePartner',
+                        'wert': 2.22
+                    }
+                ]
+            }
+        ]
 
