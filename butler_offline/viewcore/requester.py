@@ -31,6 +31,6 @@ class Requester:
 
     def put(self, server_url, data, cookies):
         print('requested url', server_url, data)
-        response = requests.put(server_url, data, cookies)
+        response = requests.put(url=server_url, json=data, cookies=cookies)
         response.raise_for_status()
         return self.decode(response)

@@ -65,17 +65,29 @@ function handle_delete($auth, $dbh){
 
 function handle_put($auth, $dbh){
 	$jsondata = file_get_contents('php://input');
-	$requestetBuchung = json_decode($jsondata, true);
+	$requestedBuchung = json_decode($jsondata, true);
+
+	if (!isset($requestedBuchung['name'])) {
+		# compute list;
+		echo json_encode(handle_put_list($auth, $dbh, $requestedBuchung));
+	}
+	else
+	{
+		# compute single element
+		echo json_encode(handle_put_single($auth, $dbh, $requestedBuchung));
+	}
+}
 
 
+function handle_put_single($auth, $dbh, $requestedBuchung){
 	$neueBuchung = new GemeinsameBuchung();
 	$neueBuchung->setUser($auth->getUsername());
-	$neueBuchung->setDatum(date_create(getOrDefault($requestetBuchung, 'datum', '01-01-2019')));
-	$neueBuchung->setName(getOrDefault($requestetBuchung, 'name', 'kein Name angegeben'));
-	$neueBuchung->setKategorie(getOrDefault($requestetBuchung, 'kategorie', 'keine Kategorie angegeben'));
-	$neueBuchung->setWert(getOrDefault($requestetBuchung, 'wert', 0));
+	$neueBuchung->setDatum(date_create(getOrDefault($requestedBuchung, 'datum', '01-01-2019')));
+	$neueBuchung->setName(getOrDefault($requestedBuchung, 'name', 'kein Name angegeben'));
+	$neueBuchung->setKategorie(getOrDefault($requestedBuchung, 'kategorie', 'keine Kategorie angegeben'));
+	$neueBuchung->setWert(getOrDefault($requestedBuchung, 'wert', 0));
 
-	if (strcmp($requestetBuchung['zielperson'], $auth->getUsername()) == 0) {
+	if (strcmp($requestedBuchung['zielperson'], $auth->getUsername()) == 0) {
 		$neueBuchung->setZielperson($auth->getUsername());
 	} else {
 		$partnerstatus = get_partnerstatus($auth, $dbh);
@@ -88,7 +100,19 @@ function handle_put($auth, $dbh){
 
 	$result = new Result();
 	$result->message = "Buchung erfolgreich hinzugefügt";
-	echo json_encode($result);
+	return $result;
 }
+
+
+function handle_put_list($auth, $dbh, $liste){
+	foreach ($liste as $item){
+		handle_put_single($auth, $dbh, $item);
+	}
+
+	$result = new Result();
+	$result->message = "Buchung erfolgreich hinzugefügt";
+	return $result;
+}
+
 
 ?>

@@ -381,7 +381,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                     'datum': '2020-01-01',
                     'kategorie': 'kategorie1',
                     'name': 'name1',
-                    'person': 'Sebastian',
+                    'zielperson': 'online user name',
                     'wert': 1.11
                 }
                 ,
@@ -389,7 +389,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                     'datum': '2020-02-02',
                     'kategorie': 'kategorie2',
                     'name': 'name2',
-                    'person': 'OnlinePartner',
+                    'zielperson': 'OnlinePartner',
                     'wert': 2.22
                 }
             ]
@@ -423,7 +423,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                     'datum': '2020-01-01',
                     'kategorie': 'kategorie1',
                     'name': 'name1',
-                    'person': 'Sebastian',
+                    'zielperson': 'online user name',
                     'wert': 1.11
                 }
                 ,
@@ -431,7 +431,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                     'datum': '2020-02-02',
                     'kategorie': 'kategorie2',
                     'name': 'name2',
-                    'person': 'OnlinePartner',
+                    'zielperson': 'OnlinePartner',
                     'wert': 2.22
                 }
             ]

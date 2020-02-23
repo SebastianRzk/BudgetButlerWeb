@@ -132,7 +132,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             print('butler offline partnername:', offline_partnername)
 
             buchungen = viewcore.database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
-                                                                                               offline_username,
+                                                                                               online_username,
                                                                                                offline_partnername,
                                                                                                online_partnername)
             request_data = []
@@ -144,7 +144,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                         'name': buchung['Name'],
                         'wert': buchung['Wert'],
                         'kategorie': buchung['Kategorie'],
-                        'person': buchung['Person']
+                        'zielperson': buchung['Person']
                     }
                 )
             anzahl_buchungen = len(buchungen)
