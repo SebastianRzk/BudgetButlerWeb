@@ -14,7 +14,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.viewcore import database_instance
 from butler_offline.viewcore import requester
-from butler_offline.test.RequesterStub import RequesterStub
+from butler_offline.test.RequesterStub import RequesterStub, MockedResponse
 from butler_offline.test.RequesterStub import RequesterErrorStub
 
 # Create your tests here.
@@ -393,6 +393,16 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         assert requester.instance().data_of_request('https://test.test/setkategorien.php')[0]['kategorien'] == 'JaEins,JaZwei'
 
+
+    LOGIN_COOKIES = 'login cookies'
+
+    LOGIN_REPONSE = MockedResponse('data', LOGIN_COOKIES)
+
+    DECODED_LOGIN_DATA = '''{
+        "username": "online user name"
+    }'''
+
+
     def test_upload_data(self):
         self.set_up()
 
@@ -401,7 +411,10 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
-                                           'https://test.test/api/login.php': self._JSON_DATA_USERNAME})
+                                           'https://test.test/api/login.php': self.LOGIN_REPONSE},
+                                           self.DECODED_LOGIN_DATA,
+                                           auth_cookies=self.LOGIN_COOKIES
+                                           )
 
         result = import_data.index(PostRequest({'action': 'upload_gemeinsame_transactions',
                                               'email': '',
@@ -409,32 +422,28 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                                               'password' : ''}))
 
         assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 0
-        assert result['message'] == True
+        assert result['message']
         assert result['message_type'] == 'success'
         assert result['message_content'] == '2 Buchungen wurden erfolgreich hochgeladen.'
 
         assert requester.INSTANCE.data_of_request('https://test.test/api/gemeinsamebuchung.php') == [
-            {
-                'email': '',
-                'password': '',
-                'data': [
-                    {
-                        'datum': '2020-01-01',
-                        'kategorie': 'kategorie1',
-                        'name': 'name1',
-                        'person': 'Sebastian',
-                        'wert': 1.11
-                    }
-                    ,
-                    {
-                        'datum': '2020-02-02',
-                        'kategorie': 'kategorie2',
-                        'name': 'name2',
-                        'person': 'OnlinePartner',
-                        'wert': 2.22
-                    }
-                ]
-            }
+             [
+                {
+                    'datum': '2020-01-01',
+                    'kategorie': 'kategorie1',
+                    'name': 'name1',
+                    'person': 'Sebastian',
+                    'wert': 1.11
+                }
+                ,
+                {
+                    'datum': '2020-02-02',
+                    'kategorie': 'kategorie2',
+                    'name': 'name2',
+                    'person': 'OnlinePartner',
+                    'wert': 2.22
+                }
+            ]
         ]
 
     def test_upload_data_fehler(self):
@@ -445,7 +454,9 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "error"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
-                                           'https://test.test/api/login.php': self._JSON_DATA_USERNAME})
+                                            'https://test.test/api/login.php': self.LOGIN_REPONSE},
+                                             self.DECODED_LOGIN_DATA,
+                                           auth_cookies=self.LOGIN_COOKIES)
 
         result = import_data.index(PostRequest({'action': 'upload_gemeinsame_transactions',
                                               'email': '',
@@ -458,26 +469,22 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
         assert result['message_content'] == 'Fehler beim Hochladen der gemeinsamen Buchungen.'
 
         assert requester.INSTANCE.data_of_request('https://test.test/api/gemeinsamebuchung.php') == [
-            {
-                'email': '',
-                'password': '',
-                'data': [
-                    {
-                        'datum': '2020-01-01',
-                        'kategorie': 'kategorie1',
-                        'name': 'name1',
-                        'person': 'Sebastian',
-                        'wert': 1.11
-                    }
-                    ,
-                    {
-                        'datum': '2020-02-02',
-                        'kategorie': 'kategorie2',
-                        'name': 'name2',
-                        'person': 'OnlinePartner',
-                        'wert': 2.22
-                    }
-                ]
-            }
+             [
+                {
+                    'datum': '2020-01-01',
+                    'kategorie': 'kategorie1',
+                    'name': 'name1',
+                    'person': 'Sebastian',
+                    'wert': 1.11
+                }
+                ,
+                {
+                    'datum': '2020-02-02',
+                    'kategorie': 'kategorie2',
+                    'name': 'name2',
+                    'person': 'OnlinePartner',
+                    'wert': 2.22
+                }
+            ]
         ]
 

@@ -1,8 +1,7 @@
 
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.session import get_username
-from butler_offline.views.online_services.session import get_partnername
-from butler_offline.test.RequesterStub import RequesterStub
+from butler_offline.views.online_services.session import get_username, get_partnername, login
+from butler_offline.test.RequesterStub import RequesterStub, MockedResponse
 from unittest import TestCase
 
 class TestSession(TestCase):
@@ -20,6 +19,12 @@ class TestSession(TestCase):
     }
     '''
 
+    login_response = MockedResponse('data', 'login cookies')
+
+    decoded_login_data = '''{
+        "username": "online user name"
+    }'''
+
     def test_get_username(self):
         requester.INSTANCE = RequesterStub({'https://test.test/api/login.php': self.auth_response})
 
@@ -29,3 +34,13 @@ class TestSession(TestCase):
         requester.INSTANCE = RequesterStub({'https://test.test/api/partner.php': self.partnername_response})
 
         assert get_partnername('https://test.test/api', '', '') == 'Partner1'
+
+    def test_login(self):
+        requester.INSTANCE = RequesterStub({'https://test.test/api/login.php': self.login_response},
+                                           self.decoded_login_data)
+
+        auth_container = login('https://test.test/api', '', '')
+
+        assert auth_container.cookies() == 'login cookies'
+        assert auth_container.online_name() == 'online user name'
+

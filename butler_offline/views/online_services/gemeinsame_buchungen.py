@@ -8,7 +8,6 @@ def get_gemeinsame_buchungen(serverurl, email, password):
     return json.loads(jsondata)
 
 
-def upload_gemeinsame_buchungen(serverurl, email, password, data):
-    jsondata = requester.instance().post(serverurl + '/gemeinsamebuchung.php',
-                                         data={'email': email, 'password': password, 'data': data})
+def upload_gemeinsame_buchungen(serverurl, data, auth_container):
+    jsondata = requester.instance().put(serverurl + '/gemeinsamebuchung.php', data, auth_container.cookies())
     return json.loads(jsondata)['result'] == 'OK'
