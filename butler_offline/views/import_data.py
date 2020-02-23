@@ -88,7 +88,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
             print(serverurl)
-            online_username = get_username(serverurl, request.values['email'], request.values['password'])
+            auth_container = login(serverurl, request.values['email'], request.values['password'])
+            online_username = auth_container.online_name()
             print('butler_online username: ', online_username)
 
             online_content = get_gemeinsame_buchungen(serverurl, request.values['email'], request.values['password'])

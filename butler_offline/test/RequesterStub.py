@@ -48,6 +48,8 @@ class RequesterErrorStub:
     def post(self, url, data):
         raise ConnectionError('Just for the test')
 
+    def post_raw(self, url, data):
+        return self.post(url, data)
 class MockedResponse:
     def __init__(self, data, cookies):
         self.data = data

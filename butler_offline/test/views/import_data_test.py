@@ -20,6 +20,14 @@ from butler_offline.test.RequesterStub import RequesterErrorStub
 # Create your tests here.
 class Importd(unittest.TestCase):
 
+    LOGIN_COOKIES = 'login cookies'
+
+    LOGIN_RESPONSE = MockedResponse('data', LOGIN_COOKIES)
+
+    DECODED_LOGIN_DATA = '''{
+        "username": "online user name"
+    }'''
+
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
         viewcore.DATABASE_INSTANCE = None
@@ -84,7 +92,7 @@ class Importd(unittest.TestCase):
 
     _JSON_IMPORT_DATA_GEMEINSAM = '''
     [
-    {"id":"122","datum":"2019-01-01","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user": "unknown", "zielperson": "Sebastian"},
+    {"id":"122","datum":"2019-01-01","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user": "unknown", "zielperson": "online user name"},
     {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user": "unknown", "zielperson": "Partner"}
     ]
     '''
@@ -203,11 +211,11 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
-
-
         requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM,
                                            'https://test.test/deletegemeinsam.php' : '',
-                                           'https://test.test/login.php': self._JSON_DATA_USERNAME})
+                                           'https://test.test/login.php': self.LOGIN_RESPONSE},
+                                           self.DECODED_LOGIN_DATA,
+                                           auth_cookies=self.LOGIN_COOKIES)
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
                                                       'email': '',
@@ -226,7 +234,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
     _JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER = '''
     [
     {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user":"SebastianFalsch","zielperson":"PartnerFalsch"},
-    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user":"SebastianFalsch","zielperson":"Sebastian"}
+    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user":"SebastianFalsch","zielperson":"online user name"}
     ]
     '''
 
@@ -239,12 +247,14 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER,
                                            'https://test.test/deletegemeinsam.php': '',
-                                           'https://test.test/login.php': self._JSON_DATA_USERNAME})
+                                           'https://test.test/login.php': self.LOGIN_RESPONSE},
+                                           self.DECODED_LOGIN_DATA,
+                                           auth_cookies=self.LOGIN_COOKIES)
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
-                                                      'email': '',
-                                                      'server': 'test.test',
-                                                      'password' : ''}))
+                                                 'email': '',
+                                                 'server': 'test.test',
+                                                 'password': ''}))
 
         assert context['element_titel'] == 'Export / Import'
         assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
@@ -292,7 +302,9 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM,
                                            'https://test.test/deletegemeinsam.php': '',
-                                           'https://test.test/login.php': self._JSON_DATA_USERNAME})
+                                           'https://test.test/login.php': self.LOGIN_RESPONSE},
+                                           self.DECODED_LOGIN_DATA,
+                                           auth_cookies=self.LOGIN_COOKIES)
 
         context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
                                                       'email': '',
@@ -321,60 +333,6 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
         assert requester.instance().complete_call_count() == 3
 
 
-
-    _JSON_IMPORT_DATA_GEMEINSAM_WRONG_SELF = '''
-    [
-    {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user":"SebastianFalsch","zielperson":"Partner"},
-    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user":"SebastianFalsch","zielperson":"SebastianFalsch"}
-    ]
-    '''
-
-    _JSON_DATA_USERNAME_NOT_MATCHING = '''
-    {
-        "username": "SebastianFalsch",
-        "token": "0x00",
-        "role": "User"
-    }
-    '''
-
-    def test_gemeinsamImport_withUnpassendenUsername_shouldImportValueAndRepalceName(self):
-        self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
-        einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
-
-        requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM_WRONG_SELF,
-                                           'https://test.test/deletegemeinsam.php': '',
-                                           'https://test.test/login.php': self._JSON_DATA_USERNAME_NOT_MATCHING})
-
-        context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
-                                                      'email': '',
-                                                      'server': 'test.test',
-                                                      'password' : ''}))
-
-        assert context['element_titel'] == 'Export / Import'
-        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
-
-        assert viewcore.database_instance().gemeinsamebuchungen.get(0) == {
-            'Datum': datetime.date(2019, 7, 11),
-            'Dynamisch': False,
-            'Kategorie': 'Essen',
-            'Name': 'Testausgabe2',
-            'Person': 'Sebastian',
-            'Wert': -0.9,
-            'index': 0}
-
-        assert viewcore.database_instance().gemeinsamebuchungen.get(1) == {
-            'Datum': datetime.date(2019, 7, 15),
-            'Dynamisch': False,
-            'Kategorie': 'Essen',
-            'Name': 'Testausgabe1',
-            'Person': 'Maureen',
-            'Wert': -1.3,
-            'index': 1}
-
-        assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
-        assert requester.instance().complete_call_count() == 3
-
     def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlossene_kategorien(self):
         self.set_up()
 
@@ -386,21 +344,12 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         requester.INSTANCE = RequesterStub({'https://test.test/setkategorien.php': ''})
 
-        context = import_data.index(PostRequest({'action': 'set_kategorien',
+        import_data.index(PostRequest({'action': 'set_kategorien',
                                               'email': '',
                                               'server': 'test.test',
                                               'password' : ''}))
 
         assert requester.instance().data_of_request('https://test.test/setkategorien.php')[0]['kategorien'] == 'JaEins,JaZwei'
-
-
-    LOGIN_COOKIES = 'login cookies'
-
-    LOGIN_REPONSE = MockedResponse('data', LOGIN_COOKIES)
-
-    DECODED_LOGIN_DATA = '''{
-        "username": "online user name"
-    }'''
 
 
     def test_upload_data(self):
@@ -411,7 +360,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
-                                           'https://test.test/api/login.php': self.LOGIN_REPONSE},
+                                           'https://test.test/api/login.php': self.LOGIN_RESPONSE},
                                            self.DECODED_LOGIN_DATA,
                                            auth_cookies=self.LOGIN_COOKIES
                                            )
@@ -454,8 +403,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "error"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
-                                            'https://test.test/api/login.php': self.LOGIN_REPONSE},
-                                             self.DECODED_LOGIN_DATA,
+                                            'https://test.test/api/login.php': self.LOGIN_RESPONSE},
+                                           self.DECODED_LOGIN_DATA,
                                            auth_cookies=self.LOGIN_COOKIES)
 
         result = import_data.index(PostRequest({'action': 'upload_gemeinsame_transactions',
