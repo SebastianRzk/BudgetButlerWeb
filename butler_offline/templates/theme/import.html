@@ -51,6 +51,23 @@
 <div class="theme-double-columns">
 	<div class="box">
 		<div class="box-header">
+			<h3 class="box-title">Nicht abgerechnete Buchungen hochladen</h3>
+		</div>
+		<form role="form" action="/import/" method="post">
+			<div class="box-body">
+				<div class="form-group">
+					<label>Server</label> <input type="text" name="server" class="form-control" value="{{ONLINE_DEFAULT_SERVER}}" required="required"/>
+					<label>Email</label> <input type="text" name="email" class="form-control" value="{{ONLINE_DEFAULT_USER}}" required="required"/>
+					<label>Passwort</label> <input type="password" name="password" class="form-control" required="required"/>
+				</div>
+				</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="upload_gemeinsame_transactions" id="upload_gemeinsame_transactions" class="btn bordered-hover">Daten hochladen</button>
+			</div>
+		</form>
+	</div>
+	<div class="box">
+		<div class="box-header">
 			<h3 class="box-title">Online Kategorien installieren</h3>
 		</div>
 		<form role="form" action="/import/" method="post">

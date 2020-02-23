@@ -197,3 +197,73 @@ class gemeinsame_buchungen(unittest.TestCase):
                 'Wert': 3.45
             }
         ]
+
+    def test_get_renamed_list(self):
+        component_under_test = Gemeinsamebuchungen()
+
+        component_under_test.add(
+            datum('1.1.2020'),
+            'kategorie1',
+            'name1',
+            1.11,
+            'offline user')
+        component_under_test.add(
+            datum('2.2.2020'),
+            'kategorie2',
+            'name2',
+            2.22,
+            'offline partner')
+        component_under_test.add(
+            datum('3.3.2020'),
+            'kategorie3',
+            'name3',
+            3.33,
+            'unknown')
+
+        result = component_under_test.get_renamed_list('offline user', 'online user', 'offline partner', 'online partner')
+
+        assert result == [
+            {
+                'Datum': datum('1.1.2020'),
+                'Name': 'name1',
+                'Kategorie': 'kategorie1',
+                'Wert': 1.11,
+                'Person': 'online user'
+            },
+            {
+                'Datum': datum('2.2.2020'),
+                'Name': 'name2',
+                'Kategorie': 'kategorie2',
+                'Wert': 2.22,
+                'Person': 'online partner'
+            },
+            {
+                'Datum': datum('3.3.2020'),
+                'Name': 'name3',
+                'Kategorie': 'kategorie3',
+                'Wert': 3.33,
+                'Person': 'unknown'
+            }
+        ]
+
+    def test_drop_all(self):
+        component_under_test = Gemeinsamebuchungen()
+
+        component_under_test.add(
+            datum('1.1.2020'),
+            'kategorie1',
+            'name1',
+            1.11,
+            'offline user')
+
+        component_under_test.add(
+            datum('1.1.2020'),
+            'kategorie1',
+            'name1',
+            1.11,
+            'offline user')
+
+        component_under_test.drop_all()
+
+        assert len(component_under_test.content) == 0
+        assert component_under_test.tainted

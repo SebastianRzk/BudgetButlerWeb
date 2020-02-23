@@ -6,15 +6,16 @@ from butler_offline.core.file_system import write_import
 from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
 
 from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.base_html import set_success_message
+from butler_offline.viewcore.base_html import set_success_message, set_error_message
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.session import get_username
+from butler_offline.views.online_services.session import get_username, get_partnername, login
 from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
-from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen
+from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, upload_gemeinsame_buchungen
 from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 
@@ -87,7 +88,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
             print(serverurl)
-            online_username = get_username(serverurl, request.values['email'], request.values['password'])
+            auth_container = login(serverurl, request.values['email'], request.values['password'])
+            online_username = auth_container.online_name()
             print('butler_online username: ', online_username)
 
             online_content = get_gemeinsame_buchungen(serverurl, request.values['email'], request.values['password'])
@@ -113,6 +115,46 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = serverurl + '/setkategorien.php'
 
             requester.instance().post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
+
+        elif post_action_is(request, 'upload_gemeinsame_transactions'):
+            serverurl = request.values['server']
+            serverurl = _add_protokoll_if_needed(serverurl)
+            _save_server_creds(serverurl, request.values['email'])
+            print(serverurl)
+            auth_container = login(serverurl, request.values['email'], request.values['password'])
+            online_username = auth_container.online_name()
+            print('butler_online username:', online_username)
+            offline_username = viewcore.database_instance().name
+            print('butler offline username:', offline_username)
+            online_partnername = get_partnername(serverurl, request.values['email'], request.values['password'])
+            print('butler online partnername:', online_partnername)
+            offline_partnername = configuration_provider.get_configuration('PARTNERNAME')
+            print('butler offline partnername:', offline_partnername)
+
+            buchungen = viewcore.database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
+                                                                                               online_username,
+                                                                                               offline_partnername,
+                                                                                               online_partnername)
+            request_data = []
+
+            for buchung in buchungen:
+                request_data.append(
+                    {
+                        'datum': datum_to_string(buchung['Datum']),
+                        'name': buchung['Name'],
+                        'wert': buchung['Wert'],
+                        'kategorie': buchung['Kategorie'],
+                        'zielperson': buchung['Person']
+                    }
+                )
+            anzahl_buchungen = len(buchungen)
+            result = upload_gemeinsame_buchungen(serverurl, request_data, auth_container)
+            if result:
+                set_success_message(context, '{anzahl_buchungen} Buchungen wurden erfolgreich hochgeladen.'.format(anzahl_buchungen=anzahl_buchungen))
+                viewcore.database_instance().gemeinsamebuchungen.drop_all()
+            else:
+                set_error_message(context, 'Fehler beim Hochladen der gemeinsamen Buchungen.')
+
         else:
             print(request.values)
             content = request.values['import'].replace('\r', '')
