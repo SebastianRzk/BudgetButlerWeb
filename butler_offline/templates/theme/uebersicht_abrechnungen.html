@@ -1,8 +1,8 @@
-{% for zusammenfassung in zusammenfassungen%}
+{% for zusammenfassung in zusammenfassungen %}
 <div class="box collapsed-box theme-row">
 	<div class="box-header with-border">
-		<h3 class="box-title">{{zusammenfassung.name}}</h3>
-		<button class="btn-tool pull-right" data-widget="collapse" id="open_{{zusammenfassung.name}}"><span class="fa fa-plus"></span></button>
+		<h3 class="box-title">Zusammenfassung {{zusammenfassung.jahr}}</h3>
+		<button class="btn-tool pull-right" data-widget="collapse" id="open_{{zusammenfassung.jahr}}"><span class="fa fa-plus"></span></button>
 	</div>
 	<div class="box-body">
 		<div class="table-responsive">
@@ -42,7 +42,7 @@
 	</div>
 	<div class="box-body">
 		<div class="table-responsive">
-            <textarea name='import' class="textarea" required="required" disabled>{{abrechnung.content}}</textarea>
+            <textarea name='import' class="textarea abrechnung" required="required" disabled>{{abrechnung.content}}</textarea>
 		</div>
 	</div>
 </div>

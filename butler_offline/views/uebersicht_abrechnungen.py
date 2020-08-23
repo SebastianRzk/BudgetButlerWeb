@@ -1,37 +1,45 @@
 from butler_offline.viewcore import request_handler
 from butler_offline.core.file_system import all_abrechnungen
 from butler_offline.viewcore import viewcore
-
+from butler_offline.core.export.text_report import TextReportReader
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 
 def _handle_request(request):
 
     all_files = all_abrechnungen()
-    all_parsed_files = []
+
+    text_report_reader = TextReportReader()
+    all_content = Einzelbuchungen()
+
+    abrechnungen = []
+
+    for file in all_files:
+        report = text_report_reader.read(''.join(file['content']))
+        all_content.parse(report)
+        abrechnungen.append(
+            {
+                'name': file['name'],
+                'content': ''.join(file['content'])
+            }
+        )
 
 
-
-
-    zusammenfassungen = [
-        {
-            'name': 'Zusammenfassung 2019',
-            'jahr': '2019',
-            'monate': [1, 0, 2, 0, 0, 40, 0, 0, 3, 10, 0, 30]
-        }
-
-    ]
+    jahre = all_content.get_jahre()
     zusammenfassungen = []
 
-    abrechnungen = [
-        {
-            'name': 'Abrechnung März 2019',
-            'content': '''ABRECHNUNG         2000'''
-        },
-        {
-            'name': 'Abrechnung März 2019',
-            'content': '''ABRECHNUNG         2000'''
-        }
-    ]
-    abrechnungen = []
+
+    for jahr in sorted(jahre):
+
+        year_selection = all_content.select().select_year(int(jahr))
+        monate = []
+        for monat in range(1, 13):
+            monate.append(year_selection.select_month(monat).count())
+        zusammenfassungen.append(
+            {
+                'jahr': jahr,
+                'monate': monate
+            }
+        )
 
     context = viewcore.generate_transactional_context('uebersichtabrechnungen')
     context['zusammenfassungen'] = zusammenfassungen
