@@ -46,7 +46,7 @@ class DBManager_readDB(unittest.TestCase):
         database = DBManager.read('testuser', set())
         DBManager.write(database)
 
-        assert file_system.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
+        assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
 
     def teste_write_with_old_database_should_migrate(self):
         self.mock_filesystem()
@@ -55,7 +55,7 @@ class DBManager_readDB(unittest.TestCase):
         database = DBManager.read('testuser', set())
         DBManager.write(database)
 
-        assert file_system.instance().read('../Database_testuser.csv') == self.full_db.split('\n')
+        assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
 
 
     full_db_old = '''Datum,Kategorie,Name,Wert,Tags

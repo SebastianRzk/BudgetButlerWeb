@@ -9,6 +9,7 @@ echo "Type=Application" >> budgetbutler.desktop
 echo "Terminal=true" >> budgetbutler.desktop
 echo "Exec=$(pwd)/start_butler_offline.sh" >> budgetbutler.desktop
 echo "Name=BudgetButler" >> budgetbutler.desktop
+echo "Comment=Simple money manager" >> budgetbutler.desktop
 echo "Icon=$(pwd)/butler_offline/static/BBFav.png" >> budgetbutler.desktop
 
 mv budgetbutler.desktop ~/.local/share/applications

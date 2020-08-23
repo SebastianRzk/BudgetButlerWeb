@@ -24,8 +24,7 @@ def write_abrechnung(file_name, file_content):
 
 
 def all_abrechnungen():
-    filenames = instance().list_files(ABRECHNUNG_PATH)
-
+    filenames = instance().list_files(ABRECHNUNG_PATH + '*') + instance().list_files(IMPORT_PATH + '*')
     all_contents = []
     for filename in filenames:
         all_contents.append({
@@ -53,4 +52,4 @@ class FileSystemImpl:
             file.write(file_content)
 
     def list_files(self, path):
-        return glob.glob(path)
+        return sorted(glob.glob(path))

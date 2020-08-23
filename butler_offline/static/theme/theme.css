@@ -597,3 +597,7 @@ textarea {
 .table-kategorie {
     width: 20%;
 }
+
+.abrechnung {
+    min-height: 100ex;
+}

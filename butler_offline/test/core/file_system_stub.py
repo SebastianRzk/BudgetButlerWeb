@@ -6,8 +6,13 @@ class FileSystemStub:
     def read(self, file_path):
         if not file_path in self._fs_stub:
             return None
+        return self.stub_pad_content(self._fs_stub[file_path])
 
-        return self._fs_stub[file_path].split('\n')
+    def stub_pad_content(self, content):
+        content = content.split('\n')
+        padded_content = [line + '\n' for line in content]
+        padded_content[-1] = padded_content[-1].replace('\n', '')
+        return padded_content
 
     def write(self, file_path, file_content):
         print('FileSystemStub WRITE:', file_path)
