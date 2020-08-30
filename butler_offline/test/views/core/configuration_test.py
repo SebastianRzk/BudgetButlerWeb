@@ -9,7 +9,7 @@ import unittest
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.views import configuration
+from butler_offline.views.core import configuration
 from butler_offline.core import file_system
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
@@ -35,33 +35,33 @@ class TestKonfiguration(unittest.TestCase):
 
     def test_addKategorie(self):
         self.set_up()
-        configuration.index(PostRequest({'action':'add_kategorie', 'neue_kategorie':'test'}))
+        configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test'}))
         assert viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
     def test_change_db_should_trigger_db_reload(self):
         self.set_up()
-        configuration.index(PostRequest({'action':'edit_databases', 'dbs':'test'}))
+        configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test'}))
         assert viewcore.database_instance().name == 'test'
 
-        configuration.index(PostRequest({'action':'edit_databases', 'dbs':'test2'}))
+        configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test2'}))
         assert viewcore.database_instance().name == 'test2'
 
     def test_change_partnername_should_change_partnername(self):
         self.set_up()
         assert viewcore.name_of_partner() == 'kein_Partnername_gesetzt'
-        configuration.index(PostRequest({'action':'set_partnername', 'partnername':'testpartner'}))
+        configuration.index(PostRequest({'action': 'set_partnername', 'partnername': 'testpartner'}))
         assert viewcore.name_of_partner() == 'testpartner'
 
     def test_change_themecolor_should_change_themecolor(self):
         self.set_up()
         assert configuration_provider.get_configuration('THEME_COLOR') == '#00acd6'
-        configuration.index(PostRequest({'action':'change_themecolor', 'themecolor':'#000000'}))
+        configuration.index(PostRequest({'action': 'change_themecolor', 'themecolor': '#000000'}))
         assert configuration_provider.get_configuration('THEME_COLOR') == '#000000'
 
     def test_change_schliesse_kateorien_aus_should_change_add_ausgeschlossene_kategorien(self):
         self.set_up()
         assert configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == ''
-        configuration.index(PostRequest({'action':'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien':'Alkohol'}))
+        configuration.index(PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'Alkohol'}))
         assert configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == 'Alkohol'
 
     def test_change_partnername_should_mirgrate_old_partnernames(self):
@@ -70,7 +70,7 @@ class TestKonfiguration(unittest.TestCase):
         gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
         gemeinsame_buchungen.add(datum('01.01.2017'), 'kat', 'name', 1, name_of_partner)
 
-        configuration.index(PostRequest({'action':'set_partnername', 'partnername':'testpartner_renamed'}))
+        configuration.index(PostRequest({'action': 'set_partnername', 'partnername': 'testpartner_renamed'}))
         gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
         database_partners = gemeinsame_buchungen.content.Person
 

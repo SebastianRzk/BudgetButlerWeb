@@ -6,8 +6,8 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
-from butler_offline.views import import_data
-from butler_offline.views import configuration
+from butler_offline.views.shared import import_data
+from butler_offline.views.core import configuration
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
@@ -136,7 +136,7 @@ class Importd(unittest.TestCase):
         einzelbuchungen = viewcore.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Unpassend', 'some name', -1.54)
 
-        context = import_data.index(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping':'als Unpassend importieren'}))
+        context = import_data.index(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping': 'als Unpassend importieren'}))
         assert context['element_titel'] == 'Export / Import'
         assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
@@ -340,7 +340,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
         viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
         viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
 
-        configuration.index(PostRequest({'action':'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien':'NeinEins'}))
+        configuration.index(PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'NeinEins'}))
 
         requester.INSTANCE = RequesterStub({'https://test.test/setkategorien.php': ''})
 

@@ -4,7 +4,7 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
-from butler_offline.views import uebersicht_dauerauftrag
+from butler_offline.views.einzelbuchungen import uebersicht_dauerauftrag
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
@@ -32,7 +32,7 @@ class Dauerauftragsuebersicht(unittest.TestCase):
         dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
         dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '22', 'monatlich', 1)
 
-        uebersicht_dauerauftrag.index(PostRequest({'action':'delete', 'delete_index':'1'}))
+        uebersicht_dauerauftrag.index(PostRequest({'action': 'delete', 'delete_index': '1'}))
 
         assert len(dauerauftraege.content) == 1
         assert dauerauftraege.content.Name.tolist() == ['11']

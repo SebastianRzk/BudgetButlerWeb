@@ -4,7 +4,7 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
-from butler_offline.views import uebersicht_jahr
+from butler_offline.views.einzelbuchungen import uebersicht_jahr
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
@@ -29,7 +29,7 @@ class Jahresuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
 
-        result_context = uebersicht_jahr.index(PostRequest({'date':'2010', 'mode':''}))
+        result_context = uebersicht_jahr.index(PostRequest({'date': '2010', 'mode': ''}))
 
         assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-100.00', 'f56954']]
         assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '10.00', '3c8dbc']]
@@ -48,7 +48,7 @@ class Jahresuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie2', 'some name', -100)
         db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie2', 'some name', 10)
 
-        result_context = uebersicht_jahr.index(PostRequest({'date':'2010', 'mode':''}))
+        result_context = uebersicht_jahr.index(PostRequest({'date': '2010', 'mode': ''}))
 
         assert result_context['zusammenfassung_ausgaben'] == [['some kategorie', '-200.00', '00a65a'], ['some kategorie2', '-100.00', '00c0ef']]
         assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '20.00', '3c8dbc'], ['eine einnahme kategorie2', '10.00', 'f56954']]

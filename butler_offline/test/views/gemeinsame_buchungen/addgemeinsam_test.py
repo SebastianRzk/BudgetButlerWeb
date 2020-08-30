@@ -10,7 +10,7 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest
-from butler_offline.views import addgemeinsam
+from butler_offline.views.gemeinsame_buchungen import addgemeinsam
 from butler_offline.core import file_system
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
@@ -34,7 +34,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         self.set_up()
         db = viewcore.database_instance()
         db.gemeinsamebuchungen.add(datum('10.10.2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
-        context = addgemeinsam.index(PostRequest({'action':'edit', 'edit_index':'0'}))
+        context = addgemeinsam.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
         preset = context['default_item']
         assert preset['datum'] == rfc('10.10.2010')

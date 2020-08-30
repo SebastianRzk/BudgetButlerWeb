@@ -6,7 +6,7 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
-from butler_offline.views import gemeinsam_abrechnen
+from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import configuration_provider

@@ -10,7 +10,7 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest
-from butler_offline.views import addeinnahme
+from butler_offline.views.einzelbuchungen import addeinnahme
 from butler_offline.core import file_system
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import database_instance as db
@@ -40,7 +40,7 @@ class TestAddEinnahmeView(unittest.TestCase):
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
         db().einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
-        context = addeinnahme.index(PostRequest({'action':'edit', 'edit_index':'0'}))
+        context = addeinnahme.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
         assert context['approve_title'] == 'Einnahme aktualisieren'
 
     def test_add_ausgabe(self):

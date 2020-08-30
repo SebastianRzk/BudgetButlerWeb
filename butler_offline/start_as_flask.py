@@ -2,27 +2,14 @@ from flask import Flask
 app = Flask(__name__)
 from flask import request
 
-from butler_offline.views import dashboard
-from butler_offline.views import adddauerauftrag
-from butler_offline.views import addeinnahme
-from butler_offline.views import addausgabe
-from butler_offline.views import addgemeinsam
+from butler_offline.views.einzelbuchungen import addausgabe, adddauerauftrag, addeinnahme, uebersicht_dauerauftrag, \
+    uebersicht_einzelbuchungen, uebersicht_jahr, uebersicht_monat
+from butler_offline.views.core import dashboard, configuration, testmode_switch, theme
 
-from butler_offline.views import uebersicht_dauerauftrag
-from butler_offline.views import uebersicht_gemeinsam
-from butler_offline.views import uebersicht_jahr
-from butler_offline.views import uebersicht_monat
-from butler_offline.views import uebersicht_einzelbuchungen
-from butler_offline.views import uebersicht_abrechnungen
+from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen, uebersicht_abrechnungen, addgemeinsam, \
+    uebersicht_gemeinsam
+from butler_offline.views.shared import import_data
 
-from butler_offline.views import gemeinsam_abrechnen
-from butler_offline.views import testmode_switch
-from butler_offline.views import import_data
-
-
-from butler_offline.views import configuration
-
-from butler_offline.views import theme
 
 @app.route('/')
 def show_dashboard():

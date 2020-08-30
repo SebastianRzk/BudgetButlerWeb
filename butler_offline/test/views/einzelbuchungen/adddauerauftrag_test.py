@@ -10,7 +10,7 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest
-from butler_offline.views import adddauerauftrag
+from butler_offline.views.einzelbuchungen import adddauerauftrag
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc

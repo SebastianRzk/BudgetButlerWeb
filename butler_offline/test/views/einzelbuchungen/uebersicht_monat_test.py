@@ -4,7 +4,7 @@ from butler_offline.core import time
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.views import uebersicht_monat
+from butler_offline.views.einzelbuchungen import uebersicht_monat
 from butler_offline.core import file_system
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -33,7 +33,7 @@ class Monatsuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
 
-        result_context = uebersicht_monat.index(PostRequest({'date':'2010_10'}))
+        result_context = uebersicht_monat.index(PostRequest({'date': '2010_10'}))
 
         assert result_context['gesamt'] == '-100.00'
         assert result_context['gesamt_einnahmen'] == '10.00'
@@ -51,7 +51,7 @@ class Monatsuebersicht(unittest.TestCase):
         db = viewcore.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
 
-        result_context = uebersicht_monat.index(PostRequest({'date':'2010_10'}))
+        result_context = uebersicht_monat.index(PostRequest({'date': '2010_10'}))
 
         assert result_context['wert_uebersicht_gruppe_1'] == '0.00'
         assert result_context['wert_uebersicht_gruppe_2'] == '100.00'
@@ -61,7 +61,7 @@ class Monatsuebersicht(unittest.TestCase):
         db = viewcore.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
 
-        result_context = uebersicht_monat.index(PostRequest({'date':'2010_10'}))
+        result_context = uebersicht_monat.index(PostRequest({'date': '2010_10'}))
 
         assert result_context['wert_uebersicht_jahr_gruppe_1'] == '0.00'
         assert result_context['wert_uebersicht_jahr_gruppe_2'] == '100.00'
