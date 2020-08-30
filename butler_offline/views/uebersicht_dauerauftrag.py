@@ -32,4 +32,4 @@ def _format_dauerauftrag_floatpoint(dauerauftraege):
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'uebersicht_dauerauftrag.html')
+    return request_handler.handle_request(request, _handle_request, 'einzelbuchungen/uebersicht_dauerauftrag.html')

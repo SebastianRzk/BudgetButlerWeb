@@ -44,5 +44,5 @@ def _handle_request(request):
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'uebersicht.html')
+    return request_handler.handle_request(request, _handle_request, 'einzelbuchungen/uebersicht.html')
 

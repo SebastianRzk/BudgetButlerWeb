@@ -78,5 +78,5 @@ def handle_request(request):
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'addgemeinsam.html')
+    return request_handler.handle_request(request, handle_request, 'gemeinsame_buchungen/addgemeinsam.html')
 

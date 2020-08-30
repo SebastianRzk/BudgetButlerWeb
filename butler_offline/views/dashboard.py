@@ -48,4 +48,4 @@ def _monatsliste():
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'dashboard.html')
+    return request_handler.handle_request(request, _handle_request, 'core/dashboard.html')

@@ -16,5 +16,5 @@ def _handle_request(request):
 
 # Create your views here.
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'uebersicht_gemeinsam.html')
+    return request_handler.handle_request(request, _handle_request, 'gemeinsame_buchungen/uebersicht_gemeinsam.html')
 

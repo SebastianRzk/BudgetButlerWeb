@@ -75,4 +75,4 @@ def handle_request(request):
     return context
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'addausgabe.html')
+    return request_handler.handle_request(request, handle_request, 'einzelbuchungen/addausgabe.html')

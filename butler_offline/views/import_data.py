@@ -54,7 +54,7 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request , 'import.html')
+    return request_handler.handle_request(request, handle_request , 'shared/import.html')
 
 def _get_success_message(last_elements):
     number = len(last_elements)
@@ -201,7 +201,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                 context['unpassende_kategorien'] = nicht_passende_kategorien
                 context['optionen'] = options
                 context['import'] = request.values['import']
-                context['special_page'] = 'import_mapping.html'
+                context['special_page'] = 'shared/import_mapping.html'
 
     context['ONLINE_DEFAULT_SERVER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER')
     context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')

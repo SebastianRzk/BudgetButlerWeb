@@ -116,11 +116,11 @@ def replay_value_if_defined(context, replay_name, request, default=False):
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'gemeinsamabrechnen.html')
+    return request_handler.handle_request(request, _handle_request, 'gemeinsame_buchungen/gemeinsamabrechnen.html')
 
 
 def abrechnen(request):
-    return request_handler.handle_request(request, _handle_abrechnen_request, 'present_abrechnung.html')
+    return request_handler.handle_request(request, _handle_abrechnen_request, 'shared/present_abrechnung.html')
 
 
 def _handle_abrechnen_request(request):

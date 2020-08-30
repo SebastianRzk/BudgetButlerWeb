@@ -115,7 +115,7 @@ def _handle_request(request):
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'uebersicht_monat.html')
+    return request_handler.handle_request(request, _handle_request, 'einzelbuchungen/uebersicht_monat.html')
 
 
 def _abrechnen(request):
@@ -195,4 +195,4 @@ def _is_selected(request, name):
 
 
 def abrechnen(request):
-    return request_handler.handle_request(request, _abrechnen, 'present_abrechnung.html')
+    return request_handler.handle_request(request, _abrechnen, 'shared/present_abrechnung.html')

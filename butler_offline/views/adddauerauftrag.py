@@ -90,4 +90,4 @@ def handle_request(request):
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'adddauerauftrag.html')
+    return request_handler.handle_request(request, handle_request, 'einzelbuchungen/adddauerauftrag.html')
