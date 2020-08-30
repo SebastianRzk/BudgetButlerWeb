@@ -12,18 +12,19 @@ from butler_offline.core.database.database_object import DatabaseObject
 
 
 class Einzelbuchungen(DatabaseObject):
+    TABLE_HEADER = ['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch']
     tmp_kategorie = None
     ausgeschlossene_kategorien = set()
 
     def __init__(self):
-        super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
+        super().__init__(self.TABLE_HEADER)
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
     def add(self, datum, kategorie, name, wert, dynamisch=False):
-        neue_einzelbuchung = pd.DataFrame([[datum, kategorie, name, wert, [], dynamisch]], columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
+        neue_einzelbuchung = pd.DataFrame([[datum, kategorie, name, wert, [], dynamisch]], columns=self.TABLE_HEADER)
         self.content = self.content.append(neue_einzelbuchung, ignore_index=True)
         self.taint()
         self._sort()

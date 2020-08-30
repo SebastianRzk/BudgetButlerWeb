@@ -20,12 +20,12 @@ def handle_request(request):
                                                                   )
             viewcore.add_changed_gemeinsamebuchungen(
                 {
-                    'fa':'pencil',
-                    'datum':datum_to_german(date),
-                    'kategorie':request.values['kategorie'],
-                    'name':request.values['name'],
-                    'wert':from_double_to_german(value),
-                    'person':request.values['person']
+                    'fa': 'pencil',
+                    'datum': datum_to_german(date),
+                    'kategorie': request.values['kategorie'],
+                    'name': request.values['name'],
+                    'wert': from_double_to_german(value),
+                    'person': request.values['person']
                     })
 
         else:
@@ -36,12 +36,12 @@ def handle_request(request):
                                                                         person=request.values['person'])
             viewcore.add_changed_gemeinsamebuchungen(
                 {
-                    'fa':'plus',
-                    'datum':datum_to_german(date),
-                    'kategorie':request.values['kategorie'],
-                    'name':request.values['name'],
-                    'wert':from_double_to_german(value),
-                    'person':request.values['person']
+                    'fa': 'plus',
+                    'datum': datum_to_german(date),
+                    'kategorie': request.values['kategorie'],
+                    'name': request.values['name'],
+                    'wert': from_double_to_german(value),
+                    'person': request.values['person']
                     })
 
     context = viewcore.generate_transactional_context("addgemeinsam")
