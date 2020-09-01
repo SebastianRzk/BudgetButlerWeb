@@ -152,3 +152,7 @@ class Einzelbuchungen(DatabaseObject):
         for kategorie, wert in data.iterrows():
             result[kategorie] = "%.2f" % wert
         return result
+
+    def get_static_content(self):
+        static_content = self.content.copy()[self.content.Dynamisch==False]
+        return static_content[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]

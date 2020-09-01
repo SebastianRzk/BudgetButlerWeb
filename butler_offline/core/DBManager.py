@@ -53,9 +53,8 @@ def wrap_tableheader(table_header_name):
     return '{} {} {}'.format(KEYWORD_LINEBREAK, table_header_name, KEYWORD_LINEBREAK)
 
 def write(database):
-    einzelbuchungen = database.einzelbuchungen.content.copy()[database.einzelbuchungen.content.Dynamisch == False]
-    einzelbuchungen_raw_data = einzelbuchungen[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
-    content = einzelbuchungen_raw_data.to_csv(index=False)
+
+    content = database.einzelbuchungen.get_static_content().to_csv(index=False)
 
     content += wrap_tableheader(KEYWORD_DAUERAUFRTAEGE)
     content += database.dauerauftraege.content.to_csv(index=False)
@@ -64,7 +63,7 @@ def write(database):
     content += database.gemeinsamebuchungen.content.to_csv(index=False)
 
     content += wrap_tableheader(KEYWORD_SPARBUCHUNGEN)
-    content += database.sparbuchungen.content[['Datum', 'Name', 'Wert', 'Typ', 'Konto']].to_csv(index=False)
+    content += database.sparbuchungen.get_static_content().to_csv(index=False)
 
     file_system.instance().write(database_path_from(database.name), content)
     print("WRITER: All Saved")

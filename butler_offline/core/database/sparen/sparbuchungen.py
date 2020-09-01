@@ -1,4 +1,5 @@
 from butler_offline.core.database.database_object import DatabaseObject
+import pandas as pd
 
 
 class Sparbuchungen(DatabaseObject):
@@ -29,3 +30,7 @@ class Sparbuchungen(DatabaseObject):
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Konto', 'Name'])
         self.content = self.content.reset_index(drop=True)
+
+    def get_static_content(self):
+        static_content = self.content.copy()[self.content.Dynamisch==False]
+        return static_content[['Datum', 'Name', 'Wert', 'Typ', 'Konto']]

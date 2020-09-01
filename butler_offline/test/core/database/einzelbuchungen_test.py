@@ -172,6 +172,20 @@ class EinzelbuchungenTest(unittest.TestCase):
 
         assert component_under_test.anzahl() == 1
 
+    def test_get_static_content_should_filter_dynamic_content(self):
+        component_under_test = Einzelbuchungen()
+        component_under_test.add(datum('01.01.2012'), '1kategorie', '1name', 1)
+        component_under_test.add(datum('02.02.2013'), '2kategorie', '2name', 2, dynamisch=True)
+
+        static_content = component_under_test.get_static_content()
+
+        assert len(static_content) == 1
+        assert static_content.Datum[0] == datum('01.01.2012')
+        assert static_content.Kategorie[0] == '1kategorie'
+        assert static_content.Name[0] == '1name'
+        assert static_content.Wert[0] == 1
+        assert 'Dynamisch' not in static_content.columns
+
 
 class gesamtausgaben_jahr(unittest.TestCase):
 

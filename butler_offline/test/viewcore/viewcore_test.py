@@ -1,12 +1,8 @@
-import sys, os
 import unittest
-import datetime
 
-import butler_offline.core.time
 from butler_offline.viewcore import viewcore
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.viewcore.converter import datum_from_german as datum
 
 
 

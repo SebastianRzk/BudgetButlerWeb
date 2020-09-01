@@ -37,3 +37,6 @@ class DatabaseObject(StatedObject):
 
     def select(self):
         return Selektor(self.content)
+
+    def get_static_content(self):
+        return self.content

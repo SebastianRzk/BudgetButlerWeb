@@ -267,3 +267,4 @@ class gemeinsame_buchungen(unittest.TestCase):
 
         assert len(component_under_test.content) == 0
         assert component_under_test.tainted
+
