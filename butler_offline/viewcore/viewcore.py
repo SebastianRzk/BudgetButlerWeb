@@ -100,6 +100,10 @@ def get_menu_list():
     main_menu['Gemeinsame Finanzen'] = menu
 
     menu = []
+    menu.append({'url': '/add_sparbuchung/', 'name': 'Neue Sparbuchung', 'icon': 'fa fa-plus'})
+    main_menu['Sparen'] = menu
+
+    menu = []
     menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon': 'fa fa-cogs'})
     menu.append({'url': '/production/?database=' + viewcore.database_instance().name, 'name': 'Datenbank neu laden',
                  'icon': 'fa fa-refresh'})

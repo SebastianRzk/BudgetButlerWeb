@@ -319,12 +319,29 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.de_taint()
         assert not db.is_tainted()
 
-    def test_tainNumber_shouldIncludeGemeinsameBuchungen(self):
+    def test_deTaint_shouldDeTaintSparbuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        db.sparbuchungen.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_taintNumber_shouldIncludeGemeinsameBuchungen(self):
         self.set_up()
         db = viewcore.database_instance()
 
         assert db.taint_number() == 0
         db.gemeinsamebuchungen.taint()
+        assert db.taint_number() == 1
+
+    def test_taintNumber_shouldIncludeSparbuchungen(self):
+        self.set_up()
+        db = viewcore.database_instance()
+
+        assert db.taint_number() == 0
+        db.sparbuchungen.taint()
         assert db.taint_number() == 1
 
     def test_deTaint_shouldDeTaintEinzelbuchungen(self):

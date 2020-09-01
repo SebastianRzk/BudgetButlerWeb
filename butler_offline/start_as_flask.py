@@ -2,12 +2,25 @@ from flask import Flask
 app = Flask(__name__)
 from flask import request
 
-from butler_offline.views.einzelbuchungen import addausgabe, adddauerauftrag, addeinnahme, uebersicht_dauerauftrag, \
-    uebersicht_einzelbuchungen, uebersicht_jahr, uebersicht_monat
-from butler_offline.views.core import dashboard, configuration, testmode_switch, theme
+from butler_offline.views.einzelbuchungen import addausgabe, \
+    adddauerauftrag, \
+    addeinnahme, \
+    uebersicht_dauerauftrag, \
+    uebersicht_einzelbuchungen, \
+    uebersicht_jahr, \
+    uebersicht_monat
+from butler_offline.views.core import dashboard, \
+    configuration, \
+    testmode_switch,\
+    theme
 
-from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen, uebersicht_abrechnungen, addgemeinsam, \
+from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen,\
+    uebersicht_abrechnungen,\
+    addgemeinsam, \
     uebersicht_gemeinsam
+
+from butler_offline.views.sparen import add_sparbuchung
+
 from butler_offline.views.shared import import_data
 
 
@@ -99,6 +112,14 @@ def view_configuration():
 @app.route('/uebersichtabrechnungen/', methods=['GET'])
 def view_uebersicht_abrechnungen():
     return uebersicht_abrechnungen.index(request)
+
+
+'''
+Sparen:
+'''
+@app.route('/add_sparbuchung/', methods=['GET', 'POST'])
+def display_add_sparbuchung():
+    return add_sparbuchung.index(request)
 
 
 @app.route('/theme/')

@@ -71,6 +71,9 @@ Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 Datum,Kategorie,Name,Wert,Person
 2017-12-30,Miete,monatlich,-200.0,Sebastian
 2017-12-31,Miete,monatlich,-200.0,Maureen
+ Sparbuchungen 
+Datum,Name,Wert,Typ,Konto
+2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
 stechzeiten...
 '''
 
@@ -87,6 +90,10 @@ Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 Datum,Kategorie,Name,Wert,Person
 2017-12-30,Miete,monatlich,-200.0,Sebastian
 2017-12-31,Miete,monatlich,-200.0,Maureen
+
+ Sparbuchungen 
+Datum,Name,Wert,Typ,Konto
+2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
 '''
 
 
