@@ -8,7 +8,7 @@ KEY_CHANGED_GEMEINSAME_BUCHUNGEN = 'gemeinsamebuchungen_changed'
 KEY_CHANGED_SPARBUCHUNGEN = 'sparbuchungen_changed'
 
 def _get_context():
-    database_name = database_instance()
+    database_name = database_instance().name
     if database_name not in CONTEXT.keys():
         CONTEXT[database_name] = {}
     return CONTEXT[database_name]

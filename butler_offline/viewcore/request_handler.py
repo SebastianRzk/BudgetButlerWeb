@@ -8,7 +8,6 @@ from flask import redirect
 from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.base_html import set_error_message
@@ -27,7 +26,7 @@ def handle_request(request, request_action, html_base_page):
         if request.values['ID'] != current_key():
             print('transaction rejected (requested:' + current_key() + ", got:" + request.values['ID'] + ')')
             context = viewcore.generate_base_context('Fehler')
-            rendered_content = request_handler.request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
+            rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
             context['content'] = rendered_content
             return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
         print('transaction allowed')
@@ -64,7 +63,7 @@ def theme(page):
     return request_handler.BASE_THEME_PATH + page
 
 def current_key():
-    return request_handler.SESSION_RANDOM + ' ' + database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
+    return request_handler.SESSION_RANDOM + ' ' + persisted_state.database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
 
 
 def stub_me():

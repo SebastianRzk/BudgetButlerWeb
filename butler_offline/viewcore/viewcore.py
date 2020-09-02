@@ -5,7 +5,6 @@ Created on 24.04.2017
 '''
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.request_handler import current_key
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.state import persisted_state
 
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
@@ -39,10 +38,10 @@ def get_menu_list():
 
     menu = []
     menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon': 'fa fa-cogs'})
-    menu.append({'url': '/production/?database=' + database_instance().name, 'name': 'Datenbank neu laden',
+    menu.append({'url': '/production/?database=' + persisted_state.database_instance().name, 'name': 'Datenbank neu laden',
                  'icon': 'fa fa-refresh'})
     for database in persisted_state.DATABASES:
-        if database != database_instance().name:
+        if database != persisted_state.database_instance().name:
             menu.append({'url': '/production/?database=' + database, 'name': 'To ' + database, 'icon': 'fa fa-cogs'})
 
     main_menu['Einstellungen'] = menu
@@ -75,7 +74,7 @@ def generate_base_context(pagename):
         'active_name': get_name_from_key(pagename),
         'element_titel': get_name_from_key(pagename),
         'menu': get_menu_list(),
-        'nutzername': database_instance().name,
+        'nutzername': persisted_state.database_instance().name,
         'extra_scripts': ''
     }
 
