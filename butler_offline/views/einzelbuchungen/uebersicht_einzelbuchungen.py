@@ -1,4 +1,4 @@
-
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import viewcore
@@ -6,7 +6,7 @@ from butler_offline.viewcore.converter import datum_to_german
 
 
 def _handle_request(request):
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
     if post_action_is(request, 'delete'):
         einzelbuchungen.delete(int(request.values['delete_index']))
 

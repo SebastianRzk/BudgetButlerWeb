@@ -3,42 +3,12 @@ Created on 24.04.2017
 
 @author: sebastian
 '''
-
-from butler_offline.core import DBManager
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.request_handler import current_key
+from butler_offline.viewcore.state.persisted_state import database_instance
+from butler_offline.viewcore.state import persisted_state
 
-DATABASE_INSTANCE = None
-DATABASES = []
-CONTEXT = {}
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
-
-
-def database_instance():
-    '''
-    returns the actual database instance
-    '''
-    if not viewcore.DATABASES:
-        viewcore.DATABASES = configuration_provider.get_configuration('DATABASES').split(',')
-
-    if viewcore.DATABASE_INSTANCE is None:
-        ausgeschlossene_kategorien = set(
-            configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
-        viewcore.DATABASE_INSTANCE = DBManager.read(viewcore.DATABASES[0],
-                                                    ausgeschlossene_kategorien=ausgeschlossene_kategorien)
-    return DATABASE_INSTANCE
-
-
-def _get_context():
-    if DATABASE_INSTANCE.name not in CONTEXT.keys():
-        CONTEXT[DATABASE_INSTANCE.name] = {}
-    return CONTEXT[DATABASE_INSTANCE.name]
-
-
-def switch_database_instance(database_name):
-    ausgeschlossene_kategorien = set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
-    viewcore.DATABASE_INSTANCE = DBManager.read(database_name, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
 
 def get_menu_list():
@@ -69,9 +39,9 @@ def get_menu_list():
 
     menu = []
     menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon': 'fa fa-cogs'})
-    menu.append({'url': '/production/?database=' + viewcore.database_instance().name, 'name': 'Datenbank neu laden',
+    menu.append({'url': '/production/?database=' + database_instance().name, 'name': 'Datenbank neu laden',
                  'icon': 'fa fa-refresh'})
-    for database in DATABASES:
+    for database in persisted_state.DATABASES:
         if database != database_instance().name:
             menu.append({'url': '/production/?database=' + database, 'name': 'To ' + database, 'icon': 'fa fa-cogs'})
 
@@ -120,27 +90,6 @@ def generate_error_context(pagename, errortext):
     context = generate_base_context(pagename)
     context['%Errortext'] = errortext
     return context
-
-
-def _save_database():
-    if DATABASE_INSTANCE != None:
-        DBManager.write(DATABASE_INSTANCE)
-
-
-def _save_refresh():
-    _save_database()
-    db_name = viewcore.DATABASE_INSTANCE.name
-    viewcore.DATABASE_INSTANCE = None
-    viewcore.switch_database_instance(db_name)
-
-
-def save_tainted():
-    db = viewcore.DATABASE_INSTANCE
-    if db.is_tainted():
-        print('Saving database with', db.taint_number(), 'modifications')
-        _save_refresh()
-        print('Saved')
-        db.de_taint()
 
 
 def name_of_partner():

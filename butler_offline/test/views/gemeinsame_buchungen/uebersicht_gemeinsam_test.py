@@ -6,15 +6,15 @@ from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.gemeinsame_buchungen import uebersicht_gemeinsam
 from butler_offline.core import file_system
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.viewcore import database_instance as db
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.state.persisted_state import database_instance as db
 from butler_offline.viewcore.converter import datum_from_german as datum
 
 class Gemeinsamuebersicht(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_transaction_id_should_be_in_context(self):

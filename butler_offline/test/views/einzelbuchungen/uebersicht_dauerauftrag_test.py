@@ -5,7 +5,7 @@ from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_dauerauftrag
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
 
@@ -13,7 +13,7 @@ class Dauerauftragsuebersicht(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):
@@ -28,7 +28,7 @@ class Dauerauftragsuebersicht(unittest.TestCase):
 
     def test_delete(self):
         self.set_up()
-        dauerauftraege = viewcore.database_instance().dauerauftraege
+        dauerauftraege = persisted_state.database_instance().dauerauftraege
         dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
         dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '22', 'monatlich', 1)
 
@@ -39,7 +39,7 @@ class Dauerauftragsuebersicht(unittest.TestCase):
 
     def test_german_datum(self):
         self.set_up()
-        dauerauftraege = viewcore.database_instance().dauerauftraege
+        dauerauftraege = persisted_state.database_instance().dauerauftraege
         dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
 
         result = uebersicht_dauerauftrag.index(GetRequest())

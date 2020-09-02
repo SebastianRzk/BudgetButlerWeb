@@ -2,6 +2,7 @@
 import pandas
 from datetime import datetime
 
+from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.core.file_system import write_import
 from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
 
@@ -13,7 +14,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.session import get_username, get_partnername, login
+from butler_offline.views.online_services.session import get_partnername, login
 from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
 from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, upload_gemeinsame_buchungen
 from butler_offline.core.export.json_report import JSONReport
@@ -32,11 +33,11 @@ def _import(import_data, gemeinsam):
     print('importing data:')
     print(import_data)
     if gemeinsam :
-        viewcore.database_instance().gemeinsamebuchungen.parse(import_data)
-        viewcore.database_instance().gemeinsamebuchungen.taint()
+        database_instance().gemeinsamebuchungen.parse(import_data)
+        database_instance().gemeinsamebuchungen.taint()
     else:
-        viewcore.database_instance().einzelbuchungen.parse(import_data)
-        viewcore.database_instance().einzelbuchungen.taint()
+        database_instance().einzelbuchungen.parse(import_data)
+        database_instance().einzelbuchungen.taint()
 
 
 def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
@@ -97,7 +98,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             table = JSONReport().dataframe_from_json_gemeinsam(online_content)
 
             print('table before person mapping', table)
-            table.Person = table.Person.map(lambda x: viewcore.database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
+            table.Person = table.Person.map(lambda x: database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
             online_content = TextReportWriter().generate_report(table)
             response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
@@ -106,7 +107,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
 
 
         elif post_action_is(request, 'set_kategorien'):
-            kategorien = ','.join(sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True)))
+            kategorien = ','.join(sorted(database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
 
             serverurl = _add_protokoll_if_needed(serverurl)
@@ -124,17 +125,17 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             online_username = auth_container.online_name()
             print('butler_online username:', online_username)
-            offline_username = viewcore.database_instance().name
+            offline_username = database_instance().name
             print('butler offline username:', offline_username)
             online_partnername = get_partnername(serverurl, request.values['email'], request.values['password'])
             print('butler online partnername:', online_partnername)
             offline_partnername = configuration_provider.get_configuration('PARTNERNAME')
             print('butler offline partnername:', offline_partnername)
 
-            buchungen = viewcore.database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
-                                                                                               online_username,
-                                                                                               offline_partnername,
-                                                                                               online_partnername)
+            buchungen = database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
+                                                                                                                               online_username,
+                                                                                                                               offline_partnername,
+                                                                                                                               online_partnername)
             request_data = []
 
             for buchung in buchungen:
@@ -151,7 +152,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             result = upload_gemeinsame_buchungen(serverurl, request_data, auth_container)
             if result:
                 set_success_message(context, '{anzahl_buchungen} Buchungen wurden erfolgreich hochgeladen.'.format(anzahl_buchungen=anzahl_buchungen))
-                viewcore.database_instance().gemeinsamebuchungen.drop_all()
+                database_instance().gemeinsamebuchungen.drop_all()
             else:
                 set_error_message(context, 'Fehler beim Hochladen der gemeinsamen Buchungen.')
 
@@ -161,7 +162,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             write_import(import_prefix + 'Import_' + str(datetime.now()), content)
 
             imported_values = TextReportReader().read(content)
-            datenbank_kategorien = set(viewcore.database_instance().einzelbuchungen.get_alle_kategorien())
+            datenbank_kategorien = set(
+                database_instance().einzelbuchungen.get_alle_kategorien())
             nicht_passende_kategorien = []
             for imported_kategorie in set(imported_values.Kategorie):
                 if imported_kategorie not in datenbank_kategorien:

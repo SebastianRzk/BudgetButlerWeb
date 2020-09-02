@@ -1,11 +1,11 @@
 import unittest
 
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_einzelbuchungen
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
 
@@ -14,7 +14,7 @@ class TestUebersicht(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_transaction_id_should_be_in_context(self):
@@ -23,7 +23,7 @@ class TestUebersicht(unittest.TestCase):
         assert 'ID' in context
 
     def add_test_data(self):
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = persisted_state.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('12.12.2012'), 'Test einnahme kategorie', 'test einnahme name', 100)
         einzelbuchungen.add(datum('13.12.2012'), 'Test ausgabe kategorie', 'test azsgabe name', -100)
 
@@ -57,5 +57,5 @@ class TestUebersicht(unittest.TestCase):
         self.set_up()
         self.add_test_data()
         uebersicht_einzelbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1'}))
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = persisted_state.database_instance().einzelbuchungen
         assert einzelbuchungen.select().sum() == 100

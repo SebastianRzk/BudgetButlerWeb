@@ -1,3 +1,4 @@
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.core import time
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
@@ -7,7 +8,7 @@ from butler_offline.viewcore.converter import datum_to_string
 
 def _handle_request(request):
     context = viewcore.generate_base_context('monatsuebersicht')
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
     monate = sorted(einzelbuchungen.get_monate(), reverse=True)
     context['monate'] = monate
 
@@ -133,7 +134,7 @@ def _abrechnen(request):
         if 'quantity' in request.values:
             quantity = int(request.values['quantity'])
 
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
     generator = ReportGenerator('Monatsübersicht für ' + str(month) + '/' + str(year), quantity)
 
     table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)

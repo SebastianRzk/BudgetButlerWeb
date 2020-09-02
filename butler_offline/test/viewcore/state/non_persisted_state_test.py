@@ -1,5 +1,6 @@
 import unittest
 from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import viewcore
 from butler_offline.core.database import Database
 
@@ -7,7 +8,7 @@ class NonPersistedStateTest(unittest.TestCase):
 
     def clear_context(self):
         non_persisted_state.CONTEXT = {}
-        viewcore.DATABASE_INSTANCE = Database('db')
+        persisted_state.DATABASE_INSTANCE = Database('db')
 
 
     def test_einzelbuchungen(self):

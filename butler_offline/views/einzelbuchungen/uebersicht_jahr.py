@@ -1,5 +1,6 @@
 import datetime
 
+from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import request_handler
 
@@ -16,27 +17,27 @@ def _filter(list, num_monate):
     return result
 
 def _computePieChartProzentual(context, jahr):
-    result = viewcore.database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
+    result = database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
     ausgaben_data = []
     ausgaben_labels = []
     ausgaben_colors = []
     for kategorie, wert in result.items():
         ausgaben_data.append('%.2f' % abs(wert))
         ausgaben_labels.append(kategorie)
-        ausgaben_colors.append('#' + viewcore.database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
+        ausgaben_colors.append('#' + database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
 
     context['pie_ausgaben_data_prozentual'] = ausgaben_data
     context['pie_ausgaben_labels'] = ausgaben_labels
     context['pie_ausgaben_colors'] = ausgaben_colors
 
-    result = viewcore.database_instance().einzelbuchungen.get_jahreseinnahmen_nach_kategorie_prozentual(jahr)
+    result = database_instance().einzelbuchungen.get_jahreseinnahmen_nach_kategorie_prozentual(jahr)
     einnahmen_data = []
     einnahmen_labels = []
     einnahmen_colors = []
     for kategorie, wert in result.items():
         einnahmen_data.append('%.2f' % abs(wert))
         einnahmen_labels.append(kategorie)
-        einnahmen_colors.append('#' + viewcore.database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
+        einnahmen_colors.append('#' + database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
 
     context['pie_einnahmen_data_prozentual'] = einnahmen_data
     context['pie_einnahmen_labels'] = einnahmen_labels
@@ -70,7 +71,7 @@ def _handle_request(request):
 
     if request.method == 'POST' and 'date' in request.values:
         year = int(float(request.values['date']))
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    einzelbuchungen = database_instance().einzelbuchungen
 
     jahresbuchungs_tabelle = einzelbuchungen.select().select_year(year)
     jahres_ausgaben = jahresbuchungs_tabelle.select_ausgaben()

@@ -1,3 +1,4 @@
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
@@ -69,7 +70,7 @@ class Database:
 
         selector = self.gemeinsamebuchungen.select().select_range(mindate, maxdate)
 
-        name_self = viewcore.database_instance().name
+        name_self = persisted_state.database_instance().name
         name_partner = viewcore.name_of_partner()
         gemeinsame_buchungen_content = selector.content
 

@@ -8,16 +8,16 @@ from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.shared import import_data
 from butler_offline.views.core import configuration
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import configuration_provider
-from butler_offline.viewcore.viewcore import database_instance
+from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import requester
 from butler_offline.test.RequesterStub import RequesterStub, MockedResponse
 from butler_offline.test.RequesterStub import RequesterErrorStub
 
-# Create your tests here.
+
 class Importd(unittest.TestCase):
 
     LOGIN_COOKIES = 'login cookies'
@@ -30,8 +30,8 @@ class Importd(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
-        viewcore.DATABASES = []
+        persisted_state.DATABASE_INSTANCE = None
+        persisted_state.DATABASES = []
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
         configuration_provider.set_configuration('DATABASES', 'Sebastian')
         request_handler.stub_me()
@@ -66,7 +66,7 @@ class Importd(unittest.TestCase):
 
     def test_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
@@ -75,7 +75,7 @@ class Importd(unittest.TestCase):
 
     def test_import_withOneBuchung_should_showSuccessSingleMessage(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
@@ -83,7 +83,7 @@ class Importd(unittest.TestCase):
 
     def test_import_withOneBuchung_should_showSuccessMessage(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA_GEMEINSAM}))
@@ -99,7 +99,7 @@ class Importd(unittest.TestCase):
 
     def test_gemeinsam_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
         context = import_data.handle_request(PostRequest({'import':self._IMPORT_DATA_GEMEINSAM}), gemeinsam=True)
@@ -109,10 +109,10 @@ class Importd(unittest.TestCase):
 
     def test_import_shouldWriteIntoAbrechnungen(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
-        context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
+        import_data.index(PostRequest({'import':self._IMPORT_DATA}))
 
         written_abrechnung = None
         for key in file_system.instance()._fs_stub.keys():
@@ -124,7 +124,7 @@ class Importd(unittest.TestCase):
 
     def test_addeUnpassendenKategorie_shouldShowImportMappingPage(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'unbekannt', 'some name', -1.54)
 
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA}))
@@ -133,7 +133,7 @@ class Importd(unittest.TestCase):
 
     def test_addeUnpassendenKategorie_mitPassendemMapping_shouldImportValue(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Unpassend', 'some name', -1.54)
 
         context = import_data.index(PostRequest({'import':self._IMPORT_DATA, 'Essen_mapping': 'als Unpassend importieren'}))
@@ -171,7 +171,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
     def test_einzelbuchungImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
         requester.INSTANCE = RequesterStub({'https://test.test/einzelbuchung.php': self._JSON_IMPORT_DATA,
@@ -184,15 +184,15 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                                                  'password': ''}))
 
         assert context['element_titel'] == 'Export / Import'
-        assert len(viewcore.database_instance().einzelbuchungen.content) == 3
-        assert viewcore.database_instance().einzelbuchungen.get(1) == {'Datum': datum('11.07.2019'),
+        assert len(database_instance().einzelbuchungen.content) == 3
+        assert database_instance().einzelbuchungen.get(1) == {'Datum': datum('11.07.2019'),
             'Dynamisch': False,
             'Kategorie': 'Essen',
             'Name': 'Testausgabe2',
             'Tags': np.nan,
             'Wert': -0.9,
             'index': 1}
-        assert viewcore.database_instance().einzelbuchungen.get(2) == {'Datum': datum('15.07.2019'),
+        assert database_instance().einzelbuchungen.get(2) == {'Datum': datum('15.07.2019'),
             'Dynamisch': False,
             'Kategorie': 'Essen',
             'Name': 'Testausgabe1',
@@ -208,7 +208,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
     def test_gemeinsamImport_addePassendeKategorie_shouldImportValue(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
         requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': self._JSON_IMPORT_DATA_GEMEINSAM,
@@ -240,7 +240,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
     def test_gemeinsamImport_withUnpassendenPartnername_shouldImportValueAndRepalceName(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
 
@@ -257,8 +257,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                                                  'password': ''}))
 
         assert context['element_titel'] == 'Export / Import'
-        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
-        assert viewcore.database_instance().gemeinsamebuchungen.get(0) == {
+        assert len(database_instance().gemeinsamebuchungen.content) == 2
+        assert database_instance().gemeinsamebuchungen.get(0) == {
             'Datum': datetime.date(2019, 7, 11),
             'Dynamisch': False,
             'Kategorie': 'Essen',
@@ -267,7 +267,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
             'Wert': -0.9,
             'index': 0}
 
-        assert viewcore.database_instance().gemeinsamebuchungen.get(1) == {
+        assert database_instance().gemeinsamebuchungen.get(1) == {
             'Datum': datetime.date(2019, 7, 15),
             'Dynamisch': False,
             'Kategorie': 'Essen',
@@ -295,7 +295,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
     def test_gemeinsamImport_withUnpassendenKategorie_shouldImportValueAndRequestmapping(self):
         self.set_up()
-        einzelbuchungen = viewcore.database_instance().einzelbuchungen
+        einzelbuchungen = database_instance().einzelbuchungen
         einzelbuchungen.add(datum('01.01.2017'), 'KeinEssen', 'some name', -1.54)
 
 
@@ -322,12 +322,12 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
 
         assert context['element_titel'] == 'Export / Import'
-        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
+        assert len(database_instance().gemeinsamebuchungen.content) == 2
+        assert database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
+        assert database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
 
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
-        assert viewcore.database_instance().gemeinsamebuchungen.content.Kategorie[1] == 'Essen'
+        assert database_instance().gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
+        assert database_instance().gemeinsamebuchungen.content.Kategorie[1] == 'Essen'
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
         assert requester.instance().complete_call_count() == 3
@@ -336,9 +336,9 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
     def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlossene_kategorien(self):
         self.set_up()
 
-        viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', -10)
-        viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
-        viewcore.database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
+        database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', -10)
+        database_instance().einzelbuchungen.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
+        database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
 
         configuration.index(PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'NeinEins'}))
 
@@ -355,8 +355,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
     def test_upload_data(self):
         self.set_up()
 
-        viewcore.database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'Sebastian')
-        viewcore.database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Maureen')
+        database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'Sebastian')
+        database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Maureen')
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
@@ -370,7 +370,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                                               'server': 'test.test/api',
                                               'password' : ''}))
 
-        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 0
+        assert len(database_instance().gemeinsamebuchungen.content) == 0
         assert result['message']
         assert result['message_type'] == 'success'
         assert result['message_content'] == '2 Buchungen wurden erfolgreich hochgeladen.'
@@ -398,8 +398,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
     def test_upload_data_fehler(self):
         self.set_up()
 
-        viewcore.database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'Sebastian')
-        viewcore.database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Maureen')
+        database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'Sebastian')
+        database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Maureen')
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "error"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
@@ -412,7 +412,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
                                               'server': 'test.test/api',
                                               'password' : ''}))
 
-        assert len(viewcore.database_instance().gemeinsamebuchungen.content) == 2
+        assert len(database_instance().gemeinsamebuchungen.content) == 2
         assert result['message'] == True
         assert result['message_type'] == 'error'
         assert result['message_content'] == 'Fehler beim Hochladen der gemeinsamen Buchungen.'

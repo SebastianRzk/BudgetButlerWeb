@@ -1,3 +1,4 @@
+from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import name_of_partner
 from butler_offline.viewcore.viewcore import get_post_parameter_or_default
@@ -11,7 +12,7 @@ from butler_offline.viewcore.converter import datum
 
 def _handle_request(request):
     context = viewcore.generate_base_context('gemeinsamabrechnen')
-    db = viewcore.database_instance()
+    db = database_instance()
     alle_gemeinsamen_buchungen = db.gemeinsamebuchungen
 
     if alle_gemeinsamen_buchungen.is_empty():
@@ -131,13 +132,13 @@ def _handle_abrechnen_request(request):
     set_self_kategorie = get_post_parameter_or_default(request, 'set_self_kategorie', None)
     set_other_kategorie = get_post_parameter_or_default(request, 'set_other_kategorie', None)
 
-    abrechnungs_text = viewcore.database_instance().abrechnen(mindate=set_mindate,
-                                                              maxdate=set_maxdate,
-                                                              set_ergebnis=request.values['set_ergebnis'],
-                                                              verhaeltnis=int(request.values['set_verhaeltnis']),
-                                                              set_self_kategorie=set_self_kategorie,
-                                                              set_other_kategorie=set_other_kategorie
-                                                              )
+    abrechnungs_text = database_instance().abrechnen(mindate=set_mindate,
+           maxdate=set_maxdate,
+           set_ergebnis=request.values['set_ergebnis'],
+           verhaeltnis=int(request.values['set_verhaeltnis']),
+           set_self_kategorie=set_self_kategorie,
+           set_other_kategorie=set_other_kategorie
+           )
     context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
 
     return context

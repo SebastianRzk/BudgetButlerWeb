@@ -4,7 +4,7 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.core import file_system
 from butler_offline.views.gemeinsame_buchungen import uebersicht_abrechnungen
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 
 
@@ -26,7 +26,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         file_system.instance().write(file_system.ABRECHNUNG_PATH+'*Abrechnung_A', self.ABRECHNUNG_A_CONTENT)
         file_system.instance().write(file_system.IMPORT_PATH+'*Import_A', self.IMPORT_A_CONTENT)
 
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):

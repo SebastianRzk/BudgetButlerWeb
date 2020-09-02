@@ -1,4 +1,4 @@
-
+from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
@@ -14,7 +14,7 @@ def handle_request(request):
         if 'edit_index' in request.values:
             startdatum = datum(request.values['startdatum'])
             endedatum = datum(request.values['endedatum'])
-            viewcore.database_instance().dauerauftraege.edit(
+            database_instance().dauerauftraege.edit(
                 int(request.values['edit_index']),
                 startdatum,
                 endedatum,
@@ -34,7 +34,7 @@ def handle_request(request):
         else:
             startdatum = datum(request.values['startdatum'])
             endedatum = datum(request.values['endedatum'])
-            viewcore.database_instance().dauerauftraege.add(
+            database_instance().dauerauftraege.add(
                 startdatum,
                 endedatum,
                 request.values['kategorie'],
@@ -56,7 +56,7 @@ def handle_request(request):
 
     if post_action_is(request, 'edit'):
         db_index = int(request.values['edit_index'])
-        default_item = viewcore.database_instance().dauerauftraege.get(db_index)
+        default_item = database_instance().dauerauftraege.get(db_index)
         default_item['Startdatum'] = datum_to_string(default_item['Startdatum'])
         default_item['Endedatum'] = datum_to_string(default_item['Endedatum'])
 
@@ -83,7 +83,7 @@ def handle_request(request):
             'Name': ''
         }
 
-    context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
+    context['kategorien'] = sorted(database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_dauerauftraege())
     context['rhythmen'] = ['monatlich']
     return context

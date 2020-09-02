@@ -1,12 +1,12 @@
 import unittest
 
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.core import time
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.views.einzelbuchungen import uebersicht_monat
 from butler_offline.core import file_system
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
 
@@ -15,7 +15,7 @@ class Monatsuebersicht(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):
@@ -29,7 +29,7 @@ class Monatsuebersicht(unittest.TestCase):
 
     def teste_mitMehrAusgabenAlsEinnahmen(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
 
@@ -48,7 +48,7 @@ class Monatsuebersicht(unittest.TestCase):
 
     def teste_gleitkommadarstellung_monats_zusammenfassung(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
 
         result_context = uebersicht_monat.index(PostRequest({'date': '2010_10'}))
@@ -58,7 +58,7 @@ class Monatsuebersicht(unittest.TestCase):
 
     def teste_gleitkommadarstellung_jahress_zusammenfassung(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
 
         result_context = uebersicht_monat.index(PostRequest({'date': '2010_10'}))
@@ -69,7 +69,7 @@ class Monatsuebersicht(unittest.TestCase):
 
     def teste_mitUnterschiedlichenMonaten_shouldSelectNeusterMonat(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10.10.2011'), 'eine einnahme kategorie', 'some name', 10)
 
@@ -79,7 +79,7 @@ class Monatsuebersicht(unittest.TestCase):
 
     def teste_datumsdarstellung_einzelbuchungsliste(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.einzelbuchungen.add(datum('10.10.2011'), 'eine einnahme kategorie', 'some name', 10)
 
         result_context = uebersicht_monat.index(GetRequest())
@@ -90,7 +90,7 @@ class Monatsuebersicht(unittest.TestCase):
 class Abrechnung(unittest.TestCase):
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):

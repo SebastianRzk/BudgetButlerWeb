@@ -13,6 +13,7 @@ from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.gemeinsame_buchungen import addgemeinsam
 from butler_offline.core import file_system
 from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
@@ -22,7 +23,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         request_handler.stub_me()
 
     def test_init(self):
@@ -32,7 +33,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('10.10.2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
         context = addgemeinsam.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
@@ -60,7 +61,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,00'
              }
          ))
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -99,7 +100,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'2,00'
              }
          ))
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         assert testdb.einzelbuchungen.content.Wert[0] == -1 * 0.5 * float('2.00')
         assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
         assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
@@ -128,7 +129,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'0,00'
              }
          ))
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -162,7 +163,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -173,7 +174,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         self.set_up()
         result = addgemeinsam.index(GetRequest())
 
-        assert viewcore.database_instance().name in result['personen']
+        assert persisted_state.database_instance().name in result['personen']
         assert viewcore.name_of_partner() in result['personen']
         assert len(result['personen']) == 2
 
@@ -213,7 +214,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              'wert':'0,00'
              }
          ))
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.50')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'

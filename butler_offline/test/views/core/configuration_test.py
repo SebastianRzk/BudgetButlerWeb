@@ -6,12 +6,14 @@ Created on 10.05.2017
 
 import unittest
 
+from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.views.core import configuration
 from butler_offline.core import file_system
 from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -20,7 +22,7 @@ class TestKonfiguration(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
+        persisted_state.DATABASE_INSTANCE = None
         configuration_provider.LOADED_CONFIG = None
         request_handler.stub_me()
 
@@ -36,15 +38,15 @@ class TestKonfiguration(unittest.TestCase):
     def test_addKategorie(self):
         self.set_up()
         configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test'}))
-        assert viewcore.database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
+        assert database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
     def test_change_db_should_trigger_db_reload(self):
         self.set_up()
         configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test'}))
-        assert viewcore.database_instance().name == 'test'
+        assert database_instance().name == 'test'
 
         configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test2'}))
-        assert viewcore.database_instance().name == 'test2'
+        assert database_instance().name == 'test2'
 
     def test_change_partnername_should_change_partnername(self):
         self.set_up()
@@ -67,11 +69,11 @@ class TestKonfiguration(unittest.TestCase):
     def test_change_partnername_should_mirgrate_old_partnernames(self):
         self.set_up()
         name_of_partner = viewcore.name_of_partner()
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        gemeinsame_buchungen = database_instance().gemeinsamebuchungen
         gemeinsame_buchungen.add(datum('01.01.2017'), 'kat', 'name', 1, name_of_partner)
 
         configuration.index(PostRequest({'action': 'set_partnername', 'partnername': 'testpartner_renamed'}))
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        gemeinsame_buchungen = database_instance().gemeinsamebuchungen
         database_partners = gemeinsame_buchungen.content.Person
 
         assert set(database_partners) == set(['testpartner_renamed'])

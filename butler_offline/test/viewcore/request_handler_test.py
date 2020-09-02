@@ -6,19 +6,20 @@ Created on 10.05.2017
 
 import unittest
 from requests.exceptions import ConnectionError
+
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.core import file_system
-from butler_offline.viewcore import viewcore
 
 
 class TesteRequestHandler(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
-        viewcore.database_instance()
+        persisted_state.DATABASE_INSTANCE = None
+        persisted_state.database_instance()
         request_handler.stub_me_theme()
 
     def test_redirect(self):

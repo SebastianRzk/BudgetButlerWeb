@@ -1,7 +1,4 @@
-
-from butler_offline.viewcore.viewcore import database_instance
-
-
+from butler_offline.viewcore.state.persisted_state import database_instance
 
 CONTEXT = {}
 

@@ -8,6 +8,7 @@ from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen
 from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import configuration_provider
 
@@ -16,8 +17,8 @@ class Gemeinsamabrechnen(unittest.TestCase):
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
         configuration_provider.LOADED_CONFIG = None
-        viewcore.DATABASE_INSTANCE = None
-        viewcore.DATABASES = []
+        persisted_state.DATABASE_INSTANCE = None
+        persisted_state.DATABASES = []
         time.stub_today_with(datum('01.01.2019'))
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
         request_handler.stub_me()
@@ -28,7 +29,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
     def test_abrechnen(self):
         self.set_up()
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         gemeinsam_abrechnen.abrechnen(PostRequest({'set_ergebnis': '',
                                                    'set_verhaeltnis': '50'}))
@@ -38,7 +39,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
 
     def test_abrechnen_should_create_abrechnung_online(self):
         self.set_up()
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
 
         context = gemeinsam_abrechnen.abrechnen(PostRequest({
@@ -75,7 +76,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_abrechnen_should_create_abrechnung_on_disk(self):
         self.set_up()
 
-        testdb = viewcore.database_instance()
+        testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         gemeinsam_abrechnen.abrechnen(PostRequest({
             'set_ergebnis': '%Ergebnis%',
@@ -122,8 +123,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_shortResult_withEqualValue_shouldReturnEqualSentence(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
-        self_name = viewcore.database_instance().name
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        self_name = persisted_state.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
 
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, self_name)
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, name_partner)
@@ -134,8 +135,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_shortResult_withSelectedDate_shouldFilterEntries(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
-        self_name = viewcore.database_instance().name
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        self_name = persisted_state.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -1000, self_name)
         gemeinsame_buchungen.add(datum('15.01.2011'), self.some_name(), self.some_kategorie(), -20, name_partner)
@@ -150,8 +151,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_result_withSelektiertemVerhaeltnis(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
-        self_name = viewcore.database_instance().name
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        self_name = persisted_state.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
@@ -168,8 +169,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_result_withLimitPartnerAndValueUnderLimit_shouldReturnDefaultVerhaeltnis(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
-        self_name = viewcore.database_instance().name
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        self_name = persisted_state.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
@@ -188,8 +189,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_result_withLimitPartnerAndValueOverLimit_shouldModifyVerhaeltnis(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
-        self_name = viewcore.database_instance().name
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        self_name = persisted_state.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
@@ -211,8 +212,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_result_withLimitSelfAndValueUnderLimit_shouldReturnDefaultVerhaeltnis(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
-        self_name = viewcore.database_instance().name
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        self_name = persisted_state.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
@@ -231,8 +232,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
     def test_result_withLimitSelfAndValueOverLimit_shouldModifyVerhaeltnis(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
-        self_name = viewcore.database_instance().name
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        self_name = persisted_state.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
@@ -263,7 +264,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
     def test_shortResult_withPartnerMoreSpendings_shouldReturnEqualSentence(self):
         self.set_up()
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
         name_partner = viewcore.name_of_partner()
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, name_partner)
         result = gemeinsam_abrechnen.index(GetRequest())
@@ -274,8 +275,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
     def test_shortResult_withSelfMoreSpendings_shouldReturnEqualSentence(self):
         self.set_up()
-        gemeinsame_buchungen = viewcore.database_instance().gemeinsamebuchungen
-        name_self = viewcore.database_instance().name
+        gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
+        name_self = persisted_state.database_instance().name
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, name_self)
 
         result = gemeinsam_abrechnen.index(GetRequest())

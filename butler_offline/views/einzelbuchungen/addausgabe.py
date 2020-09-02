@@ -1,4 +1,4 @@
-
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
@@ -11,7 +11,7 @@ def handle_request(request):
     context = viewcore.generate_transactional_context('addeinzelbuchung')
     context['element_titel'] = 'Neue Ausgabe'
     context['approve_title'] = 'Ausgabe hinzufügen'
-    einzelbuchungen = viewcore.database_instance().einzelbuchungen
+    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
 
     if post_action_is(request, 'add'):
         value = dezimal_float(request.values['wert']) * -1

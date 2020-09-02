@@ -6,6 +6,9 @@ Created on 04.12.2017
 from flask import render_template
 from flask import redirect
 from requests.exceptions import ConnectionError
+
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.base_html import set_error_message
@@ -34,7 +37,7 @@ def handle_request(request, request_action, html_base_page):
     context = viewcore.generate_base_context('Fehler')
     try:
         context = request_action(request)
-        viewcore.save_tainted()
+        persisted_state.save_tainted()
     except ConnectionError as err:
         set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
         context['%Errortext'] = ''
@@ -61,7 +64,7 @@ def theme(page):
     return request_handler.BASE_THEME_PATH + page
 
 def current_key():
-    return request_handler.SESSION_RANDOM + ' ' + viewcore.database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
+    return request_handler.SESSION_RANDOM + ' ' + database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
 
 
 def stub_me():
