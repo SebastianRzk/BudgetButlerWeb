@@ -8,6 +8,7 @@ CONTEXT = {}
 KEY_CHANGED_EINZELBUCHUNGEN = 'einzelbuchungen_changed'
 KEY_CHANGED_DAUERAUFTRAEGE = 'dauerauftraege_changed'
 KEY_CHANGED_GEMEINSAME_BUCHUNGEN = 'gemeinsamebuchungen_changed'
+KEY_CHANGED_SPARBUCHUNGEN = 'sparbuchungen_changed'
 
 def _get_context():
     database_name = database_instance()
@@ -48,3 +49,12 @@ def add_changed_gemeinsamebuchungen(new_changed_gemeinsamebuchungen_event):
 
 def get_changed_gemeinsamebuchungen():
     return _get_context_for_key(KEY_CHANGED_GEMEINSAME_BUCHUNGEN)
+
+
+def add_changed_sparbuchungen(new_changed_sparbuchungen_event):
+    context = get_changed_sparbuchungen()
+    context.append(new_changed_sparbuchungen_event)
+
+
+def get_changed_sparbuchungen():
+    return _get_context_for_key(KEY_CHANGED_SPARBUCHUNGEN)

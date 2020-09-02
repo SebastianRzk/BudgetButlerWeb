@@ -4,7 +4,7 @@ from butler_offline.viewcore import viewcore
 from butler_offline.core.database import Database
 
 class NonPersistedStateTest(unittest.TestCase):
-    
+
     def clear_context(self):
         non_persisted_state.CONTEXT = {}
         viewcore.DATABASE_INSTANCE = Database('db')
@@ -39,6 +39,14 @@ class NonPersistedStateTest(unittest.TestCase):
 
         assert non_persisted_state.get_changed_gemeinsamebuchungen() == ['demo']
 
+    def test_sparbuchungen(self):
+        self.clear_context()
+
+        assert non_persisted_state.get_changed_sparbuchungen() == []
+
+        non_persisted_state.add_changed_sparbuchungen('demo')
+
+        assert non_persisted_state.get_changed_sparbuchungen() == ['demo']
 
 if __name__ == '__main__':
     unittest.main()
