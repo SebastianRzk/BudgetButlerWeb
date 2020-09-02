@@ -6,7 +6,9 @@
 
 ## Idee
 
-* Einfache Datenhaltung: Die Daten sind im CSV-Format gespeichert und damit mit einem Textverarbeitungsprogramm oder einem Tabellenverarbeitungsprogramm zugänglich.
+* Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und damit mit einem Textverarbeitungsprogramm oder einem Tabellenverarbeitungsprogramm zugänglich.
+* Unkomplizierte Einnahmen/Ausgaben-Rechnung, keine doppelte Buchführung.
+* Schlanke Begleiter-Web-App für unterwegs (online-Version, mobil-optimiert). Import der Daten in die lokale Anwendung
 * Schlankes Design
 * Hohe Geschwindigkeit, auch bei großen Datenmengen
 * Quelloffen
@@ -14,16 +16,24 @@
 
 ## Merkmale
 
-* Monatsübersicht
-* Jahresübersicht
-* Einzelbuchungen (erfassen, ändern, löschen)
-* Daueraufträge (erfassen, ändern, löschen)
-* Gemeinsame Buchungen (erfassen, ändern, löschen, abrechnen, aus Abrechnung importieren)
-* Farbthema anpassen
-* Farben der Kategorien anpassen
-* Verwendung mehrerer Datenbanken
+* Einzelbuchungen
+** Einzelbuchungen (erfassen, ändern, löschen)
+** Daueraufträge (erfassen, ändern, löschen)
+** Monatsübersicht
+** Jahresübersicht
 
-## Offline Anwendung
+
+* Gemeinsame Buchungen
+** Erfassen, Ändern, Löschen
+** Abrechnung erstellen.
+** Abrechnungen exportieren und importieren
+
+* Konfiguration
+** Farbthema anpassen
+** Farben der Kategorien anpassen
+** Verwendung mehrerer Datenbanken
+
+## Offline Anwendung: BudgetButlerWeb
 
 ### Systemvoraussetzungen
 
@@ -68,6 +78,42 @@ BudgetButlerWeb aktualisieren:
 
 	git pull
 
+## Begleiter Web-App:
 
+### Systemanfoderungen zum Build
+
+* npm
+* composer
+
+### Systemanforderung für den Betrieb:
+
+* Webspace mit PHP
+* Relationale Datenbank
+
+### Installation
+
+* Repo clonen
+
+        git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+
+* Ins Projektverzeichnis wechseln
+
+        cd BudgetButlerWeb
+
+* Build in das Verzeichnis `butler_online_distribution` triggern
+
+        sh butler_online_install/compose.sh
+
+* Datenbank-Zugangsdaten in die Datei `butler_online_distribution/api/db.ini` eintragen
+
+* Diesen Ordner auf den Webspace laden `butler_online_distribution`
+
+* Diese SQL-Skripte in der Datenbank ausführen `butler_online_install/`
+
+* Prüfen, dass die Datei `db.ini` von außen nicht erreichbar ist.
+
+* Login auf `/`. Initiale Anmeldedaten:
+    * User: admin@admin.de
+    * Password: adminadminadmin
 
 
