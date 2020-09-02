@@ -2,6 +2,7 @@ from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.state import non_persisted_state
 
 
 def handle_request(request):
@@ -18,7 +19,7 @@ def handle_request(request):
                                                                   wert=value,
                                                                   person=request.values['person']
                                                                   )
-            viewcore.add_changed_gemeinsamebuchungen(
+            non_persisted_state.add_changed_gemeinsamebuchungen(
                 {
                     'fa': 'pencil',
                     'datum': datum_to_german(date),
@@ -34,7 +35,7 @@ def handle_request(request):
                                                                         ausgaben_name=request.values['name'],
                                                                         wert="%.2f" % value,
                                                                         person=request.values['person'])
-            viewcore.add_changed_gemeinsamebuchungen(
+            non_persisted_state.add_changed_gemeinsamebuchungen(
                 {
                     'fa': 'plus',
                     'datum': datum_to_german(date),
@@ -73,7 +74,7 @@ def handle_request(request):
 
     context['personen'] = [viewcore.database_instance().name, viewcore.name_of_partner()]
     context['kategorien'] = sorted(viewcore.database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True))
-    context['letzte_erfassung'] = reversed(viewcore.get_changed_gemeinsamebuchungen())
+    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_gemeinsamebuchungen())
     return context
 
 

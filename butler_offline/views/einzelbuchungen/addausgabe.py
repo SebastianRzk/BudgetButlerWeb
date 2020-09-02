@@ -4,6 +4,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german, datum_to_german
+from butler_offline.viewcore.state import non_persisted_state
 
 
 def handle_request(request):
@@ -23,7 +24,7 @@ def handle_request(request):
                 request.values['kategorie'],
                 request.values['name'],
                 value)
-            viewcore.add_changed_einzelbuchungen(
+            non_persisted_state.add_changed_einzelbuchungen(
                 {
                     'fa':'pencil',
                     'datum':datum_to_german(datum_object),
@@ -39,7 +40,7 @@ def handle_request(request):
                 request.values['name'],
                 value)
 
-            viewcore.add_changed_einzelbuchungen(
+            non_persisted_state.add_changed_einzelbuchungen(
                 {
                     'fa':'plus',
                     'datum':datum_to_german(datum_object),
@@ -71,7 +72,7 @@ def handle_request(request):
         }
 
     context['kategorien'] = sorted(einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True))
-    context['letzte_erfassung'] = reversed(viewcore.get_changed_einzelbuchungen())
+    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_einzelbuchungen())
     return context
 
 def index(request):

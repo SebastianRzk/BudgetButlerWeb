@@ -36,42 +36,6 @@ def _get_context():
     return CONTEXT[DATABASE_INSTANCE.name]
 
 
-def get_changed_einzelbuchungen():
-    context = _get_context()
-    if "einzelbuchungen_changed" not in context.keys():
-        context["einzelbuchungen_changed"] = []
-    return context["einzelbuchungen_changed"]
-
-
-def add_changed_einzelbuchungen(new_changed_einzelbuchung_event):
-    context = get_changed_einzelbuchungen()
-    context.append(new_changed_einzelbuchung_event)
-
-
-def add_changed_gemeinsamebuchungen(new_changed_gemeinsamebuchungen_event):
-    context = get_changed_gemeinsamebuchungen()
-    context.append(new_changed_gemeinsamebuchungen_event)
-
-
-def get_changed_gemeinsamebuchungen():
-    context = _get_context()
-    if "gemeinsamebuchungen_changed" not in context.keys():
-        context["gemeinsamebuchungen_changed"] = []
-    return context["gemeinsamebuchungen_changed"]
-
-
-def get_changed_dauerauftraege():
-    context = _get_context()
-    if "dauerauftraege_changed" not in context.keys():
-        context["dauerauftraege_changed"] = []
-    return context["dauerauftraege_changed"]
-
-
-def add_changed_dauerauftraege(new_changed_dauerauftraege_event):
-    context = get_changed_dauerauftraege()
-    context.append(new_changed_dauerauftraege_event)
-
-
 def switch_database_instance(database_name):
     ausgeschlossene_kategorien = set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
     viewcore.DATABASE_INSTANCE = DBManager.read(database_name, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
