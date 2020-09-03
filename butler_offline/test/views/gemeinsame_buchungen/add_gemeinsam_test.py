@@ -31,7 +31,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
         context = addgemeinsam.index(GetRequest())
         assert context['approve_title'] == 'Gemeinsame Ausgabe hinzufügen'
 
-    def test_editCallFromUeberischt_shouldNameButtonEdit(self):
+    def test_editCallFromUeberischt_shouldPresetValues_andRenameButton(self):
         self.set_up()
         db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('10.10.2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
@@ -130,6 +130,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
         testdb = persisted_state.database_instance()
+        assert len(testdb.gemeinsamebuchungen.content) == 1
         assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
         assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
         assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
@@ -151,9 +152,8 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        addgemeinsam.index(PostRequest(
+        addgemeinsam.index(VersionedPostRequest(
             {'action':'add',
-             'ID':request_handler.current_key(),
              'edit_index':'0',
              'date': rfc('5.1.2017'),
              'kategorie':'Essen',
