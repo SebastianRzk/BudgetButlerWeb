@@ -219,5 +219,26 @@ class AddSparbuchungTest(unittest.TestCase):
         assert preset['eigenschaft'] == 'Einzahlung'
         assert preset['typ'] == Sparbuchungen.TYP_MANUELLER_AUFTRAG
 
+    def test_editCallFromUeberischt_shouldPresetValues_auszahlung(self):
+        self.set_up()
+        add_sparbuchung.index(VersionedPostRequest(
+            {'action': 'add',
+             'date': rfc('1.1.2017'),
+             'name': 'testname',
+             'wert': '2,00',
+             'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
+             'eigenschaft': add_sparbuchung.EIGENSCHAFT_AUSZAHLUNG,
+             'konto': 'demokonto'
+             }
+        ))
+
+        context = add_sparbuchung.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
+        assert context['approve_title'] == 'Sparbuchung aktualisieren'
+        preset = context['default_item']
+
+        assert preset['wert'] == '2,00'
+        assert preset['eigenschaft'] == 'Auszahlung'
+
+
 if __name__ == '__main__':
     unittest.main()
