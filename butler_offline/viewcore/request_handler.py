@@ -19,6 +19,7 @@ REDIRECTOR = lambda x: redirect(x, code=301)
 RENDER_FULL_FUNC = render_template
 BASE_THEME_PATH = 'theme/'
 
+REDIRECT_KEY = 'redirect_to'
 
 def handle_request(request, request_action, html_base_page):
     if request.method == 'POST' and 'ID' in request.values:
@@ -50,6 +51,8 @@ def handle_request(request, request_action, html_base_page):
 
     if '%Errortext' in context:
         rendered_content = context['%Errortext']
+    elif REDIRECT_KEY in context:
+        return REDIRECTOR(context[REDIRECT_KEY])
     else:
         if 'special_page' in context:
             html_base_page = context['special_page']
@@ -58,6 +61,11 @@ def handle_request(request, request_action, html_base_page):
     context['content'] = rendered_content
     response = request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
     return response
+
+def create_redirect_context(url):
+    return {
+        REDIRECT_KEY: url
+    }
 
 def theme(page):
     return request_handler.BASE_THEME_PATH + page
