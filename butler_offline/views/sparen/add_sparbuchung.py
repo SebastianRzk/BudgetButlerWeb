@@ -91,7 +91,7 @@ def handle_request(request):
 
     context['kontos'] = ['Demo Konto 1']
     context['typen'] = [database_instance().sparbuchungen.TYP_MANUELLER_AUFTRAG]
-    context['eigenschaften'] = [EIGENSCHAFT_EINZAHLUNG, EIGENSCHAFT_AUSZAHLUNG]
+    context[EIGENSCHAFTEN] = [EIGENSCHAFT_EINZAHLUNG, EIGENSCHAFT_AUSZAHLUNG]
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_sparbuchungen())
     return context
 

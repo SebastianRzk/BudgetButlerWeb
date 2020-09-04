@@ -86,12 +86,12 @@
 				  <tbody>
 					  {% for sparbuchung in letzte_erfassung %}
 					  <tr>
-						  <td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
+						  <td><span class="fa fa-{{sparbuchung.fa}} pull-right"></span></td>
 						  <td>{{sparbuchung.datum}}</td>
 						  <td>{{sparbuchung.name}}</td>
-						  <td>{{sparbuchung.kategorie}}</td>
+						  <td>{{sparbuchung.konto}}</td>
 						  <td class="table-wert">{{sparbuchung.wert}}</td>
-						  <td>{{sparbuchung.person}}</td>
+						  <td>{{sparbuchung.typ}}</td>
 					  </tr>
 					  {% endfor %}
 				  </tbody>
