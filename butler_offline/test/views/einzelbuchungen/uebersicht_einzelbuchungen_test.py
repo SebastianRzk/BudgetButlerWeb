@@ -3,7 +3,7 @@ import unittest
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_einzelbuchungen
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -56,6 +56,17 @@ class TestUebersichtEinzelbuchungen(unittest.TestCase):
     def test_delete(self):
         self.set_up()
         self.add_test_data()
-        uebersicht_einzelbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1'}))
+        uebersicht_einzelbuchungen.index(VersionedPostRequest({'action': 'delete', 'delete_index': '1'}))
         einzelbuchungen = persisted_state.database_instance().einzelbuchungen
         assert einzelbuchungen.select().sum() == 100
+
+    def test_delete_should_only_trigger_one(self):
+        self.set_up()
+        self.add_test_data()
+        next_id = request_handler.current_key()
+
+        assert len(persisted_state.database_instance().einzelbuchungen.content) == 2
+        uebersicht_einzelbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
+        assert len(persisted_state.database_instance().einzelbuchungen.content) == 1
+        uebersicht_einzelbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
+        assert len(persisted_state.database_instance().einzelbuchungen.content) == 1

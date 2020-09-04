@@ -3,7 +3,7 @@ import unittest
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_sparbuchungen
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -62,7 +62,7 @@ class TestUebersichtSparbuchungen(unittest.TestCase):
     def test_delete(self):
         self.set_up()
         self.add_test_data()
-        uebersicht_sparbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1'}))
+        uebersicht_sparbuchungen.index(VersionedPostRequest({'action': 'delete', 'delete_index': '1'}))
         sparbuchungen = persisted_state.database_instance().sparbuchungen
         assert len(sparbuchungen.content) == 1
         assert sparbuchungen.get(0) == {'Datum': datum('12.12.2012'),
@@ -72,3 +72,15 @@ class TestUebersichtSparbuchungen(unittest.TestCase):
                                         'Typ': 'Manueller Auftrag',
                                         'Wert': 100,
                                         'index': 0}
+
+
+    def test_delete_should_only_fire_once(self):
+        self.set_up()
+        self.add_test_data()
+        next_id = request_handler.current_key()
+
+        assert len(persisted_state.database_instance().sparbuchungen.content) == 2
+        uebersicht_sparbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
+        assert len(persisted_state.database_instance().sparbuchungen.content) == 1
+        uebersicht_sparbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
+        assert len(persisted_state.database_instance().sparbuchungen.content) == 1

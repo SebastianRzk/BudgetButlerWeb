@@ -30,7 +30,7 @@
 						<td>
 							{% if not sparbuchung.dynamisch %}
 							<div class="pull-right">
-								<form onsubmit="return confirm('Willst du wirklich die Sparbuchung {{sparbuchung.name}} löschen?');" role="form" action="/uebersicht/" method="post">
+								<form onsubmit="return confirm('Willst du wirklich die Sparbuchung {{sparbuchung.name}} löschen?');" role="form" action="/uebersicht_sparbuchungen/" method="post">
 									<input type="hidden" name="ID" value="{{ID}}">
 									<input type="hidden" name="delete_index" value="{{sparbuchung.index}}">
 									<button name="action" class="btn bordered-hover btn-icon" value="delete" ><span class="fa fa-trash-o fa-large"></span></button>

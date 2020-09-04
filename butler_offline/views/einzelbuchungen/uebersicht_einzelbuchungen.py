@@ -9,6 +9,7 @@ def _handle_request(request):
     einzelbuchungen = persisted_state.database_instance().einzelbuchungen
     if post_action_is(request, 'delete'):
         einzelbuchungen.delete(int(request.values['delete_index']))
+        return request_handler.create_redirect_context('/uebersicht/')
 
     db = einzelbuchungen.get_all()
     ausgaben_monatlich = {}
