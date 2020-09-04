@@ -19,7 +19,8 @@ from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen,\
     addgemeinsam, \
     uebersicht_gemeinsam
 
-from butler_offline.views.sparen import add_sparbuchung
+from butler_offline.views.sparen import add_sparbuchung, \
+    uebersicht_sparbuchungen
 
 from butler_offline.views.shared import import_data
 
@@ -120,6 +121,14 @@ Sparen:
 @app.route('/add_sparbuchung/', methods=['GET', 'POST'])
 def display_add_sparbuchung():
     return add_sparbuchung.index(request)
+
+@app.route('/uebersicht_sparbuchungen/', methods=['GET', 'POST'])
+def display_uebersicht_sparbuchung():
+    return uebersicht_sparbuchungen.index(request)
+
+
+
+
 
 
 @app.route('/theme/')
