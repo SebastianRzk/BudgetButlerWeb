@@ -9,7 +9,7 @@ from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import PostRequest, GetRequest
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.core import file_system
 
@@ -26,6 +26,11 @@ class TesteRequestHandler(unittest.TestCase):
         self.set_up()
         result = request_handler.handle_request(PostRequest({'redirect': 'test_page'}), lambda x: {}, 'nothing')
         assert result == '/test_page/'
+
+    def test_manual_redirect(self):
+        self.set_up()
+        result = request_handler.handle_request(GetRequest(), lambda x: request_handler.create_redirect_context('to_url'), 'nothing')
+        assert result == 'to_url'
 
     def test_extra_page(self):
         self.set_up()

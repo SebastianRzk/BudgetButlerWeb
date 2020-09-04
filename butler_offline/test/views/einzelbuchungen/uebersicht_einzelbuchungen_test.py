@@ -10,7 +10,7 @@ from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
 
 
-class TestUebersicht(unittest.TestCase):
+class TestUebersichtEinzelbuchungen(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
@@ -47,10 +47,10 @@ class TestUebersicht(unittest.TestCase):
         self.add_test_data()
         result = uebersicht_einzelbuchungen.index(GetRequest())
         item = result['alles']['2012.12'][0]
-        assert float(item['wert']) > 0
+        assert item['wert'] == '100,00'
         assert item['link'] == 'addeinnahme'
         item = result['alles']['2012.12'][1]
-        assert float(item['wert']) < 0
+        assert item['wert'] == '-100,00'
         assert item['link'] == 'addausgabe'
 
     def test_delete(self):

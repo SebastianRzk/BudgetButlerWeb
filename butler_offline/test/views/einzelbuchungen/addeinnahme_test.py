@@ -182,11 +182,12 @@ class TestAddEinnahmeView(unittest.TestCase):
         self.set_up()
 
         addeinnahme.index(VersionedPostRequest(
-            {'action':'add',
-             'date': rfc('1.1.2017'),
-             'kategorie':'Essen',
-             'name':'testname',
-             'wert':'2,34'
+            {
+                'action': 'add',
+                'date': rfc('1.1.2017'),
+                'kategorie': 'Essen',
+                'name': 'testname',
+                'wert': '2,34'
              }
          ))
 
