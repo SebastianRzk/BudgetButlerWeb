@@ -49,5 +49,14 @@ class NonPersistedStateTest(unittest.TestCase):
 
         assert non_persisted_state.get_changed_sparbuchungen() == ['demo']
 
+    def test_sparkontos(self):
+        self.clear_context()
+
+        assert non_persisted_state.get_changed_sparkontos() == []
+
+        non_persisted_state.add_changed_sparkontos('demo')
+
+        assert non_persisted_state.get_changed_sparkontos() == ['demo']
+
 if __name__ == '__main__':
     unittest.main()

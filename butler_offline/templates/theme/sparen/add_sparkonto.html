@@ -1,0 +1,64 @@
+<div class="input-theme">
+	<div class="box input-box">
+		<div class="box-header">
+			<h3 class="box-title">Neues Sparkonto</h3>
+		</div>
+		<form role="form" action="/add_sparkonto/" method="post">
+			<input type="hidden" name="ID" value="{{ID}}">
+			<div class="box-body">
+				<div class="form-group">
+					<label>Name des Sparkontos</label> <input value="{{default_item.kontoname}}" type="text" name="kontoname" class="form-control" placeholder="" required="required" />
+				</div>
+				<div class="form-group">
+					<label>Kontotyp</label>
+					<select class="form-control" name="kontotyp" id="konto_auswahl">
+						 {% for kontotyp in kontotypen %}
+						<option
+							{% if bearbeitungsmodus and kontotyp == default_item.kontotyp%}
+							selected="selected"
+							{% endif %}
+							>{{kontotyp}}</option>
+						 {% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="add" id="add" class="btn bordered-hover">{{approve_title}}</button>
+			</div>
+		</form>
+	</div>
+  <div class="box last-elements-box">
+	  <div class="box-header with-border">
+		  <h3 class="box-title">Letzte Erfassungen</h3>
+	  </div>
+	  <div class="box-body">
+		  <div class="table-responsive">
+			  <table class="table no-margin" id="letzte_erfassungen">
+				  <thead>
+					  <tr>
+						  <th></th>
+						  <th>Kontoname</th>
+						  <th>Kontotyp</th>
+					  </tr>
+				  </thead>
+				  <tbody>
+					  {% for sparkonto in letzte_erfassung %}
+					  <tr>
+						  <td><span class="fa fa-{{sparkonto.fa}} pull-right"></span></td>
+						  <td>{{sparkonto.Kontoname}}</td>
+						  <td>{{sparkonto.Kontotyp}}</td>
+					  </tr>
+					  {% endfor %}
+				  </tbody>
+			  </table>
+		  </div>
+	  </div>
+	  <div class="box-footer clearfix">
+	  <a href="/uebersicht_sparbuchungen/" class="btn btn-light pull-right">Alle Sparkontos ansehen TODO</a>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function () {
+		$("[data-mask]").inputmask();
+	});
+</script>
