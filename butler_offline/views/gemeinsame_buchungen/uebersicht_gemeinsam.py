@@ -8,6 +8,7 @@ from butler_offline.viewcore.converter import to_descriptive_list
 def _handle_request(request):
     if post_action_is(request, 'delete'):
         database_instance().gemeinsamebuchungen.delete(int(request.values['delete_index']))
+        return request_handler.create_redirect_context('/gemeinsameuebersicht/')
 
     context = viewcore.generate_transactional_context('gemeinsameuebersicht')
     context['ausgaben'] = to_descriptive_list(

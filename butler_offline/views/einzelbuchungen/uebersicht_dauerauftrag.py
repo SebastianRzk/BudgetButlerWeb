@@ -12,6 +12,7 @@ def _handle_request(request):
     if post_action_is(request, 'delete'):
         print("Delete: ", request.values['delete_index'])
         dauerauftraege.delete(int(request.values['delete_index']))
+        return request_handler.create_redirect_context('/dauerauftraguebersicht/')
 
     context = viewcore.generate_transactional_context('dauerauftraguebersicht')
     data = collections.OrderedDict()
