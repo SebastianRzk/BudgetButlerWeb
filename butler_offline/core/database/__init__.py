@@ -3,6 +3,7 @@ from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.file_system import write_abrechnung
 from butler_offline.core.time import time
 from butler_offline.core.export.string_writer import StringWriter
@@ -20,6 +21,7 @@ class Database:
         self.gemeinsamebuchungen = Gemeinsamebuchungen()
         self.einzelbuchungen = Einzelbuchungen()
         self.sparbuchungen = Sparbuchungen()
+        self.sparkontos = Kontos()
         self.einzelbuchungen.ausgeschlossene_kategorien = ausgeschlossene_kategorien
         self.tainted = 0
 
@@ -34,7 +36,8 @@ class Database:
                self.dauerauftraege.taint_number() + \
                self.einzelbuchungen.taint_number() + \
                self.gemeinsamebuchungen.taint_number() + \
-               self.sparbuchungen.taint_number()
+               self.sparbuchungen.taint_number() + \
+               self.sparkontos.taint_number()
 
     def de_taint(self):
         self.tainted = 0
@@ -42,6 +45,7 @@ class Database:
         self.einzelbuchungen.de_taint()
         self.gemeinsamebuchungen.de_taint()
         self.sparbuchungen.de_taint()
+        self.sparkontos.de_taint()
 
     def refresh(self):
         print('DATABASE: Erneuere Datenbestand')

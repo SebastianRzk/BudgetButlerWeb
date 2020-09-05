@@ -5,6 +5,7 @@ import pandas as pd
 class Sparbuchungen(DatabaseObject):
     TYP_MANUELLER_AUFTRAG = 'Manueller Auftrag'
 
+    AUFTRAGS_TYPEN = [TYP_MANUELLER_AUFTRAG]
     TABLE_HEADER = ['Datum', 'Name', 'Wert', 'Typ', 'Konto' , 'Dynamisch']
 
     def __init__(self):

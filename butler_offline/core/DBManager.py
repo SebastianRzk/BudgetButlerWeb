@@ -12,6 +12,7 @@ KEYWORD_EINZELBUCHUNGEN = 'Einzelbuchungen'
 KEYWORD_DAUERAUFRTAEGE = 'Dauerauftraege'
 KEYWORD_GEMEINSAME_BUCHUNGEN = 'Gemeinsame Buchungen'
 KEYWORD_SPARBUCHUNGEN = 'Sparbuchungen'
+KEYWORD_SPARKONTOS = 'Sparkontos'
 
 KEYWORD_LINEBREAK = '\n'
 
@@ -39,6 +40,10 @@ def read(nutzername, ausgeschlossene_kategorien):
     database.gemeinsamebuchungen.parse(_to_table(parser.gemeinsame_buchungen()))
     print('READER: Gemeinsame Buchungen gelesen')
 
+    if parser.sparkontos():
+        database.sparkontos.parse(_to_table(parser.sparkontos()))
+        print('READER: Sparkontos gelesen')
+
     if parser.sparbuchungen():
         database.sparbuchungen.parse(_to_table(parser.sparbuchungen()))
         print('READER: Sparbuchungen gelesen')
@@ -65,6 +70,9 @@ def write(database):
     content += wrap_tableheader(KEYWORD_SPARBUCHUNGEN)
     content += database.sparbuchungen.get_static_content().to_csv(index=False)
 
+    content += wrap_tableheader(KEYWORD_SPARKONTOS)
+    content += database.sparkontos.get_static_content().to_csv(index=False)
+
     file_system.instance().write(database_path_from(database.name), content)
     print("WRITER: All Saved")
 
@@ -77,7 +85,13 @@ def database_path_from(username):
 class DatabaseParser:
     def __init__(self):
         self._reader = MultiPartCsvReader(
-            set([KEYWORD_EINZELBUCHUNGEN, KEYWORD_DAUERAUFRTAEGE, KEYWORD_GEMEINSAME_BUCHUNGEN, KEYWORD_SPARBUCHUNGEN]),
+            set([
+                KEYWORD_EINZELBUCHUNGEN,
+                KEYWORD_DAUERAUFRTAEGE,
+                KEYWORD_GEMEINSAME_BUCHUNGEN,
+                KEYWORD_SPARBUCHUNGEN,
+                KEYWORD_SPARKONTOS
+            ]),
             start_token=KEYWORD_EINZELBUCHUNGEN)
 
     def from_string(self, lines):
@@ -94,6 +108,9 @@ class DatabaseParser:
 
     def sparbuchungen(self):
         return self._reader.get_string(KEYWORD_SPARBUCHUNGEN)
+
+    def sparkontos(self):
+        return self._reader.get_string(KEYWORD_SPARKONTOS)
 
 
 class MultiPartCsvReader:

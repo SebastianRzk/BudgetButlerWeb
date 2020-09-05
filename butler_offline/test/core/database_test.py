@@ -362,6 +362,23 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.einzelbuchungen.taint()
         assert db.taint_number() == 1
 
+    def test_deTaint_shouldDeTaintKontos(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        db.sparkontos.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeKontos(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        assert db.taint_number() == 0
+        db.sparkontos.taint()
+        assert db.taint_number() == 1
+
 
 class converter_test(unittest.TestCase):
 

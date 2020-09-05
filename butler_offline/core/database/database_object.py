@@ -25,7 +25,8 @@ class DatabaseObject(StatedObject):
         self.taint()
 
     def parse(self, raw_table):
-        raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
+        if 'Datum' in raw_table.columns:
+            raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         if 'Dynamisch' in self.content.columns:
             raw_table['Dynamisch'] = False
         self.content = self.content.append(raw_table, ignore_index=True)

@@ -94,6 +94,9 @@ Datum,Kategorie,Name,Wert,Person
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
 2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
+
+ Sparkontos 
+Kontoname,Kontotyp
 '''
 
 
