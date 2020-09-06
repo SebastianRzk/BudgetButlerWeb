@@ -23,7 +23,6 @@ def _handle_request(request):
             sparbuchungen_liste = []
             datum_alt = row.Datum
 
-        link = 'add_sparbuchung'
         sparbuchungen_liste.append({
             'index': row_index,
             'datum': datum_to_german(row.Datum),
@@ -31,8 +30,7 @@ def _handle_request(request):
             'konto': row.Konto,
             'wert': from_double_to_german(row.Wert),
             'typ': row.Typ,
-            'dynamisch': row.Dynamisch,
-            'link': link})
+            'dynamisch': row.Dynamisch})
 
     if datum_alt:
         sparbuchungen_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = sparbuchungen_liste
