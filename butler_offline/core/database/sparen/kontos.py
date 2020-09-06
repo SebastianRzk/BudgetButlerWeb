@@ -27,6 +27,9 @@ class Kontos(DatabaseObject):
             'Kontotyp': kontotyp
         })
 
+    def get_kontos(self):
+        return sorted(list(self.content.Kontoname))
+
     def _sort(self):
         self.content = self.content.sort_values(by=['Kontotyp', 'Kontoname'])
         self.content = self.content.reset_index(drop=True)

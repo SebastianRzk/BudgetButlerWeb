@@ -16,12 +16,23 @@ class AddSparbuchungTest(unittest.TestCase):
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
         persisted_state.DATABASE_INSTANCE = None
+        persisted_state.database_instance().sparkontos.add('demokonto', 'testtyp')
         request_handler.stub_me()
 
     def test_init(self):
         self.set_up()
         context = add_sparbuchung.index(GetRequest())
         assert context['approve_title'] == 'Sparbuchung hinzufügen'
+        assert context['kontos'] == ['demokonto']
+
+    def test_init_empty_should_return_error(self):
+        self.set_up()
+        persisted_state.DATABASE_INSTANCE = None
+
+        context = add_sparbuchung.index(GetRequest())
+
+        assert '%Errortext' in context
+        assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Sparkonto.'
 
     def test_transaction_id_should_be_in_context(self):
         self.set_up()
