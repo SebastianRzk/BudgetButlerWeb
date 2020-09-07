@@ -38,6 +38,15 @@ class KontosTest(unittest.TestCase):
             'Kontotyp': '13typ'
         }
 
+    def test_get_sparfaehige_kontos(self):
+        component_under_test = Kontos()
+        component_under_test.add(kontoname='Spar', kontotyp=Kontos.TYP_SPARKONTO)
+        component_under_test.add(kontoname='Geno', kontotyp=Kontos.TYP_GENOSSENSCHAFTSANTEILE)
+        component_under_test.add(kontoname='Sonst', kontotyp='Sonstiges')
+
+        result = component_under_test.get_sparfaehige_kontos()
+
+        assert set(result) == set(['Geno', 'Spar'])
 
 if __name__ == '__main__':
     unittest.main()

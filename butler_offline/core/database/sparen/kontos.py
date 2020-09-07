@@ -3,10 +3,12 @@ import pandas as pd
 
 
 class Kontos(DatabaseObject):
+    TYP = 'Kontotyp'
     TYP_SPARKONTO = 'Sparkonto'
+    TYP_GENOSSENSCHAFTSANTEILE = 'Genossenschafts-Anteile'
 
-    KONTO_TYPEN = [TYP_SPARKONTO]
-    TABLE_HEADER = ['Kontoname', 'Kontotyp']
+    KONTO_TYPEN = [TYP_SPARKONTO, TYP_GENOSSENSCHAFTSANTEILE]
+    TABLE_HEADER = ['Kontoname', TYP]
 
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
@@ -27,8 +29,11 @@ class Kontos(DatabaseObject):
             'Kontotyp': kontotyp
         })
 
-    def get_kontos(self):
-        return sorted(list(self.content.Kontoname))
+    def get_sparfaehige_kontos(self):
+        query = '{} == "{}" | {} == "{}"'.format(self.TYP, self.TYP_SPARKONTO, self.TYP, self.TYP_GENOSSENSCHAFTSANTEILE)
+        print(self.content)
+        print(query)
+        return sorted(list(self.content.query(query).Kontoname))
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Kontotyp', 'Kontoname'])

@@ -6,6 +6,7 @@ from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.sparen import add_sparbuchung
 from butler_offline.core import file_system
+from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -16,7 +17,7 @@ class AddSparbuchungTest(unittest.TestCase):
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
         persisted_state.DATABASE_INSTANCE = None
-        persisted_state.database_instance().sparkontos.add('demokonto', 'testtyp')
+        persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_SPARKONTO)
         request_handler.stub_me()
 
     def test_init(self):

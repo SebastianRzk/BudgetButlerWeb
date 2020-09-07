@@ -11,7 +11,7 @@ EIGENSCHAFT_EINZAHLUNG = 'Einzahlung'
 EIGENSCHAFT_AUSZAHLUNG = 'Auszahlung'
 
 def handle_request(request):
-    if not database_instance().sparkontos.get_kontos():
+    if not database_instance().sparkontos.get_sparfaehige_kontos():
         return viewcore.generate_error_context('add_sparbuchung', 'Bitte erfassen Sie zuerst ein Sparkonto.')
 
 
@@ -93,7 +93,7 @@ def handle_request(request):
             'konto': ''
         }
 
-    context['kontos'] = database_instance().sparkontos.get_kontos()
+    context['kontos'] = database_instance().sparkontos.get_sparfaehige_kontos()
     context['typen'] = database_instance().sparbuchungen.AUFTRAGS_TYPEN
     context[EIGENSCHAFTEN] = [EIGENSCHAFT_EINZAHLUNG, EIGENSCHAFT_AUSZAHLUNG]
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_sparbuchungen())
