@@ -136,6 +136,21 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert uebertragene_buchung['Kategorie'] == 'some kategorie'
         assert uebertragene_buchung['Wert'] == '5.00'
 
+    def test_refresh_shouldImport_sparbuchungen(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+        db.sparbuchungen.add(datum('01.01.2020'), '1name', 123, db.sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto')
+
+        db.refresh()
+
+        assert len(db.einzelbuchungen.get_all()) == 1
+        assert db.einzelbuchungen.get(0) == {'Datum': datum('01.01.2020'),
+                                             'Dynamisch': True,
+                                             'Kategorie': 'Sparen',
+                                             'Name': '1name',
+                                             'Tags': None,
+                                             'Wert': -123,
+                                             'index': 0}
 
     def test_abrechnen_withDateRange_shouldOnlyImportMatchingElements(self):
         self.set_up()

@@ -1,6 +1,7 @@
 import unittest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 
 
 class SparbuchungenTest(unittest.TestCase):
@@ -67,6 +68,39 @@ class SparbuchungenTest(unittest.TestCase):
             'index': 1
         }
 
+    def test_get_dynamische_einzelbuchungen(self):
+        component_under_test = Sparbuchungen()
+
+        component_under_test.add(datum('01.01.2011'), '1name', 1, Sparbuchungen.TYP_AUSSCHUETTUNG, '1konto')
+        component_under_test.add(datum('02.02.2012'), '2name', 2, Sparbuchungen.TYP_MANUELLER_AUFTRAG, '2konto')
+        component_under_test.add(datum('03.03.2013'), '3name', -3, Sparbuchungen.TYP_MANUELLER_AUFTRAG, '3konto')
+        component_under_test.add(datum('04.04.2014'), '4name', 4, Sparbuchungen.TYP_ZINSEN, '3konto')
+
+        result = component_under_test.get_dynamische_einzelbuchungen()
+
+        assert len(result) == 3
+        assert set(result.columns) == set(Einzelbuchungen.TABLE_HEADER)
+
+        assert result.Datum[0] == datum('01.01.2011')
+        assert result.Name[0] == '1name'
+        assert result.Kategorie[0] == Sparbuchungen.TYP_AUSSCHUETTUNG
+        assert result.Wert[0] == 1
+        assert result.Dynamisch[0]
+        assert not result.Tags[0]
+
+        assert result.Datum[1] == datum('02.02.2012')
+        assert result.Name[1] == '2name'
+        assert result.Kategorie[1] == 'Sparen'
+        assert result.Wert[1] == -2
+        assert result.Dynamisch[1]
+        assert not result.Tags[1]
+
+        assert result.Datum[2] == datum('03.03.2013')
+        assert result.Name[2] == '3name'
+        assert result.Kategorie[2] == 'Sparen'
+        assert result.Wert[2] == 3
+        assert result.Dynamisch[2]
+        assert not result.Tags[2]
 
 if __name__ == '__main__':
     unittest.main()
