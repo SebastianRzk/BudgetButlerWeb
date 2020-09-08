@@ -40,12 +40,12 @@ class TestUebersichtSparkontos(unittest.TestCase):
                 'index': 0,
                 'kontoname': 'demokonto1',
                 'kontotyp': 'demotyp1',
-                'wert': '100.00'},
+                'wert': '100,00'},
             {
                 'index': 1,
                 'kontoname': 'demokonto2',
                 'kontotyp': 'demotyp2',
-                'wert': '0.00'}
+                'wert': '0,00'}
         ]
 
     def test_init_withEmptyDatabase(self):

@@ -16,7 +16,7 @@ def handle_request(request):
 
 
     if post_action_is(request, 'add'):
-        date = datum(request.values['date'])
+        date = datum(request.values['datum'])
         value = request.values['wert'].replace(",", ".")
         value = float(value)
 

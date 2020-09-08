@@ -44,7 +44,7 @@ class AddSparbuchungTest(unittest.TestCase):
         self.set_up()
         add_sparbuchung.index(VersionedPostRequest(
             {'action':'add',
-             'date': rfc('1.1.2017'),
+             'datum': rfc('1.1.2017'),
              'name':'testname',
              'wert':'2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -65,7 +65,7 @@ class AddSparbuchungTest(unittest.TestCase):
         self.set_up()
         result = add_sparbuchung.index(VersionedPostRequest(
             {'action':'add',
-             'date': rfc('1.1.2017'),
+             'datum': rfc('1.1.2017'),
              'name':'testname',
              'wert':'2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -89,7 +89,7 @@ class AddSparbuchungTest(unittest.TestCase):
         add_sparbuchung.index(PostRequest(
             {'action': 'add',
              'ID':next_id,
-             'date': rfc('1.1.2017'),
+             'datum': rfc('1.1.2017'),
              'name': 'testname',
              'wert': '2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -100,7 +100,7 @@ class AddSparbuchungTest(unittest.TestCase):
         add_sparbuchung.index(PostRequest(
             {'action': 'add',
              'ID':next_id,
-             'date': rfc('2.2.2012'),
+             'datum': rfc('2.2.2012'),
              'name': 'overwritten',
              'wert': '0,00',
              'typ': 'overwritten',
@@ -120,7 +120,7 @@ class AddSparbuchungTest(unittest.TestCase):
         self.set_up()
         add_sparbuchung.index(VersionedPostRequest(
             {'action': 'add',
-             'date': rfc('1.1.2017'),
+             'datum': rfc('1.1.2017'),
              'name': 'testname',
              'wert': '2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -132,7 +132,7 @@ class AddSparbuchungTest(unittest.TestCase):
         result = add_sparbuchung.index(VersionedPostRequest(
             {'action': 'add',
              'edit_index': 0,
-             'date': rfc('2.2.2012'),
+             'datum': rfc('2.2.2012'),
              'name': 'testname2',
              'wert': '3,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -163,7 +163,7 @@ class AddSparbuchungTest(unittest.TestCase):
         self.set_up()
         add_sparbuchung.index(VersionedPostRequest(
             {'action': 'add',
-             'date': rfc('1.1.2017'),
+             'datum': rfc('1.1.2017'),
              'name': 'testname',
              'wert': '2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -177,7 +177,7 @@ class AddSparbuchungTest(unittest.TestCase):
             {'action': 'add',
              'ID': next_id,
              'edit_index': 0,
-             'date': rfc('2.2.2012'),
+             'datum': rfc('2.2.2012'),
              'name': 'testname2',
              'wert': '3,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -189,7 +189,7 @@ class AddSparbuchungTest(unittest.TestCase):
             {'action': 'add',
              'ID': next_id,
              'edit_index': 0,
-             'date': rfc('1.1.2010'),
+             'datum': rfc('1.1.2010'),
              'name': 'overwritten',
              'wert': '0,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -210,7 +210,7 @@ class AddSparbuchungTest(unittest.TestCase):
         self.set_up()
         add_sparbuchung.index(VersionedPostRequest(
             {'action': 'add',
-             'date': rfc('1.1.2017'),
+             'datum': rfc('1.1.2017'),
              'name': 'testname',
              'wert': '2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
@@ -235,7 +235,7 @@ class AddSparbuchungTest(unittest.TestCase):
         self.set_up()
         add_sparbuchung.index(VersionedPostRequest(
             {'action': 'add',
-             'date': rfc('1.1.2017'),
+             'datum': rfc('1.1.2017'),
              'name': 'testname',
              'wert': '2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
