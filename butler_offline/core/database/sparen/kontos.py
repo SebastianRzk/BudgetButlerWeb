@@ -31,8 +31,6 @@ class Kontos(DatabaseObject):
 
     def get_sparfaehige_kontos(self):
         query = '{} == "{}" | {} == "{}"'.format(self.TYP, self.TYP_SPARKONTO, self.TYP, self.TYP_GENOSSENSCHAFTSANTEILE)
-        print(self.content)
-        print(query)
         return sorted(list(self.content.query(query).Kontoname))
 
     def _sort(self):

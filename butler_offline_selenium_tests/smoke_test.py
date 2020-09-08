@@ -90,3 +90,27 @@ class TestHeadlines(SeleniumTestClass):
         driver.get('http://localhost:5000/uebersichtabrechnungen/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Abrechnungen'
         close_driver(driver)
+
+    def test_add_sparbuchung(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/add_sparbuchung/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neue Sparbuchung'
+        close_driver(driver)
+
+    def test_add_sparkonto(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/add_sparkonto/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neues Sparkonto'
+        close_driver(driver)
+
+    def test_uebesicht_sparbuchungen(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht_sparbuchungen/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Sparbuchungen'
+        close_driver(driver)
+
+    def test_uebesicht_sparkontos(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht_sparkontos/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Sparkontos'
+        close_driver(driver)
