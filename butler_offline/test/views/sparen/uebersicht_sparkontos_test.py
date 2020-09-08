@@ -7,6 +7,7 @@ from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_sparkontos
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
 
 
 class TestUebersichtSparkontos(unittest.TestCase):
@@ -25,6 +26,27 @@ class TestUebersichtSparkontos(unittest.TestCase):
         sparkontos = persisted_state.database_instance().sparkontos
         sparkontos.add(kontoname='demokonto1', kontotyp='demotyp1')
         sparkontos.add(kontoname='demokonto2', kontotyp='demotyp2')
+        sparbuchungen = persisted_state.database_instance().sparbuchungen
+        sparbuchungen.add(datum('01.01.2020'), 'testname', 100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto1')
+
+    def test_should_list_kontos(self):
+        self.set_up()
+        self.add_test_data()
+
+        result = uebersicht_sparkontos.index(GetRequest())
+
+        assert result['sparkontos'] == [
+            {
+                'index': 0,
+                'kontoname': 'demokonto1',
+                'kontotyp': 'demotyp1',
+                'wert': '100.00'},
+            {
+                'index': 1,
+                'kontoname': 'demokonto2',
+                'kontotyp': 'demotyp2',
+                'wert': '0.00'}
+        ]
 
     def test_init_withEmptyDatabase(self):
         self.set_up()

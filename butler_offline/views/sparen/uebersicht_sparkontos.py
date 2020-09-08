@@ -17,7 +17,7 @@ def _handle_request(request):
             'index': row_index,
             'kontoname': row.Kontoname,
             'kontotyp': row.Kontotyp,
-            'wert': 'noch nicht ermittelt'
+            'wert': '%.2f' % persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(row.Kontoname)
         })
 
 

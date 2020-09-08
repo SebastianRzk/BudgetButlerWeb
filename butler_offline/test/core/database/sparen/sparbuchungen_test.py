@@ -102,5 +102,16 @@ class SparbuchungenTest(unittest.TestCase):
         assert result.Dynamisch[2]
         assert not result.Tags[2]
 
+    def test_get_kontostand_fuer(self):
+        component_under_test = Sparbuchungen()
+
+        component_under_test.add(datum('01.01.2011'), '1name', 1, Sparbuchungen.TYP_AUSSCHUETTUNG, 'konto')
+        component_under_test.add(datum('02.02.2012'), '2name', 200, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('03.03.2013'), '3name', -50, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('03.03.2013'), '3name', -3, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'anderes_konto')
+        component_under_test.add(datum('04.04.2014'), '4name', 10, Sparbuchungen.TYP_ZINSEN, 'konto')
+
+        assert component_under_test.get_kontostand_fuer('konto') == 160
+
 if __name__ == '__main__':
     unittest.main()
