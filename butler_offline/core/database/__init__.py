@@ -1,6 +1,9 @@
+from butler_offline.viewcore.state import persisted_state
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.file_system import write_abrechnung
 from butler_offline.core.time import time
 from butler_offline.core.export.string_writer import StringWriter
@@ -17,6 +20,8 @@ class Database:
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsamebuchungen = Gemeinsamebuchungen()
         self.einzelbuchungen = Einzelbuchungen()
+        self.sparbuchungen = Sparbuchungen()
+        self.sparkontos = Kontos()
         self.einzelbuchungen.ausgeschlossene_kategorien = ausgeschlossene_kategorien
         self.tainted = 0
 
@@ -27,13 +32,20 @@ class Database:
         return self.taint_number() != 0
 
     def taint_number(self):
-        return self.tainted + self.dauerauftraege.taint_number() + self.einzelbuchungen.taint_number() + self.gemeinsamebuchungen.taint_number()
+        return self.tainted + \
+               self.dauerauftraege.taint_number() + \
+               self.einzelbuchungen.taint_number() + \
+               self.gemeinsamebuchungen.taint_number() + \
+               self.sparbuchungen.taint_number() + \
+               self.sparkontos.taint_number()
 
     def de_taint(self):
         self.tainted = 0
         self.dauerauftraege.de_taint()
         self.einzelbuchungen.de_taint()
         self.gemeinsamebuchungen.de_taint()
+        self.sparbuchungen.de_taint()
+        self.sparkontos.de_taint()
 
     def refresh(self):
         print('DATABASE: Erneuere Datenbestand')
@@ -42,6 +54,9 @@ class Database:
 
         anteil_gemeinsamer_buchungen = self.gemeinsamebuchungen.anteil_gemeinsamer_buchungen()
         self.einzelbuchungen.append_row(anteil_gemeinsamer_buchungen)
+
+        anteil_sparbuchungen = self.sparbuchungen.get_dynamische_einzelbuchungen()
+        self.einzelbuchungen.append_row(anteil_sparbuchungen)
 
         print('DATABASE: Datenbestand erneuert')
 
@@ -62,7 +77,7 @@ class Database:
 
         selector = self.gemeinsamebuchungen.select().select_range(mindate, maxdate)
 
-        name_self = viewcore.database_instance().name
+        name_self = persisted_state.database_instance().name
         name_partner = viewcore.name_of_partner()
         gemeinsame_buchungen_content = selector.content
 

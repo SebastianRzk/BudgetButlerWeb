@@ -2,27 +2,30 @@ from flask import Flask
 app = Flask(__name__)
 from flask import request
 
-from butler_offline.views import dashboard
-from butler_offline.views import adddauerauftrag
-from butler_offline.views import addeinnahme
-from butler_offline.views import addausgabe
-from butler_offline.views import addgemeinsam
+from butler_offline.views.einzelbuchungen import addausgabe, \
+    adddauerauftrag, \
+    addeinnahme, \
+    uebersicht_dauerauftrag, \
+    uebersicht_einzelbuchungen, \
+    uebersicht_jahr, \
+    uebersicht_monat
+from butler_offline.views.core import dashboard, \
+    configuration, \
+    testmode_switch,\
+    theme
 
-from butler_offline.views import uebersicht_dauerauftrag
-from butler_offline.views import uebersicht_gemeinsam
-from butler_offline.views import uebersicht_jahr
-from butler_offline.views import uebersicht_monat
-from butler_offline.views import uebersicht_einzelbuchungen
-from butler_offline.views import uebersicht_abrechnungen
+from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen,\
+    uebersicht_abrechnungen,\
+    addgemeinsam, \
+    uebersicht_gemeinsam
 
-from butler_offline.views import gemeinsam_abrechnen
-from butler_offline.views import testmode_switch
-from butler_offline.views import import_data
+from butler_offline.views.sparen import add_sparbuchung, \
+    add_sparkoto, \
+    uebersicht_sparbuchungen, \
+    uebersicht_sparkontos
 
+from butler_offline.views.shared import import_data
 
-from butler_offline.views import configuration
-
-from butler_offline.views import theme
 
 @app.route('/')
 def show_dashboard():
@@ -112,6 +115,32 @@ def view_configuration():
 @app.route('/uebersichtabrechnungen/', methods=['GET'])
 def view_uebersicht_abrechnungen():
     return uebersicht_abrechnungen.index(request)
+
+
+'''
+Sparen:
+'''
+@app.route('/add_sparbuchung/', methods=['GET', 'POST'])
+def display_add_sparbuchung():
+    return add_sparbuchung.index(request)
+
+@app.route('/add_sparkonto/', methods=['GET', 'POST'])
+def display_add_sparkonto():
+    return add_sparkoto.index(request)
+
+@app.route('/uebersicht_sparbuchungen/', methods=['GET', 'POST'])
+def display_uebersicht_sparbuchung():
+    return uebersicht_sparbuchungen.index(request)
+
+@app.route('/uebersicht_sparkontos/', methods=['GET', 'POST'])
+def display_uebersicht_sparkontos():
+    return uebersicht_sparkontos.index(request)
+
+
+
+
+
+
 
 
 @app.route('/theme/')

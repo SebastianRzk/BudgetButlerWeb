@@ -3,78 +3,11 @@ Created on 24.04.2017
 
 @author: sebastian
 '''
-
-from butler_offline.core import DBManager
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.request_handler import current_key
+from butler_offline.viewcore.state import persisted_state
 
-DATABASE_INSTANCE = None
-DATABASES = []
-CONTEXT = {}
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
-
-
-def database_instance():
-    '''
-    returns the actual database instance
-    '''
-    if not viewcore.DATABASES:
-        viewcore.DATABASES = configuration_provider.get_configuration('DATABASES').split(',')
-
-    if viewcore.DATABASE_INSTANCE is None:
-        ausgeschlossene_kategorien = set(
-            configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
-        viewcore.DATABASE_INSTANCE = DBManager.read(viewcore.DATABASES[0],
-                                                    ausgeschlossene_kategorien=ausgeschlossene_kategorien)
-    return DATABASE_INSTANCE
-
-
-def _get_context():
-    if DATABASE_INSTANCE.name not in CONTEXT.keys():
-        CONTEXT[DATABASE_INSTANCE.name] = {}
-    return CONTEXT[DATABASE_INSTANCE.name]
-
-
-def get_changed_einzelbuchungen():
-    context = _get_context()
-    if "einzelbuchungen_changed" not in context.keys():
-        context["einzelbuchungen_changed"] = []
-    return context["einzelbuchungen_changed"]
-
-
-def add_changed_einzelbuchungen(new_changed_einzelbuchung_event):
-    context = get_changed_einzelbuchungen()
-    context.append(new_changed_einzelbuchung_event)
-
-
-def add_changed_gemeinsamebuchungen(new_changed_gemeinsamebuchungen_event):
-    context = get_changed_gemeinsamebuchungen()
-    context.append(new_changed_gemeinsamebuchungen_event)
-
-
-def get_changed_gemeinsamebuchungen():
-    context = _get_context()
-    if "gemeinsamebuchungen_changed" not in context.keys():
-        context["gemeinsamebuchungen_changed"] = []
-    return context["gemeinsamebuchungen_changed"]
-
-
-def get_changed_dauerauftraege():
-    context = _get_context()
-    if "dauerauftraege_changed" not in context.keys():
-        context["dauerauftraege_changed"] = []
-    return context["dauerauftraege_changed"]
-
-
-def add_changed_dauerauftraege(new_changed_dauerauftraege_event):
-    context = get_changed_dauerauftraege()
-    context.append(new_changed_dauerauftraege_event)
-
-
-def switch_database_instance(database_name):
-    ausgeschlossene_kategorien = set(configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN').split(','))
-    viewcore.DATABASE_INSTANCE = DBManager.read(database_name, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
 
 def get_menu_list():
@@ -100,11 +33,19 @@ def get_menu_list():
     main_menu['Gemeinsame Finanzen'] = menu
 
     menu = []
+    menu.append({'url': '/add_sparbuchung/', 'name': 'Neue Sparbuchung', 'icon': 'fa fa-plus'})
+    menu.append({'url': '/add_sparkonto/', 'name': 'Neues Sparkonto', 'icon': 'fa fa-plus'})
+    menu.append({'url': '/uebersicht_sparbuchungen/', 'name': 'Übersicht Sparbuchungen', 'icon': 'fa fa-list'})
+    menu.append({'url': '/uebersicht_sparkontos/', 'name': 'Übersicht Sparkontos', 'icon': 'fa fa-list'})
+
+    main_menu['Sparen'] = menu
+
+    menu = []
     menu.append({'url': '/configuration/', 'name': 'Einstellungen', 'icon': 'fa fa-cogs'})
-    menu.append({'url': '/production/?database=' + viewcore.database_instance().name, 'name': 'Datenbank neu laden',
+    menu.append({'url': '/production/?database=' + persisted_state.database_instance().name, 'name': 'Datenbank neu laden',
                  'icon': 'fa fa-refresh'})
-    for database in DATABASES:
-        if database != database_instance().name:
+    for database in persisted_state.DATABASES:
+        if database != persisted_state.database_instance().name:
             menu.append({'url': '/production/?database=' + database, 'name': 'To ' + database, 'icon': 'fa fa-cogs'})
 
     main_menu['Einstellungen'] = menu
@@ -137,7 +78,7 @@ def generate_base_context(pagename):
         'active_name': get_name_from_key(pagename),
         'element_titel': get_name_from_key(pagename),
         'menu': get_menu_list(),
-        'nutzername': database_instance().name,
+        'nutzername': persisted_state.database_instance().name,
         'extra_scripts': ''
     }
 
@@ -152,27 +93,6 @@ def generate_error_context(pagename, errortext):
     context = generate_base_context(pagename)
     context['%Errortext'] = errortext
     return context
-
-
-def _save_database():
-    if DATABASE_INSTANCE != None:
-        DBManager.write(DATABASE_INSTANCE)
-
-
-def _save_refresh():
-    _save_database()
-    db_name = viewcore.DATABASE_INSTANCE.name
-    viewcore.DATABASE_INSTANCE = None
-    viewcore.switch_database_instance(db_name)
-
-
-def save_tainted():
-    db = viewcore.DATABASE_INSTANCE
-    if db.is_tainted():
-        print('Saving database with', db.taint_number(), 'modifications')
-        _save_refresh()
-        print('Saved')
-        db.de_taint()
 
 
 def name_of_partner():

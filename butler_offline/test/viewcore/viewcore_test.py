@@ -1,12 +1,8 @@
-import sys, os
 import unittest
-import datetime
 
-import butler_offline.core.time
 from butler_offline.viewcore import viewcore
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.viewcore.converter import datum_from_german as datum
 
 
 
@@ -34,3 +30,9 @@ class ViewcoreTest(unittest.TestCase):
         request = PostRequest({'test' : 'value'})
         assert viewcore.get_post_parameter_or_default(request, 'test', 'default') == 'value'
         
+    def test_def_get_menu_list(self):
+        menu_list = viewcore.get_menu_list()
+        assert 'Persönliche Finanzen' in menu_list
+        assert 'Gemeinsame Finanzen' in menu_list
+        assert 'Sparen' in menu_list
+        assert 'Einstellungen' in menu_list

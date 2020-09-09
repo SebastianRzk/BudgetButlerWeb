@@ -11,12 +11,13 @@ from butler_offline.core.database.selector import GemeinsamSelector
 
 
 class Gemeinsamebuchungen(DatabaseObject):
+    TABLE_HEADER = ['Datum', 'Kategorie', 'Name', 'Wert', 'Person']
 
     def __init__(self):
-        super().__init__(['Datum', 'Kategorie', 'Name', 'Wert', 'Person'])
+        super().__init__(self.TABLE_HEADER)
 
     def add(self, ausgaben_datum, kategorie, ausgaben_name, wert, person):
-        row = DataFrame([[ausgaben_datum, kategorie, ausgaben_name, wert, person]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Person'))
+        row = DataFrame([[ausgaben_datum, kategorie, ausgaben_name, wert, person]], columns=self.TABLE_HEADER)
         self.content = self.content.append(row, ignore_index=True)
         self._sort()
         self.taint()

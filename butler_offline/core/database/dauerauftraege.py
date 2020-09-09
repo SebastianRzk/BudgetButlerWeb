@@ -13,8 +13,10 @@ import pandas as pd
 
 class Dauerauftraege(DatabaseObject):
 
+    TABLE_HEADER = ['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert']
+
     def __init__(self):
-        super().__init__(['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert'])
+        super().__init__(self.TABLE_HEADER)
 
     def parse(self, raw_table):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
@@ -47,7 +49,7 @@ class Dauerauftraege(DatabaseObject):
     def add(self, startdatum, endedatum, kategorie, name, rhythmus, wert):
         neuer_dauerauftrag = pd.DataFrame(
             [[endedatum, kategorie, name, rhythmus, startdatum, wert]],
-            columns=['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert']
+            columns=self.TABLE_HEADER
             )
         self.content = self.content.append(neuer_dauerauftrag, ignore_index=True)
         self.taint()
@@ -95,7 +97,7 @@ class Dauerauftraege(DatabaseObject):
         pass
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
-        return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
+        return pd.DataFrame([[laufdatum, kategorie, name, wert, True]], columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'])
 
     def frame_to_list_of_dicts(self, dataframe):
         result_list = []

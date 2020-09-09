@@ -14,6 +14,7 @@ from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore import configuration_provider
+from butler_offline.viewcore.state import persisted_state
 
 
 class abrechnen(unittest.TestCase):
@@ -117,13 +118,13 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
-        viewcore.DATABASE_INSTANCE = None
-        viewcore.DATABASES = []
+        persisted_state.DATABASE_INSTANCE = None
+        persisted_state.DATABASES = []
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
 
     def test_abrechnen_shouldAddEinzelbuchungen(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
 
         db.abrechnen()
@@ -135,10 +136,25 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert uebertragene_buchung['Kategorie'] == 'some kategorie'
         assert uebertragene_buchung['Wert'] == '5.00'
 
+    def test_refresh_shouldImport_sparbuchungen(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+        db.sparbuchungen.add(datum('01.01.2020'), '1name', 123, db.sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto')
+
+        db.refresh()
+
+        assert len(db.einzelbuchungen.get_all()) == 1
+        assert db.einzelbuchungen.get(0) == {'Datum': datum('01.01.2020'),
+                                             'Dynamisch': True,
+                                             'Kategorie': 'Sparen',
+                                             'Name': '1name',
+                                             'Tags': None,
+                                             'Wert': -123,
+                                             'index': 0}
 
     def test_abrechnen_withDateRange_shouldOnlyImportMatchingElements(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2010'), 'to early', 'to early', 99, viewcore.name_of_partner())
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
         db.gemeinsamebuchungen.add(datum('17.03.2020'), 'to late', 'to late', 99, viewcore.name_of_partner())
@@ -160,7 +176,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_abrechnen_withDateRange(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
@@ -178,7 +194,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
@@ -209,7 +225,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie_inverse(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
@@ -239,7 +255,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_abrechnen_withOtherKategorieSet_shouldAddOtherKategorie(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
@@ -259,7 +275,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_abrechnen_shouldPrintFileContent(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
         time.stub_today_with(datum('01.01.2010'))
         abrechnungs_text = db.abrechnen(set_ergebnis="%Ergebnis%")
@@ -269,7 +285,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_taint_shouldIncreaseTaintNumber(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         assert db.taint_number() == 0
         db.taint()
@@ -277,7 +293,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_isTainted_shouldReturnFalseWhenTainted(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         assert not db.is_tainted()
         db.taint()
@@ -285,7 +301,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_deTaint_shouldDeTaint(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         db.taint()
         assert db.is_tainted()
@@ -295,7 +311,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_deTaint_shouldDeTaintDauerauftraege(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         db.dauerauftraege.taint()
         assert db.is_tainted()
@@ -304,7 +320,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_tainNumber_shouldIncludeDauerauftraege(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         assert db.taint_number() == 0
         db.dauerauftraege.taint()
@@ -312,24 +328,41 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_deTaint_shouldDeTaintGemeinsameBuchungen(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         db.gemeinsamebuchungen.taint()
         assert db.is_tainted()
         db.de_taint()
         assert not db.is_tainted()
 
-    def test_tainNumber_shouldIncludeGemeinsameBuchungen(self):
+    def test_deTaint_shouldDeTaintSparbuchungen(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
+
+        db.sparbuchungen.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_taintNumber_shouldIncludeGemeinsameBuchungen(self):
+        self.set_up()
+        db = persisted_state.database_instance()
 
         assert db.taint_number() == 0
         db.gemeinsamebuchungen.taint()
         assert db.taint_number() == 1
 
+    def test_taintNumber_shouldIncludeSparbuchungen(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        assert db.taint_number() == 0
+        db.sparbuchungen.taint()
+        assert db.taint_number() == 1
+
     def test_deTaint_shouldDeTaintEinzelbuchungen(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         db.einzelbuchungen.taint()
         assert db.is_tainted()
@@ -338,10 +371,27 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
     def test_tainNumber_shouldIncludeEinzelbuchungen(self):
         self.set_up()
-        db = viewcore.database_instance()
+        db = persisted_state.database_instance()
 
         assert db.taint_number() == 0
         db.einzelbuchungen.taint()
+        assert db.taint_number() == 1
+
+    def test_deTaint_shouldDeTaintKontos(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        db.sparkontos.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeKontos(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        assert db.taint_number() == 0
+        db.sparkontos.taint()
         assert db.taint_number() == 1
 
 

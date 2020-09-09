@@ -8,6 +8,17 @@ from butler_offline.core import file_system
 from butler_offline.core.database import Database
 import pandas as pd
 
+KEYWORD_EINZELBUCHUNGEN = 'Einzelbuchungen'
+KEYWORD_DAUERAUFRTAEGE = 'Dauerauftraege'
+KEYWORD_GEMEINSAME_BUCHUNGEN = 'Gemeinsame Buchungen'
+KEYWORD_SPARBUCHUNGEN = 'Sparbuchungen'
+KEYWORD_SPARKONTOS = 'Sparkontos'
+
+KEYWORD_LINEBREAK = '\n'
+
+def _to_table(content):
+    return pd.read_csv(StringIO(content))
+
 def read(nutzername, ausgeschlossene_kategorien):
     if not file_system.instance().read(database_path_from(nutzername)):
         neue_datenbank = Database(nutzername)
@@ -20,31 +31,47 @@ def read(nutzername, ausgeschlossene_kategorien):
 
     database = Database(nutzername, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
-    raw_data = pd.read_csv(StringIO(parser.einzelbuchungen()))
-    database.einzelbuchungen.parse(raw_data)
-    print("READER: Einzelbuchungen gelesen")
+    database.einzelbuchungen.parse(_to_table(parser.einzelbuchungen()))
+    print('READER: Einzelbuchungen gelesen')
 
-    database.dauerauftraege.parse(pd.read_csv(StringIO(parser.dauerauftraege())))
-    print("READER: Daueraufträge gelesen")
+    database.dauerauftraege.parse(_to_table(parser.dauerauftraege()))
+    print('READER: Daueraufträge gelesen')
 
-    database.gemeinsamebuchungen.parse(pd.read_csv(StringIO(parser.gemeinsame_buchungen())))
-    print("READER: Gemeinsame Buchungen gelesen")
+    database.gemeinsamebuchungen.parse(_to_table(parser.gemeinsame_buchungen()))
+    print('READER: Gemeinsame Buchungen gelesen')
+
+    if parser.sparkontos():
+        database.sparkontos.parse(_to_table(parser.sparkontos()))
+        print('READER: Sparkontos gelesen')
+
+    if parser.sparbuchungen():
+        database.sparbuchungen.parse(_to_table(parser.sparbuchungen()))
+        print('READER: Sparbuchungen gelesen')
 
     print('READER: Refreshe Database')
     database.refresh()
     print('READER: Refresh done')
     return database
 
-def write(database):
-    einzelbuchungen = database.einzelbuchungen.content.copy()[database.einzelbuchungen.content.Dynamisch == False]
-    einzelbuchungen_raw_data = einzelbuchungen[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
-    content = einzelbuchungen_raw_data.to_csv(index=False)
 
-    content += "\n Dauerauftraege \n"
+def wrap_tableheader(table_header_name):
+    return '{} {} {}'.format(KEYWORD_LINEBREAK, table_header_name, KEYWORD_LINEBREAK)
+
+def write(database):
+
+    content = database.einzelbuchungen.get_static_content().to_csv(index=False)
+
+    content += wrap_tableheader(KEYWORD_DAUERAUFRTAEGE)
     content += database.dauerauftraege.content.to_csv(index=False)
 
-    content += "\n Gemeinsame Buchungen \n"
+    content += wrap_tableheader(KEYWORD_GEMEINSAME_BUCHUNGEN)
     content += database.gemeinsamebuchungen.content.to_csv(index=False)
+
+    content += wrap_tableheader(KEYWORD_SPARBUCHUNGEN)
+    content += database.sparbuchungen.get_static_content().to_csv(index=False)
+
+    content += wrap_tableheader(KEYWORD_SPARKONTOS)
+    content += database.sparkontos.get_static_content().to_csv(index=False)
 
     file_system.instance().write(database_path_from(database.name), content)
     print("WRITER: All Saved")
@@ -58,21 +85,32 @@ def database_path_from(username):
 class DatabaseParser:
     def __init__(self):
         self._reader = MultiPartCsvReader(
-            set(['Einzelbuchungen', 'Dauerauftraege', 'Gemeinsame Buchungen']),
-            'Einzelbuchungen')
+            set([
+                KEYWORD_EINZELBUCHUNGEN,
+                KEYWORD_DAUERAUFRTAEGE,
+                KEYWORD_GEMEINSAME_BUCHUNGEN,
+                KEYWORD_SPARBUCHUNGEN,
+                KEYWORD_SPARKONTOS
+            ]),
+            start_token=KEYWORD_EINZELBUCHUNGEN)
 
     def from_string(self, lines):
         self._reader.from_string(lines)
 
     def einzelbuchungen(self):
-        return self._reader.get_string('Einzelbuchungen')
+        return self._reader.get_string(KEYWORD_EINZELBUCHUNGEN)
 
     def dauerauftraege(self):
-        return self._reader.get_string('Dauerauftraege')
+        return self._reader.get_string(KEYWORD_DAUERAUFRTAEGE)
 
     def gemeinsame_buchungen(self):
-        return self._reader.get_string('Gemeinsame Buchungen')
+        return self._reader.get_string(KEYWORD_GEMEINSAME_BUCHUNGEN)
 
+    def sparbuchungen(self):
+        return self._reader.get_string(KEYWORD_SPARBUCHUNGEN)
+
+    def sparkontos(self):
+        return self._reader.get_string(KEYWORD_SPARKONTOS)
 
 
 class MultiPartCsvReader:
@@ -87,7 +125,7 @@ class MultiPartCsvReader:
 
         for line in lines:
             line = line.strip()
-            if line == "":
+            if line == '':
                 continue
 
             if line in self._token:
@@ -97,7 +135,7 @@ class MultiPartCsvReader:
             if not ',' in line:
                 break
 
-            self._tables[mode] = self._tables[mode] + "\n" + line
+            self._tables[mode] = self._tables[mode] + KEYWORD_LINEBREAK + line
 
     def get_string(self, token):
         return self._tables[token].strip()

@@ -229,13 +229,13 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert content_of(driver, 'item_0_name') == '0name'
         assert content_of(driver, 'item_0_kategorie') == '0test_kategorie'
         assert content_of(driver, 'item_0_datum') == '01.01.2010'
-        assert content_of(driver, 'item_0_wert') == '-50.00'
+        assert content_of(driver, 'item_0_wert') == '-50,00'
 
         assert content_of(driver, 'item_1_id') == '1'
         assert content_of(driver, 'item_1_name') == '1test_kategorie'
         assert content_of(driver, 'item_1_kategorie') == '1test_kategorie'
         assert content_of(driver, 'item_1_datum') == '01.01.2010'
-        assert content_of(driver, 'item_1_wert') == '20.00'
+        assert content_of(driver, 'item_1_wert') == '20,00'
 
         close_driver(driver)
 
