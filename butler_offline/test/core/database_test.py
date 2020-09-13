@@ -395,6 +395,23 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert db.taint_number() == 1
 
 
+    def test_deTaint_shouldDeTaintDepotwerte(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        db.depotwerte.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeDepotwerte(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        assert db.taint_number() == 0
+        db.depotwerte.taint()
+        assert db.taint_number() == 1
+
 class converter_test(unittest.TestCase):
 
     def test_frame_to_list_of_dicts_withEmptyDataframe_shouldReturnEmptyList(self):
