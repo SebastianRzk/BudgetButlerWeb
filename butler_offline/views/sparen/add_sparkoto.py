@@ -28,7 +28,7 @@ def handle_request(request):
                     'Kontotyp': request.values['kontotyp']
                     })
 
-    context = viewcore.generate_transactional_context("add_sparkonto")
+    context = viewcore.generate_transactional_context('add_sparkonto')
     context['approve_title'] = 'Sparkonto hinzufügen'
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
@@ -53,7 +53,6 @@ def handle_request(request):
         }
 
     context['kontotypen'] = database_instance().sparkontos.KONTO_TYPEN
-    print(non_persisted_state.get_changed_sparkontos())
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_sparkontos())
     return context
 

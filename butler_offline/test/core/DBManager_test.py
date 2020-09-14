@@ -1,8 +1,3 @@
-'''
-Created on 14.09.2017
-
-@author: sebastian
-'''
 import unittest
 
 from butler_offline.core import DBManager
@@ -12,18 +7,19 @@ from butler_offline.core import file_system
 from butler_offline.test.core.file_system_stub import FileSystemStub
 
 
-
-
-class DBManager_readDB(unittest.TestCase):
+class DBManagerReadDB(unittest.TestCase):
 
     def mock_filesystem(self):
         file_system.INSTANCE = FileSystemStub()
 
+
     def write_db_file_stub(self,name, stub):
         file_system.instance().write('../Database_' + name + '.csv', stub)
 
+
     def test_database_path_from(self):
         assert DBManager.database_path_from('Sebastian') == '../Database_Sebastian.csv'
+
 
     def teste_read_with_full_database(self):
         self.mock_filesystem()
@@ -39,6 +35,7 @@ class DBManager_readDB(unittest.TestCase):
         assert len(database.dauerauftraege.content) == 2
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
+
     def teste_write_with_full_database(self):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db)
@@ -47,6 +44,7 @@ class DBManager_readDB(unittest.TestCase):
         DBManager.write(database)
 
         assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
+
 
     def teste_write_with_old_database_should_migrate(self):
         self.mock_filesystem()
@@ -74,6 +72,8 @@ Datum,Kategorie,Name,Wert,Person
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
 2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
+ Depotwerte 
+Name,ISIN
 stechzeiten...
 '''
 
@@ -97,11 +97,13 @@ Datum,Name,Wert,Typ,Konto
 
  Sparkontos 
 Kontoname,Kontotyp
+
+ Depotwerte 
+Name,ISIN
 '''
 
 
-class MultiPartCsvReader_test(unittest.TestCase):
-
+class MultiPartCsvReaderTest(unittest.TestCase):
     def test_read(self):
         test_content = [
             '1,2', '2,3', '3,4',
@@ -115,7 +117,8 @@ class MultiPartCsvReader_test(unittest.TestCase):
         assert reader.get_string('B') == '3,4\n4,5'
         assert reader.get_string('C') == ''
 
-class DatabaseParser_test(unittest.TestCase):
+
+class DatabaseParserTest(unittest.TestCase):
     def test_read(self):
         database_parser = DatabaseParser()
 

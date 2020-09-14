@@ -7,6 +7,7 @@ KEY_CHANGED_DAUERAUFTRAEGE = 'dauerauftraege_changed'
 KEY_CHANGED_GEMEINSAME_BUCHUNGEN = 'gemeinsamebuchungen_changed'
 KEY_CHANGED_SPARBUCHUNGEN = 'sparbuchungen_changed'
 KEY_CHANGED_SPARKONTOS = 'sparkontos_changed'
+KEY_CHANGED_DEPOTWERTE = 'depotwerte_changed'
 
 def _get_context():
     database_name = database_instance().name
@@ -57,9 +58,20 @@ def add_changed_sparbuchungen(new_changed_sparbuchungen_event):
 def get_changed_sparbuchungen():
     return _get_context_for_key(KEY_CHANGED_SPARBUCHUNGEN)
 
+
 def add_changed_sparkontos(new_changed_sparkontos_event):
     context = get_changed_sparkontos()
     context.append(new_changed_sparkontos_event)
+
+
+def get_changed_depotwerte():
+    return _get_context_for_key(KEY_CHANGED_DEPOTWERTE)
+
+
+def add_changed_depotwerte(new_changed_depotwere_event):
+    context = get_changed_depotwerte()
+    context.append(new_changed_depotwere_event)
+
 
 def get_changed_sparkontos():
     return _get_context_for_key(KEY_CHANGED_SPARKONTOS)
