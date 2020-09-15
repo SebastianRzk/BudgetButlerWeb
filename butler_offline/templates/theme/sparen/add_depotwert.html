@@ -38,9 +38,9 @@
 				  <tbody>
 					  {% for depotwert in letzte_erfassung %}
 					  <tr>
-						  <td><span class="fa fa-{{sparkonto.fa}} pull-right"></span></td>
+						  <td><span class="fa fa-{{depotwert.fa}} pull-right"></span></td>
 						  <td>{{depotwert.Name}}</td>
-						  <td>{{depotwert.ISIN}}</td>
+						  <td>{{depotwert.Isin}}</td>
 					  </tr>
 					  {% endfor %}
 				  </tbody>

@@ -26,7 +26,7 @@ class AddDepotwertTest(unittest.TestCase):
         context = add_depotwert.index(GetRequest())
         assert 'ID' in context
 
-    def test_add_shouldAddSparkonto(self):
+    def test_add_shouldAddDepotwert(self):
         self.set_up()
         add_depotwert.index(VersionedPostRequest(
             {'action': 'add',
@@ -40,7 +40,7 @@ class AddDepotwertTest(unittest.TestCase):
         assert db.depotwerte.content.Name[0] == '1name'
         assert db.depotwerte.content.ISIN[0] == '1isin'
 
-    def test_add_sparkonto_should_show_in_recently_added(self):
+    def test_add_depotwert_should_show_in_recently_added(self):
         self.set_up()
         result = add_depotwert.index(VersionedPostRequest(
             {'action': 'add',
@@ -77,7 +77,7 @@ class AddDepotwertTest(unittest.TestCase):
         assert db.depotwerte.content.Name[0] == '1name'
         assert db.depotwerte.content.ISIN[0] == '1isin'
 
-    def test_edit_sparkonto(self):
+    def test_edit_depotwert(self):
         self.set_up()
         add_depotwert.index(VersionedPostRequest(
             {'action': 'add',
@@ -106,7 +106,7 @@ class AddDepotwertTest(unittest.TestCase):
         assert result_element['Isin'] == '2isin'
 
 
-    def test_edit_sparkonto_should_only_fire_once(self):
+    def test_edit_depotwert_should_only_fire_once(self):
         self.set_up()
         add_depotwert.index(VersionedPostRequest(
             {'action': 'add',
