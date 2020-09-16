@@ -35,8 +35,8 @@ class Jahresuebersicht(unittest.TestCase):
         assert result_context['zusammenfassung_einnahmen'] == [['eine einnahme kategorie', '10.00', '3c8dbc']]
         assert 'eine einnahme kategorie' in result_context['einnahmen']
         assert result_context['einnahmen']['eine einnahme kategorie']['values'] == '[10.00]'
-
-
+        assert result_context['jahre'] == [2010]
+        assert result_context['selected_date'] == 2010
 
     def teste_contextValues_withMutlibleEinnahmeAndAusgabe(self):
         self.set_up()

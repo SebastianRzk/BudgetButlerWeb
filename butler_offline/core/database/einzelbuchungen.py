@@ -87,7 +87,7 @@ class Einzelbuchungen(DatabaseObject):
         return set(monate)
 
     def get_jahre(self):
-        jahre = self.content.Datum.copy().map(lambda x: str(x.year))
+        jahre = self.content.Datum.copy().map(lambda x: x.year)
         return set(jahre)
 
     def get_alle_kategorien(self, hide_ausgeschlossene_kategorien=False):

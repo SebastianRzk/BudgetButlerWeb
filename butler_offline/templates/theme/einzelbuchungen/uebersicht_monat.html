@@ -5,23 +5,17 @@
         <label>Wähle Monat</label>
         <select class="form-control" name="date" id="date">
           {% for monat in monate %}
-          <option value="{{monat}}">{{monat}}</option>
+          <option value="{{monat}}"
+            {% if monat == selected_date %}
+              selected="selected"
+            {% endif %}
+          >{{monat}}</option>
           {% endfor %}
         </select>
       </div>
-    </div>
-    <script type="text/javascript">
-      function SelectElement()
-        {
-          var element = document.getElementById('date');
-          element.value = "{{selected_date}}";
-        }
-        SelectElement()
-    </script>
-    <div class="box-footer">
       <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
     </div>
-  </form>
+    </form>
 </div>
 
 <div class="box theme-row">
