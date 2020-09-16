@@ -605,6 +605,7 @@ textarea {
 }
 
 .main_menu_item {
+    cursor: pointer;
     display: block;
     padding-left: 2ex;
     padding-right: 2ex;
@@ -613,6 +614,7 @@ textarea {
     width: 100%;
 }
 .main_menu_uebersicht {
+    cursor: pointer;
     display: block;
     padding-left: 2ex;
     padding-right: 2ex;
