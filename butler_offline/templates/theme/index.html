@@ -26,7 +26,14 @@
 			<ul class="sidebar-menu">
 				<li class="main_menu_uebersicht">
 					<a href="/">
-						<span class="fa fa-th"></span> <span>Übersicht</span>
+
+						{% if '/dashboard/' == active_page_url %}
+						<span class="fa fa-th active"></span>
+						{% else %}
+						<span class="fa fa-th"></span>
+						{% endif %}
+
+						<span>Übersicht</span>
 					</a>
 				</li>
 				{% for submenuid,submenu in menu.items()%}

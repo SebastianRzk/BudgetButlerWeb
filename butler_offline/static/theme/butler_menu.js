@@ -28,10 +28,6 @@ function createCloseMenu(id, mainMenuId){
 	return function() { closeMenu(id, mainMenuId) }
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 
 async function closeMenu(id, mainMenuId) {
 	sub_menu = document.getElementById(id);
