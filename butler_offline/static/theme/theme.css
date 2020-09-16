@@ -105,16 +105,7 @@ a:focus {
     padding: 0;
 }
 
-.sidebar-menu > li {
-    position: relative;
-    margin: 0;
-    padding: 0;
-}
 
-.sidebar-menu > li > a {
-    padding: 12px 5px 12px 15px;
-    display: block;
-}
 
 .sidebar-menu > li > a > .fa {
     width: 20px;
@@ -426,9 +417,6 @@ button:hover {
 }
 
 
-.treeview-menu > li.active > a {
-    color: #000;
-}
 
 .main-header {
     background-color: #FFF;
@@ -614,4 +602,33 @@ textarea {
 .closed {
     height: 0px;
     display: none;
+}
+
+.main_menu_item {
+    display: block;
+    padding-left: 2ex;
+    padding-right: 2ex;
+    padding-bottom: 1ex;
+    padding-top: 3ex;
+    width: 100%;
+}
+.main_menu_uebersicht {
+    display: block;
+    padding-left: 2ex;
+    padding-right: 2ex;
+    padding-bottom: 1ex;
+    padding-top: 3ex;
+    width: 100%;
+}
+
+.sub_menu_item {
+    padding: 0.5ex;
+}
+
+.active {
+    color: var(--main-color) !important;
+}
+
+.sub_menu > li {
+    list-style-type: none;
 }
