@@ -601,3 +601,17 @@ textarea {
 .abrechnung {
     min-height: 100ex;
 }
+
+
+.boxcontent {
+    transition-duration: 0.3s;
+}
+
+.box {
+    transition-duration: 0.3s;
+}
+
+.closed {
+    height: 0px;
+    display: none;
+}
