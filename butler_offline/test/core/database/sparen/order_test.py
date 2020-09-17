@@ -1,6 +1,7 @@
 import unittest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 
 
 class OrderTest(unittest.TestCase):
@@ -47,6 +48,24 @@ class OrderTest(unittest.TestCase):
             'Depotwert': '24depotwert',
             'Wert': 240
         }
+
+    def test_get_dynamische_einzelbuchungen(self):
+        component_under_test = Order()
+
+        component_under_test.add(datum('01.01.2020'), '1name', '1konto', '1depotwert', 100)
+
+        result = component_under_test.get_dynamische_einzelbuchungen()
+
+        assert len(result) == 1
+        assert set(result.columns) == set(Einzelbuchungen.TABLE_HEADER)
+
+        assert result.Datum[0] == datum('01.01.2020')
+        assert result.Name[0] == '1name'
+        assert result.Kategorie[0] == 'Sparen'
+        assert result.Wert[0] == -100
+        assert result.Dynamisch[0]
+        assert not result.Tags[0]
+
 
 if __name__ == '__main__':
     unittest.main()

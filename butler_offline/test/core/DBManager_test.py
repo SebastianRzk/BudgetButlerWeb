@@ -28,9 +28,9 @@ class DBManagerReadDB(unittest.TestCase):
         database = DBManager.read('testuser', set())
 
         assert database.name == 'testuser'
-        assert len(database.einzelbuchungen.content) == 22
+        assert len(database.einzelbuchungen.content) == 23
         assert len(database.einzelbuchungen.content[database.einzelbuchungen.content.Dynamisch == False]) == 2
-        assert database.einzelbuchungen.select().sum() == -229
+        assert database.einzelbuchungen.select().sum() == -429
 
         assert len(database.dauerauftraege.content) == 2
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']

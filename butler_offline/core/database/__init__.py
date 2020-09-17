@@ -66,6 +66,9 @@ class Database:
         anteil_sparbuchungen = self.sparbuchungen.get_dynamische_einzelbuchungen()
         self.einzelbuchungen.append_row(anteil_sparbuchungen)
 
+        anteil_order = self.order.get_dynamische_einzelbuchungen()
+        self.einzelbuchungen.append_row(anteil_order)
+
         print('DATABASE: Datenbestand erneuert')
 
     def _write_trenner(self, abrechnunsdatei):

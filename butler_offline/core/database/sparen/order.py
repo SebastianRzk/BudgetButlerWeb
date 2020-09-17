@@ -29,3 +29,18 @@ class Order(DatabaseObject):
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Konto', 'Name'])
         self.content = self.content.reset_index(drop=True)
+
+
+    def get_dynamische_einzelbuchungen(self):
+        order = self.content.copy()
+        order['Kategorie'] = 'Sparen'
+        order.Wert = order.Wert * -1
+
+        order['Dynamisch'] = True
+        order['Tags'] = None
+
+        del order['Konto']
+        del order['Depotwert']
+
+        return order
+
