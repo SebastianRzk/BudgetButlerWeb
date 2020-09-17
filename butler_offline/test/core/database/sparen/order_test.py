@@ -4,7 +4,7 @@ from butler_offline.core.database.sparen.order import Order
 
 
 class OrderTest(unittest.TestCase):
-    
+
     def test_add_shouldAdd(self):
         component_under_test = Order()
 
