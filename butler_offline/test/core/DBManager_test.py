@@ -35,6 +35,9 @@ class DBManagerReadDB(unittest.TestCase):
         assert len(database.dauerauftraege.content) == 2
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
+        assert len(database.depotwerte.content) == 1
+        assert len(database.order.content) == 1
+
 
     def teste_write_with_full_database(self):
         self.mock_filesystem()
@@ -74,6 +77,10 @@ Datum,Name,Wert,Typ,Konto
 2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
  Depotwerte 
 Name,ISIN
+1depotwert,1isin
+ Order
+Datum,Name,Konto,Depotwert,Wert
+2020-02-02,1order,1konto,1depotwert,200
 stechzeiten...
 '''
 
@@ -100,6 +107,11 @@ Kontoname,Kontotyp
 
  Depotwerte 
 Name,ISIN
+1depotwert,1isin
+
+ Order 
+Datum,Name,Konto,Depotwert,Wert
+2020-02-02,1order,1konto,1depotwert,200
 '''
 
 
