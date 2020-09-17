@@ -19,7 +19,7 @@
 </div>
 
 <div class="box theme-row">
-  <div class="box-header with-border">
+  <div class="box-header">
     <h3 class="box-title">Druckausgabe erzeugen</h3>
     <button class="btn-tool pull-right open_button" id="open_druck"><span class="fa fa-plus"></span></button>
     <button class="btn-tool pull-right close_button" id="close_druck"><span class="fa fa-minus"></span></button>
@@ -133,7 +133,7 @@
 
 <div class="theme-double-columns">
   <div class="box">
-    <div class="box-header with-border">
+    <div class="box-header">
       <h3 class="box-title">Ausgaben</h3>
     </div>
     <div class="box-body">
@@ -161,7 +161,7 @@
   </div>
 
   <div class="box">
-    <div class="box-header with-border">
+    <div class="box-header">
       <h3 class="box-title">Einnahmen</h3>
     </div>
     <div class="box-body">
@@ -191,7 +191,7 @@
 
 <div class="theme-double-columns">
   <div class="box">
-    <div class="box-header with-border">
+    <div class="box-header">
       <h3 class="box-title">Ausgaben</h3>
     </div>
     <div class="box-body">
@@ -223,7 +223,7 @@
   </div>
 
   <div class="box">
-    <div class="box-header with-border">
+    <div class="box-header">
       <h3 class="box-title">Einnahmen</h3>
     </div>
     <div class="box-body">
@@ -257,12 +257,12 @@
 
 {% for tag in zusammenfassung %}
 <div class="box theme-row">
-  <div class="box-header with-border">
+  <div class="box-header">
     <h3 class="box-title">{{tag.0}}</h3>
     <button class="btn-tool pull-right open_button" id="open_{{tag.0}}"><span class="fa fa-plus"></span></button>
     <button class="btn-tool pull-right close_button" id="close_{{tag.0}}"><span class="fa fa-minus"></span></button>
   </div>
-  <div class="box-body boxcontent" id="boxcontent_{{tag.0}}">
+  <div class="box-body boxcontent border-top" id="boxcontent_{{tag.0}}">
     <div class="table-responsive">
       <table class="table no-margin">
         <thead>

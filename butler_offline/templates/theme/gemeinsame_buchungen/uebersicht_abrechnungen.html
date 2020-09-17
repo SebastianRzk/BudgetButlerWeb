@@ -1,6 +1,6 @@
 {% for zusammenfassung in zusammenfassungen %}
 <div class="box theme-row">
-	<div class="box-header with-border">
+	<div class="box-header">
 		<h3 class="box-title">Zusammenfassung {{zusammenfassung.jahr}}</h3>
         <button class="btn-tool pull-right open_button" id="open_add_kategorie"><span class="fa fa-plus"></span></button>
         <button class="btn-tool pull-right close_button" id="close_add_kategorie"><span class="fa fa-minus"></span></button>
@@ -37,7 +37,7 @@
 
 {% for abrechnung in abrechnungen%}
 <div class="box theme-row">
-	<div class="box-header with-border">
+	<div class="box-header">
 		<h3 class="box-title">{{abrechnung.name}}</h3>
         <button class="btn-tool pull-right open_button" id="open_abrechung_{{abrechnung.name}}"><span class="fa fa-plus"></span></button>
         <button class="btn-tool pull-right close_button" id="close_abrechung_{{abrechnung.name}}"><span class="fa fa-minus"></span></button>
