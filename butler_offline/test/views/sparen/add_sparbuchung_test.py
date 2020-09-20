@@ -43,10 +43,10 @@ class AddSparbuchungTest(unittest.TestCase):
     def test_add_shouldAddSparbuchung(self):
         self.set_up()
         add_sparbuchung.index(VersionedPostRequest(
-            {'action':'add',
+            {'action': 'add',
              'datum': rfc('1.1.2017'),
-             'name':'testname',
-             'wert':'2,00',
+             'name': 'testname',
+             'wert': '2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
              'eigenschaft': add_sparbuchung.EIGENSCHAFT_EINZAHLUNG,
              'konto': 'demokonto'
@@ -64,10 +64,10 @@ class AddSparbuchungTest(unittest.TestCase):
     def test_add_sparbuchung_should_show_in_recently_added(self):
         self.set_up()
         result = add_sparbuchung.index(VersionedPostRequest(
-            {'action':'add',
+            {'action': 'add',
              'datum': rfc('1.1.2017'),
-             'name':'testname',
-             'wert':'2,00',
+             'name': 'testname',
+             'wert': '2,00',
              'typ': Sparbuchungen.TYP_MANUELLER_AUFTRAG,
              'eigenschaft': add_sparbuchung.EIGENSCHAFT_EINZAHLUNG,
              'konto': 'demokonto'
@@ -88,7 +88,7 @@ class AddSparbuchungTest(unittest.TestCase):
         next_id = request_handler.current_key()
         add_sparbuchung.index(PostRequest(
             {'action': 'add',
-             'ID':next_id,
+             'ID': next_id,
              'datum': rfc('1.1.2017'),
              'name': 'testname',
              'wert': '2,00',
@@ -99,7 +99,7 @@ class AddSparbuchungTest(unittest.TestCase):
          ))
         add_sparbuchung.index(PostRequest(
             {'action': 'add',
-             'ID':next_id,
+             'ID': next_id,
              'datum': rfc('2.2.2012'),
              'name': 'overwritten',
              'wert': '0,00',

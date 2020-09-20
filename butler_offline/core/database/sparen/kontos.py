@@ -6,8 +6,9 @@ class Kontos(DatabaseObject):
     TYP = 'Kontotyp'
     TYP_SPARKONTO = 'Sparkonto'
     TYP_GENOSSENSCHAFTSANTEILE = 'Genossenschafts-Anteile'
+    TYP_DEPOT = 'Depot'
 
-    KONTO_TYPEN = [TYP_SPARKONTO, TYP_GENOSSENSCHAFTSANTEILE]
+    KONTO_TYPEN = [TYP_SPARKONTO, TYP_GENOSSENSCHAFTSANTEILE, TYP_DEPOT]
     TABLE_HEADER = ['Kontoname', TYP]
 
     def __init__(self):
@@ -32,6 +33,9 @@ class Kontos(DatabaseObject):
     def get_sparfaehige_kontos(self):
         query = '{} == "{}" | {} == "{}"'.format(self.TYP, self.TYP_SPARKONTO, self.TYP, self.TYP_GENOSSENSCHAFTSANTEILE)
         return sorted(list(self.content.query(query).Kontoname))
+
+    def get_depots(self):
+        return sorted(list(self.content[self.content.Kontotyp == self.TYP_DEPOT].Kontoname))
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Kontotyp', 'Kontoname'])

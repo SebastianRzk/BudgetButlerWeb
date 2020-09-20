@@ -38,5 +38,13 @@ class DepotweteTest(unittest.TestCase):
             'ISIN': '13isin'
         }
 
+    def test_get_depotwerte(self):
+        component_under_test = Depotwerte()
+
+        component_under_test.add('0name', '0isin',)
+        component_under_test.add('1name', '1isin',)
+
+        assert component_under_test.get_depotwerte() == ['0isin', '1isin']
+
 if __name__ == '__main__':
     unittest.main()

@@ -24,7 +24,8 @@ from butler_offline.views.sparen import add_sparbuchung, \
     uebersicht_sparbuchungen, \
     uebersicht_sparkontos,\
     add_depotwert,\
-    uebersicht_depotwerte
+    uebersicht_depotwerte, \
+    add_order
 
 from butler_offline.views.shared import import_data
 
@@ -135,6 +136,11 @@ def display_add_sparkonto():
 @app.route('/add_depotwert/', methods=['GET', 'POST'])
 def display_add_depowert():
     return add_depotwert.index(request)
+
+
+@app.route('/add_order/', methods=['GET', 'POST'])
+def display_add_order():
+    return add_order.index(request)
 
 
 @app.route('/uebersicht_sparbuchungen/', methods=['GET', 'POST'])

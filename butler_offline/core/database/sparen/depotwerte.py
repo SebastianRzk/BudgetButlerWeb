@@ -24,6 +24,9 @@ class Depotwerte(DatabaseObject):
             'ISIN': isin
         })
 
+    def get_depotwerte(self):
+        return sorted(list(self.content.ISIN))
+
     def _sort(self):
         self.content = self.content.sort_values(by=['Name', 'ISIN'])
         self.content = self.content.reset_index(drop=True)
