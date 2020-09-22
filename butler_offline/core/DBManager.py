@@ -15,6 +15,7 @@ KEYWORD_SPARBUCHUNGEN = 'Sparbuchungen'
 KEYWORD_SPARKONTOS = 'Sparkontos'
 KEYWORD_DEPOTWERTE = 'Depotwerte'
 KEYWORD_ORDER = 'Order'
+KEYWORD_DEPOTAUSZUEGE = 'Depotauszuege'
 
 KEYWORD_LINEBREAK = '\n'
 
@@ -58,6 +59,10 @@ def read(nutzername, ausgeschlossene_kategorien):
         database.order.parse(_to_table(parser.order()))
         print('READER: Depotwerte gelesen')
 
+    if parser.depotauszuege():
+        database.depotauszuege.parse(_to_table(parser.depotauszuege()))
+        print('READER: Depotauszuege gelesen')
+
     print('READER: Refreshe Database')
     database.refresh()
     print('READER: Refresh done')
@@ -90,6 +95,9 @@ def write(database):
     content += wrap_tableheader(KEYWORD_ORDER)
     content += database.order.get_static_content().to_csv(index=False)
 
+    content += wrap_tableheader(KEYWORD_DEPOTAUSZUEGE)
+    content += database.depotauszuege.get_static_content().to_csv(index=False)
+
     file_system.instance().write(database_path_from(database.name), content)
     print("WRITER: All Saved")
 
@@ -109,7 +117,8 @@ class DatabaseParser:
                 KEYWORD_SPARBUCHUNGEN,
                 KEYWORD_SPARKONTOS,
                 KEYWORD_DEPOTWERTE,
-                KEYWORD_ORDER
+                KEYWORD_ORDER,
+                KEYWORD_DEPOTAUSZUEGE
             ]),
             start_token=KEYWORD_EINZELBUCHUNGEN)
 
@@ -136,6 +145,9 @@ class DatabaseParser:
 
     def order(self):
         return self._reader.get_string(KEYWORD_ORDER)
+
+    def depotauszuege(self):
+        return self._reader.get_string(KEYWORD_DEPOTAUSZUEGE)
 
 
 class MultiPartCsvReader:

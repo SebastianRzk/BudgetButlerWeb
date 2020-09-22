@@ -37,6 +37,7 @@ class DBManagerReadDB(unittest.TestCase):
 
         assert len(database.depotwerte.content) == 1
         assert len(database.order.content) == 1
+        assert len(database.depotauszuege.content) == 1
 
 
     def teste_write_with_full_database(self):
@@ -81,6 +82,10 @@ Name,ISIN
  Order
 Datum,Name,Konto,Depotwert,Wert
 2020-02-02,1order,1konto,1depotwert,200
+ Depotauszuege
+Datum,Depotwert,Konto,Wert
+2020-01-01,1depotwert,1konto,111
+
 stechzeiten...
 '''
 
@@ -112,6 +117,10 @@ Name,ISIN
  Order 
 Datum,Name,Konto,Depotwert,Wert
 2020-02-02,1order,1konto,1depotwert,200
+
+ Depotauszuege 
+Datum,Depotwert,Konto,Wert
+2020-01-01,1depotwert,1konto,111
 '''
 
 

@@ -431,6 +431,24 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert db.taint_number() == 1
 
 
+    def test_deTaint_shouldDeTaintDepotauszuege(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        db.depotauszuege.taint()
+        assert db.is_tainted()
+        db.de_taint()
+        assert not db.is_tainted()
+
+    def test_tainNumber_shouldIncludeDepotauszuege(self):
+        self.set_up()
+        db = persisted_state.database_instance()
+
+        assert db.taint_number() == 0
+        db.depotauszuege.taint()
+        assert db.taint_number() == 1
+
+
 class converter_test(unittest.TestCase):
 
     def test_frame_to_list_of_dicts_withEmptyDataframe_shouldReturnEmptyList(self):
@@ -441,7 +459,7 @@ class converter_test(unittest.TestCase):
         assert result == []
 
     def test_frame_to_list_of_dicts_withDataframe_shouldReturnListOfDicts(self):
-        dataframe = DataFrame([{'col1':'test1', 'col2': 1}, {'col1':'test2', 'col2': 2}])
+        dataframe = DataFrame([{'col1': 'test1', 'col2': 1}, {'col1': 'test2', 'col2': 2}])
 
         result = Database('test_database').frame_to_list_of_dicts(dataframe)
 

@@ -2,7 +2,7 @@ import unittest
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 
 
-class DepotweteTest(unittest.TestCase):
+class DepotwerteTest(unittest.TestCase):
 
     def test_add_shouldAdd(self):
         component_under_test = Depotwerte()
