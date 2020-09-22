@@ -10,7 +10,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 
 
-class TestUebersichtSparkontos(unittest.TestCase):
+class TestUebersichtSparkontos_withSparkonto(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
@@ -24,10 +24,14 @@ class TestUebersichtSparkontos(unittest.TestCase):
 
     def add_test_data(self):
         sparkontos = persisted_state.database_instance().sparkontos
-        sparkontos.add(kontoname='demokonto1', kontotyp='demotyp1')
-        sparkontos.add(kontoname='demokonto2', kontotyp='demotyp2')
+        sparkontos.add(kontoname='demokonto1', kontotyp=sparkontos.TYP_SPARKONTO)
+        sparkontos.add(kontoname='demokonto2', kontotyp=sparkontos.TYP_DEPOT)
         sparbuchungen = persisted_state.database_instance().sparbuchungen
         sparbuchungen.add(datum('01.01.2020'), 'testname', 100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto1')
+        sparbuchungen.add(datum('01.01.2020'), 'testname', 10, sparbuchungen.TYP_ZINSEN, 'demokonto1')
+
+        persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+        persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
 
     def test_should_list_kontos(self):
         self.set_up()
@@ -38,15 +42,30 @@ class TestUebersichtSparkontos(unittest.TestCase):
         assert result['sparkontos'] == [
             {
                 'index': 0,
-                'kontoname': 'demokonto1',
-                'kontotyp': 'demotyp1',
-                'wert': '100,00'},
+                'kontoname': 'demokonto2',
+                'kontotyp': 'Depot',
+                'wert': 'noch nicht ermittelt',
+                'aufbuchungen': '999,00',
+                'difference': '-999,00',
+                'difference_is_negativ': True
+            },
             {
                 'index': 1,
-                'kontoname': 'demokonto2',
-                'kontotyp': 'demotyp2',
-                'wert': '0,00'}
+                'kontoname': 'demokonto1',
+                'kontotyp': 'Sparkonto',
+                'wert': '110,00',
+                'aufbuchungen': '100,00',
+                'difference': '10,00',
+                'difference_is_negativ': False
+            }
         ]
+
+        assert result['gesamt'] == {
+            'wert': '110,00',
+            'aufbuchungen': '1099,00',
+            'difference': '-989,00',
+            'difference_is_negativ': True
+        }
 
     def test_init_withEmptyDatabase(self):
         self.set_up()
@@ -63,8 +82,8 @@ class TestUebersichtSparkontos(unittest.TestCase):
         uebersicht_sparkontos.index(VersionedPostRequest({'action': 'delete', 'delete_index': '1'}))
         sparkontos = persisted_state.database_instance().sparkontos
         assert len(sparkontos.content) == 1
-        assert sparkontos.get(0) == {'Kontoname': 'demokonto1',
-                                     'Kontotyp': 'demotyp1',
+        assert sparkontos.get(0) == {'Kontoname': 'demokonto2',
+                                     'Kontotyp': 'Depot',
                                      'index': 0}
 
 

@@ -25,7 +25,7 @@ class AddOrderTest(unittest.TestCase):
         context = add_order.index(GetRequest())
         assert context['approve_title'] == 'Order hinzufügen'
         assert context['kontos'] == ['demokonto']
-        assert context['depotwerte'] == ['demoisin']
+        assert context['depotwerte'] == [{'description': 'demowert (demoisin)', 'isin': 'demoisin'}]
         assert context['typen'] == [add_order.TYP_KAUF, add_order.TYP_VERKAUF]
 
     def test_init_empty_should_return_error(self):

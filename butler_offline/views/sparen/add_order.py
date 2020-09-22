@@ -101,7 +101,7 @@ def handle_request(request):
 
     context['kontos'] = database_instance().sparkontos.get_depots()
     context[TYPEN] = [TYP_KAUF, TYP_VERKAUF]
-    context['depotwerte'] = database_instance().depotwerte.get_depotwerte()
+    context['depotwerte'] = database_instance().depotwerte.get_depotwerte_descriptions()
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_order())
     return context
 

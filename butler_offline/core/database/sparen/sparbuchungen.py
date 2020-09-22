@@ -46,6 +46,13 @@ class Sparbuchungen(DatabaseObject):
         konto_buchungen = konto_buchungen[konto_buchungen.Typ != self.TYP_AUSSCHUETTUNG]
         return konto_buchungen.Wert.sum()
 
+    def get_aufbuchungen_fuer(self, konto):
+        konto_buchungen = self.content[self.content.Konto == konto].copy()
+        konto_buchungen = konto_buchungen[konto_buchungen.Typ != self.TYP_AUSSCHUETTUNG]
+        konto_buchungen = konto_buchungen[konto_buchungen.Typ != self.TYP_ZINSEN]
+        return konto_buchungen.Wert.sum()
+
+
     def get_dynamische_einzelbuchungen(self):
         ausschuettungen = self.content[self.content.Typ == self.TYP_AUSSCHUETTUNG].copy()
         ausschuettungen['Kategorie'] = self.TYP_AUSSCHUETTUNG

@@ -66,6 +66,23 @@ class OrderTest(unittest.TestCase):
         assert result.Dynamisch[0]
         assert not result.Tags[0]
 
+    def test_get_order_fuer(self):
+        component_under_test = Order()
+
+        component_under_test.add(datum('01.01.2020'), '1name', '1konto', '1depotwert', 100)
+        component_under_test.add(datum('01.01.2020'), '1name', '2konto', '1depotwert', 300)
+
+        assert component_under_test.get_order_fuer('1konto') == 100
+
+    def test_get_order_fuer_depotwert(self):
+        component_under_test = Order()
+
+        component_under_test.add(datum('01.01.2020'), '1name', '1konto', '1depotwert', 100)
+        component_under_test.add(datum('01.01.2020'), '1name', '2konto', '2depotwert', 300)
+
+        assert component_under_test.get_order_fuer_depotwert('1depotwert') == 100
+
+
 
 if __name__ == '__main__':
     unittest.main()

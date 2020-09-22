@@ -26,10 +26,11 @@
 					<select class="form-control" name="depotwert" id="depotwert_auswahl">
 						 {% for depotwert in depotwerte %}
 						<option
-							{% if bearbeitungsmodus and depotwert == default_item.depotwert%}
-							selected="selected"
-							{% endif %}
-							>{{depotwert}}</option>
+								value="{{depotwert.isin}}"
+								{% if bearbeitungsmodus and depotwert == default_item.depotwert%}
+								selected="selected"
+								{% endif %}
+								>{{depotwert.description}}</option>
 						 {% endfor %}
 					</select>
 				</div>

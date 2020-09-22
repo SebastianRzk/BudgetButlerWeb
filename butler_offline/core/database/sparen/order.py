@@ -30,6 +30,13 @@ class Order(DatabaseObject):
         self.content = self.content.sort_values(by=['Datum', 'Konto', 'Name'])
         self.content = self.content.reset_index(drop=True)
 
+    def get_order_fuer(self, konto):
+        konto_buchungen = self.content[self.content.Konto == konto].copy()
+        return konto_buchungen.Wert.sum()
+
+    def get_order_fuer_depotwert(self, depotwert):
+        konto_buchungen = self.content[self.content.Depotwert == depotwert].copy()
+        return konto_buchungen.Wert.sum()
 
     def get_dynamische_einzelbuchungen(self):
         order = self.content.copy()

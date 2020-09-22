@@ -6,10 +6,7 @@ Created on 23.11.2017
 from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
 from SeleniumTest import enter_test_mode
-from SeleniumTest import define_kategorie
 from SeleniumTest import select_option
-from time import sleep
-from SeleniumTest import get_selected_option
 
 class TestUI(SeleniumTestClass):
     def _add_sparbuchung(self, driver, datum, name, typ, konto, wert, einzahlung):
@@ -50,6 +47,13 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element_by_id('item_0_kontoname').get_attribute('innerHTML') == 'TestKonto'
         assert driver.find_element_by_id('item_0_kontotyp').get_attribute('innerHTML') == 'Sparkonto'
         assert driver.find_element_by_id('item_0_wert').get_attribute('innerHTML') == '10,00'
+        assert driver.find_element_by_id('item_0_aufbuchungen').get_attribute('innerHTML') == '10,00'
+        assert driver.find_element_by_id('item_0_difference').get_attribute('innerHTML') == '0,00'
+
+
+        assert driver.find_element_by_id('item_gesamt_wert').get_attribute('innerHTML') == '10,00'
+        assert driver.find_element_by_id('item_gesamt_aufbuchungen').get_attribute('innerHTML') == '10,00'
+        assert driver.find_element_by_id('item_gesamt_difference').get_attribute('innerHTML') == '0,00'
         close_driver(driver)
 
 

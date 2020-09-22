@@ -40,6 +40,7 @@ def get_menu_list():
     menu.append({'url': '/uebersicht_sparbuchungen/', 'name': 'Übersicht Sparbuchungen', 'icon': 'fa fa-list'})
     menu.append({'url': '/uebersicht_sparkontos/', 'name': 'Übersicht Sparkontos', 'icon': 'fa fa-list'})
     menu.append({'url': '/uebersicht_depotwerte/', 'name': 'Übersicht Depotwerte', 'icon': 'fa fa-list'})
+    menu.append({'url': '/uebersicht_order/', 'name': 'Übersicht Order', 'icon': 'fa fa-list'})
 
     main_menu['Sparen'] = menu
 
