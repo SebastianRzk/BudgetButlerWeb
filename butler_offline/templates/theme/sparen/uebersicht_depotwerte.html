@@ -48,6 +48,21 @@
 						</td>
 					</tr>
 					{% endfor %}
+					<tr>
+						<td></td>
+						<td><b>Gesamt</b></td>
+						<td></td>
+						<td id="item_gesamt_buchung" class="table-wert">{{gesamt.buchung}}</td>
+						<td id="item_gesamt_difference"
+									class="table-wert
+									{% if gesamt.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+								>{{gesamt.difference}}</td>
+						<td id="item_gesamt_wert" class="table-wert">{{gesamt.wert}}</td>
+						<td></td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

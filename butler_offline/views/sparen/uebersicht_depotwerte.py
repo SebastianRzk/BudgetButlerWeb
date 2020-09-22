@@ -31,10 +31,15 @@ def _handle_request(request):
             'difference_is_negativ': differenz < 0,
             'wert': 'noch nicht ermittelt'
         })
+        gesamt_buchungen += buchungen
+        gesamt_wert += wert
 
+    gesamt_difference = gesamt_wert - gesamt_buchungen
     gesamt = {
-        'wert': gesamt_wert,
-        'buchungen': gesamt_buchungen
+        'wert': from_double_to_german(gesamt_wert),
+        'difference': from_double_to_german(gesamt_difference),
+        'difference_is_negativ': gesamt_difference < 0,
+        'buchung': from_double_to_german(gesamt_buchungen)
     }
 
     context = viewcore.generate_transactional_context('uebersicht_depotwerte')
