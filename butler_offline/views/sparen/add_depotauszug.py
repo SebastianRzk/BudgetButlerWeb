@@ -134,11 +134,14 @@ def handle_request(request):
         edit_konto = db_row['Konto']
         db_row = database_instance().depotauszuege.get_by(edit_datum, edit_konto)
 
+        empty_items = calculate_empty_items(db_row, depotwerte)
+        filled_items = calculate_filled_items(db_row, depotwerte)
+
         default_item = [{
             'datum': datum_to_string(edit_datum),
             'konto': edit_konto,
-            'filled_items': calculate_filled_items(db_row, depotwerte),
-            'empty_items': calculate_empty_items(db_row, depotwerte)
+            'filled_items': filled_items,
+            'empty_items': empty_items
         }]
 
         context['default_items'] = default_item
@@ -154,11 +157,19 @@ def handle_request(request):
                 default_datum = date.today()
 
             db_row = database_instance().depotauszuege.get_by(default_datum, konto)
+
+            empty_items = calculate_empty_items(db_row, depotwerte)
+            filled_items = calculate_filled_items(db_row, depotwerte)
+
+            if len(filled_items) == 0:
+                filled_items = empty_items
+                empty_items = []
+
             default_item = {
                 'datum': datum_to_string(default_datum),
                 'konto': konto,
-                'filled_items': calculate_filled_items(db_row, depotwerte),
-                'empty_items': calculate_empty_items(db_row, depotwerte)
+                'filled_items': filled_items,
+                'empty_items': empty_items
             }
             context['default_items'].append(default_item)
 

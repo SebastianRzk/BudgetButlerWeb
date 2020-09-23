@@ -11,7 +11,9 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from datetime import date
 
 
 class AddDepotauszugTest(unittest.TestCase):
@@ -74,6 +76,43 @@ class AddDepotauszugTest(unittest.TestCase):
                     {'description': '3demowert (3demoisin)',
                      'isin': '3demoisin',
                      'wert': 40}],
+                'konto': '2demokonto'},
+
+        ]
+
+    def test_init_with_empty_depotauszuege_should_flip_filled_and_empty(self):
+        self.set_up()
+        persisted_state.database_instance().depotauszuege = Depotauszuege()
+        context = add_depotauszug.index(GetRequest())
+        assert context['approve_title'] == 'Depotauszug hinzufügen'
+        assert context['default_items'] == [
+            {
+                'datum': datum_to_string(date.today()),
+                'empty_items': [],
+                'filled_items': [
+                    {'description': '1demowert (1demoisin)',
+                     'isin': '1demoisin',
+                     'wert': 0},
+                    {'description': '2demowert (2demoisin)',
+                     'isin': '2demoisin',
+                     'wert': 0},
+                    {'description': '3demowert (3demoisin)',
+                     'isin': '3demoisin',
+                     'wert': 0}],
+                'konto': '1demokonto'},
+            {
+                'datum': datum_to_string(date.today()),
+                'empty_items': [],
+                'filled_items': [
+                    {'description': '1demowert (1demoisin)',
+                     'isin': '1demoisin',
+                     'wert': 0},
+                    {'description': '2demowert (2demoisin)',
+                     'isin': '2demoisin',
+                     'wert': 0},
+                    {'description': '3demowert (3demoisin)',
+                     'isin': '3demoisin',
+                     'wert': 0}],
                 'konto': '2demokonto'},
 
         ]
@@ -304,6 +343,7 @@ class AddDepotauszugTest(unittest.TestCase):
                      'isin': '3demoisin',
                      'wert': 40}],
                 'konto': '2demokonto'}]
+
 
 if __name__ == '__main__':
     unittest.main()
