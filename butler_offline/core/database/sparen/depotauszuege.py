@@ -44,6 +44,11 @@ class Depotauszuege(DatabaseObject):
             return None
         return result_frame.index[0]
 
+    def exists_wert(self, konto, depotwert):
+        frame = self.content[self.content.Konto == konto].copy()
+        frame = frame[frame.Depotwert == depotwert]
+        return len(frame) != 0
+
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Konto', 'Depotwert'])
         self.content = self.content.reset_index(drop=True)

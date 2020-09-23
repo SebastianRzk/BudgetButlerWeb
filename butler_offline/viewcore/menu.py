@@ -14,6 +14,7 @@ from butler_offline.viewcore.routes import EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBER
     SPAREN_SPARKONTO_ADD, \
     SPAREN_DEPOTWERT_ADD, \
     SPAREN_ORDER_ADD, \
+    SPAREN_DEPOTAUSZUG_ADD, \
     SPAREN_SPARBUCHUNGEN_UEBERSICHT, \
     SPAREN_SPARKONTO_UEBERSICHT, \
     SPAREN_DEPOTWERT_UEBERSICHT, \
@@ -70,6 +71,7 @@ def get_menu_list():
     menu.append({'url': SPAREN_SPARKONTO_ADD, 'name': 'Neues Sparkonto', 'icon': 'fa fa-plus'})
     menu.append({'url': SPAREN_DEPOTWERT_ADD, 'name': 'Neuer Depotwert', 'icon': 'fa fa-plus'})
     menu.append({'url': SPAREN_ORDER_ADD, 'name': 'Neue Order', 'icon': 'fa fa-plus'})
+    menu.append({'url': SPAREN_DEPOTAUSZUG_ADD, 'name': 'Neuer Depotauszug', 'icon': 'fa fa-plus'})
     menu.append({'url': SPAREN_SPARBUCHUNGEN_UEBERSICHT, 'name': 'Übersicht Sparbuchungen', 'icon': 'fa fa-list'})
     menu.append({'url': SPAREN_SPARKONTO_UEBERSICHT, 'name': 'Übersicht Sparkontos', 'icon': 'fa fa-list'})
     menu.append({'url': SPAREN_DEPOTWERT_UEBERSICHT, 'name': 'Übersicht Depotwerte', 'icon': 'fa fa-list'})

@@ -6,23 +6,25 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from datetime import date
 
-KEY_ID = 'depotwert_id_'
 KEY_WERT = 'depotwert_wert_'
-
-def to_key(key, depotwert):
-    return '{}{}'.format(key, depotwert)
 
 def calculate_filled_items(actual, possible):
     filled_items = []
     for i, element in actual.iterrows():
         isin = element.Depotwert
-        filled_items.append(to_item(isin, resolve_description(isin, possible), element.Wert))
+        if element.Wert != 0:
+            filled_items.append(to_item(isin, resolve_description(isin, possible), element.Wert))
     return filled_items
 
-def calculate_empty_items(actual, possible):
+def calculate_empty_items(possible, filled):
     empty = possible.copy()
+
+    filled_isin = []
+    for f in filled:
+        filled_isin.append(f['isin'])
+
     for element in possible:
-        if element['isin'] in set(actual.Depotwert.tolist()):
+        if element['isin'] in filled_isin:
             empty.remove(element)
 
     result = []
@@ -58,10 +60,10 @@ def handle_request(request):
 
         if "edit_index" in request.values:
             for element in request.values:
-                if element.startswith(KEY_ID):
-                    depotwert = element.replace(KEY_ID, '')
+                if element.startswith(KEY_WERT):
+                    depotwert = element.replace(KEY_WERT, '')
                     db_index = database_instance().depotauszuege.resolve_index(current_date, konto, depotwert)
-                    value = request.values[to_key(KEY_WERT, depotwert)].replace(",", ".")
+                    value = request.values[element].replace(",", ".")
                     value = float(value)
 
                     if db_index is not None:
@@ -103,10 +105,13 @@ def handle_request(request):
                                                            datum_to_german(current_date)))
 
             for element in request.values:
-                if element.startswith('depotwert_id_'):
-                    depotwert = element.replace('depotwert_id_', '')
-                    value = request.values[to_key(KEY_WERT, depotwert)].replace(",", ".")
+                if element.startswith(KEY_WERT):
+                    depotwert = element.replace(KEY_WERT, '')
+                    value = request.values[element].replace(",", ".")
                     value = float(value)
+
+                    if value == 0 and not database_instance().depotauszuege.exists_wert(konto, depotwert):
+                        continue
 
                     database_instance().depotauszuege.add(datum=current_date,
                                                           depotwert=depotwert,
@@ -134,8 +139,8 @@ def handle_request(request):
         edit_konto = db_row['Konto']
         db_row = database_instance().depotauszuege.get_by(edit_datum, edit_konto)
 
-        empty_items = calculate_empty_items(db_row, depotwerte)
         filled_items = calculate_filled_items(db_row, depotwerte)
+        empty_items = calculate_empty_items(depotwerte, filled_items)
 
         default_item = [{
             'datum': datum_to_string(edit_datum),
@@ -158,15 +163,15 @@ def handle_request(request):
 
             db_row = database_instance().depotauszuege.get_by(default_datum, konto)
 
-            empty_items = calculate_empty_items(db_row, depotwerte)
             filled_items = calculate_filled_items(db_row, depotwerte)
+            empty_items = calculate_empty_items(depotwerte, filled_items)
 
             if len(filled_items) == 0:
                 filled_items = empty_items
                 empty_items = []
 
             default_item = {
-                'datum': datum_to_string(default_datum),
+                'datum': datum_to_string(date.today()),
                 'konto': konto,
                 'filled_items': filled_items,
                 'empty_items': empty_items
@@ -178,5 +183,5 @@ def handle_request(request):
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_sparbuchung.html')
+    return request_handler.handle_request(request, handle_request, 'sparen/add_depotauszug.html')
 

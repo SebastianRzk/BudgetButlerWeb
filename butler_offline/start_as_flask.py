@@ -26,7 +26,8 @@ from butler_offline.views.sparen import add_sparbuchung, \
     add_depotwert,\
     uebersicht_depotwerte, \
     add_order, \
-    uebersicht_order
+    uebersicht_order, \
+    add_depotauszug
 
 from butler_offline.viewcore import routes
 
@@ -146,6 +147,11 @@ def display_add_depowert():
 @app.route(routes.SPAREN_ORDER_ADD, methods=['GET', 'POST'])
 def display_add_order():
     return add_order.index(request)
+
+
+@app.route(routes.SPAREN_DEPOTAUSZUG_ADD, methods=['GET', 'POST'])
+def display_add_depotauszug():
+    return add_depotauszug.index(request)
 
 
 @app.route(routes.SPAREN_SPARBUCHUNGEN_UEBERSICHT, methods=['GET', 'POST'])

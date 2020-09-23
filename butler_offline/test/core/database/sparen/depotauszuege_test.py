@@ -88,6 +88,14 @@ class DepotauszuegeTest(unittest.TestCase):
 
         assert not component_under_test.get_latest_datum_by('1demokonto')
 
+    def test_exists_wert(self):
+        component_under_test = Depotauszuege()
+
+        assert not component_under_test.exists_wert(depotwert='isin1', konto='konto1')
+
+        component_under_test.add(datum('01.01.2020'), 'isin1', 'konto1', 100)
+
+        assert component_under_test.exists_wert(depotwert='isin1', konto='konto1')
 
 
 if __name__ == '__main__':

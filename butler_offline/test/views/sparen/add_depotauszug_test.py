@@ -48,7 +48,7 @@ class AddDepotauszugTest(unittest.TestCase):
         assert context['approve_title'] == 'Depotauszug hinzufügen'
         assert context['default_items'] == [
             {
-                'datum': '2020-01-02',
+                'datum': datum_to_string(date.today()),
                 'empty_items': [
                     {'description': '2demowert (2demoisin)',
                      'isin': '2demoisin',
@@ -63,7 +63,7 @@ class AddDepotauszugTest(unittest.TestCase):
                      'wert': 20}],
                 'konto': '1demokonto'},
             {
-                'datum': '2020-01-02',
+                'datum': datum_to_string(date.today()),
                 'empty_items': [
                     {'description': '1demowert (1demoisin)',
                      'isin': '1demoisin',
@@ -83,6 +83,50 @@ class AddDepotauszugTest(unittest.TestCase):
     def test_init_with_empty_depotauszuege_should_flip_filled_and_empty(self):
         self.set_up()
         persisted_state.database_instance().depotauszuege = Depotauszuege()
+        context = add_depotauszug.index(GetRequest())
+        assert context['approve_title'] == 'Depotauszug hinzufügen'
+        assert context['default_items'] == [
+            {
+                'datum': datum_to_string(date.today()),
+                'empty_items': [],
+                'filled_items': [
+                    {'description': '1demowert (1demoisin)',
+                     'isin': '1demoisin',
+                     'wert': 0},
+                    {'description': '2demowert (2demoisin)',
+                     'isin': '2demoisin',
+                     'wert': 0},
+                    {'description': '3demowert (3demoisin)',
+                     'isin': '3demoisin',
+                     'wert': 0}],
+                'konto': '1demokonto'},
+            {
+                'datum': datum_to_string(date.today()),
+                'empty_items': [],
+                'filled_items': [
+                    {'description': '1demowert (1demoisin)',
+                     'isin': '1demoisin',
+                     'wert': 0},
+                    {'description': '2demowert (2demoisin)',
+                     'isin': '2demoisin',
+                     'wert': 0},
+                    {'description': '3demowert (3demoisin)',
+                     'isin': '3demoisin',
+                     'wert': 0}],
+                'konto': '2demokonto'},
+
+        ]
+
+    def test_init_with_already_empty_should_handle_like_empty(self):
+        self.set_up()
+
+        persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '1demoisin', '1demokonto', 0)
+        persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '2demoisin', '1demokonto', 0)
+        persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '3demoisin', '1demokonto', 0)
+        persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '1demoisin', '2demokonto', 0)
+        persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '2demoisin', '2demokonto', 0)
+        persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '3demoisin', '2demokonto', 0)
+
         context = add_depotauszug.index(GetRequest())
         assert context['approve_title'] == 'Depotauszug hinzufügen'
         assert context['default_items'] == [
@@ -151,9 +195,7 @@ class AddDepotauszugTest(unittest.TestCase):
             {'action': 'add',
              'datum': rfc('01.03.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '100,00',
-             'depotwert_id_3demoisin': '',
              'depotwert_wert_3demoisin': '200,00'
              }
          ))
@@ -175,6 +217,25 @@ class AddDepotauszugTest(unittest.TestCase):
         assert buchungen.Depotwert[10] == '3demoisin'
         assert buchungen.Datum[10] == datum('01.03.2020')
 
+    def test_add_with_empty_value_should_skip(self):
+        self.set_up()
+        persisted_state.database_instance().depotauszuege = Depotauszuege()
+
+        assert len(persisted_state.database_instance().depotauszuege.content) == 0
+
+        add_depotauszug.index(VersionedPostRequest(
+            {'action': 'add',
+             'datum': rfc('01.03.2020'),
+             'konto': '2demokonto',
+             'depotwert_wert_2demoisin': '0,00',
+             'depotwert_wert_3demoisin': '0,00'
+             }
+         ))
+
+        db = persisted_state.database_instance()
+        assert len(db.depotauszuege.content) == 0
+
+
     def test_add_order_should_show_in_recently_added(self):
         self.set_up()
 
@@ -182,7 +243,6 @@ class AddDepotauszugTest(unittest.TestCase):
             {'action': 'add',
              'datum': rfc('01.03.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '100,00'
              }
         ))
@@ -202,7 +262,6 @@ class AddDepotauszugTest(unittest.TestCase):
             {'action': 'add',
              'datum': rfc('01.01.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '100,00'
              }
         ))
@@ -218,7 +277,6 @@ class AddDepotauszugTest(unittest.TestCase):
              'ID': next_id,
              'datum': rfc('01.03.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '100,00'
              }
          ))
@@ -227,7 +285,6 @@ class AddDepotauszugTest(unittest.TestCase):
              'ID': next_id,
              'datum': rfc('01.03.2020'),
              'konto': 'overwritten',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '9999,00'
              }
          ))
@@ -247,7 +304,6 @@ class AddDepotauszugTest(unittest.TestCase):
             {'action': 'add',
              'datum': rfc('01.03.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '100,00'
              }
          ))
@@ -257,7 +313,6 @@ class AddDepotauszugTest(unittest.TestCase):
              'edit_index': 0,
              'datum': rfc('01.03.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '200,00'
              }
          ))
@@ -286,7 +341,6 @@ class AddDepotauszugTest(unittest.TestCase):
             {'action': 'add',
              'datum': rfc('01.03.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '100,00'
              }
         ))
@@ -298,7 +352,6 @@ class AddDepotauszugTest(unittest.TestCase):
              'edit_index': 0,
              'datum': rfc('01.03.2020'),
              'konto': '2demokonto',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '200,00'
              }
         ))
@@ -309,7 +362,6 @@ class AddDepotauszugTest(unittest.TestCase):
              'edit_index': 0,
              'datum': rfc('01.03.2020'),
              'konto': 'overwritten',
-             'depotwert_id_2demoisin': '',
              'depotwert_wert_2demoisin': '0,00'
              }
         ))
