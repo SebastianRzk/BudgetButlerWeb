@@ -1,8 +1,3 @@
-'''
-Created on 03.05.2018
-
-@author: sebastian
-'''
 import pandas as pd
 from datetime import datetime
 from butler_offline.core.database.selector import Selektor

@@ -28,6 +28,8 @@ from butler_offline.views.sparen import add_sparbuchung, \
     add_order, \
     uebersicht_order
 
+from butler_offline.viewcore import routes
+
 from butler_offline.views.shared import import_data
 
 
@@ -36,47 +38,47 @@ def show_dashboard():
     return dashboard.index(request)
 
 
-@app.route('/adddauerauftrag/', methods=['GET', 'POST'])
+@app.route(routes.EINZELBUCHUNGEN_DAUERAUFTRAG_ADD, methods=['GET', 'POST'])
 def add_dauerauftrag():
     return adddauerauftrag.index(request)
 
 
-@app.route('/addeinnahme/', methods=['GET', 'POST'])
+@app.route(routes.EINZELBUCHUNGEN_EINNAHME_ADD, methods=['GET', 'POST'])
 def add_einnahme():
     return addeinnahme.index(request)
 
 
-@app.route('/addausgabe/', methods=['GET', 'POST'])
+@app.route(routes.EINZELBUCHUNGEN_AUSGABE_ADD, methods=['GET', 'POST'])
 def add_ausgabe():
     return addausgabe.index(request)
 
 
-@app.route('/addgemeinsam/', methods=['GET', 'POST'])
+@app.route(routes.GEMEINSAME_BUCHUNGEN_ADD, methods=['GET', 'POST'])
 def add_gemeinsam():
     return addgemeinsam.index(request)
 
 
-@app.route('/dauerauftraguebersicht/', methods=['GET', 'POST'])
+@app.route(routes.EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT, methods=['GET', 'POST'])
 def view_uebersicht_dauerauftrag():
     return uebersicht_dauerauftrag.index(request)
 
 
-@app.route('/gemeinsameuebersicht/', methods=['GET', 'POST'])
+@app.route(routes.GEMEINSAME_BUCHUNGEN_UEBERSICHT, methods=['GET', 'POST'])
 def view_uebersicht_gemeinsam():
     return uebersicht_gemeinsam.index(request)
 
 
-@app.route('/jahresuebersicht/', methods=['GET', 'POST'])
+@app.route(routes.EINZELBUCHUNGEN_JAHRESUEBERSICHT, methods=['GET', 'POST'])
 def view_uebersicht_jahr():
     return uebersicht_jahr.index(request)
 
 
-@app.route('/monatsuebersicht/', methods=['GET', 'POST'])
+@app.route(routes.EINZELBUCHUNGEN_MONATSUEBERSICHT, methods=['GET', 'POST'])
 def view_uebersicht_monat():
     return uebersicht_monat.index(request)
 
 
-@app.route('/uebersicht/', methods=['GET', 'POST'])
+@app.route(routes.EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT, methods=['GET', 'POST'])
 def view_uebersicht_einzelbuchungen():
     return uebersicht_einzelbuchungen.index(request)
 
@@ -96,7 +98,7 @@ def switch_to_debug():
     return testmode_switch.enter_testmode(request)
 
 
-@app.route('/gemeinsamabrechnen/', methods=['GET', 'POST'])
+@app.route(routes.GEMEINSAME_BUCHUNGEN_ABRECHNEN, methods=['GET', 'POST'])
 def view_gemeinsam_abrechnen():
     return gemeinsam_abrechnen.index(request)
 
@@ -106,17 +108,17 @@ def exec_abrechnen():
     return gemeinsam_abrechnen.abrechnen(request)
 
 
-@app.route('/import/', methods=['GET', 'POST'])
+@app.route(routes.CORE_IMPORT, methods=['GET', 'POST'])
 def view_import():
     return import_data.index(request)
 
 
-@app.route('/configuration/', methods=['GET', 'POST'])
+@app.route(routes.CORE_CONFIGURATION, methods=['GET', 'POST'])
 def view_configuration():
     return configuration.index(request)
 
 
-@app.route('/uebersichtabrechnungen/', methods=['GET'])
+@app.route(routes.GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN, methods=['GET'])
 def view_uebersicht_abrechnungen():
     return uebersicht_abrechnungen.index(request)
 
@@ -124,41 +126,43 @@ def view_uebersicht_abrechnungen():
 '''
 Sparen:
 '''
-@app.route('/add_sparbuchung/', methods=['GET', 'POST'])
+
+
+@app.route(routes.SPAREN_SPARBUCHUNG_ADD, methods=['GET', 'POST'])
 def display_add_sparbuchung():
     return add_sparbuchung.index(request)
 
 
-@app.route('/add_sparkonto/', methods=['GET', 'POST'])
+@app.route(routes.SPAREN_SPARKONTO_ADD, methods=['GET', 'POST'])
 def display_add_sparkonto():
     return add_sparkoto.index(request)
 
 
-@app.route('/add_depotwert/', methods=['GET', 'POST'])
+@app.route(routes.SPAREN_DEPOTWERT_ADD, methods=['GET', 'POST'])
 def display_add_depowert():
     return add_depotwert.index(request)
 
 
-@app.route('/add_order/', methods=['GET', 'POST'])
+@app.route(routes.SPAREN_ORDER_ADD, methods=['GET', 'POST'])
 def display_add_order():
     return add_order.index(request)
 
 
-@app.route('/uebersicht_sparbuchungen/', methods=['GET', 'POST'])
+@app.route(routes.SPAREN_SPARBUCHUNGEN_UEBERSICHT, methods=['GET', 'POST'])
 def display_uebersicht_sparbuchung():
     return uebersicht_sparbuchungen.index(request)
 
 
-@app.route('/uebersicht_sparkontos/', methods=['GET', 'POST'])
+@app.route(routes.SPAREN_SPARKONTO_UEBERSICHT, methods=['GET', 'POST'])
 def display_uebersicht_sparkontos():
     return uebersicht_sparkontos.index(request)
 
 
-@app.route('/uebersicht_depotwerte/', methods=['GET', 'POST'])
+@app.route(routes.SPAREN_DEPOTWERT_UEBERSICHT, methods=['GET', 'POST'])
 def display_uebersicht_depowerte():
     return uebersicht_depotwerte.index(request)
 
-@app.route('/uebersicht_order/', methods=['GET', 'POST'])
+@app.route(routes.SPAREN_ORDER_UEBERSICHT, methods=['GET', 'POST'])
 def display_uebersicht_order():
     return uebersicht_order.index(request)
 

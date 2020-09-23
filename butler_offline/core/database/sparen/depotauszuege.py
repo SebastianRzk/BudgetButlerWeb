@@ -1,6 +1,6 @@
 from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
-
+import numpy as np
 
 class Depotauszuege(DatabaseObject):
     TABLE_HEADER = ['Datum', 'Depotwert', 'Konto', 'Wert']
@@ -25,6 +25,24 @@ class Depotauszuege(DatabaseObject):
             'Konto': konto,
             'Wert': wert
         })
+
+    def get_by(self, datum, konto):
+        auszuege = self.content[self.content.Konto == konto].copy()
+        auszuege = auszuege[auszuege.Datum == datum]
+        return auszuege
+
+    def get_latest_datum_by(self, konto):
+        auszuege = self.content[self.content.Konto == konto].copy()
+        if len(auszuege) == 0:
+            return None
+        return auszuege.Datum.max()
+
+    def resolve_index(self, datum, konto, depotwert):
+        auszuege = self.get_by(datum, konto)
+        result_frame = auszuege[auszuege.Depotwert == depotwert]
+        if len(result_frame) == 0:
+            return None
+        return result_frame.index[0]
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Konto', 'Depotwert'])
