@@ -109,6 +109,18 @@ class TestHeadlines(SeleniumTestClass):
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neuer Depotwert'
         close_driver(driver)
 
+    def test_add_depotauszug(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/add_depotauszug/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neuer Depotauszug'
+        close_driver(driver)
+
+    def test_uebersicht_depotauszuege(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht_depotauszuege/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Depotauszüge'
+        close_driver(driver)
+
     def test_add_order(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:5000/add_order/')

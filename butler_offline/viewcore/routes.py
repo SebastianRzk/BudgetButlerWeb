@@ -21,6 +21,7 @@ SPAREN_SPARBUCHUNGEN_UEBERSICHT = '/uebersicht_sparbuchungen/'
 SPAREN_SPARKONTO_UEBERSICHT = '/uebersicht_sparkontos/'
 SPAREN_DEPOTWERT_UEBERSICHT = '/uebersicht_depotwerte/'
 SPAREN_ORDER_UEBERSICHT = '/uebersicht_order/'
+SPAREN_DEPOTAUSZUEGE_UEBERSICHT = '/uebersicht_depotauszuege/'
 
 CORE_CONFIGURATION = '/configuration/'
 CORE_IMPORT = '/import/'

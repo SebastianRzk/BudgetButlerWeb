@@ -128,6 +128,43 @@ class DepotauszuegeTest(unittest.TestCase):
 
         assert component_under_test.get_depotwert_by('1isin') == 600
 
+    def test_resolve_konto(self):
+        component_under_test = Depotauszuege()
+
+        component_under_test.add(datum('03.01.2020'), '1isin', '1demokonto', 11)
+        component_under_test.add(datum('07.01.2020'), '1isin', '2demokonto', 11)
+        component_under_test.add(datum('01.01.2020'), '1isin', '3demokonto', 11)
+
+        assert component_under_test.resolve_konto(1) == '1demokonto'
+
+    def test_resolve_datum(self):
+        component_under_test = Depotauszuege()
+
+        component_under_test.add(datum('03.01.2020'), '1isin', '1demokonto', 11)
+        component_under_test.add(datum('07.01.2020'), '1isin', '2demokonto', 11)
+        component_under_test.add(datum('01.01.2020'), '1isin', '3demokonto', 11)
+
+        assert component_under_test.resolve_datum(1) == datum('03.01.2020')
+
+    def test_delete_depotauszug(self):
+        component_under_test = Depotauszuege()
+
+
+        component_under_test.add(datum('01.01.2020'), '1isin', '1demokonto', 1)
+        component_under_test.add(datum('03.01.2020'), '2isin', '2demokonto', 2)
+        component_under_test.add(datum('03.01.2020'), '3isin', '2demokonto', 3)
+        component_under_test.add(datum('03.01.2020'), '4isin', '3demokonto', 4)
+
+        assert len(component_under_test.content) == 4
+
+        component_under_test.delete_depotauszug(datum('03.01.2020'), '2demokonto')
+
+        assert len(component_under_test.content) == 2
+        assert component_under_test.content.index.tolist() == [0, 3]
+        assert component_under_test.content.Datum.tolist() == [datum('01.01.2020'), datum('03.01.2020')]
+        assert component_under_test.content.Depotwert.tolist() == ['1isin', '4isin']
+        assert component_under_test.content.Wert.tolist() == [1, 4]
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -72,7 +72,23 @@ class Depotauszuege(DatabaseObject):
 
         return gesamt
 
+    def delete_depotauszug(self, datum, konto):
+        index = self._resolve_indices(konto, datum)
+        for i in index:
+            self.delete(i)
 
+    def _resolve_indices(self, konto, datum):
+        values = self.content[self.content.Konto == konto].copy()
+        return values[values.Datum == datum].index.tolist()
+
+    def get_all(self):
+        return self.content
+
+    def resolve_konto(self, index):
+        return self.content.loc[index, 'Konto']
+
+    def resolve_datum(self, index):
+        return self.content.loc[index, 'Datum']
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Konto', 'Depotwert'])

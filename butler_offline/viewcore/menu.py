@@ -19,7 +19,9 @@ from butler_offline.viewcore.routes import EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBER
     SPAREN_SPARKONTO_UEBERSICHT, \
     SPAREN_DEPOTWERT_UEBERSICHT, \
     SPAREN_ORDER_UEBERSICHT, \
+    SPAREN_DEPOTAUSZUEGE_UEBERSICHT, \
     CORE_CONFIGURATION
+
 from butler_offline.viewcore.state import persisted_state
 
 EINZELBUCHUNGEN_SUBMENU_NAME = 'Persönliche Finanzen'
@@ -76,6 +78,7 @@ def get_menu_list():
     menu.append({'url': SPAREN_SPARKONTO_UEBERSICHT, 'name': 'Übersicht Sparkontos', 'icon': 'fa fa-list'})
     menu.append({'url': SPAREN_DEPOTWERT_UEBERSICHT, 'name': 'Übersicht Depotwerte', 'icon': 'fa fa-list'})
     menu.append({'url': SPAREN_ORDER_UEBERSICHT, 'name': 'Übersicht Order', 'icon': 'fa fa-list'})
+    menu.append({'url': SPAREN_DEPOTAUSZUEGE_UEBERSICHT, 'name': 'Übersicht Depotauszüge', 'icon': 'fa fa-list'})
 
     main_menu['Sparen'] = menu
 
