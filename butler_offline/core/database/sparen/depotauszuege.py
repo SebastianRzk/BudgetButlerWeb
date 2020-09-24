@@ -49,6 +49,31 @@ class Depotauszuege(DatabaseObject):
         frame = frame[frame.Depotwert == depotwert]
         return len(frame) != 0
 
+    def get_kontostand_by(self, konto):
+        latest_datum = self.get_latest_datum_by(konto)
+        if not latest_datum:
+            return 0
+        auszuege = self.content[self.content.Konto == konto].copy()
+        auszug = auszuege[auszuege.Datum == latest_datum]
+        return auszug.Wert.sum()
+
+    def get_depotwert_by(self, depotwert):
+        auszuege = self.content[self.content.Depotwert == depotwert].copy()
+        if len(auszuege) == 0:
+            return 0
+
+        kontos = set(auszuege.Konto.tolist())
+        gesamt = 0
+
+        for konto in kontos:
+            konto_auszuege = auszuege[auszuege.Konto == konto].copy()
+            datum_max = konto_auszuege.Datum.max()
+            gesamt += konto_auszuege[konto_auszuege.Datum == datum_max].Wert.sum()
+
+        return gesamt
+
+
+
     def _sort(self):
         self.content = self.content.sort_values(by=['Datum', 'Konto', 'Depotwert'])
         self.content = self.content.reset_index(drop=True)

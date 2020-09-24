@@ -10,7 +10,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 
 
-class TestUebersichtSparkontos_withSparkonto(unittest.TestCase):
+class TestUebersichtSparkontos(unittest.TestCase):
 
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
@@ -32,6 +32,7 @@ class TestUebersichtSparkontos_withSparkonto(unittest.TestCase):
 
         persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
         persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
+        persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demokonto2', 990)
 
     def test_should_list_kontos(self):
         self.set_up()
@@ -44,9 +45,9 @@ class TestUebersichtSparkontos_withSparkonto(unittest.TestCase):
                 'index': 0,
                 'kontoname': 'demokonto2',
                 'kontotyp': 'Depot',
-                'wert': 'noch nicht ermittelt',
+                'wert': '990,00',
                 'aufbuchungen': '999,00',
-                'difference': '-999,00',
+                'difference': '-9,00',
                 'difference_is_negativ': True
             },
             {
@@ -61,10 +62,10 @@ class TestUebersichtSparkontos_withSparkonto(unittest.TestCase):
         ]
 
         assert result['gesamt'] == {
-            'wert': '110,00',
+            'wert': '1100,00',
             'aufbuchungen': '1099,00',
-            'difference': '-989,00',
-            'difference_is_negativ': True
+            'difference': '1,00',
+            'difference_is_negativ': False
         }
 
     def test_init_withEmptyDatabase(self):

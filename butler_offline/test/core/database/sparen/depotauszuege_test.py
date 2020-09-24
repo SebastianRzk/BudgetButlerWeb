@@ -97,6 +97,37 @@ class DepotauszuegeTest(unittest.TestCase):
 
         assert component_under_test.exists_wert(depotwert='isin1', konto='konto1')
 
+    def test_get_kontostand_by_with_empty_should_return_zero(self):
+        component_under_test = Depotauszuege()
+
+        assert component_under_test.get_kontostand_by('demokonto') == 0
+
+    def test_get_kontostand_by_(self):
+        component_under_test = Depotauszuege()
+        component_under_test.add(datum('01.01.2020'), '1isin', 'demokonto', 10)
+
+        component_under_test.add(datum('02.01.2020'), '1isin', 'demokonto', 200)
+        component_under_test.add(datum('02.01.2020'), '2isin', 'demokonto', 300)
+        component_under_test.add(datum('02.01.2020'), '1isin', '1demokonto', 999)
+
+        assert component_under_test.get_kontostand_by('demokonto') == 500
+
+    def test_get_depotwert_by_with_empty_should_return_zero(self):
+        component_under_test = Depotauszuege()
+
+        assert component_under_test.get_depotwert_by('isin1') == 0
+
+    def test_get_depotwert_by(self):
+        component_under_test = Depotauszuege()
+
+        component_under_test.add(datum('01.01.2020'), '1isin', '1demokonto', 11)
+
+        component_under_test.add(datum('02.01.2020'), '1isin', '1demokonto', 200)
+        component_under_test.add(datum('02.01.2020'), '2isin', '1demokonto', 311)
+        component_under_test.add(datum('02.01.2020'), '1isin', '2demokonto', 400)
+
+        assert component_under_test.get_depotwert_by('1isin') == 600
+
 
 if __name__ == '__main__':
     unittest.main()

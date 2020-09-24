@@ -8,6 +8,8 @@ from butler_offline.viewcore.converter import from_double_to_german
 def _handle_request(request):
     depotwerte = persisted_state.database_instance().depotwerte
     order = persisted_state.database_instance().order
+    depotauszuege = persisted_state.database_instance().depotauszuege
+
     if post_action_is(request, 'delete'):
         depotwerte.delete(int(request.values['delete_index']))
         return request_handler.create_redirect_context('/uebersicht_depotwerte/')
@@ -18,18 +20,19 @@ def _handle_request(request):
     gesamt_wert = 0
 
     for row_index, row in db.iterrows():
-        buchungen = order.get_order_fuer_depotwert(row.ISIN)
-        wert = 0
+        isin = row.ISIN
+        buchungen = order.get_order_fuer_depotwert(isin)
+        wert = depotauszuege.get_depotwert_by(isin)
         differenz = wert - buchungen
 
         depotwerte_liste.append({
             'index': row_index,
             'name': row.Name,
-            'isin': row.ISIN,
+            'isin': isin,
             'buchung': from_double_to_german(buchungen),
             'difference': from_double_to_german(differenz),
             'difference_is_negativ': differenz < 0,
-            'wert': 'noch nicht ermittelt'
+            'wert': from_double_to_german(wert)
         })
         gesamt_buchungen += buchungen
         gesamt_wert += wert

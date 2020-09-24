@@ -28,6 +28,9 @@ class TestUebersichtDepotwerte(unittest.TestCase):
         order = persisted_state.database_instance().order
         order.add(datum('12.12.2019'), 'demoname', 'demokonto', 'isin1', 100)
 
+        depotauszuege = persisted_state.database_instance().depotauszuege
+        depotauszuege.add(datum('01.01.2020'), 'isin1', 'demokonto', 90)
+
     def test_should_list_depotwerte(self):
         self.set_up()
         self.add_test_data()
@@ -40,9 +43,9 @@ class TestUebersichtDepotwerte(unittest.TestCase):
                 'name': 'depotwert1',
                 'isin': 'isin1',
                 'buchung': '100,00',
-                'difference': '-100,00',
+                'difference': '-10,00',
                 'difference_is_negativ': True,
-                'wert': 'noch nicht ermittelt'},
+                'wert': '90,00'},
             {
                 'index': 1,
                 'name': 'depotwert2',
@@ -50,14 +53,14 @@ class TestUebersichtDepotwerte(unittest.TestCase):
                 'buchung': '0,00',
                 'difference': '0,00',
                 'difference_is_negativ': False,
-                'wert': 'noch nicht ermittelt'}
+                'wert': '0,00'}
         ]
 
         assert result['gesamt'] == {
             'buchung': '100,00',
-            'difference': '-100,00',
+            'difference': '-10,00',
             'difference_is_negativ': True,
-            'wert': '0,00'
+            'wert': '90,00'
         }
 
     def test_init_withEmptyDatabase(self):

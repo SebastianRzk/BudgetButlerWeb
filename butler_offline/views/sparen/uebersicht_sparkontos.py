@@ -24,16 +24,16 @@ def _handle_request(request):
         aufbuchungen = 0
         aufbuchungen_str = 'noch nicht ermittelt'
 
-        if row.Kontotyp == sparkontos.TYP_SPARKONTO:
-            aktueller_kontostand = persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(row.Kontoname)
-            aktueller_kontostand_str = from_double_to_german(aktueller_kontostand)
+        kontoname = row.Kontoname
+        kontotyp = row.Kontotyp
 
-            aufbuchungen = persisted_state.database_instance().sparbuchungen.get_aufbuchungen_fuer(row.Kontoname)
-            aufbuchungen_str = from_double_to_german(aufbuchungen)
+        if kontotyp == sparkontos.TYP_SPARKONTO:
+            aktueller_kontostand = persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(kontoname)
+            aufbuchungen = persisted_state.database_instance().sparbuchungen.get_aufbuchungen_fuer(kontoname)
 
-        if row.Kontotyp == sparkontos.TYP_DEPOT:
-            aufbuchungen = persisted_state.database_instance().order.get_order_fuer(row.Kontoname)
-            aufbuchungen_str = from_double_to_german(aufbuchungen)
+        if kontotyp == sparkontos.TYP_DEPOT:
+            aufbuchungen = persisted_state.database_instance().order.get_order_fuer(kontoname)
+            aktueller_kontostand = persisted_state.database_instance().depotauszuege.get_kontostand_by(kontoname)
 
         gesamt_kontostand += aktueller_kontostand
         gesamt_aufbuchungen += aufbuchungen
@@ -42,11 +42,11 @@ def _handle_request(request):
 
         sparkonto_liste.append({
             'index': row_index,
-            'kontoname': row.Kontoname,
-            'kontotyp': row.Kontotyp,
-            'wert': aktueller_kontostand_str,
+            'kontoname': kontoname,
+            'kontotyp': kontotyp,
+            'wert': from_double_to_german(aktueller_kontostand),
             'difference': from_double_to_german(diff),
-            'aufbuchungen': aufbuchungen_str,
+            'aufbuchungen': from_double_to_german(aufbuchungen),
             'difference_is_negativ': diff < 0
         })
 
