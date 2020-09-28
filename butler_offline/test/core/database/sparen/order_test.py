@@ -82,6 +82,15 @@ class OrderTest(unittest.TestCase):
 
         assert component_under_test.get_order_fuer_depotwert('1depotwert') == 100
 
+    def test_select_year(self):
+        component_under_test = Order()
+
+        component_under_test.add(datum('01.01.2020'), '1name', '1konto', '1depotwert', 100)
+        component_under_test.add(datum('01.01.2021'), '1name', '1konto', '2depotwert', 300)
+        component_under_test.add(datum('01.01.2022'), '1name', '1konto', '2depotwert', 500)
+
+        assert component_under_test.select_year(2021).get_order_fuer('1konto') == 300
+
 
 
 if __name__ == '__main__':

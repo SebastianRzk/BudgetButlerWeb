@@ -10,6 +10,7 @@ from butler_offline.viewcore.routes import EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBER
     GEMEINSAME_BUCHUNGEN_ADD, \
     GEMEINSAME_BUCHUNGEN_ABRECHNEN, \
     GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN, \
+    SPAREN_UEBERSICHT, \
     SPAREN_SPARBUCHUNG_ADD, \
     SPAREN_SPARKONTO_ADD, \
     SPAREN_DEPOTWERT_ADD, \
@@ -69,6 +70,7 @@ def get_menu_list():
     main_menu['Gemeinsame Finanzen'] = menu
 
     menu = []
+    menu.append({'url': SPAREN_UEBERSICHT, 'name': 'Sparen Übersicht', 'icon': 'fa fa-line-chart'})
     menu.append({'url': SPAREN_SPARBUCHUNG_ADD, 'name': 'Neue Sparbuchung', 'icon': 'fa fa-plus'})
     menu.append({'url': SPAREN_SPARKONTO_ADD, 'name': 'Neues Sparkonto', 'icon': 'fa fa-plus'})
     menu.append({'url': SPAREN_DEPOTWERT_ADD, 'name': 'Neuer Depotwert', 'icon': 'fa fa-plus'})

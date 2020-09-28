@@ -68,3 +68,21 @@ class Sparbuchungen(DatabaseObject):
         del gesamt['Typ']
 
         return gesamt
+
+    def select_year(self, year):
+        include = self.content.copy()
+        include['datum_filter'] = include.Datum.map(lambda x: x.year)
+        include = include[include.datum_filter == year].copy()
+        del include['datum_filter']
+        selected = Sparbuchungen()
+        selected.content = include
+        return selected
+
+    def select_max_year(self, year):
+        include = self.content.copy()
+        include['datum_filter'] = include.Datum.map(lambda x: x.year)
+        include = include[include.datum_filter <= year].copy()
+        del include['datum_filter']
+        selected = Sparbuchungen()
+        selected.content = include
+        return selected

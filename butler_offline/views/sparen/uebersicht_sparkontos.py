@@ -19,15 +19,12 @@ def _handle_request(request):
 
     for row_index, row in db.iterrows():
         aktueller_kontostand = 0
-        aktueller_kontostand_str = 'noch nicht ermittelt'
-
         aufbuchungen = 0
-        aufbuchungen_str = 'noch nicht ermittelt'
 
         kontoname = row.Kontoname
         kontotyp = row.Kontotyp
 
-        if kontotyp == sparkontos.TYP_SPARKONTO:
+        if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
             aktueller_kontostand = persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(kontoname)
             aufbuchungen = persisted_state.database_instance().sparbuchungen.get_aufbuchungen_fuer(kontoname)
 

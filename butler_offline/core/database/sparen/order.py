@@ -51,3 +51,13 @@ class Order(DatabaseObject):
 
         return order
 
+    def select_year(self, year):
+        include = self.content.copy()
+        include['datum_filter'] = include.Datum.map(lambda x: x.year)
+        include = include[include.datum_filter == year].copy()
+        del include['datum_filter']
+        selected = Order()
+        selected.content = include
+        return selected
+
+

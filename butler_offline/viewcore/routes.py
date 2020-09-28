@@ -12,6 +12,7 @@ GEMEINSAME_BUCHUNGEN_ADD = '/addgemeinsam/'
 GEMEINSAME_BUCHUNGEN_ABRECHNEN = '/gemeinsamabrechnen/'
 GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN = '/uebersichtabrechnungen/'
 
+SPAREN_UEBERSICHT = '/sparen/'
 SPAREN_SPARBUCHUNG_ADD = '/add_sparbuchung/'
 SPAREN_SPARKONTO_ADD = '/add_sparkonto/'
 SPAREN_DEPOTWERT_ADD = '/add_depotwert/'

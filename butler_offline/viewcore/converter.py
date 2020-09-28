@@ -23,7 +23,7 @@ def datum_to_german(datum_obj):
     return datum_obj.strftime('%d.%m.%Y')
 
 def datum_from_german(datum_str):
-    return datetime.strptime(datum_str , '%d.%m.%Y').date()
+    return datetime.strptime(datum_str, '%d.%m.%Y').date()
 
 def german_to_rfc(datum_str):
     return datum_to_string(datum_from_german(datum_str))

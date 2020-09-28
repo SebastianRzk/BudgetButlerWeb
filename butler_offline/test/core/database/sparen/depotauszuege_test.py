@@ -146,6 +146,18 @@ class DepotauszuegeTest(unittest.TestCase):
 
         assert component_under_test.resolve_datum(1) == datum('03.01.2020')
 
+
+    def test_select_max_year(self):
+        component_under_test = Depotauszuege()
+
+        component_under_test.add(datum('03.01.2019'), '1isin', '1demokonto', 11)
+        component_under_test.add(datum('05.01.2020'), '1isin', '1demokonto', 12)
+        component_under_test.add(datum('03.01.2021'), '1isin', '1demokonto', 99)
+        component_under_test.add(datum('03.01.2022'), '1isin', '1demokonto', 99)
+
+        assert component_under_test.select_max_year(2020).get_kontostand_by('1demokonto') == 12
+
+
     def test_delete_depotauszug(self):
         component_under_test = Depotauszuege()
 

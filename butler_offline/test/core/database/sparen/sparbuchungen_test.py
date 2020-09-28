@@ -124,6 +124,28 @@ class SparbuchungenTest(unittest.TestCase):
 
         assert component_under_test.get_aufbuchungen_fuer('konto') == 150
 
+    def test_select_year(self):
+        component_under_test = Sparbuchungen()
+
+        component_under_test.add(datum('01.01.2010'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2011'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2012'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2013'), '1name', 33, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2014'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+
+        assert component_under_test.select_year(2013).get_aufbuchungen_fuer('konto') == 33
+
+    def test_select_max_year(self):
+        component_under_test = Sparbuchungen()
+
+        component_under_test.add(datum('01.01.2010'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2011'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2012'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2013'), '1name', 33, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+        component_under_test.add(datum('01.01.2014'), '1name', 1, Sparbuchungen.TYP_MANUELLER_AUFTRAG, 'konto')
+
+        assert component_under_test.select_max_year(2013).get_aufbuchungen_fuer('konto') == 36
+
 
 if __name__ == '__main__':
     unittest.main()
