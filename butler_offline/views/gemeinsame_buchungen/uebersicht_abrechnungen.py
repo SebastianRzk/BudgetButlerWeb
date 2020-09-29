@@ -30,7 +30,7 @@ def _handle_request(request):
 
     for jahr in sorted(jahre):
 
-        year_selection = all_content.select().select_year(int(jahr))
+        year_selection = all_content.select().select_year(jahr)
         monate = []
         for monat in range(1, 13):
             monate.append(year_selection.select_month(monat).count())

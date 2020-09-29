@@ -1,0 +1,329 @@
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.converter import from_double_to_german
+from datetime import date
+
+
+def to_piechart(data_list, gesamt_wert):
+    colors = []
+    labels = []
+    datasets = []
+
+    for element in data_list:
+        if gesamt_wert != 0:
+            prozent = '%.2f' % ((100 * element['wert']) / gesamt_wert)
+        else:
+            prozent = 0
+
+        colors.append(element['color'])
+        labels.append(element['name'])
+        datasets.append(prozent)
+
+    return {
+        'colors': colors,
+        'labels': labels,
+        'datasets': datasets
+    }
+
+
+def generate_konto_uebersicht(color_kontos, color_typen):
+    sparkontos = persisted_state.database_instance().sparkontos
+
+    gesamt_kontostand = 0
+    gesamt_aufbuchungen = 0
+    sparkonto_liste = []
+
+    kontotypen_werte = dict.fromkeys(sparkontos.KONTO_TYPEN, 0)
+    for typ in kontotypen_werte:
+        kontotypen_werte[typ] = {'gesamt': 0, 'aufbuchungen': 0}
+
+    db = sparkontos.get_all()
+    for row_index, row in db.iterrows():
+        aktueller_kontostand = 0
+        aufbuchungen = 0
+
+        kontoname = row.Kontoname
+        kontotyp = row.Kontotyp
+
+        if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
+            aktueller_kontostand = persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(kontoname)
+            aufbuchungen = persisted_state.database_instance().sparbuchungen.get_aufbuchungen_fuer(kontoname)
+
+        if kontotyp == sparkontos.TYP_DEPOT:
+            aufbuchungen = persisted_state.database_instance().order.get_order_fuer(kontoname)
+            aktueller_kontostand = persisted_state.database_instance().depotauszuege.get_kontostand_by(kontoname)
+
+        gesamt_kontostand += aktueller_kontostand
+        gesamt_aufbuchungen += aufbuchungen
+
+        diff = aktueller_kontostand - aufbuchungen
+
+        kontotypen_werte[kontotyp]['gesamt'] += aktueller_kontostand
+        kontotypen_werte[kontotyp]['aufbuchungen'] += aufbuchungen
+
+        sparkonto_liste.append({
+            'index': row_index,
+            'color': color_kontos.get_for_value(kontoname),
+            'name': kontoname,
+            'kontotyp': kontotyp,
+            'wert': aktueller_kontostand,
+            'difference': diff,
+            'aufbuchungen': aufbuchungen,
+            'wert_str': from_double_to_german(aktueller_kontostand),
+            'difference_str': from_double_to_german(diff),
+            'aufbuchungen_str': from_double_to_german(aufbuchungen),
+            'difference_is_negativ': diff < 0
+        })
+
+    kontotypen_liste = []
+    for kontotyp in kontotypen_werte:
+        diff = kontotypen_werte[kontotyp]['gesamt'] - kontotypen_werte[kontotyp]['aufbuchungen']
+        kontotypen_liste.append({
+            'name': kontotyp,
+            'color': color_typen.get_for_value(kontotyp),
+            'wert': kontotypen_werte[kontotyp]['gesamt'],
+            'wert_str': from_double_to_german(kontotypen_werte[kontotyp]['gesamt']),
+            'aufbuchungen': kontotypen_werte[kontotyp]['aufbuchungen'],
+            'aufbuchungen_str': from_double_to_german(kontotypen_werte[kontotyp]['aufbuchungen']),
+            'difference': diff,
+            'difference_str': from_double_to_german(diff)
+        })
+
+
+    gesamt_diff = gesamt_kontostand - gesamt_aufbuchungen
+
+    gesamt = {
+        'wert': gesamt_kontostand,
+        'difference': gesamt_diff,
+        'aufbuchungen': gesamt_aufbuchungen,
+        'wert_str': from_double_to_german(gesamt_kontostand),
+        'difference_str': from_double_to_german(gesamt_diff),
+        'aufbuchungen_str': from_double_to_german(gesamt_aufbuchungen),
+        'difference_is_negativ': gesamt_diff < 0
+    }
+    return gesamt, sparkonto_liste, kontotypen_liste
+
+def get_letztes_jahr_aufbuchungen(kontoname, gesamt):
+    if len(gesamt) == 0:
+        return 0
+    return gesamt[-1][kontoname]['aufbuchungen']
+
+def get_letztes_jahr_kontostand(kontoname, gesamt):
+    if len(gesamt) == 0:
+        return 0
+    return gesamt[-1][kontoname]['kontostand']
+
+def gesamt_uebersicht():
+    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
+    sparkontos = persisted_state.database_instance().sparkontos
+    min_jahr = einzelbuchungen.content[einzelbuchungen.content.Kategorie != 'Sparen'].Datum.min().year
+    max_jahr = date.today().year
+
+    year_kontostaende = []
+
+    gesamt_uebersicht = []
+    for jahr in range(min_jahr, max_jahr + 1):
+        print(jahr)
+
+        buchungen_jahr = einzelbuchungen.select().select_year(jahr).content
+        ausgaben = buchungen_jahr[buchungen_jahr.Wert < 0].copy()
+        ausgaben = ausgaben[ausgaben.Kategorie != 'Sparen'].Wert.sum()
+        einnahmen = buchungen_jahr[buchungen_jahr.Wert > 0].copy()
+        einnahmen = einnahmen[einnahmen.Kategorie != 'Sparen'].Wert.sum()
+
+        db = sparkontos.get_all()
+
+        sparen_aufbuchung = 0
+        gesamt_sparen = 0
+        gesamt_aufbuchung_diff = 0
+        gesamt_sparen_diff = 0
+
+        year_kontos = {}
+
+
+        for row_index, row in db.iterrows():
+            kontostand = 0
+            aufbuchungen = 0
+
+            sparbuchungen_year = persisted_state.database_instance().sparbuchungen.select_year(jahr)
+            sparbuchungen_max_year = persisted_state.database_instance().sparbuchungen.select_max_year(jahr)
+            depotauszuege_year = persisted_state.database_instance().depotauszuege.select_max_year(jahr)
+            order_year = persisted_state.database_instance().order.select_year(jahr)
+
+            kontoname = row.Kontoname
+            kontotyp = row.Kontotyp
+
+            if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
+                kontostand = sparbuchungen_max_year.get_kontostand_fuer(kontoname)
+                diff_kontostand = kontostand - get_letztes_jahr_kontostand(kontoname, year_kontostaende)
+                aufbuchungen = sparbuchungen_year.get_aufbuchungen_fuer(kontoname)
+                diff_ausbuchungen = aufbuchungen - get_letztes_jahr_aufbuchungen(kontoname, year_kontostaende)
+
+            if kontotyp == sparkontos.TYP_DEPOT:
+                aufbuchungen = order_year.get_order_fuer(kontoname)
+                diff_kontostand = kontostand - get_letztes_jahr_kontostand(kontoname, year_kontostaende)
+                kontostand = depotauszuege_year.get_kontostand_by(kontoname)
+                diff_ausbuchungen = aufbuchungen - get_letztes_jahr_aufbuchungen(kontoname, year_kontostaende)
+
+            year_kontos[kontoname] = {
+                'kontostand': kontostand,
+                'kontostand_str': from_double_to_german(kontostand),
+                'kontostand_diff': diff_kontostand,
+                'kontostand_diff_str': from_double_to_german(diff_kontostand),
+                'aufbuchungen': aufbuchungen,
+                'aufbuchungen_str': from_double_to_german(aufbuchungen),
+                'aufbuchungen_diff': diff_ausbuchungen,
+                'aufbuchungen_diff_str': from_double_to_german(diff_ausbuchungen),
+                'name': kontoname
+            }
+
+            gesamt_sparen += kontostand
+            sparen_aufbuchung += aufbuchungen
+            gesamt_aufbuchung_diff += diff_ausbuchungen
+            gesamt_sparen_diff += diff_kontostand
+
+        year_kontos['Gesamt'] = {
+                'kontostand': gesamt_sparen,
+                'kontostand_diff': gesamt_sparen_diff,
+                'aufbuchungen': sparen_aufbuchung,
+                'aufbuchungen_diff': gesamt_aufbuchung_diff,
+                'kontostand_str': from_double_to_german(gesamt_sparen),
+                'kontostand_diff_str': from_double_to_german(gesamt_sparen_diff),
+                'aufbuchungen_str': from_double_to_german(sparen_aufbuchung),
+                'aufbuchungen_diff_str': from_double_to_german(gesamt_aufbuchung_diff),
+                'name': 'Gesamt'
+            }
+
+        year_kontostaende.append(year_kontos)
+
+        print(year_kontos)
+
+        gesamt_uebersicht.append({
+            'jahr': jahr,
+            'ausgaben': ausgaben,
+            'einnahmen': einnahmen,
+            'sparen_aufbuchung': sparen_aufbuchung,
+            'gesamt_sparen': gesamt_sparen,
+        })
+
+    return gesamt_uebersicht, year_kontostaende
+
+def berechne_gesamt_tabelle(jahresdaten):
+    if len(jahresdaten) == 0:
+        return [[]]
+
+    kontos = []
+    for element in jahresdaten[0]:
+        if element == 'Gesamt':
+            continue
+        kontos.append(element)
+    kontos = sorted(kontos)
+    kontos.append('Gesamt')
+
+    kontodaten = {}
+
+    for jahr in jahresdaten:
+        for konto in jahr:
+            if konto not in kontodaten:
+                kontodaten[konto] = []
+            kontodaten[konto].append(jahr[konto])
+
+    gesamt = []
+
+    for konto in kontos:
+        gesamt.append(kontodaten[konto])
+
+    return gesamt
+
+def berechne_diagramm(data):
+    result = [
+        {
+            'label': 'Einnahmen',
+            'color': 'rgb(210, 214, 222)',
+            'datasets': []
+        },
+        {
+            'label': 'Ausgaben',
+            'color': 'rgba(60, 141, 188, 0.8)',
+            'datasets': []
+        },
+        {
+            'label': 'Sparen',
+            'color': 'rgb(0, 166, 90)',
+            'datasets': []
+        }
+    ]
+    labels = []
+
+    for jahr in data:
+        labels.append(jahr['jahr'])
+        result[0]['datasets'].append(jahr['einnahmen'])
+        result[1]['datasets'].append(abs(jahr['ausgaben']))
+        result[2]['datasets'].append(jahr['gesamt_sparen'])
+
+    return labels, result
+
+def berechne_kontogesamt(data):
+    data_gesamt = data[-1]
+    print(data_gesamt)
+
+    kontostand = []
+    aufbuchungen = []
+
+    for year in data_gesamt:
+        kontostand.append(year['kontostand'])
+        aufbuchungen.append(year['aufbuchungen'])
+
+    return {
+        'kontostand': kontostand,
+        'aufbuchungen': aufbuchungen
+    }
+
+
+def _handle_request(request):
+    if persisted_state.database_instance().einzelbuchungen.anzahl() == 0:
+        return viewcore.generate_error_context('uebersicht_sparen', 'Bitte erfassen Sie zuerst eine Einzelbuchung.')
+
+    context = viewcore.generate_transactional_context('sparen')
+    colors = viewcore.design_colors()
+    kontos = persisted_state.database_instance().sparkontos.get_all().Kontoname.tolist()
+    typen = persisted_state.database_instance().sparkontos.KONTO_TYPEN
+
+    color_kontos = GenericDesignColorChooser(kontos, colors)
+    color_typen = GenericDesignColorChooser(typen, colors)
+
+    gesamt, kontos, typen = generate_konto_uebersicht(color_kontos, color_typen)
+    diagramm_uebersicht, year_kontostaende = gesamt_uebersicht()
+    gesamt_tabelle = berechne_gesamt_tabelle(year_kontostaende)
+    gesamt_diagramm_labels, gesamt_diagramm_data = berechne_diagramm(diagramm_uebersicht)
+    gesamt_linechart = berechne_kontogesamt(gesamt_tabelle)
+    print(gesamt_linechart)
+
+    context['kontos'] = kontos
+    context['typen'] = typen
+    context['gesamt'] = gesamt
+    context['konto_diagramm'] = to_piechart(kontos, gesamt['wert'])
+    context['typen_diagramm'] = to_piechart(typen, gesamt['wert'])
+    context['gesamt_diagramm_labels'] = gesamt_diagramm_labels
+    context['gesamt_diagramm_data'] = gesamt_diagramm_data
+    context['gesamt_linechart'] = gesamt_linechart
+    context['gesamt_tabelle'] = gesamt_tabelle
+    context['tablesize'] = len(gesamt_diagramm_labels) * 40
+
+    return context
+
+
+def index(request):
+    return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_sparen.html')
+
+
+class GenericDesignColorChooser():
+     def __init__(self, values, colors):
+         self.values = values
+         self.colors = colors
+
+     def get_for_value(self, value):
+        index = self.values.index(value)
+        color_index = index %  len(self.colors)
+        return '#' + self.colors[color_index]

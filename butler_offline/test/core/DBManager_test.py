@@ -1,8 +1,3 @@
-'''
-Created on 14.09.2017
-
-@author: sebastian
-'''
 import unittest
 
 from butler_offline.core import DBManager
@@ -12,18 +7,19 @@ from butler_offline.core import file_system
 from butler_offline.test.core.file_system_stub import FileSystemStub
 
 
-
-
-class DBManager_readDB(unittest.TestCase):
+class DBManagerReadDB(unittest.TestCase):
 
     def mock_filesystem(self):
         file_system.INSTANCE = FileSystemStub()
 
+
     def write_db_file_stub(self,name, stub):
         file_system.instance().write('../Database_' + name + '.csv', stub)
 
+
     def test_database_path_from(self):
         assert DBManager.database_path_from('Sebastian') == '../Database_Sebastian.csv'
+
 
     def teste_read_with_full_database(self):
         self.mock_filesystem()
@@ -32,12 +28,17 @@ class DBManager_readDB(unittest.TestCase):
         database = DBManager.read('testuser', set())
 
         assert database.name == 'testuser'
-        assert len(database.einzelbuchungen.content) == 22
+        assert len(database.einzelbuchungen.content) == 23
         assert len(database.einzelbuchungen.content[database.einzelbuchungen.content.Dynamisch == False]) == 2
-        assert database.einzelbuchungen.select().sum() == -229
+        assert database.einzelbuchungen.select().sum() == -429
 
         assert len(database.dauerauftraege.content) == 2
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
+
+        assert len(database.depotwerte.content) == 1
+        assert len(database.order.content) == 1
+        assert len(database.depotauszuege.content) == 1
+
 
     def teste_write_with_full_database(self):
         self.mock_filesystem()
@@ -47,6 +48,7 @@ class DBManager_readDB(unittest.TestCase):
         DBManager.write(database)
 
         assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
+
 
     def teste_write_with_old_database_should_migrate(self):
         self.mock_filesystem()
@@ -74,6 +76,16 @@ Datum,Kategorie,Name,Wert,Person
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
 2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
+ Depotwerte 
+Name,ISIN
+1depotwert,1isin
+ Order
+Datum,Name,Konto,Depotwert,Wert
+2020-02-02,1order,1konto,1depotwert,200
+ Depotauszuege
+Datum,Depotwert,Konto,Wert
+2020-01-01,1depotwert,1konto,111
+
 stechzeiten...
 '''
 
@@ -97,11 +109,22 @@ Datum,Name,Wert,Typ,Konto
 
  Sparkontos 
 Kontoname,Kontotyp
+
+ Depotwerte 
+Name,ISIN
+1depotwert,1isin
+
+ Order 
+Datum,Name,Konto,Depotwert,Wert
+2020-02-02,1order,1konto,1depotwert,200
+
+ Depotauszuege 
+Datum,Depotwert,Konto,Wert
+2020-01-01,1depotwert,1konto,111
 '''
 
 
-class MultiPartCsvReader_test(unittest.TestCase):
-
+class MultiPartCsvReaderTest(unittest.TestCase):
     def test_read(self):
         test_content = [
             '1,2', '2,3', '3,4',
@@ -115,7 +138,8 @@ class MultiPartCsvReader_test(unittest.TestCase):
         assert reader.get_string('B') == '3,4\n4,5'
         assert reader.get_string('C') == ''
 
-class DatabaseParser_test(unittest.TestCase):
+
+class DatabaseParserTest(unittest.TestCase):
     def test_read(self):
         database_parser = DatabaseParser()
 

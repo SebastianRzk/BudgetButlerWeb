@@ -58,5 +58,33 @@ class NonPersistedStateTest(unittest.TestCase):
 
         assert non_persisted_state.get_changed_sparkontos() == ['demo']
 
+    def test_depotwerte(self):
+        self.clear_context()
+
+        assert non_persisted_state.get_changed_depotwerte() == []
+
+        non_persisted_state.add_changed_depotwerte('demo')
+
+        assert non_persisted_state.get_changed_depotwerte() == ['demo']
+
+    def test_order(self):
+        self.clear_context()
+
+        assert non_persisted_state.get_changed_order() == []
+
+        non_persisted_state.add_changed_order('demo')
+
+        assert non_persisted_state.get_changed_order() == ['demo']
+
+    def test_depotauszuege(self):
+        self.clear_context()
+
+        assert non_persisted_state.get_changed_depotauszuege() == []
+
+        non_persisted_state.add_changed_depotauszuege('demo')
+
+        assert non_persisted_state.get_changed_depotauszuege() == ['demo']
+
+
 if __name__ == '__main__':
     unittest.main()

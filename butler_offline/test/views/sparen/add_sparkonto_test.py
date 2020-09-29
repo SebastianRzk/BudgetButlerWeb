@@ -29,7 +29,7 @@ class AddSparkontoTest(unittest.TestCase):
     def test_add_shouldAddSparkonto(self):
         self.set_up()
         add_sparkoto.index(VersionedPostRequest(
-            {'action':'add',
+            {'action': 'add',
              'kontotyp': '1typ',
              'kontoname': '1name'
              }
@@ -43,7 +43,7 @@ class AddSparkontoTest(unittest.TestCase):
     def test_add_sparkonto_should_show_in_recently_added(self):
         self.set_up()
         result = add_sparkoto.index(VersionedPostRequest(
-            {'action':'add',
+            {'action': 'add',
              'kontotyp': '1typ',
              'kontoname': '1name'
              }

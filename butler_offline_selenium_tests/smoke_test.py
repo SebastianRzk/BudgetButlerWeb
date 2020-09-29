@@ -103,6 +103,30 @@ class TestHeadlines(SeleniumTestClass):
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neues Sparkonto'
         close_driver(driver)
 
+    def test_add_depotwert(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/add_depotwert/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neuer Depotwert'
+        close_driver(driver)
+
+    def test_add_depotauszug(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/add_depotauszug/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neuer Depotauszug'
+        close_driver(driver)
+
+    def test_uebersicht_depotauszuege(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht_depotauszuege/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Depotauszüge'
+        close_driver(driver)
+
+    def test_add_order(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/add_order/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neue Order'
+        close_driver(driver)
+
     def test_uebesicht_sparbuchungen(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:5000/uebersicht_sparbuchungen/')
@@ -113,4 +137,16 @@ class TestHeadlines(SeleniumTestClass):
         driver = get_driver()
         driver.get('http://localhost:5000/uebersicht_sparkontos/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Sparkontos'
+        close_driver(driver)
+
+    def test_uebesicht_depotwerte(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht_depotwerte/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Depotwerte'
+        close_driver(driver)
+
+    def test_uebesicht_order(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht_order/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Order'
         close_driver(driver)

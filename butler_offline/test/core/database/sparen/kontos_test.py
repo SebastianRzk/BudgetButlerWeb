@@ -42,11 +42,24 @@ class KontosTest(unittest.TestCase):
         component_under_test = Kontos()
         component_under_test.add(kontoname='Spar', kontotyp=Kontos.TYP_SPARKONTO)
         component_under_test.add(kontoname='Geno', kontotyp=Kontos.TYP_GENOSSENSCHAFTSANTEILE)
+        component_under_test.add(kontoname='Depot', kontotyp=Kontos.TYP_DEPOT)
         component_under_test.add(kontoname='Sonst', kontotyp='Sonstiges')
 
         result = component_under_test.get_sparfaehige_kontos()
 
         assert set(result) == set(['Geno', 'Spar'])
+
+    def test_get_depot(self):
+        component_under_test = Kontos()
+        component_under_test.add(kontoname='Spar', kontotyp=Kontos.TYP_SPARKONTO)
+        component_under_test.add(kontoname='Geno', kontotyp=Kontos.TYP_GENOSSENSCHAFTSANTEILE)
+        component_under_test.add(kontoname='Depot', kontotyp=Kontos.TYP_DEPOT)
+        component_under_test.add(kontoname='Sonst', kontotyp='Sonstiges')
+
+        result = component_under_test.get_depots()
+
+        assert set(result) == set(['Depot'])
+
 
 if __name__ == '__main__':
     unittest.main()

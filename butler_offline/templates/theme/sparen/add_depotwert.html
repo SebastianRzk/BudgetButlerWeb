@@ -1,0 +1,53 @@
+<div class="input-theme">
+	<div class="box input-box">
+		<div class="box-header">
+			<h3 class="box-title">Neuer Depotwert</h3>
+		</div>
+		<form role="form" action="/add_depotwert/" method="post">
+			<input type="hidden" name="ID" value="{{ID}}">
+			{% if bearbeitungsmodus %}
+			<input type="hidden" name="edit_index" value="{{default_item.edit_index}}">
+			{% endif %}
+			<div class="box-body">
+				<div class="form-group">
+					<label>Name des Depotwerts</label> <input value="{{default_item.name}}" type="text" name="name" class="form-control" placeholder="" required="required" />
+				</div>
+				<div class="form-group">
+					<label>ISIN des Depotwerts</label> <input value="{{default_item.isin}}" type="text" name="isin" class="form-control" placeholder="" required="required" />
+				</div>
+			</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="add" id="add" class="btn bordered-hover">{{approve_title}}</button>
+			</div>
+		</form>
+	</div>
+  <div class="box last-elements-box">
+	  <div class="box-header">
+		  <h3 class="box-title">Letzte Erfassungen</h3>
+	  </div>
+	  <div class="box-body">
+		  <div class="table-responsive">
+			  <table class="table no-margin" id="letzte_erfassungen">
+				  <thead>
+					  <tr>
+						  <th></th>
+						  <th>Name</th>
+						  <th>ISIN</th>
+					  </tr>
+				  </thead>
+				  <tbody>
+					  {% for depotwert in letzte_erfassung %}
+					  <tr>
+						  <td><span class="fa fa-{{depotwert.fa}} pull-right"></span></td>
+						  <td>{{depotwert.Name}}</td>
+						  <td>{{depotwert.Isin}}</td>
+					  </tr>
+					  {% endfor %}
+				  </tbody>
+			  </table>
+		  </div>
+	  </div>
+	  <div class="box-footer clearfix">
+	  <a href="/uebersicht_depotwerte/" class="btn btn-light pull-right">Alle erfassten Depotwerte ansehen</a>
+	</div>
+</div>

@@ -5,19 +5,15 @@
 	    <div class="form-group">
 		    <label>Wähle Jahr</label>
 	      <select class="form-control" name="date" id="date">
-	        {% for jahr in jahre %}<option value="{{jahr}}">{{jahr}}</option>{% endfor %}
+	        {% for jahr in jahre %}
+			  <option value="{{jahr}}"
+				{% if jahr == selected_date %}
+				selected="selected"
+				{% endif %}
+			  >{{jahr}}</option>
+			  {% endfor %}
 		    </select>
 	    </div>
-      <script type="text/javascript">
-        function SelectElement()
-        {
-            var element = document.getElementById('date');
-            element.value = "{{selected_date}}";
-        }
-        SelectElement()
-      </script>
-    </div>
-    <div class="box-footer">
 	    <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
     </div>
   </form>
@@ -182,9 +178,8 @@
 
 <div class="theme-double-columns">
 	<div class="box">
-		<div class="box-header with-border">
+		<div class="box-header">
 			<h3 class="box-title">Ausgaben</h3>
-			<button class="btn-tool pull-right" data-widget="collapse"><span class="fa fa-minus"></span></button>
 		</div>
 		<div class="box-body">
 			<input type="hidden" name="mode" value="change_selected"> <input type="hidden" name="date"
@@ -221,9 +216,8 @@
 		</div>
 	</div>
 	<div class="box">
-		<div class="box-header with-border">
+		<div class="box-header">
 			<h3 class="box-title">Einnahmen</h3>
-			<button class="btn-tool pull-right" data-widget="collapse"><span class="fa fa-minus"></span></button>
 		</div>
 		<div class="box-body">
 				<div class="table-responsive">
@@ -256,7 +250,7 @@
 
 <div class="theme-double-columns">
 	<div class="box">
-		<div class="box-header with-border">
+		<div class="box-header">
 			<h3 class="box-title">Ausgaben {{selected_date}} Prozentual</h3>
 		</div>
 		<div class="box-body">
@@ -283,7 +277,7 @@
 		</script>
 	</div>
 	<div class="box">
-		<div class="box-header with-border">
+		<div class="box-header">
 			<h3 class="box-title">Einnahmen {{selected_date}} Prozentual</h3>
 		</div>
 		<div class="box-body">

@@ -1,7 +1,7 @@
 # BudgetButlerWeb
 [![Build Status](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb) [![codecov](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb)
 
-* TOC 
+* TOC
 {:toc}
 
 ## Idee
@@ -21,12 +21,19 @@
 ** Daueraufträge (erfassen, ändern, löschen)
 ** Monatsübersicht
 ** Jahresübersicht
+** Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen
 
 
 * Gemeinsame Buchungen
 ** Erfassen, Ändern, Löschen
 ** Abrechnung erstellen.
 ** Abrechnungen exportieren und importieren
+
+* Sparen
+** Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte, Order sowie Depotauszuege
+** Sparen Übersicht:
+*** Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
+*** Zusammensetzung der Sparanlage
 
 * Konfiguration
 ** Farbthema anpassen
@@ -61,7 +68,7 @@ Flask-Server starten:
 BudgetButlerWeb ist unter folgender Adresse zu erreichen:
 
 	http://127.0.0.1:5000/
-	
+
 ### Softwaretests ausführen
 
 Alle Softwaretestsmit pytest starten:
@@ -115,5 +122,3 @@ BudgetButlerWeb aktualisieren:
 * Login auf `/`. Initiale Anmeldedaten:
     * User: admin@admin.de
     * Password: adminadminadmin
-
-

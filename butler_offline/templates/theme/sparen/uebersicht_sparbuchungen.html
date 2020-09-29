@@ -1,10 +1,11 @@
 {% for name,sparbuchungen in alles.items()%}
-<div class="box collapsed-box theme-row">
-	<div class="box-header with-border">
+<div class="box theme-row">
+	<div class="box-header">
 		<h3 class="box-title">{{name}}</h3>
-		<button class="btn-tool pull-right" data-widget="collapse" id="open_{{name}}"><span class="fa fa-plus"></span></button>
+		<button class="btn-tool pull-right open_button" id="open_{{name}}"><span class="fa fa-plus"></span></button>
+		<button class="btn-tool pull-right close_button" id="close_{{name}}"><span class="fa fa-minus"></span></button>
 	</div>
-	<div class="box-body">
+	<div class="box-body boxcontent closed border-top" id="boxcontent_{{name}}">
 		<div class="table-responsive">
 			<table>
 				<thead>

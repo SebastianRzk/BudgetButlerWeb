@@ -4,6 +4,9 @@ from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.file_system import write_abrechnung
 from butler_offline.core.time import time
 from butler_offline.core.export.string_writer import StringWriter
@@ -22,6 +25,9 @@ class Database:
         self.einzelbuchungen = Einzelbuchungen()
         self.sparbuchungen = Sparbuchungen()
         self.sparkontos = Kontos()
+        self.depotwerte = Depotwerte()
+        self.order = Order()
+        self.depotauszuege = Depotauszuege()
         self.einzelbuchungen.ausgeschlossene_kategorien = ausgeschlossene_kategorien
         self.tainted = 0
 
@@ -37,7 +43,10 @@ class Database:
                self.einzelbuchungen.taint_number() + \
                self.gemeinsamebuchungen.taint_number() + \
                self.sparbuchungen.taint_number() + \
-               self.sparkontos.taint_number()
+               self.sparkontos.taint_number() + \
+               self.depotwerte.taint_number() + \
+               self.order.taint_number() +\
+               self.depotauszuege.taint_number()
 
     def de_taint(self):
         self.tainted = 0
@@ -46,6 +55,9 @@ class Database:
         self.gemeinsamebuchungen.de_taint()
         self.sparbuchungen.de_taint()
         self.sparkontos.de_taint()
+        self.depotwerte.de_taint()
+        self.order.de_taint()
+        self.depotauszuege.de_taint()
 
     def refresh(self):
         print('DATABASE: Erneuere Datenbestand')
@@ -57,6 +69,9 @@ class Database:
 
         anteil_sparbuchungen = self.sparbuchungen.get_dynamische_einzelbuchungen()
         self.einzelbuchungen.append_row(anteil_sparbuchungen)
+
+        anteil_order = self.order.get_dynamische_einzelbuchungen()
+        self.einzelbuchungen.append_row(anteil_order)
 
         print('DATABASE: Datenbestand erneuert')
 

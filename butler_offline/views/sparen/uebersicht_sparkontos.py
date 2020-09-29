@@ -12,18 +12,54 @@ def _handle_request(request):
         return request_handler.create_redirect_context('/uebersicht_sparkontos/')
 
     db = sparkontos.get_all()
+
+    gesamt_kontostand = 0
+    gesamt_aufbuchungen = 0
     sparkonto_liste = []
+
     for row_index, row in db.iterrows():
+        aktueller_kontostand = 0
+        aufbuchungen = 0
+
+        kontoname = row.Kontoname
+        kontotyp = row.Kontotyp
+
+        if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
+            aktueller_kontostand = persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(kontoname)
+            aufbuchungen = persisted_state.database_instance().sparbuchungen.get_aufbuchungen_fuer(kontoname)
+
+        if kontotyp == sparkontos.TYP_DEPOT:
+            aufbuchungen = persisted_state.database_instance().order.get_order_fuer(kontoname)
+            aktueller_kontostand = persisted_state.database_instance().depotauszuege.get_kontostand_by(kontoname)
+
+        gesamt_kontostand += aktueller_kontostand
+        gesamt_aufbuchungen += aufbuchungen
+
+        diff = aktueller_kontostand - aufbuchungen
+
         sparkonto_liste.append({
             'index': row_index,
-            'kontoname': row.Kontoname,
-            'kontotyp': row.Kontotyp,
-            'wert': from_double_to_german(persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(row.Kontoname))
+            'kontoname': kontoname,
+            'kontotyp': kontotyp,
+            'wert': from_double_to_german(aktueller_kontostand),
+            'difference': from_double_to_german(diff),
+            'aufbuchungen': from_double_to_german(aufbuchungen),
+            'difference_is_negativ': diff < 0
         })
+
+    gesamt_diff = gesamt_kontostand - gesamt_aufbuchungen
+
+    gesamt = {
+        'wert': from_double_to_german(gesamt_kontostand),
+        'difference': from_double_to_german(gesamt_diff),
+        'aufbuchungen': from_double_to_german(gesamt_aufbuchungen),
+        'difference_is_negativ': gesamt_diff < 0
+    }
 
 
     context = viewcore.generate_transactional_context('uebersicht_sparkontos')
     context['sparkontos'] = sparkonto_liste
+    context['gesamt'] = gesamt
     return context
 
 

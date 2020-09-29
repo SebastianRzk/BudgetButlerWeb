@@ -33,7 +33,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         self.set_up()
         context = uebersicht_abrechnungen.index(GetRequest())
         assert context['zusammenfassungen'] == [{
-            'jahr': '2017',
+            'jahr': 2017,
             'monate': [0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0]
         }]
         assert context['abrechnungen'] == [

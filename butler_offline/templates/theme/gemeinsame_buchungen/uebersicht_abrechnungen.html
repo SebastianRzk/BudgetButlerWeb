@@ -1,10 +1,11 @@
 {% for zusammenfassung in zusammenfassungen %}
-<div class="box collapsed-box theme-row">
-	<div class="box-header with-border">
+<div class="box theme-row">
+	<div class="box-header">
 		<h3 class="box-title">Zusammenfassung {{zusammenfassung.jahr}}</h3>
-		<button class="btn-tool pull-right" data-widget="collapse" id="open_{{zusammenfassung.jahr}}"><span class="fa fa-plus"></span></button>
-	</div>
-	<div class="box-body">
+        <button class="btn-tool pull-right open_button" id="open_add_kategorie"><span class="fa fa-plus"></span></button>
+        <button class="btn-tool pull-right close_button" id="close_add_kategorie"><span class="fa fa-minus"></span></button>
+    </div>
+	<div class="box-body boxcontent closed" id="zusammenfassung_{{zusammenfassung.jahr}}">
 		<div class="table-responsive">
 		    <table>
                 <tr>
@@ -35,12 +36,13 @@
 {% endfor %}
 
 {% for abrechnung in abrechnungen%}
-<div class="box collapsed-box theme-row">
-	<div class="box-header with-border">
+<div class="box theme-row">
+	<div class="box-header">
 		<h3 class="box-title">{{abrechnung.name}}</h3>
-		<button class="btn-tool pull-right" data-widget="collapse" id="open_{{abrechnung.name}}"><span class="fa fa-plus"></span></button>
+        <button class="btn-tool pull-right open_button" id="open_abrechung_{{abrechnung.name}}"><span class="fa fa-plus"></span></button>
+        <button class="btn-tool pull-right close_button" id="close_abrechung_{{abrechnung.name}}"><span class="fa fa-minus"></span></button>
 	</div>
-	<div class="box-body">
+	<div class="box-body boxcontent closed" id="boxcontent_abrechung_{{abrechnung.name}}">
 		<div class="table-responsive">
             <textarea name='import' class="textarea abrechnung" required="required" disabled>{{abrechnung.content}}</textarea>
 		</div>
