@@ -260,7 +260,7 @@ def berechne_diagramm(data):
         labels.append(jahr['jahr'])
         result[0]['datasets'].append(jahr['einnahmen'])
         result[1]['datasets'].append(abs(jahr['ausgaben']))
-        result[2]['datasets'].append(jahr['gesamt_sparen'])
+        result[2]['datasets'].append(jahr['sparen_aufbuchung'])
 
     return labels, result
 

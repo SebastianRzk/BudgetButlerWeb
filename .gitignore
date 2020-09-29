@@ -2,7 +2,7 @@
 /.buildconfig
 /.project
 /.pydevproject
-/Database_Test_User.csv
+/Database_*
 /Import/*
 **/*.pyc
 **/.pytest_cache
@@ -15,3 +15,4 @@
 /.venv
 *.iml
 config
+
