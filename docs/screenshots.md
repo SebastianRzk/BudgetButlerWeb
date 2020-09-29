@@ -19,9 +19,19 @@
 
 ## Monatsübersicht
 
-### Screen 1
-![](img/screenshots/monat1.png)
+![](img/screenshots/monat.png)
 
-### Screen 2
 
-![](img/screenshots/monat2.png)
+
+## Jahresübersicht
+
+![](img/screenshots/jahr.png)
+
+
+## Sparen Übersicht
+
+![](img/screenshots/sparen.png)
+
+## Kontos
+
+![](img/screenshots/kontos.png)
