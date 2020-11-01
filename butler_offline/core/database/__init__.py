@@ -7,6 +7,7 @@ from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.file_system import write_abrechnung
 from butler_offline.core.time import time
 from butler_offline.core.export.string_writer import StringWriter
@@ -27,6 +28,7 @@ class Database:
         self.sparkontos = Kontos()
         self.depotwerte = Depotwerte()
         self.order = Order()
+        self.orderdauerauftrag = OrderDauerauftrag()
         self.depotauszuege = Depotauszuege()
         self.einzelbuchungen.ausgeschlossene_kategorien = ausgeschlossene_kategorien
         self.tainted = 0
@@ -46,18 +48,8 @@ class Database:
                self.sparkontos.taint_number() + \
                self.depotwerte.taint_number() + \
                self.order.taint_number() +\
-               self.depotauszuege.taint_number()
-
-    def de_taint(self):
-        self.tainted = 0
-        self.dauerauftraege.de_taint()
-        self.einzelbuchungen.de_taint()
-        self.gemeinsamebuchungen.de_taint()
-        self.sparbuchungen.de_taint()
-        self.sparkontos.de_taint()
-        self.depotwerte.de_taint()
-        self.order.de_taint()
-        self.depotauszuege.de_taint()
+               self.depotauszuege.taint_number() +\
+               self.orderdauerauftrag.taint_number()
 
     def refresh(self):
         print('DATABASE: Erneuere Datenbestand')

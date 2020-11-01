@@ -75,6 +75,7 @@ class TestUebersichtOrder(unittest.TestCase):
             'Name': '1name',
             'Wert': 100,
             'index': 0,
+            'Dynamisch': False
             }
 
 

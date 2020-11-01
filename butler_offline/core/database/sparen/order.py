@@ -3,13 +3,14 @@ import pandas as pd
 
 
 class Order(DatabaseObject):
-    TABLE_HEADER = ['Datum', 'Name', 'Konto', 'Depotwert', 'Wert']
+    STATIC_TABLE_HEADER = ['Datum', 'Name', 'Konto', 'Depotwert', 'Wert']
+    TABLE_HEADER = STATIC_TABLE_HEADER + ['Dynamisch']
 
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
 
-    def add(self, datum, name, konto, depotwert, wert):
-        neue_order = pd.DataFrame([[datum, name, konto, depotwert, wert]], columns=self.TABLE_HEADER)
+    def add(self, datum, name, konto, depotwert, wert, dynamisch=False):
+        neue_order = pd.DataFrame([[datum, name, konto, depotwert, wert, dynamisch]], columns=self.TABLE_HEADER)
         self.content = self.content.append(neue_order, ignore_index=True)
         self.taint()
         self._sort()
@@ -59,5 +60,10 @@ class Order(DatabaseObject):
         selected = Order()
         selected.content = include
         return selected
+
+    def get_static_content(self):
+        static_content = self.content.copy()[self.content.Dynamisch == False]
+        return static_content[self.STATIC_TABLE_HEADER]
+
 
 

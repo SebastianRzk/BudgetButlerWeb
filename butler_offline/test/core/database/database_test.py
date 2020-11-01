@@ -299,24 +299,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.taint()
         assert db.is_tainted()
 
-    def test_deTaint_shouldDeTaint(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.taint()
-        assert db.is_tainted()
-
-        db.de_taint()
-        assert not db.is_tainted()
-
-    def test_deTaint_shouldDeTaintDauerauftraege(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.dauerauftraege.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
 
     def test_tainNumber_shouldIncludeDauerauftraege(self):
         self.set_up()
@@ -326,23 +308,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.dauerauftraege.taint()
         assert db.taint_number() == 1
 
-    def test_deTaint_shouldDeTaintGemeinsameBuchungen(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.gemeinsamebuchungen.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
-
-    def test_deTaint_shouldDeTaintSparbuchungen(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.sparbuchungen.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
 
     def test_taintNumber_shouldIncludeGemeinsameBuchungen(self):
         self.set_up()
@@ -360,15 +325,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.sparbuchungen.taint()
         assert db.taint_number() == 1
 
-    def test_deTaint_shouldDeTaintEinzelbuchungen(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.einzelbuchungen.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
-
     def test_tainNumber_shouldIncludeEinzelbuchungen(self):
         self.set_up()
         db = persisted_state.database_instance()
@@ -376,15 +332,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert db.taint_number() == 0
         db.einzelbuchungen.taint()
         assert db.taint_number() == 1
-
-    def test_deTaint_shouldDeTaintKontos(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.sparkontos.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
 
     def test_tainNumber_shouldIncludeKontos(self):
         self.set_up()
@@ -395,15 +342,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert db.taint_number() == 1
 
 
-    def test_deTaint_shouldDeTaintDepotwerte(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.depotwerte.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
-
     def test_tainNumber_shouldIncludeDepotwerte(self):
         self.set_up()
         db = persisted_state.database_instance()
@@ -412,16 +350,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.depotwerte.taint()
         assert db.taint_number() == 1
 
-
-    def test_deTaint_shouldDeTaintOrder(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.order.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
-
     def test_tainNumber_shouldIncludeOrder(self):
         self.set_up()
         db = persisted_state.database_instance()
@@ -429,16 +357,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert db.taint_number() == 0
         db.order.taint()
         assert db.taint_number() == 1
-
-
-    def test_deTaint_shouldDeTaintDepotauszuege(self):
-        self.set_up()
-        db = persisted_state.database_instance()
-
-        db.depotauszuege.taint()
-        assert db.is_tainted()
-        db.de_taint()
-        assert not db.is_tainted()
 
     def test_tainNumber_shouldIncludeDepotauszuege(self):
         self.set_up()

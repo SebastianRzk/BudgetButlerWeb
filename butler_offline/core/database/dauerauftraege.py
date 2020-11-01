@@ -24,8 +24,13 @@ class Dauerauftraege(DatabaseObject):
         self.content = self.content.append(raw_table, ignore_index=True)
         self.content = self.content.sort_values(by=['Startdatum'])
 
-    def einnahmenausgaben_until_today(self, startdatum,
-                                      endedatum, frequenzfunktion, name, wert, kategorie):
+    def einnahmenausgaben_until_today(self,
+                                      startdatum,
+                                      endedatum,
+                                      frequenzfunktion,
+                                      name,
+                                      wert,
+                                      kategorie):
         '''
         compute all einnahmenausgaben until today
         '''

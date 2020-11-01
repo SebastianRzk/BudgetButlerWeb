@@ -32,8 +32,7 @@ class DauerauftraegeTest(unittest.TestCase):
             'some name',
             'some rhythmus',
             1.23)
-        component_under_test.de_taint()
-        assert component_under_test.taint_number() == 0
+        assert component_under_test.taint_number() == 1
         component_under_test.edit(
             0,
             datum('2.1.2010'),
@@ -42,7 +41,7 @@ class DauerauftraegeTest(unittest.TestCase):
             'some other name',
             'some other rhythmus',
             2.34)
-        assert component_under_test.taint_number() == 1
+        assert component_under_test.taint_number() == 2
 
     def test_delete_shouldTaint(self):
         component_under_test = Dauerauftraege()
@@ -53,10 +52,9 @@ class DauerauftraegeTest(unittest.TestCase):
             'some name',
             'some rhythmus',
             1.23)
-        component_under_test.de_taint()
-        assert component_under_test.taint_number() == 0
-        component_under_test.delete(0)
         assert component_under_test.taint_number() == 1
+        component_under_test.delete(0)
+        assert component_under_test.taint_number() == 2
 
     def test_get(self):
         component_under_test = Dauerauftraege()
