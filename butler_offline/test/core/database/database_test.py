@@ -245,7 +245,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert uebertragene_buchung['Kategorie'] == 'some kategorie'
         assert uebertragene_buchung['Wert'] == '-50.00'
 
-        uebertragene_buchung = db.einzelbuchungen.get(1)
         assert ausgleichsbuchung['Name'] == 'Ausgleich'
         assert ausgleichsbuchung['Datum'] == datum('17.03.2017')
         assert ausgleichsbuchung['Kategorie'] == 'Ausgleich'
@@ -291,7 +290,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.taint()
         assert db.taint_number() == 1
 
-    def test_isTainted_shouldReturnFalseWhenTainted(self):
+    def test_is_tainted_should_return_false_when_tainted(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -299,8 +298,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.taint()
         assert db.is_tainted()
 
-
-    def test_tainNumber_shouldIncludeDauerauftraege(self):
+    def test_tain_number_should_include_dauerauftraege(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -308,8 +306,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.dauerauftraege.taint()
         assert db.taint_number() == 1
 
-
-    def test_taintNumber_shouldIncludeGemeinsameBuchungen(self):
+    def test_taint_number_should_include_gemeinsame_buchungen(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -317,7 +314,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.gemeinsamebuchungen.taint()
         assert db.taint_number() == 1
 
-    def test_taintNumber_shouldIncludeSparbuchungen(self):
+    def test_taint_number_should_include_sparbuchungen(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -325,7 +322,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.sparbuchungen.taint()
         assert db.taint_number() == 1
 
-    def test_tainNumber_shouldIncludeEinzelbuchungen(self):
+    def test_tain_number_should_include_einzelbuchungen(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -333,7 +330,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.einzelbuchungen.taint()
         assert db.taint_number() == 1
 
-    def test_tainNumber_shouldIncludeKontos(self):
+    def test_tain_number_should_include_kontos(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -342,7 +339,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert db.taint_number() == 1
 
 
-    def test_tainNumber_shouldIncludeDepotwerte(self):
+    def test_tain_number_should_include_depotwerte(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -350,7 +347,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.depotwerte.taint()
         assert db.taint_number() == 1
 
-    def test_tainNumber_shouldIncludeOrder(self):
+    def test_tain_number_should_include_order(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -358,7 +355,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.order.taint()
         assert db.taint_number() == 1
 
-    def test_tainNumber_shouldIncludeDepotauszuege(self):
+    def test_tain_number_should_include_depotauszuege(self):
         self.set_up()
         db = persisted_state.database_instance()
 
@@ -366,8 +363,16 @@ Datum,Kategorie,Name,Wert,Dynamisch
         db.depotauszuege.taint()
         assert db.taint_number() == 1
 
+    def test_tain_number_should_include_orderdauerauftraege(self):
+        self.set_up()
+        db = persisted_state.database_instance()
 
-class converter_test(unittest.TestCase):
+        assert db.taint_number() == 0
+        db.orderdauerauftrag.taint()
+        assert db.taint_number() == 1
+
+
+class ConverterTest(unittest.TestCase):
 
     def test_frame_to_list_of_dicts_with_empty_dataframe_should_return_empty_list(self):
         empty_dataframe = DataFrame()
