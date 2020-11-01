@@ -18,6 +18,10 @@ class Order(DatabaseObject):
     def get_all(self):
         return self.content
 
+    def append_row(self, row):
+        self.content = self.content.append(row, ignore_index=True)
+        self._sort()
+
     def edit(self, index, datum, name, konto, depotwert, wert):
         self.edit_element(index, {
             'Datum': datum,

@@ -369,14 +369,14 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
 class converter_test(unittest.TestCase):
 
-    def test_frame_to_list_of_dicts_withEmptyDataframe_shouldReturnEmptyList(self):
+    def test_frame_to_list_of_dicts_with_empty_dataframe_should_return_empty_list(self):
         empty_dataframe = DataFrame()
 
         result = Database('test_database').frame_to_list_of_dicts(empty_dataframe)
 
         assert result == []
 
-    def test_frame_to_list_of_dicts_withDataframe_shouldReturnListOfDicts(self):
+    def test_frame_to_list_of_dicts_withDataframe_should_return_list_of_dicts(self):
         dataframe = DataFrame([{'col1': 'test1', 'col2': 1}, {'col1': 'test2', 'col2': 2}])
 
         result = Database('test_database').frame_to_list_of_dicts(dataframe)
@@ -394,9 +394,25 @@ class Refresh(unittest.TestCase):
         component_under_test = Database('test_database')
         component_under_test.refresh()
 
-    def teste_refresh_shouldAddEinzelbuchungenVonDauerauftrag(self):
+    def teste_refresh_should_add_einzelbuchungen_von_dauerauftrag(self):
         component_under_test = Database('test_database')
         component_under_test.dauerauftraege.add(datum('10.01.2010'), datum('11.03.2010'), '', '', 'monatlich', 20)
         component_under_test.refresh()
 
         assert len(component_under_test.einzelbuchungen.content) == 3
+
+    def test_refresh_should_add_order_and_einzelbuchung_on_orderdauerauftrag(self):
+        component_under_test = Database('test_database')
+        component_under_test.orderdauerauftrag.add(
+            datum('01.01.2020'),
+            datum('02.01.2020'),
+            'monatlich',
+            '1name',
+            '1konto',
+            '1depotwert',
+            100)
+
+        component_under_test.refresh()
+
+        assert len(component_under_test.order.get_all()) == 1
+        assert len(component_under_test.einzelbuchungen.get_all()) == 1

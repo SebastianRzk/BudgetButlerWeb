@@ -62,6 +62,9 @@ class Database:
         anteil_sparbuchungen = self.sparbuchungen.get_dynamische_einzelbuchungen()
         self.einzelbuchungen.append_row(anteil_sparbuchungen)
 
+        anteil_orderdauerauftrag = self.orderdauerauftrag.get_all_order_until_today()
+        self.order.append_row(anteil_orderdauerauftrag)
+
         anteil_order = self.order.get_dynamische_einzelbuchungen()
         self.einzelbuchungen.append_row(anteil_order)
 

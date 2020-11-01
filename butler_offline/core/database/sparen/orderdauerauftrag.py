@@ -1,5 +1,6 @@
 from butler_offline.core.database.database_object import DatabaseObject
 from butler_offline.core.frequency import FrequencsFunctions
+from datetime import datetime
 import pandas as pd
 from datetime import date
 
@@ -20,6 +21,12 @@ class OrderDauerauftrag(DatabaseObject):
 
     def get_all(self):
         return self.content
+
+    def parse(self, raw_table):
+        raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
+        raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
+        self.content = self.content.append(raw_table, ignore_index=True)
+        self.content = self.content.sort_values(by=['Startdatum'])
 
     def edit(self, index, startdatum, endedatum, rhythmus, name, konto, depotwert, wert):
         self.edit_element(index, {
