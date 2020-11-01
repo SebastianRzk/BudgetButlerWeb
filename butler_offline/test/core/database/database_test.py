@@ -191,7 +191,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         assert abrechnungs_text == self.abrechnung_verhaeltnis
 
-
     def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie(self):
         self.set_up()
         db = persisted_state.database_instance()
@@ -222,7 +221,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         assert abrechnungs_text == self.abrechnung_verhaeltnis
 
-
     def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie_inverse(self):
         self.set_up()
         db = persisted_state.database_instance()
@@ -249,8 +247,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert ausgleichsbuchung['Datum'] == datum('17.03.2017')
         assert ausgleichsbuchung['Kategorie'] == 'Ausgleich'
         assert ausgleichsbuchung['Wert'] == '20.00'
-
-
 
     def test_abrechnen_withOtherKategorieSet_shouldAddOtherKategorie(self):
         self.set_up()
