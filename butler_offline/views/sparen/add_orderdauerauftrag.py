@@ -13,13 +13,16 @@ TYP_VERKAUF = 'Verkauf'
 
 def handle_request(request):
     if not database_instance().sparkontos.get_depots():
-        return viewcore.generate_error_context('add_order', 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".')
+        return viewcore.generate_error_context(
+            'add_orderdauerauftrag',
+            'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".')
 
     if not database_instance().depotwerte.get_depotwerte():
-        return viewcore.generate_error_context('add_order', 'Bitte erfassen Sie zuerst ein Depotwert.')
+        return viewcore.generate_error_context('add_orderdauerauftrag', 'Bitte erfassen Sie zuerst ein Depotwert.')
 
     if post_action_is(request, 'add'):
-        date = datum(request.values['datum'])
+        startdatum = datum(request.values['startdatum'])
+        endedatum = datum(request.values['endedatum'])
         value = request.values['wert'].replace(",", ".")
         value = float(value)
 
@@ -27,17 +30,21 @@ def handle_request(request):
             value = value * -1
 
         if "edit_index" in request.values:
-            database_instance().order.edit(
+            database_instance().orderdauerauftrag.edit(
                 int(request.values['edit_index']),
-                datum=date,
+                startdatum=startdatum,
+                endedatum=endedatum,
+                rhythmus=request.values['rhythmus'],
                 name=request.values['name'],
                 wert="%.2f" % value,
                 depotwert=request.values['depotwert'],
                 konto=request.values['konto'])
-            non_persisted_state.add_changed_order(
+            non_persisted_state.add_changed_orderdauerauftrag(
                 {
                     'fa': 'pencil',
-                    'datum': datum_to_german(date),
+                    'startdatum': datum_to_german(startdatum),
+                    'endedatum': datum_to_german(endedatum),
+                    'rhythmus': request.values['rhythmus'],
                     'wert': from_double_to_german(abs(value)),
                     'name': request.values['name'],
                     TYP: request.values[TYP],
@@ -46,16 +53,20 @@ def handle_request(request):
                 })
 
         else:
-            database_instance().order.add(
-                datum=date,
+            database_instance().orderdauerauftrag.add(
+                startdatum=startdatum,
+                endedatum=endedatum,
+                rhythmus=request.values['rhythmus'],
                 name=request.values['name'],
                 wert="%.2f" % value,
                 depotwert=request.values['depotwert'],
                 konto=request.values['konto'])
-            non_persisted_state.add_changed_order(
+            non_persisted_state.add_changed_orderdauerauftrag(
                 {
                     'fa': 'plus',
-                    'datum': datum_to_german(date),
+                    'startdatum': datum_to_german(startdatum),
+                    'endedatum': datum_to_german(endedatum),
+                    'rhythmus': request.values['rhythmus'],
                     'wert': from_double_to_german(value),
                     'name': request.values['name'],
                     TYP: request.values[TYP],
@@ -64,12 +75,12 @@ def handle_request(request):
                     'konto': request.values['konto']
                     })
 
-    context = viewcore.generate_transactional_context('add_order')
-    context['approve_title'] = 'Order hinzufügen'
+    context = viewcore.generate_transactional_context('add_orderdauerauftrag')
+    context['approve_title'] = 'Order-Dauerauftrag hinzufügen'
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
-        db_row = database_instance().order.get(db_index)
+        db_row = database_instance().orderdauerauftrag.get(db_index)
 
         if db_row['Wert'] > 0:
             typ = TYP_KAUF
@@ -78,7 +89,9 @@ def handle_request(request):
 
         default_item = {
             'edit_index': str(db_index),
-            'datum': datum_to_string(db_row['Datum']),
+            'startdatum': datum_to_string(db_row['Startdatum']),
+            'endedatum': datum_to_string(db_row['Endedatum']),
+            'rhythmus': db_row['Rhythmus'],
             'name': db_row['Name'],
             'wert': from_double_to_german(abs(db_row['Wert'])),
             'depotwert': db_row['Depotwert'],
@@ -89,13 +102,15 @@ def handle_request(request):
         context['default_item'] = default_item
         context['bearbeitungsmodus'] = True
         context['edit_index'] = db_index
-        context['approve_title'] = 'Order aktualisieren'
+        context['approve_title'] = 'Order-Dauerauftrag aktualisieren'
 
     if 'default_item' not in context:
         context['default_item'] = {
             'name': '',
             'wert': '',
-            'datum': '',
+            'startdatum': '',
+            'endedatum': '',
+            'rhythmus': 'monatlich',
             'depotwert': '',
             'konto': ''
         }
@@ -103,7 +118,7 @@ def handle_request(request):
     context['kontos'] = database_instance().sparkontos.get_depots()
     context[TYPEN] = [TYP_KAUF, TYP_VERKAUF]
     context['depotwerte'] = database_instance().depotwerte.get_depotwerte_descriptions()
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_order())
+    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_orderdauerauftrag())
     return context
 
 
