@@ -17,7 +17,7 @@ from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.state import persisted_state
 
 
-class abrechnen(unittest.TestCase):
+class AbrechnungTest(unittest.TestCase):
     abrechnung = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
 ########################################
  Ergebnis:
@@ -122,12 +122,12 @@ Datum,Kategorie,Name,Wert,Dynamisch
         persisted_state.DATABASES = []
         configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
 
-    def test_abrechnen_shouldAddEinzelbuchungen(self):
+    def test_abrechnen_should_add_einzelbuchungen(self):
         self.set_up()
         db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
 
-        db.abrechnen()
+        db.abrechnen(mindate=datum('17.03.2017'), maxdate=datum('17.03.2017'))
 
         assert len(db.einzelbuchungen.content) == 1
         uebertragene_buchung = db.einzelbuchungen.get(0)
@@ -152,7 +152,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
                                              'Wert': -123,
                                              'index': 0}
 
-    def test_abrechnen_withDateRange_shouldOnlyImportMatchingElements(self):
+    def test_abrechnen_with_date_range_should_only_import_matching_elements(self):
         self.set_up()
         db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2010'), 'to early', 'to early', 99, viewcore.name_of_partner())
@@ -174,13 +174,17 @@ Datum,Kategorie,Name,Wert,Dynamisch
         uebertragene_buchung = db.gemeinsamebuchungen.select().to_list()[1]
         assert uebertragene_buchung['Name'] == 'to late'
 
-    def test_abrechnen_withDateRange(self):
+    def test_abrechnen_with_date_range(self):
         self.set_up()
         db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70)
+        abrechnungs_text = db.abrechnen(
+            mindate=datum('17.03.2017'),
+            maxdate=datum('17.03.2017'),
+            set_ergebnis='%Ergebnis%',
+            verhaeltnis=70)
 
         assert len(db.einzelbuchungen.content) == 1
         uebertragene_buchung = db.einzelbuchungen.get(0)
@@ -191,13 +195,18 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         assert abrechnungs_text == self.abrechnung_verhaeltnis
 
-    def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie(self):
+    def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie(self):
         self.set_up()
         db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70, set_self_kategorie='Ausgleich')
+        abrechnungs_text = db.abrechnen(
+            mindate=datum('17.03.2017'),
+            maxdate=datum('17.03.2017'),
+            set_ergebnis='%Ergebnis%',
+            verhaeltnis=70,
+            set_self_kategorie='Ausgleich')
 
         assert len(db.einzelbuchungen.content) == 2
 
@@ -221,13 +230,18 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         assert abrechnungs_text == self.abrechnung_verhaeltnis
 
-    def test_abrechnen_withSelfKategorieSet_shouldAddSelfKategorie_inverse(self):
+    def test_abrechnen_withSelf_kategorie_set_should_add_self_kategorie_inverse(self):
         self.set_up()
         db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=30, set_self_kategorie='Ausgleich')
+        abrechnungs_text = db.abrechnen(
+            mindate=datum('17.03.2017'),
+            maxdate=datum('17.03.2017'),
+            set_ergebnis='%Ergebnis%',
+            verhaeltnis=30,
+            set_self_kategorie='Ausgleich')
 
         assert len(db.einzelbuchungen.content) == 2
 
@@ -248,13 +262,18 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert ausgleichsbuchung['Kategorie'] == 'Ausgleich'
         assert ausgleichsbuchung['Wert'] == '20.00'
 
-    def test_abrechnen_withOtherKategorieSet_shouldAddOtherKategorie(self):
+    def test_abrechnen_with_other_kategorie_set_should_add_other_kategorie(self):
         self.set_up()
         db = persisted_state.database_instance()
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-        abrechnungs_text = db.abrechnen(set_ergebnis='%Ergebnis%', verhaeltnis=70, set_other_kategorie='Ausgleich')
+        abrechnungs_text = db.abrechnen(
+            mindate=datum('17.03.2017'),
+            maxdate=datum('17.03.2017'),
+            set_ergebnis='%Ergebnis%',
+            verhaeltnis=70,
+            set_other_kategorie='Ausgleich')
 
         assert len(db.einzelbuchungen.content) == 1
 
@@ -267,18 +286,20 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         assert abrechnungs_text == self.abrechnung_verhaeltnis_other
 
-
-    def test_abrechnen_shouldPrintFileContent(self):
+    def test_abrechnen_should_print_file_content(self):
         self.set_up()
         db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
         time.stub_today_with(datum('01.01.2010'))
-        abrechnungs_text = db.abrechnen(set_ergebnis="%Ergebnis%")
+        abrechnungs_text = db.abrechnen(
+            mindate=datum('17.03.2017'),
+            maxdate=datum('17.03.2017'),
+            set_ergebnis="%Ergebnis%")
         time.reset_viewcore_stubs()
 
         assert abrechnungs_text == self.abrechnung
 
-    def test_taint_shouldIncreaseTaintNumber(self):
+    def test_taint_should_increase_taint_number(self):
         self.set_up()
         db = persisted_state.database_instance()
 

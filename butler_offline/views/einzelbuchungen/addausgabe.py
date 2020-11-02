@@ -26,11 +26,11 @@ def handle_request(request):
                 value)
             non_persisted_state.add_changed_einzelbuchungen(
                 {
-                    'fa':'pencil',
-                    'datum':datum_to_german(datum_object),
-                    'kategorie':request.values['kategorie'],
-                    'name':request.values['name'],
-                    'wert':from_double_to_german(value)
+                    'fa': 'pencil',
+                    'datum': datum_to_german(datum_object),
+                    'kategorie': request.values['kategorie'],
+                    'name': request.values['name'],
+                    'wert': from_double_to_german(value)
                     })
         else:
             datum_object = datum(request.values['date'])
@@ -42,11 +42,11 @@ def handle_request(request):
 
             non_persisted_state.add_changed_einzelbuchungen(
                 {
-                    'fa':'plus',
-                    'datum':datum_to_german(datum_object),
-                    'kategorie':request.values['kategorie'],
-                    'name':request.values['name'],
-                    'wert':from_double_to_german(value)
+                    'fa': 'plus',
+                    'datum': datum_to_german(datum_object),
+                    'kategorie': request.values['kategorie'],
+                    'name': request.values['name'],
+                    'wert': from_double_to_german(value)
                     })
 
     if post_action_is(request, 'edit'):
@@ -68,12 +68,13 @@ def handle_request(request):
         context['default_item'] = {
             'Name': '',
             'Datum': '',
-            'Wert' : '',
+            'Wert': '',
         }
 
     context['kategorien'] = sorted(einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_einzelbuchungen())
     return context
 
+
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'einzelbuchungen/addausgabe.html')
+    return request_handler.handle_request(request, handle_request, 'einzelbuchungen/add_ausgabe.html')

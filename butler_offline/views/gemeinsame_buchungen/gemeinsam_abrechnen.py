@@ -127,18 +127,19 @@ def abrechnen(request):
 def _handle_abrechnen_request(request):
     context = viewcore.generate_base_context('gemeinsamabrechnen')
 
-    set_mindate = get_post_parameter_or_default(request, 'set_mindate', None, mapping_function=datum_from_german)
-    set_maxdate = get_post_parameter_or_default(request, 'set_maxdate', None, mapping_function=datum_from_german)
+    set_mindate = datum_from_german(request.values['set_mindate'])
+    set_maxdate = datum_from_german(request.values['set_maxdate'])
     set_self_kategorie = get_post_parameter_or_default(request, 'set_self_kategorie', None)
     set_other_kategorie = get_post_parameter_or_default(request, 'set_other_kategorie', None)
 
-    abrechnungs_text = database_instance().abrechnen(mindate=set_mindate,
-           maxdate=set_maxdate,
-           set_ergebnis=request.values['set_ergebnis'],
-           verhaeltnis=int(request.values['set_verhaeltnis']),
-           set_self_kategorie=set_self_kategorie,
-           set_other_kategorie=set_other_kategorie
-           )
+    abrechnungs_text = database_instance().abrechnen(
+        mindate=set_mindate,
+        maxdate=set_maxdate,
+        set_ergebnis=request.values['set_ergebnis'],
+        verhaeltnis=int(request.values['set_verhaeltnis']),
+        set_self_kategorie=set_self_kategorie,
+        set_other_kategorie=set_other_kategorie
+        )
     context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
 
     return context

@@ -6,7 +6,7 @@ Created on 18.08.2017
 
 from datetime import datetime, date
 
-from butler_offline.core.frequency import FrequencsFunctions
+from butler_offline.core.frequency import get_function_for_name
 from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
 
@@ -35,7 +35,7 @@ class Dauerauftraege(DatabaseObject):
         compute all einnahmenausgaben until today
         '''
         laufdatum = startdatum
-        frequency_function = FrequencsFunctions().get_function_for_name(frequenzfunktion)
+        frequency_function = get_function_for_name(frequenzfunktion)
         result = []
         while laufdatum < date.today() and laufdatum < endedatum:
             abbuchung = self._berechne_abbuchung(laufdatum, kategorie, name, wert)

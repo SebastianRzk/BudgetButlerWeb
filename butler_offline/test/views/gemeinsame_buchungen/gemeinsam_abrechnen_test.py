@@ -31,8 +31,11 @@ class Gemeinsamabrechnen(unittest.TestCase):
         self.set_up()
         testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
-        gemeinsam_abrechnen.abrechnen(PostRequest({'set_ergebnis': '',
-                                                   'set_verhaeltnis': '50'}))
+        gemeinsam_abrechnen.abrechnen(PostRequest({
+            'set_mindate': '01.01.2010',
+            'set_maxdate': '01.01.2010',
+            'set_ergebnis': '',
+            'set_verhaeltnis': '50'}))
 
         assert testdb.einzelbuchungen.anzahl() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
@@ -43,6 +46,8 @@ class Gemeinsamabrechnen(unittest.TestCase):
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
 
         context = gemeinsam_abrechnen.abrechnen(PostRequest({
+            'set_mindate': '01.01.2010',
+            'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
             'set_verhaeltnis': 50
         }))
@@ -79,6 +84,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         gemeinsam_abrechnen.abrechnen(PostRequest({
+            'set_mindate': '01.01.2010',
+            'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
             'set_verhaeltnis': 50
         }))

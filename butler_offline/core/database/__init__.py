@@ -73,18 +73,13 @@ class Database:
     def _write_trenner(self, abrechnunsdatei):
         return abrechnunsdatei.write("".rjust(40, "#") + "\n ")
 
-    def abrechnen(self, mindate=None, maxdate=None, set_ergebnis=None, verhaeltnis=50, set_self_kategorie=None,
+    def abrechnen(self,
+                  mindate,
+                  maxdate,
+                  set_ergebnis=None,
+                  verhaeltnis=50,
+                  set_self_kategorie=None,
                   set_other_kategorie=None):
-        '''
-        rechnet gemeinsame ausgaben aus der Datenbank ab
-        '''
-
-        if mindate == None:
-            mindate = self.gemeinsamebuchungen.min_date()
-
-        if maxdate == None:
-            maxdate = self.gemeinsamebuchungen.max_date()
-
         selector = self.gemeinsamebuchungen.select().select_range(mindate, maxdate)
 
         name_self = persisted_state.database_instance().name
@@ -201,15 +196,8 @@ class Database:
         return DataFrame([[laufdatum, kategorie, name, wert, True]],
                          columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
 
-    def func_woechentlich(self, buchungs_datum):
-        return buchungs_datum.isocalendar()[1]
-
-    def func_monatlich(self, buchungs_datum):
-        return buchungs_datum.month
-
     def _row_to_dict(self, columns, index, row_data):
-        row = {}
-        row['index'] = index
+        row = {'index': index}
         for key in columns:
             row[key] = row_data[key]
         return row

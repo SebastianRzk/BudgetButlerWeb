@@ -8,13 +8,15 @@ from butler_offline.viewcore import request_handler
 def get_monats_namen(monat):
     return datetime.date(1900, monat, 1).strftime('%B')
 
-def _filter(list, num_monate):
+
+def _filter(liste, num_monate):
     result = []
     for monat in range(1, 13):
         if monat not in num_monate:
             continue
-        result.append(list[monat - 1])
+        result.append(liste[monat - 1])
     return result
+
 
 def _computePieChartProzentual(context, jahr):
     result = database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
@@ -43,8 +45,8 @@ def _computePieChartProzentual(context, jahr):
     context['pie_einnahmen_labels'] = einnahmen_labels
     context['pie_einnahmen_colors'] = einnahmen_colors
 
-
     return context
+
 
 def _compile_colors(result, einzelbuchungen, num_monate):
     einnahmen = {}
@@ -52,7 +54,7 @@ def _compile_colors(result, einzelbuchungen, num_monate):
         if month not in num_monate:
             continue
         for kategorie in result[month]:
-            if not kategorie in einnahmen:
+            if kategorie not in einnahmen:
                 einnahmen[kategorie] = {}
                 einnahmen[kategorie]['values'] = '[' + result[month][kategorie]
                 continue
@@ -92,14 +94,15 @@ def _handle_request(request):
 
     context = viewcore.generate_base_context('jahresuebersicht')
 
-    context['durchschnitt_monat_kategorien'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
-    context['durchschnittlich_monat_wert'] = str(list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
+    context['durchschnitt_monat_kategorien'] = str(
+        list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
+    context['durchschnittlich_monat_wert'] = str(
+        list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
     context = _computePieChartProzentual(context, year)
 
     laenge = 12
     if year == today.year:
         laenge = today.month
-
 
     context['buchungen'] = [
         {
@@ -118,12 +121,19 @@ def _handle_request(request):
     context['monats_namen'] = monats_namen
     context['selected_date'] = year
 
-    context['einnahmen'] = _compile_colors(jahres_einnahmen.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(), einzelbuchungen, num_monate)
-    context['ausgaben'] = _compile_colors(jahres_ausgaben.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(), einzelbuchungen, num_monate)
+    context['einnahmen'] = _compile_colors(
+        jahres_einnahmen.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(),
+        einzelbuchungen,
+        num_monate)
+    context['ausgaben'] = _compile_colors(
+        jahres_ausgaben.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(),
+        einzelbuchungen,
+        num_monate)
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()
     return context
+
 
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'einzelbuchungen/uebersicht_jahr.html')

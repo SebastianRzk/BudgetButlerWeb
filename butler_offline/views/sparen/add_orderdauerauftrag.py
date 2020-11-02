@@ -4,6 +4,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -117,10 +118,11 @@ def handle_request(request):
 
     context['kontos'] = database_instance().sparkontos.get_depots()
     context[TYPEN] = [TYP_KAUF, TYP_VERKAUF]
+    context['rhythmen'] = ALL_FREQUENCY_NAMES
     context['depotwerte'] = database_instance().depotwerte.get_depotwerte_descriptions()
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_orderdauerauftrag())
     return context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_order.html')
+    return request_handler.handle_request(request, handle_request, 'sparen/add_orderdauerauftrag.html')

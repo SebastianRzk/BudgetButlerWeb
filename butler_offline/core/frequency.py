@@ -1,10 +1,5 @@
-'''
-Created on 21.09.2016
-
-@author: sebastian
-'''
-
 from datetime import date
+
 
 def _add_month(datum):
     if datum.month < 12:
@@ -13,21 +8,14 @@ def _add_month(datum):
         datum = date(day=datum.day, month=1, year=datum.year + 1)
     return datum
 
-class FrequencsFunctions:
-    '''
-    the frequenzfunktionen
-    '''
-    def __init__(self):
-        funktionen = {("monatlich", _add_month)}
-        self.forwardmap = {}
-        self.backwardmap = {}
-        for (name, funktion) in funktionen:
-            self.forwardmap[name] = funktion
-            self.backwardmap[funktion] = name
+
+FREQUENCY_MONATLICH_NAME = 'monatlich'
+ALL_FREQUENCY_NAMES = [FREQUENCY_MONATLICH_NAME]
+
+FREQUENCY_MAP = {
+    FREQUENCY_MONATLICH_NAME: _add_month
+}
 
 
-    def get_function_for_name(self, name):
-        '''
-        returns frequency-function for its name
-        '''
-        return self.forwardmap[name]
+def get_function_for_name(name):
+    return FREQUENCY_MAP[name]

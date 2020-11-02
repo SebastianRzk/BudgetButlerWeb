@@ -1,5 +1,5 @@
 from butler_offline.core.database.database_object import DatabaseObject
-from butler_offline.core.frequency import FrequencsFunctions
+from butler_offline.core.frequency import get_function_for_name
 from datetime import datetime
 import pandas as pd
 from datetime import date
@@ -65,7 +65,7 @@ class OrderDauerauftrag(DatabaseObject):
                           depotwert,
                           wert,):
         laufdatum = startdatum
-        frequency_function = FrequencsFunctions().get_function_for_name(frequenzfunktion)
+        frequency_function = get_function_for_name(frequenzfunktion)
         result = []
         while laufdatum < date.today() and laufdatum < endedatum:
             abbuchung = self._berechne_order(laufdatum, konto, depotwert, name, wert)

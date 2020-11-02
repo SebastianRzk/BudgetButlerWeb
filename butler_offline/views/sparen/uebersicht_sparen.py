@@ -124,8 +124,6 @@ def gesamt_uebersicht():
 
     gesamt_uebersicht = []
     for jahr in range(min_jahr, max_jahr + 1):
-        print(jahr)
-
         buchungen_jahr = einzelbuchungen.select().select_year(jahr).content
         ausgaben = buchungen_jahr[buchungen_jahr.Wert < 0].copy()
         ausgaben = ausgaben[ausgaben.Kategorie != 'Sparen'].Wert.sum()
@@ -197,7 +195,6 @@ def gesamt_uebersicht():
 
         year_kontostaende.append(year_kontos)
 
-        print(year_kontos)
 
         gesamt_uebersicht.append({
             'jahr': jahr,
@@ -266,7 +263,6 @@ def berechne_diagramm(data):
 
 def berechne_kontogesamt(data):
     data_gesamt = data[-1]
-    print(data_gesamt)
 
     kontostand = []
     aufbuchungen = []
@@ -298,7 +294,6 @@ def _handle_request(request):
     gesamt_tabelle = berechne_gesamt_tabelle(year_kontostaende)
     gesamt_diagramm_labels, gesamt_diagramm_data = berechne_diagramm(diagramm_uebersicht)
     gesamt_linechart = berechne_kontogesamt(gesamt_tabelle)
-    print(gesamt_linechart)
 
     context['kontos'] = kontos
     context['typen'] = typen
