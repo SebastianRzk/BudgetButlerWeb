@@ -18,7 +18,7 @@ class DBManagerReadDB(unittest.TestCase):
 
 
     def test_database_path_from(self):
-        assert DBManager.database_path_from('Sebastian') == '../Database_Sebastian.csv'
+        assert DBManager.database_path_from('TestUser') == '../Database_TestUser.csv'
 
 
     def teste_read_with_full_database(self):
@@ -71,8 +71,8 @@ Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 
  Gemeinsame Buchungen 
 Datum,Kategorie,Name,Wert,Person
-2017-12-30,Miete,monatlich,-200.0,Sebastian
-2017-12-31,Miete,monatlich,-200.0,Maureen
+2017-12-30,Miete,monatlich,-200.0,TestUser
+2017-12-31,Miete,monatlich,-200.0,Partner
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
 2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
@@ -103,8 +103,8 @@ Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 
  Gemeinsame Buchungen 
 Datum,Kategorie,Name,Wert,Person
-2017-12-30,Miete,monatlich,-200.0,Sebastian
-2017-12-31,Miete,monatlich,-200.0,Maureen
+2017-12-30,Miete,monatlich,-200.0,TestUser
+2017-12-31,Miete,monatlich,-200.0,Partner
 
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
@@ -167,8 +167,8 @@ class DatabaseParserTest(unittest.TestCase):
 2017-09-30,Miete,Miete,monatlich,2017-01-13,-1.0'''
 
     gemeinsame_buchungen = '''Datum,Kategorie,Name,Wert,Person
-2017-12-30,Miete,monatlich,-200.0,Sebastian
-2017-12-31,Miete,monatlich,-200.0,Maureen'''
+2017-12-30,Miete,monatlich,-200.0,TestUser
+2017-12-31,Miete,monatlich,-200.0,Partner'''
 
     full_db = '''
 {einzelbuchungen}

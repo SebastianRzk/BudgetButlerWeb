@@ -1,9 +1,3 @@
-'''
-Created on 10.05.2017
-
-@author: sebastian
-'''
-
 import unittest
 from pandas import DataFrame
 
@@ -23,7 +17,7 @@ class AbrechnungTest(unittest.TestCase):
  Ergebnis:
 %Ergebnis%
 
-Ausgaben von Maureen           -10.00
+Ausgaben von Partner           -10.00
 Ausgaben von Test_User           0.00
 --------------------------------------
 Gesamt                         -10.00
@@ -37,7 +31,7 @@ Gesamt                         -10.00
 
 
 ########################################
- Ausgaben von Maureen
+ Ausgaben von Partner
 ########################################
  Datum      Kategorie    Name                    Wert
 17.03.2017  some kategorie some name             -10.00
@@ -60,14 +54,14 @@ Datum,Kategorie,Name,Wert,Dynamisch
  Ergebnis:
 %Ergebnis%
 
-Ausgaben von Maureen          -100.00
+Ausgaben von Partner          -100.00
 Ausgaben von Test_User           0.00
 --------------------------------------
 Gesamt                        -100.00
 
 
 ########################################
- Ausgaben von Maureen
+ Ausgaben von Partner
 ########################################
  Datum      Kategorie    Name                    Wert
 17.03.2017  some kategorie some name            -100.00
@@ -90,14 +84,14 @@ Datum,Kategorie,Name,Wert,Dynamisch
  Ergebnis:
 %Ergebnis%
 
-Ausgaben von Maureen          -100.00
+Ausgaben von Partner          -100.00
 Ausgaben von Test_User           0.00
 --------------------------------------
 Gesamt                        -100.00
 
 
 ########################################
- Ausgaben von Maureen
+ Ausgaben von Partner
 ########################################
  Datum      Kategorie    Name                    Wert
 17.03.2017  some kategorie some name            -100.00
@@ -120,7 +114,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         file_system.INSTANCE = FileSystemStub()
         persisted_state.DATABASE_INSTANCE = None
         persisted_state.DATABASES = []
-        configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
+        configuration_provider.set_configuration('PARTNERNAME', 'Partner')
 
     def test_abrechnen_should_add_einzelbuchungen(self):
         self.set_up()

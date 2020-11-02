@@ -20,7 +20,7 @@ def enter_testmode(request):
     persisted_state.DATABASES = ['test']
     non_persisted_state.CONTEXT = {}
     configuration_provider.LOADED_CONFIG = None
-    configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
+    configuration_provider.set_configuration('PARTNERNAME', 'Partner')
     time.stub_today_with(datum('22.01.2019'))
     print('WARNUNG: ENTERING TESTMODE')
     return redirect('/', code=301)

@@ -32,8 +32,8 @@ class Importd(unittest.TestCase):
         file_system.INSTANCE = FileSystemStub()
         persisted_state.DATABASE_INSTANCE = None
         persisted_state.DATABASES = []
-        configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
-        configuration_provider.set_configuration('DATABASES', 'Sebastian')
+        configuration_provider.set_configuration('PARTNERNAME', 'Partner')
+        configuration_provider.set_configuration('DATABASES', 'TestUser')
         request_handler.stub_me()
 
     def test_padProtocoll_withNoProtocoll_shouldAddHTPPS(self):
@@ -143,8 +143,8 @@ class Importd(unittest.TestCase):
     _IMPORT_DATA_GEMEINSAM = '''\n
 #######MaschinenimportStart
 Datum,Kategorie,Name,Wert,Person,Dynamisch
-2019-01-01,Essen,Testausgabe1,-1.3,Sebastian,False
-2019-07-11,Essen,Testausgabe2,-0.9,Maureen,False
+2019-01-01,Essen,Testausgabe1,-1.3,TestUser,False
+2019-07-11,Essen,Testausgabe2,-0.9,Partner,False
 #######MaschinenimportEnd
 '''
 
@@ -157,7 +157,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
     _JSON_DATA_USERNAME = '''
     {
-        "username": "Sebastian",
+        "username": "TestUser",
         "token": "0x00",
         "role": "User"
     }
@@ -225,7 +225,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
         assert context['element_titel'] == 'Export / Import'
         assert len(database_instance().gemeinsamebuchungen.content) == 2
         assert database_instance().gemeinsamebuchungen.get(0)['Name'] == 'Testausgabe1'
-        assert database_instance().gemeinsamebuchungen.get(0)['Person'] == 'Sebastian'
+        assert database_instance().gemeinsamebuchungen.get(0)['Person'] == 'TestUser'
         assert database_instance().gemeinsamebuchungen.get(1)['Name'] == 'Testausgabe2'
 
         assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
@@ -233,8 +233,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
     _JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER = '''
     [
-    {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user":"SebastianFalsch","zielperson":"PartnerFalsch"},
-    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user":"SebastianFalsch","zielperson":"online user name"}
+    {"id":"122","datum":"2019-07-15","name":"Testausgabe1","kategorie":"Essen","wert":"-1.3", "user":"TestUserFalsch","zielperson":"PartnerFalsch"},
+    {"id":"123","datum":"2019-07-11","name":"Testausgabe2","kategorie":"Essen","wert":"-0.9", "user":"TestUserFalsch","zielperson":"online user name"}
     ]
     '''
 
@@ -263,7 +263,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
             'Dynamisch': False,
             'Kategorie': 'Essen',
             'Name': 'Testausgabe2',
-            'Person': 'Sebastian',
+            'Person': 'TestUser',
             'Wert': -0.9,
             'index': 0}
 
@@ -272,7 +272,7 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
             'Dynamisch': False,
             'Kategorie': 'Essen',
             'Name': 'Testausgabe1',
-            'Person': 'Maureen',
+            'Person': 'Partner',
             'Wert': -1.3,
             'index': 1}
 
@@ -323,8 +323,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
 
         assert context['element_titel'] == 'Export / Import'
         assert len(database_instance().gemeinsamebuchungen.content) == 2
-        assert database_instance().gemeinsamebuchungen.content.Person[0] == 'Sebastian'
-        assert database_instance().gemeinsamebuchungen.content.Person[1] == 'Maureen'
+        assert database_instance().gemeinsamebuchungen.content.Person[0] == 'TestUser'
+        assert database_instance().gemeinsamebuchungen.content.Person[1] == 'Partner'
 
         assert database_instance().gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
         assert database_instance().gemeinsamebuchungen.content.Kategorie[1] == 'Essen'
@@ -355,8 +355,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
     def test_upload_data(self):
         self.set_up()
 
-        database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'Sebastian')
-        database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Maureen')
+        database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
+        database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Partner')
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
@@ -398,8 +398,8 @@ Datum,Kategorie,Name,Wert,Person,Dynamisch
     def test_upload_data_fehler(self):
         self.set_up()
 
-        database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'Sebastian')
-        database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Maureen')
+        database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
+        database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Partner')
 
         requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "error"}',
                                             'https://test.test/api/partner.php': self._JSON_DATA_PARTNER,
