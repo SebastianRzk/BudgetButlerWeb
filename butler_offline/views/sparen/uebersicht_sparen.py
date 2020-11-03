@@ -351,7 +351,7 @@ def berechne_monatlich():
     colors = []
     werte = []
     monatlich = []
-    color_chooser = GenericDesignColorChooser(list(isins), viewcore.design_colors())
+    color_chooser = GenericDesignColorChooser(list(sorted(isins)), viewcore.design_colors())
 
     for isin in sorted(isins):
         name = persisted_state.database_instance().depotwerte.get_description_for(isin)
