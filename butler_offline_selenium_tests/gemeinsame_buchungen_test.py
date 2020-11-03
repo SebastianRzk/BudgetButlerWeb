@@ -4,6 +4,7 @@ from SeleniumTest import enter_test_mode
 from SeleniumTest import define_kategorie
 from SeleniumTest import select_option
 from SeleniumTest import get_selected_option
+from SeleniumTest import click_add_button
 
 
 class TestUI(SeleniumTestClass):
@@ -15,9 +16,7 @@ class TestUI(SeleniumTestClass):
         select_option(driver, 'kategorie_auswahl', kategorie)
         select_option(driver, 'person_auswahl', person)
 
-
-        add_button = driver.find_element_by_id('add')
-        add_button.click()
+        click_add_button(driver)
 
     def teste_uebersicht(self, get_driver, close_driver):
         driver = get_driver()

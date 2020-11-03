@@ -2,8 +2,8 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import from_double_to_german
+from butler_offline.viewcore.converter import datum_to_german
 from datetime import date
-
 
 def to_piechart(data_list, gesamt_wert):
     colors = []
@@ -117,14 +117,14 @@ def get_letztes_jahr_kontostand(kontoname, gesamt):
 def gesamt_uebersicht():
     einzelbuchungen = persisted_state.database_instance().einzelbuchungen
     sparkontos = persisted_state.database_instance().sparkontos
-    min_jahr = einzelbuchungen.content[einzelbuchungen.content.Kategorie != 'Sparen'].Datum.min().year
+    min_jahr = einzelbuchungen.content.copy()[einzelbuchungen.content.copy().Kategorie != 'Sparen'].Datum.min().year
     max_jahr = date.today().year
 
     year_kontostaende = []
 
     gesamt_uebersicht = []
     for jahr in range(min_jahr, max_jahr + 1):
-        buchungen_jahr = einzelbuchungen.select().select_year(jahr).content
+        buchungen_jahr = einzelbuchungen.select().select_year(jahr).content.copy()
         ausgaben = buchungen_jahr[buchungen_jahr.Wert < 0].copy()
         ausgaben = ausgaben[ausgaben.Kategorie != 'Sparen'].Wert.sum()
         einnahmen = buchungen_jahr[buchungen_jahr.Wert > 0].copy()
@@ -255,9 +255,9 @@ def berechne_diagramm(data):
 
     for jahr in data:
         labels.append(jahr['jahr'])
-        result[0]['datasets'].append(jahr['einnahmen'])
-        result[1]['datasets'].append(abs(jahr['ausgaben']))
-        result[2]['datasets'].append(jahr['sparen_aufbuchung'])
+        result[0]['datasets'].append('%.2f' % jahr['einnahmen'])
+        result[1]['datasets'].append('%.2f' % abs(jahr['ausgaben']))
+        result[2]['datasets'].append('%.2f' % jahr['sparen_aufbuchung'])
 
     return labels, result
 
@@ -275,6 +275,107 @@ def berechne_kontogesamt(data):
         'kontostand': kontostand,
         'aufbuchungen': aufbuchungen
     }
+
+
+def get_last_order_for(konto):
+    order_content = persisted_state.database_instance().order.content.copy()
+    order_for_konto = order_content[order_content.Konto == konto]
+    if len(order_for_konto) == 0:
+        return None
+    return order_for_konto.Datum.max()
+
+
+def general_infos():
+    kontos = persisted_state.database_instance().sparkontos.get_depots()
+    info = []
+    for konto in kontos:
+        latest_depotauszug = persisted_state.database_instance().depotauszuege.get_latest_datum_by(konto)
+        latest_order = get_last_order_for(konto)
+
+        warning = False;
+        print('order', latest_order, 'auszug', latest_depotauszug)
+        if latest_order and latest_depotauszug and latest_depotauszug < latest_order:
+            warning = True
+
+        if not latest_order:
+            latest_order = ''
+        else:
+            latest_order = datum_to_german(latest_order)
+
+        if not latest_depotauszug:
+            latest_depotauszug = 'fehlend'
+            warning = True
+        else:
+            latest_depotauszug = datum_to_german(latest_depotauszug)
+
+        info.append({
+            'konto': konto,
+            'letzter_auszug': latest_depotauszug,
+            'letzte_order': latest_order,
+            'warning': warning
+        })
+
+    return {
+        'kontos': info
+    }
+
+def get_sum(df):
+    if len(df) == 0:
+        return 0
+    return df.Wert.sum()
+
+def get_wert_sum(df):
+    if len(df) == 0:
+        return 0
+    return get_sum(df[df.Wert > 0])
+
+def berechne_order_typ(dauerauftrag_order):
+    order_gesamt_raw = persisted_state.database_instance().order.content.copy()
+    order_summe = get_wert_sum(order_gesamt_raw)
+    dauerauftrag_order = get_wert_sum(dauerauftrag_order)
+
+    return {
+        'manual': from_double_to_german(order_summe - dauerauftrag_order),
+        'dauerauftrag': from_double_to_german(dauerauftrag_order),
+        'manual_raw': '%.2f' % (order_summe - dauerauftrag_order),
+        'dauerauftrag_raw': '%.2f' % dauerauftrag_order
+    }
+
+def berechne_monatlich():
+    aktuelle_dauerauftraege = persisted_state.database_instance().orderdauerauftrag.aktuelle_raw().copy()
+    aktuelle_dauerauftraege = aktuelle_dauerauftraege[aktuelle_dauerauftraege.Wert > 0]
+
+    isins = set(aktuelle_dauerauftraege.Depotwert.tolist())
+
+    namen = []
+    colors = []
+    werte = []
+    monatlich = []
+    color_chooser = GenericDesignColorChooser(list(isins), viewcore.design_colors())
+
+    for isin in sorted(isins):
+        name = persisted_state.database_instance().depotwerte.get_description_for(isin)
+        wert = get_sum(aktuelle_dauerauftraege[aktuelle_dauerauftraege.Depotwert == isin])
+        color = color_chooser.get_for_value(isin)
+
+        namen.append(name)
+        werte.append('%.2f' % wert)
+        colors.append(color)
+        monatlich.append({
+            'name': name,
+            'wert': from_double_to_german(wert),
+            'color': color
+        })
+
+    return {
+        'einzelwerte': monatlich,
+        'colors': colors,
+        'namen': namen,
+        'werte': werte
+    }
+
+
+
 
 
 def _handle_request(request):
@@ -295,9 +396,16 @@ def _handle_request(request):
     gesamt_diagramm_labels, gesamt_diagramm_data = berechne_diagramm(diagramm_uebersicht)
     gesamt_linechart = berechne_kontogesamt(gesamt_tabelle)
 
+
+
+    order_until_today = persisted_state.database_instance().orderdauerauftrag.get_all_order_until_today()
+
     context['kontos'] = kontos
     context['typen'] = typen
     context['gesamt'] = gesamt
+    context['monatlich'] = berechne_monatlich()
+    context['order_typ'] = berechne_order_typ(order_until_today)
+    context['general_infos'] = general_infos()
     context['konto_diagramm'] = to_piechart(kontos, gesamt['wert'])
     context['typen_diagramm'] = to_piechart(typen, gesamt['wert'])
     context['gesamt_diagramm_labels'] = gesamt_diagramm_labels
@@ -313,12 +421,12 @@ def index(request):
     return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_sparen.html')
 
 
-class GenericDesignColorChooser():
-     def __init__(self, values, colors):
-         self.values = values
-         self.colors = colors
+class GenericDesignColorChooser:
+    def __init__(self, values, colors):
+        self.values = values
+        self.colors = colors
 
-     def get_for_value(self, value):
+    def get_for_value(self, value):
         index = self.values.index(value)
-        color_index = index %  len(self.colors)
+        color_index = index % len(self.colors)
         return '#' + self.colors[color_index]

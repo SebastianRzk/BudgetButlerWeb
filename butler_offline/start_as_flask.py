@@ -28,6 +28,7 @@ from butler_offline.views.sparen import uebersicht_sparen, \
     add_order, \
     uebersicht_order, \
     add_orderdauerauftrag, \
+    uebersicht_orderdauerauftrag, \
     add_depotauszug, \
     uebersicht_depotauszuege
 
@@ -182,6 +183,11 @@ def display_uebersicht_depowerte():
 @app.route(routes.SPAREN_ORDER_UEBERSICHT, methods=['GET', 'POST'])
 def display_uebersicht_order():
     return uebersicht_order.index(request)
+
+
+@app.route(routes.SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT, methods=['GET', 'POST'])
+def display_uebersicht_orderdauerauftrag():
+    return uebersicht_orderdauerauftrag.index(request)
 
 
 @app.route(routes.SPAREN_DEPOTAUSZUEGE_UEBERSICHT, methods=['GET', 'POST'])

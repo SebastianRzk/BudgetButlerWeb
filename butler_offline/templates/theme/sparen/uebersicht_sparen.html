@@ -75,7 +75,36 @@
 
   </script>
 </div>
+<div class="box theme-row">
+		<div class="box-header">
+			<h3 class="box-title">Depotinformation</h3>
+		</div>
+		<div class="box-body">
+			<table>
+					<thead>
+						<tr>
+							<th>Kontoname</th>
+							<th>Letzte Buchung</th>
+							<th>Letzer Kontoauszug</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for konto in general_infos.kontos %}
+						<tr>
+							<td>{{konto.konto}}</td>
+							<td>{{konto.letzte_order}}</td>
+							<td
+							{% if konto.warning %}
+								class="negativ"
+							{% endif %}
+							>{{konto.letzter_auszug}}</td>
 
+						</tr>
+						{% endfor %}
+					</tbody>
+			</table>
+		</div>
+</div>
 
 <div class="theme-double-columns">
 	<div class="box">
@@ -228,6 +257,116 @@
 		</script>
 	</div>
 </div>
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Depot Order-Typen im Vergleich</h3>
+		</div>
+		<div class="box-body">
+			<div class="table-responsive">
+				<table>
+					<thead>
+						<tr>
+							<th>Order-Typ</th>
+							<th class="table-wert">Gesamtmenge</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><span class="fa fa-circle" style="color: #39CCCC;"></span>Manuelle Order</td>
+							<td class="table-wert">{{order_typ.manual}}</td>
+						</tr>
+						<tr>
+							<td><span class="fa fa-circle" style="color: #3D9970;"></span>Order durch Daueraufträge</td>
+							<td class="table-wert">{{order_typ.dauerauftrag}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="spartyp" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels: ['Manuelle Order', 'Order durch Daueraufträge'],
+			datasets: [{
+			data: [{{order_typ.manual_raw}}, {{order_typ.dauerauftrag}}],
+			backgroundColor: ['#39CCCC', '#3D9970'],
+			}],
+			};
+			var canvas = document.getElementById("spartyp");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+</div>
+
+
+
+
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Aktuelle Daueraufträge</h3>
+		</div>
+		<div class="box-body">
+			<div class="table-responsive">
+				<table>
+					<thead>
+						<tr>
+							<th>Depotwert</th>
+							<th class="table-wert">Monatlicher Betrag</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for depotwert in monatlich.einzelwerte %}
+						<tr>
+							<td><span class="fa fa-circle" style="color: {{depotwert.color}};"></span>{{depotwert.name}}</td>
+							<td class="table-wert">{{depotwert.wert}}</td>
+
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="dauerauftrag_typen_diagramm" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels:{{monatlich.namen|safe}},
+			datasets: [{
+			data: {{monatlich.werte|safe}},
+			backgroundColor: {{monatlich.colors|safe}},
+			}],
+			};
+			var canvas = document.getElementById("dauerauftrag_typen_diagramm");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+</div>
+
 
 
 <div class="box theme-row">

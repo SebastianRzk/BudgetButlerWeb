@@ -1,13 +1,9 @@
-'''
-Created on 11.08.2017
-
-@author: sebastian
-'''
 from datetime import date
 import unittest
 
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.viewcore.converter import datum_from_german as datum
+
 
 class DauerauftraegeTest(unittest.TestCase):
 
@@ -163,7 +159,13 @@ class DauerauftraegeTest(unittest.TestCase):
 
     def test_get_aktuelle_with_actual_dauerauftrag_should_return_dauerauftrag(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.aktuelle()
 
@@ -177,23 +179,41 @@ class DauerauftraegeTest(unittest.TestCase):
 
     def test_get_aktuelle_with_past_dauerauftrag_should_return_empty_list(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2012'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2012'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.aktuelle()
 
         assert result == []
 
-    def test_get_aktuelle_withFutureDauerauftrag_shouldReturnEmptyList(self):
+    def test_get_aktuelle_with_future_dauerauftrag_should_return_empty_list(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2100'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2100'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.aktuelle()
 
         assert result == []
 
-    def test_get_past_withPastDauerauftrag_shouldReturnDauerauftrag(self):
+    def test_get_past_with_past_dauerauftrag_should_return_dauerauftrag(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2012'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2012'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.past()
 
@@ -205,25 +225,43 @@ class DauerauftraegeTest(unittest.TestCase):
         assert result[0]['Rhythmus'] == 'some rhythmus'
         assert result[0]['Wert'] == 1
 
-    def test_get_past_withActualDauerauftrag_shouldReturnEmptyList(self):
+    def test_get_past_with_actual_dauerauftrag_should_return_empty_list(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.past()
 
         assert result == []
 
-    def test_get_future_withActualDauerauftrag_shouldReturnEmptyList(self):
+    def test_get_future_with_actual_dauerauftrag_should_return_empty(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.future()
 
         assert result == []
 
-    def test_get_future_withFutureDauerauftrag_shouldReturnDauerauftrag(self):
+    def test_get_future_with_future_dauerauftrag_should_return_dauerauftrag(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2100'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2100'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.future()
 

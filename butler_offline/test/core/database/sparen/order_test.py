@@ -106,5 +106,6 @@ class OrderTest(unittest.TestCase):
         assert result.Name[1] == 'static'
         assert 'Dynamisch' not in result.columns
 
+
 if __name__ == '__main__':
     unittest.main()

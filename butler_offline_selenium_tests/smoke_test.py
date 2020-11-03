@@ -150,3 +150,15 @@ class TestHeadlines(SeleniumTestClass):
         driver.get('http://localhost:5000/uebersicht_order/')
         assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Order'
         close_driver(driver)
+
+    def test_add_orderdauerauftrag(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/add_orderdauerauftrag/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Neuer Order-Dauerauftrag'
+        close_driver(driver)
+
+    def test_uebesicht_orderdauerauftrag(self, get_driver, close_driver):
+        driver = get_driver()
+        driver.get('http://localhost:5000/uebersicht_orderdauerauftrag/')
+        assert driver.find_element_by_id('pagetitle').get_attribute('innerHTML') == 'Übersicht Order-Daueraufträge'
+        close_driver(driver)

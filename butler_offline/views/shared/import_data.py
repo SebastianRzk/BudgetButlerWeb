@@ -65,8 +65,6 @@ def _get_success_message(last_elements):
 
 
 def handle_request(request, import_prefix='', gemeinsam=False):
-    print(request)
-    imported_values = pandas.DataFrame([], columns=('Datum', 'Kategorie', 'Name', 'Wert', ''))
     context = viewcore.generate_transactional_context('import')
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
@@ -107,7 +105,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
 
 
         elif post_action_is(request, 'set_kategorien'):
-            kategorien = ','.join(sorted(database_instance().einzelbuchungen.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True)))
+            kategorien = ','.join(sorted(database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
 
             serverurl = _add_protokoll_if_needed(serverurl)

@@ -23,8 +23,8 @@ class OrderDauerauftrag(DatabaseObject):
         return self.content
 
     def parse(self, raw_table):
-        raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
-        raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, "%Y-%m-%d").date())
+        raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
+        raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         self.content = self.content.append(raw_table, ignore_index=True)
         self.content = self.content.sort_values(by=['Startdatum'])
 
@@ -81,6 +81,24 @@ class OrderDauerauftrag(DatabaseObject):
     def _sort(self):
         self.content = self.content.sort_values(by=['Startdatum', 'Endedatum', 'Name'])
         self.content = self.content.reset_index(drop=True)
+
+    def aktuelle_raw(self):
+        dauerauftraege = self.content.copy()
+        dauerauftraege = dauerauftraege[dauerauftraege.Endedatum > date.today()]
+        return dauerauftraege[dauerauftraege.Startdatum < date.today()]
+
+    def aktuelle(self):
+        return self.frame_to_list_of_dicts(self.aktuelle_raw())
+
+    def past(self):
+        dauerauftraege = self.content.copy()
+        dauerauftraege = dauerauftraege[dauerauftraege.Endedatum < date.today()]
+        return self.frame_to_list_of_dicts(dauerauftraege)
+
+    def future(self):
+        dauerauftraege = self.content.copy()
+        dauerauftraege = dauerauftraege[dauerauftraege.Startdatum > date.today()]
+        return self.frame_to_list_of_dicts(dauerauftraege)
 
 
 

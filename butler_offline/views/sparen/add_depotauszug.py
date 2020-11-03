@@ -6,7 +6,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from datetime import date
 
-KEY_WERT = 'depotwert_wert_'
+KEY_WERT = 'wert_'
 
 def calculate_filled_items(actual, possible):
     filled_items = []
@@ -55,13 +55,18 @@ def handle_request(request):
         return viewcore.generate_error_context('add_depotauszug', 'Bitte erfassen Sie zuerst ein Depotwert.')
 
     if post_action_is(request, 'add'):
-        current_date = datum(request.values['datum'])
+        current_date = None
+        for element in request.values:
+            if element.startswith('datum_'):
+                current_date = datum(request.values[element])
+        if not current_date:
+            return viewcore.generate_error_context('add_depotauszug', 'Interner Fehler <Kein Datum gefunden>.')
         konto = request.values['konto']
 
         if "edit_index" in request.values:
             for element in request.values:
                 if element.startswith(KEY_WERT):
-                    depotwert = element.replace(KEY_WERT, '')
+                    depotwert = element.split('_')[-1]
                     db_index = database_instance().depotauszuege.resolve_index(current_date, konto, depotwert)
                     value = request.values[element].replace(",", ".")
                     value = float(value)
@@ -106,7 +111,7 @@ def handle_request(request):
 
             for element in request.values:
                 if element.startswith(KEY_WERT):
-                    depotwert = element.replace(KEY_WERT, '')
+                    depotwert = element.split('_')[-1]
                     value = request.values[element].replace(",", ".")
                     value = float(value)
 

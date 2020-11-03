@@ -1,12 +1,8 @@
-'''
-Created on 23.11.2017
-
-@author: sebastian
-'''
 from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
 from SeleniumTest import enter_test_mode
 from SeleniumTest import select_option
+from SeleniumTest import click_add_button
 
 class TestUI(SeleniumTestClass):
     def _add_sparbuchung(self, driver, datum, name, typ, konto, wert, einzahlung):
@@ -22,16 +18,14 @@ class TestUI(SeleniumTestClass):
         else:
             select_option(driver, 'eigenschaft_auswahl', 'Auszahlung')
 
-        add_button = driver.find_element_by_id('add')
-        add_button.click()
+        click_add_button(driver)
 
     def _add_sparkonto(self, driver, name, typ):
         driver.get('http://localhost:5000/add_sparkonto/')
         fill_element(driver, 'kontoname', name)
         select_option(driver, 'typ_auswahl', typ)
 
-        add_button = driver.find_element_by_id('add')
-        add_button.click()
+        click_add_button(driver)
 
 
     def teste_uebersicht_kontos(self, get_driver, close_driver):
