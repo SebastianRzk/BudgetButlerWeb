@@ -136,15 +136,15 @@
 					<tbody>
 						<tr>
 							<td>{{partnername}}</td>
-							<td class="table-wert" id="ausgabe_maureen">{{ausgabe_maureen}}</td>
-							<td class="table-wert" id="ausgabe_maureen_soll">{{maureen_soll}}</td>
-							<td class="table-wert" id="ausgabe_maureen_diff">{{maureen_diff}}</td>
+							<td class="table-wert" id="ausgabe_partner">{{ausgabe_partner}}</td>
+							<td class="table-wert" id="ausgabe_partner_soll">{{partner_soll}}</td>
+							<td class="table-wert" id="ausgabe_partner_diff">{{partner_diff}}</td>
 						</tr>
 						<tr>
 							<td>{{myname}}</td>
-							<td class="table-wert" id="ausgabe_sebastian">{{ausgabe_sebastian}}</td>
-							<td class="table-wert" id="ausgabe_sebastian_soll">{{sebastian_soll}}</td>
-							<td class="table-wert" id="ausgabe_sebastian_diff">{{sebastian_diff}}</td>
+							<td class="table-wert" id="ausgabe_self">{{ausgabe_self}}</td>
+							<td class="table-wert" id="ausgabe_self_soll">{{self_soll}}</td>
+							<td class="table-wert" id="ausgabe_self_diff">{{self_diff}}</td>
 						</tr>
 					</tbody>
 					<tfooter>
@@ -160,7 +160,7 @@
 	<div class="box">
 		<div class="box-header">
 			<h3 class="box-title">Ausgaben nach Person</h3>
-		</div><!-- /.box-header -->
+		</div>
 		<div class="box-body border-top">
 			<div class="chart-responsive">
 				<canvas id="zusammenfassungPie" height="200"></canvas>
@@ -169,7 +169,7 @@
 					labels:["{{myname}}","{{partnername}}"],
 					datasets: [
 					{
-					data: [{{ausgabe_sebastian}},{{ausgabe_maureen}}],
+					data: [{{ausgabe_self}},{{ausgabe_partner}}],
 					backgroundColor: ['#00a65a','#f56954'],
 					}],
 					};

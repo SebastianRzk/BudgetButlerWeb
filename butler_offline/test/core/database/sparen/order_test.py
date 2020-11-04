@@ -32,6 +32,7 @@ class OrderTest(unittest.TestCase):
             'Datum': datum('02.02.2020'),
             'Name': '2name',
             'Konto': '2konto',
+            'Dynamisch': False,
             'Depotwert': '2depotwert',
             'Wert': 200
         }
@@ -46,7 +47,8 @@ class OrderTest(unittest.TestCase):
             'Name': '24name',
             'Konto': '24konto',
             'Depotwert': '24depotwert',
-            'Wert': 240
+            'Wert': 240,
+            'Dynamisch': False
         }
 
     def test_get_dynamische_einzelbuchungen(self):
@@ -91,6 +93,18 @@ class OrderTest(unittest.TestCase):
 
         assert component_under_test.select_year(2021).get_order_fuer('1konto') == 300
 
+
+    def test_get_static_content_should_not_return_dynamic(self):
+        component_under_test = Order()
+
+        component_under_test.add(datum('01.01.2020'), 'static', '1konto', '1depotwert', 100)
+        component_under_test.add(datum('01.01.2020'), 'dynamic', '1konto', '1depotwert', 100, dynamisch=True)
+
+        result = component_under_test.get_static_content()
+
+        assert len(result) == 1
+        assert result.Name[1] == 'static'
+        assert 'Dynamisch' not in result.columns
 
 
 if __name__ == '__main__':

@@ -1,17 +1,13 @@
-'''
-Created on 11.08.2017
-
-@author: sebastian
-'''
 from datetime import date
 import unittest
 
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.viewcore.converter import datum_from_german as datum
 
+
 class DauerauftraegeTest(unittest.TestCase):
 
-    def test_add_shouldTaint(self):
+    def test_add_shoul_taint(self):
         component_under_test = Dauerauftraege()
         assert component_under_test.taint_number() == 0
         component_under_test.add(
@@ -23,7 +19,7 @@ class DauerauftraegeTest(unittest.TestCase):
             1.23)
         assert component_under_test.taint_number() == 1
 
-    def test_edit_shouldTaint(self):
+    def test_edit_should_taint(self):
         component_under_test = Dauerauftraege()
         component_under_test.add(
             datum('1.1.2010'),
@@ -32,8 +28,7 @@ class DauerauftraegeTest(unittest.TestCase):
             'some name',
             'some rhythmus',
             1.23)
-        component_under_test.de_taint()
-        assert component_under_test.taint_number() == 0
+        assert component_under_test.taint_number() == 1
         component_under_test.edit(
             0,
             datum('2.1.2010'),
@@ -42,9 +37,9 @@ class DauerauftraegeTest(unittest.TestCase):
             'some other name',
             'some other rhythmus',
             2.34)
-        assert component_under_test.taint_number() == 1
+        assert component_under_test.taint_number() == 2
 
-    def test_delete_shouldTaint(self):
+    def test_delete_should_taint(self):
         component_under_test = Dauerauftraege()
         component_under_test.add(
             datum('1.1.2010'),
@@ -53,10 +48,9 @@ class DauerauftraegeTest(unittest.TestCase):
             'some name',
             'some rhythmus',
             1.23)
-        component_under_test.de_taint()
-        assert component_under_test.taint_number() == 0
-        component_under_test.delete(0)
         assert component_under_test.taint_number() == 1
+        component_under_test.delete(0)
+        assert component_under_test.taint_number() == 2
 
     def test_get(self):
         component_under_test = Dauerauftraege()
@@ -96,7 +90,7 @@ class DauerauftraegeTest(unittest.TestCase):
         assert component_under_test.content.Rhythmus[0] == 'some rhythmus'
         assert component_under_test.content.Wert[0] == 1.23
 
-    def test_aendere_beiLeererDatenbank(self):
+    def test_aendere_bei_leerer_datenbank(self):
         component_under_test = Dauerauftraege()
         component_under_test.add(
             datum('1.1.2010'),
@@ -122,7 +116,7 @@ class DauerauftraegeTest(unittest.TestCase):
         assert component_under_test.content.Rhythmus[0] == 'some other rhythmus'
         assert component_under_test.content.Wert[0] == 2.34
 
-    def test_aendere_beiVollerDatenbank(self):
+    def test_aendere_bei_voller_datenbank(self):
         component_under_test = Dauerauftraege()
         component_under_test.add(
             datum('1.1.2010'),
@@ -163,9 +157,15 @@ class DauerauftraegeTest(unittest.TestCase):
         assert component_under_test.content.Rhythmus[1] == 'some other rhythmus'
         assert component_under_test.content.Wert[1] == 2.34
 
-    def test_get_aktuelle_withActualDauerauftrag_shouldReturnDauerauftrag(self):
+    def test_get_aktuelle_with_actual_dauerauftrag_should_return_dauerauftrag(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.aktuelle()
 
@@ -177,25 +177,43 @@ class DauerauftraegeTest(unittest.TestCase):
         assert result[0]['Rhythmus'] == 'some rhythmus'
         assert result[0]['Wert'] == 1
 
-    def test_get_aktuelle_withPastDauerauftrag_shouldReturnEmptyList(self):
+    def test_get_aktuelle_with_past_dauerauftrag_should_return_empty_list(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2012'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2012'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.aktuelle()
 
         assert result == []
 
-    def test_get_aktuelle_withFutureDauerauftrag_shouldReturnEmptyList(self):
+    def test_get_aktuelle_with_future_dauerauftrag_should_return_empty_list(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2100'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2100'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.aktuelle()
 
         assert result == []
 
-    def test_get_past_withPastDauerauftrag_shouldReturnDauerauftrag(self):
+    def test_get_past_with_past_dauerauftrag_should_return_dauerauftrag(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2012'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2012'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.past()
 
@@ -207,25 +225,43 @@ class DauerauftraegeTest(unittest.TestCase):
         assert result[0]['Rhythmus'] == 'some rhythmus'
         assert result[0]['Wert'] == 1
 
-    def test_get_past_withActualDauerauftrag_shouldReturnEmptyList(self):
+    def test_get_past_with_actual_dauerauftrag_should_return_empty_list(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.past()
 
         assert result == []
 
-    def test_get_future_withActualDauerauftrag_shouldReturnEmptyList(self):
+    def test_get_future_with_actual_dauerauftrag_should_return_empty(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2012'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2012'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.future()
 
         assert result == []
 
-    def test_get_future_withFutureDauerauftrag_shouldReturnDauerauftrag(self):
+    def test_get_future_with_future_dauerauftrag_should_return_dauerauftrag(self):
         component_under_test = Dauerauftraege()
-        component_under_test.add(datum('01.01.2100'), datum('01.01.2100'), 'some kategorie', 'some name', 'some rhythmus', 1)
+        component_under_test.add(
+            datum('01.01.2100'),
+            datum('01.01.2100'),
+            'some kategorie',
+            'some name',
+            'some rhythmus',
+            1)
 
         result = component_under_test.future()
 

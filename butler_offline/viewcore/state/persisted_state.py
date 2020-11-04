@@ -45,4 +45,3 @@ def save_tainted():
         print('Saving database with', db.taint_number(), 'modifications')
         _save_refresh()
         print('Saved')
-        db.de_taint()

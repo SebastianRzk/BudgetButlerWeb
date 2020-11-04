@@ -26,6 +26,7 @@
 						<td id="item_{{o.index}}_typ">{{o.Typ}}</td>
 						<td id="item_{{o.index}}_wert" class="table-wert">{{o.Wert}}</td>
 						<td>
+							{% if not o.Dynamisch %}
 							<div class="pull-right">
 								<form onsubmit="return confirm('Willst du wirklich die Order {{o.name}} löschen?');" role="form" action="/uebersicht_order/" method="post">
 									<input type="hidden" name="ID" value="{{ID}}">
@@ -39,6 +40,7 @@
 									<button type="submit" class="btn bordered-hover btn-icon" id="edit_{{o.index}}" name="action" value="edit" ><span class="fa fa-pencil fa-large"></span></button>
 								</form>
 							</div>
+							{% endif %}
 						</td>
 					</tr>
 					{% endfor %}

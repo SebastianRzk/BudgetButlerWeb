@@ -77,8 +77,8 @@ def select_option(driver, option_id, item):
             option.click()  # select() in earlier versions of webdriver
             break
 
-def click_add_button(driver):
-    add_button = driver.find_element_by_id('add')
+def click_add_button(driver, button_postfix = ''):
+    add_button = driver.find_element_by_id('add' + button_postfix)
     add_button.click()
 
 

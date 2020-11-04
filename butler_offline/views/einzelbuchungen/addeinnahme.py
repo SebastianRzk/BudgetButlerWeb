@@ -25,11 +25,11 @@ def handle_request(request):
                 dezimal_float(request.values['wert']))
             non_persisted_state.add_changed_einzelbuchungen(
                 {
-                    'fa':'pencil',
-                    'datum':datum_to_german(datum_object),
-                    'kategorie':request.values['kategorie'],
-                    'name':request.values['name'],
-                    'wert':from_double_to_german(dezimal_float(request.values['wert']))
+                    'fa': 'pencil',
+                    'datum': datum_to_german(datum_object),
+                    'kategorie': request.values['kategorie'],
+                    'name': request.values['name'],
+                    'wert': from_double_to_german(dezimal_float(request.values['wert']))
                     })
 
         else:
@@ -41,11 +41,11 @@ def handle_request(request):
                 dezimal_float(request.values['wert']))
             non_persisted_state.add_changed_einzelbuchungen(
                 {
-                    'fa':'plus',
-                    'datum':datum_to_german(datum_object),
-                    'kategorie':request.values['kategorie'],
-                    'name':request.values['name'],
-                    'wert':from_double_to_german(dezimal_float(request.values['wert']))
+                    'fa': 'plus',
+                    'datum': datum_to_german(datum_object),
+                    'kategorie': request.values['kategorie'],
+                    'name': request.values['name'],
+                    'wert': from_double_to_german(dezimal_float(request.values['wert']))
                     })
 
     if post_action_is(request, 'edit'):

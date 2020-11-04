@@ -20,7 +20,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
         persisted_state.DATABASE_INSTANCE = None
         persisted_state.DATABASES = []
         time.stub_today_with(datum('01.01.2019'))
-        configuration_provider.set_configuration('PARTNERNAME', 'Maureen')
+        configuration_provider.set_configuration('PARTNERNAME', 'Partner')
         request_handler.stub_me()
 
     def test_init(self):
@@ -31,8 +31,11 @@ class Gemeinsamabrechnen(unittest.TestCase):
         self.set_up()
         testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
-        gemeinsam_abrechnen.abrechnen(PostRequest({'set_ergebnis': '',
-                                                   'set_verhaeltnis': '50'}))
+        gemeinsam_abrechnen.abrechnen(PostRequest({
+            'set_mindate': '01.01.2010',
+            'set_maxdate': '01.01.2010',
+            'set_ergebnis': '',
+            'set_verhaeltnis': '50'}))
 
         assert testdb.einzelbuchungen.anzahl() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
@@ -43,6 +46,8 @@ class Gemeinsamabrechnen(unittest.TestCase):
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
 
         context = gemeinsam_abrechnen.abrechnen(PostRequest({
+            'set_mindate': '01.01.2010',
+            'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
             'set_verhaeltnis': 50
         }))
@@ -50,7 +55,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
         assert context['content']['abrechnungstext'] == '''Abrechnung vom 01.01.2019 
 (01.01.2010-01.01.2010)<br>########################################<br> 
 Ergebnis:<br>%Ergebnis%<br><br>Ausgaben von 
-Maureen             0.00<br>Ausgaben von 
+Partner             0.00<br>Ausgaben von 
 Test_User           
 0.00<br>--------------------------------------<br>Gesamt                           
 2.60<br><br><br>########################################<br> 
@@ -61,7 +66,7 @@ Name                    Wert<br>01.01.2010
 Eine Katgorie Ein Name                
 1.30<br><br><br>########################################<br> 
 Ausgaben von 
-Maureen<br>########################################<br> 
+Partner<br>########################################<br> 
 Datum      Kategorie    
 Name                    
 Wert<br><br><br>########################################<br> 
@@ -79,6 +84,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
         gemeinsam_abrechnen.abrechnen(PostRequest({
+            'set_mindate': '01.01.2010',
+            'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
             'set_verhaeltnis': 50
         }))
@@ -89,7 +96,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
                               ' Ergebnis:\n',
                               '%Ergebnis%\n',
                               '\n',
-                              'Ausgaben von Maureen             0.00\n',
+                              'Ausgaben von Partner             0.00\n',
                               'Ausgaben von Test_User           0.00\n',
                               '--------------------------------------\n',
                               'Gesamt                           2.60\n',
@@ -103,7 +110,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
                               '\n',
                               '\n',
                               '########################################\n',
-                              ' Ausgaben von Maureen\n',
+                              ' Ausgaben von Partner\n',
                               '########################################\n',
                               ' Datum      Kategorie    Name                    Wert\n',
                               '\n',
@@ -144,7 +151,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
         result = gemeinsam_abrechnen.index(PostRequest({'set_mindate': '2011-01-01', 'set_maxdate': '2011-02-01'}))
 
-        assert result['ergebnis'] == 'Maureen bekommt von Test_User noch 10.00€.'
+        assert result['ergebnis'] == 'Partner bekommt von Test_User noch 10.00€.'
         assert result['count'] == 3
         assert result['set_count'] == 1
 
@@ -160,11 +167,11 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         result = gemeinsam_abrechnen.index(PostRequest({'set_verhaeltnis': 60}))
 
         assert result[
-                   'ergebnis'] == 'Test_User übernimmt einen Anteil von 60% der Ausgaben.<br>Maureen bekommt von Test_User noch 10.00€.'
-        assert result['sebastian_soll'] == '60.00'
-        assert result['maureen_soll'] == '40.00'
-        assert result['sebastian_diff'] == '-10.00'
-        assert result['maureen_diff'] == '10.00'
+                   'ergebnis'] == 'Test_User übernimmt einen Anteil von 60% der Ausgaben.<br>Partner bekommt von Test_User noch 10.00€.'
+        assert result['self_soll'] == '60.00'
+        assert result['partner_soll'] == '40.00'
+        assert result['self_diff'] == '-10.00'
+        assert result['partner_diff'] == '10.00'
 
     def test_result_withLimitPartnerAndValueUnderLimit_shouldReturnDefaultVerhaeltnis(self):
         self.set_up()
@@ -181,10 +188,10 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
                                                         'set_limit_value': 100}))
 
         assert result['ergebnis'] == 'Die gemeinsamen Ausgaben sind ausgeglichen.'
-        assert result['sebastian_soll'] == '50.00'
-        assert result['maureen_soll'] == '50.00'
-        assert result['sebastian_diff'] == '0.00'
-        assert result['maureen_diff'] == '0.00'
+        assert result['self_soll'] == '50.00'
+        assert result['partner_soll'] == '50.00'
+        assert result['self_diff'] == '0.00'
+        assert result['partner_diff'] == '0.00'
 
     def test_result_withLimitPartnerAndValueOverLimit_shouldModifyVerhaeltnis(self):
         self.set_up()
@@ -201,11 +208,11 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
                                                         'set_limit_value': 40}))
 
         assert result[
-                   'ergebnis'] == 'Durch das Limit bei Maureen von 40 EUR wurde das Verhältnis von 50 auf 60.0 aktualisiert<br>Maureen bekommt von Test_User noch 10.00€.'
-        assert result['sebastian_soll'] == '60.00'
-        assert result['maureen_soll'] == '40.00'
-        assert result['sebastian_diff'] == '-10.00'
-        assert result['maureen_diff'] == '10.00'
+                   'ergebnis'] == 'Durch das Limit bei Partner von 40 EUR wurde das Verhältnis von 50 auf 60.0 aktualisiert<br>Partner bekommt von Test_User noch 10.00€.'
+        assert result['self_soll'] == '60.00'
+        assert result['partner_soll'] == '40.00'
+        assert result['self_diff'] == '-10.00'
+        assert result['partner_diff'] == '10.00'
         assert result['set_verhaeltnis'] == 50
         assert result['set_verhaeltnis_real'] == 60
 
@@ -224,10 +231,10 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
                                                         'set_limit_value': 100}))
 
         assert result['ergebnis'] == 'Die gemeinsamen Ausgaben sind ausgeglichen.'
-        assert result['sebastian_soll'] == '50.00'
-        assert result['maureen_soll'] == '50.00'
-        assert result['sebastian_diff'] == '0.00'
-        assert result['maureen_diff'] == '0.00'
+        assert result['self_soll'] == '50.00'
+        assert result['partner_soll'] == '50.00'
+        assert result['self_diff'] == '0.00'
+        assert result['partner_diff'] == '0.00'
 
     def test_result_withLimitSelfAndValueOverLimit_shouldModifyVerhaeltnis(self):
         self.set_up()
@@ -244,11 +251,11 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
                                                         'set_limit_value': 40}))
 
         assert result[
-                   'ergebnis'] == 'Durch das Limit bei Test_User von 40 EUR wurde das Verhältnis von 50 auf 40.0 aktualisiert<br>Test_User bekommt von Maureen noch 10.00€.'
-        assert result['sebastian_soll'] == '40.00'
-        assert result['maureen_soll'] == '60.00'
-        assert result['sebastian_diff'] == '10.00'
-        assert result['maureen_diff'] == '-10.00'
+                   'ergebnis'] == 'Durch das Limit bei Test_User von 40 EUR wurde das Verhältnis von 50 auf 40.0 aktualisiert<br>Test_User bekommt von Partner noch 10.00€.'
+        assert result['self_soll'] == '40.00'
+        assert result['partner_soll'] == '60.00'
+        assert result['self_diff'] == '10.00'
+        assert result['partner_diff'] == '-10.00'
 
     def some_name(self):
         return 'Some Cat.'
@@ -268,7 +275,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         name_partner = viewcore.name_of_partner()
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, name_partner)
         result = gemeinsam_abrechnen.index(GetRequest())
-        assert result['ergebnis'] == 'Maureen bekommt von Test_User noch 5.50€.'
+        assert result['ergebnis'] == 'Partner bekommt von Test_User noch 5.50€.'
 
     def some_kategorie(self):
         return ''
@@ -281,4 +288,4 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
         result = gemeinsam_abrechnen.index(GetRequest())
 
-        assert result['ergebnis'] == 'Test_User bekommt von Maureen noch 5.50€.'
+        assert result['ergebnis'] == 'Test_User bekommt von Partner noch 5.50€.'

@@ -18,7 +18,7 @@
 							   {% if bearbeitungsmodus %}
 							   disabled
 							   {% endif %}
-							   type="date" min="2000-01-01" max="2030-12-31" name="datum" class="form-control" required="required" autofocus="autofocus"/>
+							   type="date" min="2000-01-01" max="2030-12-31" name="datum_{{konto.konto}}" class="form-control" required="required" autofocus="autofocus"/>
 							   {% if bearbeitungsmodus %}
 								<input type="hidden" name="edit_index" value="{{edit_index}}">
 								<input type="hidden" name="datum" value="{{konto.datum}}">
@@ -27,7 +27,7 @@
 				</div>
 				{% for item in konto.filled_items%}
 				<div class="form-group">
-					<label>{{item.description}}</label> <input value="{{item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="depotwert_wert_{{item.isin}}" class="form-control" placeholder="" required="required" />
+					<label>{{item.description}}</label> <input value="{{item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert_{{konto.konto}}_{{item.isin}}" class="form-control" placeholder="" required="required" />
 				</div>
 				{% endfor %}
 				<div class="box input-box">
@@ -46,7 +46,7 @@
 			  </div>
 			</div>
 			<div class="box-footer">
-				<button type="submit" name="action" value="add" id="add" class="btn bordered-hover">{{approve_title}}</button>
+				<button type="submit" name="action" value="add" id="add_{{konto.konto}}" class="btn bordered-hover">{{approve_title}}</button>
 			</div>
 		</form>
 	</div>

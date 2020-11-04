@@ -5,6 +5,7 @@ from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
 from SeleniumTest import enter_test_mode
 from SeleniumTest import define_kategorie
+from SeleniumTest import click_add_button
 
 
 class TestUI(SeleniumTestClass):
@@ -13,8 +14,7 @@ class TestUI(SeleniumTestClass):
         fill_element(driver, 'date', '17031994')
         fill_element(driver, 'name', 'eine ausgabe')
         fill_element(driver, 'wert', '12,34')
-        add_button = driver.find_element_by_id('add')
-        add_button.click()
+        click_add_button(driver)
 
         base_table = driver.find_element_by_id('letzte_erfassungen')
         tableRows = base_table.find_elements_by_tag_name('tr')

@@ -1,5 +1,4 @@
 from flask import Flask
-app = Flask(__name__)
 from flask import request
 
 from butler_offline.views.einzelbuchungen import addausgabe, \
@@ -28,12 +27,17 @@ from butler_offline.views.sparen import uebersicht_sparen, \
     uebersicht_depotwerte, \
     add_order, \
     uebersicht_order, \
+    add_orderdauerauftrag, \
+    uebersicht_orderdauerauftrag, \
     add_depotauszug, \
     uebersicht_depotauszuege
 
 from butler_offline.viewcore import routes
 
 from butler_offline.views.shared import import_data
+
+
+app = Flask(__name__)
 
 
 @app.route('/')
@@ -151,6 +155,11 @@ def display_add_order():
     return add_order.index(request)
 
 
+@app.route(routes.SPAREN_ORDERDAUERAUFTRAG_ADD, methods=['GET', 'POST'])
+def display_add_orderdauerauftrag():
+    return add_orderdauerauftrag.index(request)
+
+
 @app.route(routes.SPAREN_DEPOTAUSZUG_ADD, methods=['GET', 'POST'])
 def display_add_depotauszug():
     return add_depotauszug.index(request)
@@ -170,13 +179,21 @@ def display_uebersicht_sparkontos():
 def display_uebersicht_depowerte():
     return uebersicht_depotwerte.index(request)
 
+
 @app.route(routes.SPAREN_ORDER_UEBERSICHT, methods=['GET', 'POST'])
 def display_uebersicht_order():
     return uebersicht_order.index(request)
 
+
+@app.route(routes.SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT, methods=['GET', 'POST'])
+def display_uebersicht_orderdauerauftrag():
+    return uebersicht_orderdauerauftrag.index(request)
+
+
 @app.route(routes.SPAREN_DEPOTAUSZUEGE_UEBERSICHT, methods=['GET', 'POST'])
 def display_uebersicht_depotauszuege():
     return uebersicht_depotauszuege.index(request)
+
 
 @app.route(routes.SPAREN_UEBERSICHT, methods=['GET'])
 def display_sparen_uebersicht():

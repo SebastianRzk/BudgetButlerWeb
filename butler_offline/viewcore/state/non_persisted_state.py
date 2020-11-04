@@ -9,7 +9,9 @@ KEY_CHANGED_SPARBUCHUNGEN = 'sparbuchungen_changed'
 KEY_CHANGED_SPARKONTOS = 'sparkontos_changed'
 KEY_CHANGED_DEPOTWERTE = 'depotwerte_changed'
 KEY_CHANGED_ORDER = 'order_changed'
+KEY_CHANGED_ORDERDAUERAUFTRAG = 'order_changed_dauerauftrag'
 KEY_CHANGED_DEPOTAUSZUEGE = 'depotauszue_changed'
+
 
 def _get_context():
     database_name = database_instance().name
@@ -26,7 +28,7 @@ def _get_context_for_key(key):
 
 
 def get_changed_einzelbuchungen():
-   return _get_context_for_key(KEY_CHANGED_EINZELBUCHUNGEN)
+    return _get_context_for_key(KEY_CHANGED_EINZELBUCHUNGEN)
 
 
 def add_changed_einzelbuchungen(new_changed_einzelbuchung_event):
@@ -94,6 +96,15 @@ def get_changed_depotauszuege():
 
 def add_changed_depotauszuege(new_changed_order_event):
     context = get_changed_depotauszuege()
+    context.append(new_changed_order_event)
+
+
+def get_changed_orderdauerauftrag():
+    return _get_context_for_key(KEY_CHANGED_ORDERDAUERAUFTRAG)
+
+
+def add_changed_orderdauerauftrag(new_changed_order_event):
+    context = get_changed_orderdauerauftrag()
     context.append(new_changed_order_event)
 
 

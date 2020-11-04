@@ -4,11 +4,15 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
+
+TYP_AUSGABE = 'Ausgabe'
+TYPE_EINNAHME = 'Einnahme'
 
 def handle_request(request):
     if request.method == 'POST' and request.values['action'] == 'add':
         value = dezimal_float(request.values['wert'])
-        if request.values['typ'] == 'Ausgabe':
+        if request.values['typ'] == TYP_AUSGABE:
             value = value * -1
 
         if 'edit_index' in request.values:
@@ -61,9 +65,9 @@ def handle_request(request):
         default_item['Endedatum'] = datum_to_string(default_item['Endedatum'])
 
         if default_item['Wert'] < 0:
-            default_item['typ'] = 'Ausgabe'
+            default_item['typ'] = TYP_AUSGABE
         else:
-            default_item['typ'] = 'Einnahme'
+            default_item['typ'] = TYPE_EINNAHME
 
         default_item['Wert'] = from_double_to_german(abs(default_item['Wert']))
 
@@ -78,16 +82,18 @@ def handle_request(request):
         context['default_item'] = {
             'Startdatum': '',
             'Endedatum': '',
-            'typ': 'Ausgabe',
+            'typ': TYP_AUSGABE,
             'Wert': '',
             'Name': ''
         }
 
-    context['kategorien'] = sorted(database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
+    context['kategorien'] = sorted(
+        database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_dauerauftraege())
-    context['rhythmen'] = ['monatlich']
+    context['rhythmen'] = ALL_FREQUENCY_NAMES
+
     return context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'einzelbuchungen/adddauerauftrag.html')
+    return request_handler.handle_request(request, handle_request, 'einzelbuchungen/add_dauerauftrag.html')

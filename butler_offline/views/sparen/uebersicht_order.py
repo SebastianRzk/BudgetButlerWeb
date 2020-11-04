@@ -29,7 +29,8 @@ def _handle_request(request):
             'Konto': row.Konto,
             'Typ': typ,
             'Depotwert': depotwerte.get_description_for(row.Depotwert),
-            'Wert': from_double_to_german(abs(row.Wert))
+            'Wert': from_double_to_german(abs(row.Wert)),
+            'Dynamisch': row.Dynamisch
         })
 
 

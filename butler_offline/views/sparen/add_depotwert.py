@@ -7,25 +7,30 @@ from butler_offline.viewcore.state import non_persisted_state
 
 def handle_request(request):
     if post_action_is(request, 'add'):
+        isin = request.values['isin']
+        if '_' in isin:
+            return viewcore.generate_error_context('add_depotwert', 'ISIN darf kein Unterstrich "_" enthalten.')
+        name = request.values['name']
+
         if "edit_index" in request.values:
             database_instance().depotwerte.edit(int(request.values['edit_index']),
-                name=request.values['name'],
-                isin=request.values['isin'])
+                name=name,
+                isin=isin)
             non_persisted_state.add_changed_depotwerte(
                 {
                     'fa': 'pencil',
-                    'Name': request.values['name'],
-                    'Isin': request.values['isin']
+                    'Name': name,
+                    'Isin': isin
                 })
         else:
             database_instance().depotwerte.add(
-                name=request.values['name'],
-                isin=request.values['isin'])
+                name=name,
+                isin=isin)
             non_persisted_state.add_changed_depotwerte(
                 {
                     'fa': 'plus',
-                    'Name': request.values['name'],
-                    'Isin': request.values['isin']
+                    'Name': name,
+                    'Isin': isin
                     })
 
     context = viewcore.generate_transactional_context('add_depotwert')

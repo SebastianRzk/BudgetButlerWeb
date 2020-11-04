@@ -9,6 +9,3 @@ class StatedObject:
 
     def taint_number(self):
         return self.tainted
-
-    def de_taint(self):
-        self.tainted = 0

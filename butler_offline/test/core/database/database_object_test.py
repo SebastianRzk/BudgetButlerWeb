@@ -2,6 +2,7 @@ import unittest
 from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
 
+
 class DatabaseObjectTest(unittest.TestCase):
     def test_something(self):
         stored_columns = ['col1', 'col2']

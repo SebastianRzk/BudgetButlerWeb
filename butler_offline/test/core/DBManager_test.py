@@ -18,7 +18,7 @@ class DBManagerReadDB(unittest.TestCase):
 
 
     def test_database_path_from(self):
-        assert DBManager.database_path_from('Sebastian') == '../Database_Sebastian.csv'
+        assert DBManager.database_path_from('TestUser') == '../Database_TestUser.csv'
 
 
     def teste_read_with_full_database(self):
@@ -28,17 +28,17 @@ class DBManagerReadDB(unittest.TestCase):
         database = DBManager.read('testuser', set())
 
         assert database.name == 'testuser'
-        assert len(database.einzelbuchungen.content) == 23
+        assert len(database.einzelbuchungen.content) == 25
         assert len(database.einzelbuchungen.content[database.einzelbuchungen.content.Dynamisch == False]) == 2
-        assert database.einzelbuchungen.select().sum() == -429
+        assert database.einzelbuchungen.select().sum() == -675
 
         assert len(database.dauerauftraege.content) == 2
         assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
         assert len(database.depotwerte.content) == 1
-        assert len(database.order.content) == 1
+        assert len(database.order.content) == 3
         assert len(database.depotauszuege.content) == 1
-
+        assert len(database.orderdauerauftrag.content) == 1
 
     def teste_write_with_full_database(self):
         self.mock_filesystem()
@@ -71,8 +71,8 @@ Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 
  Gemeinsame Buchungen 
 Datum,Kategorie,Name,Wert,Person
-2017-12-30,Miete,monatlich,-200.0,Sebastian
-2017-12-31,Miete,monatlich,-200.0,Maureen
+2017-12-30,Miete,monatlich,-200.0,TestUser
+2017-12-31,Miete,monatlich,-200.0,Partner
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
 2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
@@ -82,6 +82,9 @@ Name,ISIN
  Order
 Datum,Name,Konto,Depotwert,Wert
 2020-02-02,1order,1konto,1depotwert,200
+ Dauerauftr_Ordr 
+Startdatum,Endedatum,Rhythmus,Name,Konto,Depotwert,Wert
+2020-01-1,2020-02-02,monatlich,dauerauftrag_order,1konto,1depotwert,123
  Depotauszuege
 Datum,Depotwert,Konto,Wert
 2020-01-01,1depotwert,1konto,111
@@ -100,8 +103,8 @@ Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 
  Gemeinsame Buchungen 
 Datum,Kategorie,Name,Wert,Person
-2017-12-30,Miete,monatlich,-200.0,Sebastian
-2017-12-31,Miete,monatlich,-200.0,Maureen
+2017-12-30,Miete,monatlich,-200.0,TestUser
+2017-12-31,Miete,monatlich,-200.0,Partner
 
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
@@ -117,6 +120,10 @@ Name,ISIN
  Order 
 Datum,Name,Konto,Depotwert,Wert
 2020-02-02,1order,1konto,1depotwert,200
+
+ Dauerauftr_Ordr 
+Startdatum,Endedatum,Rhythmus,Name,Konto,Depotwert,Wert
+2020-01-01,2020-02-02,monatlich,dauerauftrag_order,1konto,1depotwert,123
 
  Depotauszuege 
 Datum,Depotwert,Konto,Wert
@@ -160,8 +167,8 @@ class DatabaseParserTest(unittest.TestCase):
 2017-09-30,Miete,Miete,monatlich,2017-01-13,-1.0'''
 
     gemeinsame_buchungen = '''Datum,Kategorie,Name,Wert,Person
-2017-12-30,Miete,monatlich,-200.0,Sebastian
-2017-12-31,Miete,monatlich,-200.0,Maureen'''
+2017-12-30,Miete,monatlich,-200.0,TestUser
+2017-12-31,Miete,monatlich,-200.0,Partner'''
 
     full_db = '''
 {einzelbuchungen}

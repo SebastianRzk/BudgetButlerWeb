@@ -6,26 +6,31 @@ from butler_offline.viewcore.state import non_persisted_state
 
 def handle_request(request):
     if post_action_is(request, 'add'):
+        kontoname = request.values['kontoname']
+        if '_' in kontoname:
+            return viewcore.generate_error_context('add_depotwert', 'Kontoname darf kein Unterstrich "_" enthalten.')
+        kontotyp = request.values['kontotyp']
+
         if "edit_index" in request.values:
             database_instance().sparkontos.edit(int(request.values['edit_index']),
-                kontoname=request.values['kontoname'],
-                kontotyp=request.values['kontotyp'])
+                kontoname=kontoname,
+                kontotyp=kontotyp)
             non_persisted_state.add_changed_sparkontos(
                 {
                     'fa': 'pencil',
-                    'Kontoname': request.values['kontoname'],
-                    'Kontotyp': request.values['kontotyp']
+                    'Kontoname': kontoname,
+                    'Kontotyp': kontotyp
                 })
 
         else:
             database_instance().sparkontos.add(
-                kontoname=request.values['kontoname'],
-                kontotyp=request.values['kontotyp'])
+                kontoname=kontoname,
+                kontotyp=kontotyp)
             non_persisted_state.add_changed_sparkontos(
                 {
                     'fa': 'plus',
-                    'Kontoname': request.values['kontoname'],
-                    'Kontotyp': request.values['kontotyp']
+                    'Kontoname': kontoname,
+                    'Kontotyp': kontotyp
                     })
 
     context = viewcore.generate_transactional_context('add_sparkonto')

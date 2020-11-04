@@ -1,7 +1,3 @@
-'''
-
-'''
-
 from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
 from SeleniumTest import fill_element_by_id
@@ -17,16 +13,16 @@ class TestGemeinsameAbrechnung(SeleniumTestClass):
  Ergebnis:
 test übernimmt einen Anteil von 70% der Ausgaben.
 
-Maureen bekommt von test noch 70.00€.
+Partner bekommt von test noch 70.00€.
 
-Ausgaben von Maureen          -100.00
+Ausgaben von Partner          -100.00
 Ausgaben von test                0.00
 --------------------------------------
 Gesamt                        -100.00
 
 
 ########################################
- Ausgaben von Maureen
+ Ausgaben von Partner
 ########################################
  Datum      Kategorie    Name                    Wert
 01.01.2010  0test_kategorie 0name                -100.00
@@ -49,28 +45,28 @@ Datum,Kategorie,Name,Wert,Dynamisch
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Maureen')
+        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
 
         driver.get('http://localhost:5000/gemeinsamabrechnen/')
 
-        assert content_of(driver, 'ausgabe_sebastian') == "0.00"
-        assert content_of(driver, 'ausgabe_sebastian_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_sebastian_diff') == "-50.00"
+        assert content_of(driver, 'ausgabe_self') == "0.00"
+        assert content_of(driver, 'ausgabe_self_soll') == "50.00"
+        assert content_of(driver, 'ausgabe_self_diff') == "-50.00"
 
-        assert content_of(driver, 'ausgabe_maureen') == "100.00"
-        assert content_of(driver, 'ausgabe_maureen_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_maureen_diff') == "50.00"
+        assert content_of(driver, 'ausgabe_partner') == "100.00"
+        assert content_of(driver, 'ausgabe_partner_soll') == "50.00"
+        assert content_of(driver, 'ausgabe_partner_diff') == "50.00"
 
         fill_element_by_id(driver, 'abrechnungsverhaeltnis', '70')
         driver.find_element_by_id('abrechnung_aktualisieren').click()
 
-        assert content_of(driver, 'ausgabe_sebastian') == "0.00"
-        assert content_of(driver, 'ausgabe_sebastian_soll') == "70.00"
-        assert content_of(driver, 'ausgabe_sebastian_diff') == "-70.00"
+        assert content_of(driver, 'ausgabe_self') == "0.00"
+        assert content_of(driver, 'ausgabe_self_soll') == "70.00"
+        assert content_of(driver, 'ausgabe_self_diff') == "-70.00"
 
-        assert content_of(driver, 'ausgabe_maureen') == "100.00"
-        assert content_of(driver, 'ausgabe_maureen_soll') == "30.00"
-        assert content_of(driver, 'ausgabe_maureen_diff') == "70.00"
+        assert content_of(driver, 'ausgabe_partner') == "100.00"
+        assert content_of(driver, 'ausgabe_partner_soll') == "30.00"
+        assert content_of(driver, 'ausgabe_partner_diff') == "70.00"
 
         driver.find_element_by_id('abrechnen').click()
         print('[',content_of(driver, 'abrechnung').replace('<br>', '\n'),']')
@@ -83,16 +79,16 @@ Datum,Kategorie,Name,Wert,Dynamisch
  Ergebnis:
 Durch das Limit bei test von 30 EUR wurde das Verhältnis von 50 auf 30.0 aktualisiert
 
-Maureen bekommt von test noch 30.00€.
+Partner bekommt von test noch 30.00€.
 
-Ausgaben von Maureen          -100.00
+Ausgaben von Partner          -100.00
 Ausgaben von test                0.00
 --------------------------------------
 Gesamt                        -100.00
 
 
 ########################################
- Ausgaben von Maureen
+ Ausgaben von Partner
 ########################################
  Datum      Kategorie    Name                    Wert
 01.01.2010  0test_kategorie 0name                -100.00
@@ -115,30 +111,30 @@ Datum,Kategorie,Name,Wert,Dynamisch
         driver = get_driver()
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Maureen')
+        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
 
         driver.get('http://localhost:5000/gemeinsamabrechnen/')
 
-        assert content_of(driver, 'ausgabe_sebastian') == "0.00"
-        assert content_of(driver, 'ausgabe_sebastian_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_sebastian_diff') == "-50.00"
+        assert content_of(driver, 'ausgabe_self') == "0.00"
+        assert content_of(driver, 'ausgabe_self_soll') == "50.00"
+        assert content_of(driver, 'ausgabe_self_diff') == "-50.00"
 
-        assert content_of(driver, 'ausgabe_maureen') == "100.00"
-        assert content_of(driver, 'ausgabe_maureen_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_maureen_diff') == "50.00"
+        assert content_of(driver, 'ausgabe_partner') == "100.00"
+        assert content_of(driver, 'ausgabe_partner_soll') == "50.00"
+        assert content_of(driver, 'ausgabe_partner_diff') == "50.00"
 
         driver.find_element_by_id('set_limit').click()
         select_option(driver, 'set_limit_fuer', 'test')
         fill_element(driver, 'set_limit_value', '30')
         driver.find_element_by_id('abrechnung_aktualisieren').click()
 
-        assert content_of(driver, 'ausgabe_sebastian') == "0.00"
-        assert content_of(driver, 'ausgabe_sebastian_soll') == "30.00"
-        assert content_of(driver, 'ausgabe_sebastian_diff') == "-30.00"
+        assert content_of(driver, 'ausgabe_self') == "0.00"
+        assert content_of(driver, 'ausgabe_self_soll') == "30.00"
+        assert content_of(driver, 'ausgabe_self_diff') == "-30.00"
 
-        assert content_of(driver, 'ausgabe_maureen') == "100.00"
-        assert content_of(driver, 'ausgabe_maureen_soll') == "70.00"
-        assert content_of(driver, 'ausgabe_maureen_diff') == "30.00"
+        assert content_of(driver, 'ausgabe_partner') == "100.00"
+        assert content_of(driver, 'ausgabe_partner_soll') == "70.00"
+        assert content_of(driver, 'ausgabe_partner_diff') == "30.00"
 
         driver.find_element_by_id('abrechnen').click()
         print('[',content_of(driver, 'abrechnung').replace('<br>', '\n'),']')
@@ -151,16 +147,16 @@ Datum,Kategorie,Name,Wert,Dynamisch
  Ergebnis:
 Durch das Limit bei test von 30 EUR wurde das Verhältnis von 50 auf 30.0 aktualisiert
 
-Maureen bekommt von test noch 30.00€.
+Partner bekommt von test noch 30.00€.
 
-Ausgaben von Maureen          -100.00
+Ausgaben von Partner          -100.00
 Ausgaben von test                0.00
 --------------------------------------
 Gesamt                        -100.00
 
 
 ########################################
- Ausgaben von Maureen
+ Ausgaben von Partner
 ########################################
  Datum      Kategorie    Name                    Wert
 01.01.2010  0test_kategorie 0name                -100.00
@@ -185,18 +181,18 @@ Datum,Kategorie,Name,Wert,Dynamisch
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
 
-        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Maureen')
+        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
         define_kategorie(driver, '1test_kategorie')
 
         driver.get('http://localhost:5000/gemeinsamabrechnen/')
 
-        assert content_of(driver, 'ausgabe_sebastian') == "0.00"
-        assert content_of(driver, 'ausgabe_sebastian_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_sebastian_diff') == "-50.00"
+        assert content_of(driver, 'ausgabe_self') == "0.00"
+        assert content_of(driver, 'ausgabe_self_soll') == "50.00"
+        assert content_of(driver, 'ausgabe_self_diff') == "-50.00"
 
-        assert content_of(driver, 'ausgabe_maureen') == "100.00"
-        assert content_of(driver, 'ausgabe_maureen_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_maureen_diff') == "50.00"
+        assert content_of(driver, 'ausgabe_partner') == "100.00"
+        assert content_of(driver, 'ausgabe_partner_soll') == "50.00"
+        assert content_of(driver, 'ausgabe_partner_diff') == "50.00"
 
         driver.find_element_by_id('set_limit').click()
         select_option(driver, 'set_limit_fuer', 'test')
@@ -210,13 +206,13 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         driver.find_element_by_id('abrechnung_aktualisieren').click()
 
-        assert content_of(driver, 'ausgabe_sebastian') == "0.00"
-        assert content_of(driver, 'ausgabe_sebastian_soll') == "30.00"
-        assert content_of(driver, 'ausgabe_sebastian_diff') == "-30.00"
+        assert content_of(driver, 'ausgabe_self') == "0.00"
+        assert content_of(driver, 'ausgabe_self_soll') == "30.00"
+        assert content_of(driver, 'ausgabe_self_diff') == "-30.00"
 
-        assert content_of(driver, 'ausgabe_maureen') == "100.00"
-        assert content_of(driver, 'ausgabe_maureen_soll') == "70.00"
-        assert content_of(driver, 'ausgabe_maureen_diff') == "30.00"
+        assert content_of(driver, 'ausgabe_partner') == "100.00"
+        assert content_of(driver, 'ausgabe_partner_soll') == "70.00"
+        assert content_of(driver, 'ausgabe_partner_diff') == "30.00"
 
         driver.find_element_by_id('abrechnen').click()
         assert content_of(driver, 'abrechnung').replace('<br>', '\n') == self.set_limit_abrechnung_ausgleich
@@ -238,8 +234,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert content_of(driver, 'item_1_wert') == '20,00'
 
         close_driver(driver)
-
-
 
     def _add_ausgabe(self, driver, date, name, kategorie, wert, person):
         driver.get('http://localhost:5000/addgemeinsam/')

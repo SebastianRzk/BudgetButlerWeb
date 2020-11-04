@@ -29,15 +29,14 @@ class EinzelbuchungenTest(unittest.TestCase):
             'some kategorie',
             'some name',
             1.23)
-        component_under_test.de_taint()
-        assert component_under_test.taint_number() == 0
+        assert component_under_test.taint_number() == 1
         component_under_test.edit(
             0,
             datum('2.1.2010'),
             'some other kategorie',
             'some other name',
             2.34)
-        assert component_under_test.taint_number() == 1
+        assert component_under_test.taint_number() == 2
 
     def test_delete_shouldTaint(self):
         component_under_test = Einzelbuchungen()
@@ -47,10 +46,9 @@ class EinzelbuchungenTest(unittest.TestCase):
             'some kategorie',
             'some name',
             1.23)
-        component_under_test.de_taint()
-        assert component_under_test.taint_number() == 0
-        component_under_test.delete(0)
         assert component_under_test.taint_number() == 1
+        component_under_test.delete(0)
+        assert component_under_test.taint_number() == 2
 
 
     def test_add(self):

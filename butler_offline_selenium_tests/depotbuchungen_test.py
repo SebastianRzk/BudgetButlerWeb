@@ -1,15 +1,7 @@
-'''
-Created on 23.11.2017
-
-@author: sebastian
-'''
 from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
 from SeleniumTest import enter_test_mode
-from SeleniumTest import define_kategorie
 from SeleniumTest import select_option
-from time import sleep
-from SeleniumTest import get_selected_option
 from SeleniumTest import click_add_button
 
 class TestUI(SeleniumTestClass):
@@ -42,12 +34,12 @@ class TestUI(SeleniumTestClass):
 
         click_add_button(driver)
 
-    def _add_depotauszug(self, driver, datum, depotwert, wert):
+    def _add_depotauszug(self, driver, datum, konto, depotwert, wert):
         driver.get('http://localhost:5000/add_depotauszug/')
-        fill_element(driver, 'datum', datum)
-        fill_element(driver, 'depotwert_wert_' + depotwert, wert)
+        fill_element(driver, 'datum_' + konto, datum)
+        fill_element(driver, 'wert_' + konto + '_' + depotwert, wert)
 
-        click_add_button(driver)
+        click_add_button(driver, '_' + konto)
 
 
     def teste_uebersicht_order(self, get_driver, close_driver):
@@ -74,7 +66,7 @@ class TestUI(SeleniumTestClass):
         self._add_depot(driver, 'TestKonto')
         self._add_depotwert(driver, 'Testdepotwert', 'ISINDEMO')
         self._add_order(driver, '2020-01-01', 'testname', 'Testdepotwert (ISINDEMO)', 'Testdepot', 10,  True)
-        self._add_depotauszug(driver, '2020-01-02', 'ISINDEMO', 9)
+        self._add_depotauszug(driver, '2020-01-02', 'TestKonto', 'ISINDEMO', 9)
 
 
         driver.get('http://localhost:5000/uebersicht_sparkontos/')

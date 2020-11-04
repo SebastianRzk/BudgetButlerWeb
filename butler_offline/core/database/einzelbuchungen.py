@@ -12,7 +12,8 @@ from butler_offline.core.database.database_object import DatabaseObject
 
 
 class Einzelbuchungen(DatabaseObject):
-    TABLE_HEADER = ['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch']
+    STATIC_TABLE_HEADER = ['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']
+    TABLE_HEADER = STATIC_TABLE_HEADER + ['Dynamisch']
     tmp_kategorie = None
     ausgeschlossene_kategorien = set()
 
@@ -154,5 +155,5 @@ class Einzelbuchungen(DatabaseObject):
         return result
 
     def get_static_content(self):
-        static_content = self.content.copy()[self.content.Dynamisch==False]
-        return static_content[['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']]
+        static_content = self.content.copy()[self.content.Dynamisch == False]
+        return static_content[self.STATIC_TABLE_HEADER]

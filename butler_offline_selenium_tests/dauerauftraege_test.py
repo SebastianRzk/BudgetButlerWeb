@@ -1,15 +1,11 @@
-'''
-Created on 23.11.2017
-
-@author: sebastian
-'''
 from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
 from SeleniumTest import enter_test_mode
 from SeleniumTest import define_kategorie
 from SeleniumTest import select_option
-from time import sleep
 from SeleniumTest import get_selected_option
+from SeleniumTest import click_add_button
+
 
 class TestUI(SeleniumTestClass):
     def _add_dauerauftrag(self, driver, startdatum, endedatum, name, kategorie, wert, typ):
@@ -21,8 +17,7 @@ class TestUI(SeleniumTestClass):
         select_option(driver, 'kategorie_auswahl', kategorie)
         select_option(driver, 'typ_auswahl', typ)
 
-        add_button = driver.find_element_by_id('add')
-        add_button.click()
+        click_add_button(driver)
 
 
     def teste_uebersicht(self, get_driver, close_driver):

@@ -1,14 +1,10 @@
-'''
-Created on 23.11.2017
-
-@author: sebastian
-'''
 from SeleniumTest import SeleniumTestClass
 from SeleniumTest import fill_element
 from SeleniumTest import enter_test_mode
 from SeleniumTest import define_kategorie
 from SeleniumTest import select_option
 from SeleniumTest import get_selected_option
+from SeleniumTest import click_add_button
 
 class TestUI(SeleniumTestClass):
     def _add_ausgabe(self, driver, date, name, kategorie, wert):
@@ -18,8 +14,7 @@ class TestUI(SeleniumTestClass):
         fill_element(driver, 'wert', wert)
         select_option(driver, 'kategorie_auswahl', kategorie)
 
-        add_button = driver.find_element_by_id('add')
-        add_button.click()
+        click_add_button(driver)
 
         base_table = driver.find_element_by_id('letzte_erfassungen')
         tableRows = base_table.find_elements_by_tag_name('tr')
