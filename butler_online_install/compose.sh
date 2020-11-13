@@ -18,8 +18,8 @@ cd -
 
 echo "build ng frontend"
 cd butler_online/budgetbutler
-#npm install
-#ng build --prod
+npm install
+ng build --prod
 cd -
 
 echo "create webspace edition"
