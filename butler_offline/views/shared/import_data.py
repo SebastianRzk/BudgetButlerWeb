@@ -17,6 +17,7 @@ from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_partnername, login
 from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
 from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, upload_gemeinsame_buchungen
+from butler_offline.views.online_services.settings import set_kategorien
 from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 
@@ -112,9 +113,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
-            serverurl = serverurl + '/setkategorien.php'
-
-            requester.instance().post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
+            auth_container = login(serverurl, request.values['email'], request.values['password'])
+            set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
 
         elif post_action_is(request, 'upload_gemeinsame_transactions'):
             serverurl = request.values['server']

@@ -348,7 +348,11 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
 
     configuration.index(PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'NeinEins'}))
 
-    requester.INSTANCE = RequesterStub({'https://test.test/setkategorien.php': ''})
+    requester.INSTANCE = RequesterStub({
+        'https://test.test/setkategorien.php': '',
+        'https://test.test/login.php': LOGIN_RESPONSE},
+        DECODED_LOGIN_DATA,
+        auth_cookies=LOGIN_COOKIES)
 
     import_data.index(PostRequest({'action': 'set_kategorien',
                                    'email': '',
