@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__."/dtos/GemeinsameBuchungDto.php";
 /**
  * @Entity @Table(name="gemeinsamebuchungen")

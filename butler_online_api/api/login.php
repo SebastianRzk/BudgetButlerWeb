@@ -1,7 +1,9 @@
 <?php
 require_once(__DIR__.'/util/creds.php');
+require_once(__DIR__.'/util/init.php');
 require_once(__DIR__.'/model.php');
 try {
+	init();
 	$auth = getAuth();
 	if( isset($_POST['email']) and isset($_POST['password'])){
 		$auth->login($_POST['email'], $_POST['password']);

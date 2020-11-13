@@ -1,8 +1,7 @@
 <?php
 require_once(__DIR__.'/util/creds.php');
 require_once(__DIR__.'/model.php');
-authenticated(function(){
-	$auth = getAuth();
+authenticated(function($auth){
 	$dbh = getPDO();
 	$partnerstatus =  get_partnerstatus($auth, $dbh);
 

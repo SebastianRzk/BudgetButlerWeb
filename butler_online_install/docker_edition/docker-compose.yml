@@ -1,0 +1,30 @@
+version: '3'
+services:
+  static-web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/www
+      - ./site.conf:/etc/nginx/conf.d/default.conf
+    env_file:
+      - db.env
+
+  php-fpm:
+    build: php-fpm-image
+    volumes:
+      - ./src/:/www/
+    env_file:
+      - db.env
+
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    env_file:
+      - db.env
+
+volumes:
+  db:
+

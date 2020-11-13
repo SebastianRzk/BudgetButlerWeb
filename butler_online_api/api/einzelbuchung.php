@@ -5,8 +5,7 @@ require_once(__DIR__.'/model.php');
 require_once(__DIR__.'/src/Einzelbuchung.php');
 
 
-authenticated(function(){
-	$auth = getAuth();
+authenticated(function($auth){
 	$dbh = getPDO();
 
 	if($_SERVER['REQUEST_METHOD'] === 'PUT'){
