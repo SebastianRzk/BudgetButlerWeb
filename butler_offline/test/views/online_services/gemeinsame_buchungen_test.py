@@ -1,6 +1,7 @@
 
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, upload_gemeinsame_buchungen
+from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen,\
+    upload_gemeinsame_buchungen, delete_gemeinsame_buchungen
 from butler_offline.test.RequesterStub import RequesterStub
 from butler_offline.views.online_services.session import OnlineAuth
 
@@ -44,3 +45,12 @@ def test_upload_gemeinsame_buchungen():
 
     assert result
     assert requester.INSTANCE.data_of_request(api_url) == [data]
+
+
+def test_delete_gemeinsame_buchugen():
+    requester.INSTANCE = RequesterStub({'https://test.test/deletegemeinsam.php': 'ok'})
+
+    delete_gemeinsame_buchungen('https://test.test', auth_container=OnlineAuth(None, None, None))
+
+    assert requester.INSTANCE.call_count_of('https://test.test/deletegemeinsam.php') == 1
+

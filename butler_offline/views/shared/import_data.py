@@ -1,5 +1,3 @@
-
-import pandas
 from datetime import datetime
 
 from butler_offline.viewcore.state.persisted_state import database_instance
@@ -13,10 +11,10 @@ from butler_offline.viewcore.base_html import set_success_message, set_error_mes
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.viewcore import configuration_provider
-from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_partnername, login
 from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
-from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, upload_gemeinsame_buchungen
+from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, \
+    upload_gemeinsame_buchungen, delete_gemeinsame_buchungen
 from butler_offline.views.online_services.settings import set_kategorien
 from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
@@ -101,9 +99,9 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             print('table before person mapping', table)
             table.Person = table.Person.map(lambda x: database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
             online_content = TextReportWriter().generate_report(table)
-            response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
+            response = handle_request(PostRequest({'import': online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
-            requester.instance().post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            delete_gemeinsame_buchungen(serverurl, auth_container=auth_container)
             return response
 
 
