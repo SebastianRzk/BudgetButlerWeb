@@ -2,8 +2,8 @@ from butler_offline.viewcore import requester
 import json
 
 
-def get_partnername(serverurl, email, password):
-    partner_configuration_string = requester.instance().post(serverurl + '/partner.php', data={'email': email, 'password': password})
+def get_partnername(serverurl, auth_container):
+    partner_configuration_string = requester.instance().post(serverurl + '/partner.php', cookies=auth_container.cookies())
     partner_configuration = json.loads(partner_configuration_string)
     return partner_configuration['partnername']
 

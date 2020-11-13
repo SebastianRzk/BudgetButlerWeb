@@ -21,7 +21,6 @@ from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 
 
-
 def _mapping_passt(post_parameter, unpassende_kategorien):
     for unpassenden_kategorie in unpassende_kategorien:
         if not str(unpassenden_kategorie) + "_mapping" in post_parameter:
@@ -80,7 +79,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             text_report = JSONToTextMapper().map(json_report)
             print(text_report)
 
-            response = handle_request(PostRequest({'import' : text_report}), import_prefix='Internet')
+            response = handle_request(PostRequest({'import': text_report}), import_prefix='Internet')
             r = requester.instance().post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
             return response
 
@@ -127,15 +126,15 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             print('butler_online username:', online_username)
             offline_username = database_instance().name
             print('butler offline username:', offline_username)
-            online_partnername = get_partnername(serverurl, request.values['email'], request.values['password'])
+            online_partnername = get_partnername(serverurl, auth_container=auth_container)
             print('butler online partnername:', online_partnername)
             offline_partnername = configuration_provider.get_configuration('PARTNERNAME')
             print('butler offline partnername:', offline_partnername)
 
             buchungen = database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
-                                                                                                                               online_username,
-                                                                                                                               offline_partnername,
-                                                                                                                               online_partnername)
+                                                                                 online_username,
+                                                                                 offline_partnername,
+                                                                                 online_partnername)
             request_data = []
 
             for buchung in buchungen:
