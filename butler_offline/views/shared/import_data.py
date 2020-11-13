@@ -93,7 +93,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             online_username = auth_container.online_name()
             print('butler_online username: ', online_username)
 
-            online_content = get_gemeinsame_buchungen(serverurl, request.values['email'], request.values['password'])
+            online_content = get_gemeinsame_buchungen(serverurl, auth_container)
             print(online_content)
             table = JSONReport().dataframe_from_json_gemeinsam(online_content)
 
