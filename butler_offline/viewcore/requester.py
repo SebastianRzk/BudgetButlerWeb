@@ -11,9 +11,9 @@ def instance():
 
 class Requester:
 
-    def post(self, server_url, data):
+    def post(self, server_url, data={}, cookies=None):
         print('requested url', server_url, data)
-        response = requests.post(server_url, data=data)
+        response = requests.post(server_url, data=data, cookies=cookies)
         response.raise_for_status()
         return self.decode(response)
 

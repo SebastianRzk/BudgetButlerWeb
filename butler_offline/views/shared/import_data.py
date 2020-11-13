@@ -72,7 +72,9 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
-            json_report = get_einzelbuchungen(serverurl, request.values['email'], request.values['password'])
+            auth_container = login(serverurl, request.values['email'], request.values['password'])
+
+            json_report = get_einzelbuchungen(serverurl, auth_container)
             print(json_report)
             print('Mapping to text report')
             text_report = JSONToTextMapper().map(json_report)
