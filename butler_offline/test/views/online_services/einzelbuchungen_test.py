@@ -1,6 +1,6 @@
 
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
+from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
 from butler_offline.test.RequesterStub import RequesterStub
 from butler_offline.views.online_services.session import OnlineAuth
 
@@ -20,3 +20,12 @@ def test_import_einzelbuchungen():
     assert result[0]["name"] == "Testausgabe1"
     assert result[1]["id"] == "123"
     assert result[1]["name"] == "Testausgabe2"
+
+
+def test_delete_einzelbuchhungen():
+    requester.INSTANCE = RequesterStub({'https://test.test/deleteitems.php': 'ok'})
+
+    delete_einzelbuchungen('https://test.test', auth_container=OnlineAuth(None, None, None))
+
+    assert requester.INSTANCE.call_count_of('https://test.test/deleteitems.php') == 1
+

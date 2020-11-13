@@ -15,7 +15,7 @@ from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_partnername, login
-from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
+from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
 from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, upload_gemeinsame_buchungen
 from butler_offline.views.online_services.settings import set_kategorien
 from butler_offline.core.export.json_report import JSONReport
@@ -81,7 +81,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             print(text_report)
 
             response = handle_request(PostRequest({'import': text_report}), import_prefix='Internet')
-            r = requester.instance().post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
+
+            delete_einzelbuchungen(serverurl, auth_container=auth_container)
             return response
 
         if post_action_is(request, 'load_online_gemeinsame_transactions'):
