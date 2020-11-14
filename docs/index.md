@@ -121,8 +121,6 @@ oder:
 
 * Diesen Ordner auf den Webspace laden `butler_online_distribution/webspace_edition`
 
-* Diese SQL-Skripte in der Datenbank ausführen `butler_online_install/`
-
 * Prüfen, dass die Datei `db.ini` von außen nicht erreichbar ist.
 
 * Login auf `/`. Initiale Anmeldedaten:
