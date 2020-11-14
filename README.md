@@ -44,7 +44,11 @@ And open your webbrowser and visit:
 #### Server requirements
 
 * Database
-* PHP-server
+* PHP-server (7.3+)
+
+or
+
+* docker and docker-compose
 
 #### Building requirements
 
@@ -79,8 +83,5 @@ And open your webbrowser and visit:
 
 ## Screenshots
 [Link to screenshots page](docs/screenshots.md)
-
-## TODO
-[Link to todo page](docs/todo.md)
 
 
