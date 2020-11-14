@@ -4,8 +4,7 @@ require_once(__DIR__.'/model.php');
 
 
 
-authenticated(function(){
-	$auth = getAuth();
+authenticated(function($auth){
 	$dbh = getPDO();
 
 	if($_SERVER['REQUEST_METHOD'] === 'PUT'){

@@ -19,7 +19,15 @@ from butler_offline.test.RequesterStub import RequesterErrorStub
 
 LOGIN_COOKIES = 'login cookies'
 
-LOGIN_RESPONSE = MockedResponse('data', LOGIN_COOKIES)
+_JSON_DATA_USERNAME = '''
+{
+    "username": "TestUser",
+    "token": "0x00",
+    "role": "User"
+}
+'''
+
+LOGIN_RESPONSE = MockedResponse(_JSON_DATA_USERNAME, LOGIN_COOKIES)
 
 DECODED_LOGIN_DATA = '''{
     "username": "online user name"
@@ -163,13 +171,6 @@ _JSON_IMPORT_DATA = '''
 ]
 '''
 
-_JSON_DATA_USERNAME = '''
-{
-    "username": "TestUser",
-    "token": "0x00",
-    "role": "User"
-}
-'''
 
 _JSON_DATA_PARTNER = '''
 {
@@ -185,7 +186,8 @@ def test_einzelbuchung_import_adde_passende_kategorie_should_import_value():
 
     requester.INSTANCE = RequesterStub({'https://test.test/einzelbuchung.php': _JSON_IMPORT_DATA,
                                         'https://test.test/deleteitems.php': '',
-                                        'https://test.test/login.php': _JSON_DATA_USERNAME})
+                                        'https://test.test/login.php': LOGIN_RESPONSE},
+                                       mocked_decode=DECODED_LOGIN_DATA)
 
     context = import_data.index(PostRequest({'action': 'load_online_transactions',
                                              'email': '',
@@ -210,7 +212,7 @@ def test_einzelbuchung_import_adde_passende_kategorie_should_import_value():
         'index': 2}
 
     assert requester.instance().call_count_of('https://test.test/deleteitems.php') == 1
-    assert requester.instance().complete_call_count() == 2
+    assert requester.instance().complete_call_count() == 3
 
 
 def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
@@ -346,7 +348,11 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
 
     configuration.index(PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'NeinEins'}))
 
-    requester.INSTANCE = RequesterStub({'https://test.test/setkategorien.php': ''})
+    requester.INSTANCE = RequesterStub({
+        'https://test.test/setkategorien.php': '',
+        'https://test.test/login.php': LOGIN_RESPONSE},
+        DECODED_LOGIN_DATA,
+        auth_cookies=LOGIN_COOKIES)
 
     import_data.index(PostRequest({'action': 'set_kategorien',
                                    'email': '',

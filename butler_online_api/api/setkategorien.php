@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__.'/util/creds.php');
-authenticated(function(){
-	$auth = getAuth();
+authenticated(function($auth){
 	echo "well done!";
 	$dbh = getPDO();
 

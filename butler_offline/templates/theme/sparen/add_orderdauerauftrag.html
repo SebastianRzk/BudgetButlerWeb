@@ -43,7 +43,7 @@
 						 {% for depotwert in depotwerte %}
 						<option
 								value="{{depotwert.isin}}"
-								{% if bearbeitungsmodus and depotwert == default_item.depotwert%}
+								{% if bearbeitungsmodus and depotwert.isin == default_item.depotwert%}
 								selected="selected"
 								{% endif %}
 								>{{depotwert.description}}</option>

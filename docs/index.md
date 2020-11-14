@@ -30,7 +30,7 @@
 ** Abrechnungen exportieren und importieren
 
 * Sparen
-** Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte, Order sowie Depotauszuege
+** Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte, Order, Order-Dauerauftraegen sowie Depotauszuege
 ** Sparen Übersicht:
 *** Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
 *** Zusammensetzung der Sparanlage
@@ -90,14 +90,18 @@ BudgetButlerWeb aktualisieren:
 ### Systemanfoderungen zum Build
 
 * npm
-* composer
+* composer + php 7.3+
 
 ### Systemanforderung für den Betrieb:
 
-* Webspace mit PHP
+* Webspace mit PHP 7.3+
 * Relationale Datenbank
 
-### Installation
+oder:
+
+* docker und docker-compose
+
+### Installation Webspace
 
 * Repo clonen
 
@@ -111,13 +115,41 @@ BudgetButlerWeb aktualisieren:
 
         sh butler_online_install/compose.sh
 
-* Datenbank-Zugangsdaten in die Datei `butler_online_distribution/api/db.ini` eintragen
+* Datenbank-Zugangsdaten in die Datei `butler_online_distribution/webspace_edition/api/db.ini` eintragen
 
-* Diesen Ordner auf den Webspace laden `butler_online_distribution`
+* Für http (und nicht https Betrieb) in der Datei `api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
 
-* Diese SQL-Skripte in der Datenbank ausführen `butler_online_install/`
+* Diesen Ordner auf den Webspace laden `butler_online_distribution/webspace_edition`
 
 * Prüfen, dass die Datei `db.ini` von außen nicht erreichbar ist.
+
+* Login auf `/`. Initiale Anmeldedaten:
+    * User: admin@admin.de
+    * Password: adminadminadmin
+
+### Installation docker + docker-compose
+
+* Repo clonen
+
+        git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+
+* Ins Projektverzeichnis wechseln
+
+        cd BudgetButlerWeb
+
+* Build in das Verzeichnis `butler_online_distribution` triggern
+
+        sh butler_online_install/compose.sh
+
+* In das Verzeichnis wechseln: `butler_online_distribution/docker_edition`
+
+*  Gegebenenfalls die Passwörder in der `db.env` ändern
+
+* Für http (und nicht https Betrieb) in der Datei `src/api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
+
+* Folgenden Befehl ausführen:
+
+	docker-compose up
 
 * Login auf `/`. Initiale Anmeldedaten:
     * User: admin@admin.de

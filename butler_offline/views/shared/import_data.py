@@ -1,5 +1,3 @@
-
-import pandas
 from datetime import datetime
 
 from butler_offline.viewcore.state.persisted_state import database_instance
@@ -13,13 +11,13 @@ from butler_offline.viewcore.base_html import set_success_message, set_error_mes
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.viewcore import configuration_provider
-from butler_offline.viewcore import requester
 from butler_offline.views.online_services.session import get_partnername, login
-from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen
-from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, upload_gemeinsame_buchungen
+from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
+from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, \
+    upload_gemeinsame_buchungen, delete_gemeinsame_buchungen
+from butler_offline.views.online_services.settings import set_kategorien
 from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
-
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -72,14 +70,17 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
-            json_report = get_einzelbuchungen(serverurl, request.values['email'], request.values['password'])
+            auth_container = login(serverurl, request.values['email'], request.values['password'])
+
+            json_report = get_einzelbuchungen(serverurl, auth_container)
             print(json_report)
             print('Mapping to text report')
             text_report = JSONToTextMapper().map(json_report)
             print(text_report)
 
-            response = handle_request(PostRequest({'import' : text_report}), import_prefix='Internet')
-            r = requester.instance().post(serverurl + '/deleteitems.php', data={'email': request.values['email'], 'password': request.values['password']})
+            response = handle_request(PostRequest({'import': text_report}), import_prefix='Internet')
+
+            delete_einzelbuchungen(serverurl, auth_container=auth_container)
             return response
 
         if post_action_is(request, 'load_online_gemeinsame_transactions'):
@@ -91,16 +92,16 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             online_username = auth_container.online_name()
             print('butler_online username: ', online_username)
 
-            online_content = get_gemeinsame_buchungen(serverurl, request.values['email'], request.values['password'])
+            online_content = get_gemeinsame_buchungen(serverurl, auth_container)
             print(online_content)
             table = JSONReport().dataframe_from_json_gemeinsam(online_content)
 
             print('table before person mapping', table)
             table.Person = table.Person.map(lambda x: database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
             online_content = TextReportWriter().generate_report(table)
-            response = handle_request(PostRequest({'import' : online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
+            response = handle_request(PostRequest({'import': online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
-            requester.instance().post(serverurl + '/deletegemeinsam.php', data={'email': request.values['email'], 'password': request.values['password']})
+            delete_gemeinsame_buchungen(serverurl, auth_container=auth_container)
             return response
 
 
@@ -111,9 +112,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
 
-            serverurl = serverurl + '/setkategorien.php'
-
-            requester.instance().post(serverurl, data={'email': request.values['email'], 'password': request.values['password'], 'kategorien': kategorien})
+            auth_container = login(serverurl, request.values['email'], request.values['password'])
+            set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
 
         elif post_action_is(request, 'upload_gemeinsame_transactions'):
             serverurl = request.values['server']
@@ -125,15 +125,15 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             print('butler_online username:', online_username)
             offline_username = database_instance().name
             print('butler offline username:', offline_username)
-            online_partnername = get_partnername(serverurl, request.values['email'], request.values['password'])
+            online_partnername = get_partnername(serverurl, auth_container=auth_container)
             print('butler online partnername:', online_partnername)
             offline_partnername = configuration_provider.get_configuration('PARTNERNAME')
             print('butler offline partnername:', offline_partnername)
 
             buchungen = database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
-                                                                                                                               online_username,
-                                                                                                                               offline_partnername,
-                                                                                                                               online_partnername)
+                                                                                 online_username,
+                                                                                 offline_partnername,
+                                                                                 online_partnername)
             request_data = []
 
             for buchung in buchungen:

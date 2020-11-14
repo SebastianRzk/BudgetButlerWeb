@@ -5,8 +5,7 @@ require_once(__DIR__.'/entityManager.php');
 require_once(__DIR__.'/src/GemeinsameBuchung.php');
 
 
-authenticated(function(){
-	$auth = getAuth();
+authenticated(function($auth){
 	$dbh = getPDO();
 
 	if($_SERVER['REQUEST_METHOD'] === 'PUT'){

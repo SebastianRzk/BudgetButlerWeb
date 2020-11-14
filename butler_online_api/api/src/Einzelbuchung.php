@@ -1,6 +1,6 @@
 <?php
-
 require_once __DIR__."/dtos/EinzelbuchungDto.php";
+
 /**
  * @Entity @Table(name="einzelbuchungen")
  **/

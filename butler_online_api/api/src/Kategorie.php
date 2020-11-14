@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @Entity @Table(name="kategorie")
  **/

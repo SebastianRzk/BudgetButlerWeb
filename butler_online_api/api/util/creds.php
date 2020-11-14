@@ -2,9 +2,33 @@
 require __DIR__ . '/../vendor/autoload.php';
 require_once(__DIR__.'/../model.php');
 
+
+
+function choose($key, $config_from_env, $config_from_ini, $default_value){
+	if (isset($config_from_env[$key])){
+		return $config_from_env[$key];
+	} 
+	if (isset($config_from_ini[$key])){
+		return $config_from_ini[$key];
+	}
+	return $default_value;
+}
+
+
+function getConfig() {
+	$config_from_ini  = parse_ini_file(__DIR__.'/../db.ini');
+	$config_from_env = getenv();
+	return array(
+		'db_name' => choose('db_name', $config_from_env, $config_from_ini, 'butler'),
+		'db_usr' => choose('db_usr', $config_from_env, $config_from_ini, 'butler'),
+		'db_pw' => choose('db_pw', $config_from_env, $config_from_ini, 'butler'),
+		'db_host' => choose('db_host', $config_from_env, $config_from_ini, 'localhost')
+	);
+}
+
 function getPDO(){
-	$config_array  = parse_ini_file(__DIR__.'/../db.ini');
-	return new PDO('mysql:dbname='.$config_array['db_name'].';host=localhost;charset=utf8mb4', $config_array['db_usr'], $config_array['db_pw']);
+	$config_array = getConfig();
+	return new PDO('mysql:dbname='.$config_array['db_name'].';host='.$config_array['db_host'].';charset=utf8mb4', $config_array['db_usr'], $config_array['db_pw']);
 }
 
 function online(){
@@ -19,14 +43,14 @@ function getAuth(){
 		ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
 	}
 
-	$config_array  = parse_ini_file('db.ini');
+	$config_array  = getConfig();
 	// $db = new \PDO('mysql:dbname=my-database;host=localhost;charset=utf8mb4', 'my-username', 'my-password');
 	// or
 	// $db = new \PDO('pgsql:dbname=my-database;host=localhost;port=5432', 'my-username', 'my-password');
 	// or
 	// $db = new \PDO('sqlite:../Databases/my-database.sqlite');
 	// or
-	 $db = new \Delight\Db\PdoDsn('mysql:dbname='.$config_array['db_name'].';host=localhost;charset=utf8mb4', $config_array['db_usr'], $config_array['db_pw']);
+	 $db = new \Delight\Db\PdoDsn('mysql:dbname='.$config_array['db_name'].';host='.$config_array['db_host'].';charset=utf8mb4', $config_array['db_usr'], $config_array['db_pw']);
 	// or
 	// $db = new \Delight\Db\PdoDsn('pgsql:dbname=my-database;host=localhost;port=5432', 'my-username', 'my-password');
 	// or
@@ -36,13 +60,13 @@ function getAuth(){
 
 function authenticated($myfunc){
 	try {
-		if (getAuth()->isLoggedIn()) {
-			$myfunc();
+		$auth = getAuth();
+		if ($auth->isLoggedIn()) {
+			$myfunc($auth);
 		} else {
 			if( isset($_POST['email']) and isset($_POST['password'])){
-				$auth = getAuth();
 				$auth->login($_POST['email'], $_POST['password']);
-				$myfunc();
+				$myfunc($auth);
 			} else {
 				header('Location: login.php');
 				die();
@@ -122,12 +146,12 @@ function get_partnerstatus($auth, $dbh) {
 
 function doctrineConnection() {
 	$config = new \Doctrine\DBAL\Configuration();
-	$config_array  = parse_ini_file('db.ini');
+	$config_array  = getConfig();
 	$connectionParams = array(
 	    'dbname' => $config_array['db_name'],
 	    'user' => $config_array['db_usr'],
 	    'password' => $config_array['db_pw'],
-	    'host' => 'localhost',
+	    'host' => $config_array['db_host'],
 	    'driver' => 'pdo_mysql',
 	    'charset'  => 'utf8mb4'
 	);
