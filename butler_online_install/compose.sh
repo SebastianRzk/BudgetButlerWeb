@@ -36,9 +36,9 @@ echo "create docker edition"
 mkdir butler_online_distribution/docker_edition
 mkdir butler_online_distribution/docker_edition/src/
 mkdir butler_online_distribution/docker_edition/src/api
-cp -rv butler_online_install/docker_edition/* butler_online_distribution/docker_edition/
-cp -rv butler_online_api/api/* butler_online_distribution/docker_edition/src/api
-cp -rv butler_online/budgetbutler/dist/* butler_online_distribution/docker_edition/src/
+cp -r butler_online_install/docker_edition/* butler_online_distribution/docker_edition/
+cp -r butler_online_api/api/* butler_online_distribution/docker_edition/src/api
+cp -r butler_online/budgetbutler/dist/* butler_online_distribution/docker_edition/src/
 cp butler_online_distribution/docker_edition/src/api/robots.txt butler_online_distribution/docker_edition/src/
 rm butler_online_distribution/docker_edition/src/3rdpartylicenses.txt
 
