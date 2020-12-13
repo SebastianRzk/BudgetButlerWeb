@@ -151,6 +151,10 @@ oder:
 
 	docker-compose up
 
+### Aktualisierven von docker-compose server
+
+* Dateien aktualisieren `butler_online_install/compose_incremental.sh` docker-compose server neu bauen und starten: `docker-compose up -d --force-recreate --build`
+
 * Login auf `/`. Initiale Anmeldedaten:
     * User: admin@admin.de
     * Password: adminadminadmin

@@ -87,6 +87,10 @@ or
     * User: admin@admin.de 
     * Password: adminadminadmin
 
+### Update
+
+* To update the docker server, run `butler_online_install/compose_incremental.sh` and in the docker-compose directory `docker-compose up -d --force-recreate --build`
+
 ## Screenshots
 [Link to screenshots page](docs/screenshots.md)
 
