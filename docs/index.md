@@ -141,7 +141,7 @@ oder:
 
         sh butler_online_install/compose.sh
 
-* In das Verzeichnis wechseln: `butler_online_distribution/docker_edition`
+* In das Verzeichnis wechseln: `butler_online_distribution/docker_edition/budget_butler`
 
 *  Gegebenenfalls die Passwörder in der `db.env` ändern
 
