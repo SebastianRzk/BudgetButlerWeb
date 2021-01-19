@@ -9,6 +9,8 @@ services:
       - ./site.conf:/etc/nginx/conf.d/default.conf:ro
     env_file:
       - db.env
+    restart: unless-stopped
+
 
   php-fpm:
     build: php-fpm-image
@@ -16,6 +18,7 @@ services:
       - ./src/:/www/:ro
     env_file:
       - db.env
+    restart: unless-stopped
 
   db:
     image: mariadb
@@ -24,6 +27,8 @@ services:
       - db:/var/lib/mysql
     env_file:
       - db.env
+    restart: unless-stopped
+
 
 volumes:
   db:

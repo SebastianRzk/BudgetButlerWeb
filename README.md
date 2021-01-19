@@ -1,10 +1,10 @@
 # BudgetButlerWeb
 
-[![Build Status](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb) [![codecov](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb)
+[![Build Status](https://travis-ci.org/SebastianRzk/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/SebastianRzk/BudgetButlerWeb) [![codecov](https://codecov.io/gh/SebastianRzk/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/SebastianRzk/BudgetButlerWeb)
 
 ## Documentation
 
-[Link to the project page on github](https://RosesTheN00b.github.io/BudgetButlerWeb/)
+[Link to the project page on github](https://SebastianRzk.github.io/BudgetButlerWeb/)
 
 ## Local app
 ### Requirements
@@ -18,7 +18,7 @@
 ### Install and run 
 Clone the repository:
 
-	git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+	git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 Change into project directory
 
@@ -59,7 +59,7 @@ or
 
 * Clone the repository
 
-	git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+	git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 * Change into project directory
 
@@ -71,15 +71,25 @@ or
 
 * Change the database credentials in `butler_online_distribution/api/db.ini` if necessary
 
-* Load the content of the `butler_online_distribution` folder onto the server
+* For webspace edition:
 
-* install the sql from `butler_online_install/`
+    * Load the content of the `butler_online_distribution/webspace_edition` folder onto the server
 
-* Check permissions. Make sure that the file `db.ini` can not be accessed.
+    * install the sql from `butler_online_install/`
+
+    * Check permissions. Make sure that the file `db.ini` can not be accessed.
+
+* For docker-compose:
+
+    * call `docker-compose up` in `butler_online_distribution/docker-edition/budget_butler`
 
 * Login on `/`. Initial credentials are:
     * User: admin@admin.de 
     * Password: adminadminadmin
+
+### Update
+
+* To update the docker server, run `butler_online_install/compose_incremental.sh` and in the docker-compose directory `docker-compose up -d --force-recreate --build`
 
 ## Screenshots
 [Link to screenshots page](docs/screenshots.md)

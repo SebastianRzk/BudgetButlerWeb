@@ -141,7 +141,7 @@ oder:
 
         sh butler_online_install/compose.sh
 
-* In das Verzeichnis wechseln: `butler_online_distribution/docker_edition`
+* In das Verzeichnis wechseln: `butler_online_distribution/docker_edition/budget_butler`
 
 *  Gegebenenfalls die Passwörder in der `db.env` ändern
 
@@ -150,6 +150,10 @@ oder:
 * Folgenden Befehl ausführen:
 
 	docker-compose up
+
+### Aktualisierven von docker-compose server
+
+* Dateien aktualisieren `butler_online_install/compose_incremental.sh` docker-compose server neu bauen und starten: `docker-compose up -d --force-recreate --build`
 
 * Login auf `/`. Initiale Anmeldedaten:
     * User: admin@admin.de
