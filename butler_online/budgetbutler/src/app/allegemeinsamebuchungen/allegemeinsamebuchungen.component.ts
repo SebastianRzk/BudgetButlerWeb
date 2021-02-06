@@ -60,14 +60,4 @@ export class AllegemeinsamebuchungenComponent implements OnInit {
   personIsOther = (buchung: GemeinsameBuchung) => {
     return buchung.zielperson !== buchung.user;
   }
-
-  isEditable = (buchung: GemeinsameBuchung) => {
-    if(! this.partnerData){
-      return false;
-    }
-    if(buchung.user !== this.partnerData.partnername){
-      return true;
-    }
-    return this.partnerData.erweiterteRechteBekommen;
-  }
 }

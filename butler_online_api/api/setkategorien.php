@@ -1,5 +1,7 @@
 <?php
 require_once(__DIR__.'/util/creds.php');
+
+
 authenticated(function($auth){
 	echo "well done!";
 	$dbh = getPDO();
@@ -11,10 +13,9 @@ authenticated(function($auth){
 	$kategorien = explode(',', $_POST['kategorien']);
 
 	foreach($kategorien as $k) {
-	$sql = "INSERT INTO `kategorie`(`user`, `name`) VALUES (:user,:name)";
-	$sth = $dbh->prepare($sql);
-	$sth->execute(array(':user' => $auth->getUsername(),
-			':name' => $k));
+		$sql = "INSERT INTO `kategorie`(`user`, `name`) VALUES (:user,:name)";
+		$sth = $dbh->prepare($sql);
+		$sth->execute(array(':user' => $auth->getUsername(),':name' => $k));
 	}
 });
 ?>

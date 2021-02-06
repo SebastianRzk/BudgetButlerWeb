@@ -36,17 +36,13 @@ function delete_existing($auth, $dbh){
 function put_element($auth, $dbh){
 	$jsondata = file_get_contents('php://input');
 	$partnerData = json_decode($jsondata, true);
-	$rechteInt = 0;
-	if ($partnerData['erweiterteRechteGeben']) {
-		$rechteInt = 1;
-	}
 
 	$sql = "INSERT INTO `partner`(`user`, `partner`, `erweiterteRechte`) VALUES (:user,:partner,:erweiterteRechte)";
 	$sth = $dbh->prepare($sql);
 	$sth->execute(array(
 		':user' => $auth->getUsername(),
 		':partner' => $partnerData['partnername'],
-		':erweiterteRechte' => $rechteInt,
+		':erweiterteRechte' => 1
 		));
 }
 ?>

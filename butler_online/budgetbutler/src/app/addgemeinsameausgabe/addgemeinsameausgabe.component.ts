@@ -49,6 +49,6 @@ export class AddgemeinsameausgabeComponent implements OnInit {
       zielperson: this.buchungForm.get('person').value
     };
     this.gemeinsameBuchungenService.save(neueBuchung);
-    this.buchungForm.reset({datum: new Date()})
+    this.buchungForm.reset({datum: new Date()});
   }
 }
