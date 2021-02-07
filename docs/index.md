@@ -1,5 +1,5 @@
 # BudgetButlerWeb
-[![Build Status](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb) [![codecov](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb)
+[![Build Status](https://travis-ci.org/SebastianRzk/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/SebastianRzk/BudgetButlerWeb) [![codecov](https://codecov.io/gh/SebastianRzk/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/SebastianRzk/BudgetButlerWeb)
 
 * TOC
 {:toc}
@@ -53,7 +53,7 @@
 ### Installation
 Das Git-Repository clonen:
 
-	git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+	git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 Ins Projektverzeichnis wechseln:
 
@@ -105,7 +105,7 @@ oder:
 
 * Repo clonen
 
-        git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+        git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 * Ins Projektverzeichnis wechseln
 
@@ -131,7 +131,7 @@ oder:
 
 * Repo clonen
 
-        git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+        git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 * Ins Projektverzeichnis wechseln
 

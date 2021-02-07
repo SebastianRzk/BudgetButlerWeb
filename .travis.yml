@@ -16,7 +16,7 @@ env:
 
 addons:
   sonarcloud:
-    organization: "rosesthen00b-github"
+    organization: "sebastianrzk-github"
   firefox: "61.0"
   chrome: stable
 

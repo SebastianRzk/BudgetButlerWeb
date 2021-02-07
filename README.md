@@ -1,10 +1,10 @@
 # BudgetButlerWeb
 
-[![Build Status](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/RosesTheN00b/BudgetButlerWeb) [![codecov](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/RosesTheN00b/BudgetButlerWeb)
+[![Build Status](https://travis-ci.org/SebastianRzk/BudgetButlerWeb.svg?branch=master)](https://travis-ci.org/SebastianRzk/BudgetButlerWeb) [![codecov](https://codecov.io/gh/SebastianRzk/BudgetButlerWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/SebastianRzk/BudgetButlerWeb)
 
 ## Documentation
 
-[Link to the project page on github](https://RosesTheN00b.github.io/BudgetButlerWeb/)
+[Link to the project page on github](https://SebastianRzk.github.io/BudgetButlerWeb/)
 
 ## Local app
 ### Requirements
@@ -18,7 +18,7 @@
 ### Install and run 
 Clone the repository:
 
-	git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+	git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 Change into project directory
 
@@ -59,7 +59,7 @@ or
 
 * Clone the repository
 
-	git clone https://github.com/RosesTheN00b/BudgetButlerWeb.git
+	git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 * Change into project directory
 
