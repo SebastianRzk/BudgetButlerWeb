@@ -12,21 +12,21 @@ export class MenuItem {
 }
 
 const SCHNELLEINSTIEG = {
-  title: 'Schnellerfassung',
+  title: 'Buchung erfassen',
   type: 'link',
   url: ADD_SCHNELLEINSTIEG_ROUTE,
   icon: 'add_circle_outline'
 };
 
 const ALLE_EINZELBUCHUNGEN = {
-  title: 'Übersicht persönliche Buchungen',
+  title: 'Persönliche Buchungen',
   type: 'link',
   url: ALLE_EINZELBUCHUNGEN_ROUTE,
   icon: 'format_list_bulleted'
 };
 
 const ALLE_GEMEINSAME_BUCHUNGEN = {
-  title: 'Übersicht gemeinsame Buchungen',
+  title: 'Gemeinsame Buchungen',
   type: 'link',
   url: ALLE_GEMEINSAME_BUCHUNGEN_ROUTE,
   icon: 'format_list_bulleted'
