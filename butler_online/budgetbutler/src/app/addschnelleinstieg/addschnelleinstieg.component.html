@@ -1,5 +1,5 @@
 <mat-card class="erfassung">
-  <mat-card-title>Schnellerfassung</mat-card-title>
+  <mat-card-title>Buchung erfassen</mat-card-title>
   <form [formGroup]="buchungForm" (ngSubmit)="onFormSubmit()">
     <mat-form-field class="full-size-form-field">
       <input matInput [matDatepicker]="picker" placeholder="Datum der Ausgabe" formControlName="datum" required>
