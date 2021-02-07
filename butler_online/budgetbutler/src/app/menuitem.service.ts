@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ADD_SCHNELLEINSTIEG_ROUTE, ADD_AUSGABE_ROUTE, ADD_EINNAHME_ROUTE, ALLE_EINZELBUCHUNGEN_ROUTE, ADD_GEMEINSAME_BUCHUNG_ROUTE, ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, SETTINGS_ROUTE } from './app-routes';
+import { ADD_SCHNELLEINSTIEG_ROUTE, ALLE_EINZELBUCHUNGEN_ROUTE, ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, SETTINGS_ROUTE } from './app-routes';
 
 
 export class MenuItem {
@@ -18,32 +18,11 @@ const SCHNELLEINSTIEG = {
   icon: 'add_circle_outline'
 };
 
-const NEUE_AUSGABE = {
-  title: 'Neue Ausgabe',
-  type: 'link',
-  url: ADD_AUSGABE_ROUTE,
-  icon: 'add_circle_outline'
-};
-
-const NEUE_EINNAHME = {
-  title: 'Neue Einnahme',
-  type: 'link',
-  url: ADD_EINNAHME_ROUTE,
-  icon: 'add_circle_outline'
-};
-
 const ALLE_EINZELBUCHUNGEN = {
   title: 'Übersicht persönliche Buchungen',
   type: 'link',
   url: ALLE_EINZELBUCHUNGEN_ROUTE,
   icon: 'format_list_bulleted'
-};
-
-const NEUE_GEMEINSAME_BUCHUNG = {
-  title: 'Neue gemeinsame Ausgabe',
-  type: 'link',
-  url: ADD_GEMEINSAME_BUCHUNG_ROUTE,
-  icon: 'add_circle_outline'
 };
 
 const ALLE_GEMEINSAME_BUCHUNGEN = {
@@ -71,25 +50,8 @@ export class MenuitemService {
   getAllDesktopElements(): MenuItem[] {
     return [
       SCHNELLEINSTIEG,
-      {
-        title: 'Einzelbuchungen',
-        type: 'node',
-        opened: false,
-        children: [
-          NEUE_AUSGABE,
-          NEUE_EINNAHME,
-          ALLE_EINZELBUCHUNGEN
-        ]
-      },
-      {
-        title: 'Gemeinsame Buchungen',
-        type: 'node',
-        opened: false,
-        children: [
-          NEUE_GEMEINSAME_BUCHUNG,
-          ALLE_GEMEINSAME_BUCHUNGEN
-        ]
-      },
+      ALLE_EINZELBUCHUNGEN,
+      ALLE_GEMEINSAME_BUCHUNGEN,
       EINSTELLUNGEN
     ];
   }

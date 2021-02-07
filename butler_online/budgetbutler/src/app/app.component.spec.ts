@@ -12,7 +12,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -23,7 +22,6 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         SidebarComponent,
-        AddausgabeComponent
       ],
       imports: [
         HttpClientTestingModule,

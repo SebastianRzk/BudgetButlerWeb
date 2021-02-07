@@ -29,7 +29,7 @@ export class AllegemeinsamebuchungenComponent implements OnInit {
     this.einzelbuchungen = this.gemeinsameBuchungenService.getAll();
     this.partnerService.getPartnerInfo().pipe(first()).toPromise().then(
       partnerData => this.partnerData = partnerData
-    )
+    );
   }
 
   toLocaleString = (date: string) => {

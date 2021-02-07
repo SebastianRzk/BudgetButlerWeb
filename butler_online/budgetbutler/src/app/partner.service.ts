@@ -14,10 +14,8 @@ export class PartnerService {
 
   private partnerNameSubject: Subject<PartnerInfo>;
 
-  constructor(private notificationService: NotificationService,
-              private httpClient: HttpClient,
-              private api: ApiproviderService,
-              private authService: AuthService) { }
+  constructor(private httpClient: HttpClient,
+              private api: ApiproviderService) { }
 
   getPartnerInfo: () => Observable<PartnerInfo> = () => {
     if (!this.partnerNameSubject) {
@@ -36,20 +34,6 @@ export class PartnerService {
 
   deletePartner: () => Observable<Result> = () => {
     return this.httpClient.delete<Result>(this.api.getUrl('partner.php'));
-  }
-
-  getPartnerNames: () => Promise<string[]> = async () => {
-    const data = Promise.all(
-      [this.authService.getLogin().pipe(first()).toPromise(),
-      this.getPartnerInfo().pipe(first()).toPromise()]
-    );
-    const recData = await data;
-    const authdata: AuthContainer = recData[0];
-    const partnerdata: PartnerInfo = recData[1];
-    if (partnerdata.partnername && partnerdata.partnername !== '') {
-      return [authdata.username, partnerdata.partnername];
-    }
-    return [authdata.username];
   }
 }
 

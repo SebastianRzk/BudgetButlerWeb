@@ -72,7 +72,7 @@
     <ng-container matColumnDef="Aktion">
       <th mat-header-cell *matHeaderCellDef> Aktion </th>
       <td mat-cell *matCellDef="let element">
-        <button *ngIf="isEditable(element)" (click)="delete(element)">
+        <button (click)="delete(element)">
           <mat-icon aria-hidden="false" aria-label="Löschen=">delete</mat-icon>
         </button>
       </td>

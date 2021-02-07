@@ -25,13 +25,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { AddausgabeComponent } from './addausgabe/addausgabe.component';
 import { AllebuchungenComponent } from './allebuchungen/allebuchungen.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdduserComponent } from './settings/adduser/adduser.component';
-import { AddeinnahmeComponent } from './addeinnahme/addeinnahme.component';
 import { PartnernameComponent } from './settings/partnername/partnername.component';
-import { AddgemeinsameausgabeComponent } from './addgemeinsameausgabe/addgemeinsameausgabe.component';
 import { AllegemeinsamebuchungenComponent } from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
 import { AddschnelleinstiegComponent } from './addschnelleinstieg/addschnelleinstieg.component';
 
@@ -66,13 +63,10 @@ export const ALL_IMPORTS = [
     AppComponent,
     LoginComponent,
     SidebarComponent,
-    AddausgabeComponent,
     AllebuchungenComponent,
     SettingsComponent,
     AdduserComponent,
-    AddeinnahmeComponent,
     PartnernameComponent,
-    AddgemeinsameausgabeComponent,
     AllegemeinsamebuchungenComponent,
     AddschnelleinstiegComponent,
   ],
