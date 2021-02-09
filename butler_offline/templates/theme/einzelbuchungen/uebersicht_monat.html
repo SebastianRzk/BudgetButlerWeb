@@ -18,27 +18,6 @@
     </form>
 </div>
 
-<div class="box theme-row">
-  <div class="box-header">
-    <h3 class="box-title">Druckausgabe erzeugen</h3>
-    <button class="btn-tool pull-right open_button" id="open_druck"><span class="fa fa-plus"></span></button>
-    <button class="btn-tool pull-right close_button" id="close_druck"><span class="fa fa-minus"></span></button>
-  </div>
-  <div class="box-body boxcontent closed" id="boxcontent_druckausgabe">
-  <form role="form" action="/monatsuebersicht/abrechnung/" method="post">
-    <input type="hidden" name="date" value="{{selected_date}}">
-    <input type="checkbox" name="zusammenfassung_einnahmen" value="zusammenfassung_einnahmen" checked>Zusammenfassung der Einnahmen</br>
-    <input type="checkbox" name="zusammenfassung_ausgaben" value="zusammenfassung_ausgaben" checked>Zusammenfassung der Ausgaben</br>
-    <input type="checkbox" name="einnahmen" value="einnahmen" checked>Einzelbetrag der Einnahmen</br>
-    <input type="checkbox" name="ausgaben" value="ausgaben" checked>Einzelbetrag der Ausgaben</br>
-    Anzahl der Zeilen pro Seite: <input type="number" name="quantity" min="6" max="999" value="60">
-    <div class="box-footer">
-      <button type="submit" value="OK" class="btn bordered-hover">Abrechnung erzeugen!</button>
-    </div>
-  </form>
-  </div>
-</div>
-
 <div class="theme-row">
   <div class="box">
     <div class="box-header">

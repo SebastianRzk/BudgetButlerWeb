@@ -1,8 +1,3 @@
-'''
-Created on 10.08.2017
-
-@author: sebastian
-'''
 from datetime import date
 
 import pandas as pd
