@@ -8,6 +8,7 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "------------------------------------------------"
 echo "------------------------------------------------"
 rm -rfv butler_online_distribution/docker_images_edition/budget_butler/images/
+sh butler_online_install/build_assets.sh
 
 
 mkdir -p butler_online_distribution/docker_images_edition/budget_butler/images/src/api
