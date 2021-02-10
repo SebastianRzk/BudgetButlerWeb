@@ -99,7 +99,7 @@ or
 
 ### Update
 
-* To update the docker server, run `butler_online_install/compose_incremental.sh` and in the docker-compose directory `docker-compose up -d --force-recreate --build`
+* To upgrade the build-files for the images, just run `butler_online_install/build_incremental_images.sh`
 
 ## Screenshots
 [Link to screenshots page](docs/screenshots.md)
