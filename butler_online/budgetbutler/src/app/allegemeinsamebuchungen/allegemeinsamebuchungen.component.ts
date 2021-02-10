@@ -29,7 +29,7 @@ export class AllegemeinsamebuchungenComponent implements OnInit {
     this.einzelbuchungen = this.gemeinsameBuchungenService.getAll();
     this.partnerService.getPartnerInfo().pipe(first()).toPromise().then(
       partnerData => this.partnerData = partnerData
-    )
+    );
   }
 
   toLocaleString = (date: string) => {
@@ -59,15 +59,5 @@ export class AllegemeinsamebuchungenComponent implements OnInit {
 
   personIsOther = (buchung: GemeinsameBuchung) => {
     return buchung.zielperson !== buchung.user;
-  }
-
-  isEditable = (buchung: GemeinsameBuchung) => {
-    if(! this.partnerData){
-      return false;
-    }
-    if(buchung.user !== this.partnerData.partnername){
-      return true;
-    }
-    return this.partnerData.erweiterteRechteBekommen;
   }
 }

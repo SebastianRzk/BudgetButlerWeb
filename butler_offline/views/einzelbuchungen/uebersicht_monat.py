@@ -1,9 +1,6 @@
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.core import time
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
-from butler_offline.core.report import ReportGenerator
-from butler_offline.viewcore.converter import datum_to_string
 
 
 def _handle_request(request):
@@ -118,82 +115,3 @@ def _handle_request(request):
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'einzelbuchungen/uebersicht_monat.html')
 
-
-def _abrechnen(request):
-    context = viewcore.generate_base_context('monatsuebersicht')
-    date = time.today()
-    year = date.year
-    month = date.month
-    quantity = 60
-
-    if request.method == 'POST':
-        if 'date' in request.values:
-            str_year, str_month = request.values['date'].split('_')
-            year = int(str_year)
-            month = int(str_month)
-        if 'quantity' in request.values:
-            quantity = int(request.values['quantity'])
-
-    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
-    generator = ReportGenerator('Monatsübersicht für ' + str(month) + '/' + str(year), quantity)
-
-    table_data_selection = einzelbuchungen.select().select_month(month).select_year(year)
-    table_ausgaben = table_data_selection.select_ausgaben()
-    table_einnahmen = table_data_selection.select_einnahmen()
-
-    if _is_selected(request, 'zusammenfassung_einnahmen'):
-        data = {}
-        for kategorie, row in table_einnahmen.group_by_kategorie().iterrows():
-            data[kategorie] = row.Wert
-        generator.add_half_line_elements({'Einnahmen': data})
-
-    if _is_selected(request, 'zusammenfassung_ausgaben'):
-        data = {}
-        for kategorie, row in table_ausgaben.group_by_kategorie().iterrows():
-            data[kategorie] = row.Wert
-        generator.add_half_line_elements({'Ausgaben': data})
-
-    if _is_selected(request, 'einnahmen'):
-        generator.add_halfline('')
-        generator.add_halfline('')
-        generator.add_halfline('----Einnahmen----')
-        zusammenfassung = table_einnahmen.zusammenfassung()
-        compiled_zusammenfassung = {}
-        for tag, kategorien_liste in zusammenfassung:
-            compiled_zusammenfassung[datum_to_string(tag)] = {}
-            for einheit in kategorien_liste:
-                compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
-
-        generator.add_half_line_elements(compiled_zusammenfassung)
-
-    if _is_selected(request, 'ausgaben'):
-        generator.add_halfline('')
-        generator.add_halfline('')
-        generator.add_halfline('----Ausgaben----')
-        zusammenfassung = table_ausgaben.zusammenfassung()
-        compiled_zusammenfassung = {}
-        for tag, kategorien_liste in zusammenfassung:
-            compiled_zusammenfassung[datum_to_string(tag)] = {}
-            for einheit in kategorien_liste:
-                compiled_zusammenfassung[datum_to_string(tag)][einheit['name']] = float(einheit['summe'])
-
-        generator.add_half_line_elements(compiled_zusammenfassung)
-
-    page = ''
-    for line in generator.generate_pages():
-        page = page + '<br>' + line
-    context['abrechnungstext'] = '<pre>' + page + '</pre>'
-    context['element_titel'] = 'Abrechnung vom {month}/{year}'.format(month=month, year=year)
-    return context
-
-
-def _is_selected(request, name):
-    if request.method != 'POST':
-        return True
-    if name in request.values:
-        return True
-    return False
-
-
-def abrechnen(request):
-    return request_handler.handle_request(request, _abrechnen, 'shared/present_abrechnung.html')

@@ -11,10 +11,8 @@ import { first } from 'rxjs/operators';
 export class PartnernameComponent implements OnInit {
 
   partnerName = new FormControl('', Validators.required);
-  gebeErweiterteRechte = new FormControl(false);
   status: string[] = [];
   verknuepfungAktiv = true;
-  erweiterteRechte = false;
 
   constructor(private partnerService: PartnerService) {
   }
@@ -23,7 +21,7 @@ export class PartnernameComponent implements OnInit {
     if (this.verknuepfungAktiv) {
       this.partnerService.deletePartner().toPromise().then(data => this.ngOnInit());
     } else {
-      this.partnerService.setPartner(this.partnerName.value, this.gebeErweiterteRechte.value).toPromise().then(data => this.ngOnInit());
+      this.partnerService.setPartner(this.partnerName.value).toPromise().then(data => this.ngOnInit());
     }
   }
 
@@ -33,11 +31,9 @@ export class PartnernameComponent implements OnInit {
 
     if (data.partnername !== '') {
       this.verknuepfungAktiv = true;
-      this.partnerName.disable()
-      this.gebeErweiterteRechte.disable()
+      this.partnerName.disable();
     } else {
       this.partnerName.enable();
-      this.gebeErweiterteRechte.enable()
       this.verknuepfungAktiv = false;
       return;
     }
@@ -47,11 +43,6 @@ export class PartnernameComponent implements OnInit {
     } else {
       this.status.push(`${data.partnername} muss die Verknüpfung noch bestätigen.`);
     }
-
-    if (data.erweiterteRechteBekommen) {
-      this.status.push(`${data.partnername} gewährt ihnen erweiterte Rechte.`);
-    }
-
   }
 
   ngOnInit() {

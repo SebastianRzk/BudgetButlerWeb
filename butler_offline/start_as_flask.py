@@ -90,11 +90,6 @@ def view_uebersicht_einzelbuchungen():
     return uebersicht_einzelbuchungen.index(request)
 
 
-@app.route('/monatsuebersicht/abrechnung/', methods=['GET', 'POST'])
-def view_abrechnung_monat():
-    return uebersicht_monat.abrechnen(request)
-
-
 @app.route('/production/', methods=['GET'])
 def switch_to_production():
     return testmode_switch.leave_debug(request)

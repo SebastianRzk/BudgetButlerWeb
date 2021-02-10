@@ -1,5 +1,5 @@
 <mat-card class="wide">
-  <mat-card-title>Alle gemeinsamen Buchungen</mat-card-title>
+  <mat-card-title>Gemeinsame Buchungen</mat-card-title>
   <table mat-table [dataSource]="einzelbuchungen" class="desktop-only">
     <ng-container matColumnDef="Datum">
       <th mat-header-cell *matHeaderCellDef> Datum </th>
@@ -33,8 +33,7 @@
 
     <ng-container matColumnDef="Aktion">
       <th mat-header-cell *matHeaderCellDef> Aktion </th>
-      <td mat-cell *matCellDef="let element"> <button *ngIf="isEditable(element)"
-          (click)="delete(element)">Löschen</button></td>
+      <td mat-cell *matCellDef="let element"> <button (click)="delete(element)">Löschen</button></td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -73,7 +72,7 @@
     <ng-container matColumnDef="Aktion">
       <th mat-header-cell *matHeaderCellDef> Aktion </th>
       <td mat-cell *matCellDef="let element">
-        <button *ngIf="isEditable(element)" (click)="delete(element)">
+        <button (click)="delete(element)">
           <mat-icon aria-hidden="false" aria-label="Löschen=">delete</mat-icon>
         </button>
       </td>

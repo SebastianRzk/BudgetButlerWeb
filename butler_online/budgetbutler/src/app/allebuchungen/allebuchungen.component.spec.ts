@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AllebuchungenComponent } from './allebuchungen.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,7 +18,7 @@ describe('AllebuchungenComponent', () => {
   let component: AllebuchungenComponent;
   let fixture: ComponentFixture<AllebuchungenComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         LoginComponent,

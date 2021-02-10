@@ -26,25 +26,7 @@
             <mat-icon aria-hidden="false" >{{menuItem.icon}}</mat-icon>
             {{menuItem.title}}
           </button>
-          <button mat-stroked-button class="navigation-button full-height"
-            *ngIf="menuItem.type === 'node' && menuItem.opened === false" (click)="open(menuItem)">
-            <mat-icon aria-hidden="false" >keyboard_arrow_right</mat-icon>
-            {{menuItem.title}}
-          </button>
-          <button mat-button class="navigation-button full-height"
-            *ngIf="menuItem.type === 'node' && menuItem.opened === true" (click)="close(menuItem)">
-            <mat-icon aria-hidden="false" >keyboard_arrow_down</mat-icon>
-            {{menuItem.title}}
-          </button>
-          <div class="sublinklist" *ngIf="menuItem.opened">
-            <button class="navigation-button full-height" mat-button *ngFor="let subMenuItem of menuItem.children"
-              (click)="navigateTo(subMenuItem.url, drawer)">
-              <mat-icon aria-hidden="false" >{{subMenuItem.icon}}</mat-icon>
-              {{subMenuItem.title}}
-            </button>
-          </div>
         </div>
-
       </div>
     </mat-drawer>
   </mat-drawer-container>

@@ -27,12 +27,4 @@ export class SidebarComponent implements OnInit {
     this.router.navigate([url]);
   }
 
-  open(menuItem) {
-    menuItem.opened = true;
-  }
-
-  close(menuItem) {
-    menuItem.opened = false;
-  }
-
 }

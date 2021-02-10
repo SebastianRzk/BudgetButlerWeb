@@ -1,10 +1,3 @@
-'''
-Created on 28.09.2017
-
-@author: sebastian
-'''
-from datetime import datetime
-
 from pandas.core.frame import DataFrame
 from butler_offline.core.database.database_object import DatabaseObject
 from butler_offline.core.database.selector import GemeinsamSelector
