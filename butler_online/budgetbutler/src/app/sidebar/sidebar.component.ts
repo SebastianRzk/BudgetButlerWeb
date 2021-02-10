@@ -35,7 +35,9 @@ export class SidebarComponent implements OnInit {
   }
 
   navigateTo(url: string, drawer){
-    drawer.close();
+    if (this.isSmallScreen){
+      drawer.close();
+    }
     this.router.navigate([url]);
   }
 

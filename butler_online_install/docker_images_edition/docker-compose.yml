@@ -1,0 +1,28 @@
+version: '3'
+services:
+  budget-butler-static:
+    image: budget-butler-static:latest
+    ports:
+      - "80:80"
+    env_file:
+      - db.env
+    restart: unless-stopped
+  budget-butler-fpm:
+    image: budget-butler-fpm:latest
+    env_file:
+      - db.env
+    restart: unless-stopped
+
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    env_file:
+      - db.env
+    restart: unless-stopped
+
+
+volumes:
+  db:
+
