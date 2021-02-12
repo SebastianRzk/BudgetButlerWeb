@@ -17,28 +17,28 @@
 ## Merkmale
 
 * Einzelbuchungen
-** Einzelbuchungen (erfassen, ändern, löschen)
-** Daueraufträge (erfassen, ändern, löschen)
-** Monatsübersicht
-** Jahresübersicht
-** Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen
+  * Einzelbuchungen (erfassen, ändern, löschen)
+  * Daueraufträge (erfassen, ändern, löschen)
+  * Monatsübersicht
+  * Jahresübersicht
+  * Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen
 
 
 * Gemeinsame Buchungen
-** Erfassen, Ändern, Löschen
-** Abrechnung erstellen.
-** Abrechnungen exportieren und importieren
+  * Erfassen, Ändern, Löschen
+  * Abrechnung erstellen.
+  * Abrechnungen exportieren und importieren
 
 * Sparen
-** Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte, Order, Order-Dauerauftraegen sowie Depotauszuege
-** Sparen Übersicht:
-*** Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
-*** Zusammensetzung der Sparanlage
+  * Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte, Order, Order-Dauerauftraegen sowie Depotauszuege
+  * Sparen Übersicht: 
+    * Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
+    * Zusammensetzung der Sparanlage
 
 * Konfiguration
-** Farbthema anpassen
-** Farben der Kategorien anpassen
-** Verwendung mehrerer Datenbanken
+  * Farbthema anpassen
+  * Farben der Kategorien anpassen
+  * Verwendung mehrerer Datenbanken
 
 ## Offline Anwendung: BudgetButlerWeb
 
@@ -140,21 +140,34 @@ oder:
 * Build in das Verzeichnis `butler_online_distribution` triggern
 
         sh butler_online_install/compose.sh
+        
+* Docker ohne eigene images nutzen:
 
-* In das Verzeichnis wechseln: `butler_online_distribution/docker_edition/budget_butler`
+    * In das Verzeichnis wechseln: `butler_online_distribution/docker_bind_edition/budget_butler`
 
-*  Gegebenenfalls die Passwörder in der `db.env` ändern
+    *  Gegebenenfalls die Passwörder in der `db.env` ändern
 
-* Für http (und nicht https Betrieb) in der Datei `src/api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
+    * Für http (und nicht https Betrieb) in der Datei `src/api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
 
-* Folgenden Befehl ausführen:
+    * Folgenden Befehl ausführen:
 
-	docker-compose up
+    	docker-compose up
+
+* Docker nutzen und vorher images bauen:
+
+  * images bauen:
+     
+        cd butler_online_distribution/docker_images_edition/budget_butler/images/
+        docker build -t budget-butler-fpm budget-butler-fpm
+        docker build -t budget-butler-static budget-butler-static
+    
+  * Folgenden Befehl ausführen `docker-compose up` in `butler_online_distribution/docker_images_edition/budget_butler`
+
+* Login auf `/`. Initiale Anmeldedaten:
+  * User: admin@admin.de
+  * Password: adminadminadmin
 
 ### Aktualisierven von docker-compose server
 
-* Dateien aktualisieren `butler_online_install/compose_incremental.sh` docker-compose server neu bauen und starten: `docker-compose up -d --force-recreate --build`
+* Dateien aktualisieren `butler_online_install/build_incremental_images.sh` , images neu bauen und mit docker-compose die container aktualisieren.
 
-* Login auf `/`. Initiale Anmeldedaten:
-    * User: admin@admin.de
-    * Password: adminadminadmin

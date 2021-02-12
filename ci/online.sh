@@ -25,4 +25,4 @@ ng test --watch=false --progress=false --browsers=ChromeHeadlessCI
 
 cd ..
 cd ..
-sh butler_online_install/compose.sh
+sh butler_online_install/clean_compose.sh

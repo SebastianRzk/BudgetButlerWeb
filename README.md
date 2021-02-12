@@ -79,9 +79,19 @@ or
 
     * Check permissions. Make sure that the file `db.ini` can not be accessed.
 
-* For docker-compose:
+* For docker-compose without building images:
 
-    * call `docker-compose up` in `butler_online_distribution/docker-edition/budget_butler`
+    * call `docker-compose up` in `butler_online_distribution/docker_bind_edition/budget_butler`
+
+* For docker-compose with building images:
+
+  * Build Images:
+     
+        cd butler_online_distribution/docker_images_edition/budget_butler/images/
+        docker build -t budget-butler-fpm budget-butler-fpm
+        docker build -t budget-butler-static budget-butler-static
+    
+  * call `docker-compose up` in `butler_online_distribution/docker_images_edition/budget_butler`
 
 * Login on `/`. Initial credentials are:
     * User: admin@admin.de 
@@ -89,7 +99,7 @@ or
 
 ### Update
 
-* To update the docker server, run `butler_online_install/compose_incremental.sh` and in the docker-compose directory `docker-compose up -d --force-recreate --build`
+* To upgrade the build-files for the images, just run `butler_online_install/build_incremental_images.sh`
 
 ## Screenshots
 [Link to screenshots page](docs/screenshots.md)
