@@ -111,9 +111,9 @@
 						{% for key,val in einnahmen.items() %}
 						{
 							label: '{{key}}',
-							pointBorderColor: "#{{val.farbe}}",
-							borderColor: "#{{val.farbe}}",
-							pointStrokeColor: "#{{val.farbe}}",
+							pointBorderColor: "{{val.farbe}}",
+							borderColor: "{{val.farbe}}",
+							pointStrokeColor: "{{val.farbe}}",
 							data: {{val['values'] | safe}}
 						},
 						{%endfor%}
@@ -153,9 +153,9 @@
 						{% for key,val in ausgaben.items() %}
 						{
 							label: '{{key}}',
-							pointBorderColor: "#{{val.farbe}}",
-							borderColor: "#{{val.farbe}}",
-							pointStrokeColor: "#{{val.farbe}}",
+							pointBorderColor: "{{val.farbe}}",
+							borderColor: "{{val.farbe}}",
+							pointStrokeColor: "{{val.farbe}}",
 							data: {{val['values'] | safe}}
 						},
 						{%endfor%}
@@ -195,7 +195,7 @@
 					<tbody>
 						{% for ausgabe in zusammenfassung_ausgaben %}
 						<tr>
-							<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
+							<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
 							<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
 						</tr>
 						{% endfor %}
@@ -231,7 +231,7 @@
 						<tbody>
 							{% for ausgabe in zusammenfassung_einnahmen %}
 							<tr>
-								<td style="vertical-align: middle"><span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
+								<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
 								<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
 							</tr>
 							{% endfor %}

@@ -22,6 +22,9 @@ def _handle_request(request):
     table_ausgaben = table_data_selection.select_ausgaben()
     table_einnahmen = table_data_selection.select_einnahmen()
 
+    kategorien = einzelbuchungen.get_alle_kategorien()
+    color_chooser = viewcore.get_generic_color_chooser(list(kategorien))
+
     '''
     Berechnung der Ausgaben für das Kreisdiagramm
     '''
@@ -32,8 +35,8 @@ def _handle_request(request):
     for kategorie, row in table_ausgaben.group_by_kategorie().iterrows():
         ausgaben_labels.append(kategorie)
         ausgaben_data.append("%.2f" % abs(row.Wert))
-        ausgaben_colors.append("#" + einzelbuchungen.get_farbe_fuer(kategorie))
-        ausgaben_liste.append((kategorie, "%.2f" % row.Wert, einzelbuchungen.get_farbe_fuer(kategorie)))
+        ausgaben_colors.append(color_chooser.get_for_value(kategorie))
+        ausgaben_liste.append((kategorie, "%.2f" % row.Wert, color_chooser.get_for_value(kategorie)))
     context['ausgaben'] = ausgaben_liste
     context['ausgaben_labels'] = ausgaben_labels
     context['ausgaben_data'] = ausgaben_data
@@ -49,8 +52,8 @@ def _handle_request(request):
     for kategorie, row in table_einnahmen.group_by_kategorie().iterrows():
         einnahmen_labels.append(kategorie)
         einnahmen_data.append("%.2f" % abs(row.Wert))
-        einnahmen_colors.append("#" + einzelbuchungen.get_farbe_fuer(kategorie))
-        einnahmen_liste.append((kategorie, "%.2f" % row.Wert, einzelbuchungen.get_farbe_fuer(kategorie)))
+        einnahmen_colors.append(color_chooser.get_for_value(kategorie))
+        einnahmen_liste.append((kategorie, "%.2f" % row.Wert, color_chooser.get_for_value(kategorie)))
     context['einnahmen'] = einnahmen_liste
     context['einnahmen_labels'] = einnahmen_labels
     context['einnahmen_data'] = einnahmen_data
@@ -59,7 +62,7 @@ def _handle_request(request):
     zusammenfassung = table_data_selection.get_month_summary()
     for tag, kategorien_liste in zusammenfassung:
         for einheit in kategorien_liste:
-            einheit['farbe'] = einzelbuchungen.get_farbe_fuer(einheit['kategorie'])
+            einheit['farbe'] = color_chooser.get_for_value(einheit['kategorie'])
     context['zusammenfassung'] = zusammenfassung
 
     ausgaben_monat = table_ausgaben.sum()

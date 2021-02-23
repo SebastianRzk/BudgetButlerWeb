@@ -23,10 +23,13 @@ def _computePieChartProzentual(context, jahr):
     ausgaben_data = []
     ausgaben_labels = []
     ausgaben_colors = []
+    kategorien = database_instance().einzelbuchungen.get_alle_kategorien()
+    color_chooser = viewcore.get_generic_color_chooser(list(kategorien))
+
     for kategorie, wert in result.items():
         ausgaben_data.append('%.2f' % abs(wert))
         ausgaben_labels.append(kategorie)
-        ausgaben_colors.append('#' + database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
+        ausgaben_colors.append(color_chooser.get_for_value(kategorie))
 
     context['pie_ausgaben_data_prozentual'] = ausgaben_data
     context['pie_ausgaben_labels'] = ausgaben_labels
@@ -39,7 +42,7 @@ def _computePieChartProzentual(context, jahr):
     for kategorie, wert in result.items():
         einnahmen_data.append('%.2f' % abs(wert))
         einnahmen_labels.append(kategorie)
-        einnahmen_colors.append('#' + database_instance().einzelbuchungen.get_farbe_fuer(kategorie))
+        einnahmen_colors.append(color_chooser.get_for_value(kategorie))
 
     context['pie_einnahmen_data_prozentual'] = einnahmen_data
     context['pie_einnahmen_labels'] = einnahmen_labels
@@ -48,7 +51,7 @@ def _computePieChartProzentual(context, jahr):
     return context
 
 
-def _compile_colors(result, einzelbuchungen, num_monate):
+def _compile_colors(result, einzelbuchungen, num_monate, color_chooser):
     einnahmen = {}
     for month in result.keys():
         if month not in num_monate:
@@ -62,7 +65,7 @@ def _compile_colors(result, einzelbuchungen, num_monate):
 
     for kategorie in einnahmen:
         einnahmen[kategorie]['values'] = einnahmen[kategorie]['values'] + ']'
-        einnahmen[kategorie]['farbe'] = einzelbuchungen.get_farbe_fuer(kategorie)
+        einnahmen[kategorie]['farbe'] = color_chooser.get_for_value(kategorie)
 
     return einnahmen
 
@@ -78,14 +81,16 @@ def _handle_request(request):
     jahresbuchungs_tabelle = einzelbuchungen.select().select_year(year)
     jahres_ausgaben = jahresbuchungs_tabelle.select_ausgaben()
     jahres_einnahmen = jahresbuchungs_tabelle.select_einnahmen()
+    kategorien = database_instance().einzelbuchungen.get_alle_kategorien()
+    color_chooser = viewcore.get_generic_color_chooser(list(kategorien))
 
     jahresausgaben = []
     for kategorie, jahresblock in jahres_ausgaben.group_by_kategorie().iterrows():
-        jahresausgaben.append([kategorie, '%.2f' % jahresblock.Wert, einzelbuchungen.get_farbe_fuer(kategorie)])
+        jahresausgaben.append([kategorie, '%.2f' % jahresblock.Wert, color_chooser.get_for_value(kategorie)])
 
     jahreseinnahmen = []
     for kategorie, jahresblock in jahres_einnahmen.group_by_kategorie().iterrows():
-        jahreseinnahmen.append([kategorie, '%.2f' % jahresblock.Wert, einzelbuchungen.get_farbe_fuer(kategorie)])
+        jahreseinnahmen.append([kategorie, '%.2f' % jahresblock.Wert, color_chooser.get_for_value(kategorie)])
 
     monats_namen = []
     num_monate = sorted(list(set(jahresbuchungs_tabelle.raw_table().Datum.map(lambda x: x.month))))
@@ -122,13 +127,17 @@ def _handle_request(request):
     context['selected_date'] = year
 
     context['einnahmen'] = _compile_colors(
-        jahres_einnahmen.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(),
+        jahres_einnahmen.inject_zeroes_for_year_and_kategories(year).sum_kategorien_monthly(),
         einzelbuchungen,
-        num_monate)
+        num_monate,
+        color_chooser
+    )
     context['ausgaben'] = _compile_colors(
-        jahres_ausgaben.inject_zeroes_for_year_and_kategories(2017).sum_kategorien_monthly(),
+        jahres_ausgaben.inject_zeroes_for_year_and_kategories(year).sum_kategorien_monthly(),
         einzelbuchungen,
-        num_monate)
+        num_monate,
+        color_chooser
+    )
     context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
     context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
     context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()

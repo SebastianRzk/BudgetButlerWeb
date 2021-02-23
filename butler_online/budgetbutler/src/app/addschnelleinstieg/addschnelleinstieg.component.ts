@@ -60,9 +60,10 @@ export class AddschnelleinstiegComponent implements OnInit {
       };
       this.einzelbuchungsService.save(neueBuchung);
     }
-  this.buchungForm.reset({
-    datum: new Date(),
-    gemeinsameBuchung: this.buchungForm.get('gemeinsameBuchung').value
-  });
+    this.buchungForm.reset(
+      {
+        datum: new Date(),
+        gemeinsameBuchung: this.buchungForm.get('gemeinsameBuchung').value
+      });
   }
 }

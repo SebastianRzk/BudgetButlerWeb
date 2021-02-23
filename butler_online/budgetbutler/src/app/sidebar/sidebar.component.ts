@@ -1,6 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { MAT_DRAWER_DEFAULT_AUTOSIZE_FACTORY } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { MenuitemService } from '../menuitem.service';

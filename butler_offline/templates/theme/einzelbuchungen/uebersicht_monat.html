@@ -185,7 +185,7 @@
           <tbody>
             {% for ausgabe in ausgaben %}
             <tr>
-              <td> <span class="fa fa-circle" style="color: #{{ausgabe.2}};"></span> {{ausgabe.0}}</td>
+              <td> <span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
               <td class="table-wert">{{ausgabe.1}}</td>
             </tr>
             {% endfor %}
@@ -217,7 +217,7 @@
           <tbody>
             {% for einnahme in einnahmen %}
             <tr>
-              <td><span class="fa fa-circle" style="color: #{{einnahme.2}};"></span> {{einnahme.0}}</td>
+              <td><span class="fa fa-circle" style="color: {{einnahme.2}};"></span> {{einnahme.0}}</td>
               <td class="table-wert">{{einnahme.1}}</td>
             </tr>
             {% endfor %}
@@ -254,7 +254,7 @@
         <tbody>
           {% for kategorie in tag.1 %}
           <tr>
-            <td class="table-kategorie"><span class="fa fa-circle" style="color: #{{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
+            <td class="table-kategorie"><span class="fa fa-circle" style="color: {{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
             <td>{{kategorie.name}}</td>
             <td class="table-wert">{{kategorie.summe}}</td>
           </tr>

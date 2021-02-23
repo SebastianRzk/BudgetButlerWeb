@@ -41,23 +41,22 @@ def _handle_request(request):
         persisted_state.database_instance().einzelbuchungen.ausgeschlossene_kategorien = new_set
 
     farbmapping = []
+    kategorien = sorted(list(persisted_state.database_instance().einzelbuchungen.get_alle_kategorien()))
     for colornumber in range(0, 20):
         checked = False
         kategorie = 'keine'
         color = viewcore.design_colors()[colornumber % len(viewcore.design_colors())]
-        len_kategorien = len(
-            persisted_state.database_instance().einzelbuchungen.get_alle_kategorien())
+        len_kategorien = len(kategorien)
         if colornumber < len_kategorien:
-            kategorie = list(
-                persisted_state.database_instance().einzelbuchungen.get_alle_kategorien())[colornumber % len_kategorien]
+            kategorie = kategorien[colornumber % len_kategorien]
         if colornumber < len(viewcore.design_colors()):
             checked = True
 
         farbmapping.append({
             'nummer': colornumber,
             'checked': checked,
-            'farbe' : color,
-            'kategorie' : kategorie
+            'farbe': color,
+            'kategorie': kategorie
             })
 
     context = viewcore.generate_transactional_context('configuration')

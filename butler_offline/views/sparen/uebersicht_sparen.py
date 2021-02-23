@@ -351,7 +351,7 @@ def berechne_monatlich():
     colors = []
     werte = []
     monatlich = []
-    color_chooser = GenericDesignColorChooser(list(sorted(isins)), viewcore.design_colors())
+    color_chooser = viewcore.get_generic_color_chooser(list(sorted(isins)))
 
     for isin in sorted(isins):
         name = persisted_state.database_instance().depotwerte.get_description_for(isin)
@@ -383,12 +383,11 @@ def _handle_request(request):
         return viewcore.generate_error_context('uebersicht_sparen', 'Bitte erfassen Sie zuerst eine Einzelbuchung.')
 
     context = viewcore.generate_transactional_context('sparen')
-    colors = viewcore.design_colors()
     kontos = persisted_state.database_instance().sparkontos.get_all().Kontoname.tolist()
     typen = persisted_state.database_instance().sparkontos.KONTO_TYPEN
 
-    color_kontos = GenericDesignColorChooser(kontos, colors)
-    color_typen = GenericDesignColorChooser(typen, colors)
+    color_kontos = viewcore.get_generic_color_chooser(kontos)
+    color_typen = viewcore.get_generic_color_chooser(typen)
 
     gesamt, kontos, typen = generate_konto_uebersicht(color_kontos, color_typen)
     diagramm_uebersicht, year_kontostaende = gesamt_uebersicht()
@@ -420,13 +419,3 @@ def _handle_request(request):
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_sparen.html')
 
-
-class GenericDesignColorChooser:
-    def __init__(self, values, colors):
-        self.values = values
-        self.colors = colors
-
-    def get_for_value(self, value):
-        index = self.values.index(value)
-        color_index = index % len(self.colors)
-        return '#' + self.colors[color_index]

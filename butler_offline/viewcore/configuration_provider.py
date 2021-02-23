@@ -8,10 +8,11 @@ DEFAULT_CONFIG = {
     'PARTNERNAME': 'kein_Partnername_gesetzt',
     'DESIGN_COLORS': '3c8dbc,f56954,00a65a,00c0ef,f39c12,d2d6de,001F3F,39CCCC,3D9970,01FF70,FF851B,F012BE,8E24AA,D81B60,222222,d2d6de',
     'THEME_COLOR' : '#00acd6',
-    'ONLINE_DEFAULT_SERVER' : '',
-    'ONLINE_DEFAULT_USER' : '',
+    'ONLINE_DEFAULT_SERVER': '',
+    'ONLINE_DEFAULT_USER': '',
     'AUSGESCHLOSSENE_KATEGORIEN': ''
 }
+
 
 def _load_config():
     lines = file_system.instance().read('../config')

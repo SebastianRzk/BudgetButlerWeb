@@ -15,7 +15,7 @@
               name="password" required>
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
-          <button type="submit" class="full-height" *ngIf="!authService.isLoggedIn">Login</button>
+          <button mat-raised-button color="primary" type="submit" class="full-height" *ngIf="!authService.isLoggedIn">Login</button>
         </form>
     </mat-card>
   </div>

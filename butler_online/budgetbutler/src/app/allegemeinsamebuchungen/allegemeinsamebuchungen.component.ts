@@ -1,35 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { GemeinsamebuchungService } from '../gemeinsamebuchung.service';
 import { GemeinsameBuchung } from '../model';
-import { PartnerService, PartnerInfo } from '../partner.service';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-allegemeinsamebuchungen',
   templateUrl: './allegemeinsamebuchungen.component.html',
   styleUrls: ['./allegemeinsamebuchungen.component.css']
 })
-export class AllegemeinsamebuchungenComponent implements OnInit {
+export class AllegemeinsamebuchungenComponent implements OnInit, OnDestroy {
 
 
   displayedColumns: string[] = ['Datum', 'Name', 'Kategorie', 'Person', 'Wert', 'Aktion'];
   displayedMobileColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
-  einzelbuchungen: Observable<GemeinsameBuchung[]>;
-  partnerData: PartnerInfo;
+  gemeinsamebuchungen: GemeinsameBuchung[];
+  private subscription: Subscription;
 
-  constructor(private gemeinsameBuchungenService: GemeinsamebuchungService, private partnerService: PartnerService) {
+  constructor(private gemeinsameBuchungenService: GemeinsamebuchungService) {
   }
 
   ngOnInit(): void {
+    this.subscription = this.gemeinsameBuchungenService.getAll().subscribe(x => this.gemeinsamebuchungen = x);
     this.loadData();
   }
 
   loadData = () => {
-    this.einzelbuchungen = this.gemeinsameBuchungenService.getAll();
-    this.partnerService.getPartnerInfo().pipe(first()).toPromise().then(
-      partnerData => this.partnerData = partnerData
-    );
+    this.gemeinsameBuchungenService.refresh();
+  }
+
+  ngOnDestroy = () => {
+    this.subscription.unsubscribe();
   }
 
   toLocaleString = (date: string) => {
