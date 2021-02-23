@@ -114,6 +114,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
 
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
+            set_success_message(context, 'Kategorien erfolgreich in die Online-Version übertragen.')
+
 
         elif post_action_is(request, 'upload_gemeinsame_transactions'):
             serverurl = request.values['server']

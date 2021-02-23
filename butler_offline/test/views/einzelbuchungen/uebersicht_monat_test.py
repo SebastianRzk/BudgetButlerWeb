@@ -38,11 +38,11 @@ class Monatsuebersicht(unittest.TestCase):
         assert result_context['gesamt'] == '-100.00'
         assert result_context['gesamt_einnahmen'] == '10.00'
 
-        assert result_context['einnahmen'] == [('eine einnahme kategorie', '10.00', '3c8dbc')]
+        assert result_context['einnahmen'] == [('eine einnahme kategorie', '10.00', '#3c8dbc')]
         assert result_context['einnahmen_labels'] == ['eine einnahme kategorie']
         assert result_context['einnahmen_data'] == ['10.00']
 
-        assert result_context['ausgaben'] == [('some kategorie', '-100.00', 'f56954')]
+        assert result_context['ausgaben'] == [('some kategorie', '-100.00', '#f56954')]
         assert result_context['ausgaben_labels'] == ['some kategorie']
         assert result_context['ausgaben_data'] == ['100.00']
 

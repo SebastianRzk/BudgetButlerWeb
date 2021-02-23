@@ -1,6 +1,7 @@
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.request_handler import current_key
 from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.colors import GenericDesignColorChooser
 from butler_offline.viewcore.menu import get_key_for_name, get_name_from_key, get_menu_list
 
 
@@ -34,6 +35,9 @@ def name_of_partner():
 
 def design_colors():
     return configuration_provider.get_configuration('DESIGN_COLORS').split(',')
+
+def get_generic_color_chooser(values):
+    return GenericDesignColorChooser(values, design_colors())
 
 
 def post_action_is(request, action_name):

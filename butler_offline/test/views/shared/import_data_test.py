@@ -354,11 +354,14 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
         DECODED_LOGIN_DATA,
         auth_cookies=LOGIN_COOKIES)
 
-    import_data.index(PostRequest({'action': 'set_kategorien',
+    result = import_data.index(PostRequest({'action': 'set_kategorien',
                                    'email': '',
                                    'server': 'test.test',
                                    'password': ''}))
 
+    assert result['message']
+    assert result['message_type'] == 'success'
+    assert result['message_content'] == 'Kategorien erfolgreich in die Online-Version übertragen.'
     assert requester.instance().data_of_request('https://test.test/setkategorien.php')[0]['kategorien'] == 'JaEins,JaZwei'
 
 

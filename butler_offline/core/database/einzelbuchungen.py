@@ -58,19 +58,6 @@ class Einzelbuchungen(DatabaseObject):
             result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
         return result
 
-    def get_farbe_fuer(self, input_kategorie):
-        colors = viewcore.design_colors()
-        kategorien = sorted(set(self.content.Kategorie))
-        kategorie_farb_mapping = {}
-        color_index = 0
-        for kategorie in kategorien:
-            kategorie_farb_mapping[kategorie] = colors[color_index % len(colors)]
-            color_index = color_index + 1
-
-        if not input_kategorie in kategorie_farb_mapping:
-            return '00c0ef'
-        return kategorie_farb_mapping[input_kategorie]
-
     def append_row(self, row):
         self.content = self.content.append(row, ignore_index=True)
         self._sort()

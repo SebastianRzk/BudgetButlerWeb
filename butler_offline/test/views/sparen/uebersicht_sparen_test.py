@@ -52,7 +52,7 @@ def test_should_list_kontos():
             'wert_str': '990,00',
             'aufbuchungen_str': '999,00',
             'difference_str': '-9,00',
-            'color': '#3c8dbc',
+            'color': '#f56954',
             'difference_is_negativ': True
         },
         {
@@ -65,7 +65,7 @@ def test_should_list_kontos():
             'wert_str': '110,00',
             'aufbuchungen_str': '100,00',
             'difference_str': '10,00',
-            'color': '#f56954',
+            'color': '#3c8dbc',
             'difference_is_negativ': False
         }
     ]
@@ -101,7 +101,7 @@ def test_typen():
          'difference_str': '10,00',
          'wert': 110,
          'wert_str': '110,00',
-         'color': '#3c8dbc',
+         'color': '#00a65a',
          'name': 'Sparkonto'},
         {'aufbuchungen': 0,
          'aufbuchungen_str': '0,00',
@@ -117,7 +117,7 @@ def test_typen():
          'difference_str': '-9,00',
          'wert': 990,
          'wert_str': '990,00',
-         'color': '#00a65a',
+         'color': '#3c8dbc',
          'name': 'Depot'},
     ]
 
@@ -129,7 +129,7 @@ def test_konto_diagramm():
     result = uebersicht_sparen.index(GetRequest())
 
     assert result['konto_diagramm'] == {
-        'colors': ['#3c8dbc', '#f56954'],
+        'colors': ['#f56954', '#3c8dbc'],
         'datasets': ['90.00', '10.00'],
         'labels': ['demokonto2', 'demokonto1'],
     }
@@ -142,7 +142,7 @@ def test_typen_diagramm():
     result = uebersicht_sparen.index(GetRequest())
 
     assert result['typen_diagramm'] == {
-        'colors': ['#3c8dbc', '#f56954', '#00a65a'],
+        'colors': ['#00a65a', '#f56954', '#3c8dbc'],
         'datasets': ['10.00', '0.00', '90.00'],
         'labels': ['Sparkonto', 'Genossenschafts-Anteile', 'Depot'],
     }
