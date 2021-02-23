@@ -1,6 +1,6 @@
 <mat-card class="wide">
   <mat-card-title>Gemeinsame Buchungen</mat-card-title>
-  <table mat-table [dataSource]="einzelbuchungen" class="desktop-only">
+  <table mat-table [dataSource]="gemeinsamebuchungen" class="desktop-only">
     <ng-container matColumnDef="Datum">
       <th mat-header-cell *matHeaderCellDef> Datum </th>
       <td mat-cell *matCellDef="let element"> {{toLocaleString(element.datum)}}
@@ -40,7 +40,7 @@
   </table>
 
 
-  <table mat-table [dataSource]="einzelbuchungen" class="mobile-only">
+  <table mat-table [dataSource]="gemeinsamebuchungen" class="mobile-only">
     <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
     <ng-container matColumnDef="Datum">

@@ -40,4 +40,6 @@ export class Result {
 }
 
 export const ERROR_RESULT: Result = { result: 'ERROR', message: 'Fehler beim Erstellen der Buchung' };
+export const ERROR_LOADING_EINZELBUCHUNGEN: Result = { result: 'ERROR', message: 'Fehler beim Laden der Einzelbuchungen' };
+export const ERROR_LOADING_GEMEINSAME_BUCHUNGEN: Result = { result: 'ERROR', message: 'Fehler beim Laden der gemeinsamen Buchungen' };
 export const ERROR_LOGIN_RESULT: Result = { result: 'FEHLER', message: 'Fehler beim Login' };

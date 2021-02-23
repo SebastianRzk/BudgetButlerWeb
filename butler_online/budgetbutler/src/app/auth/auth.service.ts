@@ -38,12 +38,12 @@ export class AuthService {
             this.username = data.username;
             this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
           } else {
-            this.notificationService.log(ERROR_LOGIN_RESULT, "Login");
+            this.notificationService.log(ERROR_LOGIN_RESULT, 'Login');
             this.isLoggedIn = false;
           }
         },
         error => {
-          this.notificationService.log(ERROR_LOGIN_RESULT, "Login fehlgeschlagen");
+          this.notificationService.log(ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
           this.isLoggedIn = false;
         }
       ));

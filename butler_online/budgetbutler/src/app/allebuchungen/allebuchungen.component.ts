@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { EinzelbuchungserviceService as EinzelbuchungService } from '../einzelbuchungservice.service';
 import { Einzelbuchung } from '../model';
 
@@ -8,21 +8,27 @@ import { Einzelbuchung } from '../model';
   templateUrl: './allebuchungen.component.html',
   styleUrls: ['./allebuchungen.component.css']
 })
-export class AllebuchungenComponent implements OnInit {
+export class AllebuchungenComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['Datum', 'Name', 'Kategorie', 'Wert', 'Aktion'];
   displayedMobileColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
-  einzelbuchungen: Observable<Einzelbuchung[]>;
+  einzelbuchungen: Einzelbuchung[];
+  subscription: Subscription;
 
   constructor(private einzelbuchungService: EinzelbuchungService) {
   }
 
   ngOnInit(): void {
-    this.loadData();
+    this.subscription = this.einzelbuchungService.getAll().subscribe(x => this.einzelbuchungen = x);
+    this.refreshData();
   }
 
-  loadData = () => {
-    this.einzelbuchungen = this.einzelbuchungService.getAll();
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  refreshData = () => {
+    this.einzelbuchungService.refresh();
   }
 
   toLocaleString = (date: string) => {
@@ -40,6 +46,6 @@ export class AllebuchungenComponent implements OnInit {
 
   delete(einzelbuchung: Einzelbuchung) {
     this.einzelbuchungService.delete(einzelbuchung);
-    this.loadData();
+    this.refreshData();
   }
 }
