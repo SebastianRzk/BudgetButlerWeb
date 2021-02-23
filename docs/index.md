@@ -4,6 +4,9 @@
 * TOC
 {:toc}
 
+[Screenshots Desktop](docs/screenshots_desktop.md)
+[Screenshots Companion App](docs/screenshots_mobile.md)
+
 ## Idee
 
 * Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und damit mit einem Textverarbeitungsprogramm oder einem Tabellenverarbeitungsprogramm zugänglich.
@@ -167,7 +170,4 @@ oder:
   * User: admin@admin.de
   * Password: adminadminadmin
 
-### Aktualisierven von docker-compose server
-
-* Dateien aktualisieren `butler_online_install/build_incremental_images.sh` , images neu bauen und mit docker-compose die container aktualisieren.
 
