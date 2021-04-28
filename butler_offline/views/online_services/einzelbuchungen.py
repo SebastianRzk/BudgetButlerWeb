@@ -1,13 +1,16 @@
 from butler_offline.viewcore import requester
+from butler_offline.views.online_services.online_routes import EINZELBUCHUNGEN_URL, DELETEITEMS_URL
 import json
 
 
-def get_einzelbuchungen(serverurl, auth_container):
-    jsondata = requester.instance().post(serverurl + '/einzelbuchung.php', cookies=auth_container.cookies())
-    return json.loads(jsondata)
 
-def delete_einzelbuchungen(serverurl, auth_container):
+def get_einzelbuchungen(server_url, auth_container):
+    json_data = requester.instance().post(EINZELBUCHUNGEN_URL.format(server_url=server_url), cookies=auth_container.cookies())
+    return json.loads(json_data)
+
+
+def delete_einzelbuchungen(server_url, auth_container):
     requester.instance().post(
-        serverurl + '/deleteitems.php',
+        DELETEITEMS_URL.format(server_url=server_url),
         cookies=auth_container.cookies()
       )

@@ -1,18 +1,22 @@
 from butler_offline.viewcore import requester
 import json
+from butler_offline.views.online_services.online_routes import GEMEINSAMEBUCHUNGEN_URL, DELETE_GEMEINSAMEBUCHUNGEN_URL
 
 
-def get_gemeinsame_buchungen(serverurl, auth_container):
-    json_data = requester.instance().post(serverurl + '/gemeinsamebuchung.php',
+def get_gemeinsame_buchungen(server_url, auth_container):
+    json_data = requester.instance().post(GEMEINSAMEBUCHUNGEN_URL.format(server_url=server_url),
                                           cookies=auth_container.cookies())
     return json.loads(json_data)
 
 
-def upload_gemeinsame_buchungen(serverurl, data, auth_container):
-    json_data = requester.instance().put(serverurl + '/gemeinsamebuchung.php', data, auth_container.cookies())
+def upload_gemeinsame_buchungen(server_url, data, auth_container):
+    json_data = requester.instance().put(GEMEINSAMEBUCHUNGEN_URL.format(server_url=server_url),
+                                         data,
+                                         auth_container.cookies())
     return json.loads(json_data)['result'] == 'OK'
 
 
-def delete_gemeinsame_buchungen(serverurl, auth_container):
-    requester.instance().post(serverurl + '/deletegemeinsam.php', cookies=auth_container.cookies())
+def delete_gemeinsame_buchungen(server_url, auth_container):
+    requester.instance().post(DELETE_GEMEINSAMEBUCHUNGEN_URL.format(server_url=server_url),
+                              cookies=auth_container.cookies())
 
