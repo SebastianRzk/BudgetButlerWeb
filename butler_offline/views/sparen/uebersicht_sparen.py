@@ -134,8 +134,6 @@ def gesamt_uebersicht():
 
         sparen_aufbuchung = 0
         gesamt_sparen = 0
-        gesamt_aufbuchung_diff = 0
-        gesamt_sparen_diff = 0
 
         year_kontos = {}
 
@@ -154,42 +152,28 @@ def gesamt_uebersicht():
 
             if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
                 kontostand = sparbuchungen_max_year.get_kontostand_fuer(kontoname)
-                diff_kontostand = kontostand - get_letztes_jahr_kontostand(kontoname, year_kontostaende)
                 aufbuchungen = sparbuchungen_year.get_aufbuchungen_fuer(kontoname)
-                diff_ausbuchungen = aufbuchungen - get_letztes_jahr_aufbuchungen(kontoname, year_kontostaende)
 
             if kontotyp == sparkontos.TYP_DEPOT:
                 aufbuchungen = order_year.get_order_fuer(kontoname)
-                diff_kontostand = kontostand - get_letztes_jahr_kontostand(kontoname, year_kontostaende)
                 kontostand = depotauszuege_year.get_kontostand_by(kontoname)
-                diff_ausbuchungen = aufbuchungen - get_letztes_jahr_aufbuchungen(kontoname, year_kontostaende)
 
             year_kontos[kontoname] = {
                 'kontostand': kontostand,
                 'kontostand_str': from_double_to_german(kontostand),
-                'kontostand_diff': diff_kontostand,
-                'kontostand_diff_str': from_double_to_german(diff_kontostand),
                 'aufbuchungen': aufbuchungen,
                 'aufbuchungen_str': from_double_to_german(aufbuchungen),
-                'aufbuchungen_diff': diff_ausbuchungen,
-                'aufbuchungen_diff_str': from_double_to_german(diff_ausbuchungen),
                 'name': kontoname
             }
 
             gesamt_sparen += kontostand
             sparen_aufbuchung += aufbuchungen
-            gesamt_aufbuchung_diff += diff_ausbuchungen
-            gesamt_sparen_diff += diff_kontostand
 
         year_kontos['Gesamt'] = {
                 'kontostand': gesamt_sparen,
-                'kontostand_diff': gesamt_sparen_diff,
                 'aufbuchungen': sparen_aufbuchung,
-                'aufbuchungen_diff': gesamt_aufbuchung_diff,
                 'kontostand_str': from_double_to_german(gesamt_sparen),
-                'kontostand_diff_str': from_double_to_german(gesamt_sparen_diff),
                 'aufbuchungen_str': from_double_to_german(sparen_aufbuchung),
-                'aufbuchungen_diff_str': from_double_to_german(gesamt_aufbuchung_diff),
                 'name': 'Gesamt'
             }
 
@@ -395,8 +379,6 @@ def _handle_request(request):
     gesamt_diagramm_labels, gesamt_diagramm_data = berechne_diagramm(diagramm_uebersicht)
     gesamt_linechart = berechne_kontogesamt(gesamt_tabelle)
 
-
-
     order_until_today = persisted_state.database_instance().orderdauerauftrag.get_all_order_until_today()
 
     context['kontos'] = kontos
@@ -410,9 +392,6 @@ def _handle_request(request):
     context['gesamt_diagramm_labels'] = gesamt_diagramm_labels
     context['gesamt_diagramm_data'] = gesamt_diagramm_data
     context['gesamt_linechart'] = gesamt_linechart
-    context['gesamt_tabelle'] = gesamt_tabelle
-    context['tablesize'] = len(gesamt_diagramm_labels) * 40
-
     return context
 
 
