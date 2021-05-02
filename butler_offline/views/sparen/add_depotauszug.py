@@ -4,6 +4,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 from datetime import date
 
 KEY_WERT = 'wert_'
@@ -49,10 +50,10 @@ def resolve_description(isin, all):
 
 def handle_request(request):
     if not database_instance().sparkontos.get_depots():
-        return viewcore.generate_error_context('add_depotauszug', 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".')
+        return viewcore.generate_error_context('add_depotauszug', NO_VALID_DEPOT_IN_DB)
 
     if not database_instance().depotwerte.get_depotwerte():
-        return viewcore.generate_error_context('add_depotauszug', 'Bitte erfassen Sie zuerst ein Depotwert.')
+        return viewcore.generate_error_context('add_depotauszug', NO_VALID_SHARE_IN_DB)
 
     if post_action_is(request, 'add'):
         current_date = None

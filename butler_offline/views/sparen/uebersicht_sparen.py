@@ -5,6 +5,7 @@ from butler_offline.viewcore.converter import from_double_to_german
 from butler_offline.viewcore.converter import datum_to_german
 from datetime import date
 
+
 def to_piechart(data_list, gesamt_wert):
     colors = []
     labels = []
@@ -104,15 +105,18 @@ def generate_konto_uebersicht(color_kontos, color_typen):
     }
     return gesamt, sparkonto_liste, kontotypen_liste
 
+
 def get_letztes_jahr_aufbuchungen(kontoname, gesamt):
     if len(gesamt) == 0:
         return 0
     return gesamt[-1][kontoname]['aufbuchungen']
 
+
 def get_letztes_jahr_kontostand(kontoname, gesamt):
     if len(gesamt) == 0:
         return 0
     return gesamt[-1][kontoname]['kontostand']
+
 
 def gesamt_uebersicht():
     einzelbuchungen = persisted_state.database_instance().einzelbuchungen
@@ -136,7 +140,6 @@ def gesamt_uebersicht():
         gesamt_sparen = 0
 
         year_kontos = {}
-
 
         for row_index, row in db.iterrows():
             kontostand = 0
@@ -190,6 +193,7 @@ def gesamt_uebersicht():
 
     return gesamt_uebersicht, year_kontostaende
 
+
 def berechne_gesamt_tabelle(jahresdaten):
     if len(jahresdaten) == 0:
         return [[]]
@@ -216,6 +220,7 @@ def berechne_gesamt_tabelle(jahresdaten):
         gesamt.append(kontodaten[konto])
 
     return gesamt
+
 
 def berechne_diagramm(data):
     result = [
@@ -244,6 +249,7 @@ def berechne_diagramm(data):
         result[2]['datasets'].append('%.2f' % jahr['sparen_aufbuchung'])
 
     return labels, result
+
 
 def berechne_kontogesamt(data):
     data_gesamt = data[-1]
@@ -303,15 +309,18 @@ def general_infos():
         'kontos': info
     }
 
+
 def get_sum(df):
     if len(df) == 0:
         return 0
     return df.Wert.sum()
 
+
 def get_wert_sum(df):
     if len(df) == 0:
         return 0
     return get_sum(df[df.Wert > 0])
+
 
 def berechne_order_typ(dauerauftrag_order):
     order_gesamt_raw = persisted_state.database_instance().order.content.copy()
@@ -324,6 +333,7 @@ def berechne_order_typ(dauerauftrag_order):
         'manual_raw': '%.2f' % (order_summe - dauerauftrag_order),
         'dauerauftrag_raw': '%.2f' % dauerauftrag_order
     }
+
 
 def berechne_monatlich():
     aktuelle_dauerauftraege = persisted_state.database_instance().orderdauerauftrag.aktuelle_raw().copy()
@@ -357,9 +367,6 @@ def berechne_monatlich():
         'namen': namen,
         'werte': werte
     }
-
-
-
 
 
 def _handle_request(request):

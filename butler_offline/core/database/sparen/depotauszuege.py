@@ -1,13 +1,12 @@
 from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
-import numpy as np
+
 
 class Depotauszuege(DatabaseObject):
     TABLE_HEADER = ['Datum', 'Depotwert', 'Konto', 'Wert']
 
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
-
 
     def add(self, datum, depotwert, konto, wert):
         neuer_auszug = pd.DataFrame([[datum, depotwert, konto, wert]], columns=self.TABLE_HEADER)

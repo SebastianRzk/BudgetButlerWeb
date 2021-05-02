@@ -56,7 +56,6 @@ def _handle_request(request):
         'difference_is_negativ': gesamt_diff < 0
     }
 
-
     context = viewcore.generate_transactional_context('uebersicht_sparkontos')
     context['sparkontos'] = sparkonto_liste
     context['gesamt'] = gesamt
