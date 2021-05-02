@@ -7,4 +7,4 @@ DELETE_GEMEINSAMEBUCHUNGEN_URL = '{server_url}/deletegemeinsam.php'
 PARTNER_URL = '{server_url}/partner.php'
 LOGIN_URL = '{server_url}/login.php'
 
-SET_KATEOGIEN_URL = '{server_url}/setkategorien.php'
+SET_KATEGORIEN_URL = '{server_url}/setkategorien.php'
