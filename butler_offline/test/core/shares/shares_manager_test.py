@@ -37,6 +37,6 @@ def test_save_if_needed():
     save_if_needed(shares_info)
 
     assert file_system.INSTANCE.read(SHARES_PATH) == [
-        '{"isin": {"data": [{"date": "2021-01-01", "data": "test_data", "source": {"demo": "data"}}]}}']
+        '{"isin": {"data": [{"date": "2021-01-01", "data": {"demo": "data"}, "source": "test_data"}]}}']
 
 

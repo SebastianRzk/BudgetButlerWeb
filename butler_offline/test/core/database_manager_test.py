@@ -1,31 +1,28 @@
 import unittest
 
-from butler_offline.core import DBManager
-from butler_offline.core.DBManager import MultiPartCsvReader
-from butler_offline.core.DBManager import DatabaseParser
+from butler_offline.core import database_manager
+from butler_offline.core.database_manager import MultiPartCsvReader
+from butler_offline.core.database_manager import DatabaseParser
 from butler_offline.core import file_system
 from butler_offline.test.core.file_system_stub import FileSystemStub
 
 
-class DBManagerReadDB(unittest.TestCase):
+class DatabaseManagerTest(unittest.TestCase):
 
     def mock_filesystem(self):
         file_system.INSTANCE = FileSystemStub()
 
-
     def write_db_file_stub(self,name, stub):
         file_system.instance().write('../Database_' + name + '.csv', stub)
 
-
     def test_database_path_from(self):
-        assert DBManager.database_path_from('TestUser') == '../Database_TestUser.csv'
-
+        assert database_manager.database_path_from('TestUser') == '../Database_TestUser.csv'
 
     def teste_read_with_full_database(self):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db)
 
-        database = DBManager.read('testuser', set())
+        database = database_manager.read('testuser', set())
 
         assert database.name == 'testuser'
         assert len(database.einzelbuchungen.content) == 25
@@ -44,21 +41,19 @@ class DBManagerReadDB(unittest.TestCase):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db)
 
-        database = DBManager.read('testuser', set())
-        DBManager.write(database)
+        database = database_manager.read('testuser', set())
+        database_manager.write(database)
 
         assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
-
 
     def teste_write_with_old_database_should_migrate(self):
         self.mock_filesystem()
         self.write_db_file_stub('testuser', self.full_db_old)
 
-        database = DBManager.read('testuser', set())
-        DBManager.write(database)
+        database = database_manager.read('testuser', set())
+        database_manager.write(database)
 
         assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
-
 
     full_db_old = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
@@ -155,8 +150,6 @@ class DatabaseParserTest(unittest.TestCase):
         assert database_parser.einzelbuchungen() == self.einzelbuchungen
         assert database_parser.dauerauftraege() == self.dauerauftraege
         assert database_parser.gemeinsame_buchungen() == self.gemeinsame_buchungen
-
-
 
     einzelbuchungen = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
