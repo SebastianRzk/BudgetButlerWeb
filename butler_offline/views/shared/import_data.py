@@ -11,11 +11,11 @@ from butler_offline.viewcore.base_html import set_success_message, set_error_mes
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.viewcore import configuration_provider
-from butler_offline.views.online_services.session import get_partnername, login
-from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
-from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen, \
+from butler_offline.online_services.butler_online.session import get_partnername, login
+from butler_offline.online_services.butler_online.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
+from butler_offline.online_services.butler_online.gemeinsame_buchungen import get_gemeinsame_buchungen, \
     upload_gemeinsame_buchungen, delete_gemeinsame_buchungen
-from butler_offline.views.online_services.settings import set_kategorien
+from butler_offline.online_services.butler_online.settings import set_kategorien
 from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 

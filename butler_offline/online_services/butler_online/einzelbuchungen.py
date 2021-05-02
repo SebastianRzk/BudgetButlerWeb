@@ -1,7 +1,6 @@
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.online_routes import EINZELBUCHUNGEN_URL, DELETEITEMS_URL
+from butler_offline.online_services.butler_online.online_routes import EINZELBUCHUNGEN_URL, DELETEITEMS_URL
 import json
-
 
 
 def get_einzelbuchungen(server_url, auth_container):

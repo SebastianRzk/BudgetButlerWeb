@@ -1,9 +1,9 @@
 
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.gemeinsame_buchungen import get_gemeinsame_buchungen,\
+from butler_offline.online_services.butler_online.gemeinsame_buchungen import get_gemeinsame_buchungen,\
     upload_gemeinsame_buchungen, delete_gemeinsame_buchungen
 from butler_offline.test.RequesterStub import RequesterStub
-from butler_offline.views.online_services.session import OnlineAuth
+from butler_offline.online_services.butler_online.session import OnlineAuth
 
 
 

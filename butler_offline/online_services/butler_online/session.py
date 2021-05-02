@@ -1,5 +1,5 @@
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.online_routes import LOGIN_URL, PARTNER_URL
+from butler_offline.online_services.butler_online.online_routes import LOGIN_URL, PARTNER_URL
 import json
 
 

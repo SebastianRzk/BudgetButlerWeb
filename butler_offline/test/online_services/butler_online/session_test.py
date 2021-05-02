@@ -1,8 +1,8 @@
 
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.session import get_partnername, login
+from butler_offline.online_services.butler_online.session import get_partnername, login
 from butler_offline.test.RequesterStub import RequesterStub, MockedResponse
-from butler_offline.views.online_services.session import OnlineAuth
+from butler_offline.online_services.butler_online.session import OnlineAuth
 
 auth_response = '''
 {

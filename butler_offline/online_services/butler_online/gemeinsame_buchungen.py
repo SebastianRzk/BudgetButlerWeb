@@ -1,6 +1,6 @@
 from butler_offline.viewcore import requester
 import json
-from butler_offline.views.online_services.online_routes import GEMEINSAMEBUCHUNGEN_URL, DELETE_GEMEINSAMEBUCHUNGEN_URL
+from butler_offline.online_services.butler_online.online_routes import GEMEINSAMEBUCHUNGEN_URL, DELETE_GEMEINSAMEBUCHUNGEN_URL
 
 
 def get_gemeinsame_buchungen(server_url, auth_container):
