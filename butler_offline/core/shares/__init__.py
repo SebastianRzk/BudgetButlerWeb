@@ -12,21 +12,21 @@ class SharesInfo:
     
     def save(self, isin, date, source, data):
         if isin not in self.content:
-            self.content = self.content | self._get_share_data(isin, date, source, data)
+            self.content = self.content | self._to_share_data(isin, date, source, data)
         else:
-            self.content[isin][self._DATA_KEY].append(self._get_share_entry(date, source, data))
+            self.content[isin][self._DATA_KEY].append(self._to_share_entry(date, source, data))
         self.changed = True
     
-    def _get_share_data(self, isin, date, source, data):
+    def _to_share_data(self, isin, date, source, data):
         return {
                    isin: {
                        self._DATA_KEY: [
-                            self._get_share_entry(date, source, data)
+                            self._to_share_entry(date, source, data)
                            ]
                        }
                 }
 
-    def _get_share_entry(self, date, source, data):
+    def _to_share_entry(self, date, source, data):
         return {
                     self._DATE_KEY: date,
                     self._DATA_KEY: data,
