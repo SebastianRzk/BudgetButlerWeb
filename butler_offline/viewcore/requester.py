@@ -11,6 +11,13 @@ def instance():
 
 class Requester:
 
+    def get(self, server_url):
+        print('requested url', server_url)
+        response = requests.get(server_url)
+        print(response, self.decode(response))
+        response.raise_for_status()
+        return self.decode(response)
+
     def post(self, server_url, data={}, cookies=None):
         print('requested url', server_url, data)
         response = requests.post(server_url, data=data, cookies=cookies)

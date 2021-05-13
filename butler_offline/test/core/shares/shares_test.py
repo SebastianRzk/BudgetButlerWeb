@@ -39,3 +39,12 @@ def test_update_data():
 
     assert component_under_test.get_latest_data_for(isin) == updated_data
 
+
+def test_filter_out_isins_without_data():
+    isin = 'demoisin'
+    initial_data = {'test': 'data'}
+    component_under_test = SharesInfo({})
+    component_under_test.save(isin, 'demodate', 'demosource', initial_data)
+
+    assert component_under_test.filter_out_isins_without_data(['demoisin', 'unknown']) == ['demoisin']
+

@@ -1,10 +1,12 @@
 from butler_offline.core import database_manager
 from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.state import persisted_state
-
+from butler_offline.core.shares import SharesInfo
+from butler_offline.core.shares.shares_manager import load_data
 
 DATABASE_INSTANCE = None
 DATABASES = []
+SHARES_DATA = None
 
 
 def database_instance():
@@ -20,6 +22,12 @@ def database_instance():
         persisted_state.DATABASE_INSTANCE = database_manager.read(persisted_state.DATABASES[0],
                                                                   ausgeschlossene_kategorien=ausgeschlossene_kategorien)
     return persisted_state.DATABASE_INSTANCE
+
+
+def shares_data():
+    if not persisted_state.SHARES_DATA:
+        persisted_state.SHARES_DATA = load_data()
+    return persisted_state.SHARES_DATA
 
 
 def switch_database_instance(database_name):

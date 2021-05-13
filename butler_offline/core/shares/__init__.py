@@ -1,5 +1,10 @@
 
 class SharesInfo:
+    KOSTEN = 'Kosten'
+    REGIONEN = 'Regionen'
+    SEKTOREN = 'Sektoren'
+    INDEX_NAME = 'IndexName'
+    NAME = 'Name'
     _DATA_KEY = 'data'
     _NAME_KEY = 'name'
     _DATE_KEY = 'date'
@@ -45,4 +50,12 @@ class SharesInfo:
         if isin not in self.content:
             return None
         return self.content[isin][self._DATA_KEY][-1][self._DATE_KEY]
+
+    def filter_out_isins_without_data(self, isins):
+        filtered = []
+        for isin in isins:
+            if self.get_latest_data_for(isin):
+                filtered.append(isin)
+
+        return filtered
 

@@ -1,5 +1,6 @@
 from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
+from butler_offline.core.time import today
 
 
 class Depotauszuege(DatabaseObject):
@@ -101,4 +102,18 @@ class Depotauszuege(DatabaseObject):
         selected = Depotauszuege()
         selected.content = include
         return selected
+
+    def get_isins_invested_by(self, date=None):
+        if not date:
+            date = today()
+        values = self.content[['Datum', 'Depotwert', 'Wert']].copy()
+        values.Depotwert = values.Depotwert.astype(str)
+        values = values[values.Depotwert.str.len() == 12]
+        values = values[values.Datum <= date]
+        values = values.sort_values(by='Datum', ascending=True)
+        values = values.groupby('Depotwert').last()
+        values = values[values.Wert > 0]
+        values = values.sort_values('Wert', ascending=False)
+        return values.index.to_list()
+
 

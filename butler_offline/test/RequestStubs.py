@@ -13,9 +13,17 @@ from butler_offline.viewcore import request_handler
 
 CONFIGURED = False
 
+
 class PostRequest:
     method = 'POST'
+
     def __init__(self, args):
+        self.values = args
+
+
+class PostRequestAction(PostRequest):
+    def __init__(self, action, args):
+        args['action'] = action
         self.values = args
 
 

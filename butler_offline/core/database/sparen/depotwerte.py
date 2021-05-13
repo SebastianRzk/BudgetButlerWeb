@@ -43,7 +43,6 @@ class Depotwerte(DatabaseObject):
         isins = sorted(set(self.content.ISIN.to_list()))
         return list(filter(lambda x: len(x) == 12, isins))
 
-
     def _sort(self):
         self.content = self.content.sort_values(by=['Name', 'ISIN'])
         self.content = self.content.reset_index(drop=True)
