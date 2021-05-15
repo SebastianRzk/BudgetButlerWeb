@@ -48,7 +48,7 @@ def _translate(region_code, lang):
     return translation.name
 
 
-def get_regions(shares_info, isins_with_data, depotauszuege, depotwerte):
+def get_data(shares_info_resolver, isins_with_data, wert_resolver, depotwerte, translator):
     if not isins_with_data:
         return None
     order = []
@@ -57,8 +57,8 @@ def get_regions(shares_info, isins_with_data, depotauszuege, depotwerte):
 
     for isin_index in range(0, len(isins_with_data)):
         isin = isins_with_data[isin_index]
-        data = shares_info.get_latest_data_for(isin)[SharesInfo.REGIONEN]
-        wert = depotauszuege.get_depotwert_by(isin)
+        data = shares_info_resolver(isin)
+        wert = wert_resolver(isin)
         gesamt_betrag += wert
 
         for region in data.keys():
@@ -100,7 +100,6 @@ def get_regions(shares_info, isins_with_data, depotauszuege, depotwerte):
                         'percent': 0,
                         'percent_str': '0,00'
                      })
-    german = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['de'])
     # Compute gesamt
     for region_index in range(0, len(regions)):
         region = regions[region_index]
@@ -119,14 +118,48 @@ def get_regions(shares_info, isins_with_data, depotauszuege, depotwerte):
                           'percent': prozent,
                           'percent_str': '%.2f' % prozent
                       })
-        region.insert(0, _translate(order[region_index], german))
+        region.insert(0, translator(order[region_index]))
 
     regions = list(reversed(sorted(regions, key=lambda x: x[1]['euro'])))
 
     return {
                 'header': ['Gesamt'] + [depotwerte.get_description_for(e) for e in isins_with_data],
-                'regions': regions
+                'data': regions
            }
+
+
+def _get_costs(shares_data, isins_with_data, wert_resolver, depotwerte):
+    if not isins_with_data:
+        return None
+
+    total_cost_eur = 0
+    total_eur = 0
+    data = []
+
+    for isin in isins_with_data:
+        wert = wert_resolver(isin)
+        cost_percent = shares_data.get_latest_data_for(isin)[SharesInfo.KOSTEN]
+        cost_eur = wert*(cost_percent / 100)
+        total_cost_eur += cost_eur
+        total_eur += wert
+
+        data.append({
+            'name': depotwerte.get_description_for(isin),
+            'costs_percent': '%.2f' % cost_percent,
+            'costs_eur': '%.2f' % cost_eur
+        })
+    cost_percent = 0
+    if total_eur:
+        cost_percent = (total_cost_eur * 100) / total_eur
+
+    gesamt = {
+        'name': 'Gesamt',
+        'costs_percent': '%.2f' % cost_percent,
+        'costs_eur': '%.2f' % total_cost_eur
+    }
+
+    return {'data': data,
+            'gesamt': gesamt}
 
 
 def _generate_content(context):
@@ -154,8 +187,24 @@ def _generate_content(context):
     all_relevant_isins = depotauszuege.get_isins_invested_by()
     isins_with_data = shares_info.filter_out_isins_without_data(all_relevant_isins)
 
+    german = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['de'])
+
     context['etfs'] = etfs
-    context['regions'] = get_regions(shares_info, isins_with_data, depotauszuege, depotwerte)
+    context['regions'] = get_data(
+        lambda x: shares_info.get_latest_data_for(x)[SharesInfo.REGIONEN],
+        isins_with_data,
+        lambda x: depotauszuege.get_depotwert_by(x),
+        depotwerte,
+        lambda x: _translate(x, german)
+    )
+    context['sectors'] = get_data(
+        lambda x: shares_info.get_latest_data_for(x)[SharesInfo.SEKTOREN],
+        isins_with_data,
+        lambda x: depotauszuege.get_depotwert_by(x),
+        depotwerte,
+        lambda x: x
+    )
+    context['costs'] = _get_costs(shares_info, isins_with_data, lambda x: depotauszuege.get_depotwert_by(x), depotwerte)
 
     return context
 
