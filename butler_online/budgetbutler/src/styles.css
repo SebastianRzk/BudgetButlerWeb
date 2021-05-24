@@ -109,3 +109,11 @@ Masken Eigenschaften
   width: 100%;
   padding-right: 1.5ex;
 }
+
+/*
+Menu item ohne border
+*/
+
+.mat-stroked-button {
+  border: none !important;
+}
