@@ -37,3 +37,11 @@
 ## Kontos
 
 ![](img/screenshots_desktop/kontos.png)
+
+## ETF-Portfolio Vergleich
+
+![](img/screenshots_desktop/etf.png)
+
+![](img/screenshots_desktop/etf_region.png)
+
+![](img/screenshots_desktop/kontos_sektor.png)
