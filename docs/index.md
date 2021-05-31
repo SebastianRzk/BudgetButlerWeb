@@ -4,8 +4,8 @@
 * TOC
 {:toc}
 
-[Screenshots Desktop](docs/screenshots_desktop.md)
-[Screenshots Companion App](docs/screenshots_mobile.md)
+[Screenshots Desktop](screenshots_desktop)
+[Screenshots Companion App](screenshots_mobile)
 
 ## Idee
 
