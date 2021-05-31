@@ -39,7 +39,7 @@
 					<div class="boxcontent closed" id="box_add_depotauszug_{{konto.konto}}">
 						{% for item in konto.empty_items%}
 						<div class="form-group">
-							<label>{{item.description}}</label> <input value="{{item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="depotwert_wert_{{item.isin}}" class="form-control" placeholder="" required="required" />
+							<label>{{item.description}}</label> <input value="{{item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert_{{item.isin}}" class="form-control" placeholder="" required="required" />
 						</div>
 						{% endfor %}
 					</div>

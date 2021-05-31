@@ -3,7 +3,7 @@
 set -e
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-VENV_DIR=$parent_path/.venv
+VENV_DIR=$parent_path/venv
 HOST=http://localhost:5000
 
 export FLASK_APP=start_as_flask.py

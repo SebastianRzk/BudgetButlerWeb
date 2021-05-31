@@ -1,8 +1,8 @@
 
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.settings import set_kategorien
+from butler_offline.online_services.butler_online.settings import set_kategorien
 from butler_offline.test.RequesterStub import RequesterStub
-from butler_offline.views.online_services.session import OnlineAuth
+from butler_offline.online_services.butler_online.session import OnlineAuth
 
 
 def test_set_kategorien():

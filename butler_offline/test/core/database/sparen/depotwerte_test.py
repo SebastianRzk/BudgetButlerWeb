@@ -45,6 +45,14 @@ class DepotwerteTest(unittest.TestCase):
         component_under_test.add('1name', '1isin',)
 
         assert component_under_test.get_depotwerte() == ['0isin', '1isin']
+        
+    def test_get_valid_isins(self):
+        component_under_test = Depotwerte()
+        
+        component_under_test.add('invalid isin', '-')
+        component_under_test.add('valid isin', 'isin56789012')
+        
+        assert component_under_test.get_valid_isins() == ['isin56789012']
 
 if __name__ == '__main__':
     unittest.main()

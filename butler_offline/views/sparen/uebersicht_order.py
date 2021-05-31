@@ -33,7 +33,6 @@ def _handle_request(request):
             'Dynamisch': row.Dynamisch
         })
 
-
     context = viewcore.generate_transactional_context('uebersicht_order')
     context['order'] = order_liste
     return context

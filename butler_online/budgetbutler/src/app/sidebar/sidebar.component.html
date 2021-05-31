@@ -19,7 +19,7 @@
         <div class="greeter">Hallo, {{authService.username}}</div>
       </div>
       <div class="navigation">
-        <button mat-stroked-button (click)="logout()" class="navigation-button full-height">Logout</button>
+        <button mat-stroked-button (click)="logout()" class="navigation-button full-height"><mat-icon aria-hidden="false" >logout</mat-icon>Logout</button>
         <div *ngFor="let menuItem of menu">
           <button mat-stroked-button class="navigation-button full-height" *ngIf="menuItem.type === 'link'"
             (click)="navigateTo(menuItem.url, drawer)">

@@ -366,34 +366,3 @@
 		</script>
 	</div>
 </div>
-
-
-
-<div class="box theme-row">
-	<div class="box-body">
-		<div class="table-responsive" style="overflow: scrolll">
-			<table style="min-width: {{tablesize}}ex">
-				<thead>
-					<tr>
-						<th>Konto</th>
-						{% for jahr in gesamt_diagramm_labels %}
-						<th>Kontostand {{jahr}}</th>
-						<th>Aufbuchung</th>
-						{% endfor %}
-					</tr>
-				</thead>
-				<tbody>
-					{% for konto in gesamt_tabelle %}
-					<tr>
-						<td>{{konto[0].name}}</td>
-						{% for kontojahr in konto %}
-						<td> {{kontojahr.kontostand_str}} (+{{kontojahr.kontostand_diff_str}})</td>
-						<td> {{kontojahr.aufbuchungen_str}} (+{{kontojahr.aufbuchungen_diff_str}})</td>
-						{% endfor %}
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>

@@ -8,7 +8,6 @@ class Depotwerte(DatabaseObject):
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
 
-
     def add(self, name, isin):
         neuer_depotwert = pd.DataFrame([[name, isin]], columns=self.TABLE_HEADER)
         self.content = self.content.append(neuer_depotwert, ignore_index=True)
@@ -39,7 +38,10 @@ class Depotwerte(DatabaseObject):
     def get_description_for(self, isin):
         name = self.content[self.content.ISIN == isin].Name.to_list()[0]
         return '{} ({})'.format(name, isin)
-
+    
+    def get_valid_isins(self):
+        isins = sorted(set(self.content.ISIN.to_list()))
+        return list(filter(lambda x: len(x) == 12, isins))
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Name', 'ISIN'])

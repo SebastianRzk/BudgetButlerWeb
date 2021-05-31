@@ -2,7 +2,7 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.converter import datum_to_german, from_double_to_german
+from butler_offline.viewcore.converter import datum_to_german
 
 
 def _handle_request(request):

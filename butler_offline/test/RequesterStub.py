@@ -18,6 +18,14 @@ class RequesterStub:
         print('WARNING, NON MATCHING REQUEST:', url, data)
         return None
 
+    def get(self, url):
+        print('-----------------', url)
+        if url in self.mocked_requests:
+            self.call_count[url].append('')
+            return self.mocked_requests[url]
+        print('WARNING, NON MATCHING REQUEST:', url)
+        return None
+
     def post_raw(self, url, data):
         return self.post(url, data)
 

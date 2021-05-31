@@ -30,7 +30,8 @@ from butler_offline.views.sparen import uebersicht_sparen, \
     add_orderdauerauftrag, \
     uebersicht_orderdauerauftrag, \
     add_depotauszug, \
-    uebersicht_depotauszuege
+    uebersicht_depotauszuege, \
+    uebersicht_etfs
 
 from butler_offline.viewcore import routes
 
@@ -193,6 +194,11 @@ def display_uebersicht_depotauszuege():
 @app.route(routes.SPAREN_UEBERSICHT, methods=['GET'])
 def display_sparen_uebersicht():
     return uebersicht_sparen.index(request)
+
+
+@app.route(routes.SPAREN_UEBERSICHT_ETFS, methods=['GET', 'POST'])
+def display_sparen_uebersicht_etfs():
+    return uebersicht_etfs.index(request)
 
 
 @app.route('/theme/')

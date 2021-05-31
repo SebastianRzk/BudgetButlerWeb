@@ -1,8 +1,8 @@
 
 from butler_offline.viewcore import requester
-from butler_offline.views.online_services.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
+from butler_offline.online_services.butler_online.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
 from butler_offline.test.RequesterStub import RequesterStub
-from butler_offline.views.online_services.session import OnlineAuth
+from butler_offline.online_services.butler_online.session import OnlineAuth
 
 _JSON_IMPORT_DATA = '''
 [

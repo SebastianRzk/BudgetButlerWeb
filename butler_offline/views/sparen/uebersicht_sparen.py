@@ -5,6 +5,7 @@ from butler_offline.viewcore.converter import from_double_to_german
 from butler_offline.viewcore.converter import datum_to_german
 from datetime import date
 
+
 def to_piechart(data_list, gesamt_wert):
     colors = []
     labels = []
@@ -104,15 +105,18 @@ def generate_konto_uebersicht(color_kontos, color_typen):
     }
     return gesamt, sparkonto_liste, kontotypen_liste
 
+
 def get_letztes_jahr_aufbuchungen(kontoname, gesamt):
     if len(gesamt) == 0:
         return 0
     return gesamt[-1][kontoname]['aufbuchungen']
 
+
 def get_letztes_jahr_kontostand(kontoname, gesamt):
     if len(gesamt) == 0:
         return 0
     return gesamt[-1][kontoname]['kontostand']
+
 
 def gesamt_uebersicht():
     einzelbuchungen = persisted_state.database_instance().einzelbuchungen
@@ -134,11 +138,8 @@ def gesamt_uebersicht():
 
         sparen_aufbuchung = 0
         gesamt_sparen = 0
-        gesamt_aufbuchung_diff = 0
-        gesamt_sparen_diff = 0
 
         year_kontos = {}
-
 
         for row_index, row in db.iterrows():
             kontostand = 0
@@ -154,42 +155,28 @@ def gesamt_uebersicht():
 
             if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
                 kontostand = sparbuchungen_max_year.get_kontostand_fuer(kontoname)
-                diff_kontostand = kontostand - get_letztes_jahr_kontostand(kontoname, year_kontostaende)
                 aufbuchungen = sparbuchungen_year.get_aufbuchungen_fuer(kontoname)
-                diff_ausbuchungen = aufbuchungen - get_letztes_jahr_aufbuchungen(kontoname, year_kontostaende)
 
             if kontotyp == sparkontos.TYP_DEPOT:
                 aufbuchungen = order_year.get_order_fuer(kontoname)
-                diff_kontostand = kontostand - get_letztes_jahr_kontostand(kontoname, year_kontostaende)
                 kontostand = depotauszuege_year.get_kontostand_by(kontoname)
-                diff_ausbuchungen = aufbuchungen - get_letztes_jahr_aufbuchungen(kontoname, year_kontostaende)
 
             year_kontos[kontoname] = {
                 'kontostand': kontostand,
                 'kontostand_str': from_double_to_german(kontostand),
-                'kontostand_diff': diff_kontostand,
-                'kontostand_diff_str': from_double_to_german(diff_kontostand),
                 'aufbuchungen': aufbuchungen,
                 'aufbuchungen_str': from_double_to_german(aufbuchungen),
-                'aufbuchungen_diff': diff_ausbuchungen,
-                'aufbuchungen_diff_str': from_double_to_german(diff_ausbuchungen),
                 'name': kontoname
             }
 
             gesamt_sparen += kontostand
             sparen_aufbuchung += aufbuchungen
-            gesamt_aufbuchung_diff += diff_ausbuchungen
-            gesamt_sparen_diff += diff_kontostand
 
         year_kontos['Gesamt'] = {
                 'kontostand': gesamt_sparen,
-                'kontostand_diff': gesamt_sparen_diff,
                 'aufbuchungen': sparen_aufbuchung,
-                'aufbuchungen_diff': gesamt_aufbuchung_diff,
                 'kontostand_str': from_double_to_german(gesamt_sparen),
-                'kontostand_diff_str': from_double_to_german(gesamt_sparen_diff),
                 'aufbuchungen_str': from_double_to_german(sparen_aufbuchung),
-                'aufbuchungen_diff_str': from_double_to_german(gesamt_aufbuchung_diff),
                 'name': 'Gesamt'
             }
 
@@ -205,6 +192,7 @@ def gesamt_uebersicht():
         })
 
     return gesamt_uebersicht, year_kontostaende
+
 
 def berechne_gesamt_tabelle(jahresdaten):
     if len(jahresdaten) == 0:
@@ -233,6 +221,7 @@ def berechne_gesamt_tabelle(jahresdaten):
 
     return gesamt
 
+
 def berechne_diagramm(data):
     result = [
         {
@@ -260,6 +249,7 @@ def berechne_diagramm(data):
         result[2]['datasets'].append('%.2f' % jahr['sparen_aufbuchung'])
 
     return labels, result
+
 
 def berechne_kontogesamt(data):
     data_gesamt = data[-1]
@@ -319,15 +309,18 @@ def general_infos():
         'kontos': info
     }
 
+
 def get_sum(df):
     if len(df) == 0:
         return 0
     return df.Wert.sum()
 
+
 def get_wert_sum(df):
     if len(df) == 0:
         return 0
     return get_sum(df[df.Wert > 0])
+
 
 def berechne_order_typ(dauerauftrag_order):
     order_gesamt_raw = persisted_state.database_instance().order.content.copy()
@@ -340,6 +333,7 @@ def berechne_order_typ(dauerauftrag_order):
         'manual_raw': '%.2f' % (order_summe - dauerauftrag_order),
         'dauerauftrag_raw': '%.2f' % dauerauftrag_order
     }
+
 
 def berechne_monatlich():
     aktuelle_dauerauftraege = persisted_state.database_instance().orderdauerauftrag.aktuelle_raw().copy()
@@ -375,9 +369,6 @@ def berechne_monatlich():
     }
 
 
-
-
-
 def _handle_request(request):
     if persisted_state.database_instance().einzelbuchungen.anzahl() == 0:
         return viewcore.generate_error_context('uebersicht_sparen', 'Bitte erfassen Sie zuerst eine Einzelbuchung.')
@@ -395,8 +386,6 @@ def _handle_request(request):
     gesamt_diagramm_labels, gesamt_diagramm_data = berechne_diagramm(diagramm_uebersicht)
     gesamt_linechart = berechne_kontogesamt(gesamt_tabelle)
 
-
-
     order_until_today = persisted_state.database_instance().orderdauerauftrag.get_all_order_until_today()
 
     context['kontos'] = kontos
@@ -410,9 +399,6 @@ def _handle_request(request):
     context['gesamt_diagramm_labels'] = gesamt_diagramm_labels
     context['gesamt_diagramm_data'] = gesamt_diagramm_data
     context['gesamt_linechart'] = gesamt_linechart
-    context['gesamt_tabelle'] = gesamt_tabelle
-    context['tablesize'] = len(gesamt_diagramm_labels) * 40
-
     return context
 
 
