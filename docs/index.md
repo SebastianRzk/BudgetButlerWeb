@@ -47,7 +47,7 @@
 
 ### Systemvoraussetzungen
 
-* Python 3.6
+* Python 3.9
 * Pip
 * Moderner Webbrowser (z.B. Firefox oder Chromium)
 * Startup-Skript: shell, curl, Chromium
