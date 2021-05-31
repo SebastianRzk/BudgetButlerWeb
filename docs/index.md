@@ -32,11 +32,14 @@
   * Abrechnung erstellen.
   * Abrechnungen exportieren und importieren
 
+
 * Sparen
   * Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte, Order, Order-Dauerauftraegen sowie Depotauszuege
-  * Sparen Übersicht: 
+  * Sparen Übersicht:
     * Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
     * Zusammensetzung der Sparanlage
+  * ETF-Portfolio Vergleichen: Kosten, Sektoren und Länder jeweis pro ETF und nach Anteil im Portfolio
+
 
 * Konfiguration
   * Farbthema anpassen
@@ -143,7 +146,7 @@ oder:
 * Build in das Verzeichnis `butler_online_distribution` triggern
 
         sh butler_online_install/compose.sh
-        
+
 * Docker ohne eigene images nutzen:
 
     * In das Verzeichnis wechseln: `butler_online_distribution/docker_bind_edition/budget_butler`
@@ -159,15 +162,13 @@ oder:
 * Docker nutzen und vorher images bauen:
 
   * images bauen:
-     
+
         cd butler_online_distribution/docker_images_edition/budget_butler/images/
         docker build -t budget-butler-fpm budget-butler-fpm
         docker build -t budget-butler-static budget-butler-static
-    
+
   * Folgenden Befehl ausführen `docker-compose up` in `butler_online_distribution/docker_images_edition/budget_butler`
 
 * Login auf `/`. Initiale Anmeldedaten:
   * User: admin@admin.de
   * Password: adminadminadmin
-
-
