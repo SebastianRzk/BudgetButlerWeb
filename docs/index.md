@@ -5,6 +5,7 @@
 {:toc}
 
 [Screenshots Desktop](screenshots_desktop)
+
 [Screenshots Companion App](screenshots_mobile)
 
 ## Idee
