@@ -44,4 +44,4 @@
 
 ![](img/screenshots_desktop/etf_region.png)
 
-![](img/screenshots_desktop/kontos_sektor.png)
+![](img/screenshots_desktop/etf_sektor.png)

@@ -25,12 +25,7 @@
 
 ![](img/screenshots_mobile/einzel.png)
 
-![](img/screenshots_mobile/einzel_desktop.png)
-
-
 
 ## Gemeinsame Buchungen
 
 ![](img/screenshots_mobile/gemeinsam.png)
-
-
