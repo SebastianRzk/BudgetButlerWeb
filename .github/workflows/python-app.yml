@@ -28,6 +28,7 @@ jobs:
         mkdir geckodriver
         tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
         export PATH=$PATH:$PWD/geckodriver
+        export TRAVIS_INTEGRATION=TRUE
         wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
         source ~/.nvm/nvm.sh
         nvm install 12
