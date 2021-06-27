@@ -13,7 +13,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+        PATH: $PATH:$PWD/geckodriver
+        TRAVIS_INTEGRATION: TRUE
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
@@ -27,8 +29,6 @@ jobs:
         wget https://github.com/mozilla/geckodriver/releases/download/v0.29.1/geckodriver-v0.29.1-linux64.tar.gz
         mkdir geckodriver
         tar -xzf geckodriver-v0.29.1-linux64.tar.gz -C geckodriver
-        export PATH=$PATH:$PWD/geckodriver
-        export TRAVIS_INTEGRATION=TRUE
         wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
         source ~/.nvm/nvm.sh
         nvm install 12
