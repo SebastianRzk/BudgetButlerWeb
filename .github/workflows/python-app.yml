@@ -24,6 +24,14 @@ jobs:
       run: |
         sh ./ci/install_requirements.sh
         pip install flake8 pytest
+        wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz 
+        mkdir geckodriver
+        tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
+        export PATH=$PATH:$PWD/geckodriver
+        mysql -e 'CREATE DATABASE testdb;'
+        wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
+        source ~/.nvm/nvm.sh
+        nvm install 12
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
