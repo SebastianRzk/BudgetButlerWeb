@@ -23,6 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         sh ./ci/install_requirements.sh
+        pip install flake8 pytest
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
