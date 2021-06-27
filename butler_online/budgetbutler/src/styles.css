@@ -23,7 +23,7 @@
   -moz-font-feature-settings: 'liga';
   -moz-osx-font-smoothing: grayscale;
 }
-  
+
 
 body {
   margin: 0px;
@@ -31,7 +31,6 @@ body {
 
 
 .app-content{
-  width: 100vw;
   height: 100%;
   min-height: 100vh;
 }
@@ -41,17 +40,11 @@ app-sidebar {
 }
 
 
-@media (min-width: 800px) { 
+@media (min-width: 800px) {
   .app-content{
     display: flex;
     background-color: #f1f1f1;
  }
-
-  .content-area{
-    padding-left: 2ex;
-    padding-right: 2ex;
-    padding-bottom: 2ex;
-  }
 
   .mobile-only {
     display: none;
@@ -69,18 +62,13 @@ app-sidebar {
   }
 }
 
-@media (max-width: 799px) { 
+@media (max-width: 799px) {
   .app-content {
     background-color: #f1f1f1;
   }
 
   .desktop-only {
     display: none;
-  }
-
-  .content-area{
-    padding-top: 1ex;
-    width: 100%;
   }
 
   .erfassung {
