@@ -46,7 +46,8 @@ jobs:
         sh ci/run_integration_tests.sh
   docker:
     runs-on: ubuntu-latest
-    steps:
+    steps: 
+      - uses: actions/checkout@v2
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
