@@ -101,38 +101,8 @@ BudgetButlerWeb aktualisieren:
 
 ### Systemanforderung für den Betrieb:
 
-* Webspace mit PHP 7.3+
-* Relationale Datenbank
-
-oder:
-
 * docker und docker-compose
 
-### Installation Webspace
-
-* Repo clonen
-
-        git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
-
-* Ins Projektverzeichnis wechseln
-
-        cd BudgetButlerWeb
-
-* Build in das Verzeichnis `butler_online_distribution` triggern
-
-        sh butler_online_install/compose.sh
-
-* Datenbank-Zugangsdaten in die Datei `butler_online_distribution/webspace_edition/api/db.ini` eintragen
-
-* Für http (und nicht https Betrieb) in der Datei `api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
-
-* Diesen Ordner auf den Webspace laden `butler_online_distribution/webspace_edition`
-
-* Prüfen, dass die Datei `db.ini` von außen nicht erreichbar ist.
-
-* Login auf `/`. Initiale Anmeldedaten:
-    * User: admin@admin.de
-    * Password: adminadminadmin
 
 ### Installation docker + docker-compose
 
@@ -144,31 +114,14 @@ oder:
 
         cd BudgetButlerWeb
 
+* Für http (und nicht https Betrieb) in der Datei `butler_online_api/api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
+
 * Build in das Verzeichnis `butler_online_distribution` triggern
 
-        sh butler_online_install/compose.sh
+        sh butler_online_install/build_images.sh
 
-* Docker ohne eigene images nutzen:
 
-    * In das Verzeichnis wechseln: `butler_online_distribution/docker_bind_edition/budget_butler`
-
-    *  Gegebenenfalls die Passwörder in der `db.env` ändern
-
-    * Für http (und nicht https Betrieb) in der Datei `src/api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
-
-    * Folgenden Befehl ausführen:
-
-    	docker-compose up
-
-* Docker nutzen und vorher images bauen:
-
-  * images bauen:
-
-        cd butler_online_distribution/docker_images_edition/budget_butler/images/
-        docker build -t budget-butler-fpm budget-butler-fpm
-        docker build -t budget-butler-static budget-butler-static
-
-  * Folgenden Befehl ausführen `docker-compose up` in `butler_online_distribution/docker_images_edition/budget_butler`
+* Folgenden Befehl ausführen `docker-compose up` in `butler_online_distribution/budget_butler`
 
 * Login auf `/`. Initiale Anmeldedaten:
   * User: admin@admin.de
