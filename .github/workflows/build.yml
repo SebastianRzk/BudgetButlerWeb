@@ -44,3 +44,18 @@ jobs:
     - name: Integration test with pytest
       run: |
         sh ci/run_integration_tests.sh
+  docker:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: execute tests
+        run: |
+          docker build -f Dockerfile.test .
+
