@@ -1,4 +1,5 @@
 from functools import reduce
+from os import getenv
 from butler_offline.viewcore import configuration_provider
 from butler_offline.core import file_system
 
@@ -15,7 +16,7 @@ DEFAULT_CONFIG = {
 
 
 def _load_config():
-    lines = file_system.instance().read('../config')
+    lines = file_system.instance().read(getenv('CONFIG_PATH', '..') + '/config')
     if not lines:
         return dict(configuration_provider.DEFAULT_CONFIG)
     loaded_config = {}
