@@ -6,5 +6,8 @@
 
 [Webseite + Dokumentation](https://SebastianRzk.github.io/BudgetButlerWeb/)
 
-
-
+## Umgebungsvariablen
+| Wert | Default | Beschreibung |
+|------| ------- | ------------ |
+| DATABASE_PATH | .. | Ordner an dem die Datenbanken gesucht werden sollen. |
+| CONFIG_PATH | .. | Ordner an dem die Configuration gesucht werden soll. |
