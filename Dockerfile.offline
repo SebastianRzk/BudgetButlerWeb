@@ -1,0 +1,29 @@
+FROM python:3.9 as builder
+ENV PATH=/root/.local/bin:$PATH
+WORKDIR /usr/src/budget_butler
+
+COPY ./butler_offline/requirements.txt ./requirements.txt
+RUN pip install --no-cache --upgrade pip && \
+    pip install --user --no-cache -r ./requirements.txt
+
+FROM python:3.9-slim 
+
+ENV HOME /home/butler
+ENV APP_HOME $HOME/butler_offline
+ENV DATABASE_PATH /data
+ENV CONFIG_PATH /data
+RUN mkdir -p $HOME && \
+    mkdir $APP_HOME
+WORKDIR $HOME
+
+EXPOSE 5000
+ENV PATH=/home/butler/.local/bin:$PATH
+ENV FLASK_APP start_as_flask.py
+
+COPY ./butler_offline/ $APP_HOME
+
+WORKDIR /home/butler/butler_offline
+
+COPY --from=builder /root/.local /home/butler/.local
+
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
