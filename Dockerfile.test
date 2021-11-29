@@ -11,7 +11,7 @@ RUN npm run build --prod
 RUN ls -la /app/dist
 
 
-FROM markadams/chromium-xvfb as build-step-angular-test
+FROM sebastianrzk/docker-chromium-xvfb as build-step-angular-test
 
 WORKDIR /usr/src/app
 RUN apt-get update
