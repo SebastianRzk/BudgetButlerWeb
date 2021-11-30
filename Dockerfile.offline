@@ -3,7 +3,7 @@ ENV PATH=/root/.local/bin:$PATH
 WORKDIR /usr/src/budget_butler
 
 COPY ./butler_offline/requirements.txt ./requirements.txt
-RUN pip install --no-cache --upgrade pip && \
+RUN pip install --no-cache --upgrade pip setuptools && \
     pip install --user --no-cache -r ./requirements.txt
 
 FROM python:3.9-slim 
