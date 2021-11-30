@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - "v*.*.*"
-    branches: [ test-image-push ]
+    branches: [ dev ]
 
 jobs:
 
@@ -14,6 +14,13 @@ jobs:
       - 
         name: Checkout
         uses: actions/checkout@v2
+      - name: Extract branchname
+        run: |
+          echo "DOCKER_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Overwrite tag to latest
+        if: github.ref == 'refs/heads/master'
+        run: |
+          echo "DOCKER_TAG=latest" >> $GITHUB_ENV
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
