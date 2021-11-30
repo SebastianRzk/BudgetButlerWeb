@@ -1,7 +1,7 @@
 
 
 # Stage 1
-FROM node:14 as build-step-angular
+FROM node:14-slim as build-step-angular
 RUN mkdir -p /app
 WORKDIR /app
 COPY butler_online/budgetbutler/package.json /app
@@ -17,7 +17,7 @@ COPY butler_online_api/api /api
 RUN composer install
 
 
-FROM nginx:latest
+FROM nginx:alpine
 RUN mkdir -p /www/api
 COPY butler_online_api/site.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-step-angular /app/dist /www
