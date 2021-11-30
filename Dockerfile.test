@@ -22,6 +22,7 @@ COPY butler_online/budgetbutler /app
 RUN npm install
 RUN npm run test --watch=false
 
+
 FROM composer as build-step-php
 RUN mkdir -p /api
 WORKDIR /api
