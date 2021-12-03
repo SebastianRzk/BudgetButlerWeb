@@ -40,7 +40,7 @@ jobs:
           file: ./Dockerfile.static
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: sebastianrzk/budgetbutlerweb-companion-static:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-static:${{ env.DOCKER_TAG }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
@@ -50,9 +50,23 @@ jobs:
         with:
           context: ./
           file: ./Dockerfile.fpm
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: sebastianrzk/budgetbutlerweb-companion-fpm:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-fpm:${{ env.DOCKER_TAG }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+      -
+        name: Build and push offline
+        id: docker_build_bb_offline
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile.offline
+          platforms: linux/386,linux/amd64,linux/arm64
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-offline:${{ env.DOCKER_TAG }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
