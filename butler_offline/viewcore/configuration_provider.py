@@ -1,7 +1,9 @@
 from functools import reduce
+from os import getenv
 from butler_offline.viewcore import configuration_provider
 from butler_offline.core import file_system
 
+CONFIG_FILE = getenv('CONFIG_PATH', '..') + '/config'
 LOADED_CONFIG = {}
 DEFAULT_CONFIG = {
     'DATABASES': 'Test_User',
@@ -15,7 +17,7 @@ DEFAULT_CONFIG = {
 
 
 def _load_config():
-    lines = file_system.instance().read('../config')
+    lines = file_system.instance().read(CONFIG_FILE)
     if not lines:
         return dict(configuration_provider.DEFAULT_CONFIG)
     loaded_config = {}
@@ -34,7 +36,7 @@ def _save_config(config):
     for key in config:
         content.append('{key}:{value}'.format(key=key, value=config[key]))
     content = reduce(lambda x, y: str(x) + '\n' + str(y), content)
-    file_system.instance().write('../config', content)
+    file_system.instance().write(CONFIG_FILE, content)
 
 def get_configuration(key):
     if not configuration_provider.LOADED_CONFIG:
