@@ -92,6 +92,13 @@ BudgetButlerWeb aktualisieren:
 
 	git pull
 
+
+## Umgebungsvariablen
+| Wert | Default | Beschreibung |
+|------| ------- | ------------ |
+| BUDGETBUTLERWEB_DATABASE_PATH | .. | Ordner an dem die Datenbanken gesucht werden sollen. |
+| BUDGETBUTLERWEB_CONFIG_PATH | .. | Ordner an dem die Configuration gesucht werden soll. |
+
 ## Begleiter Web-App:
 
 ### Systemanfoderungen zum Build
@@ -126,3 +133,5 @@ BudgetButlerWeb aktualisieren:
 * Login auf `/`. Initiale Anmeldedaten:
   * User: admin@admin.de
   * Password: adminadminadmin
+
+

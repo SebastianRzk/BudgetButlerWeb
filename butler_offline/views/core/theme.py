@@ -1,4 +1,4 @@
-from butler_offline.viewcore import configuration_provider
+from butler_offline.core import configuration_provider
 from flask import Response
 
 THEMECSS = """:root {
