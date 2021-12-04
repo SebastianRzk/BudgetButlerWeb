@@ -1,9 +1,12 @@
 from functools import reduce
 from os import getenv
-from butler_offline.viewcore import configuration_provider
 from butler_offline.core import file_system
+from butler_offline.core import configuration_provider
+from os import getenv
 
-CONFIG_FILE = getenv('CONFIG_PATH', '..') + '/config'
+
+BUDGETBUTLERWEB_DATABASE_PATH = getenv('BUDGETBUTLERWEB_DATABASE_PATH', '..')
+BUDGETBUTLERWEB_CONFIG_PATH = getenv('BUDGETBUTLERWEB_CONFIG_PATH', '..')
 LOADED_CONFIG = {}
 DEFAULT_CONFIG = {
     'DATABASES': 'Test_User',
@@ -16,8 +19,16 @@ DEFAULT_CONFIG = {
 }
 
 
+def get_database_path():
+    return BUDGETBUTLERWEB_DATABASE_PATH
+
+
+def get_config_path():
+    return BUDGETBUTLERWEB_CONFIG_PATH
+
+
 def _load_config():
-    lines = file_system.instance().read(CONFIG_FILE)
+    lines = file_system.instance().read(get_config_path() + '/config')
     if not lines:
         return dict(configuration_provider.DEFAULT_CONFIG)
     loaded_config = {}
@@ -31,17 +42,20 @@ def _load_config():
     print("#####", loaded_config)
     return loaded_config
 
+
 def _save_config(config):
     content = []
     for key in config:
         content.append('{key}:{value}'.format(key=key, value=config[key]))
     content = reduce(lambda x, y: str(x) + '\n' + str(y), content)
-    file_system.instance().write(CONFIG_FILE, content)
+    file_system.instance().write(get_config_path() + '/config', content)
+
 
 def get_configuration(key):
     if not configuration_provider.LOADED_CONFIG:
         configuration_provider.LOADED_CONFIG = _load_config()
     return configuration_provider.LOADED_CONFIG[key]
+
 
 def set_configuration(key, value):
     if not configuration_provider.LOADED_CONFIG:

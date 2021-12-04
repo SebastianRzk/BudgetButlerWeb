@@ -1,11 +1,10 @@
 from flask import redirect
 
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.core import time
+from butler_offline.core import time, configuration_provider
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.core import file_system
-from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.converter import datum_from_german as datum
 
 

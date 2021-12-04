@@ -1,11 +1,7 @@
-'''
-Read panda files
-'''
-
 from _io import StringIO
-from os import getenv
 from butler_offline.core import file_system
 from butler_offline.core.database import Database
+from butler_offline.core.configuration_provider import configuration_provider
 import pandas as pd
 
 KEYWORD_EINZELBUCHUNGEN = 'Einzelbuchungen'
@@ -112,7 +108,7 @@ def write(database):
 
 
 def database_path_from(username):
-    return getenv('DATABASE_PATH', '..') + '/Database_' + username + '.csv'
+    return configuration_provider.get_database_path() + '/Database_' + username + '.csv'
 
 
 class DatabaseParser:

@@ -1,7 +1,5 @@
-from butler_offline.core import database_manager
-from butler_offline.viewcore import configuration_provider
+from butler_offline.core import database_manager, configuration_provider
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.core.shares import SharesInfo
 from butler_offline.core.shares.shares_manager import load_data
 
 DATABASE_INSTANCE = None

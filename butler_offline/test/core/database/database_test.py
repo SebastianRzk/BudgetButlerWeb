@@ -2,12 +2,11 @@ import unittest
 from pandas import DataFrame
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.core import file_system
+from butler_offline.core import file_system, configuration_provider
 from butler_offline.core.database import Database
 from butler_offline.core import time
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.state import persisted_state
 
 
