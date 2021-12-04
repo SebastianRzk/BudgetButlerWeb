@@ -41,9 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: |
-#            ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-static:${{ env.DOCKER_TAG }}
-            ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-static:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-static:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
@@ -56,9 +54,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: |
- #           ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-fpm:${{ env.DOCKER_TAG }}
-            ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-fpm:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-fpm:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
@@ -71,9 +67,7 @@ jobs:
           platforms: linux/386,linux/amd64,linux/arm64
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: |
-#            ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-offline:${{ env.DOCKER_TAG }}
-            ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-offline:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-offline:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
