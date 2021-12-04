@@ -29,12 +29,9 @@ WORKDIR /api
 COPY butler_online_api/api /api
 RUN composer install
 
-
-FROM php:7-fpm-alpine3.13
-RUN set -ex \
-	&& apk --no-cache add postgresql-libs postgresql-dev \
-	&& docker-php-ext-install pgsql pdo_pgsql \
- 	&& apk del postgresql-dev
+# Assembly
+FROM php:7-fpm-alpine
+RUN docker-php-ext-install pdo mysqli pdo_mysql
 RUN mkdir -p /www/api
 COPY butler_online_api/site.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-step-angular /app/dist /www
