@@ -5,6 +5,7 @@
 ## Dokumentation
 
 [Webseite + Dokumentation](https://SebastianRzk.github.io/BudgetButlerWeb/)
+<<<<<<< HEAD
 
 ## Umgebungsvariablen
 | Wert | Default | Beschreibung |
@@ -26,3 +27,5 @@ budgetbutler_offline:
     volumes:
       - '${USERDIR}/budgetbutler:/data'
 ```
+=======
+>>>>>>> 7e11c99eff7f25daab39d2ef594321b63ae2fa94

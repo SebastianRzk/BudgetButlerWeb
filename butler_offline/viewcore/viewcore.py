@@ -1,4 +1,4 @@
-from butler_offline.viewcore import configuration_provider
+from butler_offline.core import configuration_provider
 from butler_offline.viewcore.request_handler import current_key
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.colors import GenericDesignColorChooser

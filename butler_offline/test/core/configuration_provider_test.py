@@ -1,7 +1,6 @@
 import unittest
 
-from butler_offline.viewcore import configuration_provider
-from butler_offline.core import file_system
+from butler_offline.core import file_system, configuration_provider
 from butler_offline.test.core.file_system_stub import FileSystemStub
 
 
@@ -28,9 +27,9 @@ class TesteConverter(unittest.TestCase):
 
     def test_configuration_provider_should_save_values(self):
         self.set_up()
-        configuration_provider.set_configuration('test','bla')
+        configuration_provider.set_configuration('test', 'bla')
         assert configuration_provider.get_configuration('test') == 'bla'
-        configuration_provider.set_configuration('test','not bla')
+        configuration_provider.set_configuration('test', 'not bla')
         assert configuration_provider.get_configuration('test') == 'not bla'
 
     

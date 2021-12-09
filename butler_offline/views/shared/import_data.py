@@ -10,7 +10,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.base_html import set_success_message, set_error_message
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.viewcore import configuration_provider
+from butler_offline.core import configuration_provider
 from butler_offline.online_services.butler_online.session import get_partnername, login
 from butler_offline.online_services.butler_online.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
 from butler_offline.online_services.butler_online.gemeinsame_buchungen import get_gemeinsame_buchungen, \
@@ -209,15 +209,18 @@ def handle_request(request, import_prefix='', gemeinsam=False):
     context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')
     return context
 
+
 def _kategorien_map(actual, target, goal):
     if actual != target:
         return actual
     return goal
 
+
 def _add_protokoll_if_needed(serverurl):
     if not serverurl.startswith('http://') and not serverurl.startswith('https://'):
         return 'https://' + serverurl
     return serverurl
+
 
 def _save_server_creds(serverurl, email):
     configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
