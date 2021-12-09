@@ -1,6 +1,6 @@
 import unittest
 
-from butler_offline.core import time
+from butler_offline.core import time, configuration_provider
 from butler_offline.viewcore import request_handler
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
@@ -10,7 +10,6 @@ from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.viewcore import configuration_provider
 
 
 class Gemeinsamabrechnen(unittest.TestCase):

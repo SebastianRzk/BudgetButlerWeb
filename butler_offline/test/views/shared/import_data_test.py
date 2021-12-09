@@ -4,13 +4,12 @@ import datetime
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.core import file_system
+from butler_offline.core import file_system, configuration_provider
 from butler_offline.views.shared import import_data
 from butler_offline.views.core import configuration
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore import configuration_provider
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import requester
 from butler_offline.test.RequesterStub import RequesterStub, MockedResponse
