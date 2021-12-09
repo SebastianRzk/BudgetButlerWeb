@@ -108,11 +108,7 @@ def write(database):
 
 
 def database_path_from(username):
-<<<<<<< HEAD
-    return getenv('DATABASE_PATH', '..') + '/Database_' + username + '.csv'
-=======
     return configuration_provider.get_database_path() + '/Database_' + username + '.csv'
->>>>>>> 7e11c99eff7f25daab39d2ef594321b63ae2fa94
 
 
 class DatabaseParser:
