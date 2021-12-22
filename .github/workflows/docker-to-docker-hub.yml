@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - "v*.*.*"
-    branches: [ dev ]
+    branches: [ dev, test-labels ]
 
 jobs:
 
@@ -14,13 +14,24 @@ jobs:
       - 
         name: Checkout
         uses: actions/checkout@v2
-      - name: Extract branchname
-        run: |
-          echo "DOCKER_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
-      - name: Overwrite tag to latest
-        if: github.ref == 'refs/heads/master'
-        run: |
-          echo "DOCKER_TAG=latest" >> $GITHUB_ENV
+      -
+        name: Docker meta BB Static
+        id: meta_static
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-static
+      -
+        name: Docker meta BB Companion
+        id: meta_companion
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-fpm
+      -
+        name: Docker meta BB Offline
+        id: meta_offline
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-offline
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -51,7 +62,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-static:${{ env.DOCKER_TAG }}
+          tags: ${{ steps.meta_static.outputs.tags }}
+          labels: ${{ steps.meta_static.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
@@ -64,7 +76,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-fpm:${{ env.DOCKER_TAG }}
+          tags: ${{ steps.meta_companion.outputs.tags }}
+          labels: ${{ steps.meta_companion.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
@@ -77,9 +90,7 @@ jobs:
           platforms: linux/386,linux/amd64,linux/arm64
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-offline:${{ env.DOCKER_TAG }}
+          tags: ${{ steps.meta_offline.outputs.tags }}
+          labels: ${{ steps.meta_offline.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-      -
-        name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
