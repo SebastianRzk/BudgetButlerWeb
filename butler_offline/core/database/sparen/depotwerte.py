@@ -3,13 +3,22 @@ import pandas as pd
 
 
 class Depotwerte(DatabaseObject):
-    TABLE_HEADER = ['Name', 'ISIN']
+    TYP = 'Typ'
+    TYP_ETF = 'ETF'
+    TYP_FOND = 'Fond'
+    TYP_EINZELAKTIE = 'Einzelaktie'
+    TYP_CRYPTO = 'Crypto'
+    TYP_ROBOT = 'Robot'
+    TYP_DEFAULT = TYP_ETF
+
+    TABLE_HEADER = ['Name', 'ISIN', 'Typ']
+    TYPES = [TYP_ETF, TYP_FOND, TYP_EINZELAKTIE, TYP_CRYPTO, TYP_ROBOT]
 
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
 
-    def add(self, name, isin):
-        neuer_depotwert = pd.DataFrame([[name, isin]], columns=self.TABLE_HEADER)
+    def add(self, name, isin, typ):
+        neuer_depotwert = pd.DataFrame([[name, isin, typ]], columns=self.TABLE_HEADER)
         self.content = self.content.append(neuer_depotwert, ignore_index=True)
         self.taint()
         self._sort()
@@ -17,11 +26,21 @@ class Depotwerte(DatabaseObject):
     def get_all(self):
         return self.content
 
-    def edit(self, index, name, isin):
+    def edit(self, index, name, isin, typ):
         self.edit_element(index, {
             'Name': name,
-            'ISIN': isin
+            'ISIN': isin,
+            'Typ': typ
         })
+
+    def parse_and_migrate(self, raw_table):
+        migrated_raw_table = self.migrate(raw_table)
+        self.parse(migrated_raw_table)
+
+    def migrate(self, raw_table):
+        if self.TYP not in raw_table.columns:
+            raw_table[self.TYP] = self.TYP_DEFAULT
+        return raw_table
 
     def get_depotwerte(self):
         return sorted(list(self.content.ISIN))

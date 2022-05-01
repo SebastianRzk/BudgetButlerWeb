@@ -28,7 +28,8 @@ def add_test_data():
     sparbuchungen.add(datum('01.01.2020'), 'testname', 100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto1')
     sparbuchungen.add(datum('01.01.2020'), 'testname', 10, sparbuchungen.TYP_ZINSEN, 'demokonto1')
 
-    persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demokonto2', 990)
 
@@ -172,7 +173,8 @@ def test_info():
     sparkontos.add(kontoname='demodepot2', kontotyp=sparkontos.TYP_DEPOT)
     sparkontos.add(kontoname='demodepot3', kontotyp=sparkontos.TYP_DEPOT)
 
-    persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 999)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot2', 'demoisin', 999)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demodepot1', 990)
@@ -210,7 +212,8 @@ def test_order_typ():
     sparkontos = persisted_state.database_instance().sparkontos
     sparkontos.add(kontoname='demodepot1', kontotyp=sparkontos.TYP_DEPOT)
 
-    persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 100)
     persisted_state.database_instance().orderdauerauftrag.add(
         datum('01.01.2020'),
@@ -241,8 +244,9 @@ def test_aktuelle_dauerauftraege():
     sparkontos = persisted_state.database_instance().sparkontos
     sparkontos.add(kontoname='demodepot1', kontotyp=sparkontos.TYP_DEPOT)
 
-    persisted_state.database_instance().depotwerte.add('DemoName1', 'is1')
-    persisted_state.database_instance().depotwerte.add('DemoName2', 'is2')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='DemoName1', isin='is1', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='DemoName2', isin='is2', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().orderdauerauftrag.add(
         datum('01.01.2020'),
         datum('02.02.2050'),

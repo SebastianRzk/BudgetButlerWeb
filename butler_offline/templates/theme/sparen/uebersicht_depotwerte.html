@@ -9,6 +9,7 @@
 					<tr>
 						<th>Nummer</th>
 						<th>Name</th>
+						<th>Typ</th>
 						<th>ISIN</th>
 						<th class="table-wert">Gesamte Einzahlungen</th>
 						<th class="table-wert">+/-</th>
@@ -21,6 +22,7 @@
 					<tr>
 						<td id="item_{{depotwert.index}}_id">{{depotwert.index}}</td>
 						<td id="item_{{depotwert.index}}_name">{{depotwert.name}}</td>
+						<td id="item_{{depotwert.index}}_typ">{{depotwert.typ}}</td>
 						<td id="item_{{depotwert.index}}_isin">{{depotwert.isin}}</td>
 						<td id="item_{{depotwert.index}}_buchung" class="table-wert">{{depotwert.buchung}}</td>
 						<td id="item_{{depotwert.index}}_difference"
@@ -51,6 +53,7 @@
 					<tr>
 						<td></td>
 						<td><b>Gesamt</b></td>
+						<td></td>
 						<td></td>
 						<td id="item_gesamt_buchung" class="table-wert"><b>{{gesamt.buchung}}</b></td>
 						<td id="item_gesamt_difference"

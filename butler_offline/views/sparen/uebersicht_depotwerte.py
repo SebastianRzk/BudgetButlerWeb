@@ -24,11 +24,13 @@ def _handle_request(request):
         buchungen = order.get_order_fuer_depotwert(isin)
         wert = depotauszuege.get_depotwert_by(isin)
         differenz = wert - buchungen
+        typ = row.Typ
 
         depotwerte_liste.append({
             'index': row_index,
             'name': row.Name,
             'isin': isin,
+            'typ': typ,
             'buchung': from_double_to_german(buchungen),
             'difference': from_double_to_german(differenz),
             'difference_is_negativ': differenz < 0,

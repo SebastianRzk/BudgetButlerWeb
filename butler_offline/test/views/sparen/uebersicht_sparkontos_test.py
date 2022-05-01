@@ -30,7 +30,8 @@ class TestUebersichtSparkontos(unittest.TestCase):
         sparbuchungen.add(datum('01.01.2020'), 'testname', 100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto1')
         sparbuchungen.add(datum('01.01.2020'), 'testname', 10, sparbuchungen.TYP_ZINSEN, 'demokonto1')
 
-        persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+        depotwerte = persisted_state.database_instance().depotwerte
+        depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
         persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
         persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demokonto2', 990)
 

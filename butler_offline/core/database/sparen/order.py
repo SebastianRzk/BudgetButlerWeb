@@ -68,6 +68,3 @@ class Order(DatabaseObject):
     def get_static_content(self):
         static_content = self.content.copy()[self.content.Dynamisch == False]
         return static_content[self.STATIC_TABLE_HEADER]
-
-
-
