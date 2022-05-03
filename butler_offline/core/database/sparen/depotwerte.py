@@ -65,3 +65,13 @@ class Depotwerte(DatabaseObject):
     def _sort(self):
         self.content = self.content.sort_values(by=['Name', 'ISIN'])
         self.content = self.content.reset_index(drop=True)
+
+    def get_isin_nach_typ(self):
+        content = self.content.copy()
+        result_frame = content[['ISIN', 'Typ']].groupby(by='Typ').agg({'ISIN': lambda x: list(x)})
+        result = {}
+
+        for depotwert_type, name_list in result_frame.iterrows():
+            result[depotwert_type] = name_list['ISIN']
+
+        return result

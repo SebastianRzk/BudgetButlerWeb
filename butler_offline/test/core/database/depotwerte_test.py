@@ -29,3 +29,22 @@ def test_parse_and_migrate_without_type_shoud_set_type_etf():
     assert depotwerte.content.Name[0] == 'demoname'
     assert depotwerte.content.ISIN[0] == 'demoisin'
     assert depotwerte.content.Typ[0] == Depotwerte.TYP_ETF
+
+
+def test_get_isin_nach_typ_with_empty_db_should_return_empty():
+    depotwerte = Depotwerte()
+
+    assert not depotwerte.get_isin_nach_typ()
+
+
+def test_get_isin_nach_typ():
+    depotwerte = Depotwerte()
+    depotwerte.add('Name_Etf1', 'ISIN_Etf1', depotwerte.TYP_ETF)
+    depotwerte.add('Name_Etf2', 'ISIN_Etf2', depotwerte.TYP_ETF)
+    depotwerte.add('Name_Fond', 'ISIN_Fond', depotwerte.TYP_FOND)
+
+    result = depotwerte.get_isin_nach_typ()
+
+    assert len(result.keys()) == 2
+    assert result[depotwerte.TYP_ETF] == ['ISIN_Etf1', 'ISIN_Etf2']
+    assert result[depotwerte.TYP_FOND] == ['ISIN_Fond']

@@ -30,6 +30,7 @@ def to_piechart(data_list, gesamt_wert):
 
 def generate_konto_uebersicht(color_kontos, color_typen):
     sparkontos = persisted_state.database_instance().sparkontos
+    depotwerte = persisted_state.database_instance().depotwerte
 
     gesamt_kontostand = 0
     gesamt_aufbuchungen = 0
@@ -79,6 +80,8 @@ def generate_konto_uebersicht(color_kontos, color_typen):
 
     kontotypen_liste = []
     for kontotyp in kontotypen_werte:
+        if kontotyp == sparkontos.TYP_DEPOT:
+            continue
         diff = kontotypen_werte[kontotyp]['gesamt'] - kontotypen_werte[kontotyp]['aufbuchungen']
         kontotypen_liste.append({
             'name': kontotyp,
@@ -90,6 +93,25 @@ def generate_konto_uebersicht(color_kontos, color_typen):
             'difference': diff,
             'difference_str': from_double_to_german(diff)
         })
+
+    depotwerte_nach_typ = depotwerte.get_isin_nach_typ()
+    for typ in depotwerte_nach_typ:
+        gesamt = 0
+        aufbuchungen = 0
+        for isin in depotwerte_nach_typ[typ]:
+            aufbuchungen += persisted_state.database_instance().order.get_order_fuer_depotwert(isin)
+            gesamt += persisted_state.database_instance().depotauszuege.get_depotwert_by(isin)
+        diff = gesamt - aufbuchungen
+        kontotypen_liste.append({
+                'name': typ,
+                'color': color_typen.get_for_value(typ),
+                'wert': gesamt,
+                'wert_str': from_double_to_german(gesamt),
+                'aufbuchungen': aufbuchungen,
+                'aufbuchungen_str': from_double_to_german(aufbuchungen),
+                'difference': diff,
+                'difference_str': from_double_to_german(diff)
+            })
 
 
     gesamt_diff = gesamt_kontostand - gesamt_aufbuchungen
@@ -376,9 +398,10 @@ def _handle_request(request):
     context = viewcore.generate_transactional_context('sparen')
     kontos = persisted_state.database_instance().sparkontos.get_all().Kontoname.tolist()
     typen = persisted_state.database_instance().sparkontos.KONTO_TYPEN
+    depot_typen = persisted_state.database_instance().depotwerte.TYPES
 
     color_kontos = viewcore.get_generic_color_chooser(kontos)
-    color_typen = viewcore.get_generic_color_chooser(typen)
+    color_typen = viewcore.get_generic_color_chooser(typen + depot_typen)
 
     gesamt, kontos, typen = generate_konto_uebersicht(color_kontos, color_typen)
     diagramm_uebersicht, year_kontostaende = gesamt_uebersicht()
