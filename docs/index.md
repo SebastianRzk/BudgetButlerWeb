@@ -35,7 +35,7 @@
 
 
 * Sparen
-  * Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte, Order, Order-Dauerauftraegen sowie Depotauszuege
+  * Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte (mit Typ : ETF, Fond, Einzelaktie, Crypto oder Robo), Order, Order-Dauerauftraegen sowie Depotauszuege
   * Sparen Übersicht:
     * Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
     * Zusammensetzung der Sparanlage
@@ -94,17 +94,20 @@ BudgetButlerWeb aktualisieren:
 
 
 ## Umgebungsvariablen
+
+
 | Wert | Default | Beschreibung |
 |------| ------- | ------------ |
 | BUDGETBUTLERWEB_DATABASE_PATH | .. | Ordner an dem die Datenbanken gesucht werden sollen. |
 | BUDGETBUTLERWEB_CONFIG_PATH | .. | Ordner an dem die Configuration gesucht werden soll. |
+
 
 ## Begleiter Web-App:
 
 ### Systemanfoderungen zum Build
 
 * npm
-* composer + php 7.3+
+* composer + php 8+
 
 ### Systemanforderung für den Betrieb:
 
