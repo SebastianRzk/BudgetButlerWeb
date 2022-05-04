@@ -24,7 +24,7 @@ class DatabaseObject(StatedObject):
             raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         if 'Dynamisch' in self.content.columns:
             raw_table['Dynamisch'] = False
-        self.content = self.content.append(raw_table, ignore_index=True)
+        self.content = pd.concat([self.content, raw_table], ignore_index=True)
         self._sort()
 
     def delete(self, index):

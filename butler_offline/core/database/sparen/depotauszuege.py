@@ -11,7 +11,7 @@ class Depotauszuege(DatabaseObject):
 
     def add(self, datum, depotwert, konto, wert):
         neuer_auszug = pd.DataFrame([[datum, depotwert, konto, wert]], columns=self.TABLE_HEADER)
-        self.content = self.content.append(neuer_auszug, ignore_index=True)
+        self.content = pd.concat([self.content, neuer_auszug], ignore_index=True)
         self.taint()
         self._sort()
 

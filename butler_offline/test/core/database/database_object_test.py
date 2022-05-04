@@ -8,7 +8,7 @@ class DatabaseObjectTest(unittest.TestCase):
         stored_columns = ['col1', 'col2']
         component_under_test = DatabaseObject(stored_columns=stored_columns)
         content = pd.DataFrame([['A', 'B']], columns=stored_columns)
-        component_under_test.content = component_under_test.content.append(content)
+        component_under_test.content = pd.concat([component_under_test.content, content])
 
         static_content = component_under_test.get_static_content()
 

@@ -19,7 +19,7 @@ class Depotwerte(DatabaseObject):
 
     def add(self, name, isin, typ):
         neuer_depotwert = pd.DataFrame([[name, isin, typ]], columns=self.TABLE_HEADER)
-        self.content = self.content.append(neuer_depotwert, ignore_index=True)
+        self.content = pd.concat([self.content, neuer_depotwert], ignore_index=True)
         self.taint()
         self._sort()
 
