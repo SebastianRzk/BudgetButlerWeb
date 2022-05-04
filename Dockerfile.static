@@ -5,7 +5,7 @@ WORKDIR /app
 COPY butler_online/budgetbutler/package.json /app
 RUN npm install
 COPY butler_online/budgetbutler /app
-RUN npm run build --prod
+RUN npm run build -- --configuration=production
 RUN ls -la /app/dist
 
 # Stage 2
