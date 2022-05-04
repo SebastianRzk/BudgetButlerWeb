@@ -23,8 +23,8 @@ class TestUebersichtDepotwerte(unittest.TestCase):
 
     def add_test_data(self):
         depotwerte = persisted_state.database_instance().depotwerte
-        depotwerte.add(name='depotwert1', isin='isin1')
-        depotwerte.add(name='depotwert2', isin='isin2')
+        depotwerte.add(name='depotwert1', isin='isin1', typ=depotwerte.TYP_ETF)
+        depotwerte.add(name='depotwert2', isin='isin2', typ=depotwerte.TYP_ETF)
         order = persisted_state.database_instance().order
         order.add(datum('12.12.2019'), 'demoname', 'demokonto', 'isin1', 100)
 
@@ -42,6 +42,7 @@ class TestUebersichtDepotwerte(unittest.TestCase):
                 'index': 0,
                 'name': 'depotwert1',
                 'isin': 'isin1',
+                'typ': 'ETF',
                 'buchung': '100,00',
                 'difference': '-10,00',
                 'difference_is_negativ': True,
@@ -50,6 +51,7 @@ class TestUebersichtDepotwerte(unittest.TestCase):
                 'index': 1,
                 'name': 'depotwert2',
                 'isin': 'isin2',
+                'typ': 'ETF',
                 'buchung': '0,00',
                 'difference': '0,00',
                 'difference_is_negativ': False,
@@ -80,6 +82,7 @@ class TestUebersichtDepotwerte(unittest.TestCase):
         assert len(depotwerte.content) == 1
         assert depotwerte.get(0) == {'Name': 'depotwert1',
                                      'ISIN': 'isin1',
+                                     'Typ': depotwerte.TYP_ETF,
                                      'index': 0}
 
 

@@ -30,10 +30,10 @@ class TestUebersichtDepotauszuege(unittest.TestCase):
         depotauszuege.add(datum('03.01.2020'), '4isin', '3demokonto', 4)
 
         depotwerte = persisted_state.database_instance().depotwerte
-        depotwerte.add('1name', '1isin')
-        depotwerte.add('2name', '2isin')
-        depotwerte.add('3name', '3isin')
-        depotwerte.add('4name', '4isin')
+        depotwerte.add(name='1name', isin='1isin', typ=depotwerte.TYP_ETF)
+        depotwerte.add(name='2name', isin='2isin', typ=depotwerte.TYP_ETF)
+        depotwerte.add(name='3name', isin='3isin', typ=depotwerte.TYP_ETF)
+        depotwerte.add(name='4name', isin='4isin', typ=depotwerte.TYP_ETF)
 
 
     def test_init_withEmptyDatabase(self):

@@ -28,11 +28,23 @@ def add_test_data():
     sparbuchungen.add(datum('01.01.2020'), 'testname', 100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto1')
     sparbuchungen.add(datum('01.01.2020'), 'testname', 10, sparbuchungen.TYP_ZINSEN, 'demokonto1')
 
-    persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demokonto2', 990)
 
     persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
+
+
+def add_typen_test_data():
+    add_test_data()
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='demoname2', isin='demoisin2', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='demoname3', isin='demoisin3', typ=depotwerte.TYP_FOND)
+    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin2', 888)
+    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin2', 'demokonto2', 880)
+    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin3', 777)
+    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin3', 'demokonto2', 770)
 
 
 def test_should_list_kontos():
@@ -90,36 +102,44 @@ def test_gesamt():
 
 def test_typen():
     set_up()
-    add_test_data()
+    add_typen_test_data()
 
     result = uebersicht_sparen.index(GetRequest())
 
     assert result['typen'] == [
         {'aufbuchungen': 100,
          'aufbuchungen_str': '100,00',
+         'color': '#39CCCC',
          'difference': 10,
          'difference_str': '10,00',
+         'name': 'Sparkonto',
          'wert': 110,
-         'wert_str': '110,00',
-         'color': '#00a65a',
-         'name': 'Sparkonto'},
+         'wert_str': '110,00'},
         {'aufbuchungen': 0,
          'aufbuchungen_str': '0,00',
+         'color': '#d2d6de',
          'difference': 0,
          'difference_str': '0,00',
+         'name': 'Genossenschafts-Anteile',
          'wert': 0,
-         'wert_str': '0,00',
-         'color': '#f56954',
-         'name': 'Genossenschafts-Anteile'},
-        {'aufbuchungen': 999,
-         'aufbuchungen_str': '999,00',
-         'difference': -9,
-         'difference_str': '-9,00',
-         'wert': 990,
-         'wert_str': '990,00',
-         'color': '#3c8dbc',
-         'name': 'Depot'},
-    ]
+         'wert_str': '0,00'},
+        {'aufbuchungen': 1887,
+         'aufbuchungen_str': '1887,00',
+         'color': '#00a65a',
+         'difference': -17,
+         'difference_str': '-17,00',
+         'name': 'ETF',
+         'wert': 1870,
+         'wert_str': '1870,00'},
+        {'aufbuchungen': 777,
+         'aufbuchungen_str': '777,00',
+         'color': '#f39c12',
+         'difference': -7,
+         'difference_str': '-7,00',
+         'name': 'Fond',
+         'wert': 770,
+         'wert_str': '770,00'},
+        ]
 
 
 def test_konto_diagramm():
@@ -137,14 +157,14 @@ def test_konto_diagramm():
 
 def test_typen_diagramm():
     set_up()
-    add_test_data()
+    add_typen_test_data()
 
     result = uebersicht_sparen.index(GetRequest())
 
     assert result['typen_diagramm'] == {
-        'colors': ['#00a65a', '#f56954', '#3c8dbc'],
-        'datasets': ['10.00', '0.00', '90.00'],
-        'labels': ['Sparkonto', 'Genossenschafts-Anteile', 'Depot'],
+        'colors': ['#39CCCC', '#d2d6de', '#00a65a', '#f39c12'],
+        'datasets': ['4.00', '0.00', '68.00', '28.00'],
+        'labels': ['Sparkonto', 'Genossenschafts-Anteile', 'ETF', 'Fond'],
     }
 
 
@@ -172,7 +192,8 @@ def test_info():
     sparkontos.add(kontoname='demodepot2', kontotyp=sparkontos.TYP_DEPOT)
     sparkontos.add(kontoname='demodepot3', kontotyp=sparkontos.TYP_DEPOT)
 
-    persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 999)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot2', 'demoisin', 999)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demodepot1', 990)
@@ -210,7 +231,8 @@ def test_order_typ():
     sparkontos = persisted_state.database_instance().sparkontos
     sparkontos.add(kontoname='demodepot1', kontotyp=sparkontos.TYP_DEPOT)
 
-    persisted_state.database_instance().depotwerte.add('demoname', 'demoisin')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 100)
     persisted_state.database_instance().orderdauerauftrag.add(
         datum('01.01.2020'),
@@ -241,8 +263,9 @@ def test_aktuelle_dauerauftraege():
     sparkontos = persisted_state.database_instance().sparkontos
     sparkontos.add(kontoname='demodepot1', kontotyp=sparkontos.TYP_DEPOT)
 
-    persisted_state.database_instance().depotwerte.add('DemoName1', 'is1')
-    persisted_state.database_instance().depotwerte.add('DemoName2', 'is2')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='DemoName1', isin='is1', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='DemoName2', isin='is2', typ=depotwerte.TYP_ETF)
     persisted_state.database_instance().orderdauerauftrag.add(
         datum('01.01.2020'),
         datum('02.02.2050'),
@@ -267,12 +290,9 @@ def test_aktuelle_dauerauftraege():
     result = uebersicht_sparen.index(GetRequest())
 
     assert result['monatlich'] == {
-        'colors': ['#3c8dbc', '#f56954'],
-        'einzelwerte': [{'color': '#3c8dbc', 'name': 'DemoName1 (is1)', 'wert': '100,00'},
-                      {'color': '#f56954', 'name': 'DemoName2 (is2)', 'wert': '50,00'}],
-        'namen': ['DemoName1 (is1)', 'DemoName2 (is2)'],
-        'werte': ['100.00', '50.00']
-    }
-
-
-
+            'colors': ['#3c8dbc', '#f56954'],
+            'einzelwerte': [{'color': '#3c8dbc', 'name': 'DemoName1 (is1)', 'wert': '100,00'},
+                            {'color': '#f56954', 'name': 'DemoName2 (is2)', 'wert': '50,00'}],
+            'namen': ['DemoName1 (is1)', 'DemoName2 (is2)'],
+            'werte': ['100.00', '50.00']
+        }

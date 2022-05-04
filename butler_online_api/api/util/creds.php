@@ -7,7 +7,7 @@ require_once(__DIR__.'/../model.php');
 function choose($key, $config_from_env, $config_from_ini, $default_value){
 	if (isset($config_from_env[$key])){
 		return $config_from_env[$key];
-	} 
+	}
 	if (isset($config_from_ini[$key])){
 		return $config_from_ini[$key];
 	}
@@ -92,14 +92,12 @@ function authenticated($myfunc){
 }
 
 class Auth {
-	public $token = "";
 	public $username = "";
 	public $role = "user";
 }
 
 function getUserAuth($auth){
 	$result = new Auth();
-	$result->token = $_COOKIE["PHPSESSID"];
 	$result->username = $auth->getUsername();
 
 	if ($auth->getUsername() == "admin"){

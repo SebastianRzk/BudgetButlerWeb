@@ -15,7 +15,7 @@ class Dauerauftraege(DatabaseObject):
     def parse(self, raw_table):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
-        self.content = self.content.append(raw_table, ignore_index=True)
+        self.content = pd.concat([self.content, raw_table], ignore_index=True)
         self.content = self.content.sort_values(by=['Startdatum'])
 
     def einnahmenausgaben_until_today(self,
@@ -45,7 +45,7 @@ class Dauerauftraege(DatabaseObject):
                 row['Wert'],
                 row['Kategorie'])
             for buchung in dauerauftrag_buchungen:
-                all_rows = all_rows.append(buchung, ignore_index=True)
+                all_rows = pd.concat([all_rows, buchung], ignore_index=True)
         return all_rows
 
     def add(self, startdatum, endedatum, kategorie, name, rhythmus, wert):
@@ -53,7 +53,7 @@ class Dauerauftraege(DatabaseObject):
             [[endedatum, kategorie, name, rhythmus, startdatum, wert]],
             columns=self.TABLE_HEADER
             )
-        self.content = self.content.append(neuer_dauerauftrag, ignore_index=True)
+        self.content = pd.concat([self.content, neuer_dauerauftrag], ignore_index=True)
         self.taint()
         print('DATABASE: Dauerauftrag hinzugefügt')
 

@@ -17,11 +17,12 @@ from datetime import date
 def set_up():
     file_system.INSTANCE = FileSystemStub()
     persisted_state.DATABASE_INSTANCE = None
+    depotwerte = persisted_state.database_instance().depotwerte
     persisted_state.database_instance().sparkontos.add('1demokonto', Kontos.TYP_DEPOT)
     persisted_state.database_instance().sparkontos.add('2demokonto', Kontos.TYP_DEPOT)
-    persisted_state.database_instance().depotwerte.add('1demowert', '1demoisin')
-    persisted_state.database_instance().depotwerte.add('2demowert', '2demoisin')
-    persisted_state.database_instance().depotwerte.add('3demowert', '3demoisin')
+    depotwerte.add(name='1demowert', isin='1demoisin', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='2demowert', isin='2demoisin', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='3demowert', isin='3demoisin', typ=depotwerte.TYP_ETF)
 
     # old depotauszug, alle isins gebucht
     persisted_state.database_instance().depotauszuege.add(datum('01.01.2020'), '1demoisin', '1demokonto', 1)
@@ -35,7 +36,6 @@ def set_up():
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '1demoisin', '1demokonto', 20)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '2demoisin', '2demokonto', 30)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '3demoisin', '2demokonto', 40)
-
 
     request_handler.stub_me()
 

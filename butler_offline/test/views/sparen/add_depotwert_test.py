@@ -18,6 +18,7 @@ def test_init():
     set_up()
     context = add_depotwert.index(GetRequest())
     assert context['approve_title'] == 'Depotwert hinzufügen'
+    assert context['types'] == persisted_state.database_instance().depotwerte.TYPES
 
 
 def test_transaction_id_should_be_in_context():
@@ -28,10 +29,12 @@ def test_transaction_id_should_be_in_context():
 
 def test_add_shouldAddDepotwert():
     set_up()
+    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
     add_depotwert.index(VersionedPostRequest(
         {'action': 'add',
          'name': '1name',
-         'isin': '1isin'
+         'isin': '1isin',
+         'typ': typ_etf
          }
      ))
 
@@ -39,14 +42,17 @@ def test_add_shouldAddDepotwert():
     assert len(db.depotwerte.content) == 1
     assert db.depotwerte.content.Name[0] == '1name'
     assert db.depotwerte.content.ISIN[0] == '1isin'
+    assert db.depotwerte.content.Typ[0] == typ_etf
 
 
 def test_add_depotwert_should_show_in_recently_added():
     set_up()
+    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
     result = add_depotwert.index(VersionedPostRequest(
         {'action': 'add',
          'name': '1name',
-         'isin': '1isin'
+         'isin': '1isin',
+         'typ': typ_etf
          }
      ))
     result_element = list(result['letzte_erfassung'])[0]
@@ -54,37 +60,45 @@ def test_add_depotwert_should_show_in_recently_added():
     assert result_element['fa'] == 'plus'
     assert result_element['Name'] == '1name'
     assert result_element['Isin'] == '1isin'
+    assert result_element['Typ'] == typ_etf
 
 
 def test_add_should_only_fire_once():
     set_up()
+    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
     next_id = request_handler.current_key()
     add_depotwert.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
          'name': '1name',
-         'isin': '1isin'
+         'isin': '1isin',
+         'typ': typ_etf
          }
      ))
     add_depotwert.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
          'name': 'overwritten',
-         'isin': 'overwritten'
+         'isin': 'overwritten',
+         'typ': ''
          }
      ))
     db = persisted_state.database_instance()
     assert len(db.depotwerte.content) == 1
     assert db.depotwerte.content.Name[0] == '1name'
     assert db.depotwerte.content.ISIN[0] == '1isin'
+    assert db.depotwerte.content.Typ[0] == typ_etf
 
 
 def test_edit_depotwert():
     set_up()
+    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
+    typ_fond = persisted_state.database_instance().depotwerte.TYP_FOND
     add_depotwert.index(VersionedPostRequest(
         {'action': 'add',
          'name': '1name',
-         'isin': '1isin'
+         'isin': '1isin',
+         'typ': typ_etf
          }
     ))
 
@@ -92,7 +106,8 @@ def test_edit_depotwert():
         {'action': 'add',
          'edit_index': 0,
          'name': '2name',
-         'isin': '2isin'
+         'isin': '2isin',
+         'typ': typ_fond
          }
     ))
 
@@ -100,20 +115,24 @@ def test_edit_depotwert():
     assert len(db.depotwerte.content) == 1
     assert db.depotwerte.content.Name[0] == '2name'
     assert db.depotwerte.content.ISIN[0] == '2isin'
+    assert db.depotwerte.content.Typ[0] == typ_fond
 
     result_element = list(result['letzte_erfassung'])[0]
 
     assert result_element['fa'] == 'pencil'
     assert result_element['Name'] == '2name'
     assert result_element['Isin'] == '2isin'
+    assert result_element['Typ'] == typ_fond
 
 
 def test_edit_depotwert_with_underscrore_should_return_error():
     set_up()
+    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
     add_depotwert.index(VersionedPostRequest(
         {'action': 'add',
          'name': '1name',
-         'isin': '1isin'
+         'isin': '1isin',
+         'typ': typ_etf
          }
     ))
 
@@ -121,7 +140,8 @@ def test_edit_depotwert_with_underscrore_should_return_error():
         {'action': 'add',
          'edit_index': 0,
          'name': '2name',
-         'isin': '2_isin'
+         'isin': '2_isin',
+         'typ': typ_etf
          }
     ))
 
@@ -130,10 +150,12 @@ def test_edit_depotwert_with_underscrore_should_return_error():
 
 def test_edit_depotwert_should_only_fire_once():
     set_up()
+    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
     add_depotwert.index(VersionedPostRequest(
         {'action': 'add',
          'name': '1name',
-         'isin': '1isin'
+         'isin': '1isin',
+         'typ': typ_etf
          }
     ))
 
@@ -143,7 +165,8 @@ def test_edit_depotwert_should_only_fire_once():
          'ID': next_id,
          'edit_index': 0,
          'name': '2name',
-         'isin': '2isin'
+         'isin': '2isin',
+         'typ': typ_etf
          }
     ))
     add_depotwert.index(PostRequest(
@@ -151,7 +174,8 @@ def test_edit_depotwert_should_only_fire_once():
          'ID': next_id,
          'edit_index': 0,
          'name': 'overwritten',
-         'isin': 'overwritten'
+         'isin': 'overwritten',
+         'typ': ''
          }
     ))
 
@@ -159,13 +183,16 @@ def test_edit_depotwert_should_only_fire_once():
     assert len(db.depotwerte.content) == 1
     assert db.depotwerte.content.Name[0] == '2name'
     assert db.depotwerte.content.ISIN[0] == '2isin'
+    assert db.depotwerte.content.Typ[0] == typ_etf
 
 def test_edit_call_from_ueberischt_should_preset_values_and_rename_button():
     set_up()
+    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
     add_depotwert.index(VersionedPostRequest(
         {'action': 'add',
          'name': '1name',
-         'isin': '1isin'
+         'isin': '1isin',
+         'typ': typ_etf
          }
     ))
 
@@ -176,4 +203,4 @@ def test_edit_call_from_ueberischt_should_preset_values_and_rename_button():
     assert preset['edit_index'] == '0'
     assert preset['name'] == '1name'
     assert preset['isin'] == '1isin'
-
+    assert preset['typ'] == typ_etf

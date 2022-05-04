@@ -15,7 +15,7 @@ class OrderDauerauftrag(DatabaseObject):
         neue_order = pd.DataFrame(
             [[startdatum, endedatum, rhythmus, name, konto, depotwert, wert]],
             columns=self.TABLE_HEADER)
-        self.content = self.content.append(neue_order, ignore_index=True)
+        self.content = pd.concat([self.content, neue_order], ignore_index=True)
         self.taint()
         self._sort()
 
@@ -25,7 +25,7 @@ class OrderDauerauftrag(DatabaseObject):
     def parse(self, raw_table):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
-        self.content = self.content.append(raw_table, ignore_index=True)
+        self.content = pd.concat([self.content, raw_table], ignore_index=True)
         self.content = self.content.sort_values(by=['Startdatum'])
 
     def edit(self, index, startdatum, endedatum, rhythmus, name, konto, depotwert, wert):
@@ -52,18 +52,17 @@ class OrderDauerauftrag(DatabaseObject):
                 row['Depotwert'],
                 row['Wert'])
             for buchung in dauerauftrag_buchungen:
-                all_rows = all_rows.append(buchung, ignore_index=True)
+                all_rows = pd.concat([all_rows, buchung], ignore_index=True)
         return all_rows
 
-
     def _order_until_today(self,
-                          startdatum,
-                          endedatum,
-                          frequenzfunktion,
-                          name,
-                          konto,
-                          depotwert,
-                          wert,):
+                           startdatum,
+                           endedatum,
+                           frequenzfunktion,
+                           name,
+                           konto,
+                           depotwert,
+                           wert,):
         laufdatum = startdatum
         frequency_function = get_function_for_name(frequenzfunktion)
         result = []
@@ -76,7 +75,6 @@ class OrderDauerauftrag(DatabaseObject):
     def _berechne_order(self, laufdatum, konto, depotwert, name, wert):
         return pd.DataFrame([[laufdatum, konto, depotwert, name, wert, True]],
                             columns=['Datum', 'Konto', 'Depotwert' , 'Name', 'Wert', 'Dynamisch'])
-
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Startdatum', 'Endedatum', 'Name'])
@@ -99,6 +97,3 @@ class OrderDauerauftrag(DatabaseObject):
         dauerauftraege = self.content.copy()
         dauerauftraege = dauerauftraege[dauerauftraege.Startdatum > date.today()]
         return self.frame_to_list_of_dicts(dauerauftraege)
-
-
-

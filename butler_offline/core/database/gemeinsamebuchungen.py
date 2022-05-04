@@ -1,6 +1,7 @@
 from pandas.core.frame import DataFrame
 from butler_offline.core.database.database_object import DatabaseObject
 from butler_offline.core.database.selector import GemeinsamSelector
+import pandas as pd
 
 
 class Gemeinsamebuchungen(DatabaseObject):
@@ -11,7 +12,7 @@ class Gemeinsamebuchungen(DatabaseObject):
 
     def add(self, ausgaben_datum, kategorie, ausgaben_name, wert, person):
         row = DataFrame([[ausgaben_datum, kategorie, ausgaben_name, wert, person]], columns=self.TABLE_HEADER)
-        self.content = self.content.append(row, ignore_index=True)
+        self.content = pd.concat([self.content, row], ignore_index=True)
         self._sort()
         self.taint()
 
@@ -19,7 +20,7 @@ class Gemeinsamebuchungen(DatabaseObject):
         anteil_gemeinsamer_buchungen = DataFrame()
         for _, row in self.content.iterrows():
             einzelbuchung = DataFrame([[row.Datum, row.Kategorie, str(row.Name) + " (noch nicht abgerechnet, von " + str(row.Person) + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
-            anteil_gemeinsamer_buchungen = anteil_gemeinsamer_buchungen.append(einzelbuchung, ignore_index=True)
+            anteil_gemeinsamer_buchungen = pd.concat([anteil_gemeinsamer_buchungen, einzelbuchung], ignore_index=True)
         return anteil_gemeinsamer_buchungen
 
     def drop(self, indices_to_drop):
@@ -59,7 +60,6 @@ class Gemeinsamebuchungen(DatabaseObject):
     def drop_all(self):
         self.content = self.content.iloc[0:0]
         self.taint()
-
 
     def _rename_person(self, person_name, mapping):
         if person_name in mapping:

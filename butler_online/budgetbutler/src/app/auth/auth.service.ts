@@ -33,7 +33,7 @@ export class AuthService {
     return this.httpClient.post<AuthContainer>(this.api.getUrl('login.php'), body).pipe(
       tap(
         data => {
-          if (data != null && 'token' in data) {
+          if (data != null) {
             this.isLoggedIn = true;
             this.username = data.username;
             this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
@@ -51,9 +51,9 @@ export class AuthService {
 
   checkLoginState() {
     return this.httpClient.get<AuthContainer>(this.api.getUrl('login.php')).pipe(
-      tap( // Log the result or error
+      tap(
         data => {
-          if (data != null && 'token' in data) {
+          if (data != null) {
             this.isLoggedIn = true;
             this.username = data.username;
             if (this.redirectUrl) {
@@ -105,7 +105,6 @@ export class AuthService {
 }
 
 export class AuthContainer {
-  token: string;
   username: string;
   role: string;
 }

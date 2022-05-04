@@ -15,6 +15,18 @@
 				<div class="form-group">
 					<label>ISIN des Depotwerts</label> <input value="{{default_item.isin}}" type="text" name="isin" class="form-control" placeholder="" required="required" />
 				</div>
+				<div class="form-group">
+					<label>Typ</label>
+					<select class="form-control" name="typ" id="typ_auswahl">
+						 {% for typ in types %}
+						<option
+							{% if bearbeitungsmodus and typ == default_item.typ%}
+							selected="selected"
+							{% endif %}
+							>{{typ}}</option>
+						 {% endfor %}
+					</select>
+				</div>
 			</div>
 			<div class="box-footer">
 				<button type="submit" name="action" value="add" id="add" class="btn bordered-hover">{{approve_title}}</button>
@@ -33,6 +45,7 @@
 						  <th></th>
 						  <th>Name</th>
 						  <th>ISIN</th>
+						  <th>Typ</th>
 					  </tr>
 				  </thead>
 				  <tbody>
@@ -41,6 +54,7 @@
 						  <td><span class="fa fa-{{depotwert.fa}} pull-right"></span></td>
 						  <td>{{depotwert.Name}}</td>
 						  <td>{{depotwert.Isin}}</td>
+						  <td>{{depotwert.Typ}}</td>
 					  </tr>
 					  {% endfor %}
 				  </tbody>

@@ -109,8 +109,8 @@ Datum,Name,Wert,Typ,Konto
 Kontoname,Kontotyp
 
  Depotwerte 
-Name,ISIN
-1depotwert,1isin
+Name,ISIN,Typ
+1depotwert,1isin,ETF
 
  Order 
 Datum,Name,Konto,Depotwert,Wert

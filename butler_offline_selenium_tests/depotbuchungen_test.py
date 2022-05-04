@@ -31,6 +31,7 @@ class TestUI(SeleniumTestClass):
         driver.get('http://localhost:5000/add_depotwert/')
         fill_element(driver, 'name', name)
         fill_element(driver, 'isin', isin)
+        select_option(driver, 'typ_auswahl', 'FOND')
 
         click_add_button(driver)
 
