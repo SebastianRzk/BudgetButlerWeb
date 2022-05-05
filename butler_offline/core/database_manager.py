@@ -49,7 +49,7 @@ def read(nutzername, ausgeschlossene_kategorien):
         print('READER: Sparbuchungen gelesen')
 
     if parser.depotwerte():
-        database.depotwerte.parse(_to_table(parser.depotwerte()))
+        database.depotwerte.parse_and_migrate(_to_table(parser.depotwerte()))
         print('READER: Depotwerte gelesen')
 
     if parser.order():

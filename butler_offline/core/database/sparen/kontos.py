@@ -16,7 +16,7 @@ class Kontos(DatabaseObject):
 
     def add(self, kontoname, kontotyp):
         neues_konto = pd.DataFrame([[kontoname, kontotyp]], columns=self.TABLE_HEADER)
-        self.content = self.content.append(neues_konto, ignore_index=True)
+        self.content = pd.concat([self.content, neues_konto], ignore_index=True)
         self.taint()
         self._sort()
 

@@ -22,7 +22,7 @@ def test_transaction_id_should_be_in_context():
 
 def add_test_data():
     depotwerte = persisted_state.database_instance().depotwerte
-    depotwerte.add(name='depotwert1', isin='isin1')
+    depotwerte.add(name='depotwert1', isin='isin1', typ=depotwerte.TYP_ETF)
 
     order = persisted_state.database_instance().order
     order.add(datum_from_german('01.01.2020'), '1name', '1konto', 'isin1', 100)

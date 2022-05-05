@@ -64,7 +64,7 @@ class Selektor:
         data = self.content.copy()
         for month in range(1, max_month + 1):
             inject_month = date(day=1, month=month, year=year)
-            data = data.append(pd.DataFrame([[inject_month, 0]], columns=['Datum', 'Wert']), ignore_index=True)
+            data = pd.concat([data, pd.DataFrame([[inject_month, 0]], columns=['Datum', 'Wert'])], ignore_index=True)
         return Selektor(data)
 
     def inject_zeroes_for_year_and_kategories(self, year, max_month=12):
@@ -77,7 +77,9 @@ class Selektor:
 
         injections = it.product(dates, kategorien)
         for injection_date, injection_kategorie in injections:
-            data = data.append(pd.DataFrame([[injection_date, injection_kategorie, 0]], columns=['Datum', 'Kategorie', 'Wert']), ignore_index=True)
+            data = pd.concat([data,
+                              pd.DataFrame([[injection_date, injection_kategorie, 0]], columns=['Datum', 'Kategorie', 'Wert'])],
+                             ignore_index=True)
         return Selektor(data)
 
     def sum_monthly(self):
@@ -145,7 +147,7 @@ class Selektor:
                 if datum_alt != row.Datum:
                     zusammenfassung.append((datum_to_german(datum_alt), tag_liste))
                     tag_liste = []
-                tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
+                tag_liste.append({'kategorie': kategorie_alt, 'name':name_alt, 'summe': '%.2f' % summe_alt})
                 datum_alt = row.Datum
                 summe_alt = row.Wert
                 kategorie_alt = row.Kategorie
@@ -163,7 +165,7 @@ class Selektor:
                 name_alt = name_alt + ', ' + row.Name + '(' + str(row.Wert) + '€)'
                 summe_alt += row.Wert
 
-        tag_liste.append({'kategorie':kategorie_alt, 'name':name_alt, 'summe':'%.2f' % summe_alt})
+        tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': '%.2f' % summe_alt})
         zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
         return zusammenfassung
 

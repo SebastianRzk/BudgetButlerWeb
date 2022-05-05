@@ -2,7 +2,6 @@ from datetime import date
 
 import pandas as pd
 
-from butler_offline.viewcore import viewcore
 from butler_offline.core.database.database_object import DatabaseObject
 
 
@@ -21,7 +20,7 @@ class Einzelbuchungen(DatabaseObject):
 
     def add(self, datum, kategorie, name, wert, dynamisch=False):
         neue_einzelbuchung = pd.DataFrame([[datum, kategorie, name, wert, [], dynamisch]], columns=self.TABLE_HEADER)
-        self.content = self.content.append(neue_einzelbuchung, ignore_index=True)
+        self.content = pd.concat([self.content, neue_einzelbuchung], ignore_index=True)
         self.taint()
         self._sort()
 
@@ -59,7 +58,7 @@ class Einzelbuchungen(DatabaseObject):
         return result
 
     def append_row(self, row):
-        self.content = self.content.append(row, ignore_index=True)
+        self.content = pd.concat([self.content, row], ignore_index=True)
         self._sort()
 
     def get_monate(self):

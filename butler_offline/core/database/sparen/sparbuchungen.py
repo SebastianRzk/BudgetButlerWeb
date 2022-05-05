@@ -17,7 +17,7 @@ class Sparbuchungen(DatabaseObject):
 
     def add(self, datum, name, wert, typ, konto, dynamisch=False):
         neue_sparbuchung = pd.DataFrame([[datum, name, wert, typ, konto, dynamisch]], columns=self.TABLE_HEADER)
-        self.content = self.content.append(neue_sparbuchung, ignore_index=True)
+        self.content = pd.concat([self.content, neue_sparbuchung], ignore_index=True)
         self.taint()
         self._sort()
 

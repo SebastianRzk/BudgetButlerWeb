@@ -31,7 +31,8 @@ def test_load_page_without_data():
 
 def test_load_page_without_shares_data():
     set_up()
-    persisted_state.database_instance().depotwerte.add('some name', 'isin56789012')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='some name', isin='isin56789012', typ=depotwerte.TYP_ETF)
 
     context = index(GetRequest())
 
@@ -47,8 +48,9 @@ def test_load_page_without_shares_data():
 def test_content():
     set_up()
 
-    persisted_state.database_instance().depotwerte.add('large_etf', '1isin6789012')
-    persisted_state.database_instance().depotwerte.add('small_etf', '2isin6789012')
+    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte.add(name='large_etf', isin='1isin6789012', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='small_etf', isin='2isin6789012', typ=depotwerte.TYP_ETF)
 
     persisted_state.database_instance().depotauszuege.add(depotwert='1isin6789012', datum=today(), konto='', wert=900)
     persisted_state.database_instance().depotauszuege.add(depotwert='2isin6789012', datum=today(), konto='', wert=100)

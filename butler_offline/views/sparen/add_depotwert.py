@@ -11,26 +11,31 @@ def handle_request(request):
         if '_' in isin:
             return viewcore.generate_error_context('add_depotwert', 'ISIN darf kein Unterstrich "_" enthalten.')
         name = request.values['name']
+        typ = request.values['typ']
 
         if "edit_index" in request.values:
             database_instance().depotwerte.edit(int(request.values['edit_index']),
                 name=name,
-                isin=isin)
+                isin=isin,
+                typ=typ)
             non_persisted_state.add_changed_depotwerte(
                 {
                     'fa': 'pencil',
                     'Name': name,
-                    'Isin': isin
+                    'Isin': isin,
+                    'Typ': typ
                 })
         else:
             database_instance().depotwerte.add(
                 name=name,
-                isin=isin)
+                isin=isin,
+                typ=typ)
             non_persisted_state.add_changed_depotwerte(
                 {
                     'fa': 'plus',
                     'Name': name,
-                    'Isin': isin
+                    'Isin': isin,
+                    'Typ': typ
                     })
 
     context = viewcore.generate_transactional_context('add_depotwert')
@@ -43,7 +48,8 @@ def handle_request(request):
         default_item = {
             'edit_index': str(db_index),
             'name': db_row['Name'],
-            'isin': db_row['ISIN']
+            'isin': db_row['ISIN'],
+            'typ': db_row['Typ']
         }
 
         context['default_item'] = default_item
@@ -54,10 +60,12 @@ def handle_request(request):
     if 'default_item' not in context:
         context['default_item'] = {
             'name': '',
-            'isin': ''
+            'isin': '',
+            'typ': database_instance().depotwerte.TYP_ETF
         }
 
     context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_depotwerte())
+    context['types'] = database_instance().depotwerte.TYPES
     return context
 
 

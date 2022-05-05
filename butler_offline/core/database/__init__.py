@@ -14,6 +14,7 @@ from butler_offline.core.export.string_writer import StringWriter
 from butler_offline.core.export.text_report import TextReportWriter
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_to_german
+import pandas as pd
 
 from pandas import DataFrame
 
@@ -130,26 +131,26 @@ class Database:
             buchung_partner = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'],
                                                        ("%.2f" % (row['Wert'] * faktor_partner)))
             buchung_partner.Dynamisch = False
-            ausgaben_fuer_partner = ausgaben_fuer_partner.append(buchung_partner)
+            ausgaben_fuer_partner = pd.concat([ausgaben_fuer_partner, buchung_partner])
 
             buchung_self = self._berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'],
                                                          ("%.2f" % (row['Wert'] * faktor_self)))
             buchung_self.Dynamisch = False
-            ausgaben_fuer_self = ausgaben_fuer_self.append(buchung_self)
+            ausgaben_fuer_self = pd.concat([ausgaben_fuer_self, buchung_self])
 
         if set_self_kategorie:
             extra_wert = (ausgaben_gesamt * self._faktor_self(verhaeltnis)) - summe_halb
             extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_self_kategorie, set_self_kategorie,
                                                                 ("%.2f" % extra_wert))
             extra_ausgleichs_buchung.Dynamisch = False
-            ausgaben_fuer_self = ausgaben_fuer_self.append(extra_ausgleichs_buchung)
+            ausgaben_fuer_self = pd.concat([ausgaben_fuer_self, extra_ausgleichs_buchung])
 
         if set_other_kategorie:
             extra_wert = (ausgaben_gesamt * self._faktor_other(verhaeltnis)) - summe_halb
             extra_ausgleichs_buchung = self._berechne_abbuchung(maxdate, set_other_kategorie, set_other_kategorie,
                                                                 ("%.2f" % extra_wert))
             extra_ausgleichs_buchung.Dynamisch = False
-            ausgaben_fuer_partner = ausgaben_fuer_partner.append(extra_ausgleichs_buchung)
+            ausgaben_fuer_partner = pd.concat([ausgaben_fuer_partner, extra_ausgleichs_buchung])
 
         report = TextReportWriter().generate_report(ausgaben_fuer_partner, abrechnunsdatei.to_string())
 

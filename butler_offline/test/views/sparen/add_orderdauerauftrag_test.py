@@ -17,8 +17,9 @@ class AddOrderDauerauftragTest(unittest.TestCase):
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
         persisted_state.DATABASE_INSTANCE = None
+        depotwerte = persisted_state.database_instance().depotwerte
         persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_DEPOT)
-        persisted_state.database_instance().depotwerte.add('demowert', 'demoisin')
+        depotwerte.add(name='demowert', isin='demoisin', typ=depotwerte.TYP_ETF)
         request_handler.stub_me()
 
     def test_init(self):

@@ -11,7 +11,7 @@ class Order(DatabaseObject):
 
     def add(self, datum, name, konto, depotwert, wert, dynamisch=False):
         neue_order = pd.DataFrame([[datum, name, konto, depotwert, wert, dynamisch]], columns=self.TABLE_HEADER)
-        self.content = self.content.append(neue_order, ignore_index=True)
+        self.content = pd.concat([self.content, neue_order], ignore_index=True)
         self.taint()
         self._sort()
 
@@ -19,7 +19,7 @@ class Order(DatabaseObject):
         return self.content
 
     def append_row(self, row):
-        self.content = self.content.append(row, ignore_index=True)
+        self.content = pd.concat([self.content, row], ignore_index=True)
         self._sort()
 
     def edit(self, index, datum, name, konto, depotwert, wert):
@@ -68,6 +68,3 @@ class Order(DatabaseObject):
     def get_static_content(self):
         static_content = self.content.copy()[self.content.Dynamisch == False]
         return static_content[self.STATIC_TABLE_HEADER]
-
-
-
