@@ -1,4 +1,3 @@
-import unittest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.sparen.order import Order
@@ -8,7 +7,8 @@ from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
 def test_add_should_add():
     component_under_test = OrderDauerauftrag()
 
-    component_under_test.add(datum('01.01.2020'), datum('01.01.2021'), 'monatlich', '1name', '1konto', '1depotwert', 100)
+    component_under_test.add(
+        datum('01.01.2020'), datum('01.01.2021'), 'monatlich', '1name', '1konto', '1depotwert', 100)
 
     assert len(component_under_test.content) == 1
     assert component_under_test.content.Startdatum[0] == datum('01.01.2020')
@@ -23,9 +23,12 @@ def test_add_should_add():
 def test_edit_should_edit():
     component_under_test = OrderDauerauftrag()
 
-    component_under_test.add(datum('01.01.2020'), datum('01.01.2021'), 'monatlich', '1name', '1konto', '1depotwert', 100)
-    component_under_test.add(datum('02.02.2020'), datum('02.02.2021'), 'monatlich', '2name', '2konto', '2depotwert', 200)
-    component_under_test.add(datum('03.03.2020'), datum('03.03.2021'), 'monatlich', '3name', '3konto', '3depotwert', 300)
+    component_under_test.add(
+        datum('01.01.2020'), datum('01.01.2021'), 'monatlich', '1name', '1konto', '1depotwert', 100)
+    component_under_test.add(
+        datum('02.02.2020'), datum('02.02.2021'), 'monatlich', '2name', '2konto', '2depotwert', 200)
+    component_under_test.add(
+        datum('03.03.2020'), datum('03.03.2021'), 'monatlich', '3name', '3konto', '3depotwert', 300)
 
     assert len(component_under_test.content) == 3
     element_before = component_under_test.get(1)
@@ -40,7 +43,8 @@ def test_edit_should_edit():
         'Wert': 200
     }
 
-    component_under_test.edit(1, datum('03.02.2020'), datum('03.02.2021'), 'jährlich', '24name', '24konto', '24depotwert', 240)
+    component_under_test.edit(
+        1, datum('03.02.2020'), datum('03.02.2021'), 'jährlich', '24name', '24konto', '24depotwert', 240)
 
     assert len(component_under_test.content) == 3
     element_after = component_under_test.get(1)
@@ -59,7 +63,8 @@ def test_edit_should_edit():
 def test_order_until_today_with_invalid_dates_should_be_empty():
     component_under_test = OrderDauerauftrag()
 
-    component_under_test.add(datum('01.01.2020'), datum('01.01.2019'), 'monatlich', 'invalid', '1konto', '1depotwert', 222)
+    component_under_test.add(
+        datum('01.01.2020'), datum('01.01.2019'), 'monatlich', 'invalid', '1konto', '1depotwert', 222)
 
     result = component_under_test.get_all_order_until_today()
 
@@ -69,7 +74,8 @@ def test_order_until_today_with_invalid_dates_should_be_empty():
 def test_order_until_today_with_date_in_future_should_be_empty():
     component_under_test = OrderDauerauftrag()
 
-    component_under_test.add(datum('01.01.3020'), datum('01.01.3021'), 'monatlich', 'future', '1konto', '1depotwert', 333)
+    component_under_test.add(
+        datum('01.01.3020'), datum('01.01.3021'), 'monatlich', 'future', '1konto', '1depotwert', 333)
 
     result = component_under_test.get_all_order_until_today()
 
@@ -79,7 +85,8 @@ def test_order_until_today_with_date_in_future_should_be_empty():
 def test_order_until_today():
     component_under_test = OrderDauerauftrag()
 
-    component_under_test.add(datum('01.01.2020'), datum('02.02.2020'), 'monatlich', '1name', '1konto', '1depotwert', 100)
+    component_under_test.add(
+        datum('01.01.2020'), datum('02.02.2020'), 'monatlich', '1name', '1konto', '1depotwert', 100)
 
     result = component_under_test.get_all_order_until_today()
 
@@ -100,7 +107,8 @@ def test_order_until_today():
 def test_order_until_today_table_header_should_comply_order_table_header():
     component_under_test = OrderDauerauftrag()
 
-    component_under_test.add(datum('01.01.2020'), datum('02.02.2020'), 'monatlich', '1name', '1konto', '1depotwert', 100)
+    component_under_test.add(
+        datum('01.01.2020'), datum('02.02.2020'), 'monatlich', '1name', '1konto', '1depotwert', 100)
 
     result = component_under_test.get_all_order_until_today()
 
@@ -154,7 +162,7 @@ def test_get_future_should_only_return_future():
 def test_get_all_order_until_today():
     component_under_test = OrderDauerauftrag()
     component_under_test.add(
-    datum('01.01.2010'), datum('02.02.2010'), FREQUENCY_MONATLICH_NAME, 'some name', '1konto', '1depotwert', 100)
+        datum('01.01.2010'), datum('02.02.2010'), FREQUENCY_MONATLICH_NAME, 'some name', '1konto', '1depotwert', 100)
 
     result = component_under_test.get_all_order_until_today()
 
@@ -175,7 +183,7 @@ def test_get_all_order_until_today():
 def test_get_all_order_until_today_should_use_end_of_month_when_overflow():
     component_under_test = OrderDauerauftrag()
     component_under_test.add(
-    datum('31.01.2010'), datum('02.03.2010'), FREQUENCY_MONATLICH_NAME, 'some name', '1konto', '1depotwert', 100)
+        datum('31.01.2010'), datum('02.03.2010'), FREQUENCY_MONATLICH_NAME, 'some name', '1konto', '1depotwert', 100)
 
     result = component_under_test.get_all_order_until_today()
 
