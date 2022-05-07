@@ -1,19 +1,15 @@
-from datetime import date
+from dateutil.relativedelta import relativedelta
 
 
-def _add_month(datum):
-    if datum.month < 12:
-        datum = date(day=datum.day, month=(datum.month + 1), year=datum.year)
-    else:
-        datum = date(day=datum.day, month=1, year=datum.year + 1)
-    return datum
+def monthly(iteration):
+    return relativedelta(months=iteration)
 
 
 FREQUENCY_MONATLICH_NAME = 'monatlich'
 ALL_FREQUENCY_NAMES = [FREQUENCY_MONATLICH_NAME]
 
 FREQUENCY_MAP = {
-    FREQUENCY_MONATLICH_NAME: _add_month
+    FREQUENCY_MONATLICH_NAME: monthly
 }
 
 

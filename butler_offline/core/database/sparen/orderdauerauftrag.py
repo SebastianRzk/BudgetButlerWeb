@@ -64,12 +64,14 @@ class OrderDauerauftrag(DatabaseObject):
                            depotwert,
                            wert,):
         laufdatum = startdatum
+        iteration = 0
         frequency_function = get_function_for_name(frequenzfunktion)
         result = []
         while laufdatum < date.today() and laufdatum < endedatum:
             abbuchung = self._berechne_order(laufdatum, konto, depotwert, name, wert)
             result.append(abbuchung)
-            laufdatum = frequency_function(laufdatum)
+            iteration += 1
+            laufdatum = startdatum + frequency_function(iteration)
         return result
 
     def _berechne_order(self, laufdatum, konto, depotwert, name, wert):
