@@ -2,6 +2,7 @@ import unittest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
 
 
 def test_add_should_add():
@@ -150,5 +151,43 @@ def test_get_future_should_only_return_future():
     assert result[0]['Name'] == '1name'
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_get_all_order_until_today():
+    component_under_test = OrderDauerauftrag()
+    component_under_test.add(
+    datum('01.01.2010'), datum('02.02.2010'), FREQUENCY_MONATLICH_NAME, 'some name', '1konto', '1depotwert', 100)
+
+    result = component_under_test.get_all_order_until_today()
+
+    assert len(result) == 2
+    first_row = result.iloc[0]
+    assert first_row.Datum == datum('1.1.2010')
+    assert first_row.Name == 'some name'
+    assert first_row.Depotwert == '1depotwert'
+    assert first_row.Wert == 100
+
+    second_row = result.iloc[1]
+    assert second_row.Datum == datum('1.2.2010')
+    assert second_row.Name == 'some name'
+    assert second_row.Depotwert == '1depotwert'
+    assert second_row.Wert == 100
+
+
+def test_get_all_order_until_today_should_use_end_of_month_when_overflow():
+    component_under_test = OrderDauerauftrag()
+    component_under_test.add(
+    datum('31.01.2010'), datum('02.03.2010'), FREQUENCY_MONATLICH_NAME, 'some name', '1konto', '1depotwert', 100)
+
+    result = component_under_test.get_all_order_until_today()
+
+    assert len(result) == 2
+    first_row = result.iloc[0]
+    assert first_row.Datum == datum('31.1.2010')
+    assert first_row.Name == 'some name'
+    assert first_row.Depotwert == '1depotwert'
+    assert first_row.Wert == 100
+
+    second_row = result.iloc[1]
+    assert second_row.Datum == datum('28.2.2010')
+    assert second_row.Name == 'some name'
+    assert second_row.Depotwert == '1depotwert'
+    assert second_row.Wert == 100
