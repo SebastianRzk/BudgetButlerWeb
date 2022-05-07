@@ -1,7 +1,10 @@
 from datetime import date
 
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
-from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
+from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME, \
+    FREQUENCY_VIERTELJAEHRLICH_NAME,\
+    FREQUENCY_HALBJAEHRLICH_NAME,\
+    FREQUENCY_JAEHRLICH_NAME
 from butler_offline.viewcore.converter import datum_from_german as datum
 
 
@@ -306,6 +309,84 @@ def test_get_einzelbuchungen_until_today():
 
     second_row = result.iloc[1]
     assert second_row.Datum == datum('1.2.2010')
+    assert second_row.Kategorie == 'some kategorie'
+    assert second_row.Name == 'some name'
+    assert second_row.Wert == 1.23
+
+
+def test_get_einzelbuchungen_until_today_quarterly():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        datum('1.1.2010'),
+        datum('2.4.2010'),
+        'some kategorie',
+        'some name',
+        FREQUENCY_VIERTELJAEHRLICH_NAME,
+        1.23)
+
+    result = component_under_test.get_all_einzelbuchungen_until_today()
+
+    assert len(result) == 2
+    first_row = result.iloc[0]
+    assert first_row.Datum == datum('1.1.2010')
+    assert first_row.Kategorie == 'some kategorie'
+    assert first_row.Name == 'some name'
+    assert first_row.Wert == 1.23
+
+    second_row = result.iloc[1]
+    assert second_row.Datum == datum('1.4.2010')
+    assert second_row.Kategorie == 'some kategorie'
+    assert second_row.Name == 'some name'
+    assert second_row.Wert == 1.23
+
+
+def test_get_einzelbuchungen_until_half_yearly():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        datum('1.1.2010'),
+        datum('2.7.2010'),
+        'some kategorie',
+        'some name',
+        FREQUENCY_HALBJAEHRLICH_NAME,
+        1.23)
+
+    result = component_under_test.get_all_einzelbuchungen_until_today()
+
+    assert len(result) == 2
+    first_row = result.iloc[0]
+    assert first_row.Datum == datum('1.1.2010')
+    assert first_row.Kategorie == 'some kategorie'
+    assert first_row.Name == 'some name'
+    assert first_row.Wert == 1.23
+
+    second_row = result.iloc[1]
+    assert second_row.Datum == datum('1.7.2010')
+    assert second_row.Kategorie == 'some kategorie'
+    assert second_row.Name == 'some name'
+    assert second_row.Wert == 1.23
+
+
+def test_get_einzelbuchungen_until_yearly():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        datum('1.1.2010'),
+        datum('2.1.2011'),
+        'some kategorie',
+        'some name',
+        FREQUENCY_JAEHRLICH_NAME,
+        1.23)
+
+    result = component_under_test.get_all_einzelbuchungen_until_today()
+
+    assert len(result) == 2
+    first_row = result.iloc[0]
+    assert first_row.Datum == datum('1.1.2010')
+    assert first_row.Kategorie == 'some kategorie'
+    assert first_row.Name == 'some name'
+    assert first_row.Wert == 1.23
+
+    second_row = result.iloc[1]
+    assert second_row.Datum == datum('1.1.2011')
     assert second_row.Kategorie == 'some kategorie'
     assert second_row.Name == 'some name'
     assert second_row.Wert == 1.23
