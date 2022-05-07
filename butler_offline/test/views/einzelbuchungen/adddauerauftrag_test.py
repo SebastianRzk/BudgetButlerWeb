@@ -45,13 +45,15 @@ def test_edit_call_from_ueberischt_presets_values():
     assert preset['Kategorie'] == '0kategorie'
     assert preset['Wert'] == '10,00'
     assert preset['typ'] == 'Einnahme'
+    assert preset['Rhythmus'] == 'monatlich'
 
-    db().dauerauftraege.add(datum('10.10.2015'), datum('10.10.2015'), '0kategorie', '0name', 'monatlich', -10)
+    db().dauerauftraege.add(datum('10.10.2015'), datum('10.10.2015'), '0kategorie', '0name', 'jaehrlich', -10)
     context = adddauerauftrag.handle_request(PostRequest({'action': 'edit', 'edit_index': '1'}))
     preset = context['default_item']
     assert preset['Startdatum'] == rfc('10.10.2015')
     assert preset['Wert'] == '10,00'
     assert preset['typ'] == 'Ausgabe'
+    assert preset['Rhythmus'] == 'jaehrlich'
 
 
 def test_add_dauerauftrag():
@@ -284,4 +286,3 @@ def test_add_dauerauftrag_should_only_fire_once():
     assert db().dauerauftraege.content.Kategorie[0] == 'Essen'
     assert db().dauerauftraege.content.Startdatum[0] == datum('2.1.2017')
     assert db().dauerauftraege.content.Endedatum[0] == datum('5.1.2017')
-

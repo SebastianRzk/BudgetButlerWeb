@@ -31,9 +31,13 @@
 					<label>Name des Dauerauftrags</label> <input value="{{default_item.Name}}" type="text" name="name" class="form-control" placeholder="" required="required" />
 				</div>
 				<div class="form-group">
-					<label>Rhythmus</label> <select value="{{default_item.Rhythmus}}" class="form-control" name="rhythmus">
+					<label>Rhythmus</label> <select value="{{default_item.Rhythmus}}" class="form-control" name="rhythmus" id="rhythmus_auswahl">
 					 {% for rhythmus in rhythmen %}
-						<option>{{rhythmus}}</option>
+						<option
+						{% if bearbeitungsmodus and default_item.Rhythmus == rhythmus%}
+						selected="selected"
+						{% endif %}
+						>{{rhythmus}}</option>
 					 {% endfor %}
 					</select>
 				</div>

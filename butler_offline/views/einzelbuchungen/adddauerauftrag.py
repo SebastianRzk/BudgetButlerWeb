@@ -63,6 +63,7 @@ def handle_request(request):
         default_item = database_instance().dauerauftraege.get(db_index)
         default_item['Startdatum'] = datum_to_string(default_item['Startdatum'])
         default_item['Endedatum'] = datum_to_string(default_item['Endedatum'])
+        default_item['Rhythmus'] = default_item['Rhythmus']
 
         if default_item['Wert'] < 0:
             default_item['typ'] = TYP_AUSGABE
@@ -83,6 +84,7 @@ def handle_request(request):
             'Startdatum': '',
             'Endedatum': '',
             'typ': TYP_AUSGABE,
+            'Rhythmus': ALL_FREQUENCY_NAMES[0],
             'Wert': '',
             'Name': ''
         }
