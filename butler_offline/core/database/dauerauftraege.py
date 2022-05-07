@@ -26,12 +26,14 @@ class Dauerauftraege(DatabaseObject):
                                       wert,
                                       kategorie):
         laufdatum = startdatum
+        iteration = 0
         frequency_function = get_function_for_name(frequenzfunktion)
         result = []
         while laufdatum < date.today() and laufdatum < endedatum:
             abbuchung = self._berechne_abbuchung(laufdatum, kategorie, name, wert)
             result.append(abbuchung)
-            laufdatum = frequency_function(laufdatum)
+            iteration += 1
+            laufdatum = startdatum + frequency_function(iteration)
         return result
 
     def get_all_einzelbuchungen_until_today(self):

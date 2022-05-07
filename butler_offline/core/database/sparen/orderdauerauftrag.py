@@ -39,7 +39,6 @@ class OrderDauerauftrag(DatabaseObject):
             'Wert': wert
         })
 
-
     def get_all_order_until_today(self):
         all_rows = pd.DataFrame()
         for _, row in self.content.iterrows():
@@ -64,17 +63,19 @@ class OrderDauerauftrag(DatabaseObject):
                            depotwert,
                            wert,):
         laufdatum = startdatum
+        iteration = 0
         frequency_function = get_function_for_name(frequenzfunktion)
         result = []
         while laufdatum < date.today() and laufdatum < endedatum:
             abbuchung = self._berechne_order(laufdatum, konto, depotwert, name, wert)
             result.append(abbuchung)
-            laufdatum = frequency_function(laufdatum)
+            iteration += 1
+            laufdatum = startdatum + frequency_function(iteration)
         return result
 
     def _berechne_order(self, laufdatum, konto, depotwert, name, wert):
         return pd.DataFrame([[laufdatum, konto, depotwert, name, wert, True]],
-                            columns=['Datum', 'Konto', 'Depotwert' , 'Name', 'Wert', 'Dynamisch'])
+                            columns=['Datum', 'Konto', 'Depotwert', 'Name', 'Wert', 'Dynamisch'])
 
     def _sort(self):
         self.content = self.content.sort_values(by=['Startdatum', 'Endedatum', 'Name'])
