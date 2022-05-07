@@ -30,7 +30,11 @@
 				<div class="form-group">
 					<label>Rhythmus</label> <select value="{{default_item.Rhythmus}}" class="form-control" name="rhythmus">
 					 {% for rhythmus in rhythmen %}
-						<option>{{rhythmus}}</option>
+						<option
+						{% if bearbeitungsmodus and default_item.rhythmus == rhythmus%}
+						selected="selected"
+						{% endif %}
+						>{{rhythmus}}</option>
 					 {% endfor %}
 					</select>
 				</div>
