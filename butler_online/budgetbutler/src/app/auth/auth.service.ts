@@ -33,7 +33,7 @@ export class AuthService {
     return this.httpClient.post<AuthContainer>(this.api.getUrl('login.php'), body).pipe(
       tap(
         data => {
-          if (data != null) {
+          if (data != null && data.username) {
             this.isLoggedIn = true;
             this.username = data.username;
             this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
