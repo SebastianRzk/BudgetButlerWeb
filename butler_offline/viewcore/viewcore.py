@@ -1,12 +1,5 @@
 from butler_offline.core import configuration_provider
 from butler_offline.viewcore.colors import GenericDesignColorChooser
-from butler_offline.viewcore.context import ERROR_KEY, generate_base_context
-
-
-def generate_error_context(pagename, errortext):
-    context = generate_base_context(pagename)
-    context[ERROR_KEY] = errortext
-    return context
 
 
 def name_of_partner():

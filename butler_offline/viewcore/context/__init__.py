@@ -64,6 +64,7 @@ def get_transaction_id(request):
 
 def is_error(context):
     return ERROR_KEY in context
+import butler_offline.viewcore.context
 
 
 def get_error_message(context):
@@ -85,4 +86,10 @@ def generate_base_context(pagename):
 def generate_transactional_context(pagename):
     context = generate_base_context(pagename)
     context['ID'] = persisted_state.current_database_version()
+    return context
+
+
+def generate_error_context(pagename, errortext):
+    context = generate_base_context(pagename)
+    context[ERROR_KEY] = errortext
     return context

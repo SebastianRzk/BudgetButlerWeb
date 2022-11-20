@@ -1,17 +1,15 @@
-import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.context import generate_transactional_context
+from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
 
 
 def handle_request(request):
     if post_action_is(request, 'add'):
         kontoname = request.values['kontoname']
         if '_' in kontoname:
-            return viewcore.generate_error_context('add_depotwert', 'Kontoname darf kein Unterstrich "_" enthalten.')
+            return generate_error_context('add_depotwert', 'Kontoname darf kein Unterstrich "_" enthalten.')
         kontotyp = request.values['kontotyp']
 
         if "edit_index" in request.values:

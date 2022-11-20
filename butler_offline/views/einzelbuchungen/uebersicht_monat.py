@@ -1,8 +1,7 @@
-import butler_offline.viewcore.context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.context import generate_base_context
+from butler_offline.viewcore.context import generate_base_context, generate_error_context
 
 
 def _handle_request(request):
@@ -12,7 +11,7 @@ def _handle_request(request):
     context['monate'] = monate
 
     if not monate:
-        return viewcore.generate_error_context('monatsuebersicht', 'Keine Ausgaben erfasst')
+        return generate_error_context('monatsuebersicht', 'Keine Ausgaben erfasst')
 
     selected_item = context['monate'][0]
     if request.method == "POST":

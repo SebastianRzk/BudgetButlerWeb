@@ -3,6 +3,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_to_german
 import collections
+
 from butler_offline.viewcore.context import generate_transactional_context
 
 def _handle_request(request):
