@@ -64,13 +64,16 @@ def handle_request(request, request_action, html_base_page):
     response = request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
     return response
 
+
 def create_redirect_context(url):
     return {
         REDIRECT_KEY: url
     }
 
+
 def theme(page):
     return request_handler.BASE_THEME_PATH + page
+
 
 def current_key():
     return request_handler.SESSION_RANDOM + ' ' + persisted_state.database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
@@ -80,12 +83,14 @@ def stub_me():
     request_handler.RENDER_FULL_FUNC = full_render_stub
     request_handler.REDIRECTOR = lambda x: x
 
+
 def stub_me_theme():
     request_handler.RENDER_FULL_FUNC = full_render_stub_theme
     request_handler.REDIRECTOR = lambda x: x
 
 def full_render_stub(theme, **context):
     return context
+
 
 def full_render_stub_theme(theme, **context):
     if not 'content' in context:
