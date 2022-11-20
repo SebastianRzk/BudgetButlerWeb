@@ -10,6 +10,7 @@ from butler_offline.viewcore.base_html import set_error_message
 from butler_offline.core.shares import shares_manager
 import random
 import traceback
+import logging
 
 DATABASE_VERSION = 0
 SESSION_RANDOM = str(random.random())
@@ -22,16 +23,16 @@ REDIRECT_KEY = 'redirect_to'
 
 def handle_request(request, request_action, html_base_page):
     if request.method == 'POST' and 'ID' in request.values:
-        print('transactional request found')
+        logging.info('transactional request found')
         if request.values['ID'] != current_key():
-            print('transaction rejected (requested:' + current_key() + ", got:" + request.values['ID'] + ')')
+            logging.info('transaction rejected (requested:' + current_key() + ", got:" + request.values['ID'] + ')')
             context = viewcore.generate_base_context('Fehler')
             rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
             context['content'] = rendered_content
             return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
-        print('transaction allowed')
+        logging.info('transaction allowed')
         request_handler.DATABASE_VERSION = request_handler.DATABASE_VERSION + 1
-        print('new db version: ' + str(request_handler.DATABASE_VERSION))
+        logging.info('new db version: ' + str(request_handler.DATABASE_VERSION))
 
     context = viewcore.generate_base_context('Fehler')
     try:
@@ -42,7 +43,7 @@ def handle_request(request, request_action, html_base_page):
         context['%Errortext'] = ''
     except Exception as e:
         set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
-        print(e)
+        logging.error(e)
         traceback.print_exc()
         context['%Errortext'] = ''
     shares_manager.save_if_needed(persisted_state.shares_data())
