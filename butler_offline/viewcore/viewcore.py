@@ -1,20 +1,7 @@
 from butler_offline.core import configuration_provider
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.colors import GenericDesignColorChooser
-from butler_offline.viewcore.menu import get_key_for_name, get_name_from_key, get_menu_list
-from butler_offline.viewcore.context import ERROR_KEY
-
-
-def generate_base_context(pagename):
-    return {
-        'active': get_key_for_name(pagename),
-        'active_page_url': '/' + pagename + '/',
-        'active_name': get_name_from_key(pagename),
-        'element_titel': get_name_from_key(pagename),
-        'menu': get_menu_list(),
-        'nutzername': persisted_state.database_instance().name,
-        'extra_scripts': ''
-    }
+from butler_offline.viewcore.context import ERROR_KEY, generate_base_context
 
 
 def generate_transactional_context(pagename):

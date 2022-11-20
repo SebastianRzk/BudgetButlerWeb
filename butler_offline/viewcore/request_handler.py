@@ -4,7 +4,7 @@ from flask import redirect
 from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context import generate_base_context
 from butler_offline.viewcore.base_html import set_error_message
 from butler_offline.core.shares import shares_manager
 from butler_offline.viewcore.state import persisted_state
@@ -60,14 +60,14 @@ def handle_request(request, request_action, html_base_page):
 def handle_transaction_out_of_sync(transaction_id):
     logging.error(
         'transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
-    context = viewcore.generate_base_context('Fehler')
+    context = generate_base_context('Fehler')
     rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
     context['content'] = rendered_content
     return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
 
 
 def take_action(request, request_action):
-    context = viewcore.generate_base_context('Fehler')
+    context = generate_base_context('Fehler')
     try:
         context = request_action(request)
     except ConnectionError as err:

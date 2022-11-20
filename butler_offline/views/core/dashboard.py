@@ -1,7 +1,8 @@
 from datetime import date
 
+import butler_offline.viewcore.context
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context import generate_base_context
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import to_descriptive_list
 from butler_offline.core.time import today
@@ -17,7 +18,7 @@ def _handle_request(_):
         'zusammenfassung_ausgabenliste': str(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
         'ausgaben_des_aktuellen_monats': to_descriptive_list(selector.select_year(today().year).select_month(today().month).to_list())
     }
-    context = {**context, **viewcore.generate_base_context('dashboard')}
+    context = {**context, **generate_base_context('dashboard')}
     return context
 
 def _monatsliste():

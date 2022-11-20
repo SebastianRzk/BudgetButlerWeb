@@ -1,7 +1,9 @@
 import datetime
 
+import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context import generate_base_context
 from butler_offline.viewcore import request_handler
 
 
@@ -97,7 +99,7 @@ def _handle_request(request):
     for num_monat in num_monate:
         monats_namen.append(get_monats_namen(num_monat))
 
-    context = viewcore.generate_base_context('jahresuebersicht')
+    context = generate_base_context('jahresuebersicht')
 
     context['durchschnitt_monat_kategorien'] = str(
         list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))

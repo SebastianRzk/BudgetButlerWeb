@@ -1,10 +1,12 @@
+import butler_offline.viewcore.context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context import generate_base_context
 
 
 def _handle_request(request):
-    context = viewcore.generate_base_context('monatsuebersicht')
+    context = generate_base_context('monatsuebersicht')
     einzelbuchungen = persisted_state.database_instance().einzelbuchungen
     monate = sorted(einzelbuchungen.get_monate(), reverse=True)
     context['monate'] = monate
