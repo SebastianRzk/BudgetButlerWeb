@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+import logging
 
 from butler_offline.views.einzelbuchungen import addausgabe, \
     adddauerauftrag, \
@@ -39,6 +40,7 @@ from butler_offline.views.shared import import_data
 
 
 app = Flask(__name__)
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 
 @app.route('/')
