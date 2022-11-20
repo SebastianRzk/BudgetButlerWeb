@@ -8,6 +8,7 @@ from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.base_html import set_error_message
 from butler_offline.core.shares import shares_manager
 from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.context import get_transaction_id, is_transactional_request, ERROR_KEY, is_error
 import traceback
 import logging
 
@@ -19,9 +20,9 @@ REDIRECT_KEY = 'redirect_to'
 
 
 def handle_request(request, request_action, html_base_page):
-    if _is_transactional_request(request):
+    if is_transactional_request(request):
         logging.info('transactional request found')
-        transaction_id = _get_transaction_id(request)
+        transaction_id = get_transaction_id(request)
         if transaction_id != persisted_state.current_database_version():
             return handle_transaction_out_of_sync(transaction_id)
         logging.info('transaction allowed')
@@ -30,9 +31,9 @@ def handle_request(request, request_action, html_base_page):
 
     context = take_action(request, request_action)
 
-    if not _is_error(context):
+    if not is_error(context):
         if persisted_state.database_instance().is_tainted():
-            if not _is_transactional_request(request):
+            if not is_transactional_request(request):
                 raise ModificationWithoutTransactionContext()
             persisted_state.save_tainted()
 
@@ -42,8 +43,8 @@ def handle_request(request, request_action, html_base_page):
     if request.method == 'POST' and 'redirect' in request.values:
         return request_handler.REDIRECTOR('/' + str(request.values['redirect']) + '/')
 
-    if _is_error(context):
-        rendered_content = context['%Errortext']
+    if is_error(context):
+        rendered_content = context[ERROR_KEY]
     elif REDIRECT_KEY in context:
         return REDIRECTOR(context[REDIRECT_KEY])
     else:
@@ -65,30 +66,18 @@ def handle_transaction_out_of_sync(transaction_id):
     return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
 
 
-def _is_error(context):
-    return '%Errortext' in context
-
-
-def _is_transactional_request(request):
-    return 'ID' in request.values
-
-
-def _get_transaction_id(request):
-    return request.values['ID']
-
-
 def take_action(request, request_action):
     context = viewcore.generate_base_context('Fehler')
     try:
         context = request_action(request)
     except ConnectionError as err:
         set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
-        context['%Errortext'] = ''
+        context[ERROR_KEY] = ''
     except Exception as e:
         set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
         logging.error(e)
         traceback.print_exc()
-        context['%Errortext'] = ''
+        context[ERROR_KEY] = ''
     return context
 
 
@@ -102,7 +91,6 @@ def theme(page):
     return request_handler.BASE_THEME_PATH + page
 
 
-
 def stub_me():
     request_handler.RENDER_FULL_FUNC = full_render_stub
     request_handler.REDIRECTOR = lambda x: x
@@ -111,6 +99,7 @@ def stub_me():
 def stub_me_theme():
     request_handler.RENDER_FULL_FUNC = full_render_stub_theme
     request_handler.REDIRECTOR = lambda x: x
+
 
 def full_render_stub(theme, **context):
     return context
