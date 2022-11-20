@@ -5,6 +5,7 @@ def set_success_message(context, message):
     context['message_content'] = message.replace('\n', '<br>\n')
     return context
 
+
 def set_error_message(context, message):
     print('ERROR:', message)
     context['message'] = True
