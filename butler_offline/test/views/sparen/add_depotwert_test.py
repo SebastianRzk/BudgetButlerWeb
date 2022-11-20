@@ -6,6 +6,7 @@ from butler_offline.views.sparen import add_depotwert
 from butler_offline.core import file_system
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context import get_error_message
 
 
 def set_up():
@@ -145,7 +146,7 @@ def test_edit_depotwert_with_underscrore_should_return_error():
          }
     ))
 
-    assert result['%Errortext'] == 'ISIN darf kein Unterstrich "_" enthalten.'
+    assert get_error_message(result) == 'ISIN darf kein Unterstrich "_" enthalten.'
 
 
 def test_edit_depotwert_should_only_fire_once():

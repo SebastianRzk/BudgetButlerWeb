@@ -2,6 +2,7 @@ from butler_offline.core import configuration_provider
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.colors import GenericDesignColorChooser
 from butler_offline.viewcore.menu import get_key_for_name, get_name_from_key, get_menu_list
+from butler_offline.viewcore.context import ERROR_KEY
 
 
 def generate_base_context(pagename):
@@ -24,7 +25,7 @@ def generate_transactional_context(pagename):
 
 def generate_error_context(pagename, errortext):
     context = generate_base_context(pagename)
-    context['%Errortext'] = errortext
+    context[ERROR_KEY] = errortext
     return context
 
 

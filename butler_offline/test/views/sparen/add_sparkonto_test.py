@@ -6,6 +6,7 @@ from butler_offline.views.sparen import add_sparkoto
 from butler_offline.core import file_system
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context import get_error_message
 
 
 def set_up():
@@ -50,7 +51,7 @@ def test_add_with_underscore_in_name_should_return_error():
          }
      ))
 
-    assert result['%Errortext'] == 'Kontoname darf kein Unterstrich "_" enthalten.'
+    assert get_error_message(result) == 'Kontoname darf kein Unterstrich "_" enthalten.'
 
 
 def test_add_sparkonto_should_show_in_recently_added():

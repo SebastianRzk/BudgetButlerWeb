@@ -6,7 +6,7 @@ from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_sparen
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
-
+from butler_offline.viewcore.context import get_error_message
 
 def set_up():
     file_system.INSTANCE = FileSystemStub()
@@ -179,8 +179,7 @@ def test_init_with_empty_database():
 
     context = uebersicht_sparen.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst eine Einzelbuchung.'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst eine Einzelbuchung.'
 
 
 def test_init_filled_database():

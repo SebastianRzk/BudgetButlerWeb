@@ -9,6 +9,7 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.viewcore.context import get_error_message
 
 
 def set_up():
@@ -37,8 +38,7 @@ def test_init_empty_should_return_error():
 
     context = add_orderdauerauftrag.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
 
 
 def test_init_without_depotwert_should_return_error():
@@ -49,8 +49,7 @@ def test_init_without_depotwert_should_return_error():
 
     context = add_orderdauerauftrag.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Depotwert.'
 
 
 def test_transaction_id_should_be_in_context():

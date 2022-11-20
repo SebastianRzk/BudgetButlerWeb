@@ -55,6 +55,7 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
 def index(request):
     return request_handler.handle_request(request, handle_request , 'shared/import.html')
 
+
 def _get_success_message(last_elements):
     number = len(last_elements)
     if number == 1:
@@ -104,7 +105,6 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             delete_gemeinsame_buchungen(serverurl, auth_container=auth_container)
             return response
 
-
         elif post_action_is(request, 'set_kategorien'):
             kategorien = ','.join(sorted(database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
@@ -115,7 +115,6 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
             set_success_message(context, 'Kategorien erfolgreich in die Online-Version übertragen.')
-
 
         elif post_action_is(request, 'upload_gemeinsame_transactions'):
             serverurl = request.values['server']

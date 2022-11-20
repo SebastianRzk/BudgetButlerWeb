@@ -1,4 +1,8 @@
 
+'''
+New implementation
+'''
+
 TRANSACTION_ID_KEY = 'ID'
 ERROR_KEY = '%Errortext'
 
@@ -42,6 +46,11 @@ class Context:
         return key in self._state
 
 
+'''
+Old migration
+'''
+
+
 def is_transactional_request(request):
     return TRANSACTION_ID_KEY in request.values
 
@@ -52,3 +61,7 @@ def get_transaction_id(request):
 
 def is_error(context):
     return ERROR_KEY in context
+
+
+def get_error_message(context):
+    return context[ERROR_KEY]

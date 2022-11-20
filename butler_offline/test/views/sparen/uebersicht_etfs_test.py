@@ -14,6 +14,7 @@ from butler_offline.test.RequesterStub import RequesterStub
 from butler_offline.test.RequestStubs import VersionedPostRequestAction
 from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import language
+from butler_offline.viewcore.context import get_error_message
 
 def set_up():
     file_system.INSTANCE = FileSystemStub()
@@ -26,8 +27,7 @@ def test_load_page_without_data():
     set_up()
     context = index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == NO_VALID_ISIN_IN_DB
+    assert get_error_message(context) == NO_VALID_ISIN_IN_DB
 
 
 def test_load_page_without_shares_data():

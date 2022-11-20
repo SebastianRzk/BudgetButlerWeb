@@ -6,6 +6,7 @@ from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.test.database_util import untaint_database
 from butler_offline.views.einzelbuchungen import uebersicht_monat
 from butler_offline.core import file_system
+from butler_offline.viewcore.context import get_error_message
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import request_handler
 
@@ -24,7 +25,7 @@ class Monatsuebersicht(unittest.TestCase):
     def test_withNoData_shouldGenerateErrorPage(self):
         self.set_up()
         context = uebersicht_monat.index(GetRequest())
-        assert context['%Errortext']
+        assert get_error_message(context)
 
     def teste_mitMehrAusgabenAlsEinnahmen(self):
         self.set_up()

@@ -8,6 +8,7 @@ from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.converter import datum_from_german
 from butler_offline.viewcore.converter import datum
+from butler_offline.viewcore.context import ERROR_KEY
 
 
 def _handle_request(request):
@@ -16,7 +17,7 @@ def _handle_request(request):
     alle_gemeinsamen_buchungen = db.gemeinsamebuchungen
 
     if alle_gemeinsamen_buchungen.is_empty():
-        context['%Errortext'] = 'Keine gemeinsame Buchungen erfasst'
+        context[ERROR_KEY] = 'Keine gemeinsame Buchungen erfasst'
         return context
 
     name_self = db.name

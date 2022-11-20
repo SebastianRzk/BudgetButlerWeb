@@ -10,6 +10,7 @@ from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.viewcore.context import get_error_message
 
 
 class Gemeinsamabrechnen(unittest.TestCase):
@@ -283,7 +284,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         self.set_up()
 
         result = gemeinsam_abrechnen.index(GetRequest())
-        assert '%Errortext' in result
+        assert get_error_message(result)
 
     def test_shortResult_withPartnerMoreSpendings_shouldReturnEqualSentence(self):
         self.set_up()

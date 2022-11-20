@@ -11,6 +11,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.viewcore.context import get_error_message
 
 class AddSparbuchungTest(unittest.TestCase):
     def set_up(self):
@@ -32,8 +33,7 @@ class AddSparbuchungTest(unittest.TestCase):
 
         context = add_sparbuchung.index(GetRequest())
 
-        assert '%Errortext' in context
-        assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Sparkonto.'
+        assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Sparkonto.'
 
     def test_transaction_id_should_be_in_context(self):
         self.set_up()

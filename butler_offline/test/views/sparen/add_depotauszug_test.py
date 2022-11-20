@@ -9,6 +9,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.viewcore.converter import datum_to_string
+from butler_offline.viewcore.context import get_error_message
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from datetime import date
 
@@ -170,8 +171,7 @@ def test_init_empty_should_return_error():
 
     context = add_depotauszug.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert get_error_message(context) ==  'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
 
 
 def test_init_without_depotwert_should_return_error():
@@ -182,8 +182,7 @@ def test_init_without_depotwert_should_return_error():
 
     context = add_depotauszug.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Depotwert.'
 
 
 def test_transaction_id_should_be_in_context():
@@ -254,7 +253,7 @@ def test_add_with_empty_datum_should_return_error_page():
          'wert_2demokonto_3demoisin': '10,00'
          }
      ))
-    assert result['%Errortext'] == 'Interner Fehler <Kein Datum gefunden>.'
+    assert get_error_message(result) == 'Interner Fehler <Kein Datum gefunden>.'
 
 def test_add_order_should_show_in_recently_added():
     set_up()
@@ -287,8 +286,7 @@ def test_add_order_for_existing_auszug_should_return_error():
          }
     ))
 
-    assert '%Errortext' in result
-    assert result['%Errortext'] == 'Für es besteht bereits ein Kontoauszug für 2demokonto am 01.01.2020'
+    assert get_error_message(result) == 'Für es besteht bereits ein Kontoauszug für 2demokonto am 01.01.2020'
 
 def test_add_should_only_fire_once():
     set_up()
