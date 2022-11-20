@@ -114,7 +114,7 @@ def test_add_order_should_show_in_recently_added():
 
 def test_add_should_only_fire_once():
     set_up()
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_orderdauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -219,7 +219,7 @@ def test_edit_should_only_fire_once():
          }
     ))
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_orderdauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

@@ -66,7 +66,7 @@ def test_add_depotwert_should_show_in_recently_added():
 def test_add_should_only_fire_once():
     set_up()
     typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotwert.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -159,7 +159,7 @@ def test_edit_depotwert_should_only_fire_once():
          }
     ))
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotwert.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

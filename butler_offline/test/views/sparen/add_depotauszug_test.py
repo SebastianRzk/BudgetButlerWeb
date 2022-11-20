@@ -290,7 +290,7 @@ def test_add_order_for_existing_auszug_should_return_error():
 
 def test_add_should_only_fire_once():
     set_up()
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotauszug.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -363,7 +363,7 @@ def test_edit_should_only_fire_once():
          }
     ))
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotauszug.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

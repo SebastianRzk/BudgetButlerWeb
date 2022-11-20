@@ -62,7 +62,7 @@ class TestAddEinnahmeView(unittest.TestCase):
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         addeinnahme.index(PostRequest(
             {'action':'add',
              'ID':next_id,
@@ -149,7 +149,7 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         addeinnahme.index(PostRequest(
             {'action':'add',
              'ID':next_id,

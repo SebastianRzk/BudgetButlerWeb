@@ -3,17 +3,14 @@ from flask import render_template
 from flask import redirect
 from requests.exceptions import ConnectionError
 
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.base_html import set_error_message
 from butler_offline.core.shares import shares_manager
-import random
+from butler_offline.viewcore.state import persisted_state
 import traceback
 import logging
 
-DATABASE_VERSION = 0
-SESSION_RANDOM = str(random.random())
 REDIRECTOR = lambda x: redirect(x, code=301)
 RENDER_FULL_FUNC = render_template
 BASE_THEME_PATH = 'theme/'
@@ -24,15 +21,15 @@ REDIRECT_KEY = 'redirect_to'
 def handle_request(request, request_action, html_base_page):
     if request.method == 'POST' and 'ID' in request.values:
         logging.info('transactional request found')
-        if request.values['ID'] != current_key():
-            logging.info('transaction rejected (requested:' + current_key() + ", got:" + request.values['ID'] + ')')
+        if request.values['ID'] != persisted_state.current_database_version():
+            logging.info('transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + request.values['ID'] + ')')
             context = viewcore.generate_base_context('Fehler')
             rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
             context['content'] = rendered_content
             return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
         logging.info('transaction allowed')
-        request_handler.DATABASE_VERSION = request_handler.DATABASE_VERSION + 1
-        logging.info('new db version: ' + str(request_handler.DATABASE_VERSION))
+        persisted_state.increase_database_version()
+        logging.info('new db version: ' + str(persisted_state.current_database_version()))
 
     context = viewcore.generate_base_context('Fehler')
     try:
@@ -75,9 +72,6 @@ def create_redirect_context(url):
 def theme(page):
     return request_handler.BASE_THEME_PATH + page
 
-
-def current_key():
-    return request_handler.SESSION_RANDOM + ' ' + persisted_state.database_instance().name + '_VERSION_' + str(request_handler.DATABASE_VERSION)
 
 
 def stub_me():

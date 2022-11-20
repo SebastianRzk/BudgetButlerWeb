@@ -1,5 +1,4 @@
 from butler_offline.core import configuration_provider
-from butler_offline.viewcore.request_handler import current_key
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.colors import GenericDesignColorChooser
 from butler_offline.viewcore.menu import get_key_for_name, get_name_from_key, get_menu_list
@@ -19,7 +18,7 @@ def generate_base_context(pagename):
 
 def generate_transactional_context(pagename):
     context = generate_base_context(pagename)
-    context['ID'] = current_key()
+    context['ID'] = persisted_state.current_database_version()
     return context
 
 

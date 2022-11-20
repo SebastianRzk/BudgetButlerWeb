@@ -9,7 +9,7 @@ class GetRequest():
     POST = {}
 
 
-from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.state import persisted_state
 
 CONFIGURED = False
 
@@ -29,5 +29,5 @@ class PostRequestAction(PostRequest):
 
 class VersionedPostRequest(PostRequest):
     def __init__(self, args):
-        args['ID'] = request_handler.current_key()
+        args['ID'] = persisted_state.current_database_version()
         self.values = args

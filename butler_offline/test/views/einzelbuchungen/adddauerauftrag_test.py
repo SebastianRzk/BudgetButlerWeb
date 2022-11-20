@@ -213,7 +213,7 @@ def test_edit_dauerauftrag_should_only_fire_once():
          'wert': '2,00'
          }
      ))
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     adddauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -253,7 +253,7 @@ def test_edit_dauerauftrag_should_only_fire_once():
 def test_add_dauerauftrag_should_only_fire_once():
     set_up()
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     adddauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

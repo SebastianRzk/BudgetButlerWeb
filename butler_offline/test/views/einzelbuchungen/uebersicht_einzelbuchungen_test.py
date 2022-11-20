@@ -63,7 +63,7 @@ class TestUebersichtEinzelbuchungen(unittest.TestCase):
     def test_delete_should_only_trigger_one(self):
         self.set_up()
         self.add_test_data()
-        next_id = request_handler.current_key()
+        next_id = request_handler.persisted_state.current_database_version()
 
         assert len(persisted_state.database_instance().einzelbuchungen.content) == 2
         uebersicht_einzelbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))

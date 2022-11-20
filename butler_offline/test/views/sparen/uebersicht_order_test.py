@@ -85,7 +85,7 @@ def test_delete():
 def test_delete_should_only_fire_once():
     set_up()
     add_test_data()
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
 
     assert len(persisted_state.database_instance().order.content) == 2
     uebersicht_order.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
