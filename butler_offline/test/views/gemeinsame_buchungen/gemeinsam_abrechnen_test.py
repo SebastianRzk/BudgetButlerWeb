@@ -3,8 +3,8 @@ import unittest
 from butler_offline.core import time, configuration_provider
 from butler_offline.viewcore import request_handler
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen
 from butler_offline.viewcore import viewcore
@@ -30,7 +30,9 @@ class Gemeinsamabrechnen(unittest.TestCase):
         self.set_up()
         testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
-        gemeinsam_abrechnen.abrechnen(PostRequest({
+        untaint_database(database=testdb)
+
+        gemeinsam_abrechnen.abrechnen(VersionedPostRequest({
             'set_mindate': '01.01.2010',
             'set_maxdate': '01.01.2010',
             'set_ergebnis': '',
@@ -43,8 +45,9 @@ class Gemeinsamabrechnen(unittest.TestCase):
         self.set_up()
         testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
+        untaint_database(database=testdb)
 
-        context = gemeinsam_abrechnen.abrechnen(PostRequest({
+        context = gemeinsam_abrechnen.abrechnen(VersionedPostRequest({
             'set_mindate': '01.01.2010',
             'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
@@ -79,10 +82,11 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
     def test_abrechnen_should_create_abrechnung_on_disk(self):
         self.set_up()
-
         testdb = persisted_state.database_instance()
         testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
-        gemeinsam_abrechnen.abrechnen(PostRequest({
+        untaint_database(database=testdb)
+
+        gemeinsam_abrechnen.abrechnen(VersionedPostRequest({
             'set_mindate': '01.01.2010',
             'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
@@ -134,6 +138,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, self_name)
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, name_partner)
+        untaint_database(database=persisted_state.database_instance())
 
         result = gemeinsam_abrechnen.index(GetRequest())
         assert result['ergebnis'] == 'Die gemeinsamen Ausgaben sind ausgeglichen.'
@@ -147,6 +152,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -1000, self_name)
         gemeinsame_buchungen.add(datum('15.01.2011'), self.some_name(), self.some_kategorie(), -20, name_partner)
         gemeinsame_buchungen.add(datum('15.01.2012'), self.some_name(), self.some_kategorie(), -1000, name_partner)
+        untaint_database(database=persisted_state.database_instance())
 
         result = gemeinsam_abrechnen.index(PostRequest({'set_mindate': '2011-01-01', 'set_maxdate': '2011-02-01'}))
 
@@ -163,6 +169,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
 
+        untaint_database(database=persisted_state.database_instance())
+
         result = gemeinsam_abrechnen.index(PostRequest({'set_verhaeltnis': 60}))
 
         assert result[
@@ -172,6 +180,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         assert result['self_diff'] == '-10.00'
         assert result['partner_diff'] == '10.00'
 
+
     def test_result_withLimitPartnerAndValueUnderLimit_shouldReturnDefaultVerhaeltnis(self):
         self.set_up()
         name_partner = viewcore.name_of_partner()
@@ -180,6 +189,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
+
+        untaint_database(database=persisted_state.database_instance())
 
         result = gemeinsam_abrechnen.index(PostRequest({'set_verhaeltnis': 50,
                                                         'set_limit': 'on',
@@ -200,6 +211,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
+
+        untaint_database(database=persisted_state.database_instance())
 
         result = gemeinsam_abrechnen.index(PostRequest({'set_verhaeltnis': 50,
                                                         'set_limit': 'on',
@@ -224,6 +237,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
 
+        untaint_database(database=persisted_state.database_instance())
+
         result = gemeinsam_abrechnen.index(PostRequest({'set_verhaeltnis': 50,
                                                         'set_limit': 'on',
                                                         'set_limit_fuer': self_name,
@@ -243,6 +258,8 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
 
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, self_name)
         gemeinsame_buchungen.add(self.some_datum(), self.some_name(), self.some_kategorie(), -50, name_partner)
+
+        untaint_database(database=persisted_state.database_instance())
 
         result = gemeinsam_abrechnen.index(PostRequest({'set_verhaeltnis': 50,
                                                         'set_limit': 'on',
@@ -273,6 +290,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
         name_partner = viewcore.name_of_partner()
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, name_partner)
+        untaint_database(database=persisted_state.database_instance())
         result = gemeinsam_abrechnen.index(GetRequest())
         assert result['ergebnis'] == 'Partner bekommt von Test_User noch 5.50€.'
 
@@ -284,6 +302,7 @@ Name,1.30,False<br>#######MaschinenimportEnd<br>'''.replace('\n', '')
         gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
         name_self = persisted_state.database_instance().name
         gemeinsame_buchungen.add(datum('01.01.2010'), self.some_name(), self.some_kategorie(), -11, name_self)
+        untaint_database(database=persisted_state.database_instance())
 
         result = gemeinsam_abrechnen.index(GetRequest())
 

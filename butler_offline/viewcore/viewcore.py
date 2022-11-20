@@ -35,6 +35,7 @@ def name_of_partner():
 def design_colors():
     return configuration_provider.get_configuration('DESIGN_COLORS').split(',')
 
+
 def get_generic_color_chooser(values):
     return GenericDesignColorChooser(values, design_colors())
 

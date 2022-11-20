@@ -1,7 +1,6 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import add_depotauszug
 from butler_offline.core import file_system
 from butler_offline.core.database.sparen.kontos import Kontos
@@ -36,6 +35,8 @@ def set_up():
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '1demoisin', '1demokonto', 20)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '2demoisin', '2demokonto', 30)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '3demoisin', '2demokonto', 40)
+
+    untaint_database(database=persisted_state.database_instance())
 
     request_handler.stub_me()
 
@@ -126,6 +127,7 @@ def test_init_with_already_empty_should_handle_like_empty():
     persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '1demoisin', '2demokonto', 0)
     persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '2demoisin', '2demokonto', 0)
     persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '3demoisin', '2demokonto', 0)
+    untaint_database(database=persisted_state.database_instance())
 
     context = add_depotauszug.index(GetRequest())
     assert context['approve_title'] == 'Depotauszug hinzufügen'

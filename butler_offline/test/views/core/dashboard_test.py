@@ -3,6 +3,7 @@ import unittest
 from butler_offline.core import time
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.core import dashboard
 from butler_offline.viewcore.state import persisted_state
@@ -36,6 +37,8 @@ class TestUebersicht(unittest.TestCase):
         db = persisted_state.database_instance()
         time.stub_today_with(date(2019, 2, 17))
         db.einzelbuchungen.add(date(2019, 2, 16), 'eine einnahme kategorie', 'some name', 10)
+        untaint_database(database=db)
+
 
         result = dashboard.index(GetRequest())
         print(result['ausgaben_des_aktuellen_monats'])

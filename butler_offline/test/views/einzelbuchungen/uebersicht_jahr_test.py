@@ -2,8 +2,8 @@ import unittest
 
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_jahr
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -28,6 +28,7 @@ class Jahresuebersicht(unittest.TestCase):
         db = persisted_state.database_instance()
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
         db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
+        untaint_database(database=db)
 
         result_context = uebersicht_jahr.index(PostRequest({'date': '2010', 'mode': ''}))
 
@@ -47,6 +48,7 @@ class Jahresuebersicht(unittest.TestCase):
         db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie', 'some name', 10)
         db.einzelbuchungen.add(datum('10.10.2010'), 'some kategorie2', 'some name', -100)
         db.einzelbuchungen.add(datum('10.10.2010'), 'eine einnahme kategorie2', 'some name', 10)
+        untaint_database(database=db)
 
         result_context = uebersicht_jahr.index(PostRequest({'date': '2010', 'mode': ''}))
 

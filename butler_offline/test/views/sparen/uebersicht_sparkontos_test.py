@@ -4,6 +4,7 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_sparkontos
 from butler_offline.viewcore import request_handler
@@ -34,6 +35,7 @@ class TestUebersichtSparkontos(unittest.TestCase):
         depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
         persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
         persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demokonto2', 990)
+        untaint_database(database=persisted_state.database_instance())
 
     def test_should_list_kontos(self):
         self.set_up()

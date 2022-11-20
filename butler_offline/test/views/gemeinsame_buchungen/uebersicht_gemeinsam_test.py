@@ -1,8 +1,8 @@
 import unittest
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.gemeinsame_buchungen import uebersicht_gemeinsam
 from butler_offline.core import file_system
 from butler_offline.viewcore import request_handler
@@ -32,6 +32,7 @@ class Gemeinsamuebersicht(unittest.TestCase):
         db().gemeinsamebuchungen.add(datum('01.01.2011'), 'kat1', 'name1', 1, 'pers1')
         db().gemeinsamebuchungen.add(datum('01.01.2012'), 'kat2', 'name2', 1, 'pers2')
         db().gemeinsamebuchungen.add(datum('01.01.2013'), 'kat3', 'name3', 1, 'pers3')
+        untaint_database(database=db())
 
         uebersicht_gemeinsam.index(VersionedPostRequest({
             'action' : 'delete',
@@ -49,6 +50,7 @@ class Gemeinsamuebersicht(unittest.TestCase):
         self.set_up()
 
         db().gemeinsamebuchungen.add(datum('01.01.2011'), 'kat1', 'name1', 1, 'pers1')
+        untaint_database(database=db())
 
         result = uebersicht_gemeinsam.index(GetRequest())
         print(result['ausgaben'])

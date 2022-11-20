@@ -1,9 +1,8 @@
 import unittest
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import add_sparbuchung
 from butler_offline.core import file_system
 from butler_offline.core.database.sparen.kontos import Kontos
@@ -18,6 +17,7 @@ class AddSparbuchungTest(unittest.TestCase):
         file_system.INSTANCE = FileSystemStub()
         persisted_state.DATABASE_INSTANCE = None
         persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_SPARKONTO)
+        untaint_database(database=persisted_state.database_instance())
         request_handler.stub_me()
 
     def test_init(self):

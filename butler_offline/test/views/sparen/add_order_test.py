@@ -1,8 +1,8 @@
 import unittest
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.sparen import add_order
 from butler_offline.core import file_system
@@ -20,6 +20,7 @@ class AddOrderTest(unittest.TestCase):
         depotwerte = persisted_state.database_instance().depotwerte
         persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_DEPOT)
         depotwerte.add(name='demowert', isin='demoisin', typ=depotwerte.TYP_ETF)
+        untaint_database(database=persisted_state.database_instance())
         request_handler.stub_me()
 
     def test_init(self):

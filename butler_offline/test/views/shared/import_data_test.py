@@ -2,8 +2,8 @@ import numpy as np
 import datetime
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system, configuration_provider
 from butler_offline.views.shared import import_data
 from butler_offline.views.core import configuration
@@ -78,8 +78,9 @@ def test_add_passende_kategorie_should_import_value():
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
-    context = import_data.index(PostRequest({'import': _IMPORT_DATA}))
+    context = import_data.index(VersionedPostRequest({'import': _IMPORT_DATA}))
     assert context['element_titel'] == 'Export / Import'
     assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
@@ -88,8 +89,9 @@ def test_import_with_one_buchung_should_show_success_single_message():
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
-    context = import_data.index(PostRequest({'import': _IMPORT_DATA}))
+    context = import_data.index(VersionedPostRequest({'import': _IMPORT_DATA}))
     assert context['message_content'] == '1 Buchung wurde importiert'
 
 
@@ -97,8 +99,9 @@ def test_import_with_one_buchung_should_show_success_message():
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
-    context = import_data.index(PostRequest({'import': _IMPORT_DATA_GEMEINSAM}))
+    context = import_data.index(VersionedPostRequest({'import': _IMPORT_DATA_GEMEINSAM}))
     assert context['message_content'] == '2 Buchungen wurden importiert'
 
 
@@ -125,8 +128,9 @@ def test_import_should_write_into_abrechnungen():
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
-    import_data.index(PostRequest({'import': _IMPORT_DATA}))
+    import_data.index(VersionedPostRequest({'import': _IMPORT_DATA}))
 
     written_abrechnung = None
     for key in file_system.instance()._fs_stub.keys():
@@ -141,7 +145,7 @@ def test_adde_unpassenden_kategorie_should_show_import_mapping_page():
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'unbekannt', 'some name', -1.54)
 
-    context = import_data.index(PostRequest({'import': _IMPORT_DATA}))
+    context = import_data.index(VersionedPostRequest({'import': _IMPORT_DATA}))
     assert context['element_titel'] == 'Kategorien zuweisen'
 
 
@@ -149,8 +153,9 @@ def test_add_unpassenden_kategorie_mit_passendem_mapping_should_import_value():
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Unpassend', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
-    context = import_data.index(PostRequest({'import': _IMPORT_DATA, 'Essen_mapping': 'als Unpassend importieren'}))
+    context = import_data.index(VersionedPostRequest({'import': _IMPORT_DATA, 'Essen_mapping': 'als Unpassend importieren'}))
     assert context['element_titel'] == 'Export / Import'
     assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
@@ -182,13 +187,14 @@ def test_einzelbuchung_import_adde_passende_kategorie_should_import_value():
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
     requester.INSTANCE = RequesterStub({'https://test.test/einzelbuchung.php': _JSON_IMPORT_DATA,
                                         'https://test.test/deleteitems.php': '',
                                         'https://test.test/login.php': LOGIN_RESPONSE},
                                        mocked_decode=DECODED_LOGIN_DATA)
 
-    context = import_data.index(PostRequest({'action': 'load_online_transactions',
+    context = import_data.index(VersionedPostRequest({'action': 'load_online_transactions',
                                              'email': '',
                                              'server': 'test.test',
                                              'password': ''}))
@@ -218,6 +224,7 @@ def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
     requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': _JSON_IMPORT_DATA_GEMEINSAM,
                                         'https://test.test/deletegemeinsam.php': '',
@@ -225,7 +232,7 @@ def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
                                        DECODED_LOGIN_DATA,
                                        auth_cookies=LOGIN_COOKIES)
 
-    context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+    context = import_data.index(VersionedPostRequest({'action': 'load_online_gemeinsame_transactions',
                                              'email': '',
                                              'server': 'test.test',
                                              'password': ''}))
@@ -252,6 +259,7 @@ def test_gemeinsam_import_with_unpassenden_partnername_should_import_value_and_r
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
     requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': _JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER,
                                         'https://test.test/deletegemeinsam.php': '',
@@ -259,7 +267,7 @@ def test_gemeinsam_import_with_unpassenden_partnername_should_import_value_and_r
                                        DECODED_LOGIN_DATA,
                                        auth_cookies=LOGIN_COOKIES)
 
-    context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+    context = import_data.index(VersionedPostRequest({'action': 'load_online_gemeinsame_transactions',
                                              'email': '',
                                              'server': 'test.test',
                                              'password': ''}))
@@ -306,6 +314,7 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
     set_up()
     einzelbuchungen = database_instance().einzelbuchungen
     einzelbuchungen.add(datum('01.01.2017'), 'KeinEssen', 'some name', -1.54)
+    untaint_database(database=database_instance())
 
     requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': _JSON_IMPORT_DATA_GEMEINSAM,
                                         'https://test.test/deletegemeinsam.php': '',
@@ -313,7 +322,7 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
                                        DECODED_LOGIN_DATA,
                                        auth_cookies=LOGIN_COOKIES)
 
-    context = import_data.index(PostRequest({'action': 'load_online_gemeinsame_transactions',
+    context = import_data.index(VersionedPostRequest({'action': 'load_online_gemeinsame_transactions',
                                              'email': '',
                                              'server': 'test.test',
                                              'password': ''}))
@@ -322,7 +331,7 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
     assert context['import'] == _IMPORT_DATA_GEMEINSAM
     assert context['unpassende_kategorien'] == ['Essen']
 
-    context = import_data.index(PostRequest({'action': 'map_and_push',
+    context = import_data.index(VersionedPostRequest({'action': 'map_and_push',
                                              'Essen_mapping': 'neue Kategorie anlegen',
                                              'import': _IMPORT_DATA_GEMEINSAM}))
 
@@ -344,6 +353,7 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
     database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', -10)
     database_instance().einzelbuchungen.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
     database_instance().einzelbuchungen.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
+    untaint_database(database=database_instance())
 
     configuration.index(PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'NeinEins'}))
 
@@ -353,7 +363,7 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
         DECODED_LOGIN_DATA,
         auth_cookies=LOGIN_COOKIES)
 
-    result = import_data.index(PostRequest({'action': 'set_kategorien',
+    result = import_data.index(VersionedPostRequest({'action': 'set_kategorien',
                                    'email': '',
                                    'server': 'test.test',
                                    'password': ''}))
@@ -369,6 +379,7 @@ def test_upload_data():
 
     database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
     database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Partner')
+    untaint_database(database=database_instance())
 
     requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
                                         'https://test.test/api/partner.php': _JSON_DATA_PARTNER,
@@ -377,7 +388,7 @@ def test_upload_data():
                                        auth_cookies=LOGIN_COOKIES
                                        )
 
-    result = import_data.index(PostRequest({'action': 'upload_gemeinsame_transactions',
+    result = import_data.index(VersionedPostRequest({'action': 'upload_gemeinsame_transactions',
                                             'email': '',
                                             'server': 'test.test/api',
                                             'password': ''}))
@@ -412,6 +423,7 @@ def test_upload_data_fehler():
 
     database_instance().gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
     database_instance().gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Partner')
+    untaint_database(database=database_instance())
 
     requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "error"}',
                                         'https://test.test/api/partner.php': _JSON_DATA_PARTNER,
@@ -419,7 +431,7 @@ def test_upload_data_fehler():
                                        DECODED_LOGIN_DATA,
                                        auth_cookies=LOGIN_COOKIES)
 
-    result = import_data.index(PostRequest({'action': 'upload_gemeinsame_transactions',
+    result = import_data.index(VersionedPostRequest({'action': 'upload_gemeinsame_transactions',
                                             'email': '',
                                             'server': 'test.test/api',
                                             'password': ''}))

@@ -6,6 +6,7 @@ Created on 30.09.2017
 
 class GetRequest():
     method = "GET"
+    values = {}
     POST = {}
 
 
@@ -30,4 +31,10 @@ class PostRequestAction(PostRequest):
 class VersionedPostRequest(PostRequest):
     def __init__(self, args):
         args['ID'] = persisted_state.current_database_version()
+        self.values = args
+
+
+class VersionedPostRequestAction(VersionedPostRequest):
+    def __init__(self, action, args):
+        args['action'] = action
         self.values = args

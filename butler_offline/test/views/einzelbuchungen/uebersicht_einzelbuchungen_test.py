@@ -2,8 +2,8 @@ import unittest
 
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
+from butler_offline.test.RequestStubs import GetRequest,  VersionedPostRequest, PostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_einzelbuchungen
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -26,6 +26,7 @@ class TestUebersichtEinzelbuchungen(unittest.TestCase):
         einzelbuchungen = persisted_state.database_instance().einzelbuchungen
         einzelbuchungen.add(datum('12.12.2012'), 'Test einnahme kategorie', 'test einnahme name', 100)
         einzelbuchungen.add(datum('13.12.2012'), 'Test ausgabe kategorie', 'test azsgabe name', -100)
+        untaint_database(database=persisted_state.database_instance())
 
     def test_init_withEmptyDatabase(self):
         self.set_up()

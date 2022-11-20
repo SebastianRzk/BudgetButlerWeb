@@ -1,6 +1,6 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_dauerauftrag
 from butler_offline.viewcore.state import persisted_state
@@ -30,8 +30,9 @@ def test_delete():
     dauerauftraege = persisted_state.database_instance().dauerauftraege
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '22', 'monatlich', 1)
+    untaint_database(database=persisted_state.database_instance())
 
-    uebersicht_dauerauftrag.index(PostRequest({'action': 'delete', 'delete_index': '1'}))
+    uebersicht_dauerauftrag.index(VersionedPostRequest({'action': 'delete', 'delete_index': '1'}))
 
     assert len(dauerauftraege.content) == 1
     assert dauerauftraege.content.Name.tolist() == ['11']
@@ -41,6 +42,7 @@ def test_german_datum():
     set_up()
     dauerauftraege = persisted_state.database_instance().dauerauftraege
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
+    untaint_database(database=persisted_state.database_instance())
 
     result = uebersicht_dauerauftrag.index(GetRequest())
 

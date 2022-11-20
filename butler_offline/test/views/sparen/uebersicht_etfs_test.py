@@ -11,7 +11,8 @@ from butler_offline.core.shares import sectors
 from butler_offline.viewcore.converter import datum_to_string,datum_to_german
 from butler_offline.viewcore import requester
 from butler_offline.test.RequesterStub import RequesterStub
-from butler_offline.test.RequestStubs import PostRequestAction
+from butler_offline.test.RequestStubs import VersionedPostRequestAction
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import language
 
 def set_up():
@@ -33,6 +34,7 @@ def test_load_page_without_shares_data():
     set_up()
     depotwerte = persisted_state.database_instance().depotwerte
     depotwerte.add(name='some name', isin='isin56789012', typ=depotwerte.TYP_ETF)
+    untaint_database(database=persisted_state.database_instance())
 
     context = index(GetRequest())
 
@@ -87,6 +89,7 @@ def test_content():
             SharesInfo.KOSTEN: 1.5,
         }
     )
+    untaint_database(database=persisted_state.database_instance())
 
     result = index(GetRequest())
 
@@ -228,7 +231,7 @@ def test_refresh_data():
         }
     )
 
-    result = index(PostRequestAction('update_data', {'isin': 'DE000A14ND46'}))
+    result = index(VersionedPostRequestAction('update_data', {'isin': 'DE000A14ND46'}))
     assert result['message']
     assert result['message_type'] == 'success'
     assert result['message_content'] == language.SHARES_DATA_UPDATED.format(isin='DE000A14ND46')

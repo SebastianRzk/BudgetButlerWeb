@@ -19,10 +19,11 @@ REDIRECT_KEY = 'redirect_to'
 
 
 def handle_request(request, request_action, html_base_page):
-    if request.method == 'POST' and 'ID' in request.values:
+    if _is_transactional_request(request):
         logging.info('transactional request found')
-        if request.values['ID'] != persisted_state.current_database_version():
-            logging.info('transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + request.values['ID'] + ')')
+        transaction_id = _get_transaction_id(request)
+        if transaction_id != persisted_state.current_database_version():
+            logging.error('transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
             context = viewcore.generate_base_context('Fehler')
             rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
             context['content'] = rendered_content
@@ -31,25 +32,21 @@ def handle_request(request, request_action, html_base_page):
         persisted_state.increase_database_version()
         logging.info('new db version: ' + str(persisted_state.current_database_version()))
 
-    context = viewcore.generate_base_context('Fehler')
-    try:
-        context = request_action(request)
-        persisted_state.save_tainted()
-    except ConnectionError as err:
-        set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
-        context['%Errortext'] = ''
-    except Exception as e:
-        set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
-        logging.error(e)
-        traceback.print_exc()
-        context['%Errortext'] = ''
+    context = take_action(request, request_action)
+
+    if not _is_error(context):
+        if persisted_state.database_instance().is_tainted():
+            if not _is_transactional_request(request):
+                raise ModificationWithoutTransactionContext()
+            persisted_state.save_tainted()
+
     shares_manager.save_if_needed(persisted_state.shares_data())
 
 
     if request.method == 'POST' and 'redirect' in request.values:
         return request_handler.REDIRECTOR('/' + str(request.values['redirect']) + '/')
 
-    if '%Errortext' in context:
+    if _is_error(context):
         rendered_content = context['%Errortext']
     elif REDIRECT_KEY in context:
         return REDIRECTOR(context[REDIRECT_KEY])
@@ -61,6 +58,33 @@ def handle_request(request, request_action, html_base_page):
     context['content'] = rendered_content
     response = request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
     return response
+
+
+def _is_error(context):
+    return '%Errortext' in context
+
+
+def _is_transactional_request(request):
+    return 'ID' in request.values
+
+
+def _get_transaction_id(request):
+    return request.values['ID']
+
+
+def take_action(request, request_action):
+    context = viewcore.generate_base_context('Fehler')
+    try:
+        context = request_action(request)
+    except ConnectionError as err:
+        set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
+        context['%Errortext'] = ''
+    except Exception as e:
+        set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
+        logging.error(e)
+        traceback.print_exc()
+        context['%Errortext'] = ''
+    return context
 
 
 def create_redirect_context(url):
@@ -91,3 +115,7 @@ def full_render_stub_theme(theme, **context):
     if not 'content' in context:
         return theme
     return context
+
+
+class ModificationWithoutTransactionContext(Exception):
+    pass
