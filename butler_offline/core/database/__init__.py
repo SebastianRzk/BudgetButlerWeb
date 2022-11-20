@@ -1,4 +1,3 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
@@ -9,15 +8,7 @@ from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.gemeinsamebuchungen.abrechnen import abrechnen
-from butler_offline.core.file_system import write_abrechnung
-from butler_offline.core.time import time
-from butler_offline.core.export.string_writer import StringWriter
-from butler_offline.core.export.text_report import TextReportWriter
-from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.converter import datum_to_german
-import pandas as pd
 
-from pandas import DataFrame
 
 
 class Database:
