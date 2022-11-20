@@ -23,11 +23,7 @@ def handle_request(request, request_action, html_base_page):
         logging.info('transactional request found')
         transaction_id = _get_transaction_id(request)
         if transaction_id != persisted_state.current_database_version():
-            logging.error('transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
-            context = viewcore.generate_base_context('Fehler')
-            rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
-            context['content'] = rendered_content
-            return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
+            return handle_transaction_out_of_sync(transaction_id)
         logging.info('transaction allowed')
         persisted_state.increase_database_version()
         logging.info('new db version: ' + str(persisted_state.current_database_version()))
@@ -58,6 +54,15 @@ def handle_request(request, request_action, html_base_page):
     context['content'] = rendered_content
     response = request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
     return response
+
+
+def handle_transaction_out_of_sync(transaction_id):
+    logging.error(
+        'transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
+    context = viewcore.generate_base_context('Fehler')
+    rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
+    context['content'] = rendered_content
+    return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
 
 
 def _is_error(context):
