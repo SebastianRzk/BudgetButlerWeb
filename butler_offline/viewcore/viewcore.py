@@ -1,13 +1,6 @@
 from butler_offline.core import configuration_provider
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.colors import GenericDesignColorChooser
 from butler_offline.viewcore.context import ERROR_KEY, generate_base_context
-
-
-def generate_transactional_context(pagename):
-    context = generate_base_context(pagename)
-    context['ID'] = persisted_state.current_database_version()
-    return context
 
 
 def generate_error_context(pagename, errortext):

@@ -1,10 +1,8 @@
 from datetime import datetime
-
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.core.file_system import write_import
 from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
-
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.base_html import set_success_message, set_error_message
@@ -64,7 +62,7 @@ def _get_success_message(last_elements):
 
 
 def handle_request(request, import_prefix='', gemeinsam=False):
-    context = viewcore.generate_transactional_context('import')
+    context = generate_transactional_context('import')
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']

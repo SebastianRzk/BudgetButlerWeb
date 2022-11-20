@@ -1,7 +1,7 @@
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.converter import datum_to_german, from_double_to_german
 
 
@@ -35,7 +35,7 @@ def _handle_request(request):
     if datum_alt:
         sparbuchungen_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = sparbuchungen_liste
 
-    context = viewcore.generate_transactional_context('uebersicht_sparbuchungen')
+    context = generate_transactional_context('uebersicht_sparbuchungen')
     context['alles'] = sparbuchungen_monatlich
     return context
 

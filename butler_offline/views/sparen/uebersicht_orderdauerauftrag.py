@@ -1,10 +1,9 @@
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_to_german
 import collections
-
+from butler_offline.viewcore.context import generate_transactional_context
 
 def _handle_request(request):
     orderdauerauftrag = persisted_state.database_instance().orderdauerauftrag
@@ -14,7 +13,7 @@ def _handle_request(request):
         orderdauerauftrag.delete(int(request.values['delete_index']))
         return request_handler.create_redirect_context('/uebersicht_orderdauerauftrag/')
 
-    context = viewcore.generate_transactional_context('uebersicht_orderdauerauftrag')
+    context = generate_transactional_context('uebersicht_orderdauerauftrag')
     data = collections.OrderedDict()
     data['Aktuelle Daueraufträge'] = _format_dauerauftrag_floatpoint(orderdauerauftrag.aktuelle())
     data['Zukünftige Daueraufträge'] = _format_dauerauftrag_floatpoint(orderdauerauftrag.future())

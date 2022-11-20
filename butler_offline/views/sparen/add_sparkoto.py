@@ -1,8 +1,11 @@
+import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.context import generate_transactional_context
+
 
 def handle_request(request):
     if post_action_is(request, 'add'):
@@ -33,7 +36,7 @@ def handle_request(request):
                     'Kontotyp': kontotyp
                     })
 
-    context = viewcore.generate_transactional_context('add_sparkonto')
+    context = generate_transactional_context('add_sparkonto')
     context['approve_title'] = 'Sparkonto hinzufügen'
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])

@@ -1,9 +1,9 @@
+import butler_offline.viewcore.context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_to_german
-
+from butler_offline.viewcore.context import generate_transactional_context
 
 def _handle_request(request):
     depotauszuege = persisted_state.database_instance().depotauszuege
@@ -55,7 +55,7 @@ def _handle_request(request):
                 'buchungen': buchungen
             })
 
-    context = viewcore.generate_transactional_context('uebersicht_depotauszuege')
+    context = generate_transactional_context('uebersicht_depotauszuege')
     context['gesamt'] = gesamt
     return context
 

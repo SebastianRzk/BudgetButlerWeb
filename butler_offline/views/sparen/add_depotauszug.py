@@ -1,3 +1,4 @@
+import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
@@ -6,8 +7,10 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 from datetime import date
+from butler_offline.viewcore.context import generate_transactional_context
 
 KEY_WERT = 'wert_'
+
 
 def calculate_filled_items(actual, possible):
     filled_items = []
@@ -16,6 +19,7 @@ def calculate_filled_items(actual, possible):
         if element.Wert != 0:
             filled_items.append(to_item(isin, resolve_description(isin, possible), element.Wert))
     return filled_items
+
 
 def calculate_empty_items(possible, filled):
     empty = possible.copy()
@@ -42,11 +46,13 @@ def to_item(isin, description, wert):
         'wert': wert
     }
 
+
 def resolve_description(isin, all):
     for element in all:
         if element['isin'] == isin:
             return element['description']
     return None
+
 
 def handle_request(request):
     if not database_instance().sparkontos.get_depots():
@@ -132,7 +138,7 @@ def handle_request(request):
                             'konto': konto
                             })
 
-    context = viewcore.generate_transactional_context('add_depotauszug')
+    context = generate_transactional_context('add_depotauszug')
     context['approve_title'] = 'Depotauszug hinzufügen'
 
     depotwerte = database_instance().depotwerte.get_depotwerte_descriptions()

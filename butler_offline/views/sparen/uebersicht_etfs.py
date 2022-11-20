@@ -12,12 +12,13 @@ import gettext
 import pycountry
 import traceback
 from butler_offline.views.sparen import language
+from butler_offline.viewcore.context import generate_transactional_context
 
 PAGE_NAME = 'uebersicht_etfs'
 
 
 def _handle_request(request):
-    context = viewcore.generate_transactional_context(PAGE_NAME)
+    context = generate_transactional_context(PAGE_NAME)
     if post_action_is(request, 'update_data'):
         context = _update_data(request.values['isin'], context)
     return _generate_content(context)

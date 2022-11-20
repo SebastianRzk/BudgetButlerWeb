@@ -1,8 +1,10 @@
+import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.context import generate_transactional_context
 
 
 def handle_request(request):
@@ -38,7 +40,7 @@ def handle_request(request):
                     'Typ': typ
                     })
 
-    context = viewcore.generate_transactional_context('add_depotwert')
+    context = generate_transactional_context('add_depotwert')
     context['approve_title'] = 'Depotwert hinzufügen'
 
     if post_action_is(request, 'edit'):

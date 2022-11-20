@@ -8,6 +8,7 @@ from butler_offline.viewcore.state import persisted_state
 TRANSACTION_ID_KEY = 'ID'
 ERROR_KEY = '%Errortext'
 
+
 class Context:
     def __init__(self, initial_state, error=None, redirect=None):
         self._state = initial_state
@@ -79,3 +80,9 @@ def generate_base_context(pagename):
         'nutzername': persisted_state.database_instance().name,
         'extra_scripts': ''
     }
+
+
+def generate_transactional_context(pagename):
+    context = generate_base_context(pagename)
+    context['ID'] = persisted_state.current_database_version()
+    return context

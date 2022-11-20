@@ -4,7 +4,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
-
+from butler_offline.viewcore.context import generate_transactional_context
 
 def handle_request(request):
     if post_action_is(request, 'add'):
@@ -46,7 +46,7 @@ def handle_request(request):
                     'person': request.values['person']
                     })
 
-    context = viewcore.generate_transactional_context("addgemeinsam")
+    context = generate_transactional_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
