@@ -4,7 +4,7 @@ from flask import redirect
 from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.context import generate_base_context
+from butler_offline.viewcore.context import generate_base_context, REDIRECT_KEY
 from butler_offline.viewcore.base_html import set_error_message
 from butler_offline.core.shares import shares_manager
 from butler_offline.viewcore.state import persisted_state
@@ -15,8 +15,6 @@ import logging
 REDIRECTOR = lambda x: redirect(x, code=301)
 RENDER_FULL_FUNC = render_template
 BASE_THEME_PATH = 'theme/'
-
-REDIRECT_KEY = 'redirect_to'
 
 
 def handle_request(request, request_action, html_base_page):
@@ -79,12 +77,6 @@ def take_action(request, request_action):
         traceback.print_exc()
         context[ERROR_KEY] = ''
     return context
-
-
-def create_redirect_context(url):
-    return {
-        REDIRECT_KEY: url
-    }
 
 
 def theme(page):

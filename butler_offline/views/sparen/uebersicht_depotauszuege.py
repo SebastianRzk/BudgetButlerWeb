@@ -1,9 +1,8 @@
-import butler_offline.viewcore.context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.viewcore.context import generate_transactional_context
+from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
 
 def _handle_request(request):
     depotauszuege = persisted_state.database_instance().depotauszuege
@@ -13,7 +12,7 @@ def _handle_request(request):
         delete_konto = depotauszuege.resolve_konto(delete_index)
         delete_datum = depotauszuege.resolve_datum(delete_index)
         depotauszuege.delete_depotauszug(delete_datum, delete_konto)
-        return request_handler.create_redirect_context('/uebersicht_depotauszuege/')
+        return generate_redirect_context('/uebersicht_depotauszuege/')
 
     depotwerte = persisted_state.database_instance().depotwerte
     db = depotauszuege.get_all()

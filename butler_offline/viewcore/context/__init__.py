@@ -7,6 +7,7 @@ from butler_offline.viewcore.state import persisted_state
 
 TRANSACTION_ID_KEY = 'ID'
 ERROR_KEY = '%Errortext'
+REDIRECT_KEY = 'redirect_to'
 
 
 class Context:
@@ -64,7 +65,6 @@ def get_transaction_id(request):
 
 def is_error(context):
     return ERROR_KEY in context
-import butler_offline.viewcore.context
 
 
 def get_error_message(context):
@@ -93,3 +93,9 @@ def generate_error_context(pagename, errortext):
     context = generate_base_context(pagename)
     context[ERROR_KEY] = errortext
     return context
+
+
+def generate_redirect_context(url):
+    return {
+        REDIRECT_KEY: url
+    }

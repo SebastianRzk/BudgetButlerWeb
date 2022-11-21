@@ -1,7 +1,7 @@
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore.context import generate_transactional_context
+from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
 from butler_offline.viewcore.converter import datum_to_german, from_double_to_german
 
 
@@ -9,7 +9,7 @@ def _handle_request(request):
     sparbuchungen = persisted_state.database_instance().sparbuchungen
     if post_action_is(request, 'delete'):
         sparbuchungen.delete(int(request.values['delete_index']))
-        return request_handler.create_redirect_context('/uebersicht_sparbuchungen/')
+        return generate_redirect_context('/uebersicht_sparbuchungen/')
 
     db = sparbuchungen.get_all()
     sparbuchungen_monatlich = {}

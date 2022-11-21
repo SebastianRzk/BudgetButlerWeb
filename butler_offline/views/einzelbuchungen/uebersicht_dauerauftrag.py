@@ -1,3 +1,4 @@
+from butler_offline.viewcore.context import generate_redirect_context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
@@ -12,7 +13,7 @@ def _handle_request(request):
     if post_action_is(request, 'delete'):
         print("Delete: ", request.values['delete_index'])
         dauerauftraege.delete(int(request.values['delete_index']))
-        return request_handler.create_redirect_context('/dauerauftraguebersicht/')
+        return generate_redirect_context('/dauerauftraguebersicht/')
 
     context = generate_transactional_context('dauerauftraguebersicht')
     data = collections.OrderedDict()

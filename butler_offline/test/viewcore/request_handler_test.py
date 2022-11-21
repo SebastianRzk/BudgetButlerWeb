@@ -7,6 +7,7 @@ Created on 10.05.2017
 import unittest
 from requests.exceptions import ConnectionError
 
+from butler_offline.viewcore.context import generate_redirect_context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.test.RequestStubs import PostRequest, GetRequest
@@ -29,7 +30,7 @@ class TesteRequestHandler(unittest.TestCase):
 
     def test_manual_redirect(self):
         self.set_up()
-        result = request_handler.handle_request(GetRequest(), lambda x: request_handler.create_redirect_context('to_url'), 'nothing')
+        result = request_handler.handle_request(GetRequest(), lambda x: generate_redirect_context('to_url'), 'nothing')
         assert result == 'to_url'
 
     def test_extra_page(self):
@@ -56,7 +57,6 @@ class TesteRequestHandler(unittest.TestCase):
         assert result['message']
         assert result['message_type'] == 'error'
         assert result['message_content'] == 'Verbindung zum Server konnte nicht aufgebaut werden.'
-
 
     def test_exception(self):
         self.set_up()
