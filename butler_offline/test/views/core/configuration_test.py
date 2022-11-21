@@ -35,6 +35,11 @@ class TestKonfiguration(unittest.TestCase):
         configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test'}))
         assert database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
+    def test_addKategorie_withRedirect(self):
+        self.set_up()
+        result = configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test', 'redirect': 'destination'}))
+        assert result == '/destination/'
+
     def test_change_db_should_trigger_db_reload(self):
         self.set_up()
         configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test'}))

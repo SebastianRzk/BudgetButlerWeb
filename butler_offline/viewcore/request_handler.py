@@ -37,10 +37,6 @@ def handle_request(request, request_action, html_base_page):
 
     shares_manager.save_if_needed(persisted_state.shares_data())
 
-
-    if request.method == 'POST' and 'redirect' in request.values:
-        return request_handler.REDIRECTOR('/' + str(request.values['redirect']) + '/')
-
     if is_error(context):
         rendered_content = context[ERROR_KEY]
     elif REDIRECT_KEY in context:

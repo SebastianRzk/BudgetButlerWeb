@@ -23,11 +23,6 @@ class TesteRequestHandler(unittest.TestCase):
         persisted_state.database_instance()
         request_handler.stub_me_theme()
 
-    def test_redirect(self):
-        self.set_up()
-        result = request_handler.handle_request(PostRequest({'redirect': 'test_page'}), lambda x: {}, 'nothing')
-        assert result == '/test_page/'
-
     def test_manual_redirect(self):
         self.set_up()
         result = request_handler.handle_request(GetRequest(), lambda x: generate_redirect_context('to_url'), 'nothing')
