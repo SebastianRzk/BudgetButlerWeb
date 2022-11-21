@@ -1,5 +1,4 @@
 
-from flask import render_template
 from flask import redirect
 from requests.exceptions import ConnectionError
 
@@ -11,9 +10,10 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.context import get_transaction_id, is_transactional_request, ERROR_KEY, is_error
 import traceback
 import logging
+from butler_offline.viewcore import template
+from butler_offline.viewcore.template import renderer_instance
 
 REDIRECTOR = lambda x: redirect(x, code=301)
-RENDER_FULL_FUNC = render_template
 BASE_THEME_PATH = 'theme/'
 
 
@@ -44,10 +44,10 @@ def handle_request(request, request_action, html_base_page):
     else:
         if 'special_page' in context:
             html_base_page = context['special_page']
-        rendered_content = request_handler.RENDER_FULL_FUNC(theme(html_base_page), **context)
+        rendered_content = renderer_instance().render(theme(html_base_page), **context)
 
     context['content'] = rendered_content
-    response = request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
+    response = renderer_instance().render(theme('index.html'), **context)
     return response
 
 
@@ -55,9 +55,9 @@ def handle_transaction_out_of_sync(transaction_id):
     logging.error(
         'transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
     context = generate_base_context('Fehler')
-    rendered_content = request_handler.RENDER_FULL_FUNC(theme('core/error_race.html'), **{})
+    rendered_content = renderer_instance().render(theme('core/error_race.html'), **{})
     context['content'] = rendered_content
-    return request_handler.RENDER_FULL_FUNC(theme('index.html'), **context)
+    return renderer_instance().render(theme('index.html'), **context)
 
 
 def take_action(request, request_action):
@@ -80,23 +80,25 @@ def theme(page):
 
 
 def stub_me():
-    request_handler.RENDER_FULL_FUNC = full_render_stub
+    template.RENDERER = RendererStub()
     request_handler.REDIRECTOR = lambda x: x
 
 
 def stub_me_theme():
-    request_handler.RENDER_FULL_FUNC = full_render_stub_theme
+    template.RENDERER = RendererThemeStub()
     request_handler.REDIRECTOR = lambda x: x
 
 
-def full_render_stub(theme, **context):
-    return context
+class RendererStub():
+    def render(self, template, **context):
+        return context
 
 
-def full_render_stub_theme(theme, **context):
-    if not 'content' in context:
-        return theme
-    return context
+class RendererThemeStub():
+    def render(self, template, **context):
+        if not 'content' in context:
+            return template
+        return context
 
 
 class ModificationWithoutTransactionContext(Exception):
