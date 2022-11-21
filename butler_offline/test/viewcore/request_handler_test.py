@@ -31,12 +31,12 @@ class TesteRequestHandler(unittest.TestCase):
     def test_extra_page(self):
         self.set_up()
         result = request_handler.handle_request(PostRequest({}), lambda x: {'special_page': 'something_special'}, 'something_normal')
-        assert result['content'] == 'theme/something_special'
+        assert result['content'] == 'something_special'
 
     def test_default_page(self):
         self.set_up()
         result = request_handler.handle_request(PostRequest({}), lambda x: {}, 'something_normal')
-        assert result['content'] == 'theme/something_normal'
+        assert result['content'] == 'something_normal'
 
     def raise_http_error(self):
         raise ConnectionError()

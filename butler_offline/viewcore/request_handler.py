@@ -14,7 +14,7 @@ from butler_offline.viewcore import template
 from butler_offline.viewcore.template import renderer_instance
 
 REDIRECTOR = lambda x: redirect(x, code=301)
-BASE_THEME_PATH = 'theme/'
+
 
 
 def handle_request(request, request_action, html_base_page):
@@ -44,10 +44,10 @@ def handle_request(request, request_action, html_base_page):
     else:
         if 'special_page' in context:
             html_base_page = context['special_page']
-        rendered_content = renderer_instance().render(theme(html_base_page), **context)
+        rendered_content = renderer_instance().render(html_base_page, **context)
 
     context['content'] = rendered_content
-    response = renderer_instance().render(theme('index.html'), **context)
+    response = renderer_instance().render('index.html', **context)
     return response
 
 
@@ -55,9 +55,9 @@ def handle_transaction_out_of_sync(transaction_id):
     logging.error(
         'transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
     context = generate_base_context('Fehler')
-    rendered_content = renderer_instance().render(theme('core/error_race.html'), **{})
+    rendered_content = renderer_instance().render('core/error_race.html', **{})
     context['content'] = rendered_content
-    return renderer_instance().render(theme('index.html'), **context)
+    return renderer_instance().render('index.html', **context)
 
 
 def take_action(request, request_action):
@@ -75,8 +75,6 @@ def take_action(request, request_action):
     return context
 
 
-def theme(page):
-    return request_handler.BASE_THEME_PATH + page
 
 
 def stub_me():
