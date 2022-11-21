@@ -40,7 +40,12 @@ from butler_offline.views.shared import import_data
 
 
 app = Flask(__name__)
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+
+if app.debug:
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+else:
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARN)
+logging.debug('debug output enabled')
 
 
 @app.route('/')
