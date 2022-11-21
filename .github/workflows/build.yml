@@ -26,9 +26,9 @@ jobs:
       run: |
         sh ./ci/install_requirements.sh
         pip install flake8 pytest
-        wget https://github.com/mozilla/geckodriver/releases/download/v0.29.1/geckodriver-v0.29.1-linux64.tar.gz
+        wget https://github.com/mozilla/geckodriver/releases/download/v0.32.0/geckodriver-v0.32.0-linux64.tar.gz
         mkdir geckodriver
-        tar -xzf geckodriver-v0.29.1-linux64.tar.gz -C geckodriver
+        tar -xzf geckodriver-v0.32.0-linux64.tar.gz -C geckodriver
         wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
         source ~/.nvm/nvm.sh
         nvm install 12
