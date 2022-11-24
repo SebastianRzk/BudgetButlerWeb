@@ -9,6 +9,9 @@ from butler_offline.core.time import today
 def _handle_request(request):
     year = today().year
     einzelbuchungen = persisted_state.database_instance().einzelbuchungen
+    years = sorted(einzelbuchungen.get_jahre(), reverse=True)
+    if years:
+        year = years[0]
 
     if request.method == 'POST' and 'date' in request.values:
         year = int(float(request.values['date']))
@@ -47,7 +50,7 @@ def _handle_request(request):
 
     context = generate_transactional_context('uebersicht')
     context['alles'] = ausgaben_monatlich
-    context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
+    context['jahre'] = years
     context['selected_date'] = year
     return context
 

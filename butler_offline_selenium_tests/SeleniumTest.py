@@ -4,10 +4,12 @@ import os
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
-import SeleniumTest
+from butler_offline_selenium_tests import SeleniumTest
+from selenium.webdriver.common.by import By
 
 CHROME_CACHE = []
 CHROME_INSTANCES = []
+
 
 class SeleniumTestClass:
 
@@ -22,6 +24,7 @@ class SeleniumTestClass:
 
         metafunc.parametrize(argnames=['get_driver', 'close_driver'], argvalues=chrome, scope="module")
 
+
 def close_driver(driver):
     if driver in SeleniumTest.CHROME_INSTANCES:
         SeleniumTest.CHROME_INSTANCES.remove(driver)
@@ -31,14 +34,16 @@ def close_driver(driver):
         return
     driver.close()
 
+
 def content_of(driver, element_id):
-    return driver.find_element_by_id(element_id).get_attribute('innerHTML')
+    return driver.find_element(By.ID, element_id).get_attribute('innerHTML')
 
 
 def _launch_head_firefox():
     firefox_options = Options()
     firefox_options.add_argument("--window-size=1920,1080")
     return webdriver.Firefox(options=firefox_options)
+
 
 def _launch_headles_firefox():
     if SeleniumTest.CHROME_CACHE:
@@ -61,49 +66,56 @@ def _launch_headles_firefox():
     SeleniumTest.CHROME_INSTANCES.append(browser)
     return browser
 
+
 def enter_test_mode(driver):
     driver.get('http://localhost:5000/production/testmode')
 
 
 def fill_element(driver, elementname, content):
-    elem = driver.find_element_by_name(elementname)
+    elem = driver.find_element(By.NAME, elementname)
     elem.clear()
     elem.send_keys(content)
 
+
 def select_option(driver, option_id, item):
-    el = driver.find_element_by_id(option_id)
-    for option in el.find_elements_by_tag_name('option'):
+    el = driver.find_element(By.ID, option_id)
+    for option in el.find_elements(By.TAG_NAME, 'option'):
         if option.text == item:
-            option.click()  # select() in earlier versions of webdriver
+            option.click()
             break
 
+
 def click_add_button(driver, button_postfix = ''):
-    add_button = driver.find_element_by_id('add' + button_postfix)
+    add_button = driver.find_element(By.ID, 'add' + button_postfix)
     add_button.click()
 
 
 def fill_element_by_id(driver, elementname, content):
-    elem = driver.find_element_by_id(elementname)
+    elem = driver.find_element(By.ID, elementname)
     elem.clear()
     elem.send_keys(content)
+
 
 def define_kategorie(driver, kategorie_name):
     driver.get('http://127.0.0.1:5000/configuration/')
     fill_element(driver, 'neue_kategorie', kategorie_name)
-    button = driver.find_element_by_id('add_kategorie')
+    button = driver.find_element(By.ID, 'add_kategorie')
     button.click()
 
+
 def get_options(driver, option_id):
-    el = driver.find_element_by_id(option_id)
+    el = driver.find_element(By.ID, option_id)
     result = []
-    for option in el.find_elements_by_tag_name('option'):
+    for option in el.find_elements(By.TAG_NAME, 'option'):
         result.append(option.text)
     return result
 
+
 def get_selected_option(driver, option_id):
-    select = Select(driver.find_element_by_id(option_id))
+    select = Select(driver.find_element(By.ID, option_id))
     selected_option = select.first_selected_option
     return selected_option.text
+
 
 def pagename(driver):
     return content_of(driver, 'pagetitle')
