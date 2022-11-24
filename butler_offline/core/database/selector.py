@@ -183,6 +183,9 @@ class Selektor:
             result.append({**row.to_dict(), **{'index': index}})
         return result
 
+    def get_all_raw(self):
+        return self.content
+
 
 class GemeinsamSelector(Selektor):
 
