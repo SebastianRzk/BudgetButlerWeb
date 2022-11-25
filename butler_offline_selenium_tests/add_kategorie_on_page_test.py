@@ -1,6 +1,5 @@
 from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
-from butler_offline_selenium_tests.SeleniumTest import fill_element
-from butler_offline_selenium_tests.SeleniumTest import enter_test_mode
+from butler_offline_selenium_tests.page.util import enter_test_mode, fill_element
 from selenium.webdriver.common.by import By
 import time
 

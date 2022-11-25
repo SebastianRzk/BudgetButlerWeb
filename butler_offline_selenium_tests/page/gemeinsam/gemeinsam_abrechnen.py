@@ -1,4 +1,4 @@
-from butler_offline_selenium_tests.SeleniumTest import content_of, fill_element_by_id, select_option, fill_element
+from butler_offline_selenium_tests.page.util import content_of, fill_element, select_option, fill_element_by_id
 from selenium.webdriver.common.by import By
 
 

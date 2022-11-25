@@ -1,4 +1,4 @@
-from butler_offline_selenium_tests.SeleniumTest import fill_element, pagename, select_option, get_selected_option
+from butler_offline_selenium_tests.page.util import fill_element, select_option, get_selected_option, pagename
 from selenium.webdriver.common.by import By
 
 

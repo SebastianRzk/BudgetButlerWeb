@@ -1,4 +1,5 @@
-from butler_offline_selenium_tests.SeleniumTest import fill_element, click_add_button
+from butler_offline_selenium_tests.page.util import fill_element, click_add_button
+
 
 class DepotauszugAdd:
     def __init__(self, driver):

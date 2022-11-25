@@ -1,5 +1,5 @@
-from butler_offline_selenium_tests.SeleniumTest import fill_element, select_option, click_add_button,\
-    get_selected_option, get_options
+from butler_offline_selenium_tests.page.util import fill_element, select_option, click_add_button, get_options, \
+    get_selected_option
 from selenium.webdriver.common.by import By
 
 

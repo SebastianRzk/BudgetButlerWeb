@@ -1,4 +1,4 @@
-from butler_offline_selenium_tests.SeleniumTest import fill_element
+from butler_offline_selenium_tests.page.util import fill_element
 from selenium.webdriver.common.by import By
 
 

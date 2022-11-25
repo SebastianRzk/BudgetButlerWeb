@@ -1,4 +1,6 @@
-from butler_offline_selenium_tests.SeleniumTest import fill_element, select_option, click_add_button
+from butler_offline_selenium_tests.page.util import fill_element, select_option, click_add_button
+
+
 class OrderAdd:
     def __init__(self, driver):
         self.driver = driver

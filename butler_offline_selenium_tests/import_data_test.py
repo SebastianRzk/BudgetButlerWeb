@@ -1,5 +1,5 @@
 from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
-from butler_offline_selenium_tests.SeleniumTest import enter_test_mode
+from butler_offline_selenium_tests.page.util import enter_test_mode
 from butler_offline_selenium_tests.page.core.im_port import Import
 from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchungen_uebersicht import EinzelbuchungenUebersicht
 from butler_offline_selenium_tests.page.core.configuration import Configuration

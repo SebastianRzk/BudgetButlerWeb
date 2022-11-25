@@ -1,7 +1,5 @@
 from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
-from butler_offline_selenium_tests.SeleniumTest import enter_test_mode
-from butler_offline_selenium_tests.SeleniumTest import define_kategorie
-from butler_offline_selenium_tests.SeleniumTest import content_of
+from butler_offline_selenium_tests.page.util import content_of, enter_test_mode, define_kategorie
 import logging
 from butler_offline_selenium_tests.page.core.configuration import Configuration
 from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_add import GemeinsamAdd

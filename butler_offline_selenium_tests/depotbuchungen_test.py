@@ -1,5 +1,5 @@
 from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
-from butler_offline_selenium_tests.SeleniumTest import enter_test_mode
+from butler_offline_selenium_tests.page.util import enter_test_mode
 from butler_offline_selenium_tests.page.sparen.order_add import OrderAdd
 from butler_offline_selenium_tests.page.sparen.depot_add import DepotAdd
 from butler_offline_selenium_tests.page.sparen.depotwert_add import DepotwertAdd
