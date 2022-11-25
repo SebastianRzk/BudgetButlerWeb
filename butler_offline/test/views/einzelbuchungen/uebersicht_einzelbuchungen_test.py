@@ -1,5 +1,3 @@
-import unittest
-
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest,  VersionedPostRequest, PostRequest
@@ -70,7 +68,7 @@ def test_getRequest_should_filter_year():
     result = uebersicht_einzelbuchungen.index(GetRequest())
     assert len(result['alles']) == 1
     assert result['jahre'] == [2013, 2012, 2011]
-    assert result['selected_date'] == 2012
+    assert result['selected_date'] == 2013
 
 
 def test_delete():
