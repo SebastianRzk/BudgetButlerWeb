@@ -19,3 +19,7 @@ class EinzelbuchungenUebersicht:
             'datum': self.driver.find_element(By.ID, 'item_{id}_datum'.format(id=id)).get_attribute('innerHTML'),
             'wert': self.driver.find_element(By.ID, 'item_{id}_wert'.format(id=id)).get_attribute('innerHTML')
         }
+
+    def click_edit_button(self, id):
+        edit_button = self.driver.find_element(By.ID, 'edit_{id}'.format(id=id))
+        edit_button.click()

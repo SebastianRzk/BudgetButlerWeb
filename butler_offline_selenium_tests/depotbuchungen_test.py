@@ -5,7 +5,7 @@ from butler_offline_selenium_tests.page.sparen.depot_add import DepotAdd
 from butler_offline_selenium_tests.page.sparen.depotwert_add import DepotwertAdd
 from butler_offline_selenium_tests.page.sparen.order_uebersicht import OrderUebersicht
 from butler_offline_selenium_tests.page.sparen.depotauszug_add import DepotauszugAdd
-from butler_offline_selenium_tests.page.sparen.sparkonto_uebersicht import SparkontoUebersicht
+from butler_offline_selenium_tests.page.sparen.depot_uebersicht import DepotUebersicht
 from butler_offline_selenium_tests.page.sparen.depotwert_uebersicht import DepotwertUebersicht
 
 
@@ -47,7 +47,7 @@ class TestUI(SeleniumTestClass):
         page_depot_add = DepotAdd(driver=driver)
         page_depotwert_add = DepotwertAdd(driver=driver)
         page_depotauszug_add = DepotauszugAdd(driver=driver)
-        page_sparkonto_uebersicht = SparkontoUebersicht(driver=driver)
+        page_sparkonto_uebersicht = DepotUebersicht(driver=driver)
 
         page_depot_add.visit()
         page_depot_add.add('TestKonto')

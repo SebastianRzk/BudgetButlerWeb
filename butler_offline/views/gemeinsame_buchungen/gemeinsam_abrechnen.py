@@ -1,6 +1,6 @@
 import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.viewcore.context import generate_base_context
+from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.viewcore import name_of_partner
 from butler_offline.viewcore.viewcore import get_post_parameter_or_default
 from butler_offline.viewcore.viewcore import is_post_parameter_set
@@ -13,7 +13,7 @@ from butler_offline.viewcore.context import ERROR_KEY
 
 
 def _handle_request(request):
-    context = generate_base_context('gemeinsamabrechnen')
+    context = generate_transactional_context('gemeinsamabrechnen')
     db = database_instance()
     alle_gemeinsamen_buchungen = db.gemeinsamebuchungen
 
@@ -126,7 +126,7 @@ def abrechnen(request):
 
 
 def _handle_abrechnen_request(request):
-    context = generate_base_context('gemeinsamabrechnen')
+    context = generate_transactional_context('gemeinsamabrechnen')
 
     set_mindate = datum_from_german(request.values['set_mindate'])
     set_maxdate = datum_from_german(request.values['set_maxdate'])
