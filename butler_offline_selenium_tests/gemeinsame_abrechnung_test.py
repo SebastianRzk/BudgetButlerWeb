@@ -1,10 +1,10 @@
-from SeleniumTest import SeleniumTestClass
-from SeleniumTest import fill_element
-from SeleniumTest import fill_element_by_id
-from SeleniumTest import enter_test_mode
-from SeleniumTest import define_kategorie
-from SeleniumTest import select_option
-from SeleniumTest import content_of
+from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
+from butler_offline_selenium_tests.page.util import content_of, enter_test_mode, define_kategorie
+import logging
+from butler_offline_selenium_tests.page.core.configuration import Configuration
+from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_add import GemeinsamAdd
+from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_abrechnen import GemeinsamAbrechnen
+from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchungen_uebersicht import EinzelbuchungenUebersicht
 
 class TestGemeinsameAbrechnung(SeleniumTestClass):
     test_change_veraeltnis_abrechnung = '''
@@ -44,33 +44,49 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def test_change_verhaeltnis(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
-        define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
 
-        driver.get('http://localhost:5000/gemeinsamabrechnen/')
+        page_configuration = Configuration(driver=driver)
+        page_gemeinsam_add = GemeinsamAdd(driver=driver)
+        page_gemeinsam_abrechnen = GemeinsamAbrechnen(driver=driver)
 
-        assert content_of(driver, 'ausgabe_self') == "0.00"
-        assert content_of(driver, 'ausgabe_self_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_self_diff') == "-50.00"
+        page_configuration.visit()
+        page_configuration.define_kategorie('0test_kategorie')
 
-        assert content_of(driver, 'ausgabe_partner') == "100.00"
-        assert content_of(driver, 'ausgabe_partner_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_partner_diff') == "50.00"
+        page_gemeinsam_add.visit()
+        page_gemeinsam_add.add('2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
 
-        fill_element_by_id(driver, 'abrechnungsverhaeltnis', '70')
-        driver.find_element_by_id('abrechnung_aktualisieren').click()
+        page_gemeinsam_abrechnen.visit()
 
-        assert content_of(driver, 'ausgabe_self') == "0.00"
-        assert content_of(driver, 'ausgabe_self_soll') == "70.00"
-        assert content_of(driver, 'ausgabe_self_diff') == "-70.00"
+        assert page_gemeinsam_abrechnen.result_self() == {
+            'ausgabe_self': '0.00',
+            'ausgabe_self_soll': '50.00',
+            'ausgabe_self_diff': '-50.00'
+        }
 
-        assert content_of(driver, 'ausgabe_partner') == "100.00"
-        assert content_of(driver, 'ausgabe_partner_soll') == "30.00"
-        assert content_of(driver, 'ausgabe_partner_diff') == "70.00"
+        assert page_gemeinsam_abrechnen.result_partner() == {
+            'ausgabe_partner': '100.00',
+            'ausgabe_partner_soll': '50.00',
+            'ausgabe_partner_diff': '50.00'
+        }
 
-        driver.find_element_by_id('abrechnen').click()
-        print('[',content_of(driver, 'abrechnung').replace('<br>', '\n'),']')
-        assert content_of(driver, 'abrechnung').replace('<br>', '\n') == self.test_change_veraeltnis_abrechnung
+        page_gemeinsam_abrechnen.update_abrechnungsverhältnis(70)
+
+        assert page_gemeinsam_abrechnen.result_self() == {
+            'ausgabe_self': '0.00',
+            'ausgabe_self_soll': '70.00',
+            'ausgabe_self_diff': '-70.00'
+        }
+
+        assert page_gemeinsam_abrechnen.result_partner() == {
+            'ausgabe_partner': '100.00',
+            'ausgabe_partner_soll': '30.00',
+            'ausgabe_partner_diff': '70.00'
+        }
+
+        page_gemeinsam_abrechnen.abrechnen()
+
+        logging.info(str(page_gemeinsam_abrechnen.abrechnung_result()))
+        assert page_gemeinsam_abrechnen.abrechnung_result() == self.test_change_veraeltnis_abrechnung
         close_driver(driver)
 
     set_limit_abrechnung = '''
@@ -110,35 +126,50 @@ Datum,Kategorie,Name,Wert,Dynamisch
     def test_set_limit(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
-        define_kategorie(driver, '0test_kategorie')
-        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
 
-        driver.get('http://localhost:5000/gemeinsamabrechnen/')
+        page_configuration = Configuration(driver=driver)
+        page_gemeinsam_add = GemeinsamAdd(driver=driver)
+        page_gemeinsam_abrechnen = GemeinsamAbrechnen(driver=driver)
 
-        assert content_of(driver, 'ausgabe_self') == "0.00"
-        assert content_of(driver, 'ausgabe_self_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_self_diff') == "-50.00"
+        page_configuration.visit()
+        page_configuration.define_kategorie('0test_kategorie')
 
-        assert content_of(driver, 'ausgabe_partner') == "100.00"
-        assert content_of(driver, 'ausgabe_partner_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_partner_diff') == "50.00"
+        page_gemeinsam_add.visit()
+        page_gemeinsam_add.add('2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
 
-        driver.find_element_by_id('set_limit').click()
-        select_option(driver, 'set_limit_fuer', 'test')
-        fill_element(driver, 'set_limit_value', '30')
-        driver.find_element_by_id('abrechnung_aktualisieren').click()
+        page_gemeinsam_abrechnen.visit()
 
-        assert content_of(driver, 'ausgabe_self') == "0.00"
-        assert content_of(driver, 'ausgabe_self_soll') == "30.00"
-        assert content_of(driver, 'ausgabe_self_diff') == "-30.00"
+        assert page_gemeinsam_abrechnen.result_self() == {
+            'ausgabe_self': '0.00',
+            'ausgabe_self_soll': '50.00',
+            'ausgabe_self_diff': '-50.00'
+        }
 
-        assert content_of(driver, 'ausgabe_partner') == "100.00"
-        assert content_of(driver, 'ausgabe_partner_soll') == "70.00"
-        assert content_of(driver, 'ausgabe_partner_diff') == "30.00"
+        assert page_gemeinsam_abrechnen.result_partner() == {
+            'ausgabe_partner': '100.00',
+            'ausgabe_partner_soll': '50.00',
+            'ausgabe_partner_diff': '50.00'
+        }
 
-        driver.find_element_by_id('abrechnen').click()
-        print('[',content_of(driver, 'abrechnung').replace('<br>', '\n'),']')
-        assert content_of(driver, 'abrechnung').replace('<br>', '\n') == self.set_limit_abrechnung
+        page_gemeinsam_abrechnen.update_limit(person='test', value=30)
+
+
+        assert page_gemeinsam_abrechnen.result_self() == {
+            'ausgabe_self': '0.00',
+            'ausgabe_self_soll': '30.00',
+            'ausgabe_self_diff': '-30.00'
+        }
+
+        assert page_gemeinsam_abrechnen.result_partner() == {
+            'ausgabe_partner': '100.00',
+            'ausgabe_partner_soll': '70.00',
+            'ausgabe_partner_diff': '30.00'
+        }
+
+        page_gemeinsam_abrechnen.abrechnen()
+
+        logging.info(str(page_gemeinsam_abrechnen.abrechnung_result()))
+        assert page_gemeinsam_abrechnen.abrechnung_result() == self.set_limit_abrechnung
         close_driver(driver)
 
     set_limit_abrechnung_ausgleich = '''
@@ -181,67 +212,71 @@ Datum,Kategorie,Name,Wert,Dynamisch
         enter_test_mode(driver)
         define_kategorie(driver, '0test_kategorie')
 
-        self._add_ausgabe(driver, '2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
-        define_kategorie(driver, '1test_kategorie')
+        page_configuration = Configuration(driver=driver)
+        page_gemeinsam_add = GemeinsamAdd(driver=driver)
+        page_gemeinsam_abrechnen = GemeinsamAbrechnen(driver=driver)
+        page_einzelbuchung_uebersicht = EinzelbuchungenUebersicht(driver=driver)
 
-        driver.get('http://localhost:5000/gemeinsamabrechnen/')
+        page_configuration.visit()
+        page_configuration.define_kategorie('0test_kategorie')
 
-        assert content_of(driver, 'ausgabe_self') == "0.00"
-        assert content_of(driver, 'ausgabe_self_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_self_diff') == "-50.00"
+        page_gemeinsam_add.visit()
+        page_gemeinsam_add.add('2010-01-01', '0name', '0test_kategorie', '100', 'Partner')
 
-        assert content_of(driver, 'ausgabe_partner') == "100.00"
-        assert content_of(driver, 'ausgabe_partner_soll') == "50.00"
-        assert content_of(driver, 'ausgabe_partner_diff') == "50.00"
+        page_configuration.visit()
+        page_configuration.define_kategorie('1test_kategorie')
 
-        driver.find_element_by_id('set_limit').click()
-        select_option(driver, 'set_limit_fuer', 'test')
-        fill_element_by_id(driver, 'set_limit_value', '30')
+        page_gemeinsam_abrechnen.visit()
 
-        driver.find_element_by_id('set_self_kategorie').click()
-        select_option(driver, 'set_self_kategorie_value', '1test_kategorie')
+        assert page_gemeinsam_abrechnen.result_self() == {
+            'ausgabe_self': '0.00',
+            'ausgabe_self_soll': '50.00',
+            'ausgabe_self_diff': '-50.00'
+        }
 
-        driver.find_element_by_id('set_other_kategorie').click()
-        fill_element_by_id(driver, 'set_other_kategorie_value', 'test ausgleich')
+        assert page_gemeinsam_abrechnen.result_partner() == {
+            'ausgabe_partner': '100.00',
+            'ausgabe_partner_soll': '50.00',
+            'ausgabe_partner_diff': '50.00'
+        }
 
-        driver.find_element_by_id('abrechnung_aktualisieren').click()
+        page_gemeinsam_abrechnen.update_limit('test', 30)
+        page_gemeinsam_abrechnen.set_self_kategorie('1test_kategorie')
+        page_gemeinsam_abrechnen.set_other_kategorie('test ausgleich')
 
-        assert content_of(driver, 'ausgabe_self') == "0.00"
-        assert content_of(driver, 'ausgabe_self_soll') == "30.00"
-        assert content_of(driver, 'ausgabe_self_diff') == "-30.00"
+        assert page_gemeinsam_abrechnen.result_self() == {
+            'ausgabe_self': '0.00',
+            'ausgabe_self_soll': '30.00',
+            'ausgabe_self_diff': '-30.00'
+        }
 
-        assert content_of(driver, 'ausgabe_partner') == "100.00"
-        assert content_of(driver, 'ausgabe_partner_soll') == "70.00"
-        assert content_of(driver, 'ausgabe_partner_diff') == "30.00"
+        assert page_gemeinsam_abrechnen.result_partner() == {
+            'ausgabe_partner': '100.00',
+            'ausgabe_partner_soll': '70.00',
+            'ausgabe_partner_diff': '30.00'
+        }
 
-        driver.find_element_by_id('abrechnen').click()
-        assert content_of(driver, 'abrechnung').replace('<br>', '\n') == self.set_limit_abrechnung_ausgleich
+        page_gemeinsam_abrechnen.abrechnen()
 
-        driver.get('http://localhost:5000/uebersicht/')
-        open_table_button = driver.find_element_by_id('open_2010.1')
-        open_table_button.click()
+        assert page_gemeinsam_abrechnen.abrechnung_result() == self.set_limit_abrechnung_ausgleich
 
-        assert content_of(driver, 'item_0_id') == '0'
-        assert content_of(driver, 'item_0_name') == '0name'
-        assert content_of(driver, 'item_0_kategorie') == '0test_kategorie'
-        assert content_of(driver, 'item_0_datum') == '01.01.2010'
-        assert content_of(driver, 'item_0_wert') == '-50,00'
+        page_einzelbuchung_uebersicht.visit()
+        page_einzelbuchung_uebersicht.open_module(month=1, year=2010)
 
-        assert content_of(driver, 'item_1_id') == '1'
-        assert content_of(driver, 'item_1_name') == '1test_kategorie'
-        assert content_of(driver, 'item_1_kategorie') == '1test_kategorie'
-        assert content_of(driver, 'item_1_datum') == '01.01.2010'
-        assert content_of(driver, 'item_1_wert') == '20,00'
+        assert page_einzelbuchung_uebersicht.get_item_in_opened_module(0) == {
+            'name': '0name',
+            'kategorie': '0test_kategorie',
+            'datum': '01.01.2010',
+            'wert': '-50,00'
+        }
+
+        assert page_einzelbuchung_uebersicht.get_item_in_opened_module(1) == {
+            'name': '1test_kategorie',
+            'kategorie': '1test_kategorie',
+            'datum': '01.01.2010',
+            'wert': '20,00'
+        }
 
         close_driver(driver)
 
-    def _add_ausgabe(self, driver, date, name, kategorie, wert, person):
-        driver.get('http://localhost:5000/addgemeinsam/')
-        fill_element(driver, 'date', date)
-        fill_element(driver, 'name', name)
-        fill_element(driver, 'wert', wert)
-        select_option(driver, 'kategorie_auswahl', kategorie)
-        select_option(driver, 'person_auswahl', person)
 
-        add_button = driver.find_element_by_id('add')
-        add_button.click()

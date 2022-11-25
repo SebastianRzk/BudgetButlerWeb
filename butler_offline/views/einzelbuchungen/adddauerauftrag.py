@@ -1,13 +1,16 @@
 from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
+from butler_offline.viewcore.context import generate_transactional_context
+from butler_offline.viewcore.template import fa
+
 
 TYP_AUSGABE = 'Ausgabe'
 TYPE_EINNAHME = 'Einnahme'
+
 
 def handle_request(request):
     if request.method == 'POST' and request.values['action'] == 'add':
@@ -27,7 +30,7 @@ def handle_request(request):
                 request.values['rhythmus'],
                 value)
             non_persisted_state.add_changed_dauerauftraege({
-                'fa': 'pencil',
+                'fa': fa.pencil,
                 'startdatum': datum_to_german(startdatum),
                 'endedatum':  datum_to_german(endedatum),
                 'kategorie': request.values['kategorie'],
@@ -46,7 +49,7 @@ def handle_request(request):
                 request.values['rhythmus'],
                 value)
             non_persisted_state.add_changed_dauerauftraege({
-                'fa': 'plus',
+                'fa': fa.plus,
                 'startdatum': datum_to_german(startdatum),
                 'endedatum': datum_to_german(endedatum),
                 'kategorie': request.values['kategorie'],
@@ -55,7 +58,7 @@ def handle_request(request):
                 'wert': from_double_to_german(value)
                 })
 
-    context = viewcore.generate_transactional_context('adddauerauftrag')
+    context = generate_transactional_context('adddauerauftrag')
     context['approve_title'] = 'Dauerauftrag hinzufügen'
 
     if post_action_is(request, 'edit'):

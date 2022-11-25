@@ -1,11 +1,12 @@
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_sparen
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
-
+from butler_offline.viewcore.context import get_error_message
 
 def set_up():
     file_system.INSTANCE = FileSystemStub()
@@ -35,6 +36,8 @@ def add_test_data():
 
     persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
 
+    untaint_database(persisted_state.database_instance())
+
 
 def add_typen_test_data():
     add_test_data()
@@ -45,6 +48,8 @@ def add_typen_test_data():
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin2', 'demokonto2', 880)
     persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin3', 777)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin3', 'demokonto2', 770)
+
+    untaint_database(persisted_state.database_instance())
 
 
 def test_should_list_kontos():
@@ -174,8 +179,7 @@ def test_init_with_empty_database():
 
     context = uebersicht_sparen.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst eine Einzelbuchung.'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst eine Einzelbuchung.'
 
 
 def test_init_filled_database():
@@ -200,6 +204,9 @@ def test_info():
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2019'), 'demoisin', 'demodepot2', 0)
 
     persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
+
+    untaint_database(persisted_state.database_instance())
+
 
     result = uebersicht_sparen.index(GetRequest())
 
@@ -247,6 +254,8 @@ def test_order_typ():
 
     persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
 
+    untaint_database(persisted_state.database_instance())
+
     result = uebersicht_sparen.index(GetRequest())
 
     assert result['order_typ'] == {
@@ -286,6 +295,8 @@ def test_aktuelle_dauerauftraege():
     )
 
     persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
+
+    untaint_database(persisted_state.database_instance())
 
     result = uebersicht_sparen.index(GetRequest())
 

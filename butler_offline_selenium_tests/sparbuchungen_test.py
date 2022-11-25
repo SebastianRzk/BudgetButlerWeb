@@ -1,83 +1,79 @@
-from SeleniumTest import SeleniumTestClass
-from SeleniumTest import fill_element
-from SeleniumTest import enter_test_mode
-from SeleniumTest import select_option
-from SeleniumTest import click_add_button
+from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
+from butler_offline_selenium_tests.page.util import enter_test_mode
+from butler_offline_selenium_tests.page.sparen.depot_add import DepotAdd
+from butler_offline_selenium_tests.page.sparen.depot_uebersicht import DepotUebersicht
+from butler_offline_selenium_tests.page.sparen.sparbuchung_add import SparbuchungAdd
+from butler_offline_selenium_tests.page.sparen.sparbuchung_uebersicht import SparbuchungUebersicht
+from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchungen_uebersicht import EinzelbuchungenUebersicht
+
 
 class TestUI(SeleniumTestClass):
-    def _add_sparbuchung(self, driver, datum, name, typ, konto, wert, einzahlung):
-        driver.get('http://localhost:5000/add_sparbuchung/')
-        fill_element(driver, 'datum', datum)
-        fill_element(driver, 'name', name)
-        fill_element(driver, 'wert', wert)
-        select_option(driver, 'konto_auswahl', konto)
-        select_option(driver, 'typ_auswahl', typ)
-
-        if einzahlung:
-            select_option(driver, 'eigenschaft_auswahl', 'Einzahlung')
-        else:
-            select_option(driver, 'eigenschaft_auswahl', 'Auszahlung')
-
-        click_add_button(driver)
-
-    def _add_sparkonto(self, driver, name, typ):
-        driver.get('http://localhost:5000/add_sparkonto/')
-        fill_element(driver, 'kontoname', name)
-        select_option(driver, 'typ_auswahl', typ)
-
-        click_add_button(driver)
-
 
     def teste_uebersicht_kontos(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
 
-        self._add_sparkonto(driver, 'TestKonto', 'Sparkonto')
-        self._add_sparbuchung(driver, '2020-01-01', 'testname', 'Manueller Auftrag', 'TestKonto', 10,  True)
+        page_sparkonto_add = DepotAdd(driver=driver)
+        page_sparbuchung_add = SparbuchungAdd(driver=driver)
+        page_sparkonto_uebersicht = DepotUebersicht(driver=driver)
 
-        driver.get('http://localhost:5000/uebersicht_sparkontos/')
+        page_sparkonto_add.visit()
+        page_sparkonto_add.add('TestKonto', 'Sparkonto')
 
-        assert driver.find_element_by_id('item_0_id').get_attribute('innerHTML') == '0'
-        assert driver.find_element_by_id('item_0_kontoname').get_attribute('innerHTML') == 'TestKonto'
-        assert driver.find_element_by_id('item_0_kontotyp').get_attribute('innerHTML') == 'Sparkonto'
-        assert driver.find_element_by_id('item_0_wert').get_attribute('innerHTML') == '10,00'
-        assert driver.find_element_by_id('item_0_aufbuchungen').get_attribute('innerHTML') == '10,00'
-        assert driver.find_element_by_id('item_0_difference').get_attribute('innerHTML') == '0,00'
+        page_sparbuchung_add.visit()
+        page_sparbuchung_add.add('2020-01-01', 'testname', 'Manueller Auftrag', 'TestKonto', 10,  True)
 
+        page_sparkonto_uebersicht.visit()
 
-        assert driver.find_element_by_id('item_gesamt_wert').get_attribute('innerHTML') == '10,00'
-        assert driver.find_element_by_id('item_gesamt_aufbuchungen').get_attribute('innerHTML') == '10,00'
-        assert driver.find_element_by_id('item_gesamt_difference').get_attribute('innerHTML') == '0,00'
+        assert page_sparkonto_uebersicht.get(0) == {
+            'name': 'TestKonto',
+            'typ': 'Sparkonto',
+            'wert': '10,00',
+            'aufbuchungen': '10,00',
+            'difference': '0,00'
+        }
+
+        assert page_sparkonto_uebersicht.get_gesamt() == {
+            'wert': '10,00',
+            'aufbuchungen': '10,00',
+            'difference': '0,00'
+        }
         close_driver(driver)
-
 
     def teste_uebersicht_sparbuchungen(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
 
-        self._add_sparkonto(driver, 'TestKonto', 'Sparkonto')
-        self._add_sparbuchung(driver, '2020-01-01', 'testname', 'Manueller Auftrag', 'TestKonto', 10,  True)
+        page_sparkonto_add = DepotAdd(driver=driver)
+        page_sparbuchung_add = SparbuchungAdd(driver=driver)
+        page_sparbuchungen_uebersicht = SparbuchungUebersicht(driver=driver)
+        page_einzelbuchung_uebersicht = EinzelbuchungenUebersicht(driver=driver)
 
+        page_sparkonto_add.visit()
+        page_sparkonto_add.add('TestKonto', 'Sparkonto')
+        page_sparbuchung_add.visit()
+        page_sparbuchung_add.add('2020-01-01', 'testname', 'Manueller Auftrag', 'TestKonto', 10,  True)
+
+        page_sparbuchungen_uebersicht.visit()
         driver.get('http://localhost:5000/uebersicht_sparbuchungen/')
 
-        open_table_button = driver.find_element_by_id('open_2020.1')
-        open_table_button.click()
+        page_sparbuchungen_uebersicht.open_module(month=1, year=2020)
 
-        assert driver.find_element_by_id('item_0_id').get_attribute('innerHTML') == '0'
-        assert driver.find_element_by_id('item_0_name').get_attribute('innerHTML') == 'testname'
-        assert driver.find_element_by_id('item_0_konto').get_attribute('innerHTML') == 'TestKonto'
-        assert driver.find_element_by_id('item_0_typ').get_attribute('innerHTML').strip() == 'Manueller Auftrag'
-        assert driver.find_element_by_id('item_0_wert').get_attribute('innerHTML') == '10,00'
+        assert page_sparbuchungen_uebersicht.get(0) == {
+            'name': 'testname',
+            'konto': 'TestKonto',
+            'typ': 'Manueller Auftrag',
+            'wert': '10,00'
+        }
 
+        page_einzelbuchung_uebersicht.visit()
+        page_einzelbuchung_uebersicht.open_module(month=1, year=2020)
 
-        driver.get('http://localhost:5000/uebersicht/')
-
-        open_table_button = driver.find_element_by_id('open_2020.1')
-        open_table_button.click()
-
-        assert driver.find_element_by_id('item_0_id').get_attribute('innerHTML') == '0'
-        assert driver.find_element_by_id('item_0_name').get_attribute('innerHTML') == 'testname'
-        assert driver.find_element_by_id('item_0_kategorie').get_attribute('innerHTML') == 'Sparen'
-        assert driver.find_element_by_id('item_0_wert').get_attribute('innerHTML') == '-10,00'
+        assert page_einzelbuchung_uebersicht.get_item_in_opened_module(0) == {
+            'name': 'testname',
+            'datum': '01.01.2020',
+            'kategorie': 'Sparen',
+            'wert': '-10,00'
+        }
         close_driver(driver)
 

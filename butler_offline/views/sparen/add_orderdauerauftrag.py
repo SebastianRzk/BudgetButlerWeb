@@ -1,11 +1,12 @@
 from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
 from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
+from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.template import fa
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -15,12 +16,12 @@ TYP_VERKAUF = 'Verkauf'
 
 def handle_request(request):
     if not database_instance().sparkontos.get_depots():
-        return viewcore.generate_error_context(
+        return generate_error_context(
             'add_orderdauerauftrag',
             NO_VALID_DEPOT_IN_DB)
 
     if not database_instance().depotwerte.get_depotwerte():
-        return viewcore.generate_error_context('add_orderdauerauftrag', NO_VALID_SHARE_IN_DB)
+        return generate_error_context('add_orderdauerauftrag', NO_VALID_SHARE_IN_DB)
 
     if post_action_is(request, 'add'):
         startdatum = datum(request.values['startdatum'])
@@ -43,7 +44,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_orderdauerauftrag(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'startdatum': datum_to_german(startdatum),
                     'endedatum': datum_to_german(endedatum),
                     'rhythmus': request.values['rhythmus'],
@@ -65,7 +66,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_orderdauerauftrag(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'startdatum': datum_to_german(startdatum),
                     'endedatum': datum_to_german(endedatum),
                     'rhythmus': request.values['rhythmus'],
@@ -77,7 +78,7 @@ def handle_request(request):
                     'konto': request.values['konto']
                     })
 
-    context = viewcore.generate_transactional_context('add_orderdauerauftrag')
+    context = generate_transactional_context('add_orderdauerauftrag')
     context['approve_title'] = 'Order-Dauerauftrag hinzufügen'
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])

@@ -1,7 +1,6 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import add_depotauszug
 from butler_offline.core import file_system
 from butler_offline.core.database.sparen.kontos import Kontos
@@ -10,6 +9,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.viewcore.converter import datum_to_string
+from butler_offline.viewcore.context import get_error_message
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from datetime import date
 
@@ -36,6 +36,8 @@ def set_up():
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '1demoisin', '1demokonto', 20)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '2demoisin', '2demokonto', 30)
     persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '3demoisin', '2demokonto', 40)
+
+    untaint_database(database=persisted_state.database_instance())
 
     request_handler.stub_me()
 
@@ -126,6 +128,7 @@ def test_init_with_already_empty_should_handle_like_empty():
     persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '1demoisin', '2demokonto', 0)
     persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '2demoisin', '2demokonto', 0)
     persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '3demoisin', '2demokonto', 0)
+    untaint_database(database=persisted_state.database_instance())
 
     context = add_depotauszug.index(GetRequest())
     assert context['approve_title'] == 'Depotauszug hinzufügen'
@@ -168,8 +171,7 @@ def test_init_empty_should_return_error():
 
     context = add_depotauszug.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert get_error_message(context) ==  'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
 
 
 def test_init_without_depotwert_should_return_error():
@@ -180,8 +182,7 @@ def test_init_without_depotwert_should_return_error():
 
     context = add_depotauszug.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Depotwert.'
 
 
 def test_transaction_id_should_be_in_context():
@@ -252,7 +253,7 @@ def test_add_with_empty_datum_should_return_error_page():
          'wert_2demokonto_3demoisin': '10,00'
          }
      ))
-    assert result['%Errortext'] == 'Interner Fehler <Kein Datum gefunden>.'
+    assert get_error_message(result) == 'Interner Fehler <Kein Datum gefunden>.'
 
 def test_add_order_should_show_in_recently_added():
     set_up()
@@ -285,12 +286,11 @@ def test_add_order_for_existing_auszug_should_return_error():
          }
     ))
 
-    assert '%Errortext' in result
-    assert result['%Errortext'] == 'Für es besteht bereits ein Kontoauszug für 2demokonto am 01.01.2020'
+    assert get_error_message(result) == 'Für es besteht bereits ein Kontoauszug für 2demokonto am 01.01.2020'
 
 def test_add_should_only_fire_once():
     set_up()
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotauszug.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -363,7 +363,7 @@ def test_edit_should_only_fire_once():
          }
     ))
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotauszug.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

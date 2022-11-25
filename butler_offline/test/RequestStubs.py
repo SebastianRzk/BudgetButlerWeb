@@ -6,10 +6,11 @@ Created on 30.09.2017
 
 class GetRequest():
     method = "GET"
+    values = {}
     POST = {}
 
 
-from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.state import persisted_state
 
 CONFIGURED = False
 
@@ -29,5 +30,11 @@ class PostRequestAction(PostRequest):
 
 class VersionedPostRequest(PostRequest):
     def __init__(self, args):
-        args['ID'] = request_handler.current_key()
+        args['ID'] = persisted_state.current_database_version()
+        self.values = args
+
+
+class VersionedPostRequestAction(VersionedPostRequest):
+    def __init__(self, action, args):
+        args['action'] = action
         self.values = args

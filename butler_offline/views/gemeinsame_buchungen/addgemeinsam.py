@@ -4,6 +4,9 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.context import generate_transactional_context
+from butler_offline.viewcore.template import fa
+import logging
 
 
 def handle_request(request):
@@ -22,7 +25,7 @@ def handle_request(request):
                    )
             non_persisted_state.add_changed_gemeinsamebuchungen(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'datum': datum_to_german(date),
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],
@@ -38,7 +41,7 @@ def handle_request(request):
                   person=request.values['person'])
             non_persisted_state.add_changed_gemeinsamebuchungen(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'datum': datum_to_german(date),
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],
@@ -46,10 +49,10 @@ def handle_request(request):
                     'person': request.values['person']
                     })
 
-    context = viewcore.generate_transactional_context("addgemeinsam")
+    context = generate_transactional_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if post_action_is(request, 'edit'):
-        print("Please edit:", request.values['edit_index'])
+        logging.info('Please edit: %s', request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         db_row = database_instance().gemeinsamebuchungen.get(db_index)
         default_item = {

@@ -1,8 +1,3 @@
-'''
-Created on 10.05.2017
-
-@author: sebastian
-'''
 
 import unittest
 
@@ -81,7 +76,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
-        request_key = request_handler.current_key()
+        request_key = persisted_state.current_database_version()
 
         addausgabe.index(PostRequest(
             {'action':'add',
@@ -150,7 +145,7 @@ class TesteAddEinzelbuchungView(unittest.TestCase):
              }
          ))
 
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         addausgabe.index(PostRequest(
             {'action':'add',
              'ID':next_id,

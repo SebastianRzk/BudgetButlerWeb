@@ -1,7 +1,6 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import add_orderdauerauftrag
 from butler_offline.core import file_system
 from butler_offline.core.database.sparen.kontos import Kontos
@@ -10,6 +9,7 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.viewcore.context import get_error_message
 
 
 def set_up():
@@ -18,6 +18,7 @@ def set_up():
     depotwerte = persisted_state.database_instance().depotwerte
     persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_DEPOT)
     depotwerte.add(name='demowert', isin='demoisin', typ=depotwerte.TYP_ETF)
+    untaint_database(database=persisted_state.database_instance())
     request_handler.stub_me()
 
 
@@ -37,8 +38,7 @@ def test_init_empty_should_return_error():
 
     context = add_orderdauerauftrag.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
 
 
 def test_init_without_depotwert_should_return_error():
@@ -49,8 +49,7 @@ def test_init_without_depotwert_should_return_error():
 
     context = add_orderdauerauftrag.index(GetRequest())
 
-    assert '%Errortext' in context
-    assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Depotwert.'
 
 
 def test_transaction_id_should_be_in_context():
@@ -114,7 +113,7 @@ def test_add_order_should_show_in_recently_added():
 
 def test_add_should_only_fire_once():
     set_up()
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_orderdauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -219,7 +218,7 @@ def test_edit_should_only_fire_once():
          }
     ))
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_orderdauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

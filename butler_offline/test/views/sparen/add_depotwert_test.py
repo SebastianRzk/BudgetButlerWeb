@@ -6,6 +6,7 @@ from butler_offline.views.sparen import add_depotwert
 from butler_offline.core import file_system
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context import get_error_message
 
 
 def set_up():
@@ -66,7 +67,7 @@ def test_add_depotwert_should_show_in_recently_added():
 def test_add_should_only_fire_once():
     set_up()
     typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotwert.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -145,7 +146,7 @@ def test_edit_depotwert_with_underscrore_should_return_error():
          }
     ))
 
-    assert result['%Errortext'] == 'ISIN darf kein Unterstrich "_" enthalten.'
+    assert get_error_message(result) == 'ISIN darf kein Unterstrich "_" enthalten.'
 
 
 def test_edit_depotwert_should_only_fire_once():
@@ -159,7 +160,7 @@ def test_edit_depotwert_should_only_fire_once():
          }
     ))
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     add_depotwert.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

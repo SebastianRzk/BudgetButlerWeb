@@ -4,6 +4,7 @@ from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import from_double_to_german
 from butler_offline.viewcore.converter import datum_to_german
 from datetime import date
+from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
 
 
 def to_piechart(data_list, gesamt_wert):
@@ -393,9 +394,9 @@ def berechne_monatlich():
 
 def _handle_request(request):
     if persisted_state.database_instance().einzelbuchungen.anzahl() == 0:
-        return viewcore.generate_error_context('uebersicht_sparen', 'Bitte erfassen Sie zuerst eine Einzelbuchung.')
+        return generate_error_context('uebersicht_sparen', 'Bitte erfassen Sie zuerst eine Einzelbuchung.')
 
-    context = viewcore.generate_transactional_context('sparen')
+    context = generate_transactional_context('sparen')
     kontos = persisted_state.database_instance().sparkontos.get_all().Kontoname.tolist()
     typen = persisted_state.database_instance().sparkontos.KONTO_TYPEN
     depot_typen = persisted_state.database_instance().depotwerte.TYPES

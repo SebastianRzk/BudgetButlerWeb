@@ -1,10 +1,8 @@
 from datetime import datetime
-
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.core.file_system import write_import
 from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
-
-from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.base_html import set_success_message, set_error_message
@@ -18,6 +16,7 @@ from butler_offline.online_services.butler_online.gemeinsame_buchungen import ge
 from butler_offline.online_services.butler_online.settings import set_kategorien
 from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
+import logging
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -28,8 +27,8 @@ def _mapping_passt(post_parameter, unpassende_kategorien):
 
 
 def _import(import_data, gemeinsam):
-    print('importing data:')
-    print(import_data)
+    logging.info('importing data:')
+    logging.info(str(import_data))
     if gemeinsam :
         database_instance().gemeinsamebuchungen.parse(import_data)
         database_instance().gemeinsamebuchungen.taint()
@@ -39,21 +38,22 @@ def _import(import_data, gemeinsam):
 
 
 def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
-    print('Mappe Kategorien', unpassende_kategorien, post_parameter)
+    logging.info('Mappe Kategorien %s -> %s', unpassende_kategorien, post_parameter)
 
     for unpassende_kategorie in unpassende_kategorien:
         mapping_string = post_parameter[str(unpassende_kategorie) + '_mapping']
         if mapping_string == 'neue Kategorie anlegen':
-            print(unpassende_kategorie, ' muss nicht gemappt werden')
+            logging.info(unpassende_kategorie + ' muss nicht gemappt werden')
             continue
         mapping_kategorie = mapping_string[4:len(' importieren') * -1]
-        print(unpassende_kategorie, 'wird in', mapping_kategorie, 'gemappt')
+        logging.info('%s wird in %s gemappt', unpassende_kategorie,  mapping_kategorie)
         import_data.Kategorie = import_data.Kategorie.map(lambda x: _kategorien_map(x, unpassende_kategorie, mapping_kategorie))
     return import_data
 
 
 def index(request):
     return request_handler.handle_request(request, handle_request , 'shared/import.html')
+
 
 def _get_success_message(last_elements):
     number = len(last_elements)
@@ -63,7 +63,7 @@ def _get_success_message(last_elements):
 
 
 def handle_request(request, import_prefix='', gemeinsam=False):
-    context = viewcore.generate_transactional_context('import')
+    context = generate_transactional_context('import')
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
@@ -73,10 +73,10 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             auth_container = login(serverurl, request.values['email'], request.values['password'])
 
             json_report = get_einzelbuchungen(serverurl, auth_container)
-            print(json_report)
-            print('Mapping to text report')
+            logging.info(str(json_report))
+            logging.info('Mapping to text report')
             text_report = JSONToTextMapper().map(json_report)
-            print(text_report)
+            logging.info(str(text_report))
 
             response = handle_request(PostRequest({'import': text_report}), import_prefix='Internet')
 
@@ -87,23 +87,22 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
-            print(serverurl)
+            logging.info(serverurl)
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             online_username = auth_container.online_name()
-            print('butler_online username: ', online_username)
+            logging.info('butler_online username: %s', online_username)
 
             online_content = get_gemeinsame_buchungen(serverurl, auth_container)
-            print(online_content)
+            logging.info(str(online_content))
             table = JSONReport().dataframe_from_json_gemeinsam(online_content)
 
-            print('table before person mapping', table)
+            logging.info('table before person mapping %s', table)
             table.Person = table.Person.map(lambda x: database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
             online_content = TextReportWriter().generate_report(table)
             response = handle_request(PostRequest({'import': online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
 
             delete_gemeinsame_buchungen(serverurl, auth_container=auth_container)
             return response
-
 
         elif post_action_is(request, 'set_kategorien'):
             kategorien = ','.join(sorted(database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
@@ -116,21 +115,20 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
             set_success_message(context, 'Kategorien erfolgreich in die Online-Version übertragen.')
 
-
         elif post_action_is(request, 'upload_gemeinsame_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(serverurl, request.values['email'])
-            print(serverurl)
+            logging.info(serverurl)
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             online_username = auth_container.online_name()
-            print('butler_online username:', online_username)
+            logging.info('butler_online username: %s', online_username)
             offline_username = database_instance().name
-            print('butler offline username:', offline_username)
+            logging.info('butler offline username: %s', offline_username)
             online_partnername = get_partnername(serverurl, auth_container=auth_container)
-            print('butler online partnername:', online_partnername)
+            logging.info('butler online partnername: %s', online_partnername)
             offline_partnername = configuration_provider.get_configuration('PARTNERNAME')
-            print('butler offline partnername:', offline_partnername)
+            logging.info('butler offline partnername: %s', offline_partnername)
 
             buchungen = database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
                                                                                  online_username,
@@ -157,7 +155,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                 set_error_message(context, 'Fehler beim Hochladen der gemeinsamen Buchungen.')
 
         else:
-            print(request.values)
+            logging.debug(str(request.values))
             content = request.values['import'].replace('\r', '')
             write_import(import_prefix + 'Import_' + str(datetime.now()), content)
 
@@ -173,8 +171,8 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                 gemeinsam = True
 
             if not nicht_passende_kategorien:
-                print('keine unpassenden kategorien gefunden')
-                print('beginne mit dem direkten import')
+                logging.info('keine unpassenden kategorien gefunden')
+                logging.info('beginne mit dem direkten import')
                 _import(imported_values, gemeinsam)
 
                 last_elements = []
@@ -183,7 +181,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                 context['ausgaben'] = last_elements
                 context = set_success_message(context, _get_success_message(last_elements))
             elif _mapping_passt(request.values, nicht_passende_kategorien):
-                print('import kann durchgeführt werden, weil mapping vorhanden')
+                logging.info('import kann durchgeführt werden, weil mapping vorhanden')
                 imported_values = _map_kategorien(imported_values, nicht_passende_kategorien, request.values)
                 _import(imported_values, gemeinsam)
 
@@ -193,7 +191,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                 context['ausgaben'] = last_elements
                 context = set_success_message(context, _get_success_message(last_elements))
             else:
-                print("Nicht passende Kategorien: ", nicht_passende_kategorien)
+                logging.info("Nicht passende Kategorien: %s", nicht_passende_kategorien)
                 options = ['neue Kategorie anlegen']
                 for kategorie_option in datenbank_kategorien:
                     options.append('als ' + str(kategorie_option) + ' importieren')

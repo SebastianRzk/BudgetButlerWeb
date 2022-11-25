@@ -3,6 +3,7 @@ from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.core import configuration_provider
+from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
 
 
 def _handle_request(request):
@@ -14,6 +15,8 @@ def _handle_request(request):
 
     if post_action_is(request, 'add_kategorie'):
         persisted_state.database_instance().einzelbuchungen.add_kategorie(request.values['neue_kategorie'])
+        if 'redirect' in request.values:
+            return generate_redirect_context('/' + str(request.values['redirect']) + '/')
 
     if post_action_is(request, 'change_themecolor'):
         configuration_provider.set_configuration('THEME_COLOR', request.values['themecolor'])
@@ -53,7 +56,7 @@ def _handle_request(request):
             'kategorie': kategorie
             })
 
-    context = viewcore.generate_transactional_context('configuration')
+    context = generate_transactional_context('configuration')
     context['palette'] = farbmapping
     default_databases = ''
     for db in persisted_state.DATABASES:

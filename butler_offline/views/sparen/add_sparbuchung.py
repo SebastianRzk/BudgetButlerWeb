@@ -1,19 +1,21 @@
 from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.views.sparen.language import NO_VALID_SAVINGS_ACCOUNT_IN_DB
+from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.template import fa
 
 EIGENSCHAFT = 'eigenschaft'
 EIGENSCHAFTEN = 'eigenschaften'
 EIGENSCHAFT_EINZAHLUNG = 'Einzahlung'
 EIGENSCHAFT_AUSZAHLUNG = 'Auszahlung'
 
+
 def handle_request(request):
     if not database_instance().sparkontos.get_sparfaehige_kontos():
-        return viewcore.generate_error_context('add_sparbuchung', NO_VALID_SAVINGS_ACCOUNT_IN_DB)
+        return generate_error_context('add_sparbuchung', NO_VALID_SAVINGS_ACCOUNT_IN_DB)
 
 
     if post_action_is(request, 'add'):
@@ -33,7 +35,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_sparbuchungen(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'datum': datum_to_german(date),
                     'wert': from_double_to_german(value),
                     'name': request.values['name'],
@@ -50,7 +52,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_sparbuchungen(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'datum': datum_to_german(date),
                     'wert': from_double_to_german(value),
                     'name': request.values['name'],
@@ -58,7 +60,7 @@ def handle_request(request):
                     'konto': request.values['konto']
                     })
 
-    context = viewcore.generate_transactional_context('add_sparbuchung')
+    context = generate_transactional_context('add_sparbuchung')
     context['approve_title'] = 'Sparbuchung hinzufügen'
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])

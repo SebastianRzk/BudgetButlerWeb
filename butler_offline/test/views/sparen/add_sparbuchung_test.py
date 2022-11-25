@@ -1,9 +1,8 @@
 import unittest
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import add_sparbuchung
 from butler_offline.core import file_system
 from butler_offline.core.database.sparen.kontos import Kontos
@@ -12,12 +11,14 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.viewcore.context import get_error_message
 
 class AddSparbuchungTest(unittest.TestCase):
     def set_up(self):
         file_system.INSTANCE = FileSystemStub()
         persisted_state.DATABASE_INSTANCE = None
         persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_SPARKONTO)
+        untaint_database(database=persisted_state.database_instance())
         request_handler.stub_me()
 
     def test_init(self):
@@ -32,8 +33,7 @@ class AddSparbuchungTest(unittest.TestCase):
 
         context = add_sparbuchung.index(GetRequest())
 
-        assert '%Errortext' in context
-        assert context['%Errortext'] == 'Bitte erfassen Sie zuerst ein Sparkonto.'
+        assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Sparkonto.'
 
     def test_transaction_id_should_be_in_context(self):
         self.set_up()
@@ -85,7 +85,7 @@ class AddSparbuchungTest(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         add_sparbuchung.index(PostRequest(
             {'action': 'add',
              'ID': next_id,
@@ -172,7 +172,7 @@ class AddSparbuchungTest(unittest.TestCase):
              }
         ))
 
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         add_sparbuchung.index(PostRequest(
             {'action': 'add',
              'ID': next_id,

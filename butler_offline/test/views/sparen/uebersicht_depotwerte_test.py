@@ -2,12 +2,13 @@ import unittest
 
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
+from butler_offline.test.RequestStubs import GetRequest, VersionedPostRequest, PostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_depotwerte
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
+
 
 class TestUebersichtDepotwerte(unittest.TestCase):
 
@@ -30,6 +31,8 @@ class TestUebersichtDepotwerte(unittest.TestCase):
 
         depotauszuege = persisted_state.database_instance().depotauszuege
         depotauszuege.add(datum('01.01.2020'), 'isin1', 'demokonto', 90)
+
+        untaint_database(database=persisted_state.database_instance())
 
     def test_should_list_depotwerte(self):
         self.set_up()
@@ -89,7 +92,7 @@ class TestUebersichtDepotwerte(unittest.TestCase):
     def test_delete_should_only_fire_once(self):
         self.set_up()
         self.add_test_data()
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
 
         assert len(persisted_state.database_instance().depotwerte.content) == 2
         uebersicht_depotwerte.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))

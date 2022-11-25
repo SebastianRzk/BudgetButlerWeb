@@ -1,3 +1,24 @@
+<div class="box theme-row">
+  <form role="form" action="/uebersicht/" method="post">
+    <div class="box-body">
+      <input type="hidden" name="mode" value="change_month"/>
+	    <div class="form-group">
+		    <label>Wähle Jahr</label>
+	      <select class="form-control" name="date" id="date">
+	        {% for jahr in jahre %}
+			  <option value="{{jahr}}"
+				{% if jahr == selected_date %}
+				selected="selected"
+				{% endif %}
+			  >{{jahr}}</option>
+			  {% endfor %}
+		    </select>
+	    </div>
+	    <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
+    </div>
+  </form>
+</div>
+
 {% for name,ausgaben in alles.items()%}
 <div class="box theme-row">
 	<div class="box-header">

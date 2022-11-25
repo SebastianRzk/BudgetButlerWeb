@@ -1,8 +1,8 @@
 from butler_offline.viewcore import request_handler
 from butler_offline.core.file_system import all_abrechnungen
-from butler_offline.viewcore import viewcore
 from butler_offline.core.export.text_report import TextReportReader
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.viewcore.context import generate_transactional_context
 
 def _handle_request(request):
 
@@ -41,7 +41,7 @@ def _handle_request(request):
             }
         )
 
-    context = viewcore.generate_transactional_context('uebersichtabrechnungen')
+    context = generate_transactional_context('uebersichtabrechnungen')
     context['zusammenfassungen'] = zusammenfassungen
     context['abrechnungen'] = abrechnungen
     return context

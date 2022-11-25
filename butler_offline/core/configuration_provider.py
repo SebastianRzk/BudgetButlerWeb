@@ -1,5 +1,5 @@
 from functools import reduce
-from os import getenv
+import logging
 from butler_offline.core import file_system
 from butler_offline.core import configuration_provider
 from os import getenv
@@ -39,7 +39,7 @@ def _load_config():
     for key in dict(configuration_provider.DEFAULT_CONFIG):
         if key not in loaded_config:
             loaded_config[key] = configuration_provider.DEFAULT_CONFIG[key]
-    print("#####", loaded_config)
+    logging.debug('loaded info %s', loaded_config)
     return loaded_config
 
 

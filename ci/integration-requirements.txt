@@ -1,7 +1,7 @@
 -r ../butler_offline/requirements.txt
 pytest-cov==2.5.0
 pyyaml>3.11
-selenium>3.6
+selenium==4.6.0
 codecov>=2.0.15
 coveralls>=1.5.1
 

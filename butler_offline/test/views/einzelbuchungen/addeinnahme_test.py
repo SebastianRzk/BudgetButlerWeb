@@ -1,15 +1,8 @@
-'''
-Created on 10.05.2017
-
-@author: sebastian
-'''
-
 import unittest
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.einzelbuchungen import addeinnahme
 from butler_offline.core import file_system
 from butler_offline.viewcore.state import persisted_state
@@ -40,7 +33,10 @@ class TestAddEinnahmeView(unittest.TestCase):
     def test_editCallFromUeberischt_shouldNameButtonEdit(self):
         self.set_up()
         db().einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
+        untaint_database(database=db())
+
         context = addeinnahme.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
+
         assert context['approve_title'] == 'Einnahme aktualisieren'
 
     def test_add_ausgabe(self):
@@ -62,7 +58,7 @@ class TestAddEinnahmeView(unittest.TestCase):
 
     def test_add_ausgabe_should_only_fire_once(self):
         self.set_up()
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         addeinnahme.index(PostRequest(
             {'action':'add',
              'ID':next_id,
@@ -149,7 +145,7 @@ class TestAddEinnahmeView(unittest.TestCase):
              }
          ))
 
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         addeinnahme.index(PostRequest(
             {'action':'add',
              'ID':next_id,

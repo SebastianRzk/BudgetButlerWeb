@@ -1,15 +1,8 @@
-'''
-Created on 10.05.2017
-
-@author: sebastian
-'''
-
 import unittest
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.gemeinsame_buchungen import addgemeinsam
 from butler_offline.core import file_system
 from butler_offline.viewcore import viewcore
@@ -35,7 +28,10 @@ class TesteAddGemeinsamView(unittest.TestCase):
         self.set_up()
         db = persisted_state.database_instance()
         db.gemeinsamebuchungen.add(datum('10.10.2010'), 'kategorie', 'ausgaben_name', -10, 'Sebastian')
+        untaint_database(database=db)
+
         context = addgemeinsam.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
+
         assert context['approve_title'] == 'Gemeinsame Ausgabe aktualisieren'
         preset = context['default_item']
         assert preset['datum'] == rfc('10.10.2010')
@@ -108,7 +104,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
 
     def test_add_should_only_fire_once(self):
         self.set_up()
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         addgemeinsam.index(PostRequest(
             {'action':'add',
              'ID':next_id,
@@ -191,7 +187,7 @@ class TesteAddGemeinsamView(unittest.TestCase):
              }
          ))
 
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
         addgemeinsam.index(PostRequest(
             {'action':'add',
              'ID':next_id,

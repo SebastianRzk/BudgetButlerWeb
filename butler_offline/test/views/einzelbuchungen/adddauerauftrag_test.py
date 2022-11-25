@@ -1,7 +1,6 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.views.einzelbuchungen import adddauerauftrag
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -33,9 +32,11 @@ def test_init():
 
 def test_edit_call_from_ueberischt_presets_values():
     set_up()
-
     db().dauerauftraege.add(datum('10.10.2010'), datum('10.10.2011'), '0kategorie', '0name', 'monatlich', 10)
-    context = adddauerauftrag.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
+    untaint_database(database=db())
+
+    context = adddauerauftrag.index(VersionedPostRequest({'action': 'edit', 'edit_index': '0'}))
+
     assert context['approve_title'] == 'Dauerauftrag aktualisieren'
 
     preset = context['default_item']
@@ -213,7 +214,7 @@ def test_edit_dauerauftrag_should_only_fire_once():
          'wert': '2,00'
          }
      ))
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     adddauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,
@@ -253,7 +254,7 @@ def test_edit_dauerauftrag_should_only_fire_once():
 def test_add_dauerauftrag_should_only_fire_once():
     set_up()
 
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
     adddauerauftrag.index(PostRequest(
         {'action': 'add',
          'ID': next_id,

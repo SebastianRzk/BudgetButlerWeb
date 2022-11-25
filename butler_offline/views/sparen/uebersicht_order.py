@@ -1,10 +1,9 @@
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import from_double_to_german, datum_to_german
 from butler_offline.views.sparen.add_order import TYP_KAUF, TYP_VERKAUF
-
+from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
 
 def _handle_request(request):
     order = persisted_state.database_instance().order
@@ -12,7 +11,7 @@ def _handle_request(request):
 
     if post_action_is(request, 'delete'):
         order.delete(int(request.values['delete_index']))
-        return request_handler.create_redirect_context('/uebersicht_order/')
+        return generate_redirect_context('/uebersicht_order/')
 
     db = order.get_all()
     order_liste = []
@@ -33,7 +32,7 @@ def _handle_request(request):
             'Dynamisch': row.Dynamisch
         })
 
-    context = viewcore.generate_transactional_context('uebersicht_order')
+    context = generate_transactional_context('uebersicht_order')
     context['order'] = order_liste
     return context
 

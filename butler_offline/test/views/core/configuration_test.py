@@ -1,21 +1,17 @@
-'''
-Created on 10.05.2017
-
-@author: sebastian
-'''
-
 import unittest
 
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.core import configuration
 from butler_offline.core import file_system, configuration_provider
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.test.database_util import untaint_database
 
 class TestKonfiguration(unittest.TestCase):
 
@@ -39,6 +35,11 @@ class TestKonfiguration(unittest.TestCase):
         configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test'}))
         assert database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
 
+    def test_addKategorie_withRedirect(self):
+        self.set_up()
+        result = configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test', 'redirect': 'destination'}))
+        assert result == '/destination/'
+
     def test_change_db_should_trigger_db_reload(self):
         self.set_up()
         configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test'}))
@@ -50,7 +51,7 @@ class TestKonfiguration(unittest.TestCase):
     def test_change_partnername_should_change_partnername(self):
         self.set_up()
         assert viewcore.name_of_partner() == 'kein_Partnername_gesetzt'
-        configuration.index(PostRequest({'action': 'set_partnername', 'partnername': 'testpartner'}))
+        configuration.index(VersionedPostRequest({'action': 'set_partnername', 'partnername': 'testpartner'}))
         assert viewcore.name_of_partner() == 'testpartner'
 
     def test_change_themecolor_should_change_themecolor(self):
@@ -70,8 +71,9 @@ class TestKonfiguration(unittest.TestCase):
         name_of_partner = viewcore.name_of_partner()
         gemeinsame_buchungen = database_instance().gemeinsamebuchungen
         gemeinsame_buchungen.add(datum('01.01.2017'), 'kat', 'name', 1, name_of_partner)
+        untaint_database(database=database_instance())
 
-        configuration.index(PostRequest({'action': 'set_partnername', 'partnername': 'testpartner_renamed'}))
+        configuration.index(VersionedPostRequest({'action': 'set_partnername', 'partnername': 'testpartner_renamed'}))
         gemeinsame_buchungen = database_instance().gemeinsamebuchungen
         database_partners = gemeinsame_buchungen.content.Person
 

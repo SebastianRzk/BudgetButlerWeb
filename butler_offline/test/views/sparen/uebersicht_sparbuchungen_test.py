@@ -4,6 +4,7 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_sparbuchungen
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -26,6 +27,7 @@ class TestUebersichtSparbuchungen(unittest.TestCase):
         sparbuchungen = persisted_state.database_instance().sparbuchungen
         sparbuchungen.add(datum('12.12.2012'), 'sparen', 100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'Demokonto')
         sparbuchungen.add(datum('13.12.2012'), 'auszahlen', -100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'Demokonto')
+        untaint_database(database=persisted_state.database_instance())
 
 
     def test_init_withEmptyDatabase(self):
@@ -77,7 +79,7 @@ class TestUebersichtSparbuchungen(unittest.TestCase):
     def test_delete_should_only_fire_once(self):
         self.set_up()
         self.add_test_data()
-        next_id = request_handler.current_key()
+        next_id = persisted_state.current_database_version()
 
         assert len(persisted_state.database_instance().sparbuchungen.content) == 2
         uebersicht_sparbuchungen.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))

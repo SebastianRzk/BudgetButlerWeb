@@ -1,3 +1,5 @@
+import logging
+
 class FileSystemStub:
     _interactions = 0
 
@@ -19,8 +21,8 @@ class FileSystemStub:
 
     def write(self, file_path, file_content):
         self._interactions += 1
-        print('FileSystemStub WRITE:', file_path)
-        print(file_content)
+        logging.debug('FileSystemStub WRITE: %s', file_path)
+        logging.debug(file_content)
         self._fs_stub[file_path] = file_content
 
     def list_files(self, path):

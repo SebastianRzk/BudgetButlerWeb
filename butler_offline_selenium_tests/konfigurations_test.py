@@ -1,12 +1,9 @@
-'''
-Created on 23.11.2017
-
-@author: sebastian
-'''
-from SeleniumTest import SeleniumTestClass
-from SeleniumTest import enter_test_mode
-from SeleniumTest import get_options
-from SeleniumTest import fill_element
+from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
+from butler_offline_selenium_tests.page.util import enter_test_mode
+from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_add import GemeinsamAdd
+from butler_offline_selenium_tests.page.core.configuration import Configuration
+from butler_offline_selenium_tests.page.core.menu import Menu
+from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchung_add import EinzelbuchungAdd
 
 
 class TestUI(SeleniumTestClass):
@@ -14,50 +11,52 @@ class TestUI(SeleniumTestClass):
     def teste_change_partnername(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
-        driver.get('http://localhost:5000/addgemeinsam/')
-        assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Partner'])
 
-        driver.get('http://localhost:5000/configuration/')
-        fill_element(driver, 'partnername', 'Olaf')
-        driver.find_element_by_id('set_partnername').click()
+        page_gemeinsam_add = GemeinsamAdd(driver=driver)
+        page_configuration = Configuration(driver=driver)
 
-        driver.get('http://localhost:5000/addgemeinsam/')
-        assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Olaf'])
+        page_gemeinsam_add.visit()
+        assert page_gemeinsam_add.partner_options() == set(['test', 'Partner'])
+
+        page_configuration.visit()
+        page_configuration.update_partnername('Olaf')
+
+        page_gemeinsam_add.visit()
+        assert page_gemeinsam_add.partner_options() == set(['test', 'Olaf'])
         close_driver(driver)
 
-    def teste_change_partner(self, get_driver, close_driver):
-        # checks if the forwarding works correctly when changing the database via the URL
+    def test_change_database(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
-        driver.get('http://localhost:5000/addgemeinsam/')
-        assert set(get_options(driver, 'person_auswahl')) == set(['test', 'Partner'])
 
-        driver.get('http://localhost:5000/production/?database=test')
-        assert driver.find_element_by_class_name('info')\
-                   .find_element_by_tag_name('strong').get_attribute('innerHTML') == '~~~test~~~';
+        page_gemeinsam_add = GemeinsamAdd(driver=driver)
+        page_menu = Menu(driver=driver)
 
-        driver.get('http://localhost:5000/production/?database=Partner')
-        assert driver.find_element_by_class_name('info')\
-                   .find_element_by_tag_name('strong').get_attribute('innerHTML') == '~~~Partner~~~';
+        page_gemeinsam_add.visit()
+        assert page_gemeinsam_add.partner_options() == set(['test', 'Partner'])
+
+        page_menu.change_database('test')
+        assert page_menu.get_title() == '~~~test~~~'
+
+        page_menu.change_database('Partner')
+        assert page_menu.get_title() == '~~~Partner~~~'
         close_driver(driver)
 
     def teste_theme_color(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
 
-        driver.get('http://127.0.0.1:5000/addausgabe/')
-        add_button = driver.find_element_by_id('add')
-        color_before = add_button.value_of_css_property("background-color")
-        assert color_before == 'rgb(0, 172, 214)'
+        page_einzelbuchungen_add = EinzelbuchungAdd(driver=driver)
+        page_configuration = Configuration(driver=driver)
 
-        driver.get('http://127.0.0.1:5000/configuration/')
-        driver.execute_script("document.getElementById('themecolor').setAttribute('value', '#000000')")
-        driver.find_element_by_id('change_themecolor').click()
+        page_einzelbuchungen_add.visit()
+        assert page_einzelbuchungen_add.add_button_color() == 'rgb(0, 172, 214)'
 
-        driver.get('http://127.0.0.1:5000/addausgabe/')
-        add_button = driver.find_element_by_id('add')
-        color_before = add_button.value_of_css_property("background-color")
-        assert color_before == 'rgb(0, 0, 0)'
+        page_configuration.visit()
+        page_configuration.update_theme_color('#000000')
+
+        page_einzelbuchungen_add.visit()
+        assert page_einzelbuchungen_add.add_button_color() == 'rgb(0, 0, 0)'
 
         close_driver(driver)
 

@@ -3,6 +3,7 @@ from datetime import datetime, date
 from butler_offline.core.frequency import get_function_for_name
 from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
+import logging
 
 
 class Dauerauftraege(DatabaseObject):
@@ -57,7 +58,7 @@ class Dauerauftraege(DatabaseObject):
             )
         self.content = pd.concat([self.content, neuer_dauerauftrag], ignore_index=True)
         self.taint()
-        print('DATABASE: Dauerauftrag hinzugefügt')
+        logging.info('DATABASE: Dauerauftrag hinzugefügt')
 
     def aktuelle(self):
         dauerauftraege = self.content.copy()

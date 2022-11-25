@@ -1,5 +1,4 @@
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore import viewcore
 from butler_offline.core import time
 from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
 from butler_offline.viewcore.state import persisted_state
@@ -12,12 +11,13 @@ import gettext
 import pycountry
 import traceback
 from butler_offline.views.sparen import language
+from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
 
 PAGE_NAME = 'uebersicht_etfs'
 
 
 def _handle_request(request):
-    context = viewcore.generate_transactional_context(PAGE_NAME)
+    context = generate_transactional_context(PAGE_NAME)
     if post_action_is(request, 'update_data'):
         context = _update_data(request.values['isin'], context)
     return _generate_content(context)
@@ -168,7 +168,7 @@ def _generate_content(context):
     depotauszuege = persisted_state.database_instance().depotauszuege
     isins = depotwerte.get_valid_isins()
     if not isins:
-        return viewcore.generate_error_context(PAGE_NAME, NO_VALID_ISIN_IN_DB)
+        return generate_error_context(PAGE_NAME, NO_VALID_ISIN_IN_DB)
 
     etfs = []
     for isin in isins:

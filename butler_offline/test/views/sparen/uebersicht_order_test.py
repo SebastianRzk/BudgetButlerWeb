@@ -2,6 +2,7 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
+from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.sparen import uebersicht_order
 from butler_offline.viewcore import request_handler
@@ -27,6 +28,8 @@ def add_test_data():
     order = persisted_state.database_instance().order
     order.add(datum_from_german('01.01.2020'), '1name', '1konto', 'isin1', 100)
     order.add(datum_from_german('02.02.2020'), '2name', '2konto', 'isin1', -200)
+
+    untaint_database(database=persisted_state.database_instance())
 
 
 def test_should_list_order():
@@ -85,7 +88,7 @@ def test_delete():
 def test_delete_should_only_fire_once():
     set_up()
     add_test_data()
-    next_id = request_handler.current_key()
+    next_id = persisted_state.current_database_version()
 
     assert len(persisted_state.database_instance().order.content) == 2
     uebersicht_order.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
