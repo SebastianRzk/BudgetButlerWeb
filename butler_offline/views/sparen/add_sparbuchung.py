@@ -5,12 +5,13 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.views.sparen.language import NO_VALID_SAVINGS_ACCOUNT_IN_DB
 from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
-
+from butler_offline.viewcore.template import fa
 
 EIGENSCHAFT = 'eigenschaft'
 EIGENSCHAFTEN = 'eigenschaften'
 EIGENSCHAFT_EINZAHLUNG = 'Einzahlung'
 EIGENSCHAFT_AUSZAHLUNG = 'Auszahlung'
+
 
 def handle_request(request):
     if not database_instance().sparkontos.get_sparfaehige_kontos():
@@ -34,7 +35,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_sparbuchungen(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'datum': datum_to_german(date),
                     'wert': from_double_to_german(value),
                     'name': request.values['name'],
@@ -51,7 +52,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_sparbuchungen(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'datum': datum_to_german(date),
                     'wert': from_double_to_german(value),
                     'name': request.values['name'],

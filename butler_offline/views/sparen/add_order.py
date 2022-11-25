@@ -5,6 +5,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.template import fa
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -37,7 +38,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_order(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'datum': datum_to_german(date),
                     'wert': from_double_to_german(abs(value)),
                     'name': request.values['name'],
@@ -55,7 +56,7 @@ def handle_request(request):
                 konto=request.values['konto'])
             non_persisted_state.add_changed_order(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'datum': datum_to_german(date),
                     'wert': from_double_to_german(value),
                     'name': request.values['name'],

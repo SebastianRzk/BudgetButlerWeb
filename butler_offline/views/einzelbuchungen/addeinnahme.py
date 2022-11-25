@@ -5,6 +5,7 @@ from butler_offline.viewcore.converter import datum, dezimal_float, from_double_
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.context import generate_transactional_context
+from butler_offline.viewcore.template import fa
 
 
 def handle_request(request):
@@ -25,7 +26,7 @@ def handle_request(request):
                 dezimal_float(request.values['wert']))
             non_persisted_state.add_changed_einzelbuchungen(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'datum': datum_to_german(datum_object),
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],
@@ -41,7 +42,7 @@ def handle_request(request):
                 dezimal_float(request.values['wert']))
             non_persisted_state.add_changed_einzelbuchungen(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'datum': datum_to_german(datum_object),
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],

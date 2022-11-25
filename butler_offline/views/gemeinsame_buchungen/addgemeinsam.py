@@ -5,6 +5,8 @@ from butler_offline.viewcore.converter import from_double_to_german, datum, datu
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.context import generate_transactional_context
+from butler_offline.viewcore.template import fa
+
 
 def handle_request(request):
     if post_action_is(request, 'add'):
@@ -22,7 +24,7 @@ def handle_request(request):
                    )
             non_persisted_state.add_changed_gemeinsamebuchungen(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'datum': datum_to_german(date),
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],
@@ -38,7 +40,7 @@ def handle_request(request):
                   person=request.values['person'])
             non_persisted_state.add_changed_gemeinsamebuchungen(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'datum': datum_to_german(date),
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],

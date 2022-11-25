@@ -3,6 +3,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.template import fa
 
 
 def handle_request(request):
@@ -20,7 +21,7 @@ def handle_request(request):
                 typ=typ)
             non_persisted_state.add_changed_depotwerte(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'Name': name,
                     'Isin': isin,
                     'Typ': typ
@@ -32,7 +33,7 @@ def handle_request(request):
                 typ=typ)
             non_persisted_state.add_changed_depotwerte(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'Name': name,
                     'Isin': isin,
                     'Typ': typ

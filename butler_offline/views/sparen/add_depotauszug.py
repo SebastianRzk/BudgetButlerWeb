@@ -6,6 +6,7 @@ from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 from datetime import date
 from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.template import fa
 
 KEY_WERT = 'wert_'
 
@@ -84,7 +85,7 @@ def handle_request(request):
                                                                konto=konto)
                         non_persisted_state.add_changed_depotauszuege(
                             {
-                                'fa': 'pencil',
+                                'fa': fa.pencil,
                                 'datum': datum_to_german(current_date),
                                 'wert': from_double_to_german(value),
                                 'depotwert': depotwert,
@@ -97,7 +98,7 @@ def handle_request(request):
                                                               konto=konto)
                         non_persisted_state.add_changed_depotauszuege(
                             {
-                                'fa': 'plus',
+                                'fa': fa.plus,
                                 'datum': datum_to_german(current_date),
                                 'wert': from_double_to_german(value),
                                 'depotwert': depotwert,

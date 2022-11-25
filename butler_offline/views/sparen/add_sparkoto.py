@@ -3,6 +3,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.template import fa
 
 
 def handle_request(request):
@@ -18,7 +19,7 @@ def handle_request(request):
                 kontotyp=kontotyp)
             non_persisted_state.add_changed_sparkontos(
                 {
-                    'fa': 'pencil',
+                    'fa': fa.pencil,
                     'Kontoname': kontoname,
                     'Kontotyp': kontotyp
                 })
@@ -29,7 +30,7 @@ def handle_request(request):
                 kontotyp=kontotyp)
             non_persisted_state.add_changed_sparkontos(
                 {
-                    'fa': 'plus',
+                    'fa': fa.plus,
                     'Kontoname': kontoname,
                     'Kontotyp': kontotyp
                     })

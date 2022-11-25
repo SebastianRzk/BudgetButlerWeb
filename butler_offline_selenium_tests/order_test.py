@@ -6,7 +6,7 @@ from butler_offline_selenium_tests.page.sparen.order_add import OrderAdd
 from butler_offline_selenium_tests.page.sparen.depotauszug_add import DepotauszugAdd
 from butler_offline_selenium_tests.page.sparen.orderdauerauftrag_add import OrderDauerauftragAdd
 from butler_offline_selenium_tests.page.sparen.order_uebersicht import OrderUebersicht
-from butler_offline_selenium_tests.page.sparen.depot_uebersicht import DepotUebersicht 
+from butler_offline_selenium_tests.page.sparen.depot_uebersicht import DepotUebersicht
 
 
 class TestUI(SeleniumTestClass):
