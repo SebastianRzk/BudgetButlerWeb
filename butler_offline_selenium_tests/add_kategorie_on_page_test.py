@@ -38,10 +38,12 @@ class TestUI(SeleniumTestClass):
         assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == pagetitle
         close_driver(driver)
 
+
 def verify_no_kategories_defined(driver):
     el = driver.find_element(By.ID, 'kategorie_auswahl')
 
     assert len(el.find_elements(By.TAG_NAME, 'option')) == 0
+
 
 def verify_kategorie_defined(driver, kategorie):
     el = driver.find_element(By.ID, 'kategorie_auswahl')
