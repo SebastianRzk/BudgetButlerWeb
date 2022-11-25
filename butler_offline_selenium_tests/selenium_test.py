@@ -3,10 +3,10 @@ from selenium import webdriver
 import os
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
-from butler_offline_selenium_tests import SeleniumTest
+from butler_offline_selenium_tests import selenium_test
 
-CHROME_CACHE = []
-CHROME_INSTANCES = []
+BROWSER_CACHE = []
+BROWSER_INSTANCES = []
 
 
 class SeleniumTestClass:
@@ -24,11 +24,11 @@ class SeleniumTestClass:
 
 
 def close_driver(driver):
-    if driver in SeleniumTest.CHROME_INSTANCES:
-        SeleniumTest.CHROME_INSTANCES.remove(driver)
+    if driver in selenium_test.BROWSER_INSTANCES:
+        selenium_test.BROWSER_INSTANCES.remove(driver)
 
     if 'TRAVIS_INTEGRATION' in os.environ:
-        SeleniumTest.CHROME_CACHE.append(driver)
+        selenium_test.BROWSER_CACHE.append(driver)
         return
     driver.close()
 
@@ -40,10 +40,10 @@ def _launch_head_firefox():
 
 
 def _launch_headles_firefox():
-    if SeleniumTest.CHROME_CACHE:
-        browser = SeleniumTest.CHROME_CACHE[0]
-        SeleniumTest.CHROME_CACHE.remove(browser)
-        SeleniumTest.CHROME_INSTANCES.append(browser)
+    if selenium_test.BROWSER_CACHE:
+        browser = selenium_test.BROWSER_CACHE[0]
+        selenium_test.BROWSER_CACHE.remove(browser)
+        selenium_test.BROWSER_INSTANCES.append(browser)
         return browser
 
     firefox_options = Options()
@@ -57,7 +57,7 @@ def _launch_headles_firefox():
     profile.set_preference('network.cookie.cookieBehavior', 2)
 
     browser = webdriver.Firefox(options=firefox_options, firefox_profile=profile)
-    SeleniumTest.CHROME_INSTANCES.append(browser)
+    selenium_test.BROWSER_INSTANCES.append(browser)
     return browser
 
 

@@ -1,4 +1,4 @@
-from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
+from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
 from butler_offline_selenium_tests.page.util import content_of, enter_test_mode, define_kategorie
 import logging
 from butler_offline_selenium_tests.page.core.configuration import Configuration

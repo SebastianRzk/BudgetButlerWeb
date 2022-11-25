@@ -1,4 +1,4 @@
-from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
+from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
 from butler_offline_selenium_tests.page.util import enter_test_mode, define_kategorie, get_selected_option
 from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_add import GemeinsamAdd
 from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_uebersicht import GemeinsamUeberischt

@@ -1,4 +1,4 @@
-from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
+from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
 from butler_offline_selenium_tests.page.util import enter_test_mode
 from butler_offline_selenium_tests.page.sparen.depot_add import DepotAdd
 from butler_offline_selenium_tests.page.sparen.depot_uebersicht import DepotUebersicht

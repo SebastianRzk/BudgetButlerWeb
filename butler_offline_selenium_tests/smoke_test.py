@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-from butler_offline_selenium_tests.SeleniumTest import SeleniumTestClass
+from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
 
 
 class TestHeadlines(SeleniumTestClass):
