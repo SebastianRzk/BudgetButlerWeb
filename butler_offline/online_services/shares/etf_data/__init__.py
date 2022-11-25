@@ -3,6 +3,7 @@ from butler_offline.core.shares import sectors
 from butler_offline.core.shares import SharesInfo
 from textwrap import shorten
 import json
+import logging
 
 URL = 'https://api.etf-data.com/product/{isin}'
 SOURCE = 'api.etf-data.com'
@@ -10,7 +11,7 @@ SOURCE = 'api.etf-data.com'
 
 def get_data_for(isin):
     data = json.loads(requester.instance().get(URL.format(isin=isin)))
-    print('loaded etf data:', data)
+    logging.debug('loaded etf data: %s', data)
     return _map_data(data)
 
 

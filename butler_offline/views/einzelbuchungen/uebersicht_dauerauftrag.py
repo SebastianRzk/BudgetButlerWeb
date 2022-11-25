@@ -5,13 +5,14 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_to_german
 import collections
 from butler_offline.viewcore.context import generate_transactional_context
+import logging
 
 
 def _handle_request(request):
     dauerauftraege = persisted_state.database_instance().dauerauftraege
 
     if post_action_is(request, 'delete'):
-        print("Delete: ", request.values['delete_index'])
+        logging.info('Please edit: %s', request.values['delete_index'])
         dauerauftraege.delete(int(request.values['delete_index']))
         return generate_redirect_context('/dauerauftraguebersicht/')
 

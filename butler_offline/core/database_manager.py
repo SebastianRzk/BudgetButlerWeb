@@ -3,6 +3,7 @@ from butler_offline.core import file_system
 from butler_offline.core.database import Database
 from butler_offline.core.configuration_provider import configuration_provider
 import pandas as pd
+import logging
 
 KEYWORD_EINZELBUCHUNGEN = 'Einzelbuchungen'
 KEYWORD_DAUERAUFRTAEGE = 'Dauerauftraege'
@@ -16,8 +17,10 @@ KEYWORD_DEPOTAUSZUEGE = 'Depotauszuege'
 
 KEYWORD_LINEBREAK = '\n'
 
+
 def _to_table(content):
     return pd.read_csv(StringIO(content))
+
 
 def read(nutzername, ausgeschlossene_kategorien):
     if not file_system.instance().read(database_path_from(nutzername)):
@@ -32,41 +35,41 @@ def read(nutzername, ausgeschlossene_kategorien):
     database = Database(nutzername, ausgeschlossene_kategorien=ausgeschlossene_kategorien)
 
     database.einzelbuchungen.parse(_to_table(parser.einzelbuchungen()))
-    print('READER: Einzelbuchungen gelesen')
+    logging.info('READER: Einzelbuchungen gelesen')
 
     database.dauerauftraege.parse(_to_table(parser.dauerauftraege()))
-    print('READER: Daueraufträge gelesen')
+    logging.info('READER: Daueraufträge gelesen')
 
     database.gemeinsamebuchungen.parse(_to_table(parser.gemeinsame_buchungen()))
-    print('READER: Gemeinsame Buchungen gelesen')
+    logging.info('READER: Gemeinsame Buchungen gelesen')
 
     if parser.sparkontos():
         database.sparkontos.parse(_to_table(parser.sparkontos()))
-        print('READER: Sparkontos gelesen')
+        logging.info('READER: Sparkontos gelesen')
 
     if parser.sparbuchungen():
         database.sparbuchungen.parse(_to_table(parser.sparbuchungen()))
-        print('READER: Sparbuchungen gelesen')
+        logging.info('READER: Sparbuchungen gelesen')
 
     if parser.depotwerte():
         database.depotwerte.parse_and_migrate(_to_table(parser.depotwerte()))
-        print('READER: Depotwerte gelesen')
+        logging.info('READER: Depotwerte gelesen')
 
     if parser.order():
         database.order.parse(_to_table(parser.order()))
-        print('READER: Depotwerte gelesen')
+        logging.info('READER: Depotwerte gelesen')
 
     if parser.depotauszuege():
         database.depotauszuege.parse(_to_table(parser.depotauszuege()))
-        print('READER: Depotauszuege gelesen')
+        logging.info('READER: Depotauszuege gelesen')
 
     if parser.order_dauerauftrag():
         database.orderdauerauftrag.parse(_to_table(parser.order_dauerauftrag()))
-        print('READER: Order Dauerauftrag gelesen')
+        logging.info('READER: Order Dauerauftrag gelesen')
 
-    print('READER: Refreshe Database')
+    logging.info('READER: Refreshe Database')
     database.refresh()
-    print('READER: Refresh done')
+    logging.info('READER: Refresh done')
     return database
 
 

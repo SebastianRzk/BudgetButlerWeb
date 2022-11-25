@@ -2,6 +2,7 @@ from butler_offline.core import database_manager, configuration_provider
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.core.shares.shares_manager import load_data
 import random
+import logging
 
 DATABASE_INSTANCE = None
 DATABASES = []
@@ -53,9 +54,9 @@ def _save_refresh():
 def save_tainted():
     db = persisted_state.DATABASE_INSTANCE
     if db.is_tainted():
-        print('Saving database with', db.taint_number(), 'modifications')
+        logging.info('Saving database with %s modifications', db.taint_number())
         _save_refresh()
-        print('Saved')
+        logging.debug('Saved')
 
 
 def current_database_version():

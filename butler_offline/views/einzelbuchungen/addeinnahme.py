@@ -6,7 +6,7 @@ from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.template import fa
-
+import logging
 
 def handle_request(request):
     context = generate_transactional_context('addeinnahme')
@@ -50,7 +50,7 @@ def handle_request(request):
                     })
 
     if post_action_is(request, 'edit'):
-        print('Please edit:', request.values['edit_index'])
+        logging.info('Please edit: %s', request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         selected_item = einzelbuchungen.get(db_index)
         selected_item['Datum'] = datum_to_string(selected_item['Datum'])

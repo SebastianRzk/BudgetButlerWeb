@@ -1,4 +1,5 @@
 from requests.exceptions import ConnectionError
+import logging
 
 
 class RequesterStub:
@@ -11,19 +12,19 @@ class RequesterStub:
         self.auth_cookies = auth_cookies
 
     def post(self, url, data={}, cookies=None):
-        print('-----------------', url)
+        logging.info('-----------------' + url)
         if url in self.mocked_requests:
             self.call_count[url].append(data)
             return self.mocked_requests[url]
-        print('WARNING, NON MATCHING REQUEST:', url, data)
+        logging.error('WARNING, NON MATCHING REQUEST: %s %s', url, data)
         return None
 
     def get(self, url):
-        print('-----------------', url)
+        logging.info('-----------------' + url)
         if url in self.mocked_requests:
             self.call_count[url].append('')
             return self.mocked_requests[url]
-        print('WARNING, NON MATCHING REQUEST:', url)
+        logging.error('WARNING, NON MATCHING REQUEST: %s', url)
         return None
 
     def post_raw(self, url, data):

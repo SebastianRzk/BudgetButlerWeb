@@ -1,4 +1,5 @@
 from butler_offline.viewcore import requester
+import logging
 import requests
 
 INSTANCE = None
@@ -12,32 +13,32 @@ def instance():
 class Requester:
 
     def get(self, server_url):
-        print('requested url', server_url)
+        logging.info('requested url %s', server_url)
         response = requests.get(server_url)
-        print(response, self.decode(response))
+        logging.info(response, self.decode(response))
         response.raise_for_status()
         return self.decode(response)
 
     def post(self, server_url, data={}, cookies=None):
-        print('requested url', server_url, data)
+        logging.info('requested url %s', server_url, data)
         response = requests.post(server_url, data=data, cookies=cookies)
         response.raise_for_status()
         return self.decode(response)
 
     def decode(self, response):
-        print('response:', response)
+        logging.info('response: %s', response)
         decoded_response = response.content.decode("utf-8")
-        print('decoded repsonse:', decoded_response)
+        logging.info('decoded repsonse: %s', decoded_response)
         return decoded_response
 
     def post_raw(self, server_url, data):
-        print('requested url', server_url, data)
+        logging.info('requested url', server_url, data)
         response = requests.post(server_url, data=data)
         response.raise_for_status()
         return response
 
     def put(self, server_url, data, cookies):
-        print('requested url', server_url, data)
+        logging.info('requested url %s %s', server_url, data)
         response = requests.put(url=server_url, json=data, cookies=cookies)
         response.raise_for_status()
         return self.decode(response)

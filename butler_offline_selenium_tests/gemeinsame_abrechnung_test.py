@@ -85,7 +85,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         page_gemeinsam_abrechnen.abrechnen()
 
-        logging.info(page_gemeinsam_abrechnen.abrechnung_result())
+        logging.info(str(page_gemeinsam_abrechnen.abrechnung_result()))
         assert page_gemeinsam_abrechnen.abrechnung_result() == self.test_change_veraeltnis_abrechnung
         close_driver(driver)
 
@@ -168,7 +168,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         page_gemeinsam_abrechnen.abrechnen()
 
-        logging.info(page_gemeinsam_abrechnen.abrechnung_result())
+        logging.info(str(page_gemeinsam_abrechnen.abrechnung_result()))
         assert page_gemeinsam_abrechnen.abrechnung_result() == self.set_limit_abrechnung
         close_driver(driver)
 

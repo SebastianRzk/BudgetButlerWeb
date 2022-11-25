@@ -6,6 +6,7 @@ from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.core import file_system
 from butler_offline.viewcore.converter import datum_from_german as datum
+import logging
 
 
 def leave_debug(request):
@@ -21,6 +22,6 @@ def enter_testmode(request):
     configuration_provider.LOADED_CONFIG = None
     configuration_provider.set_configuration('PARTNERNAME', 'Partner')
     time.stub_today_with(datum('22.01.2019'))
-    print('WARNUNG: ENTERING TESTMODE')
+    logging.warning('WARNUNG: ENTERING TESTMODE')
     return redirect('/', code=301)
 

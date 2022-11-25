@@ -1,10 +1,3 @@
-'''
-Created on 10.05.2017
-
-@author: sebastian
-'''
-
-import unittest
 from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore.context import generate_redirect_context
@@ -13,7 +6,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.test.RequestStubs import PostRequest, GetRequest
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.core import file_system
-
+import logging
 
 def set_up():
     file_system.INSTANCE = FileSystemStub()
@@ -63,7 +56,7 @@ def test_exception():
     request_handler.stub_me()
 
     result = request_handler.handle_request(PostRequest({}), lambda x: raise_error(), 'something_normal')
-    print(result['message_content'])
+    logging.info(str(result['message_content']))
     assert result['message']
     assert result['message_type'] == 'error'
     assert result['message_content'] == 'Ein Fehler ist aufgetreten: <br>\n '

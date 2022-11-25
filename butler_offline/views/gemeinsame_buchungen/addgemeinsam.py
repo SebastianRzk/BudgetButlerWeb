@@ -6,6 +6,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.template import fa
+import logging
 
 
 def handle_request(request):
@@ -51,7 +52,7 @@ def handle_request(request):
     context = generate_transactional_context("addgemeinsam")
     context['approve_title'] = 'Gemeinsame Ausgabe hinzufügen'
     if post_action_is(request, 'edit'):
-        print("Please edit:", request.values['edit_index'])
+        logging.info('Please edit: %s', request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         db_row = database_instance().gemeinsamebuchungen.get(db_index)
         default_item = {

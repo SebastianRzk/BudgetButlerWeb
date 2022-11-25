@@ -8,6 +8,7 @@ from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.gemeinsamebuchungen.abrechnen import abrechnen
+import logging
 
 
 
@@ -45,7 +46,7 @@ class Database:
                self.orderdauerauftrag.taint_number()
 
     def refresh(self):
-        print('DATABASE: Erneuere Datenbestand')
+        logging.info('DATABASE: Erneuere Datenbestand')
         alle_dauerauftragsbuchungen = self.dauerauftraege.get_all_einzelbuchungen_until_today()
         self.einzelbuchungen.append_row(alle_dauerauftragsbuchungen)
 
@@ -61,7 +62,7 @@ class Database:
         anteil_order = self.order.get_dynamische_einzelbuchungen()
         self.einzelbuchungen.append_row(anteil_order)
 
-        print('DATABASE: Datenbestand erneuert')
+        logging.info('DATABASE: Datenbestand erneuert')
 
     def _row_to_dict(self, columns, index, row_data):
         row = {'index': index}
