@@ -8,9 +8,10 @@ function init() {
 
 	$val = $pdo->prepare('select 1 from `einzelbuchungen` LIMIT 1');
 
-	if ( $val->execute() ) {
+	try {
+	    $val->execute();
 	    // db initialized
-	} else {
+	} catch (Exception $e) {
 	    $sql = file_get_contents(__DIR__.'/sql/base.sql');
 	    $pdo->exec($sql);
 	}
