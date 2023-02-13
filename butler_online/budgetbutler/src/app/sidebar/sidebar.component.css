@@ -1,33 +1,34 @@
 
 .desktop-menu {
-    padding: 1ex;
+  padding: 1ex;
 }
 
 .greeter {
-    padding-left: 2ex;
-    width: 100%;
+  padding-left: 2ex;
+  width: 100%;
 }
 
 .navigation-button {
-    width: 100%;
-    text-align: start;
+  width: 100%;
+  display: block;
+  text-align: start;
 }
 
 
 .navigation {
-    padding-top: 3ex;
+  padding-top: 3ex;
 }
 
 h2 {
-    padding: 1ex;
+  padding: 1ex;
 }
 
 mat-drawer {
-    height: 100%;
-    position: fixed;
+  height: 100%;
+  position: fixed;
 }
 
 .open-menu-button {
-    padding: 1ex;
-    width: 100%
+  padding: 1ex;
+  width: 100%
 }

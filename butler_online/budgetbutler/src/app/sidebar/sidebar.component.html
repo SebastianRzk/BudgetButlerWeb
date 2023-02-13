@@ -1,33 +1,42 @@
-<div *ngIf="authService.isLoggedIn" class="menu-element full-height">
-  <div *ngIf="!drawer.opened" class="full-with-on-mobile">
-    <button mat-raised-button type="button" mat-button (click)="drawer.open()" class="open-menu-button full-height">
-      <mat-icon>menu</mat-icon>Menu
-    </button>
-  </div>
-  <mat-drawer-container>
-    <mat-drawer #drawer [(opened)]="opened" mode="side">
-      <p>
-        <button type="button" mat-button (click)="drawer.close()" class="navigation-button full-height">
-          <mat-icon>arrow_back</mat-icon>Menu ausblenden
-        </button>
-      </p>
-
-      <div class="desktop-only">
-        <h2>
-          BudgetButlerWEB
-        </h2>
-        <div class="greeter">Hallo, {{authService.username}}</div>
-      </div>
-      <div class="navigation">
-        <button mat-stroked-button (click)="logout()" class="navigation-button full-height"><mat-icon aria-hidden="false" >logout</mat-icon>Logout</button>
-        <div *ngFor="let menuItem of menu">
-          <button mat-stroked-button class="navigation-button full-height" *ngIf="menuItem.type === 'link'"
-            (click)="navigateTo(menuItem.url, drawer)">
-            <mat-icon aria-hidden="false" >{{menuItem.icon}}</mat-icon>
-            {{menuItem.title}}
+<div *ngIf="user$ | async as user" class="menu-element full-height">
+  <ng-container *ngIf="user.isLoggedIn">
+    <div *ngIf="!drawer.opened" class="full-with-on-mobile">
+      <button (click)="drawer.open()" class="open-menu-button full-height" mat-button mat-raised-button type="button">
+        <mat-icon>menu</mat-icon>
+        Menu
+      </button>
+    </div>
+    <mat-drawer-container>
+      <mat-drawer #drawer [(opened)]="opened" mode="side">
+        <p>
+          <button (click)="drawer.close()" class="navigation-button full-height" mat-button type="button">
+            <mat-icon>arrow_back</mat-icon>
+            Menu ausblenden
           </button>
+        </p>
+        <div class="desktop-only">
+          <h2>
+            BudgetButlerWEB
+            <br>
+            Companion
+          </h2>
+          <div class="greeter">Hallo, {{user.username}}</div>
         </div>
-      </div>
-    </mat-drawer>
-  </mat-drawer-container>
+        <div class="navigation">
+          <button (click)="logout()" class="navigation-button full-height" mat-flat-button>
+            <mat-icon aria-hidden="false">logout</mat-icon>
+            Logout
+          </button>
+          <div *ngFor="let menuItem of menu">
+            <button (click)="navigateTo(menuItem.url, drawer)" *ngIf="menuItem.type === 'link'"
+                    class="navigation-button full-height"
+                    mat-flat-button>
+              <mat-icon aria-hidden="false">{{menuItem.icon}}</mat-icon>
+              {{menuItem.title}}
+            </button>
+          </div>
+        </div>
+      </mat-drawer>
+    </mat-drawer-container>
+  </ng-container>
 </div>

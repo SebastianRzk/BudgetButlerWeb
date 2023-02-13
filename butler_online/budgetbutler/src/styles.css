@@ -26,11 +26,11 @@
 
 
 body {
-  margin: 0px;
+  margin: 0;
 }
 
 
-.app-content{
+.app-content {
   height: 100%;
   min-height: 100vh;
 }
@@ -41,23 +41,23 @@ app-sidebar {
 
 
 @media (min-width: 800px) {
-  .app-content{
+  .app-content {
     display: flex;
     background-color: #f1f1f1;
- }
+  }
 
   .mobile-only {
     display: none;
   }
 
   .erfassung {
-    max-width: 40ex;
+    max-width: 40rem;
     margin: 2ex;
   }
 
   .wide {
     width: 100%;
-    max-width: 80ex;
+    max-width: 80rem;
     margin: 2ex;
   }
 }
@@ -98,10 +98,7 @@ Masken Eigenschaften
   padding-right: 1.5ex;
 }
 
-/*
-Menu item ohne border
-*/
 
-.mat-stroked-button {
-  border: none !important;
+mat-card-header {
+  margin-bottom: 2ex;
 }
