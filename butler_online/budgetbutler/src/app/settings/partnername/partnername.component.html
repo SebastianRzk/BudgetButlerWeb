@@ -1,17 +1,23 @@
 <mat-card class="erfassung">
-  <mat-card-title>Partner konfigurieren</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Partner konfigurieren</mat-card-title>
+  </mat-card-header>
   <mat-card-content>
     <form>
       <mat-form-field class="full-size-form-field">
-        <input matInput placeholder="Partnername" [formControl]="partnerName">
+        <mat-label>Partnername</mat-label>
+        <input [formControl]="partnerName" matInput>
       </mat-form-field>
       <ul>
         <li *ngFor="let message of status">{{message}}</li>
       </ul>
-      <button *ngIf="verknuepfungAktiv" mat-raised-button color="primary" class="full-size-form-field"
-        (click)="onClick()" class="full-size-form-field">Verknüpfung löschen</button>
-      <button *ngIf="verknuepfungAktiv===false" mat-raised-button color="primary" class="full-size-form-field"
-        (click)="onClick()" class="full-size-form-field">Partner speichern</button>
+      <button (click)="onClick()" *ngIf="verknuepfungAktiv" class="full-size-form-field" class="full-size-form-field"
+              color="primary" mat-raised-button>Verknüpfung löschen
+      </button>
+      <button (click)="onClick()" *ngIf="verknuepfungAktiv===false" class="full-size-form-field"
+              class="full-size-form-field"
+              color="primary" mat-raised-button>Partner speichern
+      </button>
     </form>
   </mat-card-content>
 </mat-card>

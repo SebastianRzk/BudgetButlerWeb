@@ -1,13 +1,13 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { GemeinsamebuchungService } from './gemeinsamebuchung.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {GemeinsamebuchungService} from './gemeinsamebuchung.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 describe('GemeinsamebuchungService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [HttpClientTestingModule,
-    MatSnackBarModule]
+      MatSnackBarModule]
   }));
 
   it('should be created', () => {

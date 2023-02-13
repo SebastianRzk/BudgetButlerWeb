@@ -1,21 +1,33 @@
 <mat-card *ngIf="isAdmin | async" class="erfassung">
-  <form [formGroup]="newUserForm" (ngSubmit)="onNewUserSubmit()">
+  <mat-card-header>
     <mat-card-title>Neuen Benutzer erstellen</mat-card-title>
-    <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Nutzername" formControlName="username" required>
-    </mat-form-field>
-    <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Email" formControlName="email" required>
-    </mat-form-field>
-    <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Passwort" [type]="'password'" formControlName="passwort" (change)="computeErrorMesage()" required>
-    </mat-form-field>
-    <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Passwort wiederholen" [type]="'password'" formControlName="passwortWiederholung" (change)="computeErrorMesage()" required>
-    </mat-form-field>
-    <mat-chip-list *ngIf="errorMessage">
-      <mat-chip selected [color]="warn" class="full-size-form-field">{{errorMessage}}</mat-chip>
-    </mat-chip-list>
-    <button mat-raised-button color="primary" class="full-size-form-field" type="submit" class="full-size-form-field" [disabled]="!!errorMessage">Nutzer erstellen</button>
-  </form>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="onNewUserSubmit()" [formGroup]="newUserForm">
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Nutzername</mat-label>
+        <input formControlName="username" matInput required>
+      </mat-form-field>
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Email</mat-label>
+        <input formControlName="email" matInput required>
+      </mat-form-field>
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Passwort</mat-label>
+        <input (change)="computeErrorMesage()" [type]="'password'" formControlName="passwort" matInput required>
+      </mat-form-field>
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Passwort wiederholen</mat-label>
+        <input (change)="computeErrorMesage()" [type]="'password'" formControlName="passwortWiederholung" matInput
+               required>
+      </mat-form-field>
+      <mat-chip-listbox *ngIf="errorMessage">
+        <mat-chip class="full-size-form-field" color="warn" selected>{{errorMessage}}</mat-chip>
+      </mat-chip-listbox>
+      <button [disabled]="!!errorMessage" class="full-size-form-field" class="full-size-form-field" color="primary"
+              mat-raised-button
+              type="submit">Nutzer erstellen
+      </button>
+    </form>
+  </mat-card-content>
 </mat-card>

@@ -1,28 +1,26 @@
-import { Injectable } from '@angular/core';
-
-import { tap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { ApiproviderService } from '../apiprovider.service';
-import { NotificationService } from '../notification.service';
-import { Result, ERROR_LOGIN_RESULT } from '../model';
-import { Observable } from 'rxjs';
-import { ADD_SCHNELLEINSTIEG_ROUTE } from '../app-routes';
-
-
-
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {ApiproviderService} from '../apiprovider.service';
+import {NotificationService} from '../notification.service';
+import {ERROR_LOGIN_RESULT, Result} from '../model';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {ADD_SCHNELLEINSTIEG_ROUTE} from '../app-routes';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn = false;
-  username = '';
-  authToken: AuthContainer;
   redirectUrl = '';
 
-  constructor(private httpClient: HttpClient, private router: Router, private api: ApiproviderService, private notificationService: NotificationService) {
+  private auth = new BehaviorSubject<AuthContainer>(LOGGED_OUT);
+  public readonly auth$ = this.auth.asObservable();
+
+  constructor(private httpClient: HttpClient,
+              private router: Router,
+              private api: ApiproviderService,
+              private notificationService: NotificationService) {
   }
 
   login(username: string, password: string) {
@@ -30,46 +28,49 @@ export class AuthService {
     body.append('email', username);
     body.append('password', password);
 
-    return this.httpClient.post<AuthContainer>(this.api.getUrl('login.php'), body).pipe(
-      tap(
-        data => {
-          if (data != null && data.username) {
-            this.isLoggedIn = true;
-            this.username = data.username;
-            this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
-          } else {
-            this.notificationService.log(ERROR_LOGIN_RESULT, 'Login');
-            this.isLoggedIn = false;
-          }
-        },
-        error => {
-          this.notificationService.log(ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
-          this.isLoggedIn = false;
+    this.httpClient.post<AuthContainer>(this.api.getUrl('login.php'), body).subscribe(
+      data => {
+        if (data != null && data.username) {
+          this.auth.next(
+            {
+              username: data.username,
+              role: 'user',
+              isLoggedIn: true
+            }
+          );
+          this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
+        } else {
+          this.auth.next(LOGGED_OUT);
+          this.notificationService.log(ERROR_LOGIN_RESULT, 'Login');
         }
-      ));
+      },
+      error => {
+        this.notificationService.log(ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
+        this.auth.next(LOGGED_OUT);
+      }
+    );
   }
 
   checkLoginState() {
-    return this.httpClient.get<AuthContainer>(this.api.getUrl('login.php')).pipe(
-      tap(
-        data => {
-          if (data != null) {
-            this.isLoggedIn = true;
-            this.username = data.username;
-            if (this.redirectUrl) {
-              this.router.navigate([this.redirectUrl]);
-            } else {
-              this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
+    this.httpClient.get<AuthContainer | null>(this.api.getUrl('login.php')).subscribe(
+      data => {
+        if (data != null && data.username) {
+          this.auth.next(
+            {
+              username: data.username,
+              role: 'user',
+              isLoggedIn: true
             }
-          } else {
-            this.isLoggedIn = false;
-          }
-        },
-        error => {
-          console.log('Mischt', error);
-          this.isLoggedIn = false;
+          );
+        } else {
+          this.handleLogOut();
         }
-      ));
+      },
+      error => {
+        this.notificationService.log(ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
+        this.handleLogOut();
+      }
+    );
   }
 
   public getLogin: () => Observable<AuthContainer> = () => this.httpClient.get<AuthContainer>(this.api.getUrl('login.php'));
@@ -77,37 +78,43 @@ export class AuthService {
 
   changePassword(oldPassword: string, newPassword: string) {
     const body: ChangePasswordContainer = {
-      oldPassword: oldPassword,
-      newPassword: newPassword
+      oldPassword,
+      newPassword
     };
-    return this.httpClient.post<Result>(this.api.getUrl('changepassword.php'), body).
-      toPromise().then(
-        data => {
-          this.notificationService.handleServerResult(data, 'Passwort ändern');
-        },
-        error => {
-          console.log('Mischt', error);
-          this.isLoggedIn = false;
-        }
-      );
+    return this.httpClient.post<Result>(this.api.getUrl('changepassword.php'), body).toPromise().then(
+      data => {
+        this.notificationService.handleServerResult(data, 'Passwort ändern');
+      },
+      error => {
+        this.handleLogOut();
+      }
+    );
   }
 
 
-  isAdmin = () => this.username === 'admin';
-
   logout(): void {
-    this.httpClient.get(this.api.getUrl('logout.php')).toPromise().then(() => {
-      this.isLoggedIn = false;
-      this.router.navigate(['login']);
+    this.httpClient.get<null>(this.api.getUrl('logout.php')).subscribe(() => {
+      this.handleLogOut();
     });
-    this.isLoggedIn = false;
+  }
+
+  handleLogOut() {
+    this.auth.next(LOGGED_OUT);
+    this.router.navigate(['login']);
   }
 }
 
 export class AuthContainer {
   username: string;
   role: string;
+  isLoggedIn: boolean;
 }
+
+export const LOGGED_OUT: AuthContainer = {
+  username: '',
+  role: '',
+  isLoggedIn: false,
+};
 
 
 class ChangePasswordContainer {

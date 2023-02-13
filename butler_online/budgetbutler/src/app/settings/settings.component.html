@@ -1,20 +1,31 @@
 <mat-card class="erfassung">
-  <form [formGroup]="neuesPasswortForm" (ngSubmit)="changePassword()">
+  <mat-card-header>
     <mat-card-title>Passwort ändern</mat-card-title>
-    <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Altes Passwort" [type]="'password'" formControlName="altesPasswort">
-    </mat-form-field>
-    <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Neues Passwort" [type]="'password'" formControlName="neuesPasswort" (keyup)="computeErrorMesage()">
-    </mat-form-field>
-    <mat-form-field class="full-size-form-field">
-      <input matInput placeholder="Neues Passwort wiederholen" [type]="'password'" formControlName="neuesPasswortWiederholung" (keyup)="computeErrorMesage()">
-    </mat-form-field>
-    <mat-chip-list *ngIf="errorMessage">
-      <mat-chip selected [color]="warn" class="full-size-form-field">{{errorMessage}}</mat-chip>
-    </mat-chip-list>
-    <button mat-raised-button color="primary" class="full-size-form-field" type="submit" class="full-size-form-field" [disabled]="!!errorMessage">Passwort ändern</button>
-  </form>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="changePassword()" [formGroup]="neuesPasswortForm">
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Altes Passwort</mat-label>
+        <input [type]="'password'" formControlName="altesPasswort" matInput>
+      </mat-form-field>
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Neues Passwort</mat-label>
+        <input (keyup)="computeErrorMesage()" [type]="'password'" formControlName="neuesPasswort" matInput>
+      </mat-form-field>
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Neues Passwort wiederholen</mat-label>
+        <input (keyup)="computeErrorMesage()" [type]="'password'" formControlName="neuesPasswortWiederholung"
+               matInput>
+      </mat-form-field>
+      <mat-chip-listbox *ngIf="errorMessage">
+        <mat-chip class="full-size-form-field" color="warn" selected>{{errorMessage}}</mat-chip>
+      </mat-chip-listbox>
+      <button [disabled]="!!errorMessage" class="full-size-form-field" class="full-size-form-field" color="primary"
+              mat-raised-button
+              type="submit">Passwort ändern
+      </button>
+    </form>
+  </mat-card-content>
 </mat-card>
 <app-partnername></app-partnername>
 <app-adduser></app-adduser>

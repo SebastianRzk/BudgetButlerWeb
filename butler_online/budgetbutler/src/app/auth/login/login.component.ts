@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthService} from '../auth.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ADD_SCHNELLEINSTIEG_ROUTE} from '../../app-routes';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -13,21 +15,29 @@ export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
-  })
+  });
 
   hide = true;
 
-  constructor(public authService: AuthService, public router: Router) {}
+
+  constructor(public authService: AuthService, public router: Router) {
+  }
 
 
   ngOnInit() {
-    this.authService.checkLoginState().toPromise().then(() => {});
+    this.authService.auth$.pipe(take(2)).subscribe(status => {
+      if (status.isLoggedIn) {
+        this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
+      }
+    });
+    this.authService.checkLoginState();
   }
 
+
   login() {
-    if (!this.loginForm.valid){
+    if (!this.loginForm.valid) {
       return;
     }
-    this.authService.login(this.loginForm.get('email').value, this.loginForm.get('password').value).toPromise().then(() => {});
+    this.authService.login(this.loginForm.get('email').value, this.loginForm.get('password').value);
   }
 }

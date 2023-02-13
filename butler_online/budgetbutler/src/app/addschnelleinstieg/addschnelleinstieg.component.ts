@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { EinzelbuchungserviceService } from '../einzelbuchungservice.service';
-import { Observable } from 'rxjs';
-import { KategorieService } from '../kategorie.service';
-import { EinzelbuchungAnlegen, GemeinsameBuchungAnlegen } from '../model';
-import { GemeinsamebuchungService } from '../gemeinsamebuchung.service';
-import { AuthService } from '../auth/auth.service';
-import { first } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {EinzelbuchungService} from '../einzelbuchung.service';
+import {Observable} from 'rxjs';
+import {KategorieService} from '../kategorie.service';
+import {EinzelbuchungAnlegen, GemeinsameBuchungAnlegen} from '../model';
+import {GemeinsamebuchungService} from '../gemeinsamebuchung.service';
+import {AuthService} from '../auth/auth.service';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-addschnelleinstieg',
@@ -18,7 +18,7 @@ export class AddschnelleinstiegComponent implements OnInit {
     datum: new FormControl(new Date(), Validators.required),
     name: new FormControl('', Validators.required),
     kategorie: new FormControl('', Validators.required),
-    wert: new FormControl('', Validators.required),
+    wert: new FormControl<number>(null, Validators.required),
     gemeinsameBuchung: new FormControl(false)
   });
 
@@ -26,10 +26,11 @@ export class AddschnelleinstiegComponent implements OnInit {
   personenName: string;
 
   constructor(
-    private einzelbuchungsService: EinzelbuchungserviceService,
+    private einzelbuchungsService: EinzelbuchungService,
     private gemeinsameBuchungenService: GemeinsamebuchungService,
     private authService: AuthService,
-    private kategorieService: KategorieService) { }
+    private kategorieService: KategorieService) {
+  }
 
   ngOnInit() {
     this.kategorien = this.kategorieService.getAll();
@@ -50,8 +51,7 @@ export class AddschnelleinstiegComponent implements OnInit {
         zielperson: this.personenName
       };
       this.gemeinsameBuchungenService.save(neueBuchung);
-    }
-    else {
+    } else {
       const neueBuchung: EinzelbuchungAnlegen = {
         name: this.buchungForm.get('name').value,
         datum: this.buchungForm.get('datum').value,

@@ -1,86 +1,44 @@
 <mat-card class="wide">
-  <mat-card-title>Gemeinsame Buchungen</mat-card-title>
-  <table mat-table [dataSource]="gemeinsamebuchungen" class="desktop-only">
-    <ng-container matColumnDef="Datum">
-      <th mat-header-cell *matHeaderCellDef> Datum </th>
-      <td mat-cell *matCellDef="let element"> {{toLocaleString(element.datum)}}
-      </td>
-    </ng-container>
+  <mat-card-header>
+    <mat-card-title>Gemeinsame Buchungen</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table [dataSource]="gemeinsamebuchungen | async" mat-table>
+      <ng-container matColumnDef="Datum">
+        <th *matHeaderCellDef mat-header-cell> Datum</th>
+        <td *matCellDef="let element" mat-cell> {{toLocaleShortString(element.datum)}}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="Name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Kategorie">
-      <th mat-header-cell *matHeaderCellDef> Kategorie </th>
-      <td mat-cell *matCellDef="let element"> {{element.kategorie}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Person">
-      <th mat-header-cell *matHeaderCellDef> Person </th>
-      <td mat-cell *matCellDef="let element"> {{generatePerson(element)}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Wert">
-      <th mat-header-cell *matHeaderCellDef>
-        <p> Wert </p>
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <p>{{toLocaleWert(element.wert)}}</p>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Aktion">
-      <th mat-header-cell *matHeaderCellDef> Aktion </th>
-      <td mat-cell *matCellDef="let element"> <button (click)="delete(element)">Löschen</button></td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-
-  <table mat-table [dataSource]="gemeinsamebuchungen" class="mobile-only">
-    <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-    <ng-container matColumnDef="Datum">
-      <th mat-header-cell *matHeaderCellDef> Datum </th>
-      <td mat-cell *matCellDef="let element" class="datum-mobile"> {{toLocaleShortString(element.datum)}}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Eigenschaften">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element">
-        <div class="mobile-eigenschaften">
-          <mat-chip-list>
+      <ng-container matColumnDef="Eigenschaften">
+        <th *matHeaderCellDef mat-header-cell> Name</th>
+        <td *matCellDef="let element" mat-cell>
+          <mat-chip-listbox>
             <mat-chip>{{element.name}}</mat-chip>
-            <mat-chip color="primary" selected>{{element.kategorie}}</mat-chip>
-            <mat-chip>{{element.wert}}€</mat-chip>
+            <mat-chip color="primary" highlighted="true">{{element.kategorie}}</mat-chip>
+            <mat-chip>{{element.wert | number: '1.2-2'}}€</mat-chip>
             <mat-chip>
-              <mat-icon>person</mat-icon>{{element.zielperson}}
+              <mat-icon matChipAvatar>person</mat-icon>
+              {{element.zielperson}}
             </mat-chip>
             <mat-chip *ngIf="personIsOther(element)">
-              <mat-icon>edit</mat-icon>von {{element.user}}
+              <mat-icon matChipAvatar>edit</mat-icon>
+              von {{element.user}}
             </mat-chip>
+          </mat-chip-listbox>
+        </td>
+      </ng-container>
 
-          </mat-chip-list>
-        </div>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Aktion">
-      <th mat-header-cell *matHeaderCellDef> Aktion </th>
-      <td mat-cell *matCellDef="let element">
-        <button (click)="delete(element)">
-          <mat-icon aria-hidden="false" aria-label="Löschen=">delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedMobileColumns" class="mobile-headers"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedMobileColumns;"></tr>
-  </table>
-
-
-
+      <ng-container matColumnDef="Aktion">
+        <th *matHeaderCellDef mat-header-cell> Aktion</th>
+        <td *matCellDef="let element" mat-cell>
+          <button (click)="delete(element)">
+            <mat-icon aria-hidden="false" aria-label="Löschen=">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+  </mat-card-content>
 </mat-card>

@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { PartnerService, PartnerInfo } from '../../partner.service';
-import { Validators, FormControl } from '@angular/forms';
+import {Validators, FormControl} from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 @Component({
