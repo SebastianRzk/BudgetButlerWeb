@@ -23,12 +23,7 @@ h2 {
   padding: 1ex;
 }
 
-mat-drawer {
+mat-sidenav {
   height: 100%;
   position: fixed;
-}
-
-.open-menu-button {
-  padding: 1ex;
-  width: 100%
 }

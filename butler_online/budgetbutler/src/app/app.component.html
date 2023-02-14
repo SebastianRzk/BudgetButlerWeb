@@ -1,5 +1,12 @@
-<div class="app-content">
-  <app-sidebar></app-sidebar>
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container [hasBackdrop]="isSmallScreen" autosize>
+  <mat-sidenav (closed)="menuService.close()" *ngIf="user$ | async as user" [mode]="mode"
+               [opened]="opened$ | async">
+
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-sidebar-toggle></app-sidebar-toggle>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 

@@ -1,28 +1,28 @@
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+
+import {SidebarToggleComponent} from './sidebar-toggle.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {TestBed, waitForAsync} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatNativeDateModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatSidenavModule} from '@angular/material/sidenav';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AppComponent} from './app.component';
-import {SidebarComponent} from './sidebar/sidebar/sidebar.component';
-import {RouterTestingModule} from '@angular/router/testing';
 
-describe('AppComponent', () => {
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        SidebarComponent,
-      ],
+describe('SidebarToggleComponent', () => {
+  let component: SidebarToggleComponent;
+  let fixture: ComponentFixture<SidebarToggleComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [SidebarToggleComponent],
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -43,12 +43,13 @@ describe('AppComponent', () => {
       ]
     })
       .compileComponents();
-  }));
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+    fixture = TestBed.createComponent(SidebarToggleComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });
