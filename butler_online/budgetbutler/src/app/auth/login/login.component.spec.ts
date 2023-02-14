@@ -10,7 +10,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SidebarComponent} from 'src/app/sidebar/sidebar.component';
+import {SidebarComponent} from 'src/app/sidebar/sidebar/sidebar.component';
 import {LoginComponent} from './login.component';
 
 

@@ -13,7 +13,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
-import {SidebarComponent} from './sidebar/sidebar.component';
+import {SidebarComponent} from './sidebar/sidebar/sidebar.component';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('AppComponent', () => {

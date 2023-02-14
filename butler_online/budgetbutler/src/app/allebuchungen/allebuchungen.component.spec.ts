@@ -9,7 +9,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
 import {LoginComponent} from '../auth/login/login.component';
-import {SidebarComponent} from '../sidebar/sidebar.component';
+import {SidebarComponent} from '../sidebar/sidebar/sidebar.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
