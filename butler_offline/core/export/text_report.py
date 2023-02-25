@@ -21,9 +21,7 @@ class TextReportWriter:
 
 class TextReportReader:
     def read(self, content):
-        tables = {}
-        tables["sonst"] = ""
-        tables["#######MaschinenimportStart"] = ""
+        tables = {"sonst": "", "#######MaschinenimportStart": ""}
         mode = "sonst"
         logging.debug('textfield content: %s', content)
         for line in content.split('\n'):

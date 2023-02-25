@@ -33,7 +33,7 @@ class TestKonfiguration(unittest.TestCase):
     def test_addKategorie(self):
         self.set_up()
         configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test'}))
-        assert database_instance().einzelbuchungen.get_alle_kategorien() == set(['test'])
+        assert database_instance().einzelbuchungen.get_alle_kategorien() == {'test'}
 
     def test_addKategorie_withRedirect(self):
         self.set_up()
@@ -77,7 +77,7 @@ class TestKonfiguration(unittest.TestCase):
         gemeinsame_buchungen = database_instance().gemeinsamebuchungen
         database_partners = gemeinsame_buchungen.content.Person
 
-        assert set(database_partners) == set(['testpartner_renamed'])
+        assert set(database_partners) == {'testpartner_renamed'}
 
     def test_change_colors(self):
         self.set_up()
