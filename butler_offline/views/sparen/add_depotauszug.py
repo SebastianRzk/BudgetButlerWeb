@@ -46,8 +46,8 @@ def to_item(isin, description, wert):
     }
 
 
-def resolve_description(isin, all):
-    for element in all:
+def resolve_description(isin: str, all_elements) -> str:
+    for element in all_elements:
         if element['isin'] == isin:
             return element['description']
     return None

@@ -50,7 +50,8 @@ def _handle_request(request):
     ergebnis = ''
 
     if set_verhaeltnis != 50:
-        ergebnis += '{self_name} übernimmt einen Anteil von {verhaeltnis}% der Ausgaben.<br>'.format(self_name=name_self, verhaeltnis=set_verhaeltnis)
+        ergebnis += '{self_name} übernimmt einen Anteil von {verhaeltnis}% der Ausgaben.<br>'.format(
+            self_name=name_self, verhaeltnis=set_verhaeltnis)
 
     if is_post_parameter_set(request, 'set_limit'):
         ergebnis_satz = '''Durch das Limit bei {name} von {limit_value} EUR wurde das Verhältnis von {verhaeltnis_alt} auf {verhaeltnis_neu} aktualisiert<br>'''
@@ -62,12 +63,14 @@ def _handle_request(request):
             partner_soll = abs(ausgabe_gesamt * ((100 - set_verhaeltnis) / 100))
             if partner_soll > limit_value:
                 set_verhaeltnis = 100 - abs((limit_value / ausgabe_gesamt) * 100)
-                ergebnis += ergebnis_satz.format(name=name_partner, limit_value = limit_value, verhaeltnis_alt=verhaeltnis_alt, verhaeltnis_neu=set_verhaeltnis)
+                ergebnis += ergebnis_satz.format(name=name_partner, limit_value=limit_value,
+                                                 verhaeltnis_alt=verhaeltnis_alt, verhaeltnis_neu=set_verhaeltnis)
         else:
             self_soll = abs(ausgabe_gesamt * (set_verhaeltnis / 100))
             if self_soll > limit_value:
                 set_verhaeltnis = abs((limit_value / ausgabe_gesamt) * 100)
-                ergebnis += ergebnis_satz.format(name=name_self, limit_value = limit_value, verhaeltnis_alt=verhaeltnis_alt, verhaeltnis_neu=set_verhaeltnis)
+                ergebnis += ergebnis_satz.format(name=name_self, limit_value=limit_value,
+                                                 verhaeltnis_alt=verhaeltnis_alt, verhaeltnis_neu=set_verhaeltnis)
 
     self_soll = (ausgabe_gesamt * (set_verhaeltnis / 100))
     self_diff = self_soll - ausgabe_self
@@ -110,7 +113,7 @@ def _handle_request(request):
     return context
 
 
-def replay_value_if_defined(context, replay_name, request, default=False):
+def replay_value_if_defined(context, replay_name, request, default: bool | object | int = False):
     if is_post_parameter_set(request, replay_name):
         context[replay_name] = request.values[replay_name]
     elif default:
@@ -140,7 +143,7 @@ def _handle_abrechnen_request(request):
         verhaeltnis=int(request.values['set_verhaeltnis']),
         set_self_kategorie=set_self_kategorie,
         set_other_kategorie=set_other_kategorie
-        )
+    )
     context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
 
     return context

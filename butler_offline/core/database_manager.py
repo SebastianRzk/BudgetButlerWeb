@@ -109,7 +109,6 @@ def write(database):
     print("WRITER: All Saved")
 
 
-
 def database_path_from(username):
     return configuration_provider.get_database_path() + '/Database_' + username + '.csv'
 
@@ -117,17 +116,17 @@ def database_path_from(username):
 class DatabaseParser:
     def __init__(self):
         self._reader = MultiPartCsvReader(
-            set([
-                KEYWORD_EINZELBUCHUNGEN,
-                KEYWORD_DAUERAUFRTAEGE,
-                KEYWORD_GEMEINSAME_BUCHUNGEN,
-                KEYWORD_SPARBUCHUNGEN,
-                KEYWORD_SPARKONTOS,
-                KEYWORD_DEPOTWERTE,
-                KEYWORD_ORDER,
-                KEYWORD_DEPOTAUSZUEGE,
-                KEYWORD_ORDERDAUERAUFTRAG
-            ]),
+            {
+                 KEYWORD_EINZELBUCHUNGEN,
+                 KEYWORD_DAUERAUFRTAEGE,
+                 KEYWORD_GEMEINSAME_BUCHUNGEN,
+                 KEYWORD_SPARBUCHUNGEN,
+                 KEYWORD_SPARKONTOS,
+                 KEYWORD_DEPOTWERTE,
+                 KEYWORD_ORDER,
+                 KEYWORD_DEPOTAUSZUEGE,
+                 KEYWORD_ORDERDAUERAUFTRAG
+            },
             start_token=KEYWORD_EINZELBUCHUNGEN)
 
     def from_string(self, lines):

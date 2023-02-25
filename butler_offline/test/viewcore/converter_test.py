@@ -35,7 +35,7 @@ class TesteConverter(unittest.TestCase):
     def test_german_to_rfc(self):
         assert german_to_rfc('13.12.2014') == '2014-12-13'
 
-    def test_fromDoubleToGerman(self):
+    def test_from_double_to_german(self):
         result = from_double_to_german(3.444)
         assert result == "3,44"
 
