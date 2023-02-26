@@ -215,7 +215,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert uebertragene_buchung['Kategorie'] == 'some kategorie'
         assert uebertragene_buchung['Wert'] == '-50.00'
 
-        uebertragene_buchung = db.einzelbuchungen.get(1)
         assert ausgleichsbuchung['Name'] == 'Ausgleich'
         assert ausgleichsbuchung['Datum'] == datum('17.03.2017')
         assert ausgleichsbuchung['Kategorie'] == 'Ausgleich'
@@ -229,7 +228,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         time.stub_today_with(datum('01.01.2010'))
         db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-        abrechnungs_text = db.abrechnen(
+        db.abrechnen(
             mindate=datum('17.03.2017'),
             maxdate=datum('17.03.2017'),
             set_ergebnis='%Ergebnis%',

@@ -28,7 +28,7 @@ def _handle_request(request):
             datum_alt = row.Datum
         if not konto_alt:
             konto_alt = row.Konto
-        if index_alt == None:
+        if index_alt is None:
             index_alt = row_index
 
         if datum_alt != row.Datum or konto_alt != row.Konto:

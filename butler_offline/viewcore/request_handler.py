@@ -64,7 +64,7 @@ def take_action(request, request_action):
     context = generate_base_context('Fehler')
     try:
         context = request_action(request)
-    except ConnectionError as err:
+    except ConnectionError as _:
         set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
         context[ERROR_KEY] = ''
     except Exception as e:
