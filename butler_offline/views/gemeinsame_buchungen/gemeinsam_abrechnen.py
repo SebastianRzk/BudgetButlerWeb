@@ -1,4 +1,3 @@
-import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.viewcore import name_of_partner

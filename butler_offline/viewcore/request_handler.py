@@ -1,4 +1,3 @@
-
 from flask import redirect
 from requests.exceptions import ConnectionError
 
@@ -13,8 +12,8 @@ import logging
 from butler_offline.viewcore import template
 from butler_offline.viewcore.template import renderer_instance
 
-REDIRECTOR = lambda x: redirect(x, code=301)
 
+REDIRECTOR = lambda x: redirect(x, code=301)
 
 
 def handle_request(request, request_action, html_base_page):

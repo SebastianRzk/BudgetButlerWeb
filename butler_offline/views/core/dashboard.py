@@ -1,6 +1,3 @@
-from datetime import date
-
-import butler_offline.viewcore.context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.context import generate_base_context
 from butler_offline.viewcore import request_handler
