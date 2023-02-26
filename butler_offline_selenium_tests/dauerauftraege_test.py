@@ -36,7 +36,7 @@ class TestUI(SeleniumTestClass):
         page_dauerauftrag_add.add('2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
         page_dauerauftrag_uebersicht.visit()
-        assert page_dauerauftrag_uebersicht.get_row(id=2) == {
+        assert page_dauerauftrag_uebersicht.get_row(row_id=2) == {
             'id': '2',
             'name': '2name',
             'kategorie': '2test_kategorie',
