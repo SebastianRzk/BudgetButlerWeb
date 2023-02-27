@@ -1,4 +1,4 @@
-class StringWriter():
+class StringWriter:
 
     def __init__(self):
         self.value = ""

@@ -74,8 +74,6 @@ def take_action(request, request_action):
     return context
 
 
-
-
 def stub_me():
     template.RENDERER = RendererStub()
     request_handler.REDIRECTOR = lambda x: x
@@ -86,12 +84,12 @@ def stub_me_theme():
     request_handler.REDIRECTOR = lambda x: x
 
 
-class RendererStub():
+class RendererStub:
     def render(self, template, **context):
         return context
 
 
-class RendererThemeStub():
+class RendererThemeStub:
     def render(self, template, **context):
         if not 'content' in context:
             return template

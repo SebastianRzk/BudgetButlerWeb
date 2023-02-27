@@ -1,4 +1,3 @@
-import unittest
 from datetime import timedelta
 from butler_offline.core import time
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
@@ -15,6 +14,7 @@ def test_add_should_add():
     assert component_under_test.content.Depotwert[0] == 'demoisin'
     assert component_under_test.content.Konto[0] == 'demokonto'
     assert component_under_test.content.Wert[0] == 100
+
 
 def test_edit_should_edit():
     component_under_test = Depotauszuege()
@@ -71,10 +71,10 @@ def test_resolve_index():
     component_under_test.add(datum('02.01.2020'), 'demoisin2', '1demokonto', 200)
     component_under_test.add(datum('01.01.2020'), 'demoisin', '2demokonto', 300)
 
-    component_under_test.resolve_index(datum('01.01.2020'), '1demokonto', 'demoisin') == 0
-    component_under_test.resolve_index(datum('02.01.2020'), '1demokonto', 'demoisin') == 1
-    component_under_test.resolve_index(datum('02.01.2020'), '1demokonto', 'demoisin2') == 2
-    component_under_test.resolve_index(datum('01.01.2020'), '2demokonto', 'demoisin') == 3
+    assert component_under_test.resolve_index(datum('01.01.2020'), '1demokonto', 'demoisin') == 0
+    assert component_under_test.resolve_index(datum('02.01.2020'), '1demokonto', 'demoisin') == 2
+    assert component_under_test.resolve_index(datum('02.01.2020'), '1demokonto', 'demoisin2') == 3
+    assert component_under_test.resolve_index(datum('01.01.2020'), '2demokonto', 'demoisin') == 1
 
 
 def test_get_latest_datum_by():
@@ -101,6 +101,7 @@ def test_exists_wert():
     component_under_test.add(datum('01.01.2020'), 'isin1', 'konto1', 100)
 
     assert component_under_test.exists_wert(depotwert='isin1', konto='konto1')
+
 
 def test_get_kontostand_by_with_empty_should_return_zero():
     component_under_test = Depotauszuege()
@@ -171,7 +172,6 @@ def test_select_max_year():
 def test_delete_depotauszug():
     component_under_test = Depotauszuege()
 
-
     component_under_test.add(datum('01.01.2020'), '1isin', '1demokonto', 1)
     component_under_test.add(datum('03.01.2020'), '2isin', '2demokonto', 2)
     component_under_test.add(datum('03.01.2020'), '3isin', '2demokonto', 3)
@@ -225,7 +225,3 @@ def test_get_isins_invested_by_should_filter_invalid_isins():
     component_under_test.add(time.today(), 'too_short', '2demokonto', 333)
 
     assert component_under_test.get_isins_invested_by() == ['isin_1234567']
-
-
-if __name__ == '__main__':
-    unittest.main()

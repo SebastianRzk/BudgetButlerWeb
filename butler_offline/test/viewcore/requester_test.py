@@ -12,6 +12,6 @@ class RequesterTest(unittest.TestCase):
         assert requester.decode(response) == 'test'
 
 
-class TestReponse():
+class TestReponse:
     pass
 

@@ -16,7 +16,7 @@ class SelectorTest(unittest.TestCase):
         assert datum('01.01.2017') in set(result.Datum)
         assert datum('01.12.2017') in set(result.Datum)
         assert result.Wert.sum() == 10
-        assert set(['kat1', 'kat2']) == set(result.Kategorie)
+        assert {'kat1', 'kat2'} == set(result.Kategorie)
 
     def test_sum_kategorien_monthly(self):
         component_under_test = Einzelbuchungen()
@@ -31,7 +31,6 @@ class SelectorTest(unittest.TestCase):
     def test_inject_zeroes_for_year_and_kategories_wothNoValues_shouldInjectZeroes(self):
         component_under_test = Einzelbuchungen()
         assert component_under_test.select().inject_zeroes_for_year_and_kategories(2017).sum() == 0
-
 
     def test_injectZeros_shouldInjectZeroes(self):
         component_under_test = Einzelbuchungen()
@@ -141,7 +140,9 @@ class SelectorTest(unittest.TestCase):
         assert component_under_test.select().group_by_kategorie().Wert.tolist() == [-20, 8]
         assert component_under_test.select().group_by_kategorie().index.tolist() == ['A', 'B']
 
+
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+
 
 class GemeinsamSelectorTest(unittest.TestCase):
     def test_selectRange_withEntriesContainigMatchingDates_shouldReturnEntries(self):
