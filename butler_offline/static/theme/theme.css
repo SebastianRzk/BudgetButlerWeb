@@ -228,7 +228,6 @@ a:focus {
 
 a {
     color: #444;
-    padding: 1ex;
 }
 
 a > .fa {
@@ -238,10 +237,14 @@ a > .fa {
 button {
     background-color: var(--main-color);
     color: #FFF;
+}
+
+button, .btn-light {
     border-radius: 0.3rem;
     transition-duration: 0.5s;
     padding: 1ex;
 }
+
 
 button:hover {
     background-color: #FFF;
@@ -254,8 +257,6 @@ button:hover {
     border: 1px solid #ccc;
     font-size: 12px;
     line-height: 1.5;
-    border-radius: 0.3rem;
-    transition-duration: 0.5s;
 }
 
 .btn-light:hover {
@@ -284,7 +285,7 @@ button:hover {
 .content-area {
     display: grid;
     grid-template-rows: 6ex 5ex auto;
-    grid-template-columns: 30ex auto 6ex;
+    grid-template-columns: 33ex auto 6ex;
     grid-column-gap: 5vh;
 }
 
@@ -580,4 +581,8 @@ tr:hover {
 
 table, thead, tr, td, th{
     border:none;
+}
+
+.sidebar-menu > li > ul {
+    padding-left: 1.5rem;
 }
