@@ -7,6 +7,12 @@
 !*/
 @import '/theme/';
 
+@font-face {
+  font-family: fira;
+  src: url('/static/theme/FiraSans-Regular.woff2');
+}
+
+
 html,
 body {
     min-height: 100%;
@@ -16,26 +22,9 @@ body {
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: 'fira';
     overflow-x: hidden;
     overflow-y: auto;
-}
-
-/* H1 - H6 font */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-    font-family: 'Source Sans Pro', sans-serif;
 }
 
 /* General Links */
@@ -147,17 +136,21 @@ a:focus {
 
 .box-header {
     color: #444;
-    display: block;
+    display: flex;
     padding: 5px;
     position: relative;
 }
 
-.box-header > .fa,
 .box-header .box-title {
-    display: inline-block;
+    display: flex;
     font-size: 18px;
     margin: 0;
     line-height: 1;
+    align-items: center;
+}
+
+.box-header > .pull-right {
+    margin-left: auto;
 }
 
 .box-body {
@@ -191,6 +184,10 @@ a:focus {
     background-color: #ffffff;
 }
 
+.box-footer > button {
+    width: 100%
+}
+
 
 
 /*
@@ -198,12 +195,8 @@ a:focus {
  * ----------------
  */
 .table > thead > tr > th,
-.table > tbody > tr > th,
-.table > tfoot > tr > th,
-.table > thead > tr > td,
-.table > tbody > tr > td,
-.table > tfoot > tr > td {
-    border-top: 1px solid #f4f4f4;
+.table > thead > tr > td {
+    border-bottom: 1px solid #f4f4f4;
 }
 
 .table > thead > tr > th {
@@ -235,18 +228,24 @@ a:focus {
 
 a {
     color: #444;
+    padding: 1ex;
+}
+
+a > .fa {
+    margin-right: 0.4ex;
 }
 
 button {
     background-color: var(--main-color);
     color: #FFF;
-    border-radius: 0.2ex !important;
+    border-radius: 0.3rem;
     transition-duration: 0.5s;
+    padding: 1ex;
 }
 
 button:hover {
     background-color: #FFF;
-    color: var(--main-color) !important;
+    color: var(--main-color);
 }
 
 .btn-light {
@@ -255,7 +254,7 @@ button:hover {
     border: 1px solid #ccc;
     font-size: 12px;
     line-height: 1.5;
-    border-radius: 0.1ex;
+    border-radius: 0.3rem;
     transition-duration: 0.5s;
 }
 
@@ -464,6 +463,7 @@ textarea {
     padding-top: 3ex;
     width: 100%;
 }
+
 .main_menu_uebersicht {
     cursor: pointer;
     display: block;
@@ -570,10 +570,14 @@ label {
     padding-right: 2ex;
 }
 
-.hover-table tr:hover {
-    background-color: lightgray;
+tr:hover {
+    background-color: rgb(240, 240, 240);
 }
 
 .has-shadow {
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.05);
+}
+
+table, thead, tr, td, th{
+    border:none;
 }
