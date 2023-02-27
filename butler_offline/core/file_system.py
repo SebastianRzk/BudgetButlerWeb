@@ -6,7 +6,7 @@ INSTANCE = None
 
 
 def instance():
-    if file_system.INSTANCE == None:
+    if file_system.INSTANCE is None:
         file_system.INSTANCE = FileSystemImpl()
     return file_system.INSTANCE
 

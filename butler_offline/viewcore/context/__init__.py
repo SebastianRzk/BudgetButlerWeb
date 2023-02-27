@@ -1,7 +1,3 @@
-
-'''
-New implementation
-'''
 from butler_offline.viewcore.menu import get_key_for_name, get_name_from_key, get_menu_list
 from butler_offline.viewcore.state import persisted_state
 

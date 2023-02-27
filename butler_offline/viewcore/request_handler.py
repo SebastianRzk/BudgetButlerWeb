@@ -1,4 +1,3 @@
-
 from flask import redirect
 from requests.exceptions import ConnectionError
 
@@ -13,8 +12,8 @@ import logging
 from butler_offline.viewcore import template
 from butler_offline.viewcore.template import renderer_instance
 
-REDIRECTOR = lambda x: redirect(x, code=301)
 
+REDIRECTOR = lambda x: redirect(x, code=301)
 
 
 def handle_request(request, request_action, html_base_page):
@@ -64,7 +63,7 @@ def take_action(request, request_action):
     context = generate_base_context('Fehler')
     try:
         context = request_action(request)
-    except ConnectionError as err:
+    except ConnectionError as _:
         set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
         context[ERROR_KEY] = ''
     except Exception as e:
@@ -73,8 +72,6 @@ def take_action(request, request_action):
         traceback.print_exc()
         context[ERROR_KEY] = ''
     return context
-
-
 
 
 def stub_me():
@@ -87,12 +84,12 @@ def stub_me_theme():
     request_handler.REDIRECTOR = lambda x: x
 
 
-class RendererStub():
+class RendererStub:
     def render(self, template, **context):
         return context
 
 
-class RendererThemeStub():
+class RendererThemeStub:
     def render(self, template, **context):
         if not 'content' in context:
             return template

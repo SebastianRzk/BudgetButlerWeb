@@ -1,10 +1,5 @@
-'''
-Created on 30.09.2017
 
-@author: sebastian
-'''
-
-class GetRequest():
+class GetRequest:
     method = "GET"
     values = {}
     POST = {}

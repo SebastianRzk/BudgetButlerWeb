@@ -1,6 +1,6 @@
-import json
 import pandas as pd
 from datetime import datetime
+
 
 class JSONReport:
     def dataframe_from_json(self, json_data):

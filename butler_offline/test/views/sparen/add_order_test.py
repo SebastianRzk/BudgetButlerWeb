@@ -1,5 +1,3 @@
-import unittest
-
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.test.database_util import untaint_database

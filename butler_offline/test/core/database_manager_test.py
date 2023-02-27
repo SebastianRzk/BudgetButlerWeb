@@ -7,55 +7,59 @@ from butler_offline.core import file_system
 from butler_offline.test.core.file_system_stub import FileSystemStub
 
 
-class DatabaseManagerTest(unittest.TestCase):
+def mock_filesystem():
+    file_system.INSTANCE = FileSystemStub()
 
-    def mock_filesystem(self):
-        file_system.INSTANCE = FileSystemStub()
 
-    def write_db_file_stub(self,name, stub):
-        file_system.instance().write('../Database_' + name + '.csv', stub)
+def write_db_file_stub(name, stub):
+    file_system.instance().write('../Database_' + name + '.csv', stub)
 
-    def test_database_path_from(self):
-        assert database_manager.database_path_from('TestUser') == '../Database_TestUser.csv'
 
-    def teste_read_with_full_database(self):
-        self.mock_filesystem()
-        self.write_db_file_stub('testuser', self.full_db)
+def test_database_path_from():
+    assert database_manager.database_path_from('TestUser') == '../Database_TestUser.csv'
 
-        database = database_manager.read('testuser', set())
 
-        assert database.name == 'testuser'
-        assert len(database.einzelbuchungen.content) == 25
-        assert len(database.einzelbuchungen.content[database.einzelbuchungen.content.Dynamisch == False]) == 2
-        assert database.einzelbuchungen.select().sum() == -675
+def teste_read_with_full_database():
+    mock_filesystem()
+    write_db_file_stub('testuser', full_db)
 
-        assert len(database.dauerauftraege.content) == 2
-        assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
+    database = database_manager.read('testuser', set())
 
-        assert len(database.depotwerte.content) == 1
-        assert len(database.order.content) == 3
-        assert len(database.depotauszuege.content) == 1
-        assert len(database.orderdauerauftrag.content) == 1
+    assert database.name == 'testuser'
+    assert len(database.einzelbuchungen.content) == 25
+    assert len(database.einzelbuchungen.content[database.einzelbuchungen.content.Dynamisch == False]) == 2
+    assert database.einzelbuchungen.select().sum() == -675
 
-    def teste_write_with_full_database(self):
-        self.mock_filesystem()
-        self.write_db_file_stub('testuser', self.full_db)
+    assert len(database.dauerauftraege.content) == 2
+    assert database.dauerauftraege.content.Kategorie.tolist() == ['Essen', 'Miete']
 
-        database = database_manager.read('testuser', set())
-        database_manager.write(database)
+    assert len(database.depotwerte.content) == 1
+    assert len(database.order.content) == 3
+    assert len(database.depotauszuege.content) == 1
+    assert len(database.orderdauerauftrag.content) == 1
 
-        assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
 
-    def teste_write_with_old_database_should_migrate(self):
-        self.mock_filesystem()
-        self.write_db_file_stub('testuser', self.full_db_old)
+def teste_write_with_full_database():
+    mock_filesystem()
+    write_db_file_stub('testuser', full_db)
 
-        database = database_manager.read('testuser', set())
-        database_manager.write(database)
+    database = database_manager.read('testuser', set())
+    database_manager.write(database)
 
-        assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(self.full_db)
+    assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(full_db)
 
-    full_db_old = '''Datum,Kategorie,Name,Wert,Tags
+
+def teste_write_with_old_database_should_migrate():
+    mock_filesystem()
+    write_db_file_stub('testuser', full_db_old)
+
+    database = database_manager.read('testuser', set())
+    database_manager.write(database)
+
+    assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(full_db)
+
+
+full_db_old = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
 2017-11-11,Essen,Nochwas,-1.0,[]
 
@@ -87,7 +91,7 @@ Datum,Depotwert,Konto,Wert
 stechzeiten...
 '''
 
-    full_db = '''Datum,Kategorie,Name,Wert,Tags
+full_db = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
 2017-11-11,Essen,Nochwas,-1.0,[]
 
@@ -133,7 +137,7 @@ class MultiPartCsvReaderTest(unittest.TestCase):
             'B', '3,4', '4,5'
         ]
 
-        reader = MultiPartCsvReader(set(['A', 'B', 'C']), 'A')
+        reader = MultiPartCsvReader({'A', 'B', 'C'}, 'A')
         reader.from_string(test_content)
 
         assert reader.get_string('A') == '1,2\n2,3\n3,4'

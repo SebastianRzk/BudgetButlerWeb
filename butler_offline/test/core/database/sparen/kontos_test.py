@@ -47,7 +47,7 @@ class KontosTest(unittest.TestCase):
 
         result = component_under_test.get_sparfaehige_kontos()
 
-        assert set(result) == set(['Geno', 'Spar'])
+        assert set(result) == {'Geno', 'Spar'}
 
     def test_get_depot(self):
         component_under_test = Kontos()
@@ -58,7 +58,7 @@ class KontosTest(unittest.TestCase):
 
         result = component_under_test.get_depots()
 
-        assert set(result) == set(['Depot'])
+        assert set(result) == {'Depot'}
 
 
 if __name__ == '__main__':

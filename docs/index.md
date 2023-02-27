@@ -51,7 +51,7 @@
 
 ### Systemvoraussetzungen
 
-* Python 3.9
+* Python 3.10+
 * Pip
 * Moderner Webbrowser (z.B. Firefox oder Chromium)
 * Startup-Skript: shell, curl, Chromium
@@ -96,18 +96,23 @@ BudgetButlerWeb aktualisieren:
 ## Umgebungsvariablen
 
 
-| Wert | Default | Beschreibung |
-|------| ------- | ------------ |
-| BUDGETBUTLERWEB_DATABASE_PATH | .. | Ordner an dem die Datenbanken gesucht werden sollen. |
-| BUDGETBUTLERWEB_CONFIG_PATH | .. | Ordner an dem die Configuration gesucht werden soll. |
+| Wert                          | Default | Beschreibung                                         |
+|-------------------------------|---------|------------------------------------------------------|
+| BUDGETBUTLERWEB_DATABASE_PATH | ..      | Ordner an dem die Datenbanken gesucht werden sollen. |
+| BUDGETBUTLERWEB_CONFIG_PATH   | ..      | Ordner an dem die Configuration gesucht werden soll. |
 
 
 ## Begleiter Web-App:
 
 ### Systemanfoderungen zum Build
 
+
+Entweder:
 * npm
 * composer + php 8+
+
+oder:
+* docker
 
 ### Systemanforderung für den Betrieb:
 

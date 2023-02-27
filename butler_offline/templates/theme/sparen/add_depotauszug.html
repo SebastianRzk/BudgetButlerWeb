@@ -10,20 +10,15 @@
 			<div class="box-body">
 				<div class="form-group">
 					<label>Datum:</label>
-					<div class="input-group">
-						<div class="input-group-addon">
-							<span class="fa fa-calendar"></span>
-						</div>
-						<input value="{{konto.datum}}"
-							   {% if bearbeitungsmodus %}
-							   disabled
-							   {% endif %}
-							   type="date" min="2000-01-01" max="2030-12-31" name="datum_{{konto.konto}}" class="form-control" required="required" autofocus="autofocus"/>
-							   {% if bearbeitungsmodus %}
-								<input type="hidden" name="edit_index" value="{{edit_index}}">
-								<input type="hidden" name="datum" value="{{konto.datum}}">
-						       {% endif %}
-					</div>
+					<input value="{{konto.datum}}"
+						   {% if bearbeitungsmodus %}
+						   disabled
+						   {% endif %}
+						   type="date" min="2000-01-01" max="2030-12-31" name="datum_{{konto.konto}}" class="form-control" required="required" autofocus="autofocus"/>
+						   {% if bearbeitungsmodus %}
+							<input type="hidden" name="edit_index" value="{{edit_index}}">
+							<input type="hidden" name="datum" value="{{konto.datum}}">
+						   {% endif %}
 				</div>
 				{% for item in konto.filled_items%}
 				<div class="form-group">

@@ -6,6 +6,7 @@ from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME, \
     FREQUENCY_HALBJAEHRLICH_NAME,\
     FREQUENCY_JAEHRLICH_NAME
 from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.core.database.database_object import row_to_dict
 
 
 def test_add_should_taint():
@@ -416,3 +417,26 @@ def test_get_einzelbuchungen_until_today_should_use_end_of_month_when_overflow()
     assert second_row.Kategorie == 'some kategorie'
     assert second_row.Name == 'some name'
     assert second_row.Wert == 1.23
+
+
+def test_get_all_einzelbuchungen_until_today_should_return_element_with_empty_tag_list():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        datum('31.1.2010'),
+        datum('2.2.2010'),
+        'some kategorie',
+        'some name',
+        FREQUENCY_MONATLICH_NAME,
+        1.23)
+
+    result = component_under_test.get_all_einzelbuchungen_until_today()
+
+    row = result.iloc[0]
+
+    assert row.Datum == datum('31.1.2010')
+    assert row.Kategorie == 'some kategorie'
+    assert row.Name == 'some name'
+    assert row.Wert == 1.23
+    assert row.Dynamisch
+    assert row.Tags == []
+

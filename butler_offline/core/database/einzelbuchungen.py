@@ -76,9 +76,6 @@ class Einzelbuchungen(DatabaseObject):
         return self.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien).union(self.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien))
 
     def get_kategorien_ausgaben(self, hide_ausgeschlossene_kategorien=False):
-        '''
-        returns all imported kategorien
-        '''
         kategorien = set(self.content[self.content.Wert < 0].Kategorie)
         if self.tmp_kategorie:
             kategorien.add(self.tmp_kategorie)
@@ -89,9 +86,6 @@ class Einzelbuchungen(DatabaseObject):
         return kategorien
 
     def get_kategorien_einnahmen(self, hide_ausgeschlossene_kategorien=False):
-        '''
-        returns all imported kategorien
-        '''
         kategorien = set(self.content[self.content.Wert > 0].Kategorie)
         if self.tmp_kategorie:
             kategorien.add(self.tmp_kategorie)
@@ -119,7 +113,7 @@ class Einzelbuchungen(DatabaseObject):
             return {}
         monats_teiler = 12
         if min_year == jahr:
-            monats_teiler = 13 - (min(self.content.Datum).month)
+            monats_teiler = 13 - min(self.content.Datum).month
         if jahr == today.year:
             data.DatumBackup = data.DatumBackup.map(lambda x: x.month)
             data = data[data.DatumBackup != today.month]

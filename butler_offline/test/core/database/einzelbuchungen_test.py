@@ -1,8 +1,3 @@
-'''
-Created on 11.08.2017
-
-@author: sebastian
-'''
 from datetime import date
 import unittest
 
@@ -85,8 +80,9 @@ class EinzelbuchungenTest(unittest.TestCase):
         component_under_test.edit(0, datum('15.01.2017'), 'some other kategorie', 'some other name', 2.65)
 
         assert len(component_under_test.content) == 3
-        assert set(component_under_test.content.Name) == set(['1name', '2name', 'some other name'])
-        assert set(component_under_test.content.Datum) == set([datum('02.01.2017'), datum('03.01.2017'), datum('15.01.2017')])
+        assert set(component_under_test.content.Name) == {'1name', '2name', 'some other name'}
+        assert set(component_under_test.content.Datum) == {datum('02.01.2017'), datum('03.01.2017'),
+                                                           datum('15.01.2017')}
 
         changed_row = component_under_test.content[component_under_test.content.Datum == datum('15.01.2017')]
         changed_row.reset_index(drop=True, inplace=True)
@@ -217,7 +213,7 @@ class gesamtausgaben_jahr(unittest.TestCase):
 
         result = component_under_test.get_jahresausgaben_nach_kategorie_prozentual(2015)
 
-        assert set(result.keys()) == set(['kategorie 1'])
+        assert set(result.keys()) == {'kategorie 1'}
         assert  result['kategorie 1'] == 100.00
 
     def test_getJahresausgabenNachKategorieProzentual_withTwoEntrys_shouldReturnResult(self):
@@ -227,7 +223,7 @@ class gesamtausgaben_jahr(unittest.TestCase):
 
         result = component_under_test.get_jahresausgaben_nach_kategorie_prozentual(2015)
 
-        assert set(result.keys()) == set(['kategorie 1', 'kategorie 2'])
+        assert set(result.keys()) == {'kategorie 1', 'kategorie 2'}
         assert  result['kategorie 1'] == 75.00
         assert  result['kategorie 2'] == 25.00
 
@@ -286,31 +282,32 @@ class kategorien_selector(unittest.TestCase):
 
     def test_schliesse_kategorien_aus_ausgaben(self):
         component_under_test = Einzelbuchungen()
-        component_under_test.ausgeschlossene_kategorien = set(['NeinEins'])
+        component_under_test.ausgeschlossene_kategorien = {'NeinEins'}
         component_under_test.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', -10)
         component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', -10)
         component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
 
-        assert component_under_test.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True) == set(['JaEins', 'JaZwei'])
-
+        assert component_under_test.get_kategorien_ausgaben(hide_ausgeschlossene_kategorien=True) == {'JaEins',
+                                                                                                      'JaZwei'}
 
     def test_schliesse_kategorien_aus_einnahmen(self):
         component_under_test = Einzelbuchungen()
-        component_under_test.ausgeschlossene_kategorien = set(['NeinEins'])
+        component_under_test.ausgeschlossene_kategorien = {'NeinEins'}
         component_under_test.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', 10)
         component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', 10)
         component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', 10)
 
-        assert component_under_test.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien=True) == set(['JaEins', 'JaZwei'])
+        assert component_under_test.get_kategorien_einnahmen(hide_ausgeschlossene_kategorien=True) == {'JaEins',
+                                                                                                       'JaZwei'}
 
 
 
     def test_schliesse_kategorien_aus_allen_buchungen(self):
         component_under_test = Einzelbuchungen()
-        component_under_test.ausgeschlossene_kategorien = set(['NeinEins', 'NeinZwei'])
+        component_under_test.ausgeschlossene_kategorien = {'NeinEins', 'NeinZwei'}
         component_under_test.add(datum('20.01.1990'), 'JaEins', 'SomeTitle', 10)
         component_under_test.add(datum('20.01.1990'), 'NeinEins', 'SomeTitle', 10)
         component_under_test.add(datum('20.01.1990'), 'NeinZwei', 'SomeTitle', -10)
         component_under_test.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
 
-        assert component_under_test.get_alle_kategorien(hide_ausgeschlossene_kategorien=True) == set(['JaEins', 'JaZwei'])
+        assert component_under_test.get_alle_kategorien(hide_ausgeschlossene_kategorien=True) == {'JaEins', 'JaZwei'}

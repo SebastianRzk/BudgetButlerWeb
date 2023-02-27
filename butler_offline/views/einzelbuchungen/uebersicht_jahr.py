@@ -1,6 +1,5 @@
 import datetime
 
-import butler_offline.viewcore.context
 from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.context import generate_base_context
@@ -20,7 +19,7 @@ def _filter(liste, num_monate):
     return result
 
 
-def _computePieChartProzentual(context, jahr):
+def _compute_pie_chart_prozentual(context, jahr):
     result = database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
     ausgaben_data = []
     ausgaben_labels = []
@@ -53,7 +52,7 @@ def _computePieChartProzentual(context, jahr):
     return context
 
 
-def _compile_colors(result, einzelbuchungen, num_monate, color_chooser):
+def _compile_colors(result, num_monate, color_chooser):
     einnahmen = {}
     for month in result.keys():
         if month not in num_monate:
@@ -105,7 +104,7 @@ def _handle_request(request):
         list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
     context['durchschnittlich_monat_wert'] = str(
         list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
-    context = _computePieChartProzentual(context, year)
+    context = _compute_pie_chart_prozentual(context, year)
 
     laenge = 12
     if year == today.year:
@@ -130,13 +129,11 @@ def _handle_request(request):
 
     context['einnahmen'] = _compile_colors(
         jahres_einnahmen.inject_zeroes_for_year_and_kategories(year).sum_kategorien_monthly(),
-        einzelbuchungen,
         num_monate,
         color_chooser
     )
     context['ausgaben'] = _compile_colors(
         jahres_ausgaben.inject_zeroes_for_year_and_kategories(year).sum_kategorien_monthly(),
-        einzelbuchungen,
         num_monate,
         color_chooser
     )

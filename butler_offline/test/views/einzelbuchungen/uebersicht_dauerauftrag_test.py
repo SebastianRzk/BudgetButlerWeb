@@ -1,5 +1,5 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, VersionedPostRequest
 from butler_offline.test.database_util import untaint_database
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_dauerauftrag

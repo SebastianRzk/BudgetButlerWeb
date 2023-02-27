@@ -11,8 +11,8 @@ def dezimal_float(string):
 
 
 def from_double_to_german(value):
-    str = "%.2f" % value
-    return str.replace(".", ",")
+    string_representation = "%.2f" % value
+    return string_representation.replace(".", ",")
 
 
 def datum_to_string(datum_obj):
