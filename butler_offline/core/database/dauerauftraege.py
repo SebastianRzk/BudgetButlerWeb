@@ -46,7 +46,8 @@ class Dauerauftraege(DatabaseObject):
                 row['Rhythmus'],
                 row['Name'],
                 row['Wert'],
-                row['Kategorie'])
+                row['Kategorie'],
+            )
             for buchung in dauerauftrag_buchungen:
                 all_rows = pd.concat([all_rows, buchung], ignore_index=True)
         return all_rows
@@ -91,5 +92,5 @@ class Dauerauftraege(DatabaseObject):
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return pd.DataFrame(
-            [[laufdatum, kategorie, name, wert, True]],
-            columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'])
+            [[laufdatum, kategorie, name, wert, True, []]],
+            columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch', 'Tags'])

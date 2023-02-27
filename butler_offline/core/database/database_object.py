@@ -40,13 +40,14 @@ class DatabaseObject(StatedObject):
     def frame_to_list_of_dicts(self, dataframe):
         result_list = []
         for index, row_data in dataframe.iterrows():
-            row = self._row_to_dict(dataframe.columns, index, row_data)
+            row = row_to_dict(dataframe.columns, index, row_data)
             result_list.append(row)
         return result_list
 
-    def _row_to_dict(self, columns, index, row_data):
-        row = {'index': index}
-        for key in columns:
-            row[key] = row_data[key]
-        return row
+
+def row_to_dict(columns, index, row_data):
+    row = {'index': index}
+    for key in columns:
+        row[key] = row_data[key]
+    return row
 
