@@ -18,3 +18,12 @@ def test_submenu_sizes():
     assert len(menu[GEMEINSAME_FINANZEN_SUBMENU_NAME]) == 5
     assert len(menu[SPAREN_SUBMENU_NAME]) == 14
     assert len(menu[EINSTELLUNGEN_SUBMENU_NAME]) == 2
+
+
+def test_all_menu_items_have_valid_icon():
+    menu = get_menu_list()
+
+    for main_menu_key in menu.keys():
+        for menu_item in menu[main_menu_key]:
+            print(menu_item)
+            assert 'fa fa-' == menu_item['icon'][:len('fa fa-')]
