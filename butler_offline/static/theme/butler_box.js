@@ -36,40 +36,31 @@ function sleep(ms) {
 }
 
 
-async function closeBox(id, openButton, closeButton) {
+function closeBox(id, openButton, closeButton) {
 	box = document.getElementById(id);
 	
 	let current_height = box.getBoundingClientRect().height;
 	box.style.height = current_height;
-	
-	// trigger recalculation
-	console.log(document.getElementById(id).getBoundingClientRect())
 
 	document.getElementById(id).style.height = 0;
 	document.getElementById(id).style.opacity = 0;
 	
 	openButton.style.display = "block";
 	closeButton.style.display = "none";
-	
-	await sleep(200)
+
 	document.getElementById(id).style.display = 'none';
-	
 }
 
-async function openBox(id, openButton, closeButton) {
-
+function openBox(id, openButton, closeButton) {
 	document.getElementById(id).style.display = 'block';
 	document.getElementById(id).style.height = 'auto';
 	document.getElementById(id).style.opacity = 1;
 	
-	sleep(20)
-	
+
 	let current_height = document.getElementById(id).getBoundingClientRect().height
-	console.log(current_height)
 	document.getElementById(id).style.height = current_height;
 	
 	
 	openButton.style.display = "none";
 	closeButton.style.display = "block";
-	
 }
