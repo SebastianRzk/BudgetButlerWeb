@@ -28,13 +28,13 @@
 									<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.Name}} löschen?');" role="form" action="/gemeinsameuebersicht/" method="post">
 										<input type="hidden" name="ID" value="{{ID}}">
 										<input type="hidden" name="delete_index" value="{{ausgabe.index}}">
-										<button name="action" value="delete" class="btn bordered-hover"><span class="fa fa-trash-o"></span></button>
+										<button name="action" value="delete"><span class="fa fa-trash-o"></span></button>
 									</form>
 								</div>
 								<div class="pull-right">
 									<form role="form" action="/addgemeinsam/" method="post">
 										<input type="hidden" name="edit_index" value="{{ausgabe.index}}">
-										<button type="submit" name="action" value="edit" id="edit_{{ausgabe.index}}" class="btn bordered-hover" ><span class="fa fa-pencil"></span></button>
+										<button type="submit" name="action" value="edit" id="edit_{{ausgabe.index}}"><span class="fa fa-pencil"></span></button>
 									</form>
 								</div>
 							</td>
@@ -43,9 +43,6 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
-		<div class="box-footer clearfix">
-			<a href="/addgemeinsam/" class="btn btn-light pull-left">Neue gemeinsame Buchung</a>
 		</div>
 	</div>
 </div>

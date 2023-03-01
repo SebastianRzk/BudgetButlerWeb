@@ -1,22 +1,22 @@
 <div class="box theme-row">
-  <form role="form" action="/uebersicht/" method="post">
     <div class="box-body">
-      <input type="hidden" name="mode" value="change_month"/>
-	    <div class="form-group">
-		    <label>Wähle Jahr</label>
-	      <select class="form-control" name="date" id="date">
-	        {% for jahr in jahre %}
-			  <option value="{{jahr}}"
-				{% if jahr == selected_date %}
-				selected="selected"
-				{% endif %}
-			  >{{jahr}}</option>
-			  {% endfor %}
-		    </select>
-	    </div>
-	    <button type="submit" value="OK" class="btn bordered-hover">Filtern!</button>
-    </div>
-  </form>
+		<form role="form" action="/uebersicht/" method="post">
+			<input type="hidden" name="mode" value="change_month"/>
+				<div class="form-group">
+					<label>Wähle Jahr</label>
+					<select class="form-control" name="date" id="date">
+						{% for jahr in jahre %}
+						<option value="{{jahr}}"
+						{% if jahr == selected_date %}
+						selected="selected"
+						{% endif %}
+						>{{jahr}}</option>
+						{% endfor %}
+					</select>
+				</div>
+			<button type="submit" value="OK">Filtern!</button>
+		</form>
+	</div>
 </div>
 
 {% for name,ausgaben in alles.items()%}
@@ -55,13 +55,13 @@
 								<form onsubmit="return confirm('Willst du wirklich den Eintrag {{ausgabe.name}} löschen?');" role="form" action="/uebersicht/" method="post">
 									<input type="hidden" name="ID" value="{{ID}}">
 									<input type="hidden" name="delete_index" value="{{ausgabe.index}}">
-									<button name="action" class="btn bordered-hover btn-icon" value="delete" ><span class="fa fa-trash-o fa-large"></span></button>
+									<button name="action" class="btn-icon" value="delete" ><span class="fa fa-trash-o fa-large"></span></button>
 								</form>
 							</div>
 							<div class="pull-right">
 								<form role="form" action="/{{ausgabe.link}}/" method="post">
 									<input type="hidden" name="edit_index" value="{{ausgabe.index}}">
-									<button type="submit" class="btn bordered-hover btn-icon" id="edit_{{ausgabe.index}}" name="action" value="edit" ><span class="fa fa-pencil fa-large"></span></button>
+									<button type="submit" class="btn-icon" id="edit_{{ausgabe.index}}" name="action" value="edit" ><span class="fa fa-pencil fa-large"></span></button>
 								</form>
 							</div>
 							{% endif %}
