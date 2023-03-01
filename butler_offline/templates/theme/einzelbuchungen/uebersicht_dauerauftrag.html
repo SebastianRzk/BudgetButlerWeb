@@ -35,13 +35,13 @@
 								<form onsubmit="return confirm('Willst du wirklich den Dauerauftrag {{dauerauftrag.Name}} löschen?');" role="form" action="/dauerauftraguebersicht/" method="post">
 									<input type="hidden" name="ID" value="{{ID}}">
 									<input type="hidden" name="delete_index" value="{{dauerauftrag.index}}">
-									<button name="action" value="delete" class="btn bordered-hover"><span class="fa fa-trash-o"></span></button>
+									<button name="action" value="delete"><span class="fa fa-trash-o"></span></button>
 								</form>
 							</div>
 							<div class="pull-right">
 								<form role="form" action="/adddauerauftrag/" method="post">
 									<input type="hidden" name="edit_index" value="{{dauerauftrag.index}}">
-									<button type="submit" name="action" value="edit" id="edit_{{dauerauftrag.index}}" class="btn bordered-hover"><span class="fa fa-pencil"></span></button>
+									<button type="submit" name="action" value="edit" id="edit_{{dauerauftrag.index}}"><span class="fa fa-pencil"></span></button>
 								</form>
 							</div>
 						</td>

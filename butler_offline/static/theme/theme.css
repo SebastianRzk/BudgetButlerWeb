@@ -27,7 +27,6 @@ body {
     overflow-y: auto;
 }
 
-/* General Links */
 a:hover,
 a:active,
 a:focus {
@@ -40,7 +39,6 @@ a:focus {
  * Component: Main Header
  * ----------------------
  */
-
 
 .main-header .logo {
     display: block;
@@ -184,12 +182,6 @@ a:focus {
     background-color: #ffffff;
 }
 
-.box-footer > button {
-    width: 100%
-}
-
-
-
 /*
  * Component: Table
  * ----------------
@@ -237,6 +229,8 @@ a > .fa {
 button {
     background-color: var(--main-color);
     color: #FFF;
+    border: 1px solid var(--main-color);
+    width: 100%
 }
 
 button, .btn-light {
@@ -264,10 +258,6 @@ button:hover {
     background-color: #ccc;
 }
 
-
-.bordered-hover {
-    border: 1px solid var(--main-color);
-}
 
 .main-header {
     background-color: #FFF;
@@ -305,7 +295,6 @@ button:hover {
     grid-row: 1/4;
     height: 100%;
     min-height: 100vh;
-    width: 70vw;
     padding-top: 3ex;
 }
 
@@ -405,6 +394,11 @@ textarea {
     font-size: large;
 }
 
+.btn-tool > .fa {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 .btn-icon {
     height: 5ex;
     width: 5ex;
@@ -502,36 +496,6 @@ a {
     box-sizing: border-box;
 }
 
-.input-group {
-    display: table;
-}
-
-.input-group-addon {
-    color: #555;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    vertical-align: middle;
-    width: 1%;
-    background-color: #FFF;
-}
-
-.input-group .input-group-addon {
-    border-radius: 0px;
-    border-color: #d2d6de;
-}
-
-.input-group .form-control{
-    display: table-cell;
-}
-
-.input-group .form-control{
-    position: relative;
-    z-index: 2;
-    float: left;
-    width: 100%;
-    margin-bottom: 0;
-}
-
 label {
     display: inline-block;
     max-width: 100%;
@@ -546,6 +510,11 @@ label {
     color: #555;
     background-color: #fff;
     border: 1px solid #ccc;
+}
+
+
+.inline-form-control {
+    width: unset;
 }
 
 * {

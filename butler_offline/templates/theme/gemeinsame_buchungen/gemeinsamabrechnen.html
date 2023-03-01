@@ -32,7 +32,7 @@
 				  </div>
 			  </div>
 			  <div class="box-footer">
-				  <button type="submit" name="action" value="add" id="add" class="btn bordered-hover">Abrechnung vorbereiten</button>
+				  <button type="submit" name="action" value="add" id="add">Abrechnung vorbereiten</button>
 			  </div>
 		  </form>
     </div>
@@ -46,62 +46,60 @@
             <input value="{{set_mindate_rfc}}" type="hidden" name="set_mindate"/>
             <input value="{{set_maxdate_rfc}}" type="hidden" name="set_maxdate"/>
 			  <div class="box-body">
-				  <div class="form-group">
-					  <label>Anteil, den {{myname}} übernimmt (in Prozent)</label>
-					  <div class="input-group">
-						 <input type="number" name="set_verhaeltnis" min="0" max="100" required="required" id="abrechnungsverhaeltnis" value="{{ set_verhaeltnis }}"/>
-					  </div><br/>
-					  <label>Erweiterte Einstellungen</label>
-					  <div class="input-group">
-                          {% if set_limit %}
-                            <input type="checkbox" name="set_limit" id="set_limit" checked="checked"/>
-                          {% else %}
-                            <input type="checkbox" name="set_limit" id="set_limit"/>
-                          {% endif %}
-                          Limit setzen für
-                          <select name="set_limit_fuer" id="set_limit_fuer">
-                              {% if set_limit_fuer  == myname %}
-                                 <option value="{{ myname }}" selected="selected">{{myname}}</option>
-                                 <option value="{{ partnername }}">{{partnername}}</option>
-                              {% else %}
-                                 <option value="{{ myname }}">{{myname}}</option>
-                                 <option value="{{ partnername }}" selected="selected">{{partnername}}</option>
-                              {% endif %}
-                         </select>
-                          mit einem Wert von
-                          <input type="number" name="set_limit_value" id="set_limit_value" min="0" max="2000" value="{{ set_limit_value }}"/>
-					    Euro.
-					  </div>
-                      <div class="input-group">
-                          {% if set_self_kategorie %}
-                              <input type="checkbox" name="set_self_kategorie" checked="checked" id="set_self_kategorie"/>
-                          {% else %}
-                              <input type="checkbox" name="set_self_kategorie" id="set_self_kategorie"/>
-                          {% endif %}
-                          von paritätischer Teilung abweichender Geldanteil<br/>bei der Abrechnung in der eigenen Datenbank als
-                          <select name="set_self_kategorie_value" id="set_self_kategorie_value">
-                              {% for kategorie in kategorien %}
-                                  {% if set_self_kategorie_value == kategorie %}
-                                      <option value="{{ kategorie }}" selected="selected">{{ kategorie }}</option>
-                                  {% else %}
-                                      <option value="{{ kategorie }}">{{ kategorie }}</option>
-                                  {% endif %}
-                              {% endfor %}
-                          </select>importieren.
-                      </div>
-                      <div class="input-group">
-                          {% if set_other_kategorie %}
-                          <input type="checkbox" name="set_other_kategorie" id="set_other_kategorie" checked="checked"/>
-                          {% else %}
-                          <input type="checkbox" name="set_other_kategorie" id="set_other_kategorie"/>
-                          {% endif %}
-                          von paritätischer Teilung abweichender Geldanteil<br/>bei der Abrechnung in der Partnerdatenbank als
-                          <input type="text" name="set_other_kategorie_value" id="set_other_kategorie_value" value="{{ set_other_kategorie_value }}"/> importieren.
-                      </div>
-				  </div>
+				  <p>
+					  <label>Anteil, den {{myname}} übernimmt (in Prozent):</label>
+					 <input class="form-control inline-form-control" type="number" name="set_verhaeltnis" min="0" max="100" required="required" id="abrechnungsverhaeltnis" value="{{ set_verhaeltnis }}"/>
+				  </p>
+				  <label>Erweiterte Einstellungen</label>
+				  <p>
+					  {% if set_limit %}
+						<input type="checkbox" name="set_limit" id="set_limit" checked="checked"/>
+					  {% else %}
+						<input type="checkbox" name="set_limit" id="set_limit"/>
+					  {% endif %}
+					  Limit setzen für
+					  <select name="set_limit_fuer" id="set_limit_fuer" class="form-control inline-form-control">
+						  {% if set_limit_fuer  == myname %}
+							 <option value="{{ myname }}" selected="selected">{{myname}}</option>
+							 <option value="{{ partnername }}">{{partnername}}</option>
+						  {% else %}
+							 <option value="{{ myname }}">{{myname}}</option>
+							 <option value="{{ partnername }}" selected="selected">{{partnername}}</option>
+						  {% endif %}
+					 </select>
+					  mit einem Wert von
+					  <input type="number" name="set_limit_value" id="set_limit_value" min="0" max="2000" value="{{ set_limit_value }}" class="form-control inline-form-control"/>
+					Euro.
+				  </p>
+				  <p>
+					  {% if set_self_kategorie %}
+						  <input type="checkbox" name="set_self_kategorie" checked="checked" id="set_self_kategorie"/>
+					  {% else %}
+						  <input type="checkbox" name="set_self_kategorie" id="set_self_kategorie"/>
+					  {% endif %}
+					  von paritätischer Teilung abweichender Geldanteil<br/>bei der Abrechnung in der eigenen Datenbank als
+					  <select name="set_self_kategorie_value" id="set_self_kategorie_value" class="form-control inline-form-control">
+						  {% for kategorie in kategorien %}
+							  {% if set_self_kategorie_value == kategorie %}
+								  <option value="{{ kategorie }}" selected="selected">{{ kategorie }}</option>
+							  {% else %}
+								  <option value="{{ kategorie }}">{{ kategorie }}</option>
+							  {% endif %}
+						  {% endfor %}
+					  </select>importieren.
+				  </p>
+				  <p>
+					  {% if set_other_kategorie %}
+					  <input type="checkbox" name="set_other_kategorie" id="set_other_kategorie" checked="checked"/>
+					  {% else %}
+					  <input type="checkbox" name="set_other_kategorie" id="set_other_kategorie"/>
+					  {% endif %}
+					  von paritätischer Teilung abweichender Geldanteil<br/>bei der Abrechnung in der Partnerdatenbank als
+					  <input type="text" name="set_other_kategorie_value" id="set_other_kategorie_value" value="{{ set_other_kategorie_value }}" class="form-control inline-form-control"/> importieren.
+				  </p>
 			  </div>
 			  <div class="box-footer">
-				  <button type="submit" name="action" value="add" id="abrechnung_aktualisieren" class="btn bordered-hover">Abrechnung aktualisieren</button>
+				  <button type="submit" name="action" value="add" id="abrechnung_aktualisieren">Abrechnung aktualisieren</button>
               </div>
         </form>
       </div>
@@ -184,8 +182,8 @@
 		<div class="box-body border-top">
 			{{ergebnis | safe}}
 		</div>
-		<div class="box-footer clearfix">
-            <form role="form" action="/abrechnen/" method="post">
+		<form role="form" action="/abrechnen/" method="post">
+			<div class="box-footer clearfix">
                 <input value="{{set_mindate}}" type="hidden" name="set_mindate"/>
                 <input value="{{set_maxdate}}" type="hidden" name="set_maxdate"/>
                 <input value="{{set_verhaeltnis_real}}" type="hidden" name="set_verhaeltnis"/>
@@ -197,8 +195,8 @@
                     <input value="{{set_other_kategorie_value}}" type="hidden" name="set_other_kategorie"/>
                 {% endif %}
 				<input type="hidden" name="ID" value="{{ID}}">
-                <button type="submit" class="btn bordered-hover pull-left" id="abrechnen">Jetzt Abrechnen!</button>
-            </form>
-		</div>
+                <button type="submit" id="abrechnen">Jetzt Abrechnen!</button>
+			</div>
+		</form>
 	</div>
 </div>
