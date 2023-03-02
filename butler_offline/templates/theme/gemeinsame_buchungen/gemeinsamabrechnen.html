@@ -111,38 +111,36 @@
 			<h3 class="box-title">Ausgaben pro Person</h3>
 		</div>
 		<div class="box-body border-top">
-			<div class="table-responsive">
-				<table class="table no-margin">
-					<thead>
-						<tr>
-							<th>Person</th>
-							<th class="table-wert">Ausgegeben</th>
-                            <th class="table-wert">Ausgegeben Soll</th>
-                            <th class="table-wert">Differenz</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>{{partnername}}</td>
-							<td class="table-wert" id="ausgabe_partner">{{ausgabe_partner}}</td>
-							<td class="table-wert" id="ausgabe_partner_soll">{{partner_soll}}</td>
-							<td class="table-wert" id="ausgabe_partner_diff">{{partner_diff}}</td>
-						</tr>
-						<tr>
-							<td>{{myname}}</td>
-							<td class="table-wert" id="ausgabe_self">{{ausgabe_self}}</td>
-							<td class="table-wert" id="ausgabe_self_soll">{{self_soll}}</td>
-							<td class="table-wert" id="ausgabe_self_diff">{{self_diff}}</td>
-						</tr>
-					</tbody>
-					<tfooter>
-						<tr>
-							<td>Gesamt</td>
-							<td class="table-wert">{{ausgabe_gesamt}}</td>
-						</tr>
-					</tfooter>
-				</table>
-			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Person</th>
+						<th class="table-wert">Ausgegeben</th>
+						<th class="table-wert">Ausgegeben Soll</th>
+						<th class="table-wert">Differenz</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{partnername}}</td>
+						<td class="table-wert" id="ausgabe_partner">{{ausgabe_partner}}</td>
+						<td class="table-wert" id="ausgabe_partner_soll">{{partner_soll}}</td>
+						<td class="table-wert" id="ausgabe_partner_diff">{{partner_diff}}</td>
+					</tr>
+					<tr>
+						<td>{{myname}}</td>
+						<td class="table-wert" id="ausgabe_self">{{ausgabe_self}}</td>
+						<td class="table-wert" id="ausgabe_self_soll">{{self_soll}}</td>
+						<td class="table-wert" id="ausgabe_self_diff">{{self_diff}}</td>
+					</tr>
+				</tbody>
+				<tfooter>
+					<tr>
+						<td>Gesamt</td>
+						<td class="table-wert">{{ausgabe_gesamt}}</td>
+					</tr>
+				</tfooter>
+			</table>
 		</div>
 	</div>
 	<div class="box">

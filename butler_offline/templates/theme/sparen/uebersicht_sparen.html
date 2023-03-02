@@ -112,50 +112,48 @@
 			<h3 class="box-title">Sparkontos</h3>
 		</div>
 		<div class="box-body">
-			<div class="table-responsive">
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Kontotyp</th>
-							<th class="table-wert">Gesamte Einzahlungen</th>
-							<th class="table-wert">+/-</th>
-							<th class="table-wert">Letzer Kontostand</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for sparkonto in kontos %}
-						<tr>
-							<td id="item_{{sparkonto.index}}_kontoname"><span class="fa fa-circle" style="color: {{sparkonto.color}};"></span>{{sparkonto.name}}</td>
-							<td id="item_{{sparkonto.index}}_kontotyp">{{sparkonto.kontotyp}}</td>
-							<td id="item_{{sparkonto.index}}_aufbuchungen" class="table-wert">{{sparkonto.aufbuchungen_str}}</td>
-							<td id="item_{{sparkonto.index}}_difference"
-										class="table-wert
-										{% if sparkonto.difference_is_negativ %}
-										negativ
-										{% endif %}
-										"
-									>{{sparkonto.difference_str}}</td>
-							<td id="item_{{sparkonto.index}}_wert" class="table-wert">{{sparkonto.wert_str}}</td>
-						</tr>
-						{% endfor %}
-						<tr>
-							<td><b>Gesamt</b></td>
-							<td></td>
-							<td class="table-wert"><b id="item_gesamt_aufbuchungen">{{gesamt.aufbuchungen_str}}</b></td>
-							<td
-										class="table-wert
-										{% if gesamt.difference_is_negativ %}
-										negativ
-										{% endif %}
-										"
-							><b id="item_gesamt_difference">{{gesamt.difference_str}}</b></td>
-							<td class="table-wert"><b id="item_gesamt_wert">{{gesamt.wert_str}}</b></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Kontotyp</th>
+						<th class="table-wert">Gesamte Einzahlungen</th>
+						<th class="table-wert">+/-</th>
+						<th class="table-wert">Letzer Kontostand</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for sparkonto in kontos %}
+					<tr>
+						<td id="item_{{sparkonto.index}}_kontoname"><span class="fa fa-circle" style="color: {{sparkonto.color}};"></span>{{sparkonto.name}}</td>
+						<td id="item_{{sparkonto.index}}_kontotyp">{{sparkonto.kontotyp}}</td>
+						<td id="item_{{sparkonto.index}}_aufbuchungen" class="table-wert">{{sparkonto.aufbuchungen_str}}</td>
+						<td id="item_{{sparkonto.index}}_difference"
+									class="table-wert
+									{% if sparkonto.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+								>{{sparkonto.difference_str}}</td>
+						<td id="item_{{sparkonto.index}}_wert" class="table-wert">{{sparkonto.wert_str}}</td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td><b>Gesamt</b></td>
+						<td></td>
+						<td class="table-wert"><b id="item_gesamt_aufbuchungen">{{gesamt.aufbuchungen_str}}</b></td>
+						<td
+									class="table-wert
+									{% if gesamt.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+						><b id="item_gesamt_difference">{{gesamt.difference_str}}</b></td>
+						<td class="table-wert"><b id="item_gesamt_wert">{{gesamt.wert_str}}</b></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div class="box">
@@ -189,47 +187,45 @@
 			<h3 class="box-title">Anlagetypen</h3>
 		</div>
 		<div class="box-body">
-			<div class="table-responsive">
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th class="table-wert">Gesamte Einzahlungen</th>
-							<th class="table-wert">+/-</th>
-							<th class="table-wert">Letzer Kontostand</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for typ in typen %}
-						<tr>
-							<td id="item_{{typ.index}}_kontoname"><span class="fa fa-circle" style="color: {{typ.color}};"></span>{{typ.name}}</td>
-							<td id="item_{{typ.index}}_aufbuchungen" class="table-wert">{{typ.aufbuchungen_str}}</td>
-							<td id="item_{{typ.index}}_difference"
-										class="table-wert
-										{% if typ.difference_is_negativ %}
-										negativ
-										{% endif %}
-										"
-									>{{typ.difference_str}}</td>
-							<td id="item_{{typ.index}}_wert" class="table-wert">{{typ.wert_str}}</td>
-						</tr>
-						{% endfor %}
-						<tr>
-							<td><b>Gesamt</b></td>
-							<td class="table-wert"><b>{{gesamt.aufbuchungen_str}}</b></td>
-							<td
-										class="table-wert
-										{% if gesamt.difference_is_negativ %}
-										negativ
-										{% endif %}
-										"
-							><b>{{gesamt.difference_str}}</b></td>
-							<td class="table-wert"><b>{{gesamt.wert_str}}</b></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th class="table-wert">Gesamte Einzahlungen</th>
+						<th class="table-wert">+/-</th>
+						<th class="table-wert">Letzer Kontostand</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for typ in typen %}
+					<tr>
+						<td id="item_{{typ.index}}_kontoname"><span class="fa fa-circle" style="color: {{typ.color}};"></span>{{typ.name}}</td>
+						<td id="item_{{typ.index}}_aufbuchungen" class="table-wert">{{typ.aufbuchungen_str}}</td>
+						<td id="item_{{typ.index}}_difference"
+									class="table-wert
+									{% if typ.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+								>{{typ.difference_str}}</td>
+						<td id="item_{{typ.index}}_wert" class="table-wert">{{typ.wert_str}}</td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td><b>Gesamt</b></td>
+						<td class="table-wert"><b>{{gesamt.aufbuchungen_str}}</b></td>
+						<td
+									class="table-wert
+									{% if gesamt.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+						><b>{{gesamt.difference_str}}</b></td>
+						<td class="table-wert"><b>{{gesamt.wert_str}}</b></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div class="box">
@@ -263,26 +259,24 @@
 			<h3 class="box-title">Depot Order-Typen im Vergleich</h3>
 		</div>
 		<div class="box-body">
-			<div class="table-responsive">
-				<table>
-					<thead>
-						<tr>
-							<th>Order-Typ</th>
-							<th class="table-wert">Gesamtmenge</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><span class="fa fa-circle" style="color: #39CCCC;"></span>Manuelle Order</td>
-							<td class="table-wert">{{order_typ.manual}}</td>
-						</tr>
-						<tr>
-							<td><span class="fa fa-circle" style="color: #3D9970;"></span>Order durch Daueraufträge</td>
-							<td class="table-wert">{{order_typ.dauerauftrag}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Order-Typ</th>
+						<th class="table-wert">Gesamtmenge</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><span class="fa fa-circle" style="color: #39CCCC;"></span>Manuelle Order</td>
+						<td class="table-wert">{{order_typ.manual}}</td>
+					</tr>
+					<tr>
+						<td><span class="fa fa-circle" style="color: #3D9970;"></span>Order durch Daueraufträge</td>
+						<td class="table-wert">{{order_typ.dauerauftrag}}</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div class="box">
@@ -320,25 +314,23 @@
 			<h3 class="box-title">Aktuelle Daueraufträge</h3>
 		</div>
 		<div class="box-body">
-			<div class="table-responsive">
-				<table>
-					<thead>
-						<tr>
-							<th>Depotwert</th>
-							<th class="table-wert">Monatlicher Betrag</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for depotwert in monatlich.einzelwerte %}
-						<tr>
-							<td><span class="fa fa-circle" style="color: {{depotwert.color}};"></span>{{depotwert.name}}</td>
-							<td class="table-wert">{{depotwert.wert}}</td>
+			<table>
+				<thead>
+					<tr>
+						<th>Depotwert</th>
+						<th class="table-wert">Monatlicher Betrag</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for depotwert in monatlich.einzelwerte %}
+					<tr>
+						<td><span class="fa fa-circle" style="color: {{depotwert.color}};"></span>{{depotwert.name}}</td>
+						<td class="table-wert">{{depotwert.wert}}</td>
 
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div class="box">

@@ -67,30 +67,28 @@
 			<h3 class="box-title">Letzte Erfassungen</h3>
 		</div>
 		<div class="box-body">
-			<div class="table-responsive">
-				<table class="table no-margin" id="letzte_erfassungen">
-					<thead>
-						<tr>
-							<th></th>
-							<th>Datum</th>
-							<th>Name</th>
-							<th>Kategorie</th>
-							<th class="table-wert">Wert</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% for ausgabe in letzte_erfassung %}
-						<tr>
-							<td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
-							<td>{{ausgabe.datum}}</td>
-							<td>{{ausgabe.name}}</td>
-							<td>{{ausgabe.kategorie}}</td>
-							<td class="table-wert">{{ausgabe.wert}}</td>
-						</tr>
-					{% endfor %}
-					</tbody>
-				</table>
-			</div>
+			<table class="table" id="letzte_erfassungen">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Datum</th>
+						<th>Name</th>
+						<th>Kategorie</th>
+						<th class="table-wert">Wert</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for ausgabe in letzte_erfassung %}
+					<tr>
+						<td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
+						<td>{{ausgabe.datum}}</td>
+						<td>{{ausgabe.name}}</td>
+						<td>{{ausgabe.kategorie}}</td>
+						<td class="table-wert">{{ausgabe.wert}}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
 		</div>
 		<div class="box-footer clearfix">
 			<a href="/uebersicht/" class="btn btn-light pull-right">Alle Buchungen ansehen</a>

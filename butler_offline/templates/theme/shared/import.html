@@ -90,30 +90,28 @@
 		<h3 class="box-title">Letzte importierte Erfassungen</h3>
 	</div>
 	<div class="box-body">
-		<div class="table-responsive">
-			<table class="table no-margin">
-				<thead>
-					<tr>
-						<th>Nummer</th>
-						<th>Datum</th>
-						<th>Name</th>
-						<th>Kategorie</th>
-						<th>Wert</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for ausgabe in ausgaben %}
-					<tr>
-						<td>{{ausgabe.0}}</td>
-						<td>{{ausgabe.1}}</td>
-						<td>{{ausgabe.2}}</td>
-						<td>{{ausgabe.3}}</td>
-						<td>{{ausgabe.4}}</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Nummer</th>
+					<th>Datum</th>
+					<th>Name</th>
+					<th>Kategorie</th>
+					<th>Wert</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for ausgabe in ausgaben %}
+				<tr>
+					<td>{{ausgabe.0}}</td>
+					<td>{{ausgabe.1}}</td>
+					<td>{{ausgabe.2}}</td>
+					<td>{{ausgabe.3}}</td>
+					<td>{{ausgabe.4}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
 	<div class="box-footer clearfix">
 		<a href="/uebersicht/" class="btn btn-light pull-right">Alle persönlichen Einzelbuchungen ansehen</a>

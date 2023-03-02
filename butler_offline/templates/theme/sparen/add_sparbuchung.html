@@ -83,32 +83,30 @@
 		  <h3 class="box-title">Letzte Erfassungen</h3>
 	  </div>
 	  <div class="box-body">
-		  <div class="table-responsive">
-			  <table class="table no-margin" id="letzte_erfassungen">
-				  <thead>
-					  <tr>
-						  <th></th>
-						  <th>Datum</th>
-						  <th>Name</th>
-						  <th>Konto</th>
-						  <th class="table-wert">Wert</th>
-						  <th>Typ</th>
-					  </tr>
-				  </thead>
-				  <tbody>
-					  {% for sparbuchung in letzte_erfassung %}
-					  <tr>
-						  <td><span class="fa fa-{{sparbuchung.fa}} pull-right"></span></td>
-						  <td>{{sparbuchung.datum}}</td>
-						  <td>{{sparbuchung.name}}</td>
-						  <td>{{sparbuchung.konto}}</td>
-						  <td class="table-wert">{{sparbuchung.wert}}</td>
-						  <td>{{sparbuchung.typ}}</td>
-					  </tr>
-					  {% endfor %}
-				  </tbody>
-			  </table>
-		  </div>
+		  <table class="table" id="letzte_erfassungen">
+			  <thead>
+				  <tr>
+					  <th></th>
+					  <th>Datum</th>
+					  <th>Name</th>
+					  <th>Konto</th>
+					  <th class="table-wert">Wert</th>
+					  <th>Typ</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  {% for sparbuchung in letzte_erfassung %}
+				  <tr>
+					  <td><span class="fa fa-{{sparbuchung.fa}} pull-right"></span></td>
+					  <td>{{sparbuchung.datum}}</td>
+					  <td>{{sparbuchung.name}}</td>
+					  <td>{{sparbuchung.konto}}</td>
+					  <td class="table-wert">{{sparbuchung.wert}}</td>
+					  <td>{{sparbuchung.typ}}</td>
+				  </tr>
+				  {% endfor %}
+			  </tbody>
+		  </table>
 	  </div>
 	  <div class="box-footer clearfix">
 	  <a href="/uebersicht_sparbuchungen/" class="btn btn-light pull-right">Alle Sparbuchungen ansehen</a>

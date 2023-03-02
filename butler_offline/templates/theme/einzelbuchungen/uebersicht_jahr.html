@@ -184,8 +184,41 @@
 		<div class="box-body">
 			<input type="hidden" name="mode" value="change_selected"> <input type="hidden" name="date"
 				value="{{selected_date}}">
-			<div class="table-responsive">
-				<table class="table no-margin">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Kategorie</th>
+						<th class="table-wert">Wert</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for ausgabe in zusammenfassung_ausgaben %}
+					<tr>
+						<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
+						<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
+					</tr>
+					{% endfor %}
+					<tfooter>
+					<tr>
+						<td style="vertical-align: middle">Summe</td>
+						<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben}}</td>
+						<td/>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+					</tr>
+					</tfooter>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Einnahmen</h3>
+		</div>
+		<div class="box-body">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>Kategorie</th>
@@ -193,7 +226,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for ausgabe in zusammenfassung_ausgaben %}
+						{% for ausgabe in zusammenfassung_einnahmen %}
 						<tr>
 							<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
 							<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
@@ -202,48 +235,11 @@
 						<tfooter>
 						<tr>
 							<td style="vertical-align: middle">Summe</td>
-							<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben}}</td>
-							<td/>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
+							<td style="vertical-align: middle" class="table-wert">{{gesamt_einnahmen}}</td>
 						</tr>
 						</tfooter>
 					</tbody>
 				</table>
-			</div>
-		</div>
-	</div>
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Einnahmen</h3>
-		</div>
-		<div class="box-body">
-				<div class="table-responsive">
-					<table class="table no-margin">
-						<thead>
-							<tr>
-								<th>Kategorie</th>
-								<th class="table-wert">Wert</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for ausgabe in zusammenfassung_einnahmen %}
-							<tr>
-								<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-								<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
-							</tr>
-							{% endfor %}
-							<tfooter>
-							<tr>
-								<td style="vertical-align: middle">Summe</td>
-								<td style="vertical-align: middle" class="table-wert">{{gesamt_einnahmen}}</td>
-							</tr>
-							</tfooter>
-						</tbody>
-					</table>
-				</div>
 		</div>
 	</div>
 </div>

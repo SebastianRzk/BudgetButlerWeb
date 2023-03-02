@@ -35,26 +35,24 @@
 		  <h3 class="box-title">Letzte Erfassungen</h3>
 	  </div>
 	  <div class="box-body">
-		  <div class="table-responsive">
-			  <table class="table no-margin" id="letzte_erfassungen">
-				  <thead>
-					  <tr>
-						  <th></th>
-						  <th>Kontoname</th>
-						  <th>Kontotyp</th>
-					  </tr>
-				  </thead>
-				  <tbody>
-					  {% for sparkonto in letzte_erfassung %}
-					  <tr>
-						  <td><span class="fa fa-{{sparkonto.fa}} pull-right"></span></td>
-						  <td>{{sparkonto.Kontoname}}</td>
-						  <td>{{sparkonto.Kontotyp}}</td>
-					  </tr>
-					  {% endfor %}
-				  </tbody>
-			  </table>
-		  </div>
+		  <table class="table" id="letzte_erfassungen">
+			  <thead>
+				  <tr>
+					  <th></th>
+					  <th>Kontoname</th>
+					  <th>Kontotyp</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  {% for sparkonto in letzte_erfassung %}
+				  <tr>
+					  <td><span class="fa fa-{{sparkonto.fa}} pull-right"></span></td>
+					  <td>{{sparkonto.Kontoname}}</td>
+					  <td>{{sparkonto.Kontotyp}}</td>
+				  </tr>
+				  {% endfor %}
+			  </tbody>
+		  </table>
 	  </div>
 	  <div class="box-footer clearfix">
 	  <a href="/uebersicht_sparkontos/" class="btn btn-light pull-right">Alle Sparkontos ansehen</a>
