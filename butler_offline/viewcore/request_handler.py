@@ -1,4 +1,5 @@
-from flask import redirect
+from flask import redirect, Request
+from typing import Callable
 from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore import request_handler
@@ -16,7 +17,7 @@ from butler_offline.viewcore.template import renderer_instance
 REDIRECTOR = lambda x: redirect(x, code=301)
 
 
-def handle_request(request, request_action, html_base_page):
+def handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page:str):
     if is_transactional_request(request):
         logging.info('transactional request found')
         transaction_id = get_transaction_id(request)
@@ -59,7 +60,7 @@ def handle_transaction_out_of_sync(transaction_id):
     return renderer_instance().render('index.html', **context)
 
 
-def take_action(request, request_action):
+def take_action(request, request_action: Callable[[Request], dict]):
     context = generate_base_context('Fehler')
     try:
         context = request_action(request)
