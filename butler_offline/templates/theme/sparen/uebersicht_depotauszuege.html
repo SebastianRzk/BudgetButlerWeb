@@ -19,24 +19,22 @@
 				<button type="submit" class="btn-icon" id="edit_{{depotauszug.index}}" name="action" value="edit" ><span class="fa fa-pencil fa-large"></span></button>
 			</form>
 		</div>
-		<div class="table-responsive">
-			<table>
-				<thead>
-					<tr>
-						<th>Depotwerts</th>
-						<th class="table-wert">Wert</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for buchung in depotauszug.buchungen %}
-					<tr>
-						<td id="item_{{depotauszug.name}}{{depotauszug.datum}}{{buchung.name}}_name">{{buchung.depotwert}}</td>
-						<td id="item_{{depotauszug.name}}{{depotauszug.datum}}{{buchung.name}}_wert" class="table-wert">{{buchung.wert}}</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>Depotwerts</th>
+					<th class="table-wert">Wert</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for buchung in depotauszug.buchungen %}
+				<tr>
+					<td id="item_{{depotauszug.name}}{{depotauszug.datum}}{{buchung.name}}_name">{{buchung.depotwert}}</td>
+					<td id="item_{{depotauszug.name}}{{depotauszug.datum}}{{buchung.name}}_wert" class="table-wert">{{buchung.wert}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
 </div>
 {% endfor %}

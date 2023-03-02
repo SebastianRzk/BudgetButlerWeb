@@ -52,31 +52,28 @@
 		  <h3 class="box-title">Letzte Erfassungen</h3>
 	  </div>
 	  <div class="box-body">
-		  <div class="table-responsive">
-			  <table class="table no-margin" id="letzte_erfassungen">
-				  <thead>
-					  <tr>
-						  <th></th>
-						  <th>Datum</th>
-						  <th>Depotwert</th>
-						  <th>Depot</th>
-						  <th class="table-wert">Wert</th>
-					  </tr>
-				  </thead>
-				  <tbody>
-					  {% for order in letzte_erfassung %}
-					  <tr>
-						  <td><span class="fa fa-{{order.fa}} pull-right"></span></td>
-						  <td>{{order.datum}}</td>
-						  <td>{{order.depotwert}}</td>
-						  <td>{{order.konto}}</td>
-						  <td class="table-wert">{{order.wert}}</td>
-					  </tr>
-					  {% endfor %}
-				  </tbody>
-			  </table>
-		  </div>
-
+		  <table class="table" id="letzte_erfassungen">
+			  <thead>
+				  <tr>
+					  <th></th>
+					  <th>Datum</th>
+					  <th>Depotwert</th>
+					  <th>Depot</th>
+					  <th class="table-wert">Wert</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  {% for order in letzte_erfassung %}
+				  <tr>
+					  <td><span class="fa fa-{{order.fa}} pull-right"></span></td>
+					  <td>{{order.datum}}</td>
+					  <td>{{order.depotwert}}</td>
+					  <td>{{order.konto}}</td>
+					  <td class="table-wert">{{order.wert}}</td>
+				  </tr>
+				  {% endfor %}
+			  </tbody>
+		  </table>
 	</div>
 	<div class="box-footer clearfix">
 	  <a href="/order_uebersicht/" class="btn btn-light pull-right">Alle Buchungen ansehen</a>

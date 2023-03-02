@@ -38,28 +38,26 @@
 		  <h3 class="box-title">Letzte Erfassungen</h3>
 	  </div>
 	  <div class="box-body">
-		  <div class="table-responsive">
-			  <table class="table no-margin" id="letzte_erfassungen">
-				  <thead>
-					  <tr>
-						  <th></th>
-						  <th>Name</th>
-						  <th>ISIN</th>
-						  <th>Typ</th>
-					  </tr>
-				  </thead>
-				  <tbody>
-					  {% for depotwert in letzte_erfassung %}
-					  <tr>
-						  <td><span class="fa fa-{{depotwert.fa}} pull-right"></span></td>
-						  <td>{{depotwert.Name}}</td>
-						  <td>{{depotwert.Isin}}</td>
-						  <td>{{depotwert.Typ}}</td>
-					  </tr>
-					  {% endfor %}
-				  </tbody>
-			  </table>
-		  </div>
+		  <table class="table" id="letzte_erfassungen">
+			  <thead>
+				  <tr>
+					  <th></th>
+					  <th>Name</th>
+					  <th>ISIN</th>
+					  <th>Typ</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  {% for depotwert in letzte_erfassung %}
+				  <tr>
+					  <td><span class="fa fa-{{depotwert.fa}} pull-right"></span></td>
+					  <td>{{depotwert.Name}}</td>
+					  <td>{{depotwert.Isin}}</td>
+					  <td>{{depotwert.Typ}}</td>
+				  </tr>
+				  {% endfor %}
+			  </tbody>
+		  </table>
 	  </div>
 	  <div class="box-footer clearfix">
 	  <a href="/uebersicht_depotwerte/" class="btn btn-light pull-right">Alle erfassten Depotwerte ansehen</a>

@@ -174,30 +174,28 @@
       <h3 class="box-title">Ausgaben</h3>
     </div>
     <div class="box-body">
-      <div class="table-responsive">
-        <table class="table no-margin">
-          <thead>
-            <tr>
-              <th>Kategorie</th>
-              <th class="table-wert">Wert</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for ausgabe in ausgaben %}
-            <tr>
-              <td> <span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-              <td class="table-wert">{{ausgabe.1}}</td>
-            </tr>
-            {% endfor %}
-            <tfooter>
-            <tr>
-              <td>Summe</td>
-              <td class="table-wert">{{gesamt}}</td>
-            </tr>
-            </tfooter>
-          </tbody>
-        </table>
-      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th class="table-wert">Wert</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ausgabe in ausgaben %}
+          <tr>
+            <td> <span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
+            <td class="table-wert">{{ausgabe.1}}</td>
+          </tr>
+          {% endfor %}
+          <tfooter>
+          <tr>
+            <td>Summe</td>
+            <td class="table-wert">{{gesamt}}</td>
+          </tr>
+          </tfooter>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -206,30 +204,28 @@
       <h3 class="box-title">Einnahmen</h3>
     </div>
     <div class="box-body">
-      <div class="table-responsive">
-        <table class="table no-margin">
-          <thead>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th class="table-wert">Wert</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for einnahme in einnahmen %}
+          <tr>
+            <td><span class="fa fa-circle" style="color: {{einnahme.2}};"></span> {{einnahme.0}}</td>
+            <td class="table-wert">{{einnahme.1}}</td>
+          </tr>
+          {% endfor %}
+          <tfooter>
             <tr>
-              <th>Kategorie</th>
-              <th class="table-wert">Wert</th>
+              <td>Summe</td>
+              <td class="table-wert">{{gesamt_einnahmen}}</td>
             </tr>
-          </thead>
-          <tbody>
-            {% for einnahme in einnahmen %}
-            <tr>
-              <td><span class="fa fa-circle" style="color: {{einnahme.2}};"></span> {{einnahme.0}}</td>
-              <td class="table-wert">{{einnahme.1}}</td>
-            </tr>
-            {% endfor %}
-            <tfooter>
-              <tr>
-                <td>Summe</td>
-                <td class="table-wert">{{gesamt_einnahmen}}</td>
-              </tr>
-            </tfooter>
-          </tbody>
-        </table>
-      </div>
+          </tfooter>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -242,26 +238,24 @@
     <button class="btn-tool pull-right close_button" id="close_{{tag.0}}"><span class="fa fa-minus"></span></button>
   </div>
   <div class="box-body boxcontent border-top" id="boxcontent_{{tag.0}}">
-    <div class="table-responsive">
-      <table class="table no-margin">
-        <thead>
-          <tr>
-            <th>Kategorie</th>
-            <th>Name</th>
-            <th class="table-wert">Wert</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for kategorie in tag.1 %}
-          <tr>
-            <td class="table-kategorie"><span class="fa fa-circle" style="color: {{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
-            <td>{{kategorie.name}}</td>
-            <td class="table-wert">{{kategorie.summe}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Kategorie</th>
+          <th>Name</th>
+          <th class="table-wert">Wert</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for kategorie in tag.1 %}
+        <tr>
+          <td class="table-kategorie"><span class="fa fa-circle" style="color: {{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
+          <td>{{kategorie.name}}</td>
+          <td class="table-wert">{{kategorie.summe}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
 {% endfor %}

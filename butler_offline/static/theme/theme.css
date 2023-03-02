@@ -518,3 +518,11 @@ table, thead, tr, td, th{
 .sidebar-menu > li > ul {
     padding-left: 1.5rem;
 }
+
+.flex {
+    display: flex;
+}
+
+.end {
+    flex-direction: row-reverse;
+}

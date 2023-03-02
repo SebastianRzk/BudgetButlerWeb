@@ -6,31 +6,29 @@
         <button class="btn-tool pull-right close_button" id="close_add_kategorie"><span class="fa fa-minus"></span></button>
     </div>
 	<div class="box-body boxcontent closed" id="zusammenfassung_{{zusammenfassung.jahr}}">
-		<div class="table-responsive">
-		    <table>
-                <tr>
-                    <th>Monat</th>
-                    <th>1.{{ zusammenfassung.jahr }}</th>
-                    <th>2.{{ zusammenfassung.jahr }}</th>
-                    <th>3.{{ zusammenfassung.jahr }}</th>
-                    <th>4.{{ zusammenfassung.jahr }}</th>
-                    <th>5.{{ zusammenfassung.jahr }}</th>
-                    <th>6.{{ zusammenfassung.jahr }}</th>
-                    <th>7.{{ zusammenfassung.jahr }}</th>
-                    <th>8.{{ zusammenfassung.jahr }}</th>
-                    <th>9.{{ zusammenfassung.jahr }}</th>
-                    <th>10.{{ zusammenfassung.jahr }}</th>
-                    <th>11.{{ zusammenfassung.jahr }}</th>
-                    <th>12.{{ zusammenfassung.jahr }}</th>
-                </tr>
-                <tr>
-                    <th>Abrerechnete Buchungen</th>
-                    {% for monat in zusammenfassung.monate %}
-                        <th>{{ monat }}</th>
-                    {% endfor %}
-                </tr>
-            </table>
-        </div>
+        <table>
+            <tr>
+                <th>Monat</th>
+                <th>1.{{ zusammenfassung.jahr }}</th>
+                <th>2.{{ zusammenfassung.jahr }}</th>
+                <th>3.{{ zusammenfassung.jahr }}</th>
+                <th>4.{{ zusammenfassung.jahr }}</th>
+                <th>5.{{ zusammenfassung.jahr }}</th>
+                <th>6.{{ zusammenfassung.jahr }}</th>
+                <th>7.{{ zusammenfassung.jahr }}</th>
+                <th>8.{{ zusammenfassung.jahr }}</th>
+                <th>9.{{ zusammenfassung.jahr }}</th>
+                <th>10.{{ zusammenfassung.jahr }}</th>
+                <th>11.{{ zusammenfassung.jahr }}</th>
+                <th>12.{{ zusammenfassung.jahr }}</th>
+            </tr>
+            <tr>
+                <th>Abrerechnete Buchungen</th>
+                {% for monat in zusammenfassung.monate %}
+                    <th>{{ monat }}</th>
+                {% endfor %}
+            </tr>
+        </table>
 	</div>
 </div>
 {% endfor %}
@@ -43,9 +41,7 @@
         <button class="btn-tool pull-right close_button" id="close_abrechung_{{abrechnung.name}}"><span class="fa fa-minus"></span></button>
 	</div>
 	<div class="box-body boxcontent closed" id="boxcontent_abrechung_{{abrechnung.name}}">
-		<div class="table-responsive">
-            <textarea name='import' class="textarea abrechnung" required="required" disabled>{{abrechnung.content}}</textarea>
-		</div>
+        <textarea name='import' class="textarea abrechnung" required="required" disabled>{{abrechnung.content}}</textarea>
 	</div>
 </div>
 {% endfor %}
