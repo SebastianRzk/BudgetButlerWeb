@@ -1,50 +1,59 @@
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
 from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import add_depotauszug
-from butler_offline.core import file_system
+from butler_offline.views.sparen.add_depotauszug import AddDepotauszugContext
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.context import get_error_message
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from datetime import date
+from butler_offline.core.database import Database
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.state import non_persisted_state
 
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    depotwerte = persisted_state.database_instance().depotwerte
-    persisted_state.database_instance().sparkontos.add('1demokonto', Kontos.TYP_DEPOT)
-    persisted_state.database_instance().sparkontos.add('2demokonto', Kontos.TYP_DEPOT)
+def initial_database() -> Database:
+    database = Database(name="test")
+    sparkontos = database.sparkontos
+    sparkontos.add('1demokonto', Kontos.TYP_DEPOT)
+    sparkontos.add('2demokonto', Kontos.TYP_DEPOT)
+
+    depotwerte = database.depotwerte
     depotwerte.add(name='1demowert', isin='1demoisin', typ=depotwerte.TYP_ETF)
     depotwerte.add(name='2demowert', isin='2demoisin', typ=depotwerte.TYP_ETF)
     depotwerte.add(name='3demowert', isin='3demoisin', typ=depotwerte.TYP_ETF)
 
     # old depotauszug, alle isins gebucht
-    persisted_state.database_instance().depotauszuege.add(datum('01.01.2020'), '1demoisin', '1demokonto', 1)
-    persisted_state.database_instance().depotauszuege.add(datum('01.01.2020'), '2demoisin', '1demokonto', 1)
-    persisted_state.database_instance().depotauszuege.add(datum('01.01.2020'), '3demoisin', '1demokonto', 1)
-    persisted_state.database_instance().depotauszuege.add(datum('01.01.2020'), '1demoisin', '2demokonto', 1)
-    persisted_state.database_instance().depotauszuege.add(datum('01.01.2020'), '2demoisin', '2demokonto', 1)
-    persisted_state.database_instance().depotauszuege.add(datum('01.01.2020'), '3demoisin', '2demokonto', 1)
+    depotauszuege = database.depotauszuege
+    depotauszuege.add(datum('01.01.2020'), '1demoisin', '1demokonto', 1)
+    depotauszuege.add(datum('01.01.2020'), '2demoisin', '1demokonto', 1)
+    depotauszuege.add(datum('01.01.2020'), '3demoisin', '1demokonto', 1)
+    depotauszuege.add(datum('01.01.2020'), '1demoisin', '2demokonto', 1)
+    depotauszuege.add(datum('01.01.2020'), '2demoisin', '2demokonto', 1)
+    depotauszuege.add(datum('01.01.2020'), '3demoisin', '2demokonto', 1)
 
     # new depotauszug
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '1demoisin', '1demokonto', 20)
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '2demoisin', '2demokonto', 30)
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), '3demoisin', '2demokonto', 40)
+    depotauszuege.add(datum('02.01.2020'), '1demoisin', '1demokonto', 20)
+    depotauszuege.add(datum('02.01.2020'), '2demoisin', '2demokonto', 30)
+    depotauszuege.add(datum('02.01.2020'), '3demoisin', '2demokonto', 40)
 
-    untaint_database(database=persisted_state.database_instance())
+    untaint_database(database=database)
 
-    request_handler.stub_me()
+    return database
 
 
 def test_init():
-    set_up()
-    context = add_depotauszug.index(GetRequest())
+    database = initial_database()
+    context = add_depotauszug.handle_request(request=GetRequest(), context=AddDepotauszugContext(
+        depotauszuege=database.depotauszuege,
+        depotwerte=database.depotwerte,
+        kontos=database.sparkontos
+    ))
+    print(context)
     assert context['approve_title'] == 'Depotauszug hinzufügen'
     assert context['default_items'] == [
         {
@@ -82,9 +91,13 @@ def test_init():
 
 
 def test_init_with_empty_depotauszuege_should_flip_filled_and_empty():
-    set_up()
-    persisted_state.database_instance().depotauszuege = Depotauszuege()
-    context = add_depotauszug.index(GetRequest())
+    database = initial_database()
+    context = add_depotauszug.handle_request(request=GetRequest(), context=AddDepotauszugContext(
+        depotauszuege=Depotauszuege(),
+        depotwerte=database.depotwerte,
+        kontos=database.sparkontos
+    ))
+
     assert context['approve_title'] == 'Depotauszug hinzufügen'
     assert context['default_items'] == [
         {
@@ -120,17 +133,23 @@ def test_init_with_empty_depotauszuege_should_flip_filled_and_empty():
 
 
 def test_init_with_already_empty_should_handle_like_empty():
-    set_up()
+    database = initial_database()
 
-    persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '1demoisin', '1demokonto', 0)
-    persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '2demoisin', '1demokonto', 0)
-    persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '3demoisin', '1demokonto', 0)
-    persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '1demoisin', '2demokonto', 0)
-    persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '2demoisin', '2demokonto', 0)
-    persisted_state.database_instance().depotauszuege.add(datum('03.01.2020'), '3demoisin', '2demokonto', 0)
-    untaint_database(database=persisted_state.database_instance())
+    depotauszuege = database.depotauszuege
+    depotauszuege.add(datum('03.01.2020'), '1demoisin', '1demokonto', 0)
+    depotauszuege.add(datum('03.01.2020'), '2demoisin', '1demokonto', 0)
+    depotauszuege.add(datum('03.01.2020'), '3demoisin', '1demokonto', 0)
+    depotauszuege.add(datum('03.01.2020'), '1demoisin', '2demokonto', 0)
+    depotauszuege.add(datum('03.01.2020'), '2demoisin', '2demokonto', 0)
+    depotauszuege.add(datum('03.01.2020'), '3demoisin', '2demokonto', 0)
+    untaint_database(database=database)
 
-    context = add_depotauszug.index(GetRequest())
+    context = add_depotauszug.handle_request(request=GetRequest(), context=AddDepotauszugContext(
+        depotauszuege=Depotauszuege(),
+        depotwerte=database.depotwerte,
+        kontos=database.sparkontos
+    ))
+
     assert context['approve_title'] == 'Depotauszug hinzufügen'
     assert context['default_items'] == [
         {
@@ -166,105 +185,122 @@ def test_init_with_already_empty_should_handle_like_empty():
 
 
 def test_init_empty_should_return_error():
-    set_up()
-    persisted_state.DATABASE_INSTANCE = None
+    context = add_depotauszug.handle_request(request=GetRequest(), context=AddDepotauszugContext(
+        depotauszuege=Depotauszuege(),
+        kontos=Kontos(),
+        depotwerte=Depotwerte()
+    ))
 
-    context = add_depotauszug.index(GetRequest())
-
-    assert get_error_message(context) ==  'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
 
 
 def test_init_without_depotwert_should_return_error():
-    set_up()
-    persisted_state.DATABASE_INSTANCE = None
-    sparkontos = persisted_state.database_instance().sparkontos
+    sparkontos = Kontos()
     sparkontos.add('1name', sparkontos.TYP_DEPOT)
 
-    context = add_depotauszug.index(GetRequest())
+    context = add_depotauszug.handle_request(request=GetRequest(), context=AddDepotauszugContext(
+        depotauszuege=Depotauszuege(),
+        depotwerte=Depotwerte(),
+        kontos=sparkontos
+    ))
 
     assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Depotwert.'
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = add_depotauszug.index(GetRequest())
+    database = initial_database()
+    context = add_depotauszug.handle_request(request=GetRequest(),
+                                             context=AddDepotauszugContext(
+        depotauszuege=database.depotauszuege,
+        depotwerte=database.depotwerte,
+        kontos=database.sparkontos
+    ))
+
     assert 'ID' in context
 
 
 def test_add():
-    set_up()
-    assert len(persisted_state.database_instance().depotauszuege.content) == 9
+    database = initial_database()
+    assert database.depotauszuege.select().count() == 9
 
-    add_depotauszug.index(VersionedPostRequest(
+    add_depotauszug.handle_request(request=VersionedPostRequest(
         {'action': 'add',
          'datum_2demokonto': rfc('01.03.2020'),
          'konto': '2demokonto',
          'wert_2demokonto_2demoisin': '100,00',
          'wert_2demokonto_3demoisin': '200,00'
          }
-     ))
+     ), context=AddDepotauszugContext(depotauszuege=database.depotauszuege,
+                                      depotwerte=database.depotwerte,
+                                      kontos=database.sparkontos))
 
-    db = persisted_state.database_instance()
-    assert len(db.depotauszuege.content) == 11
-    buchungen = db.depotauszuege.get_by(datum('01.03.2020'), '2demokonto')
-    print(buchungen)
+    assert database.depotauszuege.select().count() == 11
+    buchungen = database.depotauszuege.get_by(datum('01.03.2020'), '2demokonto')
 
     assert len(buchungen) == 2
 
-    assert buchungen.Wert[9] == 100
+    assert buchungen.Wert[9] == '100.00'
     assert buchungen.Konto[9] == '2demokonto'
     assert buchungen.Depotwert[9] == '2demoisin'
     assert buchungen.Datum[9] == datum('01.03.2020')
 
-    assert buchungen.Wert[10] == 200
+    assert buchungen.Wert[10] == '200.00'
     assert buchungen.Konto[10] == '2demokonto'
     assert buchungen.Depotwert[10] == '3demoisin'
     assert buchungen.Datum[10] == datum('01.03.2020')
 
 
 def test_add_with_empty_value_should_skip():
-    set_up()
-    persisted_state.database_instance().depotauszuege = Depotauszuege()
+    database = initial_database()
+    database.depotauszuege = Depotauszuege()
 
-    assert len(persisted_state.database_instance().depotauszuege.content) == 0
+    assert database.depotauszuege.select().count() == 0
 
-    add_depotauszug.index(VersionedPostRequest(
+    add_depotauszug.handle_request(request=VersionedPostRequest(
         {'action': 'add',
          'datum_2demokonto': rfc('01.03.2020'),
          'konto': '2demokonto',
          'wert_2demokonto_2demoisin': '0,00',
          'wert_2demokonto_3demoisin': '0,00'
          }
-     ))
+     ), context=AddDepotauszugContext(
+        depotauszuege=database.depotauszuege,
+        depotwerte=database.depotwerte,
+        kontos=database.sparkontos))
 
-    db = persisted_state.database_instance()
-    assert len(db.depotauszuege.content) == 0
+    assert database.depotauszuege.select().count() == 0
+
 
 def test_add_with_empty_datum_should_return_error_page():
-    set_up()
-    persisted_state.database_instance().depotauszuege = Depotauszuege()
+    database = initial_database()
 
-    assert len(persisted_state.database_instance().depotauszuege.content) == 0
-
-    result = add_depotauszug.index(VersionedPostRequest(
+    result = add_depotauszug.handle_request(request=VersionedPostRequest(
         {'action': 'add',
          'konto': '2demokonto',
          'wert_2demokonto_2demoisin': '10,00',
          'wert_2demokonto_3demoisin': '10,00'
          }
-     ))
+     ), context=AddDepotauszugContext(
+        depotauszuege=database.depotauszuege,
+        kontos=database.sparkontos,
+        depotwerte=database.depotwerte))
     assert get_error_message(result) == 'Interner Fehler <Kein Datum gefunden>.'
 
-def test_add_order_should_show_in_recently_added():
-    set_up()
 
-    result = add_depotauszug.index(VersionedPostRequest(
+def test_add_order_should_show_in_recently_added():
+    database = initial_database()
+
+    result = add_depotauszug.handle_request(request=VersionedPostRequest(
         {'action': 'add',
          'datum_2demokonto': rfc('01.03.2020'),
          'konto': '2demokonto',
          'wert_2demokonto_2demoisin': '100,00'
          }
-    ))
+    ),
+        context=AddDepotauszugContext(
+            depotauszuege=database.depotauszuege,
+            kontos=database.sparkontos,
+            depotwerte=database.depotwerte))
 
     result_element = list(result['letzte_erfassung'])[0]
 
@@ -276,126 +312,121 @@ def test_add_order_should_show_in_recently_added():
 
 
 def test_add_order_for_existing_auszug_should_return_error():
-    set_up()
+    database = initial_database()
 
-    result = add_depotauszug.index(VersionedPostRequest(
+    result = add_depotauszug.handle_request(request=VersionedPostRequest(
         {'action': 'add',
          'datum_2demokonto': rfc('01.01.2020'),
          'konto': '2demokonto',
          'wert_2demokonto_2demoisin': '100,00'
          }
-    ))
+    ),
+        context=AddDepotauszugContext(
+            depotauszuege=database.depotauszuege,
+            kontos=database.sparkontos,
+            depotwerte=database.depotwerte))
 
     assert get_error_message(result) == 'Für es besteht bereits ein Kontoauszug für 2demokonto am 01.01.2020'
 
-def test_add_should_only_fire_once():
-    set_up()
-    next_id = persisted_state.current_database_version()
-    add_depotauszug.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'datum_2demokonto': rfc('01.03.2020'),
-         'konto': '2demokonto',
-         'wert_2demokonto_2demoisin': '100,00'
-         }
-     ))
-    add_depotauszug.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'datum_2demokonto': rfc('01.03.2020'),
-         'konto': 'overwritten',
-         'wert_2demokonto_2demoisin': '9999,00'
-         }
-     ))
 
-    buchungen = persisted_state.database_instance().depotauszuege.content
-    assert len(buchungen) == 10
-    assert buchungen.Wert[9] == 100
-    assert buchungen.Konto[9] == '2demokonto'
-    assert buchungen.Depotwert[9] == '2demoisin'
-    assert buchungen.Datum[9] == datum('01.03.2020')
+def test_add_should_be_secured_by_request_handler():
+    def index_handle():
+        add_depotauszug.index(PostRequest(
+            {'action': 'add',
+             'ID': 'idasdasd',
+             'datum_2demokonto': rfc('01.03.2020'),
+             'konto': '2demokonto',
+             'wert_2demokonto_2demoisin': '100,00'
+             }
+         ))
+
+    result = run_in_mocked_handler(index_handle=index_handle)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/add_depotauszug.html']
 
 
 def test_edit():
-    set_up()
+    non_persisted_state.CONTEXT = {}
+    database = initial_database()
+    database.depotauszuege = Depotauszuege()
+
     persisted_state.database_instance().depotauszuege = Depotauszuege()
-    add_depotauszug.index(VersionedPostRequest(
+    add_depotauszug.handle_request(request=VersionedPostRequest(
         {'action': 'add',
          'datum_2demokonto': rfc('01.03.2020'),
          'konto': '2demokonto',
          'wert_2demokonto_2demoisin': '100,00'
          }
-     ))
+     ),
+        context=AddDepotauszugContext(
+            depotauszuege=database.depotauszuege,
+            depotwerte=database.depotwerte,
+            kontos=database.sparkontos
+    ))
 
-    result = add_depotauszug.index(VersionedPostRequest(
+    result = add_depotauszug.handle_request(request=VersionedPostRequest(
         {'action': 'add',
          'edit_index': 0,
          'datum_2demokonto': rfc('01.03.2020'),
          'konto': '2demokonto',
          'wert_2demokonto_2demoisin': '200,00'
          }
-     ))
+     ),
+        context=AddDepotauszugContext(
+            depotauszuege=database.depotauszuege,
+            depotwerte=database.depotwerte,
+            kontos=database.sparkontos
+        ))
 
-    db = persisted_state.database_instance()
-    assert len(db.depotauszuege.content) == 1
-    assert db.depotauszuege.content.Wert[0] == 200
-    assert db.depotauszuege.content.Konto[0] == '2demokonto'
-    assert db.depotauszuege.content.Depotwert[0] == '2demoisin'
-    assert db.depotauszuege.content.Datum[0] == datum('01.03.2020')
+    assert database.depotauszuege.select().count() == 1
+    assert database.depotauszuege.get(0) == {
+        'Wert': '200.00',
+        'Konto': '2demokonto',
+        'Depotwert': '2demoisin',
+        'Datum': datum('01.03.2020'),
+        'index': 0
+    }
 
-    result_element = list(result['letzte_erfassung'])[0]
+    letzte_erfassungen = list(result['letzte_erfassung'])
+    assert len(letzte_erfassungen) == 2
+    assert letzte_erfassungen[0] == {
+        'fa': 'pencil',
+        'datum': '01.03.2020',
+        'konto': '2demokonto',
+        'depotwert': '2demoisin',
+        'wert': '200,00'
+    }
 
-    assert result_element['fa'] == 'pencil'
-    assert result_element['datum'] == '01.03.2020'
-    assert result_element['konto'] == '2demokonto'
-    assert result_element['depotwert'] == '2demoisin'
-    assert result_element['wert'] == '200,00'
 
+def test_edit_should_be_secured_by_request_handler():
+    def index_handle():
+        add_depotauszug.index(VersionedPostRequest(
+            {'action': 'add',
+             'ID': 'asdf',
+             'edit_index': 0,
+             'datum_2demokonto': rfc('01.03.2020'),
+             'konto': '2demokonto',
+             'wert_2demokonto_2demoisin': '200,00'
+             }
+        ))
 
-def test_edit_should_only_fire_once():
-    set_up()
-    persisted_state.database_instance().depotauszuege = Depotauszuege()
-    add_depotauszug.index(VersionedPostRequest(
-        {'action': 'add',
-         'datum_2demokonto': rfc('01.03.2020'),
-         'konto': '2demokonto',
-         'wert_2demokonto_2demoisin': '100,00'
-         }
-    ))
+    result = run_in_mocked_handler(index_handle)
 
-    next_id = persisted_state.current_database_version()
-    add_depotauszug.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'datum_2demokonto': rfc('01.03.2020'),
-         'konto': '2demokonto',
-         'wert_2demokonto_2demoisin': '200,00'
-         }
-    ))
-
-    add_depotauszug.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'datum_2demokonto': rfc('01.03.2020'),
-         'konto': 'overwritten',
-         'wert_2demokonto_2demoisin': '0,00'
-         }
-    ))
-
-    db = persisted_state.database_instance()
-    assert len(db.depotauszuege.content) == 1
-    assert db.depotauszuege.content.Wert[0] == 200
-    assert db.depotauszuege.content.Konto[0] == '2demokonto'
-    assert db.depotauszuege.content.Depotwert[0] == '2demoisin'
-    assert db.depotauszuege.content.Datum[0] == datum('01.03.2020')
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/add_depotauszug.html']
 
 
 def test_edit_call_from_ueberischt_should_preset_values_and_rename_button():
-    set_up()
+    database = initial_database()
 
-    context = add_depotauszug.index(PostRequest({'action': 'edit', 'edit_index': '8'}))
+    context = add_depotauszug.handle_request(
+        request=PostRequest({'action': 'edit', 'edit_index': '8'}),
+        context=AddDepotauszugContext(
+            depotauszuege=database.depotauszuege,
+            depotwerte=database.depotwerte,
+            kontos=database.sparkontos)
+    )
 
     assert context['approve_title'] == 'Depotauszug aktualisieren'
     assert context['default_items'] == [

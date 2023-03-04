@@ -1,4 +1,3 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
@@ -7,6 +6,7 @@ from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_
 from datetime import date
 from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
 from butler_offline.viewcore.template import fa
+from butler_offline.core.database import Depotauszuege, Kontos, Depotwerte
 
 KEY_WERT = 'wert_'
 
@@ -53,11 +53,27 @@ def resolve_description(isin: str, all_elements) -> str:
     return None
 
 
-def handle_request(request):
-    if not database_instance().sparkontos.get_depots():
+class AddDepotauszugContext:
+    def __init__(self, depotauszuege: Depotauszuege, kontos: Kontos, depotwerte: Depotwerte):
+        self._depotauszuege = depotauszuege
+        self._kontos = kontos
+        self._depotwerte = depotwerte
+
+    def depotauszuege(self) -> Depotauszuege:
+        return self._depotauszuege
+
+    def kontos(self) -> Kontos:
+        return self._kontos
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+
+def handle_request(request, context: AddDepotauszugContext) -> dict:
+    if not context.kontos().get_depots():
         return generate_error_context('add_depotauszug', NO_VALID_DEPOT_IN_DB)
 
-    if not database_instance().depotwerte.get_depotwerte():
+    if not context.depotwerte().get_depotwerte():
         return generate_error_context('add_depotauszug', NO_VALID_SHARE_IN_DB)
 
     if post_action_is(request, 'add'):
@@ -73,16 +89,16 @@ def handle_request(request):
             for element in request.values:
                 if element.startswith(KEY_WERT):
                     depotwert = element.split('_')[-1]
-                    db_index = database_instance().depotauszuege.resolve_index(current_date, konto, depotwert)
+                    db_index = context.depotauszuege().resolve_index(current_date, konto, depotwert)
                     value = request.values[element].replace(",", ".")
                     value = float(value)
 
                     if db_index is not None:
-                        database_instance().depotauszuege.edit(db_index,
-                                                               datum=current_date,
-                                                               depotwert=depotwert,
-                                                               wert="%.2f" % value,
-                                                               konto=konto)
+                        context.depotauszuege().edit(db_index,
+                                                     datum=current_date,
+                                                     depotwert=depotwert,
+                                                     wert="%.2f" % value,
+                                                     konto=konto)
                         non_persisted_state.add_changed_depotauszuege(
                             {
                                 'fa': fa.pencil,
@@ -92,10 +108,10 @@ def handle_request(request):
                                 'konto': konto
                             })
                     else:
-                        database_instance().depotauszuege.add(datum=current_date,
-                                                              depotwert=depotwert,
-                                                              wert="%.2f" % value,
-                                                              konto=konto)
+                        context.depotauszuege().add(datum=current_date,
+                                                    depotwert=depotwert,
+                                                    wert="%.2f" % value,
+                                                    konto=konto)
                         non_persisted_state.add_changed_depotauszuege(
                             {
                                 'fa': fa.plus,
@@ -105,15 +121,14 @@ def handle_request(request):
                                 'konto': konto
                             })
 
-
         else:
 
-            result = database_instance().depotauszuege.get_by(current_date, konto)
+            result = context.depotauszuege().get_by(current_date, konto)
             if len(result) > 0:
                 return generate_error_context('add_depotauszug',
-                                                       'Für es besteht bereits ein Kontoauszug für {} am {}'.format(
-                                                           konto,
-                                                           datum_to_german(current_date)))
+                                              'Für es besteht bereits ein Kontoauszug für {} am {}'.format(
+                                                  konto,
+                                                  datum_to_german(current_date)))
 
             for element in request.values:
                 if element.startswith(KEY_WERT):
@@ -121,13 +136,13 @@ def handle_request(request):
                     value = request.values[element].replace(",", ".")
                     value = float(value)
 
-                    if value == 0 and not database_instance().depotauszuege.exists_wert(konto, depotwert):
+                    if value == 0 and not context.depotauszuege().exists_wert(konto, depotwert):
                         continue
 
-                    database_instance().depotauszuege.add(datum=current_date,
-                                                          depotwert=depotwert,
-                                                          wert="%.2f" % value,
-                                                          konto=konto)
+                    context.depotauszuege().add(datum=current_date,
+                                                depotwert=depotwert,
+                                                wert="%.2f" % value,
+                                                konto=konto)
                     non_persisted_state.add_changed_depotauszuege(
                         {
                             'fa': 'plus',
@@ -135,20 +150,20 @@ def handle_request(request):
                             'wert': from_double_to_german(value),
                             'depotwert': depotwert,
                             'konto': konto
-                            })
+                        })
 
-    context = generate_transactional_context('add_depotauszug')
-    context['approve_title'] = 'Depotauszug hinzufügen'
+    render_context = generate_transactional_context('add_depotauszug')
+    render_context['approve_title'] = 'Depotauszug hinzufügen'
 
-    depotwerte = database_instance().depotwerte.get_depotwerte_descriptions()
+    depotwerte = context.depotwerte().get_depotwerte_descriptions()
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
-        db_row = database_instance().depotauszuege.get(db_index)
+        db_row = context.depotauszuege().get(db_index)
 
         edit_datum = db_row['Datum']
         edit_konto = db_row['Konto']
-        db_row = database_instance().depotauszuege.get_by(edit_datum, edit_konto)
+        db_row = context.depotauszuege().get_by(edit_datum, edit_konto)
 
         filled_items = calculate_filled_items(db_row, depotwerte)
         empty_items = calculate_empty_items(depotwerte, filled_items)
@@ -160,19 +175,19 @@ def handle_request(request):
             'empty_items': empty_items
         }]
 
-        context['default_items'] = default_item
-        context['bearbeitungsmodus'] = True
-        context['edit_index'] = db_index
-        context['approve_title'] = 'Depotauszug aktualisieren'
+        render_context['default_items'] = default_item
+        render_context['bearbeitungsmodus'] = True
+        render_context['edit_index'] = db_index
+        render_context['approve_title'] = 'Depotauszug aktualisieren'
 
-    if 'default_items' not in context:
-        context['default_items'] = []
-        for konto in database_instance().sparkontos.get_depots():
-            default_datum = database_instance().depotauszuege.get_latest_datum_by(konto)
+    if 'default_items' not in render_context:
+        render_context['default_items'] = []
+        for konto in context.kontos().get_depots():
+            default_datum = context.depotauszuege().get_latest_datum_by(konto)
             if not default_datum:
                 default_datum = date.today()
 
-            db_row = database_instance().depotauszuege.get_by(default_datum, konto)
+            db_row = context.depotauszuege().get_by(default_datum, konto)
 
             filled_items = calculate_filled_items(db_row, depotwerte)
             empty_items = calculate_empty_items(depotwerte, filled_items)
@@ -187,12 +202,21 @@ def handle_request(request):
                 'filled_items': filled_items,
                 'empty_items': empty_items
             }
-            context['default_items'].append(default_item)
+            render_context['default_items'].append(default_item)
 
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_depotauszuege())
-    return context
+    render_context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_depotauszuege())
+    return render_context
+
+
+from butler_offline.viewcore.state.persisted_state import database_instance
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_depotauszug.html')
+    context = AddDepotauszugContext(depotauszuege=database_instance().depotauszuege,
+                                    kontos=database_instance().sparkontos,
+                                    depotwerte=database_instance().depotwerte)
 
+    def migration_function(r):
+        return handle_request(request=r, context=context)
+
+    return request_handler.handle_request(request, migration_function, 'sparen/add_depotauszug.html')
