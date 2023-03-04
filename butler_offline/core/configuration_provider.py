@@ -3,6 +3,7 @@ import logging
 from butler_offline.core import file_system
 from butler_offline.core import configuration_provider
 from os import getenv
+from typing import Callable
 
 
 BUDGETBUTLERWEB_DATABASE_PATH = getenv('BUDGETBUTLERWEB_DATABASE_PATH', '..')
@@ -63,4 +64,21 @@ def set_configuration(key, value):
     configuration_provider.LOADED_CONFIG[key] = value
     _save_config(configuration_provider.LOADED_CONFIG)
     configuration_provider.LOADED_CONFIG = _load_config()
-    
+
+
+class ConfigurationProvider:
+    def __init__(self, set_configuration_fun: Callable[[str, str], None], get_configuration_fun: Callable[[str], str]):
+        self._set_configuration = set_configuration_fun
+        self._get_configuration = get_configuration_fun
+
+    def set_configuration(self, key: str, value: str):
+        self._set_configuration(key=key, value=value)
+
+    def get_configuration(self, key: str) -> str:
+        return self._get_configuration(key=key)
+
+
+CONFIGURATION_PROVIDER = ConfigurationProvider(
+    set_configuration_fun=set_configuration,
+    get_configuration_fun=get_configuration,
+)
