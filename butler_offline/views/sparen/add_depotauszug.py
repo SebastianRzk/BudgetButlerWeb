@@ -69,7 +69,7 @@ class AddDepotauszugContext:
         return self._depotwerte
 
 
-def handle_request(request, context: AddDepotauszugContext):
+def handle_request(request, context: AddDepotauszugContext) -> dict:
     if not context.kontos().get_depots():
         return generate_error_context('add_depotauszug', NO_VALID_DEPOT_IN_DB)
 
@@ -120,7 +120,6 @@ def handle_request(request, context: AddDepotauszugContext):
                                 'depotwert': depotwert,
                                 'konto': konto
                             })
-
 
         else:
 

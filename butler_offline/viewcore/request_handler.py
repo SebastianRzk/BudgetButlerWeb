@@ -17,7 +17,11 @@ from butler_offline.viewcore.template import renderer_instance
 REDIRECTOR = lambda x: redirect(x, code=301)
 
 
-def handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page:str):
+def handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page: str):
+    return REQUEST_HANDLER(request=request, request_action=request_action, html_base_page=html_base_page)
+
+
+def __handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page: str):
     if is_transactional_request(request):
         logging.info('transactional request found')
         transaction_id = get_transaction_id(request)
@@ -49,6 +53,9 @@ def handle_request(request: Request, request_action: Callable[[Request], dict], 
     context['content'] = rendered_content
     response = renderer_instance().render('index.html', **context)
     return response
+
+
+REQUEST_HANDLER = __handle_request
 
 
 def handle_transaction_out_of_sync(transaction_id):
