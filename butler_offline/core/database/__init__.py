@@ -11,7 +11,6 @@ from butler_offline.core.database.gemeinsamebuchungen.abrechnen import abrechnen
 import logging
 
 
-
 class Database:
     def __init__(self, name, ausgeschlossene_kategorien=set()):
         self.name = name
