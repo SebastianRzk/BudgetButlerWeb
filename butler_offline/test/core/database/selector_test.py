@@ -1,5 +1,4 @@
 import unittest
-from datetime import date
 
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore.converter import datum_from_german as datum

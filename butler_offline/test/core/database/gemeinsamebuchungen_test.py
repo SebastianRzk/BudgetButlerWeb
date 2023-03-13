@@ -244,6 +244,26 @@ def test_get_renamed_list():
     ]
 
 
+def test_anteil_gemeinsamer_buchungen():
+    component_under_test = Gemeinsamebuchungen()
+
+    component_under_test.add(
+        datum('2.2.2020'),
+        'kategorie1',
+        'name1',
+        10.00,
+        'Parnername')
+
+    result = component_under_test.anteil_gemeinsamer_buchungen()
+
+    assert len(result) == 1
+    assert result['Datum'][0] == datum('2.2.2020')
+    assert result['Kategorie'][0] == 'kategorie1'
+    assert result['Name'][0] == 'name1 (noch nicht abgerechnet, von Parnername)'
+    assert result['Wert'][0] == 5.00
+    assert result['Tags'][0] == []
+
+
 def test_drop_all():
     component_under_test = Gemeinsamebuchungen()
 
