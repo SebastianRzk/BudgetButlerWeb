@@ -3,9 +3,10 @@ from datetime import datetime
 from butler_offline.core.database.selector import Selektor
 from butler_offline.core.database.stated_object import StatedObject
 
+
 class DatabaseObject(StatedObject):
 
-    def __init__(self, stored_columns=[]):
+    def __init__(self, stored_columns = []):
         super().__init__()
         self.content = pd.DataFrame({}, columns=stored_columns)
 
@@ -31,10 +32,10 @@ class DatabaseObject(StatedObject):
         self.content = self.content.drop(index)
         self.taint()
 
-    def select(self):
+    def select(self) -> Selektor:
         return Selektor(self.content)
 
-    def get_static_content(self):
+    def get_static_content(self) -> pd.DataFrame:
         return self.content
 
     def frame_to_list_of_dicts(self, dataframe):
