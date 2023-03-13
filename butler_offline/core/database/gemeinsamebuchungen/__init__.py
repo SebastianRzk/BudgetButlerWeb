@@ -88,5 +88,5 @@ class Gemeinsamebuchungen(DatabaseObject):
     def is_empty(self):
         return self.content.empty
 
-    def select(self):
+    def select(self) -> GemeinsamSelector:
         return GemeinsamSelector(self.content)
