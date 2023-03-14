@@ -41,7 +41,7 @@ class Selektor:
         return self.content
 
     def group_by_kategorie(self):
-        return self.content.groupby(by='Kategorie').sum()
+        return self.content.copy()[['Wert', 'Kategorie']].groupby(by='Kategorie').sum()
 
     def select_letzte_6_montate(self):
         if date.today().month > 6:
