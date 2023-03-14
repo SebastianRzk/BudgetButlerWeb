@@ -48,7 +48,7 @@ class Einzelbuchungen(DatabaseObject):
             return {}
 
         tabelle_gesamtsumme = tabelle.Wert.sum()
-        tabelle = tabelle.groupby(['Kategorie']).sum()
+        tabelle = tabelle.copy()[['Kategorie', 'Wert']].groupby(['Kategorie']).sum()
         result = {}
         for kategorie, row in tabelle.iterrows():
             result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
