@@ -1,5 +1,3 @@
-import unittest
-
 from butler_offline.core import database_manager
 from butler_offline.core.database_manager import MultiPartCsvReader
 from butler_offline.core.database_manager import DatabaseParser
@@ -130,47 +128,50 @@ Datum,Depotwert,Konto,Wert
 '''
 
 
-class MultiPartCsvReaderTest(unittest.TestCase):
-    def test_read(self):
-        test_content = [
-            '1,2', '2,3', '3,4',
-            'B', '3,4', '4,5'
-        ]
+def test_read_multipart_csv_reader():
+    test_content = [
+        '1,2', '2,3', '3,4',
+        'B', '3,4', '4,5'
+    ]
 
-        reader = MultiPartCsvReader({'A', 'B', 'C'}, 'A')
-        reader.from_string(test_content)
+    reader = MultiPartCsvReader({'A', 'B', 'C'}, 'A')
+    reader.from_string(test_content)
 
-        assert reader.get_string('A') == '1,2\n2,3\n3,4'
-        assert reader.get_string('B') == '3,4\n4,5'
-        assert reader.get_string('C') == ''
+    assert reader.get_string('A') == '1,2\n2,3\n3,4'
+    assert reader.get_string('B') == '3,4\n4,5'
+    assert reader.get_string('C') == ''
 
 
-class DatabaseParserTest(unittest.TestCase):
-    def test_read(self):
-        database_parser = DatabaseParser()
+def test_read_database_parser():
+    database_parser = DatabaseParser()
 
-        database_parser.from_string(self.full_db)
+    database_parser.from_string(full_db_parser)
 
-        assert database_parser.einzelbuchungen() == self.einzelbuchungen
-        assert database_parser.dauerauftraege() == self.dauerauftraege
-        assert database_parser.gemeinsame_buchungen() == self.gemeinsame_buchungen
+    assert database_parser.einzelbuchungen() == einzelbuchungen
+    assert database_parser.dauerauftraege() == dauerauftraege
+    assert database_parser.gemeinsame_buchungen() == gemeinsame_buchungen
 
-    einzelbuchungen = '''Datum,Kategorie,Name,Wert,Tags
+
+einzelbuchungen = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
 2017-11-11,Essen,Nochwas,-1.0,[]'''
 
-    dauerauftraege = '''Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
+
+dauerauftraege = '''Endedatum,Kategorie,Name,Rhythmus,Startdatum,Wert
 2017-09-18,Essen,Other Something,monatlich,2017-01-12,-1.0
 2017-09-30,Miete,Miete,monatlich,2017-01-13,-1.0'''
 
-    gemeinsame_buchungen = '''Datum,Kategorie,Name,Wert,Person
+
+gemeinsame_buchungen = '''Datum,Kategorie,Name,Wert,Person
 2017-12-30,Miete,monatlich,-200.0,TestUser
 2017-12-31,Miete,monatlich,-200.0,Partner'''
 
-    full_db = '''
+
+full_db_parser = '''
 {einzelbuchungen}
 Dauerauftraege
 {dauerauftraege}
 Gemeinsame Buchungen
 {gemeinsame_buchungen}
-'''.format(einzelbuchungen=einzelbuchungen, dauerauftraege=dauerauftraege, gemeinsame_buchungen=gemeinsame_buchungen).split('\n')  
+'''.format(einzelbuchungen=einzelbuchungen, dauerauftraege=dauerauftraege, gemeinsame_buchungen=gemeinsame_buchungen)\
+    .split('\n')
