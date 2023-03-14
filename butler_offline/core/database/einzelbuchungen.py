@@ -24,7 +24,7 @@ class Einzelbuchungen(DatabaseObject):
         self.taint()
         self._sort()
 
-    def get_all(self):
+    def get_all(self) -> pd.DataFrame:
         return self.content
 
     def edit(self, index, buchungs_datum, kategorie, name, wert):
@@ -34,9 +34,6 @@ class Einzelbuchungen(DatabaseObject):
             'Kategorie': kategorie,
             'Name': name
         })
-
-    def anzahl(self):
-        return len(self.content)
 
     def get_jahresausgaben_nach_kategorie_prozentual(self, jahr):
         tabelle = self.select().select_ausgaben().select_year(jahr).content
@@ -62,9 +59,6 @@ class Einzelbuchungen(DatabaseObject):
         self._sort()
 
     def get_monate(self):
-        '''
-        Alle in der Datenbank eingetragenen Monate als set
-        '''
         monate = self.content.Datum.copy().map(lambda x: str(x.year) + '_' + str(x.month).rjust(2, '0'))
         return set(monate)
 

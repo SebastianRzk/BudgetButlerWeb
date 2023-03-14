@@ -39,7 +39,7 @@ class Gemeinsamabrechnen(unittest.TestCase):
             'set_ergebnis': '',
             'set_verhaeltnis': '50'}))
 
-        assert testdb.einzelbuchungen.anzahl() == 1
+        assert testdb.einzelbuchungen.select().count() == 1
         assert testdb.einzelbuchungen.get_all().Wert[0] == '1.30'
 
     def test_abrechnen_should_create_abrechnung_online(self):

@@ -1,4 +1,3 @@
-import unittest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
