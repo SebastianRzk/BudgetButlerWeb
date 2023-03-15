@@ -58,11 +58,14 @@ def test_add_should_add_gemeinsame_buchung():
          }
     ))
     testdb = persisted_state.database_instance()
-    assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
-    assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
-    assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
-    assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1.1.2017')
-    assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
+    assert testdb.gemeinsamebuchungen.get(0) == {
+        'Wert': -1 * float('2.00'),
+        'Name': 'testname',
+        'Kategorie': 'Essen',
+        'Datum': datum('1.1.2017'),
+        'Person': 'testperson',
+        'index': 0
+    }
 
 
 def test_add_gemeinsame_ausgabe_should_show_in_recently_added():
@@ -99,10 +102,15 @@ def test_add_should_add_dynamic_einzelbuchung():
          }
     ))
     testdb = persisted_state.database_instance()
-    assert testdb.einzelbuchungen.content.Wert[0] == -1 * 0.5 * float('2.00')
-    assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
-    assert testdb.einzelbuchungen.content.Name[0] == 'testname (noch nicht abgerechnet, von testperson)'
+    assert testdb.einzelbuchungen.get(0) == {
+        'Wert': -0.5 * float('2.00'),
+        'Name': 'testname (noch nicht abgerechnet, von testperson)',
+        'Kategorie': 'Essen',
+        'Datum': datum('1.1.2017'),
+        'index': 0,
+        'Tags': [],
+        'Dynamisch': True
+    }
 
 
 def test_add_should_only_fire_once():
@@ -129,12 +137,7 @@ def test_add_should_only_fire_once():
          }
     ))
     testdb = persisted_state.database_instance()
-    assert len(testdb.gemeinsamebuchungen.content) == 1
-    assert testdb.gemeinsamebuchungen.content.Wert[0] == -1 * float('2.00')
-    assert testdb.gemeinsamebuchungen.content.Name[0] == 'testname'
-    assert testdb.gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
-    assert testdb.gemeinsamebuchungen.content.Datum[0] == datum('1.1.2017')
-    assert testdb.gemeinsamebuchungen.content.Person[0] == 'testperson'
+    assert testdb.gemeinsamebuchungen.select().count() == 1
 
 
 def test_edit_ausgabe():
