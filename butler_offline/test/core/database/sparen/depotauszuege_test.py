@@ -2,6 +2,7 @@ from datetime import timedelta
 from butler_offline.core import time
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.test.core.database import extract_index, extract_column_values
 
 
 def test_add_should_add():
@@ -44,6 +45,28 @@ def test_edit_should_edit():
         'Konto': '23demokonto',
         'Wert': 230
     }
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Depotauszuege()
+
+    component_under_test.add(datum('01.01.2020'), 'depotwert1', '1demokonto', 100)
+    component_under_test.add(datum('01.01.2010'), 'depotwert2', '1demokonto', 100)
+
+    assert extract_column_values(component_under_test, 'Depotwert') == ['depotwert2', 'depotwert1']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Depotauszuege()
+
+    component_under_test.add(datum('01.01.2010'), 'depotwert1', '1demokonto', 100)
+    component_under_test.add(datum('01.01.2020'), 'depotwert2', '1demokonto', 100)
+
+    component_under_test.edit(1, datum('01.01.2000'), 'depotwert2', '1demokonto', 100)
+
+    assert extract_column_values(component_under_test, 'Depotwert') == ['depotwert2', 'depotwert1']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_get_by():

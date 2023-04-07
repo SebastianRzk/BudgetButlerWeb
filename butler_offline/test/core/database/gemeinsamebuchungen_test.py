@@ -1,6 +1,6 @@
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-
+from butler_offline.test.core.database import extract_index, extract_name_column
 
 def test_add_should_taint():
     component_under_test = Gemeinsamebuchungen()
@@ -31,6 +31,56 @@ def test_edit_should_taint():
         2.34,
         'sebastian')
     assert component_under_test.taint_number() == 2
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Gemeinsamebuchungen()
+    component_under_test.add(
+        datum('1.1.2020'),
+        'kategorie1',
+        'name1',
+        1.23,
+        'person1'
+    )
+    component_under_test.add(
+        datum('1.1.2010'),
+        'kategorie2',
+        'name2',
+        1.23,
+        'person2'
+    )
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Gemeinsamebuchungen()
+    component_under_test.add(
+        datum('1.1.2010'),
+        'kategorie1',
+        'name1',
+        1.23,
+        'person2'
+    )
+    component_under_test.add(
+        datum('1.1.2020'),
+        'kategorie2',
+        'name2',
+        1.23,
+        'person2'
+    )
+    component_under_test.edit(
+        1,
+        datum('1.1.2000'),
+        'name2',
+        'kategorie2',
+        1.23,
+        'person2'
+    )
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_edit_should_edit():

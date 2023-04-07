@@ -1,5 +1,7 @@
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 import pandas as pd
+from butler_offline.test.core.database import extract_index, extract_name_column
+
 
 def test_add_should_add():
     component_under_test = Depotwerte()
@@ -38,6 +40,28 @@ def test_edit_should_edit():
         'Typ': component_under_test.TYP_FOND,
         'ISIN': '13isin'
     }
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Depotwerte()
+
+    component_under_test.add('name2', '1isin', typ=component_under_test.TYP_ETF)
+    component_under_test.add('name1', '1isin', typ=component_under_test.TYP_ETF)
+
+    assert extract_name_column(component_under_test) == ['name1', 'name2']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Depotwerte()
+
+    component_under_test.add('name1', '1isin', typ=component_under_test.TYP_ETF)
+    component_under_test.add('name2', '1isin', typ=component_under_test.TYP_ETF)
+
+    component_under_test.edit(1, 'name0', '1isin', typ=component_under_test.TYP_ETF)
+
+    assert extract_name_column(component_under_test) == ['name0', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_get_depotwerte():
