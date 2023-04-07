@@ -67,7 +67,7 @@ def get_error_message(context):
     return context[ERROR_KEY]
 
 
-def generate_base_context(pagename):
+def generate_base_context(pagename: str):
     return {
         'active': get_key_for_name(pagename),
         'active_page_url': '/' + pagename + '/',
@@ -79,7 +79,7 @@ def generate_base_context(pagename):
     }
 
 
-def generate_transactional_context(pagename):
+def generate_transactional_context(pagename: str):
     context = generate_base_context(pagename)
     context['ID'] = persisted_state.current_database_version()
     return context

@@ -4,6 +4,7 @@ import logging
 
 from butler_offline.views.einzelbuchungen import addausgabe, \
     adddauerauftrag, \
+    split_dauerauftrag, \
     addeinnahme, \
     uebersicht_dauerauftrag, \
     uebersicht_einzelbuchungen, \
@@ -56,6 +57,11 @@ def show_dashboard():
 @app.route(routes.EINZELBUCHUNGEN_DAUERAUFTRAG_ADD, methods=['GET', 'POST'])
 def add_dauerauftrag():
     return adddauerauftrag.index(request)
+
+
+@app.route(routes.EINZELBUCHUNGEN_DAUERAUFTRAG_SPLIT, methods=['POST'])
+def go_split_dauerauftrag():
+    return split_dauerauftrag.index(request)
 
 
 @app.route(routes.EINZELBUCHUNGEN_EINNAHME_ADD, methods=['GET', 'POST'])

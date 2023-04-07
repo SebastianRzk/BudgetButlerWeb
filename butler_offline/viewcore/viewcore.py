@@ -14,7 +14,7 @@ def get_generic_color_chooser(values):
     return GenericDesignColorChooser(values, design_colors())
 
 
-def post_action_is(request, action_name):
+def post_action_is(request, action_name: str) -> bool:
     if not is_post_parameter_set(request, 'action'):
         return False
     return request.values['action'] == action_name

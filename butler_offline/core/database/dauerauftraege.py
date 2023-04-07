@@ -36,8 +36,7 @@ class Dauerauftraege(DatabaseObject):
         raw_table[self._TABLE_HEADER_ENDE_DATUM] = raw_table[self._TABLE_HEADER_ENDE_DATUM]\
             .map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         self.content = pd.concat([self.content, raw_table], ignore_index=True)
-        if not self.content.empty:
-            self.content = self.content.sort_values(by=self.SORT_ORDER)
+        self._sort()
 
     def einnahmenausgaben_until_today(self,
                                       startdatum,
@@ -79,6 +78,7 @@ class Dauerauftraege(DatabaseObject):
             )
         self.content = pd.concat([self.content, neuer_dauerauftrag], ignore_index=True)
         self.taint()
+        self._sort()
         logging.info('DATABASE: Dauerauftrag hinzugefügt')
 
     def aktuelle(self):
@@ -108,7 +108,8 @@ class Dauerauftraege(DatabaseObject):
         })
 
     def _sort(self):
-        pass
+        self.content = self.content.sort_values(by=self.SORT_ORDER)
+
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return pd.DataFrame(
