@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from typing import List
 
 from butler_offline.core.frequency import get_function_for_name
 from butler_offline.core.database.database_object import DatabaseObject
@@ -8,16 +9,35 @@ import logging
 
 class Dauerauftraege(DatabaseObject):
 
-    TABLE_HEADER = ['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert']
+    _TABLE_HEADER_START_DATUM: str = 'Startdatum'
+    _TABLE_HEADER_ENDE_DATUM: str = 'Endedatum'
+    _TABLE_HEADER_KATEGORIE: str = 'Kategorie'
+    _TABLE_HEADER_NAME: str = 'Name'
+    _TABLE_HEADER_WERT: str = 'Wert'
+    _TABLE_HEADER_RHYTHUMS: str = 'Rhythmus'
+
+    SORT_ORDER: List[str] = [
+        _TABLE_HEADER_START_DATUM,
+        _TABLE_HEADER_ENDE_DATUM,
+        _TABLE_HEADER_KATEGORIE,
+        _TABLE_HEADER_NAME,
+        _TABLE_HEADER_WERT,
+        _TABLE_HEADER_RHYTHUMS
+    ]
+
+    TABLE_HEADER: List[str] = ['Endedatum', 'Kategorie', 'Name', 'Rhythmus', 'Startdatum', 'Wert']
 
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
 
-    def parse(self, raw_table):
-        raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
-        raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
+    def parse(self, raw_table) -> None:
+        raw_table[self._TABLE_HEADER_START_DATUM] = raw_table[self._TABLE_HEADER_START_DATUM]\
+            .map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
+        raw_table[self._TABLE_HEADER_ENDE_DATUM] = raw_table[self._TABLE_HEADER_ENDE_DATUM]\
+            .map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         self.content = pd.concat([self.content, raw_table], ignore_index=True)
-        self.content = self.content.sort_values(by=['Startdatum'])
+        if not self.content.empty:
+            self.content = self.content.sort_values(by=self.SORT_ORDER)
 
     def einnahmenausgaben_until_today(self,
                                       startdatum,
