@@ -1,6 +1,7 @@
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.core.database import extract_index, extract_name_column
 
 
 def test_add_should_add():
@@ -48,6 +49,28 @@ def test_edit_should_edit():
         'Wert': 240,
         'Dynamisch': False
     }
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Order()
+
+    component_under_test.add(datum('01.01.2020'), '1name', '1konto', '1depotwert', 100)
+    component_under_test.add(datum('01.01.2010'), '2name', '1konto', '1depotwert', 100)
+
+    assert extract_name_column(component_under_test) == ['2name', '1name']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Order()
+
+    component_under_test.add(datum('01.01.2010'), '1name', '1konto', '1depotwert', 100)
+    component_under_test.add(datum('01.01.2020'), '2name', '1konto', '1depotwert', 100)
+
+    component_under_test.edit(1, datum('01.01.2000'), '2name', '1konto', '1depotwert', 100)
+
+    assert extract_name_column(component_under_test) == ['2name', '1name']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_get_dynamische_einzelbuchungen():

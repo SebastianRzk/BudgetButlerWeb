@@ -1,3 +1,4 @@
+from butler_offline.test.core.database import extract_index, extract_column_values
 from butler_offline.core.database.sparen.kontos import Kontos
 
 
@@ -35,6 +36,28 @@ def test_edit_should_edit():
         'Kontoname': '13name',
         'Kontotyp': '13typ'
     }
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Kontos()
+
+    component_under_test.add('name2', '1typ',)
+    component_under_test.add('name1', '1typ',)
+
+    assert extract_column_values(component_under_test, 'Kontoname') == ['name1', 'name2']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Kontos()
+
+    component_under_test.add('name1', '1typ',)
+    component_under_test.add('name2', '1typ',)
+
+    component_under_test.edit(1, 'name0', '1typ',)
+
+    assert extract_column_values(component_under_test, 'Kontoname') == ['name0', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_get_sparfaehige_kontos():
