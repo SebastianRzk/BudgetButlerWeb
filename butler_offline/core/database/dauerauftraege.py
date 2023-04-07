@@ -106,9 +106,11 @@ class Dauerauftraege(DatabaseObject):
             'Name': name,
             'Rhythmus': rhythmus
         })
+        self._sort()
 
     def _sort(self):
         self.content = self.content.sort_values(by=self.SORT_ORDER)
+        self.content = self.content.reset_index(drop=True)
 
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
