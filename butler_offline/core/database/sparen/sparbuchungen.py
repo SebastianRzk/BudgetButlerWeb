@@ -33,7 +33,7 @@ class Sparbuchungen(DatabaseObject):
         })
 
     def _sort(self):
-        self.content = self.content.sort_values(by=['Datum', 'Konto', 'Name'])
+        self.content = self.content.sort_values(by=['Datum', 'Konto', 'Name', 'Typ', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
     def get_static_content(self):

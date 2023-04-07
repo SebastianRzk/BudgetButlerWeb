@@ -35,7 +35,8 @@ class Gemeinsamebuchungen(DatabaseObject):
         self.content = self.content.drop(indices_to_drop, axis=0)
 
     def _sort(self):
-        self.content = self.content.sort_values(by='Datum')
+        self.content = self.content.sort_values(by=self.TABLE_HEADER)
+        self.content = self.content.reset_index(drop=True)
 
     def edit(self, index, datum, name, kategorie, wert, person):
         self.edit_element(index, {

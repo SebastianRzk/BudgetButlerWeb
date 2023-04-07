@@ -18,7 +18,7 @@ class PostRequest:
 
 
 class PostRequestAction(PostRequest):
-    def __init__(self, action, args):
+    def __init__(self, action: str, args):
         args['action'] = action
         self.values = args
 
@@ -30,6 +30,6 @@ class VersionedPostRequest(PostRequest):
 
 
 class VersionedPostRequestAction(VersionedPostRequest):
-    def __init__(self, action, args):
+    def __init__(self, action: str, args):
         args['action'] = action
         self.values = args

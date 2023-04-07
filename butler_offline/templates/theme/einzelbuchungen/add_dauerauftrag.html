@@ -3,6 +3,16 @@
 		<div class="box-header">
 			<h3 class="box-title">{{element_titel}}</h3>
 		</div>
+		{% if bearbeitungsmodus %}
+		<form role="form" action="/splitdauerauftrag/" method="post">
+			<input type="hidden" name="dauerauftrag_id" value="{{edit_index}}">
+			<input type="hidden" name="ID" value="{{ID}}">
+			<div class="box-footer">
+				<button type="submit" name="action" value="preset_values" id="preset_values">
+					Dauerauftrag teilen und mit neuem Wert weiterführen</button>
+			</div>
+		</form>
+		{% endif %}
 		<form role="form" action="/adddauerauftrag/" method="post">
 			{% if bearbeitungsmodus %}
 				<input type="hidden" name="edit_index" value="{{edit_index}}">

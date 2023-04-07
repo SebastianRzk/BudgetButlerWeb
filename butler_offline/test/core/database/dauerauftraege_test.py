@@ -6,7 +6,7 @@ from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME, \
     FREQUENCY_HALBJAEHRLICH_NAME,\
     FREQUENCY_JAEHRLICH_NAME
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.core.database.database_object import row_to_dict
+from butler_offline.test.core.database import extract_name_column, extract_index
 
 
 def test_add_should_taint():
@@ -41,6 +41,58 @@ def test_edit_should_taint():
         'some other rhythmus',
         2.34)
     assert component_under_test.taint_number() == 2
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        datum('1.1.2020'),
+        datum('1.1.2020'),
+        'kategorie1',
+        'name1',
+        'rhythmus1',
+        1.23)
+    component_under_test.add(
+        datum('1.1.2010'),
+        datum('1.1.2010'),
+        'kategorie2',
+        'name2',
+        'rhythmus2',
+        1.23)
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        datum('1.1.2010'),
+        datum('1.1.2010'),
+        'kategorie1',
+        'name1',
+        'rhythmus1',
+        1.23)
+    component_under_test.add(
+        datum('1.1.2020'),
+        datum('1.1.2020'),
+        'kategorie2',
+        'name2',
+        'rhythmus2',
+        1.23)
+
+    component_under_test.edit(
+        1,
+        datum('1.1.2000'),
+        datum('1.1.2000'),
+        'kategorie2',
+        'name2',
+        'rhythmus2',
+        1.23)
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
+
 
 
 def test_delete_should_taint():
@@ -134,14 +186,14 @@ def test_aendere_bei_voller_datenbank():
         '1some rhythmus',
         1.23)
     component_under_test.add(
-        datum('1.1.2010'),
+        datum('1.1.2011'),
         date.today(),
         '2some kategorie',
         '2some name',
         '2some rhythmus',
         1.23)
     component_under_test.add(
-        datum('1.1.2010'),
+        datum('1.1.2012'),
         date.today(),
         '3some kategorie',
         '3some name',
@@ -150,16 +202,16 @@ def test_aendere_bei_voller_datenbank():
 
     component_under_test.edit(
         1,
-        datum('2.1.2010'),
-        datum('3.1.2010'),
+        datum('2.1.2011'),
+        datum('3.1.2011'),
         'some other kategorie',
         'some other name',
         'some other rhythmus',
         2.34)
 
     assert len(component_under_test.content) == 3
-    assert component_under_test.content.Startdatum[1] == datum('2.1.2010')
-    assert component_under_test.content.Endedatum[1] == datum('3.1.2010')
+    assert component_under_test.content.Startdatum[1] == datum('2.1.2011')
+    assert component_under_test.content.Endedatum[1] == datum('3.1.2011')
     assert component_under_test.content.Name[1] == 'some other name'
     assert component_under_test.content.Kategorie[1] == 'some other kategorie'
     assert component_under_test.content.Rhythmus[1] == 'some other rhythmus'

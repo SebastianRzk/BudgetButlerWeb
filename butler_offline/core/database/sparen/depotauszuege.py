@@ -25,6 +25,7 @@ class Depotauszuege(DatabaseObject):
             'Konto': konto,
             'Wert': wert
         })
+        self._sort()
 
     def get_by(self, datum, konto):
         auszuege = self.content[self.content.Konto == konto].copy()
@@ -91,7 +92,7 @@ class Depotauszuege(DatabaseObject):
         return self.content.loc[index, 'Datum']
 
     def _sort(self):
-        self.content = self.content.sort_values(by=['Datum', 'Konto', 'Depotwert'])
+        self.content = self.content.sort_values(by=['Datum', 'Konto', 'Depotwert', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
     def select_max_year(self, year):

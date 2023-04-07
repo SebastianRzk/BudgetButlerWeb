@@ -2,6 +2,7 @@ from datetime import date
 
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.core.database import extract_index, extract_name_column
 
 
 def test_add_should_taint():
@@ -30,6 +31,47 @@ def test_edit_should_taint():
         'some other name',
         2.34)
     assert component_under_test.taint_number() == 2
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Einzelbuchungen()
+    component_under_test.add(
+        datum('1.1.2020'),
+        'kategorie1',
+        'name1',
+        1.23)
+    component_under_test.add(
+        datum('1.1.2010'),
+        'kategorie2',
+        'name2',
+        1.23)
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Einzelbuchungen()
+    component_under_test.add(
+        datum('1.1.2010'),
+        'kategorie1',
+        'name1',
+        1.23)
+    component_under_test.add(
+        datum('1.1.2020'),
+        'kategorie2',
+        'name2',
+        1.23)
+
+    component_under_test.edit(
+        1,
+        datum('1.1.2000'),
+        'kategorie2',
+        'name2',
+        1.23)
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_delete_should_taint():
