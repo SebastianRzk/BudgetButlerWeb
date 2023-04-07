@@ -393,7 +393,7 @@ def berechne_monatlich():
 
 
 def _handle_request(request):
-    if persisted_state.database_instance().einzelbuchungen.anzahl() == 0:
+    if persisted_state.database_instance().einzelbuchungen.select().count() == 0:
         return generate_error_context('uebersicht_sparen', 'Bitte erfassen Sie zuerst eine Einzelbuchung.')
 
     context = generate_transactional_context('sparen')

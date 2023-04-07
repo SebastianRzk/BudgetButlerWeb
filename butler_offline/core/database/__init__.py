@@ -11,9 +11,8 @@ from butler_offline.core.database.gemeinsamebuchungen.abrechnen import abrechnen
 import logging
 
 
-
 class Database:
-    def __init__(self, name, ausgeschlossene_kategorien=set()):
+    def __init__(self, name: str = '', ausgeschlossene_kategorien: set = set()):
         self.name = name
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsamebuchungen = Gemeinsamebuchungen()
@@ -27,13 +26,13 @@ class Database:
         self.einzelbuchungen.ausgeschlossene_kategorien = ausgeschlossene_kategorien
         self.tainted = 0
 
-    def taint(self):
+    def taint(self) -> None:
         self.tainted = self.tainted + 1
 
-    def is_tainted(self):
+    def is_tainted(self) -> bool:
         return self.taint_number() != 0
 
-    def taint_number(self):
+    def taint_number(self) -> int:
         return self.tainted + \
                self.dauerauftraege.taint_number() + \
                self.einzelbuchungen.taint_number() + \
@@ -45,7 +44,7 @@ class Database:
                self.depotauszuege.taint_number() +\
                self.orderdauerauftrag.taint_number()
 
-    def refresh(self):
+    def refresh(self) -> None:
         logging.info('DATABASE: Erneuere Datenbestand')
         alle_dauerauftragsbuchungen = self.dauerauftraege.get_all_einzelbuchungen_until_today()
         self.einzelbuchungen.append_row(alle_dauerauftragsbuchungen)
@@ -64,7 +63,7 @@ class Database:
 
         logging.info('DATABASE: Datenbestand erneuert')
 
-    def _row_to_dict(self, columns, index, row_data):
+    def _row_to_dict(self, columns, index: int, row_data):
         row = {'index': index}
         for key in columns:
             row[key] = row_data[key]

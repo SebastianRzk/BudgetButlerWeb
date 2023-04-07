@@ -1,11 +1,10 @@
-import unittest
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 
 
-def test_add_shouldAdd():
+def test_add_should_add():
     component_under_test = Depotwerte()
 
-    component_under_test.add(name='1name', isin='some isin', typ= component_under_test.TYP_ETF)
+    component_under_test.add(name='1name', isin='some isin', typ=component_under_test.TYP_ETF)
 
     assert len(component_under_test.content) == 1
     assert component_under_test.content.Name[0] == '1name'
@@ -13,7 +12,7 @@ def test_add_shouldAdd():
     assert component_under_test.content.Typ[0] == component_under_test.TYP_ETF
 
 
-def test_edit_shouldEdit():
+def test_edit_should_edit():
     component_under_test = Depotwerte()
 
     component_under_test.add('0name', '0isin', typ=component_under_test.TYP_ETF)
@@ -57,7 +56,3 @@ def test_get_valid_isins():
     component_under_test.add(name='valid isin', isin='isin56789012', typ=component_under_test.TYP_ETF)
 
     assert component_under_test.get_valid_isins() == ['isin56789012']
-
-
-if __name__ == '__main__':
-    unittest.main()

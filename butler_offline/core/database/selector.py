@@ -2,6 +2,7 @@ import itertools as it
 from datetime import date
 
 import pandas as pd
+from pandas import DataFrame
 
 from butler_offline.viewcore.converter import datum_to_german
 
@@ -36,11 +37,11 @@ class Selektor:
     def select_ausgaben(self):
         return Selektor(self.content[self.content.Wert < 0])
 
-    def raw_table(self):
+    def raw_table(self) -> DataFrame:
         return self.content
 
     def group_by_kategorie(self):
-        return self.content.groupby(by='Kategorie').sum()
+        return self.content.copy()[['Wert', 'Kategorie']].groupby(by='Kategorie').sum()
 
     def select_letzte_6_montate(self):
         if date.today().month > 6:
@@ -105,7 +106,7 @@ class Selektor:
             result[monat][kategorie] = "%.2f" % abs(reihe.Wert)
         return result
 
-    def sum(self):
+    def sum(self) -> float:
         if self.content.empty:
             return 0
         return self.content.Wert.sum()
@@ -174,7 +175,7 @@ class Selektor:
         data.Wert = data.Wert.map(lambda x: x*faktor)
         return Selektor(data)
 
-    def count(self):
+    def count(self) -> int:
         return len(self.content)
 
     def to_list(self):
@@ -183,7 +184,7 @@ class Selektor:
             result.append({**row.to_dict(), **{'index': index}})
         return result
 
-    def get_all_raw(self):
+    def get_all_raw(self) -> DataFrame:
         return self.content
 
 

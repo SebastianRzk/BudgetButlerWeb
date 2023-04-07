@@ -19,7 +19,15 @@ class Gemeinsamebuchungen(DatabaseObject):
     def anteil_gemeinsamer_buchungen(self):
         anteil_gemeinsamer_buchungen = DataFrame()
         for _, row in self.content.iterrows():
-            einzelbuchung = DataFrame([[row.Datum, row.Kategorie, str(row.Name) + " (noch nicht abgerechnet, von " + str(row.Person) + ")", row.Wert * 0.5, True]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Dynamisch'))
+            einzelbuchung = DataFrame([
+                [
+                    row.Datum,
+                    row.Kategorie,
+                    str(row.Name) + " (noch nicht abgerechnet, von " + str(row.Person) + ")",
+                    row.Wert * 0.5,
+                    [],
+                    True
+                ]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'))
             anteil_gemeinsamer_buchungen = pd.concat([anteil_gemeinsamer_buchungen, einzelbuchung], ignore_index=True)
         return anteil_gemeinsamer_buchungen
 
@@ -80,5 +88,5 @@ class Gemeinsamebuchungen(DatabaseObject):
     def is_empty(self):
         return self.content.empty
 
-    def select(self):
+    def select(self) -> GemeinsamSelector:
         return GemeinsamSelector(self.content)

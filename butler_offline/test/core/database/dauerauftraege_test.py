@@ -440,3 +440,8 @@ def test_get_all_einzelbuchungen_until_today_should_return_element_with_empty_ta
     assert row.Dynamisch
     assert row.Tags == []
 
+
+def test_sort_columns_should_be_containing_all_values_of_read_columns_to_prevent_edit_instabilities():
+    component_under_test = Dauerauftraege()
+
+    assert set(component_under_test.TABLE_HEADER) == set(component_under_test.SORT_ORDER)

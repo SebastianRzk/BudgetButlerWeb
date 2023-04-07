@@ -14,7 +14,6 @@ class Sparbuchungen(DatabaseObject):
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
 
-
     def add(self, datum, name, wert, typ, konto, dynamisch=False):
         neue_sparbuchung = pd.DataFrame([[datum, name, wert, typ, konto, dynamisch]], columns=self.TABLE_HEADER)
         self.content = pd.concat([self.content, neue_sparbuchung], ignore_index=True)
@@ -52,7 +51,6 @@ class Sparbuchungen(DatabaseObject):
         konto_buchungen = konto_buchungen[konto_buchungen.Typ != self.TYP_ZINSEN]
         return konto_buchungen.Wert.sum()
 
-
     def get_dynamische_einzelbuchungen(self):
         ausschuettungen = self.content[self.content.Typ == self.TYP_AUSSCHUETTUNG].copy()
         ausschuettungen['Kategorie'] = self.TYP_AUSSCHUETTUNG
@@ -63,7 +61,7 @@ class Sparbuchungen(DatabaseObject):
 
         gesamt = pd.concat([ausschuettungen, manuelle_auftraege])
         gesamt.Dynamisch = True
-        gesamt['Tags'] = None
+        gesamt['Tags'] = gesamt['Kategorie'].map(lambda x: [])
         del gesamt['Konto']
         del gesamt['Typ']
 
