@@ -38,6 +38,7 @@ class OrderDauerauftrag(DatabaseObject):
             'Depotwert': depotwert,
             'Wert': wert
         })
+        self._sort()
 
     def get_all_order_until_today(self):
         all_rows = pd.DataFrame()
@@ -78,7 +79,7 @@ class OrderDauerauftrag(DatabaseObject):
                             columns=['Datum', 'Konto', 'Depotwert', 'Name', 'Wert', 'Dynamisch'])
 
     def _sort(self):
-        self.content = self.content.sort_values(by=['Startdatum', 'Endedatum', 'Name'])
+        self.content = self.content.sort_values(by=['Startdatum', 'Endedatum', 'Name', 'Konto', 'Depotwert', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
     def aktuelle_raw(self):

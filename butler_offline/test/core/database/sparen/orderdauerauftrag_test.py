@@ -2,6 +2,7 @@ from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
+from butler_offline.test.core.database import extract_index, extract_name_column
 
 
 def test_add_should_add():
@@ -58,6 +59,34 @@ def test_edit_should_edit():
         'Depotwert': '24depotwert',
         'Wert': 240
     }
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = OrderDauerauftrag()
+
+    component_under_test.add(
+        datum('03.03.2020'), datum('03.03.2020'), 'monatlich', 'name1', '3konto', '3depotwert', 300)
+
+    component_under_test.add(
+        datum('03.03.2010'), datum('03.03.2010'), 'monatlich', 'name2', '3konto', '3depotwert', 300)
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = OrderDauerauftrag()
+
+    component_under_test.add(
+        datum('03.03.2010'), datum('03.03.2010'), 'monatlich', 'name1', '3konto', '3depotwert', 300)
+    component_under_test.add(
+        datum('03.03.2020'), datum('03.03.2020'), 'monatlich', 'name2', '3konto', '3depotwert', 300)
+
+    component_under_test.edit(
+        1, datum('03.03.2000'), datum('03.03.2000'), 'monatlich', 'name2', '3konto', '3depotwert', 300)
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_order_until_today_with_invalid_dates_should_be_empty():

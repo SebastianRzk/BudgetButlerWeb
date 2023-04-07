@@ -1,6 +1,7 @@
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.core.database import extract_index, extract_name_column
 
 
 def test_get_static_content_should_filter_dynamic_content():
@@ -66,6 +67,28 @@ def test_edit_should_edit():
         'Wert': 3,
         'index': 1
     }
+
+
+def test_add_should_sort_and_drop_index():
+    component_under_test = Sparbuchungen()
+
+    component_under_test.add(datum('04.04.2020'), 'name1', 0, '0typ', '0konto', dynamisch=True)
+    component_under_test.add(datum('04.04.2010'), 'name2', 0, '0typ', '0konto', dynamisch=True)
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
+
+
+def test_edit_should_sort_and_drop_index():
+    component_under_test = Sparbuchungen()#
+
+    component_under_test.add(datum('04.04.2010'), 'name1', 0, '0typ', '0konto', dynamisch=True)
+    component_under_test.add(datum('04.04.2020'), 'name2', 0, '0typ', '0konto', dynamisch=True)
+
+    component_under_test.edit(1, datum('04.04.2000'), 'name2', 0, '0typ', '0konto')
+
+    assert extract_name_column(component_under_test) == ['name2', 'name1']
+    assert extract_index(component_under_test) == [0, 1]
 
 
 def test_get_dynamische_einzelbuchungen():
