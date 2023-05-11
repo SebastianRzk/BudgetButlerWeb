@@ -35,7 +35,7 @@ def test__get_post_parameter_or_default__with_post_request_and_matching_paramete
 
 
 def test_def_get_menu_list():
-    menu_list = butler_offline.viewcore.menu.get_menu_list()
+    menu_list = butler_offline.viewcore.menu.get_menu_list('')
     assert 'Persönliche Finanzen' in menu_list
     assert 'Gemeinsame Finanzen' in menu_list
     assert 'Sparen' in menu_list

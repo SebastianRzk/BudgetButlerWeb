@@ -1,7 +1,6 @@
 from butler_offline.views.einzelbuchungen.split_dauerauftrag import handle_request, SplitDauerauftraegeContext, index
 from butler_offline.test.RequestStubs import PostRequestAction
 from butler_offline.core.database import Dauerauftraege
-from butler_offline.viewcore.context import TRANSACTION_ID_KEY
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
 from butler_offline.core.time import stub_today_with
@@ -25,7 +24,7 @@ def test_preset_values_should_be_transactional():
                                                       args={'dauerauftrag_id': 0}),
                             context=context)
 
-    assert TRANSACTION_ID_KEY in result
+    assert result.is_transactional()
 
 
 def test_index_should_be_secured_by_requesthandler():
@@ -56,7 +55,7 @@ def test_preset_values_should_be_add_preset_for_date_and_wert():
                                                       args={'dauerauftrag_id': 0}),
                             context=context)
 
-    assert result['datum'] == [
+    assert result.get('datum') == [
         {'can_be_chosen': False,
          'datum': '2022-01-01',
          'datum_german': '01.01.2022'},
@@ -97,8 +96,8 @@ def test_preset_values_should_be_add_preset_for_date_and_wert():
          'datum': '2023-01-01',
          'datum_german': '01.01.2023'},
     ]
-    assert result['wert'] == 123
-    assert result['dauerauftrag_id'] == 0
+    assert result.get('wert') == 123
+    assert result.get('dauerauftrag_id') == 0
 
 
 def test_split_should_split():

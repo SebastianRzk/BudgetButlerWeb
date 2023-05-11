@@ -1,24 +1,53 @@
+import datetime
+
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore.context import generate_base_context
+from butler_offline.viewcore.context.builder import generate_page_context
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import to_descriptive_list
-from butler_offline.core.time import today
+from butler_offline.core import time
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 
 
-def _handle_request(_):
-    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
-    selector = einzelbuchungen.select()
+class DashboardContext:
+    def __init__(self, einzelbuchungen: Einzelbuchungen, today: datetime.date):
+        self._today = today
+        self._einzelbuchungen = einzelbuchungen
 
-    context = {
-        'zusammenfassung_monatsliste': str(_monatsliste()),
-        'zusammenfassung_einnahmenliste': str(selector.select_einnahmen().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
-        'zusammenfassung_ausgabenliste': str(selector.select_ausgaben().inject_zeros_for_last_6_months().select_letzte_6_montate().sum_monthly()),
-        'ausgaben_des_aktuellen_monats': to_descriptive_list(selector.select_year(today().year).select_month(today().month).to_list())
-    }
-    context = {**context, **generate_base_context('dashboard')}
-    return context
+    def einzelbuchungen(self) -> Einzelbuchungen:
+        return self._einzelbuchungen
 
-def _monatsliste():
+    def today(self) -> datetime.date:
+        return self._today
+
+
+def _handle_request(_, context: DashboardContext):
+    selector = context.einzelbuchungen().select()
+
+    result_context = generate_page_context('dashboard')
+
+    result_context.add('zusammenfassung_monatsliste', str(_monatsliste(current_month=context.today().month))),
+    result_context.add('zusammenfassung_einnahmenliste',
+                       str(selector
+                           .select_einnahmen()
+                           .inject_zeros_for_last_6_months(today=context.today())
+                           .select_letzte_6_montate(today=context.today())
+                           .sum_monthly())),
+    result_context.add('zusammenfassung_ausgabenliste',
+                       str(selector
+                           .select_ausgaben()
+                           .inject_zeros_for_last_6_months(today=context.today())
+                           .select_letzte_6_montate(today=context.today())
+                           .sum_monthly())),
+    result_context.add('ausgaben_des_aktuellen_monats',
+                       to_descriptive_list(selector
+                                           .select_year(context.today().year)
+                                           .select_month(context.today().month)
+                                           .to_list()))
+
+    return result_context
+
+
+def _monatsliste(current_month: int):
     month_map = {1: 'Januar',
                  2: 'Februar',
                  3: 'März',
@@ -31,7 +60,7 @@ def _monatsliste():
                  10: 'Oktober',
                  11: 'November',
                  12: 'Dezember'}
-    aktueller_monat = today().month
+    aktueller_monat = current_month
 
     result_list = []
 
@@ -47,4 +76,9 @@ def _monatsliste():
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'core/dashboard.html')
+    return request_handler.handle(
+        request=request,
+        handle_function=_handle_request,
+        context_creator=lambda db: DashboardContext(einzelbuchungen=db.einzelbuchungen, today=time.today()),
+        html_base_page='core/dashboard.html'
+    )

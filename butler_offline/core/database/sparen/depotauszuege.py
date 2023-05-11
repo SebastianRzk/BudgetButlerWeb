@@ -82,9 +82,6 @@ class Depotauszuege(DatabaseObject):
         values = self.content[self.content.Konto == konto].copy()
         return values[values.Datum == datum].index.tolist()
 
-    def get_all(self):
-        return self.content
-
     def resolve_konto(self, index):
         return self.content.loc[index, 'Konto']
 
