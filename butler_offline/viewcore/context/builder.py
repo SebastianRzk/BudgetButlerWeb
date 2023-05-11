@@ -22,6 +22,9 @@ class PageContext:
     def get(self, key: str):
         return self._additional_context_values[key]
 
+    def contains(self, key: str):
+        return key in self._additional_context_values
+
 
 class TransactionalPageContext(PageContext):
     def __init__(self, pagename: str, database_name: str):

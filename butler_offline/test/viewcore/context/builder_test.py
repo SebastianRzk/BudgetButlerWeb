@@ -54,3 +54,13 @@ def test_as_dict_redirect_context_should_contain_redirect_key():
 
     assert RedirectPageContext(redirect_target_url='my_target', database_name='my_database', page_name='my_page')\
         .as_dict()[REDIRECT_KEY] == 'my_target'
+
+
+def test_contains_with_not_contained_key_should_return_false():
+    assert not PageContext(pagename='asdf', database_name='asdf').contains('asdf')
+
+
+def test_contains_with_contained_key_should_return_true():
+    context = PageContext(pagename="asdf", database_name="asdf")
+    context.add('mykey', 'myvalue')
+    assert context.contains('mykey')

@@ -1,71 +1,78 @@
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.einzelbuchungen import addausgabe
-from butler_offline.core import file_system
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.state.persisted_state import database_instance
-
-
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
 
 def test_init():
-    set_up()
-    context = addausgabe.handle_request(GetRequest())
-    assert context['approve_title'] == 'Ausgabe hinzufügen'
+    context = addausgabe.handle_request(
+        request=GetRequest(),
+        context=addausgabe.AddAusgabeContext(einzelbuchungen=Einzelbuchungen()))
+    assert context.get('approve_title') == 'Ausgabe hinzufügen'
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = addausgabe.index(GetRequest())
-    assert 'ID' in context
+    context = addausgabe.handle_request(
+        request=GetRequest(),
+        context=addausgabe.AddAusgabeContext(einzelbuchungen=Einzelbuchungen()))
+    assert context.is_transactional()
 
 
-def test__edit_call_from_ueberischt__should_name_button_edit():
-    set_up()
-    database_instance().einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
-    context = addausgabe.handle_request(PostRequest({'action': 'edit', 'edit_index': '0'}))
-    assert context['approve_title'] == 'Ausgabe aktualisieren'
+def test__edit_call_from_uebersicht__should_name_button_edit():
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
+
+    context = addausgabe.handle_request(
+        request=PostRequest({'action': 'edit', 'edit_index': '0'}),
+        context=addausgabe.AddAusgabeContext(einzelbuchungen=einzelbuchungen)
+    )
+    assert context.get('approve_title') == 'Ausgabe aktualisieren'
 
 
 def test_add_ausgabe():
-    set_up()
-    addausgabe.handle_request(VersionedPostRequest(
-        {'action': 'add',
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
-         }
-    ))
-    testdb = database_instance()
-    assert len(testdb.einzelbuchungen.content) == 1
-    assert testdb.einzelbuchungen.content.Wert[0] == -1 * float('2.00')
-    assert testdb.einzelbuchungen.content.Name[0] == 'testname'
-    assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
+    einzelbuchungen = Einzelbuchungen()
+    addausgabe.handle_request(
+        request=VersionedPostRequest(
+            {'action': 'add',
+             'date': rfc('1.1.2017'),
+             'kategorie': 'Essen',
+             'name': 'testname',
+             'wert': '2,00'
+             }
+        ),
+        context=addausgabe.AddAusgabeContext(einzelbuchungen=einzelbuchungen)
+        )
+
+    assert einzelbuchungen.select().count() == 1
+    assert einzelbuchungen.get(0) == {
+        'index': 0,
+        'Wert': float('-2.00'),
+        'Name': 'testname',
+        'Kategorie': 'Essen',
+        'Datum': datum('01.01.2017'),
+        'Tags': [],
+        'Dynamisch': False
+    }
 
 
 def test_add_ausgabe_should_show_in_recently_added():
-    set_up()
-    result = addausgabe.handle_request(VersionedPostRequest(
-        {'action': 'add',
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
-         }
-    ))
+    result = addausgabe.handle_request(
+        request=VersionedPostRequest(
+            {'action': 'add',
+             'date': rfc('1.1.2017'),
+             'kategorie': 'Essen',
+             'name': 'testname',
+             'wert': '2,00'
+             }
+        ),
+        context=addausgabe.AddAusgabeContext(einzelbuchungen=Einzelbuchungen())
+    )
 
-    result_element = list(result['letzte_erfassung'])[0]
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'plus'
     assert result_element['datum'] == '01.01.2017'
@@ -74,126 +81,73 @@ def test_add_ausgabe_should_show_in_recently_added():
     assert result_element['wert'] == '-2,00'
 
 
-def test_add_ausgabe_should_only_fire_once():
-    set_up()
-    request_key = persisted_state.current_database_version()
-
-    addausgabe.index(PostRequest(
-        {'action': 'add',
-         'ID': request_key,
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
-         }
-    ))
-
-    addausgabe.index(PostRequest(
-        {'action': 'add',
-         'ID': request_key,
-         'date': rfc('1.1.2017'),
-         'kategorie': 'overwritten',
-         'name': 'overwritten',
-         'wert': '0,00'
-         }
-    ))
-
-    testdb = database_instance()
-    assert len(testdb.einzelbuchungen.content) == 1
-    assert testdb.einzelbuchungen.content.Wert[0] == -1 * float('2.00')
-    assert testdb.einzelbuchungen.content.Name[0] == 'testname'
-    assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert testdb.einzelbuchungen.content.Datum[0] == datum('1.1.2017')
-
-
 def test_edit_ausgabe():
-    set_up()
+    einzelbuchungen = Einzelbuchungen()
 
-    addausgabe.handle_request(VersionedPostRequest(
-        {'action': 'add',
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
+    einzelbuchungen.add(
+        datum=datum('01.01.2017'),
+        name='testname',
+        kategorie='Essen',
+        wert=float(-2.00),
+    )
+
+    addausgabe.handle_request(
+        request=VersionedPostRequest(
+            {'action': 'add',
+             'edit_index': '0',
+             'date': rfc('5.1.2017'),
+             'kategorie': 'Essen2',
+             'name': 'testname2',
+             'wert': '2,50'
+             }
+        ),
+        context=addausgabe.AddAusgabeContext(
+            einzelbuchungen=einzelbuchungen
+        )
+    )
+
+    assert einzelbuchungen.select().count() == 1
+    assert einzelbuchungen.get(0) == {
+        'Datum': datum('5.1.2017'),
+        'Kategorie': 'Essen2',
+        'Name': 'testname2',
+        'Wert': float(-2.50),
+        'index': 0,
+        'Dynamisch': False,
+        'Tags': []
          }
-    ))
-
-    addausgabe.handle_request(VersionedPostRequest(
-        {'action': 'add',
-         'edit_index': '0',
-         'date': rfc('5.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,50'
-         }
-    ))
-    testdb = database_instance()
-    assert len(testdb.einzelbuchungen.content) == 1
-    assert testdb.einzelbuchungen.content.Wert[0] == -1 * float('2.50')
-    assert testdb.einzelbuchungen.content.Name[0] == 'testname'
-    assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert testdb.einzelbuchungen.content.Datum[0] == datum('5.1.2017')
-
-
-def test_edit_ausgabe_should_only_fire_once():
-    set_up()
-    addausgabe.index(VersionedPostRequest(
-        {'action': 'add',
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
-         }
-    ))
-
-    next_id = persisted_state.current_database_version()
-    addausgabe.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': '0',
-         'date': rfc('5.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,50'
-         }
-    ))
-
-    addausgabe.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': '0',
-         'date': rfc('5.1.2017'),
-         'kategorie': 'overwritten',
-         'name': 'overwritten',
-         'wert': '0,00'
-         }
-    ))
-    testdb = database_instance()
-    assert len(testdb.einzelbuchungen.content) == 1
-    assert testdb.einzelbuchungen.content.Wert[0] == -1 * float('2.50')
-    assert testdb.einzelbuchungen.content.Name[0] == 'testname'
-    assert testdb.einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert testdb.einzelbuchungen.content.Datum[0] == datum('5.1.2017')
 
 
 def test_edit_einzelbuchung__should_load_input_values__and__invert_wert():
-    set_up()
+    einzelbuchungen = Einzelbuchungen()
 
-    addausgabe.handle_request(VersionedPostRequest(
-        {'action': 'add',
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,34'
-         }
-    ))
+    einzelbuchungen.add(
+        datum=datum('01.01.2017'),
+        name='testname',
+        kategorie='Essen',
+        wert=float(-2.00),
+    )
 
-    result = addausgabe.handle_request(PostRequest(
-        {'action': 'edit',
-         'edit_index': '0'
-         }
-    ))
+    result = addausgabe.handle_request(
+        request=PostRequest(
+            {'action': 'edit',
+             'edit_index': '0'
+             }),
+        context=addausgabe.AddAusgabeContext(
+            einzelbuchungen=einzelbuchungen
+        )
+    )
 
-    assert result['edit_index'] == 0
-    assert result['default_item']['Name'] == 'testname'
-    assert result['default_item']['Wert'] == '2,34'
+    assert result.get('edit_index') == 0
+    assert result.get('default_item')['Name'] == 'testname'
+    assert result.get('default_item')['Wert'] == '2,00'
+
+
+def index_function_should_be_secured_by_request_handler():
+    def handle():
+        addausgabe.index(request=GetRequest())
+
+    result = run_in_mocked_handler(index_handle=handle)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['einzelbuchungen/add_ausgabe.html']
