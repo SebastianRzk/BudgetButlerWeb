@@ -6,6 +6,11 @@ from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.core import file_system
+from butler_offline.test.core.file_system_stub import FileSystemStub
+
+
+file_system.INSTANCE = FileSystemStub()
 
 
 def test_init():

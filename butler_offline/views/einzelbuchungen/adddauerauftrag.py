@@ -1,18 +1,32 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
-from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.template import fa
+from butler_offline.core.database.dauerauftraege import Dauerauftraege
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, TransactionalPageContext
 
 
 TYP_AUSGABE = 'Ausgabe'
 TYPE_EINNAHME = 'Einnahme'
 
 
-def handle_request(request):
+class AddDauerauftragContext:
+
+    def __init__(self, dauerauftraege: Dauerauftraege, einzelbuchungen: Einzelbuchungen):
+        self._dauerauftraege = dauerauftraege
+        self._einzelbuchungen = einzelbuchungen
+
+    def dauerauftraege(self) -> Dauerauftraege:
+        return self._dauerauftraege
+
+    def einzelbuchungen(self) -> Einzelbuchungen:
+        return self._einzelbuchungen
+
+
+def handle_request(request, context: AddDauerauftragContext) -> TransactionalPageContext:
     if request.method == 'POST' and request.values['action'] == 'add':
         value = dezimal_float(request.values['wert'])
         if request.values['typ'] == TYP_AUSGABE:
@@ -21,7 +35,7 @@ def handle_request(request):
         if 'edit_index' in request.values:
             startdatum = datum(request.values['startdatum'])
             endedatum = datum(request.values['endedatum'])
-            database_instance().dauerauftraege.edit(
+            context.dauerauftraege().edit(
                 int(request.values['edit_index']),
                 startdatum,
                 endedatum,
@@ -41,7 +55,7 @@ def handle_request(request):
         else:
             startdatum = datum(request.values['startdatum'])
             endedatum = datum(request.values['endedatum'])
-            database_instance().dauerauftraege.add(
+            context.dauerauftraege().add(
                 startdatum,
                 endedatum,
                 request.values['kategorie'],
@@ -58,12 +72,12 @@ def handle_request(request):
                 'wert': from_double_to_german(value)
                 })
 
-    context = generate_transactional_context('adddauerauftrag')
-    context['approve_title'] = 'Dauerauftrag hinzufügen'
+    page_context = generate_transactional_page_context('adddauerauftrag')
+    page_context.add('approve_title', 'Dauerauftrag hinzufügen')
 
     if post_action_is(request, 'edit'):
         db_index = int(request.values['edit_index'])
-        default_item = database_instance().dauerauftraege.get(db_index)
+        default_item = context.dauerauftraege().get(db_index)
         default_item['Startdatum'] = datum_to_string(default_item['Startdatum'])
         default_item['Endedatum'] = datum_to_string(default_item['Endedatum'])
         default_item['Rhythmus'] = default_item['Rhythmus']
@@ -75,30 +89,38 @@ def handle_request(request):
 
         default_item['Wert'] = from_double_to_german(abs(default_item['Wert']))
 
-        context['default_item'] = default_item
-        context['bearbeitungsmodus'] = True
-        context['edit_index'] = db_index
-        context['approve_title'] = 'Dauerauftrag aktualisieren'
-        context['element_titel'] = 'Dauerauftrag bearbeiten'
-        context['active_name'] = 'Dauerauftrag bearbeiten'
+        page_context.add('default_item', default_item)
+        page_context.add('bearbeitungsmodus', True)
+        page_context.add('edit_index', db_index)
+        page_context.add('approve_title', 'Dauerauftrag aktualisieren')
+        page_context.add('element_titel', 'Dauerauftrag bearbeiten')
+        page_context.add('active_name', 'Dauerauftrag bearbeiten')
 
-    if 'default_item' not in context:
-        context['default_item'] = {
+    if not page_context.contains('default_item'):
+        page_context.add('default_item', {
             'Startdatum': '',
             'Endedatum': '',
             'typ': TYP_AUSGABE,
             'Rhythmus': ALL_FREQUENCY_NAMES[0],
             'Wert': '',
             'Name': ''
-        }
+        })
 
-    context['kategorien'] = sorted(
-        database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_dauerauftraege())
-    context['rhythmen'] = ALL_FREQUENCY_NAMES
+    page_context.add('kategorien', sorted(
+        context.einzelbuchungen().get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
+    page_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_dauerauftraege()))
+    page_context.add('rhythmen', ALL_FREQUENCY_NAMES)
 
-    return context
+    return page_context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'einzelbuchungen/add_dauerauftrag.html')
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        context_creator=lambda db: AddDauerauftragContext(
+            einzelbuchungen=db.einzelbuchungen,
+            dauerauftraege=db.dauerauftraege
+        ),
+        html_base_page='einzelbuchungen/add_dauerauftrag.html'
+    )
