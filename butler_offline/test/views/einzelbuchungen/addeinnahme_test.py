@@ -1,93 +1,74 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
-from butler_offline.test.database_util import untaint_database
 from butler_offline.views.einzelbuchungen import addeinnahme
 from butler_offline.core import file_system
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore.state.persisted_state import database_instance as db
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.state import non_persisted_state
 
-
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
+file_system.INSTANCE = FileSystemStub()
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = addeinnahme.index(GetRequest())
-    assert 'ID' in context
+    context = addeinnahme.handle_request(GetRequest(), context=addeinnahme.AddEinnahmeContext(
+        einzelbuchungen=Einzelbuchungen()))
+    assert context.is_transactional()
 
 
-def test_init():
-    set_up()
-    context = addeinnahme.index(GetRequest())
-    assert context['approve_title'] == 'Einnahme hinzufügen'
+def test_init_should_have_title_einnahme_hinzufuegen():
+    context = addeinnahme.handle_request(GetRequest(), context=addeinnahme.AddEinnahmeContext(
+        einzelbuchungen=Einzelbuchungen()
+    ))
+    assert context.get('approve_title') == 'Einnahme hinzufügen'
 
 
 def test__edit_call_from_ueberischt__should_name_button_edit():
-    set_up()
-    db().einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
-    untaint_database(database=db())
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum('10.10.2010'), 'kategorie', 'name', 10.00)
 
-    context = addeinnahme.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
+    context = addeinnahme.handle_request(request=PostRequest({'action': 'edit', 'edit_index': '0'}),
+                                         context=addeinnahme.AddEinnahmeContext(einzelbuchungen=einzelbuchungen))
 
-    assert context['approve_title'] == 'Einnahme aktualisieren'
+    assert context.get('approve_title') == 'Einnahme aktualisieren'
 
 
 def test_add_ausgabe():
-    set_up()
-    addeinnahme.index(VersionedPostRequest(
+    einzelbuchungen = Einzelbuchungen()
+    addeinnahme.handle_request(VersionedPostRequest(
         {'action': 'add',
          'date': rfc('1.1.2017'),
          'kategorie': 'Essen',
          'name': 'testname',
          'wert': '2,00'
-         }
-    ))
+         }),
+        context=addeinnahme.AddEinnahmeContext(einzelbuchungen=einzelbuchungen))
 
-    assert len(db().einzelbuchungen.content) == 1
-    assert db().einzelbuchungen.content.Wert[0] == float('2.00')
-    assert db().einzelbuchungen.content.Name[0] == 'testname'
-    assert db().einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert db().einzelbuchungen.content.Datum[0] == datum('1.1.2017')
+    assert einzelbuchungen.select().count() == 1
+    assert einzelbuchungen.get(0) == {
+        'Wert': float('2.00'),
+        'Name': 'testname',
+        'Kategorie': 'Essen',
+        'Datum': datum('01.01.2017'),
+        'Dynamisch': False,
+        'Tags': [],
+        'index': 0
+    }
 
 
-def test_add_ausgabe_should_only_fire_once():
-    set_up()
-    next_id = persisted_state.current_database_version()
-    addeinnahme.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
-         }
-    ))
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        addeinnahme.index(GetRequest())
 
-    addeinnahme.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'date': rfc('1.1.2017'),
-         'kategorie': 'overwritten',
-         'name': 'overwritten',
-         'wert': '0,00'
-         }
-    ))
+    result = run_in_mocked_handler(index_handle=index)
 
-    assert db().einzelbuchungen.select().count() == 1
-    assert db().einzelbuchungen.content.Wert[0] == float('2.00')
-    assert db().einzelbuchungen.content.Name[0] == 'testname'
-    assert db().einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert db().einzelbuchungen.content.Datum[0] == datum('1.1.2017')
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['einzelbuchungen/addeinnahme.html']
 
 
 def test_add_einnahme_should_show_in_recently_added():
-    set_up()
+    non_persisted_state.CONTEXT = {}
     result = addeinnahme.handle_request(VersionedPostRequest(
         {'action': 'add',
          'date': rfc('1.1.2017'),
@@ -95,30 +76,26 @@ def test_add_einnahme_should_show_in_recently_added():
          'name': 'testname',
          'wert': '2,00'
          }
-    ))
+    ),
+        context=addeinnahme.AddEinnahmeContext(einzelbuchungen=Einzelbuchungen()))
 
-    result_element = list(result['letzte_erfassung'])[0]
-
-    assert result_element['fa'] == 'plus'
-    assert result_element['datum'] == '01.01.2017'
-    assert result_element['kategorie'] == 'Essen'
-    assert result_element['name'] == 'testname'
-    assert result_element['wert'] == '2,00'
+    assert list(result.get('letzte_erfassung')) == [{'datum': '01.01.2017',
+                                                     'fa': 'plus',
+                                                     'kategorie': 'Essen',
+                                                     'name': 'testname',
+                                                     'wert': '2,00'}]
 
 
 def test_edit_ausgabe():
-    set_up()
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(
+        datum=datum('1.1.2017'),
+        kategorie='Essen',
+        name='testname',
+        wert=float('2.00')
+    )
 
-    addeinnahme.index(VersionedPostRequest(
-        {'action': 'add',
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
-         }
-    ))
-
-    addeinnahme.index(VersionedPostRequest(
+    addeinnahme.handle_request(VersionedPostRequest(
         {'action': 'add',
          'edit_index': '0',
          'date': rfc('5.1.2017'),
@@ -126,76 +103,41 @@ def test_edit_ausgabe():
          'name': 'testname',
          'wert': '2,50'
          }
-    ))
+    ), context=addeinnahme.AddEinnahmeContext(einzelbuchungen=einzelbuchungen))
 
-    assert db().einzelbuchungen.select().count() == 1
-    assert db().einzelbuchungen.content.Wert[0] == float('2.50')
-    assert db().einzelbuchungen.content.Name[0] == 'testname'
-    assert db().einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert db().einzelbuchungen.content.Datum[0] == datum('5.1.2017')
-
-
-def test_edit_ausgabe_should_only_fire_once():
-    set_up()
-
-    addeinnahme.index(VersionedPostRequest(
-        {'action': 'add',
-         'date': rfc('1.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,00'
-         }
-    ))
-
-    next_id = persisted_state.current_database_version()
-    addeinnahme.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': '0',
-         'date': rfc('5.1.2017'),
-         'kategorie': 'Essen',
-         'name': 'testname',
-         'wert': '2,50'
-         }
-    ))
-
-    addeinnahme.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': '0',
-         'date': rfc('5.1.2017'),
-         'kategorie': 'overwritten',
-         'name': 'overwritten',
-         'wert': '0,0'
-         }
-    ))
-
-    assert db().einzelbuchungen.select().count() == 1
-    assert db().einzelbuchungen.content.Wert[0] == float('2.50')
-    assert db().einzelbuchungen.content.Name[0] == 'testname'
-    assert db().einzelbuchungen.content.Kategorie[0] == 'Essen'
-    assert db().einzelbuchungen.content.Datum[0] == datum('5.1.2017')
+    assert einzelbuchungen.select().count() == 1
+    assert einzelbuchungen.get(0) == {
+        'Name': 'testname',
+        'Kategorie': 'Essen',
+        'Datum': datum('05.01.2017'),
+        'Wert': float('2.50'),
+        'index': 0,
+        'Dynamisch': False,
+        'Tags': []
+    }
 
 
 def test_edit_einzelbuchung__should_load_input_values():
-    set_up()
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(
+        datum=datum('1.1.2017'),
+        kategorie='Essen',
+        name='testname',
+        wert=float('2.34')
+    )
 
-    addeinnahme.index(VersionedPostRequest(
-        {
-            'action': 'add',
-            'date': rfc('1.1.2017'),
-            'kategorie': 'Essen',
-            'name': 'testname',
-            'wert': '2,34'
-        }
-    ))
-
-    result = addeinnahme.index(PostRequest(
+    result = addeinnahme.handle_request(PostRequest(
         {'action': 'edit',
          'edit_index': '0'
          }
-    ))
+    ),
+        context=addeinnahme.AddEinnahmeContext(einzelbuchungen=einzelbuchungen))
 
-    assert result['edit_index'] == 0
-    assert result['default_item']['Name'] == 'testname'
-    assert result['default_item']['Wert'] == '2,34'
+    assert result.get('edit_index') == 0
+    assert result.get('default_item') == {'Datum': '2017-01-01',
+                                          'Dynamisch': False,
+                                          'Kategorie': 'Essen',
+                                          'Name': 'testname',
+                                          'Tags': [],
+                                          'Wert': '2,34',
+                                          'index': 0}
