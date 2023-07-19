@@ -43,18 +43,17 @@ class Selektor:
     def group_by_kategorie(self):
         return self.content.copy()[['Wert', 'Kategorie']].groupby(by='Kategorie').sum()
 
-    def select_letzte_6_montate(self):
-        if date.today().month > 6:
-            mindate = date(day=1, month=(date.today().month - 6), year=date.today().year)
+    def select_letzte_6_montate(self, today: date):
+        if today.month > 6:
+            mindate = date(day=1, month=(today.month - 6), year=today.year)
         else:
-            mindate = date(day=1, month=(date.today().month + 6), year=date.today().year - 1)
+            mindate = date(day=1, month=(today.month + 6), year=today.year - 1)
         tabelle = self.content.copy()
         tabelle = tabelle[tabelle.Datum >= mindate]
         tabelle = tabelle[tabelle.Datum <= date.today()]
         return Selektor(tabelle)
 
-    def inject_zeros_for_last_6_months(self):
-        today = date.today()
+    def inject_zeros_for_last_6_months(self, today: date):
         if today.month > 6:
             return self.inject_zeros_for_year(today.year, today.month)
 

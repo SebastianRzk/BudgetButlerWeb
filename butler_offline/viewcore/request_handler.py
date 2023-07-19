@@ -1,5 +1,4 @@
 from flask import redirect, Request
-from typing import Callable
 from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore import request_handler
@@ -12,6 +11,9 @@ import traceback
 import logging
 from butler_offline.viewcore import template
 from butler_offline.viewcore.template import renderer_instance
+from typing import Callable, TypeVar
+from butler_offline.core.database import Database
+from butler_offline.viewcore.context.builder import PageContext
 
 
 REDIRECTOR = lambda x: redirect(x, code=301)
@@ -19,6 +21,27 @@ REDIRECTOR = lambda x: redirect(x, code=301)
 
 def handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page: str):
     return REQUEST_HANDLER(request=request, request_action=request_action, html_base_page=html_base_page)
+
+
+TYPE_INPUT_CONTEXT = TypeVar("TYPE_INPUT_CONTEXT")
+TYPE_INPUT_CONTEXT_CREATOR = Callable[[Database], TYPE_INPUT_CONTEXT]
+TYPE_OUTPUT_PAGE_CONTEXT = TypeVar("TYPE_OUTPUT_PAGE_CONTEXT", bound=PageContext)
+TYPE_USECASE = Callable[[Request, TYPE_INPUT_CONTEXT], TYPE_OUTPUT_PAGE_CONTEXT]
+
+
+def handle(request: Request,
+           context_creator: TYPE_INPUT_CONTEXT_CREATOR,
+           handle_function: TYPE_USECASE,
+           html_base_page: str):
+    input_context: TYPE_INPUT_CONTEXT = context_creator(persisted_state.database_instance())
+
+    def migration_function(r: Request) -> dict:
+        result: TYPE_OUTPUT_PAGE_CONTEXT = handle_function(r, input_context)
+        return result.as_dict()
+
+    return handle_request(request=request,
+                          request_action=migration_function,
+                          html_base_page=html_base_page)
 
 
 def __handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page: str):

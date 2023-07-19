@@ -58,7 +58,7 @@ class Depotauszuege(DatabaseObject):
         auszug = auszuege[auszuege.Datum == latest_datum]
         return auszug.Wert.sum()
 
-    def get_depotwert_by(self, depotwert):
+    def get_depotwert_by(self, depotwert: str) -> int:
         auszuege = self.content[self.content.Depotwert == depotwert].copy()
         if len(auszuege) == 0:
             return 0
@@ -81,9 +81,6 @@ class Depotauszuege(DatabaseObject):
     def _resolve_indices(self, konto, datum):
         values = self.content[self.content.Konto == konto].copy()
         return values[values.Datum == datum].index.tolist()
-
-    def get_all(self):
-        return self.content
 
     def resolve_konto(self, index):
         return self.content.loc[index, 'Konto']

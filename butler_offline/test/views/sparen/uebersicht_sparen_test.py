@@ -1,64 +1,82 @@
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.database_util import untaint_database
-from butler_offline.core import file_system
-from butler_offline.views.sparen import uebersicht_sparen
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.viewcore.context import get_error_message
-
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
-
-
-def test_transaction_id_should_be_in_context():
-    set_up()
-    add_test_data()
-    context = uebersicht_sparen.index(GetRequest())
-    assert 'ID' in context
+from butler_offline.views.sparen import uebersicht_sparen
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
 
-def add_test_data():
-    sparkontos = persisted_state.database_instance().sparkontos
+def test_index_should_be_secured_by_requesthandler():
+    def handle():
+        uebersicht_sparen.index(request=GetRequest())
+
+    result = run_in_mocked_handler(handle)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/uebersicht_sparen.html']
+
+
+def test_transaction_id_should_not_be_in_context():
+    context = uebersicht_sparen.handle_request(GetRequest(), get_test_data())
+    assert context
+
+
+def get_test_data() -> uebersicht_sparen.SparenUebersichtContext:
+    sparkontos = Kontos()
     sparkontos.add(kontoname='demokonto1', kontotyp=sparkontos.TYP_SPARKONTO)
     sparkontos.add(kontoname='demokonto2', kontotyp=sparkontos.TYP_DEPOT)
-    sparbuchungen = persisted_state.database_instance().sparbuchungen
+
+    sparbuchungen = Sparbuchungen()
     sparbuchungen.add(datum('01.01.2020'), 'testname', 100, sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto1')
     sparbuchungen.add(datum('01.01.2020'), 'testname', 10, sparbuchungen.TYP_ZINSEN, 'demokonto1')
 
-    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte = Depotwerte()
     depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
-    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demokonto2', 990)
 
-    persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
+    order = Order()
+    order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin', 999)
 
-    untaint_database(persisted_state.database_instance())
+    depotauszuege = Depotauszuege()
+    depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demokonto2', 990)
 
-
-def add_typen_test_data():
-    add_test_data()
-    depotwerte = persisted_state.database_instance().depotwerte
-    depotwerte.add(name='demoname2', isin='demoisin2', typ=depotwerte.TYP_ETF)
-    depotwerte.add(name='demoname3', isin='demoisin3', typ=depotwerte.TYP_FOND)
-    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin2', 888)
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin2', 'demokonto2', 880)
-    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin3', 777)
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin3', 'demokonto2', 770)
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
 
     untaint_database(persisted_state.database_instance())
+
+    return uebersicht_sparen.SparenUebersichtContext(
+        einzelbuchungen=einzelbuchungen,
+        kontos=sparkontos,
+        orderdauerauftrag=OrderDauerauftrag(),
+        depotwerte=depotwerte,
+        sparbuchungen=sparbuchungen,
+        depotauszuege=depotauszuege,
+        order=order,
+    )
+
+
+def get_typen_test_data() -> uebersicht_sparen.SparenUebersichtContext:
+    test_data_context = get_test_data()
+    test_data_context.depotwerte().add(name='demoname2', isin='demoisin2', typ=test_data_context.depotwerte().TYP_ETF)
+    test_data_context.depotwerte().add(name='demoname3', isin='demoisin3', typ=test_data_context.depotwerte().TYP_FOND)
+    test_data_context.order().add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin2', 888)
+    test_data_context.depotauszeuge().add(datum('02.01.2020'), 'demoisin2', 'demokonto2', 880)
+    test_data_context.order().add(datum('01.01.2020'), 'testname', 'demokonto2', 'demoisin3', 777)
+    test_data_context.depotauszeuge().add(datum('02.01.2020'), 'demoisin3', 'demokonto2', 770)
+    return test_data_context
 
 
 def test_should_list_kontos():
-    set_up()
-    add_test_data()
+    result = uebersicht_sparen.handle_request(GetRequest(), get_test_data())
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['kontos'] == [
+    assert result.get('kontos') == [
         {
             'index': 0,
             'name': 'demokonto2',
@@ -89,12 +107,9 @@ def test_should_list_kontos():
 
 
 def test_gesamt():
-    set_up()
-    add_test_data()
+    result = uebersicht_sparen.handle_request(GetRequest(), get_test_data())
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['gesamt'] == {
+    assert result.get('gesamt') == {
         'wert': 1100,
         'aufbuchungen': 1099,
         'difference': 1,
@@ -106,12 +121,9 @@ def test_gesamt():
 
 
 def test_typen():
-    set_up()
-    add_typen_test_data()
+    result = uebersicht_sparen.handle_request(GetRequest(), get_typen_test_data())
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['typen'] == [
+    assert result.get('typen') == [
         {'aufbuchungen': 100,
          'aufbuchungen_str': '100,00',
          'color': '#39CCCC',
@@ -144,16 +156,13 @@ def test_typen():
          'name': 'Fond',
          'wert': 770,
          'wert_str': '770,00'},
-        ]
+    ]
 
 
 def test_konto_diagramm():
-    set_up()
-    add_test_data()
+    result = uebersicht_sparen.handle_request(GetRequest(), get_test_data())
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['konto_diagramm'] == {
+    assert result.get('konto_diagramm') == {
         'colors': ['#f56954', '#3c8dbc'],
         'datasets': ['90.00', '10.00'],
         'labels': ['demokonto2', 'demokonto1'],
@@ -161,12 +170,9 @@ def test_konto_diagramm():
 
 
 def test_typen_diagramm():
-    set_up()
-    add_typen_test_data()
+    result = uebersicht_sparen.handle_request(GetRequest(), get_typen_test_data())
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['typen_diagramm'] == {
+    assert result.get('typen_diagramm') == {
         'colors': ['#39CCCC', '#d2d6de', '#00a65a', '#f39c12'],
         'datasets': ['4.00', '0.00', '68.00', '28.00'],
         'labels': ['Sparkonto', 'Genossenschafts-Anteile', 'ETF', 'Fond'],
@@ -174,43 +180,62 @@ def test_typen_diagramm():
 
 
 def test_init_with_empty_database():
-    set_up()
     persisted_state.DATABASE_INSTANCE = None
 
-    context = uebersicht_sparen.index(GetRequest())
+    context = uebersicht_sparen.handle_request(GetRequest(), uebersicht_sparen.SparenUebersichtContext(
+        einzelbuchungen=Einzelbuchungen(),
+        depotauszuege=Depotauszuege(),
+        kontos=Kontos(),
+        depotwerte=Depotwerte(),
+        sparbuchungen=Sparbuchungen(),
+        orderdauerauftrag=OrderDauerauftrag(),
+        order=Order()
+    ))
 
-    assert get_error_message(context) == 'Bitte erfassen Sie zuerst eine Einzelbuchung.'
+    assert context.is_error()
+    assert context.error_text() == 'Bitte erfassen Sie zuerst eine Einzelbuchung.'
 
 
 def test_init_filled_database():
-    set_up()
-    add_test_data()
-    uebersicht_sparen.index(GetRequest())
+    uebersicht_sparen.handle_request(GetRequest(), get_test_data())
 
 
 def test_info():
-    set_up()
-
-    sparkontos = persisted_state.database_instance().sparkontos
+    sparkontos = Kontos()
     sparkontos.add(kontoname='demodepot1', kontotyp=sparkontos.TYP_DEPOT)
     sparkontos.add(kontoname='demodepot2', kontotyp=sparkontos.TYP_DEPOT)
     sparkontos.add(kontoname='demodepot3', kontotyp=sparkontos.TYP_DEPOT)
 
-    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte = Depotwerte()
     depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
-    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 999)
-    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot2', 'demoisin', 999)
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demodepot1', 990)
-    persisted_state.database_instance().depotauszuege.add(datum('02.01.2019'), 'demoisin', 'demodepot2', 0)
 
-    persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
+    order = Order()
+    order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 999)
+    order.add(datum('01.01.2020'), 'testname', 'demodepot2', 'demoisin', 999)
+
+    depotauszuege = Depotauszuege()
+    depotauszuege.add(datum('02.01.2020'), 'demoisin', 'demodepot1', 990)
+    depotauszuege.add(datum('02.01.2019'), 'demoisin', 'demodepot2', 0)
+
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
 
     untaint_database(persisted_state.database_instance())
 
+    result = uebersicht_sparen.handle_request(
+        GetRequest(),
+        uebersicht_sparen.SparenUebersichtContext(
+            einzelbuchungen=einzelbuchungen,
+            orderdauerauftrag=OrderDauerauftrag(),
+            order=order,
+            depotwerte=depotwerte,
+            kontos=sparkontos,
+            sparbuchungen=Sparbuchungen(),
+            depotauszuege=depotauszuege
+        )
+    )
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['general_infos'] == {
+    assert result.get('general_infos') == {
         'kontos':
             [
                 {
@@ -233,15 +258,18 @@ def test_info():
 
 
 def test_order_typ():
-    set_up()
 
-    sparkontos = persisted_state.database_instance().sparkontos
+    sparkontos = Kontos()
     sparkontos.add(kontoname='demodepot1', kontotyp=sparkontos.TYP_DEPOT)
 
-    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte = Depotwerte()
     depotwerte.add(name='demoname', isin='demoisin', typ=depotwerte.TYP_ETF)
-    persisted_state.database_instance().order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 100)
-    persisted_state.database_instance().orderdauerauftrag.add(
+
+    order = Order()
+    order.add(datum('01.01.2020'), 'testname', 'demodepot1', 'demoisin', 100)
+
+    orderdauerauftrag = OrderDauerauftrag()
+    orderdauerauftrag.add(
         datum('01.01.2020'),
         datum('02.02.2020'),
         name='1name',
@@ -250,15 +278,25 @@ def test_order_typ():
         konto='demodepot1',
         wert=33
     )
-    persisted_state.database_instance().refresh()
+    order.append_row(orderdauerauftrag.get_all_order_until_today())
 
-    persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
 
-    untaint_database(persisted_state.database_instance())
+    result = uebersicht_sparen.handle_request(
+        GetRequest(),
+        uebersicht_sparen.SparenUebersichtContext(
+            einzelbuchungen=einzelbuchungen,
+            order=order,
+            kontos=Kontos(),
+            depotwerte=depotwerte,
+            depotauszuege=Depotauszuege(),
+            sparbuchungen=Sparbuchungen(),
+            orderdauerauftrag=orderdauerauftrag
+        )
+    )
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['order_typ'] == {
+    assert result.get('order_typ') == {
         'manual': '100,00',
         'dauerauftrag': '66,00',
         'manual_raw': '100.00',
@@ -267,15 +305,15 @@ def test_order_typ():
 
 
 def test_aktuelle_dauerauftraege():
-    set_up()
-
-    sparkontos = persisted_state.database_instance().sparkontos
+    sparkontos = Kontos()
     sparkontos.add(kontoname='demodepot1', kontotyp=sparkontos.TYP_DEPOT)
 
-    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte = Depotwerte()
     depotwerte.add(name='DemoName1', isin='is1', typ=depotwerte.TYP_ETF)
     depotwerte.add(name='DemoName2', isin='is2', typ=depotwerte.TYP_ETF)
-    persisted_state.database_instance().orderdauerauftrag.add(
+
+    orderdauerauftrag = OrderDauerauftrag()
+    orderdauerauftrag.add(
         datum('01.01.2020'),
         datum('02.02.2050'),
         name='1name',
@@ -284,7 +322,7 @@ def test_aktuelle_dauerauftraege():
         konto='demodepot1',
         wert=100
     )
-    persisted_state.database_instance().orderdauerauftrag.add(
+    orderdauerauftrag.add(
         datum('01.01.2020'),
         datum('02.02.2050'),
         name='1name',
@@ -294,16 +332,26 @@ def test_aktuelle_dauerauftraege():
         wert=50
     )
 
-    persisted_state.database_instance().einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
 
-    untaint_database(persisted_state.database_instance())
+    result = uebersicht_sparen.handle_request(
+        GetRequest(),
+        context=uebersicht_sparen.SparenUebersichtContext(
+            einzelbuchungen=einzelbuchungen,
+            orderdauerauftrag=orderdauerauftrag,
+            kontos=sparkontos,
+            depotwerte=depotwerte,
+            depotauszuege=Depotauszuege(),
+            sparbuchungen=Sparbuchungen(),
+            order=Order()
+        )
+    )
 
-    result = uebersicht_sparen.index(GetRequest())
-
-    assert result['monatlich'] == {
-            'colors': ['#3c8dbc', '#f56954'],
-            'einzelwerte': [{'color': '#3c8dbc', 'name': 'DemoName1 (is1)', 'wert': '100,00'},
-                            {'color': '#f56954', 'name': 'DemoName2 (is2)', 'wert': '50,00'}],
-            'namen': ['DemoName1 (is1)', 'DemoName2 (is2)'],
-            'werte': ['100.00', '50.00']
-        }
+    assert result.get('monatlich') == {
+        'colors': ['#3c8dbc', '#f56954'],
+        'einzelwerte': [{'color': '#3c8dbc', 'name': 'DemoName1 (is1)', 'wert': '100,00'},
+                        {'color': '#f56954', 'name': 'DemoName2 (is2)', 'wert': '50,00'}],
+        'namen': ['DemoName1 (is1)', 'DemoName2 (is2)'],
+        'werte': ['100.00', '50.00']
+    }

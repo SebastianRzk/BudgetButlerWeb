@@ -81,7 +81,7 @@ STATIC_MENU = OrderedDict(
 
 
 def get_name_from_key(pagename):
-    for name, menu_items in get_menu_list().items():
+    for name, menu_items in get_menu_list(persisted_state.database_instance().name).items():
         for menu_item in menu_items:
             if menu_item['url'] == "/" + pagename + "/":
                 return menu_item['name']
@@ -92,19 +92,19 @@ def get_key_for_name(pagename):
     if pagename == 'dashboard':
         return EINZELBUCHUNGEN_SUBMENU_NAME
 
-    for name, menu_items in get_menu_list().items():
+    for name, menu_items in get_menu_list(persisted_state.database_instance().name).items():
         for menu_item in menu_items:
             if menu_item['url'] == "/" + pagename + "/":
                 return name
     return EINZELBUCHUNGEN_SUBMENU_NAME
 
 
-def get_menu_list():
+def get_menu_list(current_database: str) -> dict:
     menu = [{'url': CORE_CONFIGURATION, 'name': 'Einstellungen', 'icon': fa.fa_cogs},
-            {'url': '/production/?database=' + persisted_state.database_instance().name,
+            {'url': '/production/?database=' + current_database,
              'name': 'Datenbank neu laden', 'icon': fa.fa_refresh}]
     for database in persisted_state.DATABASES:
-        if database != persisted_state.database_instance().name:
+        if database != current_database:
             menu.append({'url': '/production/?database=' + database, 'name': 'To ' + database, 'icon': fa.fa_cogs})
 
     STATIC_MENU[EINSTELLUNGEN_SUBMENU_NAME] = menu

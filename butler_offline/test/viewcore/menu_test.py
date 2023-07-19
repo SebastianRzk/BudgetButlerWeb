@@ -2,7 +2,7 @@ from butler_offline.viewcore.menu import get_menu_list, EINZELBUCHUNGEN_SUBMENU_
 
 
 def test_menu_has_a_fixed_order():
-    menu = get_menu_list()
+    menu = get_menu_list('Test_User')
 
     assert list(menu.keys()) == [
         EINZELBUCHUNGEN_SUBMENU_NAME,
@@ -12,7 +12,7 @@ def test_menu_has_a_fixed_order():
 
 
 def test_submenu_sizes():
-    menu = get_menu_list()
+    menu = get_menu_list('Test_User')
 
     assert len(menu[EINZELBUCHUNGEN_SUBMENU_NAME]) == 8
     assert len(menu[GEMEINSAME_FINANZEN_SUBMENU_NAME]) == 5
@@ -21,7 +21,7 @@ def test_submenu_sizes():
 
 
 def test_all_menu_items_have_valid_icon():
-    menu = get_menu_list()
+    menu = get_menu_list('Test_User')
 
     for main_menu_key in menu.keys():
         for menu_item in menu[main_menu_key]:
