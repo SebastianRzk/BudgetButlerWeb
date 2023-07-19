@@ -1,10 +1,54 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import from_double_to_german
 from butler_offline.viewcore.converter import datum_to_german
 from datetime import date
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.context.builder import generate_page_context
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+
+class SparenUebersichtContext:
+    def __init__(self,
+                 einzelbuchungen: Einzelbuchungen,
+                 depotauszuege: Depotauszuege,
+                 kontos: Kontos,
+                 order: Order,
+                 orderdauerauftrag: OrderDauerauftrag,
+                 depotwerte: Depotwerte,
+                 sparbuchungen: Sparbuchungen):
+        self._einzelbuchungen = einzelbuchungen
+        self._depotauszuege = depotauszuege
+        self._kontos = kontos
+        self._order = order
+        self._orderdauerauftrag = orderdauerauftrag
+        self._depotwerte = depotwerte
+        self._sparbuchungen = sparbuchungen
+
+    def einzelbuchungen(self) -> Einzelbuchungen:
+        return self._einzelbuchungen
+
+    def depotauszeuge(self) -> Depotauszuege:
+        return self._depotauszuege
+
+    def kontos(self) -> Kontos:
+        return self._kontos
+
+    def order(self) -> Order:
+        return self._order
+
+    def order_dauerauftraege(self):
+        return self._orderdauerauftrag
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+    def sparbuchungen(self) -> Sparbuchungen:
+        return self._sparbuchungen
 
 
 def to_piechart(data_list, gesamt_wert):
@@ -29,10 +73,12 @@ def to_piechart(data_list, gesamt_wert):
     }
 
 
-def generate_konto_uebersicht(color_kontos, color_typen):
-    sparkontos = persisted_state.database_instance().sparkontos
-    depotwerte = persisted_state.database_instance().depotwerte
-
+def generate_konto_uebersicht(color_kontos, color_typen,
+                              sparkontos: Kontos,
+                              depotwerte: Depotwerte,
+                              sparbuchungen: Sparbuchungen,
+                              order: Order,
+                              depotauszuege: Depotauszuege):
     gesamt_kontostand = 0
     gesamt_aufbuchungen = 0
     sparkonto_liste = []
@@ -50,12 +96,12 @@ def generate_konto_uebersicht(color_kontos, color_typen):
         kontotyp = row.Kontotyp
 
         if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
-            aktueller_kontostand = persisted_state.database_instance().sparbuchungen.get_kontostand_fuer(kontoname)
-            aufbuchungen = persisted_state.database_instance().sparbuchungen.get_aufbuchungen_fuer(kontoname)
+            aktueller_kontostand = sparbuchungen.get_kontostand_fuer(kontoname)
+            aufbuchungen = sparbuchungen.get_aufbuchungen_fuer(kontoname)
 
         if kontotyp == sparkontos.TYP_DEPOT:
-            aufbuchungen = persisted_state.database_instance().order.get_order_fuer(kontoname)
-            aktueller_kontostand = persisted_state.database_instance().depotauszuege.get_kontostand_by(kontoname)
+            aufbuchungen = order.get_order_fuer(kontoname)
+            aktueller_kontostand = depotauszuege.get_kontostand_by(kontoname)
 
         gesamt_kontostand += aktueller_kontostand
         gesamt_aufbuchungen += aufbuchungen
@@ -100,8 +146,8 @@ def generate_konto_uebersicht(color_kontos, color_typen):
         gesamt = 0
         aufbuchungen = 0
         for isin in depotwerte_nach_typ[typ]:
-            aufbuchungen += persisted_state.database_instance().order.get_order_fuer_depotwert(isin)
-            gesamt += persisted_state.database_instance().depotauszuege.get_depotwert_by(isin)
+            aufbuchungen += order.get_order_fuer_depotwert(isin)
+            gesamt += depotauszuege.get_depotwert_by(isin)
         diff = gesamt - aufbuchungen
         kontotypen_liste.append({
                 'name': typ,
@@ -113,7 +159,6 @@ def generate_konto_uebersicht(color_kontos, color_typen):
                 'difference': diff,
                 'difference_str': from_double_to_german(diff)
             })
-
 
     gesamt_diff = gesamt_kontostand - gesamt_aufbuchungen
 
@@ -141,9 +186,13 @@ def get_letztes_jahr_kontostand(kontoname, gesamt):
     return gesamt[-1][kontoname]['kontostand']
 
 
-def gesamt_uebersicht():
-    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
-    sparkontos = persisted_state.database_instance().sparkontos
+def gesamt_uebersicht(
+        einzelbuchungen: Einzelbuchungen,
+        sparkontos: Kontos,
+        sparbuchungen: Sparbuchungen,
+        depotauszuege: Depotauszuege,
+        order: Order
+    ):
     min_jahr = einzelbuchungen.content.copy()[einzelbuchungen.content.copy().Kategorie != 'Sparen'].Datum.min().year
     max_jahr = date.today().year
 
@@ -164,23 +213,22 @@ def gesamt_uebersicht():
 
         year_kontos = {}
 
-        for row_index, row in db.iterrows():
+        for _, sparkonto in db.iterrows():
             kontostand = 0
             aufbuchungen = 0
 
-            sparbuchungen_year = persisted_state.database_instance().sparbuchungen.select_year(jahr)
-            sparbuchungen_max_year = persisted_state.database_instance().sparbuchungen.select_max_year(jahr)
-            depotauszuege_year = persisted_state.database_instance().depotauszuege.select_max_year(jahr)
-            order_year = persisted_state.database_instance().order.select_year(jahr)
-
-            kontoname = row.Kontoname
-            kontotyp = row.Kontotyp
+            kontoname = sparkonto.Kontoname
+            kontotyp = sparkonto.Kontotyp
 
             if kontotyp == sparkontos.TYP_SPARKONTO or kontotyp == sparkontos.TYP_GENOSSENSCHAFTSANTEILE:
+                sparbuchungen_year = sparbuchungen.select_year(jahr)
+                sparbuchungen_max_year = sparbuchungen.select_max_year(jahr)
                 kontostand = sparbuchungen_max_year.get_kontostand_fuer(kontoname)
                 aufbuchungen = sparbuchungen_year.get_aufbuchungen_fuer(kontoname)
 
             if kontotyp == sparkontos.TYP_DEPOT:
+                depotauszuege_year = depotauszuege.select_max_year(jahr)
+                order_year = order.select_year(jahr)
                 aufbuchungen = order_year.get_order_fuer(kontoname)
                 kontostand = depotauszuege_year.get_kontostand_by(kontoname)
 
@@ -204,7 +252,6 @@ def gesamt_uebersicht():
             }
 
         year_kontostaende.append(year_kontos)
-
 
         gesamt_uebersicht.append({
             'jahr': jahr,
@@ -290,22 +337,29 @@ def berechne_kontogesamt(data):
     }
 
 
-def get_last_order_for(konto):
-    order_content = persisted_state.database_instance().order.content.copy()
+def get_last_order_for(konto, order: Order):
+    order_content = order.content.copy()
     order_for_konto = order_content[order_content.Konto == konto]
     if len(order_for_konto) == 0:
         return None
     return order_for_konto.Datum.max()
 
 
-def general_infos():
-    kontos = persisted_state.database_instance().sparkontos.get_depots()
+def general_infos(
+        sparkontos: Kontos,
+        depotauszuege: Depotauszuege,
+        order: Order
+):
+    kontos = sparkontos.get_depots()
     info = []
     for konto in kontos:
-        latest_depotauszug = persisted_state.database_instance().depotauszuege.get_latest_datum_by(konto)
-        latest_order = get_last_order_for(konto)
+        latest_depotauszug = depotauszuege.get_latest_datum_by(konto)
+        latest_order = get_last_order_for(
+            konto,
+            order=order
+        )
 
-        warning = False;
+        warning = False
         print('order', latest_order, 'auszug', latest_depotauszug)
         if latest_order and latest_depotauszug and latest_depotauszug < latest_order:
             warning = True
@@ -345,8 +399,8 @@ def get_wert_sum(df):
     return get_sum(df[df.Wert > 0])
 
 
-def berechne_order_typ(dauerauftrag_order):
-    order_gesamt_raw = persisted_state.database_instance().order.content.copy()
+def berechne_order_typ(dauerauftrag_order, order: Order):
+    order_gesamt_raw = order.content.copy()
     order_summe = get_wert_sum(order_gesamt_raw)
     dauerauftrag_order = get_wert_sum(dauerauftrag_order)
 
@@ -358,8 +412,9 @@ def berechne_order_typ(dauerauftrag_order):
     }
 
 
-def berechne_monatlich():
-    aktuelle_dauerauftraege = persisted_state.database_instance().orderdauerauftrag.aktuelle_raw().copy()
+def berechne_monatlich(order_dauerauftrag: OrderDauerauftrag,
+                       depotwerte: Depotwerte):
+    aktuelle_dauerauftraege = order_dauerauftrag.aktuelle_raw().copy()
     aktuelle_dauerauftraege = aktuelle_dauerauftraege[aktuelle_dauerauftraege.Wert > 0]
 
     isins = set(aktuelle_dauerauftraege.Depotwert.tolist())
@@ -371,7 +426,7 @@ def berechne_monatlich():
     color_chooser = viewcore.get_generic_color_chooser(list(sorted(isins)))
 
     for isin in sorted(isins):
-        name = persisted_state.database_instance().depotwerte.get_description_for(isin)
+        name = depotwerte.get_description_for(isin)
         wert = get_sum(aktuelle_dauerauftraege[aktuelle_dauerauftraege.Depotwert == isin])
         color = color_chooser.get_for_value(isin)
 
@@ -392,40 +447,77 @@ def berechne_monatlich():
     }
 
 
-def _handle_request(request):
-    if persisted_state.database_instance().einzelbuchungen.select().count() == 0:
-        return generate_error_context('uebersicht_sparen', 'Bitte erfassen Sie zuerst eine Einzelbuchung.')
+def handle_request(_, context: SparenUebersichtContext):
+    result_context = generate_page_context(page_name='sparen')
+    if context.einzelbuchungen().select().count() == 0:
+        result_context.throw_error('Bitte erfassen Sie zuerst eine Einzelbuchung.')
+        return result_context
 
-    context = generate_transactional_context('sparen')
-    kontos = persisted_state.database_instance().sparkontos.get_all().Kontoname.tolist()
-    typen = persisted_state.database_instance().sparkontos.KONTO_TYPEN
-    depot_typen = persisted_state.database_instance().depotwerte.TYPES
+    kontos = context.kontos().get_all().Kontoname.tolist()
+    typen = context.kontos().KONTO_TYPEN
+    depot_typen = context.depotwerte().TYPES
 
     color_kontos = viewcore.get_generic_color_chooser(kontos)
     color_typen = viewcore.get_generic_color_chooser(typen + depot_typen)
 
-    gesamt, kontos, typen = generate_konto_uebersicht(color_kontos, color_typen)
-    diagramm_uebersicht, year_kontostaende = gesamt_uebersicht()
+    gesamt, kontos, typen = generate_konto_uebersicht(
+        color_kontos,
+        color_typen,
+        sparkontos=context.kontos(),
+        depotauszuege=context.depotauszeuge(),
+        depotwerte=context.depotwerte(),
+        order=context.order(),
+        sparbuchungen=context.sparbuchungen(),
+    )
+    diagramm_uebersicht, year_kontostaende = gesamt_uebersicht(
+        sparbuchungen=context.sparbuchungen(),
+        depotauszuege=context.depotauszeuge(),
+        order=context.order(),
+        sparkontos=context.kontos(),
+        einzelbuchungen=context.einzelbuchungen(),
+    )
     gesamt_tabelle = berechne_gesamt_tabelle(year_kontostaende)
     gesamt_diagramm_labels, gesamt_diagramm_data = berechne_diagramm(diagramm_uebersicht)
     gesamt_linechart = berechne_kontogesamt(gesamt_tabelle)
 
-    order_until_today = persisted_state.database_instance().orderdauerauftrag.get_all_order_until_today()
+    order_until_today = context.order_dauerauftraege().get_all_order_until_today()
 
-    context['kontos'] = kontos
-    context['typen'] = typen
-    context['gesamt'] = gesamt
-    context['monatlich'] = berechne_monatlich()
-    context['order_typ'] = berechne_order_typ(order_until_today)
-    context['general_infos'] = general_infos()
-    context['konto_diagramm'] = to_piechart(kontos, gesamt['wert'])
-    context['typen_diagramm'] = to_piechart(typen, gesamt['wert'])
-    context['gesamt_diagramm_labels'] = gesamt_diagramm_labels
-    context['gesamt_diagramm_data'] = gesamt_diagramm_data
-    context['gesamt_linechart'] = gesamt_linechart
-    return context
+    result_context.add('kontos', kontos)
+    result_context.add('typen', typen)
+    result_context.add('gesamt', gesamt)
+    result_context.add('monatlich', berechne_monatlich(
+        order_dauerauftrag=context.order_dauerauftraege(),
+        depotwerte=context.depotwerte()
+    ))
+    result_context.add('order_typ', berechne_order_typ(
+        order_until_today,
+        order=context.order(),
+    ))
+    result_context.add('general_infos', general_infos(
+        sparkontos=context.kontos(),
+        depotauszuege=context.depotauszeuge(),
+        order=context.order()
+    ))
+    result_context.add('konto_diagramm', to_piechart(kontos, gesamt['wert']))
+    result_context.add('typen_diagramm', to_piechart(typen, gesamt['wert']))
+    result_context.add('gesamt_diagramm_labels', gesamt_diagramm_labels)
+    result_context.add('gesamt_diagramm_data', gesamt_diagramm_data)
+    result_context.add('gesamt_linechart', gesamt_linechart)
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_sparen.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        context_creator=lambda db: SparenUebersichtContext(
+            einzelbuchungen=db.einzelbuchungen,
+            order=db.order,
+            sparbuchungen=db.sparbuchungen,
+            depotauszuege=db.depotauszuege,
+            depotwerte=db.depotwerte,
+            kontos=db.sparkontos,
+            orderdauerauftrag=db.orderdauerauftrag
+        ),
+        html_base_page='sparen/uebersicht_sparen.html'
+    )

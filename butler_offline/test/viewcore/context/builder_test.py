@@ -1,7 +1,7 @@
 from butler_offline.viewcore.context import generate_base_context, generate_transactional_context, \
     generate_redirect_context
 from butler_offline.viewcore.context.builder import PageContext, TransactionalPageContext, RedirectPageContext
-from butler_offline.viewcore.context import TRANSACTION_ID_KEY, REDIRECT_KEY
+from butler_offline.viewcore.context import TRANSACTION_ID_KEY, REDIRECT_KEY, ERROR_KEY
 
 
 def test_migration_base_page_context():
@@ -64,3 +64,30 @@ def test_contains_with_contained_key_should_return_true():
     context = PageContext(pagename="asdf", database_name="asdf")
     context.add('mykey', 'myvalue')
     assert context.contains('mykey')
+
+
+def test_page_context_without_error_should_return_no_error():
+    context = PageContext(pagename="", database_name="")
+    assert not context.is_error()
+    assert not context.error_text()
+
+
+def test_migration_context_without_error_should_not_be_in_rendered_dict():
+    context = PageContext(pagename="", database_name="")
+    assert ERROR_KEY not in context.as_dict()
+
+
+def test_page_context_with_error_should_return_error():
+    context = PageContext(pagename="", database_name="")
+    context.throw_error("something went wrong")
+
+    assert context.is_error()
+    assert context.error_text() == "something went wrong"
+
+
+def test_migration_context_with_error_should_return_error_in_rendered_dict():
+    context = PageContext(pagename="", database_name="")
+    context.throw_error("something went wrong")
+
+    assert ERROR_KEY in context.as_dict()
+    assert context.as_dict()[ERROR_KEY] == "something went wrong"

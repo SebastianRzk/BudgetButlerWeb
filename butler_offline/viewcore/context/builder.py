@@ -1,13 +1,18 @@
 from butler_offline.viewcore.context import generate_base_context, generate_redirect_context
 from butler_offline.viewcore.state import persisted_state
-
+from butler_offline.viewcore.context import ERROR_KEY
 
 class PageContext:
     def __init__(self, pagename: str, database_name: str):
         self._additional_context_values = {}
         self._basic_context_values = generate_base_context(pagename=pagename, database_name=database_name)
+        self._error = False
+        self._error_text = None
 
     def as_dict(self) -> dict:
+        if self._error:
+            self._additional_context_values[ERROR_KEY] = self._error_text
+
         return self._basic_context_values | self._additional_context_values
 
     def add(self, key: str, value):
@@ -24,6 +29,16 @@ class PageContext:
 
     def contains(self, key: str):
         return key in self._additional_context_values
+
+    def is_error(self):
+        return self._error
+
+    def error_text(self):
+        return self._error_text
+
+    def throw_error(self, error_text: str):
+        self._error = True
+        self._error_text = error_text
 
 
 class TransactionalPageContext(PageContext):

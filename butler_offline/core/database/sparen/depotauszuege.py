@@ -58,7 +58,7 @@ class Depotauszuege(DatabaseObject):
         auszug = auszuege[auszuege.Datum == latest_datum]
         return auszug.Wert.sum()
 
-    def get_depotwert_by(self, depotwert):
+    def get_depotwert_by(self, depotwert: str) -> int:
         auszuege = self.content[self.content.Depotwert == depotwert].copy()
         if len(auszuege) == 0:
             return 0
