@@ -1,62 +1,69 @@
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.sparen import add_depotwert
-from butler_offline.core import file_system
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.context import get_error_message
-
-
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
 
 def test_init():
-    set_up()
-    context = add_depotwert.index(GetRequest())
-    assert context['approve_title'] == 'Depotwert hinzufügen'
-    assert context['types'] == persisted_state.database_instance().depotwerte.TYPES
+    context = add_depotwert.handle_request(
+        GetRequest(),
+        context=add_depotwert.AddDepotwertContext(depotwerte=Depotwerte())
+    )
+    assert context.get('approve_title') == 'Depotwert hinzufügen'
+    assert context.get('types') == Depotwerte().TYPES
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = add_depotwert.index(GetRequest())
-    assert 'ID' in context
+    context = add_depotwert.handle_request(
+        GetRequest(),
+        context=add_depotwert.AddDepotwertContext(depotwerte=Depotwerte())
+    )
+    assert context.is_transactional()
 
 
-def test_add_shouldAddDepotwert():
-    set_up()
-    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'name': '1name',
-         'isin': '1isin',
-         'typ': typ_etf
-         }
-     ))
+def test_add_should_add_depotwert():
+    depotwerte = Depotwerte()
+    typ_etf = depotwerte.TYP_ETF
 
-    db = persisted_state.database_instance()
-    assert len(db.depotwerte.content) == 1
-    assert db.depotwerte.content.Name[0] == '1name'
-    assert db.depotwerte.content.ISIN[0] == '1isin'
-    assert db.depotwerte.content.Typ[0] == typ_etf
+    add_depotwert.handle_request(
+        VersionedPostRequest(
+            {'action': 'add',
+             'name': '1name',
+             'isin': '1isin',
+             'typ': typ_etf
+             }
+        ),
+        context=add_depotwert.AddDepotwertContext(depotwerte=depotwerte)
+    )
+
+    assert depotwerte.select().count() == 1
+    assert depotwerte.get(0) == {
+        'Name': '1name',
+        'ISIN': '1isin',
+        'Typ': typ_etf,
+        'index': 0
+    }
 
 
 def test_add_depotwert_should_show_in_recently_added():
-    set_up()
-    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    result = add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'name': '1name',
-         'isin': '1isin',
-         'typ': typ_etf
-         }
-     ))
-    result_element = list(result['letzte_erfassung'])[0]
+    depotwerte = Depotwerte()
+    typ_etf = depotwerte.TYP_ETF
+
+    result = add_depotwert.handle_request(
+        VersionedPostRequest(
+            {'action': 'add',
+             'name': '1name',
+             'isin': '1isin',
+             'typ': typ_etf
+             }
+        ),
+        context=add_depotwert.AddDepotwertContext(
+            depotwerte=depotwerte
+        )
+    )
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'plus'
     assert result_element['Name'] == '1name'
@@ -64,61 +71,40 @@ def test_add_depotwert_should_show_in_recently_added():
     assert result_element['Typ'] == typ_etf
 
 
-def test_add_should_only_fire_once():
-    set_up()
-    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    next_id = persisted_state.current_database_version()
-    add_depotwert.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'name': '1name',
-         'isin': '1isin',
-         'typ': typ_etf
-         }
-     ))
-    add_depotwert.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'name': 'overwritten',
-         'isin': 'overwritten',
-         'typ': ''
-         }
-     ))
-    db = persisted_state.database_instance()
-    assert len(db.depotwerte.content) == 1
-    assert db.depotwerte.content.Name[0] == '1name'
-    assert db.depotwerte.content.ISIN[0] == '1isin'
-    assert db.depotwerte.content.Typ[0] == typ_etf
-
-
 def test_edit_depotwert():
-    set_up()
-    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    typ_fond = persisted_state.database_instance().depotwerte.TYP_FOND
-    add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'name': '1name',
-         'isin': '1isin',
-         'typ': typ_etf
-         }
-    ))
+    depotwerte = Depotwerte()
+    typ_etf = depotwerte.TYP_ETF
+    typ_fond = depotwerte.TYP_FOND
 
-    result = add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'edit_index': 0,
-         'name': '2name',
-         'isin': '2isin',
-         'typ': typ_fond
-         }
-    ))
+    depotwerte.add(
+        name='1name',
+        typ=typ_etf,
+        isin='1isin'
+    )
 
-    db = persisted_state.database_instance()
-    assert len(db.depotwerte.content) == 1
-    assert db.depotwerte.content.Name[0] == '2name'
-    assert db.depotwerte.content.ISIN[0] == '2isin'
-    assert db.depotwerte.content.Typ[0] == typ_fond
+    result = add_depotwert.handle_request(
+        VersionedPostRequest(
+            {'action': 'add',
+             'edit_index': 0,
+             'name': '2name',
+             'isin': '2isin',
+             'typ': typ_fond
+             }
+        ),
+        context=add_depotwert.AddDepotwertContext(
+            depotwerte=depotwerte
+        )
+    )
 
-    result_element = list(result['letzte_erfassung'])[0]
+    assert depotwerte.select().count() == 1
+    assert depotwerte.get(0) == {
+        'Name': '2name',
+        'ISIN': '2isin',
+        'Typ': typ_fond,
+        'index': 0
+    }
+
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'pencil'
     assert result_element['Name'] == '2name'
@@ -126,82 +112,60 @@ def test_edit_depotwert():
     assert result_element['Typ'] == typ_fond
 
 
-def test_edit_depotwert_with_underscrore_should_return_error():
-    set_up()
-    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'name': '1name',
-         'isin': '1isin',
-         'typ': typ_etf
-         }
-    ))
+def test_edit_depotwert_with_underscore_should_return_error():
+    depotwerte = Depotwerte()
+    typ_etf = depotwerte.TYP_ETF
+    depotwerte.add(
+        name='1name',
+        isin='1isin',
+        typ=typ_etf
+    )
 
-    result = add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'edit_index': 0,
-         'name': '2name',
-         'isin': '2_isin',
-         'typ': typ_etf
-         }
-    ))
+    result = add_depotwert.handle_request(
+        VersionedPostRequest(
+            {'action': 'add',
+             'edit_index': 0,
+             'name': '2name',
+             'isin': '2_isin',
+             'typ': typ_etf
+             }
+        ),
+        context=add_depotwert.AddDepotwertContext(
+            depotwerte=depotwerte
+        )
+    )
+    assert result.is_error()
+    assert result.error_text() == 'ISIN darf kein Unterstrich "_" enthalten.'
 
-    assert get_error_message(result) == 'ISIN darf kein Unterstrich "_" enthalten.'
-
-
-def test_edit_depotwert_should_only_fire_once():
-    set_up()
-    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'name': '1name',
-         'isin': '1isin',
-         'typ': typ_etf
-         }
-    ))
-
-    next_id = persisted_state.current_database_version()
-    add_depotwert.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'name': '2name',
-         'isin': '2isin',
-         'typ': typ_etf
-         }
-    ))
-    add_depotwert.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'name': 'overwritten',
-         'isin': 'overwritten',
-         'typ': ''
-         }
-    ))
-
-    db = persisted_state.database_instance()
-    assert len(db.depotwerte.content) == 1
-    assert db.depotwerte.content.Name[0] == '2name'
-    assert db.depotwerte.content.ISIN[0] == '2isin'
-    assert db.depotwerte.content.Typ[0] == typ_etf
 
 def test_edit_call_from_ueberischt_should_preset_values_and_rename_button():
-    set_up()
-    typ_etf = persisted_state.database_instance().depotwerte.TYP_ETF
-    add_depotwert.index(VersionedPostRequest(
-        {'action': 'add',
-         'name': '1name',
-         'isin': '1isin',
-         'typ': typ_etf
-         }
-    ))
+    depotwerte = Depotwerte()
+    typ_etf = depotwerte.TYP_ETF
+    depotwerte.add(
+        name='1name',
+        isin='1isin',
+        typ=typ_etf
+    )
 
-    context = add_depotwert.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
-    assert context['approve_title'] == 'Depotwert aktualisieren'
-    preset = context['default_item']
+    context = add_depotwert.handle_request(
+        PostRequest({'action': 'edit', 'edit_index': '0'}),
+        context=add_depotwert.AddDepotwertContext(depotwerte=depotwerte)
+    )
+    assert context.get('approve_title') == 'Depotwert aktualisieren'
+    preset = context.get('default_item')
 
     assert preset['edit_index'] == '0'
     assert preset['name'] == '1name'
     assert preset['isin'] == '1isin'
     assert preset['typ'] == typ_etf
+
+
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        add_depotwert.index(GetRequest())
+
+    result = run_in_mocked_handler(index_handle=index)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/add_depotwert.html']
+

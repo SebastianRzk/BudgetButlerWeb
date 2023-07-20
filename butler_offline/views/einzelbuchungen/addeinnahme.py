@@ -1,4 +1,3 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum, dezimal_float, from_double_to_german
