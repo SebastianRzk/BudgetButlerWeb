@@ -1,97 +1,123 @@
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.test.database_util import untaint_database
 from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.sparen import add_order
-from butler_offline.core import file_system
-from butler_offline.core.database.sparen.kontos import Kontos
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.viewcore.context import get_error_message
 from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.test.core.database.builder import order_dict
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    depotwerte = persisted_state.database_instance().depotwerte
-    persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_DEPOT)
+def get_basic_test_data():
+    sparkontos = Kontos()
+    sparkontos.add('demokonto', Kontos.TYP_DEPOT)
+
+    depotwerte = Depotwerte()
     depotwerte.add(name='demowert', isin='demoisin', typ=depotwerte.TYP_ETF)
-    untaint_database(database=persisted_state.database_instance())
-    request_handler.stub_me()
+
+    return add_order.AddOrderContext(
+        order=Order(),
+        sparkontos=sparkontos,
+        depotwerte=depotwerte
+    )
 
 
 def test_init():
-    set_up()
-    context = add_order.index(GetRequest())
-    assert context['approve_title'] == 'Order hinzufügen'
-    assert context['kontos'] == ['demokonto']
-    assert context['depotwerte'] == [{'description': 'demowert (demoisin)', 'isin': 'demoisin'}]
-    assert context['typen'] == [add_order.TYP_KAUF, add_order.TYP_VERKAUF]
+    context = add_order.handle_request(
+        GetRequest(),
+        context=get_basic_test_data()
+    )
+
+    assert context.get('approve_title') == 'Order hinzufügen'
+    assert context.get('kontos') == ['demokonto']
+    assert context.get('depotwerte') == [{'description': 'demowert (demoisin)', 'isin': 'demoisin'}]
+    assert context.get('typen') == [add_order.TYP_KAUF, add_order.TYP_VERKAUF]
 
 
 def test_init_empty_should_return_error():
-    set_up()
-    persisted_state.DATABASE_INSTANCE = None
+    context = add_order.handle_request(
+        GetRequest(),
+        context=add_order.AddOrderContext(
+            order=Order(),
+            depotwerte=Depotwerte(),
+            sparkontos=Kontos()
+        )
+    )
 
-    context = add_order.index(GetRequest())
-
-    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert context.is_error()
+    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
 
 
 def test_init_without_depotwert_should_return_error():
-    set_up()
-    persisted_state.DATABASE_INSTANCE = None
-    sparkontos = persisted_state.database_instance().sparkontos
+    sparkontos = Kontos()
     sparkontos.add('1name', sparkontos.TYP_DEPOT)
 
-    context = add_order.index(GetRequest())
+    context = add_order.handle_request(
+        GetRequest(),
+        context=add_order.AddOrderContext(
+            depotwerte=Depotwerte(),
+            sparkontos=sparkontos,
+            order=Order()
+        )
+    )
 
-    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert context.is_error()
+    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Depotwert.'
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = add_order.index(GetRequest())
-    assert 'ID' in context
+    context = add_order.handle_request(
+        GetRequest(),
+        get_basic_test_data()
+    )
+    assert context.is_transactional()
 
 
 def test_add():
-    set_up()
-    add_order.index(VersionedPostRequest(
+    context = get_basic_test_data()
+
+    add_order.handle_request(VersionedPostRequest(
         {'action': 'add',
          'datum': rfc('1.1.2017'),
          'name': 'testname',
-         'wert': '2,00',
+         'wert': '2.00',
          'typ': add_order.TYP_KAUF,
          'depotwert': 'demoisin',
          'konto': 'demokonto'
-         }
-     ))
+         }),
+        context=context
+    )
 
-    db = persisted_state.database_instance()
-    assert len(db.order.content) == 1
-    assert db.order.content.Datum[0] == datum('1.1.2017')
-    assert db.order.content.Wert[0] == float('2.00')
-    assert db.order.content.Name[0] == 'testname'
-    assert db.order.content.Depotwert[0] == 'demoisin'
-    assert db.order.content.Konto[0] == 'demokonto'
+    assert context.order().select().count() == 1
+    assert context.order().get(0) == {
+        'Datum': datum('1.1.2017'),
+        'Wert': '2.00',
+        'Name': 'testname',
+        'Depotwert': 'demoisin',
+        'Konto': 'demokonto',
+        'index': 0,
+        'Dynamisch': False
+    }
 
 
 def test_add_order_should_show_in_recently_added():
-    set_up()
-    result = add_order.index(VersionedPostRequest(
-        {'action': 'add',
-         'datum': rfc('1.1.2017'),
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-     ))
-    result_element = list(result['letzte_erfassung'])[0]
+    result = add_order.handle_request(
+        VersionedPostRequest(
+            {'action': 'add',
+             'datum': rfc('1.1.2017'),
+             'name': 'testname',
+             'wert': '2,00',
+             'typ': add_order.TYP_KAUF,
+             'depotwert': 'demoisin',
+             'konto': 'demokonto'
+             }
+        ),
+        context=get_basic_test_data()
+    )
+
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'plus'
     assert result_element['datum'] == '01.01.2017'
@@ -102,74 +128,42 @@ def test_add_order_should_show_in_recently_added():
     assert result_element['depotwert'] == 'demoisin'
 
 
-def test_add_should_only_fire_once():
-    set_up()
-    next_id = persisted_state.current_database_version()
-    add_order.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'datum': rfc('1.1.2017'),
-         'name':'testname',
-         'wert':'2,00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-     ))
-    add_order.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'datum': rfc('2.2.2012'),
-         'name': 'overwritten',
-         'wert': '0,00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'overwritten',
-         'konto': 'overwritten'
-         }
-     ))
-    db = persisted_state.database_instance()
-    assert len(db.order.content) == 1
-    assert db.order.content.Datum[0] == datum('1.1.2017')
-    assert db.order.content.Wert[0] == float('2.00')
-    assert db.order.content.Name[0] == 'testname'
-    assert db.order.content.Depotwert[0] == 'demoisin'
-    assert db.order.content.Konto[0] == 'demokonto'
-
-
 def test_edit():
-    set_up()
-    add_order.index(VersionedPostRequest(
-        {'action': 'add',
-         'datum': rfc('1.1.2017'),
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-     ))
+    context = get_basic_test_data()
+    context.order().add(
+        name='testname',
+        wert=float('2.00'),
+        datum=datum('01.01.2017'),
+        depotwert='demoisin',
+        dynamisch=False,
+        konto='demokonto'
+    )
 
-    result = add_order.index(VersionedPostRequest(
-        {'action': 'add',
-         'edit_index': 0,
-         'datum': rfc('2.1.2017'),
-         'name': '2testname',
-         'wert': '3,00',
-         'typ': add_order.TYP_VERKAUF,
-         'depotwert': '2demoisin',
-         'konto': '2demokonto'
-         }
-     ))
+    result = add_order.handle_request(
+        VersionedPostRequest(
+            {'action': 'add',
+             'edit_index': 0,
+             'datum': rfc('2.1.2017'),
+             'name': '2testname',
+             'wert': '3,00',
+             'typ': add_order.TYP_VERKAUF,
+             'depotwert': '2demoisin',
+             'konto': '2demokonto'
+             }
+        ),
+        context=context
+    )
 
-    db = persisted_state.database_instance()
-    assert len(db.order.content) == 1
-    assert db.order.content.Datum[0] == datum('2.1.2017')
-    assert db.order.content.Wert[0] == float('-3.00')
-    assert db.order.content.Name[0] == '2testname'
-    assert db.order.content.Depotwert[0] == '2demoisin'
-    assert db.order.content.Konto[0] == '2demokonto'
+    assert context.order().select().count() == 1
+    assert context.order().get(0) == order_dict(
+        datum='2.1.2017',
+        depotwert='2demoisin',
+        konto='2demokonto',
+        name='2testname',
+        wert='-3.00',
+    )
 
-    result_element = list(result['letzte_erfassung'])[0]
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'pencil'
     assert result_element['datum'] == '02.01.2017'
@@ -180,99 +174,68 @@ def test_edit():
     assert result_element['typ'] == add_order.TYP_VERKAUF
 
 
-def test_edit_should_only_fire_once():
-    set_up()
-    add_order.index(VersionedPostRequest(
-        {'action': 'add',
-         'datum': rfc('1.1.2017'),
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-    ))
+def test_edit_call_from_uebersicht_should_preset_values_and_rename_button():
+    context = get_basic_test_data()
+    context.order().add(
+        depotwert='demoisin',
+        konto='demokonto',
+        datum=datum('1.1.2017'),
+        name='demoname',
+        wert=2.10,
+        dynamisch=False,
+    )
 
-    next_id = persisted_state.current_database_version()
-    add_order.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'datum': rfc('2.1.2017'),
-         'name': '2testname',
-         'wert': '3,00',
-         'typ': add_order.TYP_VERKAUF,
-         'depotwert': '2demoisin',
-         'konto': '2demokonto'
-         }
-    ))
-
-    add_order.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'datum': rfc('1.1.2010'),
-         'name': 'overwritten',
-         'wert': '0,00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'overwritten',
-         'konto': 'overwritten'
-         }
-    ))
-
-    db = persisted_state.database_instance()
-    assert len(db.order.content) == 1
-    assert db.order.content.Datum[0] == datum('2.1.2017')
-    assert db.order.content.Wert[0] == float('-3.00')
-    assert db.order.content.Name[0] == '2testname'
-    assert db.order.content.Depotwert[0] == '2demoisin'
-    assert db.order.content.Konto[0] == '2demokonto'
+    context = add_order.handle_request(
+        PostRequest({'action': 'edit', 'edit_index': '0'}),
+        context=context
+    )
+    assert context.get('approve_title') == 'Order aktualisieren'
+    assert context.get('default_item') == {
+        'edit_index': '0',
+        'datum': '2017-01-01',
+        'konto': 'demokonto',
+        'name': 'demoname',
+        'wert': '2,10',
+        'typ': add_order.TYP_KAUF,
+        'depotwert': 'demoisin'
+    }
 
 
-def test_editCallFromUeberischt_shouldPresetValues_andRenameButton():
-    set_up()
-    add_order.index(VersionedPostRequest(
-        {'action': 'add',
-         'datum': rfc('1.1.2017'),
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-    ))
+def test_edit_call_from_ueberischt_should_preset_values_verkauf():
+    context = get_basic_test_data()
+    context.order().add(
+        depotwert='demoisin',
+        konto='demokonto',
+        datum=datum('1.1.2017'),
+        name='demoname',
+        wert=-2.10,
+        dynamisch=False,
+    )
 
-    context = add_order.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
-    assert context['approve_title'] == 'Order aktualisieren'
-    preset = context['default_item']
+    context = add_order.handle_request(
+        PostRequest({'action': 'edit', 'edit_index': '0'}),
+        context=context
+    )
+    assert context.get('approve_title') == 'Order aktualisieren'
 
-    assert preset['edit_index'] == '0'
-    assert preset['datum'] == '2017-01-01'
-    assert preset['konto'] == 'demokonto'
-    assert preset['name'] == 'testname'
-    assert preset['wert'] == '2,00'
-    assert preset['typ'] == add_order.TYP_KAUF
-    assert preset['depotwert'] == 'demoisin'
+    assert context.get('approve_title') == 'Order aktualisieren'
+    assert context.get('default_item') == {
+        'edit_index': '0',
+        'datum': '2017-01-01',
+        'konto': 'demokonto',
+        'name': 'demoname',
+        'wert': '2,10',
+        'typ': add_order.TYP_VERKAUF,
+        'depotwert': 'demoisin'
+    }
 
 
-def test_editCallFromUeberischt_shouldPresetValues_verkauf():
-    set_up()
-    add_order.index(VersionedPostRequest(
-        {'action': 'add',
-         'datum': rfc('1.1.2017'),
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_order.TYP_VERKAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-    ))
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        add_order.index(GetRequest())
 
-    context = add_order.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
-    assert context['approve_title'] == 'Order aktualisieren'
-    preset = context['default_item']
+    result = run_in_mocked_handler(index_handle=index)
 
-    assert preset['wert'] == '2,00'
-    assert preset['typ'] == add_order.TYP_VERKAUF
-
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/add_order.html']
 

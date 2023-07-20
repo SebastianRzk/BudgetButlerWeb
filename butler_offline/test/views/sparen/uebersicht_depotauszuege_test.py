@@ -1,94 +1,100 @@
-import unittest
-
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
-from butler_offline.core import file_system
+from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.sparen import uebersicht_depotauszuege
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.viewcore import request_handler
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
 
-class TestUebersichtDepotauszuege(unittest.TestCase):
-
-    def set_up(self):
-        file_system.INSTANCE = FileSystemStub()
-        persisted_state.DATABASE_INSTANCE = None
-        request_handler.stub_me()
-
-    def test_transaction_id_should_be_in_context(self):
-        self.set_up()
-        context = uebersicht_depotauszuege.index(GetRequest())
-        assert 'ID' in context
-
-    def add_test_data(self):
-        depotauszuege = persisted_state.database_instance().depotauszuege
-        depotauszuege.add(datum('01.01.2020'), '1isin', '1demokonto', 1)
-        depotauszuege.add(datum('03.01.2020'), '2isin', '2demokonto', 2)
-        depotauszuege.add(datum('03.01.2020'), '3isin', '2demokonto', 3)
-        depotauszuege.add(datum('03.01.2020'), '4isin', '3demokonto', 4)
-
-        depotwerte = persisted_state.database_instance().depotwerte
-        depotwerte.add(name='1name', isin='1isin', typ=depotwerte.TYP_ETF)
-        depotwerte.add(name='2name', isin='2isin', typ=depotwerte.TYP_ETF)
-        depotwerte.add(name='3name', isin='3isin', typ=depotwerte.TYP_ETF)
-        depotwerte.add(name='4name', isin='4isin', typ=depotwerte.TYP_ETF)
+def test_context_should_be_transactional():
+    context = uebersicht_depotauszuege.handle_request(
+        GetRequest(),
+        context=get_test_data()
+    )
+    assert context.is_transactional()
 
 
-    def test_init_withEmptyDatabase(self):
-        self.set_up()
-        content = uebersicht_depotauszuege.index(GetRequest())
-        assert content['gesamt'] == []
+def get_test_data():
+    depotauszuege = Depotauszuege()
+    depotauszuege.add(datum('01.01.2020'), '1isin', '1demokonto', 1)
+    depotauszuege.add(datum('03.01.2020'), '2isin', '2demokonto', 2)
+    depotauszuege.add(datum('03.01.2020'), '3isin', '2demokonto', 3)
+    depotauszuege.add(datum('03.01.2020'), '4isin', '3demokonto', 4)
+    print(depotauszuege.content)
+
+    depotwerte = Depotwerte()
+    depotwerte.add(name='1name', isin='1isin', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='2name', isin='2isin', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='3name', isin='3isin', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='4name', isin='4isin', typ=depotwerte.TYP_ETF)
+
+    return uebersicht_depotauszuege.UebersichtDepotauszuegeContext(
+        depotauszuege=depotauszuege,
+        depotwerte=depotwerte
+    )
 
 
-    def test_init_filledDatabase(self):
-        self.set_up()
-        self.add_test_data()
+def test_init_with_empty_database():
+    content = uebersicht_depotauszuege.handle_request(
+        GetRequest(),
+        context=uebersicht_depotauszuege.UebersichtDepotauszuegeContext(
+            depotauszuege=Depotauszuege(),
+            depotwerte=Depotwerte()
+        )
+    )
+    assert content.get('gesamt') == []
 
-        content = uebersicht_depotauszuege._handle_request(GetRequest())
 
-        assert content['gesamt'] == [
-            {'buchungen': [
-                {'depotwert': '1name (1isin)', 'wert': 1}],
-                'index': 0,
-                'name': '1demokonto vom 01.01.2020'},
-            {'buchungen': [{'depotwert': '2name (2isin)', 'wert': 2},
-                           {'depotwert': '3name (3isin)', 'wert': 3}],
-             'index': 1,
-             'name': '2demokonto vom 03.01.2020'},
-            {'buchungen': [{'depotwert': '4name (4isin)', 'wert': 4}],
-             'index': 3,
-             'name': '3demokonto vom 03.01.2020'},
-        ]
+def test_init_filled_database():
+    content = uebersicht_depotauszuege.handle_request(
+        GetRequest(),
+        context=get_test_data()
+    )
 
-    def test_delete(self):
-        self.set_up()
-        self.add_test_data()
+    assert content.get('gesamt') == [
+        {'buchungen': [
+            {'depotwert': '1name (1isin)', 'wert': 1}],
+            'index': 0,
+            'name': '1demokonto vom 01.01.2020'},
+        {'buchungen': [{'depotwert': '2name (2isin)', 'wert': 2},
+                       {'depotwert': '3name (3isin)', 'wert': 3}],
+         'index': 1,
+         'name': '2demokonto vom 03.01.2020'},
+        {'buchungen': [{'depotwert': '4name (4isin)', 'wert': 4}],
+         'index': 3,
+         'name': '3demokonto vom 03.01.2020'},
+    ]
 
-        uebersicht_depotauszuege.index(VersionedPostRequest({'action': 'delete', 'delete_index': '1'}))
-        depotauszuege = persisted_state.database_instance().depotauszuege
 
-        assert len(depotauszuege.content) == 2
+def test_delete():
+    context = get_test_data()
+    uebersicht_depotauszuege.handle_request(
+        VersionedPostRequest({'action': 'delete', 'delete_index': '1'}),
+        context=context
+    )
 
-        page_conent = uebersicht_depotauszuege._handle_request(GetRequest())
-        assert page_conent['gesamt'] == [
-            {'buchungen': [
-                {'depotwert': '1name (1isin)', 'wert': 1}],
-                'index': 0,
-                'name': '1demokonto vom 01.01.2020'},
-            {'buchungen': [{'depotwert': '4name (4isin)', 'wert': 4}],
-             'index': 1,
-             'name': '3demokonto vom 03.01.2020'},
-        ]
+    assert context.depotauszuege().select().count() == 2
 
-    def test_delete_should_only_fire_once(self):
-        self.set_up()
-        self.add_test_data()
-        next_id = persisted_state.current_database_version()
+    page_conent = uebersicht_depotauszuege.handle_request(
+        GetRequest(),
+        context=context)
+    assert page_conent.get('gesamt') == [
+        {'buchungen': [
+            {'depotwert': '1name (1isin)', 'wert': 1}],
+            'index': 0,
+            'name': '1demokonto vom 01.01.2020'},
+        {'buchungen': [{'depotwert': '4name (4isin)', 'wert': 4}],
+         'index': 3,
+         'name': '3demokonto vom 03.01.2020'},
+    ]
 
-        assert len(persisted_state.database_instance().depotauszuege.content) == 4
-        uebersicht_depotauszuege.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
-        assert len(persisted_state.database_instance().depotauszuege.content) == 2
-        uebersicht_depotauszuege.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
-        assert len(persisted_state.database_instance().depotauszuege.content) == 2
+
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        uebersicht_depotauszuege.index(GetRequest())
+
+    result = run_in_mocked_handler(index_handle=index)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/uebersicht_depotauszuege.html']
