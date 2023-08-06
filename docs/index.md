@@ -46,6 +46,7 @@
   * Farbthema anpassen
   * Farben der Kategorien anpassen
   * Verwendung mehrerer Datenbanken
+  * Backup der Datenbank-Datei anlegen
 
 ## Offline Anwendung: BudgetButlerWeb
 
@@ -96,10 +97,11 @@ BudgetButlerWeb aktualisieren:
 ## Umgebungsvariablen
 
 
-| Wert                          | Default | Beschreibung                                         |
-|-------------------------------|---------|------------------------------------------------------|
-| BUDGETBUTLERWEB_DATABASE_PATH | ..      | Ordner an dem die Datenbanken gesucht werden sollen. |
-| BUDGETBUTLERWEB_CONFIG_PATH   | ..      | Ordner an dem die Configuration gesucht werden soll. |
+| Wert                                 | Default     | Beschreibung                                            |
+|--------------------------------------|-------------|---------------------------------------------------------|
+| BUDGETBUTLERWEB_DATABASE_PATH        | ..          | Ordner an dem die Datenbanken gesucht werden sollen.    |
+| BUDGETBUTLERWEB_CONFIG_PATH          | ..          | Ordner an dem die Configuration gesucht werden soll.    |
+| BUDGETBUTLERWEB_DATABASE_BACKUP_PATH | ../Backups  | Ordner in welchem die Datenbank-Backups abgelegt werden |
 
 
 ## Begleiter Web-App:
