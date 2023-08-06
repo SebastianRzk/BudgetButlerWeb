@@ -1,10 +1,11 @@
 from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
-from butler_offline_selenium_tests.page.util import content_of, enter_test_mode, define_kategorie
+from butler_offline_selenium_tests.page.util import enter_test_mode, define_kategorie
 import logging
 from butler_offline_selenium_tests.page.core.configuration import Configuration
 from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_add import GemeinsamAdd
 from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_abrechnen import GemeinsamAbrechnen
 from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchungen_uebersicht import EinzelbuchungenUebersicht
+
 
 class TestGemeinsameAbrechnung(SeleniumTestClass):
     test_change_veraeltnis_abrechnung = '''
@@ -121,7 +122,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 2010-01-01,0test_kategorie,0name,-70.00,False
 #######MaschinenimportEnd
 
-		'''
+'''
 
     def test_set_limit(self, get_driver, close_driver):
         driver = get_driver()
@@ -205,7 +206,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 2010-01-01,test ausgleich,test ausgleich,-20.00,False
 #######MaschinenimportEnd
 
-		'''
+'''
 
     def test_set_limit_and_add_ausgleichsbuchungen_both(self, get_driver, close_driver):
         driver = get_driver()

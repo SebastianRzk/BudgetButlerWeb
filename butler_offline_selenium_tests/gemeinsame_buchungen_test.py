@@ -1,5 +1,5 @@
 from butler_offline_selenium_tests.selenium_test import SeleniumTestClass
-from butler_offline_selenium_tests.page.util import enter_test_mode, define_kategorie, get_selected_option
+from butler_offline_selenium_tests.page.util import enter_test_mode
 from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_add import GemeinsamAdd
 from butler_offline_selenium_tests.page.gemeinsam.gemeinsam_uebersicht import GemeinsamUeberischt
 from butler_offline_selenium_tests.page.core.configuration import Configuration
@@ -88,7 +88,6 @@ class TestUI(SeleniumTestClass):
     def teste_vorbelegung_with_other(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
-
 
         page_gemeinsam_add = GemeinsamAdd(driver=driver)
         page_configuration = Configuration(driver=driver)

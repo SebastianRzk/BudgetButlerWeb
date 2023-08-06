@@ -10,8 +10,6 @@ from butler_offline_selenium_tests.page.sparen.depot_uebersicht import DepotUebe
 
 
 class TestUI(SeleniumTestClass):
-
-
     def teste_uebersicht_kontos(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
@@ -50,7 +48,6 @@ class TestUI(SeleniumTestClass):
             'difference': '1,00'
         }
         close_driver(driver)
-
 
     def teste_orderdauerauftrag(self, get_driver, close_driver):
         driver = get_driver()
@@ -94,6 +91,3 @@ class TestUI(SeleniumTestClass):
         }
 
         close_driver(driver)
-
-
-

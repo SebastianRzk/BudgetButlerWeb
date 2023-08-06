@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 
 
 class DauerauftragUebersicht:
-
     def __init__(self, driver):
         self.driver = driver
 
@@ -22,4 +21,3 @@ class DauerauftragUebersicht:
     def click_edit_button(self, id):
         edit_button = self.driver.find_element(By.ID, 'edit_{id}'.format(id=id))
         edit_button.click()
-

@@ -76,4 +76,3 @@ class TestUI(SeleniumTestClass):
             'wert': '-10,00'
         }
         close_driver(driver)
-
