@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 class FileSystemStub:
     _interactions = 0
@@ -35,3 +36,9 @@ class FileSystemStub:
 
     def get_interaction_count(self):
         return self._interactions
+
+    def get_all_files(self) -> List[str]:
+        return list(self._fs_stub.keys())
+
+    def get_raw_file(self, path: str) -> str | None:
+        return self._fs_stub[path]

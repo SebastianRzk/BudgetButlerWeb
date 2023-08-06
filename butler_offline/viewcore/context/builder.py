@@ -23,8 +23,11 @@ class PageContext:
     def is_transactional(self):
         return False
 
-    def is_redirect(self):
+    def is_redirect(self) -> bool:
         return False
+
+    def redirect_target_url(self) -> str | None:
+        return None
 
     def get(self, key: str):
         return self._additional_context_values[key]
@@ -64,8 +67,11 @@ class RedirectPageContext(PageContext):
     def as_dict(self) -> dict:
         return generate_redirect_context(self._redirect_target_url)
 
-    def is_redirect(self):
+    def is_redirect(self) -> bool:
         return True
+
+    def redirect_target_url(self) -> str:
+        return self._redirect_target_url
 
 
 def generate_page_context(page_name: str) -> PageContext:

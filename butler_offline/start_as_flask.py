@@ -12,6 +12,7 @@ from butler_offline.views.einzelbuchungen import addausgabe, \
     uebersicht_monat
 from butler_offline.views.core import dashboard, \
     configuration, \
+    backup, \
     testmode_switch,\
     theme
 
@@ -132,6 +133,11 @@ def view_import():
 @app.route(routes.CORE_CONFIGURATION, methods=['GET', 'POST'])
 def view_configuration():
     return configuration.index(request)
+
+
+@app.route(routes.CORE_CONFIGURATION_BACKUP, methods=['POST'])
+def create_backup():
+    return backup.index(request)
 
 
 @app.route(routes.GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN, methods=['GET'])

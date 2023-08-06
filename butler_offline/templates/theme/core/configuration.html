@@ -70,6 +70,35 @@
 <div class="theme-double-columns">
 	<div class="box">
 		<div class="box-header">
+			<h3 class="box-title">Backup der aktuellen Datenbank anlegen</h3>
+		</div>
+		<form role="form" action="/configuration/backup/" method="post">
+			<div class="box-footer">
+				<button type="submit" name="action" value="change_colorpalette" id="create_backup">Backup jetzt anlegen</button>
+			</div>
+		</form>
+	</div>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Kategorien in Formularen ausschließen</h3>
+		</div>
+		<form role="form" action="/configuration/" method="post">
+			<div class="box-body">
+				<div class="form-group">
+					<label>Ausgeschlossene Kategorien (mit einem Komma getrennt)</label> <input type="text" name="ausgeschlossene_kategorien" class="form-control" value="{{ausgeschlossene_kategorien}}" placeholder="Enter ..." />
+				</div>
+				</div>
+			<div class="box-footer">
+				<input type="hidden" name="ID" value="{{ID}}">
+				<button type="submit" name="action" value="set_ausgeschlossene_kategorien" id="set_ausgeschlossene_kategorien">Daten aktualisieren</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
 			<h3 class="box-title">Farbpalette für Kategorien ändern</h3>
 		</div>
 		<form role="form" action="/configuration/" method="post">
@@ -98,23 +127,5 @@
 			</div>
 		</form>
 	</div>
-	<div>
-		<div class="box">
-			<div class="box-header">
-				<h3 class="box-title">Kategorien in Formularen ausschließen</h3>
-			</div>
-			<form role="form" action="/configuration/" method="post">
-				<div class="box-body">
-					<div class="form-group">
-						<label>Ausgeschlossene Kategorien (mit einem Komma getrennt)</label> <input type="text" name="ausgeschlossene_kategorien" class="form-control" value="{{ausgeschlossene_kategorien}}" placeholder="Enter ..." />
-					</div>
-					</div>
-				<div class="box-footer">
-					<input type="hidden" name="ID" value="{{ID}}">
-					<button type="submit" name="action" value="set_ausgeschlossene_kategorien" id="set_ausgeschlossene_kategorien">Daten aktualisieren</button>
-				</div>
-			</form>
-		</div>
 	<div></div>
-	</div>
-	</div>
+</div>

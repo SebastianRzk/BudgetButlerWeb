@@ -7,6 +7,7 @@ from typing import Callable
 
 
 BUDGETBUTLERWEB_DATABASE_PATH = getenv('BUDGETBUTLERWEB_DATABASE_PATH', '..')
+BUDGETBUTLERWEB_DATABASE_BACKUP_PATH = getenv('BUDGETBUTLERWEB_DATABASE_BACKUP_PATH', '../Backups')
 BUDGETBUTLERWEB_CONFIG_PATH = getenv('BUDGETBUTLERWEB_CONFIG_PATH', '..')
 LOADED_CONFIG = {}
 DEFAULT_CONFIG = {
@@ -20,11 +21,15 @@ DEFAULT_CONFIG = {
 }
 
 
-def get_database_path():
+def get_database_path() -> str:
     return BUDGETBUTLERWEB_DATABASE_PATH
 
 
-def get_config_path():
+def get_database_backup_path() -> str:
+    return BUDGETBUTLERWEB_DATABASE_BACKUP_PATH
+
+
+def get_config_path() -> str:
     return BUDGETBUTLERWEB_CONFIG_PATH
 
 

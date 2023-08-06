@@ -14,9 +14,6 @@ DATABASE_VERSION = 0
 
 
 def database_instance():
-    '''
-    returns the actual database instance
-    '''
     if not persisted_state.DATABASES:
         persisted_state.DATABASES = configuration_provider.get_configuration('DATABASES').split(',')
 
