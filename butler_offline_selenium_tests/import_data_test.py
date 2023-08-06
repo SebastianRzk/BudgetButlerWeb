@@ -68,7 +68,6 @@ Datum,Kategorie,Name,Wert,Dynamisch
         }
         close_driver(driver)
 
-
     def test_with_existing_kategorie(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
@@ -96,7 +95,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         close_driver(driver)
 
-    def test_should_showSuccessMessage(self, get_driver, close_driver):
+    def test_should_show_success_message(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
 
@@ -112,12 +111,3 @@ Datum,Kategorie,Name,Wert,Dynamisch
 
         assert page_import.get_message() == '1 Buchung wurde importiert'
         close_driver(driver)
-
-
-
-
-
-
-
-
-

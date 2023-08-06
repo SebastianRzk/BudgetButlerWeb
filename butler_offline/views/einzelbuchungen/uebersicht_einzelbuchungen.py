@@ -1,25 +1,32 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import datum_to_german, from_double_to_german
-from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
 from butler_offline.core.time import today
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 
 
-def _handle_request(request):
+class UebersichtEinzelbuchungenContext:
+    def __init__(self, einzelbuchungen: Einzelbuchungen):
+        self._einzelbuchungen = einzelbuchungen
+
+    def einzelbuchungen(self) -> Einzelbuchungen:
+        return self._einzelbuchungen
+
+
+def handle_request(request, context: UebersichtEinzelbuchungenContext):
     year = today().year
-    einzelbuchungen = persisted_state.database_instance().einzelbuchungen
-    years = sorted(einzelbuchungen.get_jahre(), reverse=True)
+    years = sorted(context.einzelbuchungen().get_jahre(), reverse=True)
     if years:
         year = years[0]
 
     if request.method == 'POST' and 'date' in request.values:
         year = int(float(request.values['date']))
-    einzelbuchungen_filtered = einzelbuchungen.select().select_year(year).get_all_raw()
+    einzelbuchungen_filtered = context.einzelbuchungen().select().select_year(year).get_all_raw()
 
     if post_action_is(request, 'delete'):
-        einzelbuchungen.delete(int(request.values['delete_index']))
-        return generate_redirect_context('/uebersicht/')
+        context.einzelbuchungen().delete(int(request.values['delete_index']))
+        return generate_redirect_page_context('/uebersicht/')
 
     ausgaben_monatlich = {}
     datum_alt = None
@@ -48,14 +55,17 @@ def _handle_request(request):
     if datum_alt:
         ausgaben_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = ausgaben_liste
 
-    context = generate_transactional_context('uebersicht')
-    context['alles'] = ausgaben_monatlich
-    context['jahre'] = years
-    context['selected_date'] = year
-    return context
+    result_context = generate_transactional_page_context('uebersicht')
+    result_context.add('alles', ausgaben_monatlich)
+    result_context.add('jahre', years)
+    result_context.add('selected_date', year)
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'einzelbuchungen/uebersicht.html')
-
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='einzelbuchungen/uebersicht.html',
+        context_creator=lambda db: UebersichtEinzelbuchungenContext(db.einzelbuchungen)
+    )

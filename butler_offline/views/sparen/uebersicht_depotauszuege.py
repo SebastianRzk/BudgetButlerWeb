@@ -1,21 +1,33 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
+from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 
-def _handle_request(request):
-    depotauszuege = persisted_state.database_instance().depotauszuege
+
+class UebersichtDepotauszuegeContext:
+    def __init__(self, depotauszuege: Depotauszuege(), depotwerte: Depotwerte):
+        self._depotauszuege = depotauszuege
+        self._depotwerte = depotwerte
+
+    def depotauszuege(self) -> Depotauszuege:
+        return self._depotauszuege
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+
+def handle_request(request, context: UebersichtDepotauszuegeContext):
 
     if post_action_is(request, 'delete'):
         delete_index = int(request.values['delete_index'])
-        delete_konto = depotauszuege.resolve_konto(delete_index)
-        delete_datum = depotauszuege.resolve_datum(delete_index)
-        depotauszuege.delete_depotauszug(delete_datum, delete_konto)
-        return generate_redirect_context('/uebersicht_depotauszuege/')
+        delete_konto = context.depotauszuege().resolve_konto(delete_index)
+        delete_datum = context.depotauszuege().resolve_datum(delete_index)
+        context.depotauszuege().delete_depotauszug(delete_datum, delete_konto)
+        return generate_redirect_page_context('/uebersicht_depotauszuege/')
 
-    depotwerte = persisted_state.database_instance().depotwerte
-    db = depotauszuege.get_all()
+    db = context.depotauszuege().get_all()
 
     gesamt = []
     datum_alt = None
@@ -44,7 +56,7 @@ def _handle_request(request):
             index_alt = row_index
 
         buchungen.append({
-            'depotwert': depotwerte.get_description_for(row.Depotwert),
+            'depotwert': context.depotwerte().get_description_for(row.Depotwert),
             'wert': row.Wert})
 
     if index_alt:
@@ -54,11 +66,18 @@ def _handle_request(request):
                 'buchungen': buchungen
             })
 
-    context = generate_transactional_context('uebersicht_depotauszuege')
-    context['gesamt'] = gesamt
-    return context
+    result_context = generate_transactional_page_context('uebersicht_depotauszuege')
+    result_context.add('gesamt', gesamt)
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_depotauszuege.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/uebersicht_depotauszuege.html',
+        context_creator=lambda db: UebersichtDepotauszuegeContext(
+            depotwerte=db.depotwerte,
+            depotauszuege=db.depotauszuege
+        )
+    )

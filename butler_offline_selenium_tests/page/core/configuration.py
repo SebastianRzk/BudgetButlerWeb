@@ -24,3 +24,9 @@ class Configuration:
             .execute_script(
                 "document.getElementById('themecolor').setAttribute('value', '{new_color}')".format(new_color=new_color))
         self.driver.find_element(By.ID, 'change_themecolor').click()
+
+    def click_on_backup(self):
+        self.driver.find_element(By.ID, 'create_backup').click()
+
+    def get_page_message(self) -> str:
+        return self.driver.find_element(By.ID, 'message-box-content').get_attribute('innerHTML')

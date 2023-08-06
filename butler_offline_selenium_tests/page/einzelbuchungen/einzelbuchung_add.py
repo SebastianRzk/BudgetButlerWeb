@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 
 
 class EinzelbuchungAdd:
-
     def __init__(self, driver):
         self.driver = driver
 
@@ -29,5 +28,3 @@ class EinzelbuchungAdd:
     def add_button_color(self):
         add_button = self.driver.find_element(By.ID, 'add')
         return add_button.value_of_css_property("background-color")
-
-    

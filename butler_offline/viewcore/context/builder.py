@@ -1,6 +1,8 @@
 from butler_offline.viewcore.context import generate_base_context, generate_redirect_context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.context import ERROR_KEY
+from typing import Self
+
 
 class PageContext:
     def __init__(self, pagename: str, database_name: str):
@@ -21,8 +23,11 @@ class PageContext:
     def is_transactional(self):
         return False
 
-    def is_redirect(self):
+    def is_redirect(self) -> bool:
         return False
+
+    def redirect_target_url(self) -> str | None:
+        return None
 
     def get(self, key: str):
         return self._additional_context_values[key]
@@ -36,9 +41,10 @@ class PageContext:
     def error_text(self):
         return self._error_text
 
-    def throw_error(self, error_text: str):
+    def throw_error(self, error_text: str) -> Self:
         self._error = True
         self._error_text = error_text
+        return self
 
 
 class TransactionalPageContext(PageContext):
@@ -61,8 +67,11 @@ class RedirectPageContext(PageContext):
     def as_dict(self) -> dict:
         return generate_redirect_context(self._redirect_target_url)
 
-    def is_redirect(self):
+    def is_redirect(self) -> bool:
         return True
+
+    def redirect_target_url(self) -> str:
+        return self._redirect_target_url
 
 
 def generate_page_context(page_name: str) -> PageContext:

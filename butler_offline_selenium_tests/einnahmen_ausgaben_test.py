@@ -7,7 +7,6 @@ from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchungen_uebersic
 
 class TestUI(SeleniumTestClass):
 
-
     def teste_edit_vorbelegung(self, get_driver, close_driver):
         driver = get_driver()
         enter_test_mode(driver)
@@ -35,7 +34,6 @@ class TestUI(SeleniumTestClass):
         page_einzelbuchungen_add.add('2012-01-01', '2name', '2test_kategorie', 2)
         page_einzelbuchungen_add.add('2012-12-01', '3name', '1test_kategorie', 3)
 
-
         page_einzelbuchungen_uebersicht.visit()
         page_einzelbuchungen_uebersicht.open_module(month=1, year=2012)
 
@@ -56,4 +54,3 @@ class TestUI(SeleniumTestClass):
         }
 
         close_driver(driver)
-

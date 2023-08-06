@@ -1,9 +1,17 @@
 import datetime
-
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.context import generate_base_context
+from butler_offline.viewcore.context.builder import generate_page_context
 from butler_offline.viewcore import request_handler
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.viewcore.context.builder import PageContext
+
+
+class UebersichtJahrContext:
+    def __init__(self, einzelbuchungen: Einzelbuchungen):
+        self._einzelbuchungen = einzelbuchungen
+
+    def einzelbuchungen(self) -> Einzelbuchungen:
+        return self._einzelbuchungen
 
 
 def get_monats_namen(monat):
@@ -19,12 +27,12 @@ def _filter(liste, num_monate):
     return result
 
 
-def _compute_pie_chart_prozentual(context, jahr):
-    result = database_instance().einzelbuchungen.get_jahresausgaben_nach_kategorie_prozentual(jahr)
+def _compute_pie_chart_prozentual(result_context: PageContext, jahr: int, context: UebersichtJahrContext):
+    result = context.einzelbuchungen().get_jahresausgaben_nach_kategorie_prozentual(jahr)
     ausgaben_data = []
     ausgaben_labels = []
     ausgaben_colors = []
-    kategorien = database_instance().einzelbuchungen.get_alle_kategorien()
+    kategorien = context.einzelbuchungen().get_alle_kategorien()
     color_chooser = viewcore.get_generic_color_chooser(list(kategorien))
 
     for kategorie, wert in result.items():
@@ -32,11 +40,11 @@ def _compute_pie_chart_prozentual(context, jahr):
         ausgaben_labels.append(kategorie)
         ausgaben_colors.append(color_chooser.get_for_value(kategorie))
 
-    context['pie_ausgaben_data_prozentual'] = ausgaben_data
-    context['pie_ausgaben_labels'] = ausgaben_labels
-    context['pie_ausgaben_colors'] = ausgaben_colors
+    result_context.add('pie_ausgaben_data_prozentual', ausgaben_data)
+    result_context.add('pie_ausgaben_labels', ausgaben_labels)
+    result_context.add('pie_ausgaben_colors', ausgaben_colors)
 
-    result = database_instance().einzelbuchungen.get_jahreseinnahmen_nach_kategorie_prozentual(jahr)
+    result = context.einzelbuchungen().get_jahreseinnahmen_nach_kategorie_prozentual(jahr)
     einnahmen_data = []
     einnahmen_labels = []
     einnahmen_colors = []
@@ -45,11 +53,11 @@ def _compute_pie_chart_prozentual(context, jahr):
         einnahmen_labels.append(kategorie)
         einnahmen_colors.append(color_chooser.get_for_value(kategorie))
 
-    context['pie_einnahmen_data_prozentual'] = einnahmen_data
-    context['pie_einnahmen_labels'] = einnahmen_labels
-    context['pie_einnahmen_colors'] = einnahmen_colors
+    result_context.add('pie_einnahmen_data_prozentual', einnahmen_data)
+    result_context.add('pie_einnahmen_labels', einnahmen_labels)
+    result_context.add('pie_einnahmen_colors', einnahmen_colors)
 
-    return context
+    return result_context
 
 
 def _compile_colors(result, num_monate, color_chooser):
@@ -71,18 +79,17 @@ def _compile_colors(result, num_monate, color_chooser):
     return einnahmen
 
 
-def _handle_request(request):
+def handle_request(request, context: UebersichtJahrContext):
     today = datetime.date.today()
     year = today.year
 
     if request.method == 'POST' and 'date' in request.values:
         year = int(float(request.values['date']))
-    einzelbuchungen = database_instance().einzelbuchungen
 
-    jahresbuchungs_tabelle = einzelbuchungen.select().select_year(year)
+    jahresbuchungs_tabelle = context.einzelbuchungen().select().select_year(year)
     jahres_ausgaben = jahresbuchungs_tabelle.select_ausgaben()
     jahres_einnahmen = jahresbuchungs_tabelle.select_einnahmen()
-    kategorien = database_instance().einzelbuchungen.get_alle_kategorien()
+    kategorien = context.einzelbuchungen().get_alle_kategorien()
     color_chooser = viewcore.get_generic_color_chooser(list(kategorien))
 
     jahresausgaben = []
@@ -98,19 +105,19 @@ def _handle_request(request):
     for num_monat in num_monate:
         monats_namen.append(get_monats_namen(num_monat))
 
-    context = generate_base_context('jahresuebersicht')
+    result_context = generate_page_context('jahresuebersicht')
 
-    context['durchschnitt_monat_kategorien'] = str(
-        list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).keys()))
-    context['durchschnittlich_monat_wert'] = str(
-        list(einzelbuchungen.durchschnittliche_ausgaben_pro_monat(year).values()))
-    context = _compute_pie_chart_prozentual(context, year)
+    result_context.add('durchschnitt_monat_kategorien',  str(
+        list(context.einzelbuchungen().durchschnittliche_ausgaben_pro_monat(year).keys())))
+    result_context.add('durchschnittlich_monat_wert',  str(
+        list(context.einzelbuchungen().durchschnittliche_ausgaben_pro_monat(year).values())))
+    result_context = _compute_pie_chart_prozentual(result_context, year, context)
 
     laenge = 12
     if year == today.year:
         laenge = today.month
 
-    context['buchungen'] = [
+    result_context.add('buchungen',  [
         {
             'kategorie': 'Einnahmen',
             'farbe': 'rgb(210, 214, 222)',
@@ -121,27 +128,40 @@ def _handle_request(request):
             'farbe': 'rgba(60,141,188,0.8)',
             'wert': _filter(jahres_ausgaben.inject_zeros_for_year(year, laenge).sum_monthly(), num_monate)
         }
-    ]
-    context['zusammenfassung_ausgaben'] = jahresausgaben
-    context['zusammenfassung_einnahmen'] = jahreseinnahmen
-    context['monats_namen'] = monats_namen
-    context['selected_date'] = year
+    ])
+    result_context.add('zusammenfassung_ausgaben',  jahresausgaben)
+    result_context.add('zusammenfassung_einnahmen',  jahreseinnahmen)
+    result_context.add('monats_namen',  monats_namen)
+    result_context.add('selected_date',  year)
 
-    context['einnahmen'] = _compile_colors(
+    result_context.add('einnahmen',  _compile_colors(
         jahres_einnahmen.inject_zeroes_for_year_and_kategories(year).sum_kategorien_monthly(),
         num_monate,
         color_chooser
-    )
-    context['ausgaben'] = _compile_colors(
+    ))
+    result_context.add('ausgaben',  _compile_colors(
         jahres_ausgaben.inject_zeroes_for_year_and_kategories(year).sum_kategorien_monthly(),
         num_monate,
         color_chooser
-    )
-    context['jahre'] = sorted(einzelbuchungen.get_jahre(), reverse=True)
-    context['gesamt_ausgaben'] = '%.2f' % einzelbuchungen.select().select_year(year).select_ausgaben().sum()
-    context['gesamt_einnahmen'] = '%.2f' % einzelbuchungen.select().select_year(year).select_einnahmen().sum()
-    return context
+    ))
+    result_context.add('jahre',  sorted(context.einzelbuchungen().get_jahre(), reverse=True))
+    result_context.add('gesamt_ausgaben',  '%.2f' % context.einzelbuchungen()\
+        .select()\
+        .select_year(year)\
+        .select_ausgaben()\
+        .sum())
+    result_context.add('gesamt_einnahmen',  '%.2f' % context.einzelbuchungen()\
+        .select()\
+        .select_year(year)\
+        .select_einnahmen()\
+        .sum())
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'einzelbuchungen/uebersicht_jahr.html')
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='einzelbuchungen/uebersicht_jahr.html',
+        context_creator=lambda db: UebersichtJahrContext(db.einzelbuchungen)
+    )

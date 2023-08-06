@@ -16,13 +16,13 @@ class TestUI(SeleniumTestClass):
         page_configuration = Configuration(driver=driver)
 
         page_gemeinsam_add.visit()
-        assert page_gemeinsam_add.partner_options() == set(['test', 'Partner'])
+        assert page_gemeinsam_add.partner_options() == {'test', 'Partner'}
 
         page_configuration.visit()
         page_configuration.update_partnername('Olaf')
 
         page_gemeinsam_add.visit()
-        assert page_gemeinsam_add.partner_options() == set(['test', 'Olaf'])
+        assert page_gemeinsam_add.partner_options() == {'test', 'Olaf'}
         close_driver(driver)
 
     def test_change_database(self, get_driver, close_driver):
@@ -33,7 +33,7 @@ class TestUI(SeleniumTestClass):
         page_menu = Menu(driver=driver)
 
         page_gemeinsam_add.visit()
-        assert page_gemeinsam_add.partner_options() == set(['test', 'Partner'])
+        assert page_gemeinsam_add.partner_options() == {'test', 'Partner'}
 
         page_menu.change_database('test')
         assert page_menu.get_title() == '~~~test~~~'
@@ -60,3 +60,14 @@ class TestUI(SeleniumTestClass):
 
         close_driver(driver)
 
+    def test_create_backup(self, get_driver, close_driver):
+        driver = get_driver()
+        enter_test_mode(driver)
+
+        page_configuration = Configuration(driver=driver)
+        page_configuration.visit()
+        page_configuration.click_on_backup()
+
+        assert page_configuration.get_page_message() == 'Backup erstellt'
+
+        close_driver(driver)

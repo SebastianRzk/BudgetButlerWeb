@@ -17,6 +17,7 @@ from butler_offline.online_services.butler_online.settings import set_kategorien
 from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 import logging
+from butler_offline.viewcore.converter import datetime_to_filesystem_string
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -157,7 +158,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
         else:
             logging.debug(str(request.values))
             content = request.values['import'].replace('\r', '')
-            write_import(import_prefix + 'Import_' + str(datetime.now()), content)
+            write_import(import_prefix + 'Import_' + datetime_to_filesystem_string(datetime.now()), content)
 
             imported_values = TextReportReader().read(content)
             datenbank_kategorien = set(

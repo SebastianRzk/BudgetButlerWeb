@@ -7,6 +7,8 @@ from butler_offline.core.configuration_provider import ConfigurationProvider
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.core.configuration_provider import CONFIGURATION_PROVIDER
+from butler_offline.viewcore.base_html import set_success_message
+from butler_offline.viewcore import routes
 
 
 class ConfigurationContext:
@@ -79,6 +81,12 @@ def _handle_request(request, context: ConfigurationContext):
             })
 
     render_context = generate_transactional_context('configuration')
+
+    if routes.CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE in request.values:
+        set_success_message(
+            context=render_context,
+            message=request.values[routes.CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE])
+
     render_context['palette'] = farbmapping
     default_databases = ''
     for db in persisted_state.DATABASES:

@@ -1,11 +1,13 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.template import fa
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -13,12 +15,29 @@ TYP_KAUF = 'Kauf'
 TYP_VERKAUF = 'Verkauf'
 
 
-def handle_request(request):
-    if not database_instance().sparkontos.get_depots():
-        return generate_error_context('add_order', NO_VALID_DEPOT_IN_DB)
+class AddOrderContext:
+    def __init__(self, order: Order, sparkontos: Kontos, depotwerte: Depotwerte):
+        self._order = order
+        self._sparkontos = sparkontos
+        self._depotwerte = depotwerte
 
-    if not database_instance().depotwerte.get_depotwerte():
-        return generate_error_context('add_order', NO_VALID_SHARE_IN_DB)
+    def order(self) -> Order:
+        return self._order
+
+    def sparkontos(self) -> Kontos:
+        return self._sparkontos
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+
+def handle_request(request, context: AddOrderContext):
+    result_context = generate_transactional_page_context(page_name='add_order')
+    if not context.sparkontos().get_depots():
+        return result_context.throw_error(NO_VALID_DEPOT_IN_DB)
+
+    if not context.depotwerte().get_depotwerte():
+        return result_context.throw_error(NO_VALID_SHARE_IN_DB)
 
     if post_action_is(request, 'add'):
         date = datum(request.values['datum'])
@@ -29,8 +48,8 @@ def handle_request(request):
             value = value * -1
 
         if "edit_index" in request.values:
-            database_instance().order.edit(
-                int(request.values['edit_index']),
+            context.order().edit(
+                index=int(request.values['edit_index']),
                 datum=date,
                 name=request.values['name'],
                 wert="%.2f" % value,
@@ -48,7 +67,7 @@ def handle_request(request):
                 })
 
         else:
-            database_instance().order.add(
+            context.order().add(
                 datum=date,
                 name=request.values['name'],
                 wert="%.2f" % value,
@@ -64,14 +83,13 @@ def handle_request(request):
                     'value': '%.2f' % abs(value),
                     'depotwert': request.values['depotwert'],
                     'konto': request.values['konto']
-                    })
+                })
 
-    context = generate_transactional_context('add_order')
-    context['approve_title'] = 'Order hinzufügen'
+    result_context.add('approve_title', 'Order hinzufügen')
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
-        db_row = database_instance().order.get(db_index)
+        db_row = context.order().get(db_index)
 
         if db_row['Wert'] > 0:
             typ = TYP_KAUF
@@ -88,26 +106,35 @@ def handle_request(request):
             'konto': db_row['Konto']
         }
 
-        context['default_item'] = default_item
-        context['bearbeitungsmodus'] = True
-        context['edit_index'] = db_index
-        context['approve_title'] = 'Order aktualisieren'
+        result_context.add('default_item', default_item)
+        result_context.add('bearbeitungsmodus', True)
+        result_context.add('edit_index', db_index)
+        result_context.add('approve_title', 'Order aktualisieren')
 
-    if 'default_item' not in context:
-        context['default_item'] = {
+    if not result_context.contains('default_item'):
+        result_context.add('default_item', {
             'name': '',
             'wert': '',
             'datum': '',
             'depotwert': '',
             'konto': ''
-        }
+        })
 
-    context['kontos'] = database_instance().sparkontos.get_depots()
-    context[TYPEN] = [TYP_KAUF, TYP_VERKAUF]
-    context['depotwerte'] = database_instance().depotwerte.get_depotwerte_descriptions()
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_order())
-    return context
+    result_context.add('kontos', context.sparkontos().get_depots())
+    result_context.add(TYPEN, [TYP_KAUF, TYP_VERKAUF])
+    result_context.add('depotwerte', context.depotwerte().get_depotwerte_descriptions())
+    result_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_order()))
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_order.html')
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/add_order.html',
+        context_creator=lambda db: AddOrderContext(
+            depotwerte=db.depotwerte,
+            order=db.order,
+            sparkontos=db.sparkontos
+        )
+    )

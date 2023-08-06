@@ -1,21 +1,31 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.template import fa
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 
 
-def handle_request(request):
+class AddDepotwertContext:
+    def __init__(self, depotwerte: Depotwerte):
+        self._depotwerte = depotwerte
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+
+def handle_request(request, context: AddDepotwertContext):
+    result_context = generate_transactional_page_context('add_depotwert')
+
     if post_action_is(request, 'add'):
         isin = request.values['isin']
         if '_' in isin:
-            return generate_error_context('add_depotwert', 'ISIN darf kein Unterstrich "_" enthalten.')
+            return result_context.throw_error('ISIN darf kein Unterstrich "_" enthalten.')
         name = request.values['name']
         typ = request.values['typ']
 
         if "edit_index" in request.values:
-            database_instance().depotwerte.edit(int(request.values['edit_index']),
+            context.depotwerte().edit(int(request.values['edit_index']),
                 name=name,
                 isin=isin,
                 typ=typ)
@@ -27,7 +37,7 @@ def handle_request(request):
                     'Typ': typ
                 })
         else:
-            database_instance().depotwerte.add(
+            context.depotwerte().add(
                 name=name,
                 isin=isin,
                 typ=typ)
@@ -39,12 +49,11 @@ def handle_request(request):
                     'Typ': typ
                     })
 
-    context = generate_transactional_context('add_depotwert')
-    context['approve_title'] = 'Depotwert hinzufügen'
+    result_context.add('approve_title', 'Depotwert hinzufügen')
 
     if post_action_is(request, 'edit'):
         db_index = int(request.values['edit_index'])
-        db_row = database_instance().depotwerte.get(db_index)
+        db_row = context.depotwerte().get(db_index)
 
         default_item = {
             'edit_index': str(db_index),
@@ -53,23 +62,29 @@ def handle_request(request):
             'typ': db_row['Typ']
         }
 
-        context['default_item'] = default_item
-        context['bearbeitungsmodus'] = True
-        context['edit_index'] = db_index
-        context['approve_title'] = 'Depotwert aktualisieren'
+        result_context.add('default_item', default_item)
+        result_context.add('bearbeitungsmodus', True)
+        result_context.add('edit_index', db_index)
+        result_context.add('approve_title', 'Depotwert aktualisieren')
 
-    if 'default_item' not in context:
-        context['default_item'] = {
+    if not result_context.contains('default_item'):
+        result_context.add('default_item', {
             'name': '',
             'isin': '',
-            'typ': database_instance().depotwerte.TYP_ETF
-        }
+            'typ': context.depotwerte().TYP_ETF
+        })
 
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_depotwerte())
-    context['types'] = database_instance().depotwerte.TYPES
-    return context
+    result_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_depotwerte()))
+    result_context.add('types', context.depotwerte().TYPES)
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_depotwert.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/add_depotwert.html',
+        context_creator=lambda db: AddDepotwertContext(
+            depotwerte=db.depotwerte
+        )
+    )

@@ -1,11 +1,33 @@
 from butler_offline.core import file_system
+from typing import List
 import os
 import glob
 
-INSTANCE = None
+
+class FileSystemImpl:
+    def read(self, file_path: str) -> List[str] | None:
+        if not os.path.isfile(file_path):
+            return None
+
+        with open(file_path) as file:
+            file_content = []
+
+            for line in file:
+                file_content.append(line)
+        return file_content
+
+    def write(self, file_path: str, file_content: str) -> None:
+        with open(file_path, 'w') as file:
+            file.write(file_content)
+
+    def list_files(self, path: str) -> List[str]:
+        return sorted(glob.glob(path))
 
 
-def instance():
+INSTANCE: FileSystemImpl | None = None
+
+
+def instance() -> FileSystemImpl:
     if file_system.INSTANCE is None:
         file_system.INSTANCE = FileSystemImpl()
     return file_system.INSTANCE
@@ -34,22 +56,4 @@ def all_abrechnungen():
     return all_contents
 
 
-class FileSystemImpl:
-    def read(self, file_path):
 
-        if not os.path.isfile(file_path):
-            return None
-
-        with open(file_path) as file:
-            file_content = []
-
-            for line in file:
-                file_content.append(line)
-        return file_content
-
-    def write(self, file_path, file_content):
-        with open(file_path, 'w') as file:
-            file.write(file_content)
-
-    def list_files(self, path):
-        return sorted(glob.glob(path))

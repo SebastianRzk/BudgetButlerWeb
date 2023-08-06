@@ -1,6 +1,5 @@
 import datetime
 
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.context.builder import generate_page_context
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import to_descriptive_list

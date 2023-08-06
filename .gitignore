@@ -3,6 +3,7 @@
 /.pydevproject
 /Database_*
 /Import/*
+/Backups/*
 **/*.pyc
 **/.pytest_cache
 /online/vendor

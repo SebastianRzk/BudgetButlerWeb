@@ -77,39 +77,34 @@ def wrap_tableheader(table_header_name):
     return '{} {} {}'.format(KEYWORD_LINEBREAK, table_header_name, KEYWORD_LINEBREAK)
 
 
-def write(database):
+def write(database: Database):
+    content = convert_database_to_multipart_csv(database)
+    file_system.instance().write(database_path_from(database.name), content)
+    logging.info("WRITER: All Saved")
 
+
+def convert_database_to_multipart_csv(database: Database) -> str:
     content = database.einzelbuchungen.get_static_content().to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_DAUERAUFRTAEGE)
     content += database.dauerauftraege.content.to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_GEMEINSAME_BUCHUNGEN)
     content += database.gemeinsamebuchungen.content.to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_SPARBUCHUNGEN)
     content += database.sparbuchungen.get_static_content().to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_SPARKONTOS)
     content += database.sparkontos.get_static_content().to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_DEPOTWERTE)
     content += database.depotwerte.get_static_content().to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_ORDER)
     content += database.order.get_static_content().to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_ORDERDAUERAUFTRAG)
     content += database.orderdauerauftrag.get_static_content().to_csv(index=False)
-
     content += wrap_tableheader(KEYWORD_DEPOTAUSZUEGE)
     content += database.depotauszuege.get_static_content().to_csv(index=False)
-
-    file_system.instance().write(database_path_from(database.name), content)
-    print("WRITER: All Saved")
+    return content
 
 
-def database_path_from(username):
+def database_path_from(username: str) -> str:
     return configuration_provider.get_database_path() + '/Database_' + username + '.csv'
 
 

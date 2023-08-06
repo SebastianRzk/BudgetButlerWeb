@@ -14,6 +14,7 @@ def leave_debug(request):
     time.reset_viewcore_stubs()
     return redirect('/', code=301)
 
+
 def enter_testmode(request):
     file_system.INSTANCE = FileSystemStub()
     persisted_state.DATABASE_INSTANCE = None

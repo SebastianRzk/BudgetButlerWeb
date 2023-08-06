@@ -1,4 +1,3 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.core.file_system import write_abrechnung
 from butler_offline.core.time import time
 from butler_offline.core.export.string_writer import StringWriter
@@ -18,7 +17,7 @@ def abrechnen(database,
               set_other_kategorie=None):
     selector = database.gemeinsamebuchungen.select().select_range(mindate, maxdate)
 
-    name_self = persisted_state.database_instance().name
+    name_self = database.name
     name_partner = viewcore.name_of_partner()
     gemeinsame_buchungen_content = selector.content
 
