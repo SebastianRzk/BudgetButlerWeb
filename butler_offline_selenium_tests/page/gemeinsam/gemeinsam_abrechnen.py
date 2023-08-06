@@ -47,6 +47,6 @@ class GemeinsamAbrechnen:
             'ausgabe_partner_diff': content_of(self.driver, 'ausgabe_partner_diff'),
         }
 
-    def abrechnung_result(self):
-        return content_of(self.driver, 'abrechnung').replace('<br>', '\n')
+    def abrechnung_result(self) -> str:
+        return content_of(self.driver, 'abrechnung').replace('<br>', '\n').strip()
 

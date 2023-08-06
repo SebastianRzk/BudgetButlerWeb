@@ -8,8 +8,7 @@ from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchungen_uebersic
 
 
 class TestGemeinsameAbrechnung(SeleniumTestClass):
-    test_change_veraeltnis_abrechnung = '''
-			Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
+    test_change_veraeltnis_abrechnung = '''Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
 ########################################
  Ergebnis:
 test übernimmt einen Anteil von 70% der Ausgaben.
@@ -38,9 +37,7 @@ Gesamt                        -100.00
 #######MaschinenimportStart
 Datum,Kategorie,Name,Wert,Dynamisch
 2010-01-01,0test_kategorie,0name,-30.00,False
-#######MaschinenimportEnd
-
-		'''
+#######MaschinenimportEnd'''
 
     def test_change_verhaeltnis(self, get_driver, close_driver):
         driver = get_driver()
@@ -90,8 +87,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert page_gemeinsam_abrechnen.abrechnung_result() == self.test_change_veraeltnis_abrechnung
         close_driver(driver)
 
-    set_limit_abrechnung = '''
-			Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
+    set_limit_abrechnung = '''Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
 ########################################
  Ergebnis:
 Durch das Limit bei test von 30 EUR wurde das Verhältnis von 50 auf 30.0 aktualisiert
@@ -120,9 +116,7 @@ Gesamt                        -100.00
 #######MaschinenimportStart
 Datum,Kategorie,Name,Wert,Dynamisch
 2010-01-01,0test_kategorie,0name,-70.00,False
-#######MaschinenimportEnd
-
-'''
+#######MaschinenimportEnd'''
 
     def test_set_limit(self, get_driver, close_driver):
         driver = get_driver()
@@ -173,8 +167,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert page_gemeinsam_abrechnen.abrechnung_result() == self.set_limit_abrechnung
         close_driver(driver)
 
-    set_limit_abrechnung_ausgleich = '''
-			Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
+    set_limit_abrechnung_ausgleich = '''Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
 ########################################
  Ergebnis:
 Durch das Limit bei test von 30 EUR wurde das Verhältnis von 50 auf 30.0 aktualisiert
@@ -204,9 +197,7 @@ Gesamt                        -100.00
 Datum,Kategorie,Name,Wert,Dynamisch
 2010-01-01,0test_kategorie,0name,-50.00,False
 2010-01-01,test ausgleich,test ausgleich,-20.00,False
-#######MaschinenimportEnd
-
-'''
+#######MaschinenimportEnd'''
 
     def test_set_limit_and_add_ausgleichsbuchungen_both(self, get_driver, close_driver):
         driver = get_driver()
