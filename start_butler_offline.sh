@@ -47,6 +47,7 @@ cd "$parent_path/butler_offline"
 flask run &
 
 deactivate
-python ../butler_offline_boot_screen/main.py
+cd ..
+python butler_offline_boot_screen/main.py
 
 pkill -P $$
