@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 import logging
+import flask
 
 from butler_offline.views.einzelbuchungen import addausgabe, \
     adddauerauftrag, \
@@ -223,3 +224,10 @@ def display_sparen_uebersicht_etfs():
 @app.route('/theme/')
 def theme_color():
     return theme.index(request)
+
+
+@app.route('/health', methods=['GET'])
+def health():
+    response = flask.jsonify({'status': 'up'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response

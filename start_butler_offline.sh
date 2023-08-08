@@ -1,4 +1,4 @@
-#!/bin/sh
+  #!/bin/sh
 
 set -e
 
@@ -46,19 +46,7 @@ cd "$parent_path/butler_offline"
 
 flask run &
 
-tries=0
-until $(curl --output /dev/null --silent --head --fail $HOST); do
-    echo "Waiting for server to be up..."
-
-    tries=$tries+1
-    if [[ tries -gt 20 ]]; then
-        echo "Server is not coming up. Exiting..."
-        exit 1
-    fi
-
-    sleep 1
-done
-
-chromium --app=$HOST
+deactivate
+python ../butler_offline_boot_screen/main.py
 
 pkill -P $$
