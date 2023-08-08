@@ -8,8 +8,8 @@
 @import '/theme/';
 
 @font-face {
-  font-family: fira;
-  src: url('/static/theme/FiraSans-Regular.woff2');
+  font-family: cantarell;
+  src: url('/static/theme/Cantarell-Regular.ttf');
 }
 
 
@@ -22,7 +22,7 @@ body {
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: 'fira';
+    font-family: 'cantarell';
     overflow-x: hidden;
     overflow-y: auto;
 }

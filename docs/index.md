@@ -54,18 +54,22 @@
 
 * Python 3.10+
 * Pip
-* Moderner Webbrowser (z.B. Firefox oder Chromium)
-* Startup-Skript: shell, curl, Chromium
 * Versionierung: git
+* Startup-Skript: shell, PyGObject, webkitgtk-6.0
+* Falls nicht das Startup-Skript verwendet wird: Webbrowser (z.B. Firefox oder Chromium)
 
 ### Installation
-Das Git-Repository clonen:
+Das Git-Repository klonen:
 
 	git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
 
 Ins Projektverzeichnis wechseln:
 
 	cd BudgetButlerWeb
+
+Optional: Anwendungsicon anlegen:
+
+    sh create_shortcut.sh
 
 ### Server Starten
 
