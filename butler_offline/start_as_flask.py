@@ -17,7 +17,8 @@ from butler_offline.views.core import dashboard, \
     testmode_switch,\
     theme
 
-from butler_offline.views.gemeinsame_buchungen import gemeinsam_abrechnen,\
+from butler_offline.views.gemeinsame_buchungen import abrechnen,\
+    abrechnen_vorschau, \
     uebersicht_abrechnungen,\
     addgemeinsam, \
     uebersicht_gemeinsam
@@ -118,12 +119,12 @@ def switch_to_debug():
 
 @app.route(routes.GEMEINSAME_BUCHUNGEN_ABRECHNEN, methods=['GET', 'POST'])
 def view_gemeinsam_abrechnen():
-    return gemeinsam_abrechnen.index(request)
+    return abrechnen_vorschau.index(request)
 
 
 @app.route('/abrechnen/', methods=['GET', 'POST'])
 def exec_abrechnen():
-    return gemeinsam_abrechnen.abrechnen(request)
+    return abrechnen.index(request)
 
 
 @app.route(routes.CORE_IMPORT, methods=['GET', 'POST'])

@@ -6,7 +6,6 @@ from butler_offline.viewcore.viewcore import is_post_parameter_set
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.viewcore.converter import datum_from_german
 from butler_offline.viewcore.converter import datum
 from butler_offline.viewcore.context import ERROR_KEY
 
@@ -122,27 +121,3 @@ def replay_value_if_defined(context, replay_name, request, default: bool | objec
 def index(request):
     return request_handler.handle_request(request, _handle_request, 'gemeinsame_buchungen/gemeinsamabrechnen.html')
 
-
-def abrechnen(request):
-    return request_handler.handle_request(request, _handle_abrechnen_request, 'shared/present_abrechnung.html')
-
-
-def _handle_abrechnen_request(request):
-    context = generate_transactional_context('gemeinsamabrechnen')
-
-    set_mindate = datum_from_german(request.values['set_mindate'])
-    set_maxdate = datum_from_german(request.values['set_maxdate'])
-    set_self_kategorie = get_post_parameter_or_default(request, 'set_self_kategorie', None)
-    set_other_kategorie = get_post_parameter_or_default(request, 'set_other_kategorie', None)
-
-    abrechnungs_text = database_instance().abrechnen(
-        mindate=set_mindate,
-        maxdate=set_maxdate,
-        set_ergebnis=request.values['set_ergebnis'],
-        verhaeltnis=int(request.values['set_verhaeltnis']),
-        set_self_kategorie=set_self_kategorie,
-        set_other_kategorie=set_other_kategorie
-    )
-    context['abrechnungstext'] = abrechnungs_text.replace('\n', '<br>')
-
-    return context

@@ -1,7 +1,9 @@
 import logging
 from typing import List
+from butler_offline.core.file_system import FileSystemImpl
 
-class FileSystemStub:
+
+class FileSystemStub(FileSystemImpl):
     _interactions = 0
 
     def __init__(self):

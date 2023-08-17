@@ -1,9 +1,9 @@
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.core import file_system, configuration_provider
-from butler_offline.core import time
+from butler_offline.core import configuration_provider
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.state import persisted_state
+from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.core.database import Database
+import datetime
 
 
 abrechnung = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
@@ -105,19 +105,16 @@ Datum,Kategorie,Name,Wert,Dynamisch
 """
 
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    persisted_state.DATABASES = []
-    configuration_provider.set_configuration('PARTNERNAME', 'Partner')
-
-
 def test_abrechnen_should_add_einzelbuchungen():
-    set_up()
-    db = persisted_state.database_instance()
+    db = Database()
     db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
 
-    db.abrechnen(mindate=datum('17.03.2017'), maxdate=datum('17.03.2017'))
+    db.abrechnen(
+        mindate=datum('17.03.2017'),
+        maxdate=datum('17.03.2017'),
+        filesystem=FileSystemStub(),
+        now=datetime.datetime.combine(datum('17.03.2017'), datetime.time.min)
+    )
 
     assert len(db.einzelbuchungen.content) == 1
     uebertragene_buchung = db.einzelbuchungen.get(0)
@@ -128,8 +125,7 @@ def test_abrechnen_should_add_einzelbuchungen():
 
 
 def test_refresh_should_import_sparbuchungen():
-    set_up()
-    db = persisted_state.database_instance()
+    db = Database()
     db.sparbuchungen.add(datum('01.01.2020'), '1name', 123, db.sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto')
 
     db.refresh()
@@ -145,13 +141,17 @@ def test_refresh_should_import_sparbuchungen():
 
 
 def test_abrechnen_with_date_range_should_only_import_matching_elements():
-    set_up()
-    db = persisted_state.database_instance()
+    db = Database()
     db.gemeinsamebuchungen.add(datum('17.03.2010'), 'to early', 'to early', 99, viewcore.name_of_partner())
     db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
     db.gemeinsamebuchungen.add(datum('17.03.2020'), 'to late', 'to late', 99, viewcore.name_of_partner())
 
-    db.abrechnen(mindate=datum('01.01.2017'), maxdate=datum('01.12.2017'))
+    db.abrechnen(
+        mindate=datum('01.01.2017'),
+        maxdate=datum('01.12.2017'),
+        filesystem=FileSystemStub(),
+        now=datetime.datetime.combine(datum('17.03.2017'), datetime.time.min)
+    )
 
     assert len(db.einzelbuchungen.content) == 1
     uebertragene_buchung = db.einzelbuchungen.get(0)
@@ -168,16 +168,19 @@ def test_abrechnen_with_date_range_should_only_import_matching_elements():
 
 
 def test_abrechnen_with_date_range():
-    set_up()
-    db = persisted_state.database_instance()
-    time.stub_today_with(datum('01.01.2010'))
+    configuration_provider.set_configuration('PARTNERNAME', 'Partner')
+
+    db = Database(name='Test_User')
     db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
     abrechnungs_text = db.abrechnen(
         mindate=datum('17.03.2017'),
         maxdate=datum('17.03.2017'),
         set_ergebnis='%Ergebnis%',
-        verhaeltnis=70)
+        verhaeltnis=70,
+        filesystem=FileSystemStub(),
+        now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
+    )
 
     assert len(db.einzelbuchungen.content) == 1
     uebertragene_buchung = db.einzelbuchungen.get(0)
@@ -190,9 +193,8 @@ def test_abrechnen_with_date_range():
 
 
 def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie():
-    set_up()
-    db = persisted_state.database_instance()
-    time.stub_today_with(datum('01.01.2010'))
+    configuration_provider.set_configuration('PARTNERNAME', 'Partner')
+    db = Database(name='Test_User')
     db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
     abrechnungs_text = db.abrechnen(
@@ -200,7 +202,10 @@ def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie():
         maxdate=datum('17.03.2017'),
         set_ergebnis='%Ergebnis%',
         verhaeltnis=70,
-        set_self_kategorie='Ausgleich')
+        set_self_kategorie='Ausgleich',
+        filesystem=FileSystemStub(),
+        now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
+    )
 
     assert len(db.einzelbuchungen.content) == 2
 
@@ -224,10 +229,8 @@ def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie():
     assert abrechnungs_text == abrechnung_verhaeltnis
 
 
-def test_abrechnen_withSelf_kategorie_set_should_add_self_kategorie_inverse():
-    set_up()
-    db = persisted_state.database_instance()
-    time.stub_today_with(datum('01.01.2010'))
+def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie_inverse():
+    db = Database('Test_User')
     db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
     db.abrechnen(
@@ -235,7 +238,10 @@ def test_abrechnen_withSelf_kategorie_set_should_add_self_kategorie_inverse():
         maxdate=datum('17.03.2017'),
         set_ergebnis='%Ergebnis%',
         verhaeltnis=30,
-        set_self_kategorie='Ausgleich')
+        set_self_kategorie='Ausgleich',
+        filesystem=FileSystemStub(),
+        now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
+    )
 
     assert len(db.einzelbuchungen.content) == 2
 
@@ -258,9 +264,8 @@ def test_abrechnen_withSelf_kategorie_set_should_add_self_kategorie_inverse():
 
 
 def test_abrechnen_with_other_kategorie_set_should_add_other_kategorie():
-    set_up()
-    db = persisted_state.database_instance()
-    time.stub_today_with(datum('01.01.2010'))
+    configuration_provider.set_configuration('PARTNERNAME', 'Partner')
+    db = Database('Test_User')
     db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
     abrechnungs_text = db.abrechnen(
@@ -268,7 +273,10 @@ def test_abrechnen_with_other_kategorie_set_should_add_other_kategorie():
         maxdate=datum('17.03.2017'),
         set_ergebnis='%Ergebnis%',
         verhaeltnis=70,
-        set_other_kategorie='Ausgleich')
+        set_other_kategorie='Ausgleich',
+        filesystem=FileSystemStub(),
+        now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
+    )
 
     assert len(db.einzelbuchungen.content) == 1
 
@@ -283,15 +291,15 @@ def test_abrechnen_with_other_kategorie_set_should_add_other_kategorie():
 
 
 def test_abrechnen_should_print_file_content():
-    set_up()
-    db = persisted_state.database_instance()
+    configuration_provider.set_configuration('PARTNERNAME', 'Partner')
+    db = Database(name='Test_User')
     db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
-    time.stub_today_with(datum('01.01.2010'))
     abrechnungs_text = db.abrechnen(
         mindate=datum('17.03.2017'),
         maxdate=datum('17.03.2017'),
-        set_ergebnis="%Ergebnis%")
-    time.reset_viewcore_stubs()
+        set_ergebnis='%Ergebnis%',
+        filesystem=FileSystemStub(),
+        now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
+    )
 
     assert abrechnungs_text == abrechnung
-
