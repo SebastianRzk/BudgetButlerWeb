@@ -32,13 +32,16 @@ class PageContext:
     def get(self, key: str):
         return self._additional_context_values[key]
 
-    def contains(self, key: str):
+    def contains(self, key: str) -> bool:
         return key in self._additional_context_values
 
-    def is_error(self):
+    def is_error(self) -> bool:
         return self._error
 
-    def error_text(self):
+    def is_ok(self) -> bool:
+        return not self._error
+
+    def error_text(self) -> str | None:
         return self._error_text
 
     def throw_error(self, error_text: str) -> Self:

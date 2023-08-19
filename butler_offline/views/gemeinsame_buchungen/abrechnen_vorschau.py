@@ -1,5 +1,3 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.viewcore import name_of_partner
 from butler_offline.viewcore.viewcore import get_post_parameter_or_default
 from butler_offline.viewcore.viewcore import is_post_parameter_set
@@ -7,37 +5,55 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.converter import datum
-from butler_offline.viewcore.context import ERROR_KEY
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
 
 
-def _handle_request(request):
-    context = generate_transactional_context('gemeinsamabrechnen')
-    db = database_instance()
-    alle_gemeinsamen_buchungen = db.gemeinsamebuchungen
+class AbrechnenVorschauContext:
+    def __init__(self,
+                 name: str,
+                 gemeinsamebuchungen: Gemeinsamebuchungen,
+                 einzelbuchungen: Einzelbuchungen):
+        self._name = name
+        self._gemeinsamebuchungen = gemeinsamebuchungen
+        self._einzelbuchungen = einzelbuchungen
 
-    if alle_gemeinsamen_buchungen.is_empty():
-        context[ERROR_KEY] = 'Keine gemeinsame Buchungen erfasst'
-        return context
+    def name(self) -> str:
+        return self._name
 
-    name_self = db.name
+    def gemeinsamebuchungen(self) -> Gemeinsamebuchungen:
+        return self._gemeinsamebuchungen
+
+    def einzelbuchungen(self) -> Einzelbuchungen:
+        return self._einzelbuchungen
+
+
+def handle_request(request, context: AbrechnenVorschauContext):
+    result_context = generate_transactional_page_context('gemeinsamabrechnen')
+
+    if context.gemeinsamebuchungen().is_empty():
+        return result_context.throw_error('Keine gemeinsame Buchungen erfasst')
+
+    name_self = context.name()
     name_partner = name_of_partner()
 
-    mindate = alle_gemeinsamen_buchungen.min_date()
-    maxdate = alle_gemeinsamen_buchungen.max_date()
+    mindate = context.gemeinsamebuchungen().min_date()
+    maxdate = context.gemeinsamebuchungen().max_date()
 
     set_mindate = get_post_parameter_or_default(request, 'set_mindate', mindate, mapping_function=datum)
     set_maxdate = get_post_parameter_or_default(request, 'set_maxdate', maxdate, mapping_function=datum)
-    selector = alle_gemeinsamen_buchungen.select().select_range(set_mindate, set_maxdate)
+    selector = context.gemeinsamebuchungen().select().select_range(set_mindate, set_maxdate)
 
-    replay_value_if_defined(context, 'set_verhaeltnis', request, default=50)
-    set_verhaeltnis = int(context['set_verhaeltnis'])
-    replay_value_if_defined(context, 'set_limit', request)
-    replay_value_if_defined(context, 'set_limit_value', request, default=50)
-    replay_value_if_defined(context, 'set_limit_fuer', request)
-    replay_value_if_defined(context, 'set_self_kategorie', request)
-    replay_value_if_defined(context, 'set_self_kategorie_value', request)
-    replay_value_if_defined(context, 'set_other_kategorie', request)
-    replay_value_if_defined(context, 'set_other_kategorie_value', request, 'Korrekturbuchung')
+    replay_value_if_defined(result_context, 'set_verhaeltnis', request, default=50)
+    set_verhaeltnis = int(result_context.get('set_verhaeltnis'))
+    replay_value_if_defined(result_context, 'set_limit', request)
+    replay_value_if_defined(result_context, 'set_limit_value', request, default=50)
+    replay_value_if_defined(result_context, 'set_limit_fuer', request)
+    replay_value_if_defined(result_context, 'set_self_kategorie', request)
+    replay_value_if_defined(result_context, 'set_self_kategorie_value', request)
+    replay_value_if_defined(result_context, 'set_other_kategorie', request)
+    replay_value_if_defined(result_context, 'set_other_kategorie_value', request, 'Korrekturbuchung')
 
     select_self = selector.fuer(name_self)
     select_partner = selector.fuer(name_partner)
@@ -83,41 +99,50 @@ def _handle_request(request):
         ergebnis_satz = name_self + ' bekommt von ' + name_partner + ' noch ' + str('%.2f' % self_diff) + '€.'
     ergebnis += ergebnis_satz
 
-    context['str_ergebnis'] = ergebnis.replace('<br>', '\n')
-    context['ausgabe_partner'] = "%.2f" % abs(ausgabe_partner)
-    context['ausgabe_self'] = "%.2f" % abs(ausgabe_self)
-    context['self_diff'] = "%.2f" % self_diff
-    context['partner_diff'] = "%.2f" % partner_diff
-    context['self_soll'] = "%.2f" % abs(self_soll)
-    context['partner_soll'] = "%.2f" % abs(partner_soll)
-    context['ausgabe_gesamt'] = "%.2f" % abs(ausgabe_gesamt)
-    context['ergebnis'] = ergebnis
-    context['myname'] = name_self
-    context['partnername'] = name_partner
+    result_context.add('str_ergebnis', ergebnis.replace('<br>', '\n'))
+    result_context.add('ausgabe_partner', "%.2f" % abs(ausgabe_partner))
+    result_context.add('ausgabe_self', "%.2f" % abs(ausgabe_self))
+    result_context.add('self_diff', "%.2f" % self_diff)
+    result_context.add('partner_diff', "%.2f" % partner_diff)
+    result_context.add('self_soll', "%.2f" % abs(self_soll))
+    result_context.add('partner_soll', "%.2f" % abs(partner_soll))
+    result_context.add('ausgabe_gesamt', "%.2f" % abs(ausgabe_gesamt))
+    result_context.add('ergebnis', ergebnis)
+    result_context.add('myname', name_self)
+    result_context.add('partnername', name_partner)
 
-    context['mindate'] = datum_to_german(mindate)
-    context['maxdate'] = datum_to_german(maxdate)
-    context['count'] = alle_gemeinsamen_buchungen.select().count()
+    result_context.add('mindate', datum_to_german(mindate))
+    result_context.add('maxdate', datum_to_german(maxdate))
+    result_context.add('count', context.gemeinsamebuchungen().select().count())
 
-    context['set_mindate_rfc'] = datum_to_string(set_mindate)
-    context['set_maxdate_rfc'] = datum_to_string(set_maxdate)
-    context['set_mindate'] = datum_to_german(set_mindate)
-    context['set_maxdate'] = datum_to_german(set_maxdate)
-    context['set_count'] = selector.count()
-    context['set_verhaeltnis_real'] = int(set_verhaeltnis)
+    result_context.add('set_mindate_rfc', datum_to_string(set_mindate))
+    result_context.add('set_maxdate_rfc', datum_to_string(set_maxdate))
+    result_context.add('set_mindate', datum_to_german(set_mindate))
+    result_context.add('set_maxdate', datum_to_german(set_maxdate))
+    result_context.add('set_count', selector.count())
+    result_context.add('set_verhaeltnis_real', int(set_verhaeltnis))
 
-    context['kategorien'] = db.einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True)
+    result_context.add('kategorien',
+                       context.einzelbuchungen().get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
 
-    return context
+    return result_context
 
 
-def replay_value_if_defined(context, replay_name, request, default: bool | object | int = False):
+def replay_value_if_defined(context: PageContext, replay_name, request, default: bool | object | int = False):
     if is_post_parameter_set(request, replay_name):
-        context[replay_name] = request.values[replay_name]
+        context.add(replay_name, request.values[replay_name])
     elif default:
-        context[replay_name] = default
+        context.add(replay_name, default)
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'gemeinsame_buchungen/gemeinsamabrechnen.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='gemeinsame_buchungen/gemeinsamabrechnen.html',
+        context_creator=lambda db: AbrechnenVorschauContext(
+            name=db.name,
+            einzelbuchungen=db.einzelbuchungen,
+            gemeinsamebuchungen=db.gemeinsamebuchungen
+        )
+    )
