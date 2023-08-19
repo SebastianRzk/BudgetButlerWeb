@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {MenuitemService} from './menuitem.service';
+import {MenuitemService} from './domain/menuitem.service';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatDrawerMode} from '@angular/material/sidenav';
-import {AuthContainer, AuthService} from './auth/auth.service';
+import {AuthContainer, AuthService} from './pages/auth/auth.service';
 import {Observable} from 'rxjs';
 
 @Component({

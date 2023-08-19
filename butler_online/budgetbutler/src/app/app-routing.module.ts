@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {LoginComponent} from './auth/login/login.component';
-import {AllebuchungenComponent} from './allebuchungen/allebuchungen.component';
-import {SettingsComponent} from './settings/settings.component';
-import {AllegemeinsamebuchungenComponent} from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
-import {AddschnelleinstiegComponent} from './addschnelleinstieg/addschnelleinstieg.component';
+import {LoginComponent} from './pages/auth/login/login.component';
+import {AllebuchungenComponent} from './pages/allebuchungen/allebuchungen.component';
+import {SettingsComponent} from './pages/settings/settings.component';
+import {AllegemeinsamebuchungenComponent} from './pages/allegemeinsamebuchungen/allegemeinsamebuchungen.component';
+import {AddschnelleinstiegComponent} from './pages/addschnelleinstieg/addschnelleinstieg.component';
 import {
   ADD_SCHNELLEINSTIEG_ROUTE,
   ALLE_EINZELBUCHUNGEN_ROUTE,
@@ -13,7 +13,7 @@ import {
   ROOT_ROUTE,
   SETTINGS_ROUTE
 } from './app-routes';
-import {AuthGuard} from './auth/auth.guard';
+import {AuthGuard} from './pages/auth/auth.guard';
 
 
 const routes: Routes = [
