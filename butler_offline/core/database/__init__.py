@@ -1,3 +1,5 @@
+import datetime
+
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
@@ -8,6 +10,7 @@ from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.gemeinsamebuchungen.abrechnen import abrechnen
+from butler_offline.core import file_system
 import logging
 
 
@@ -34,15 +37,15 @@ class Database:
 
     def taint_number(self) -> int:
         return self.tainted + \
-               self.dauerauftraege.taint_number() + \
-               self.einzelbuchungen.taint_number() + \
-               self.gemeinsamebuchungen.taint_number() + \
-               self.sparbuchungen.taint_number() + \
-               self.sparkontos.taint_number() + \
-               self.depotwerte.taint_number() + \
-               self.order.taint_number() +\
-               self.depotauszuege.taint_number() +\
-               self.orderdauerauftrag.taint_number()
+            self.dauerauftraege.taint_number() + \
+            self.einzelbuchungen.taint_number() + \
+            self.gemeinsamebuchungen.taint_number() + \
+            self.sparbuchungen.taint_number() + \
+            self.sparkontos.taint_number() + \
+            self.depotwerte.taint_number() + \
+            self.order.taint_number() + \
+            self.depotauszuege.taint_number() + \
+            self.orderdauerauftrag.taint_number()
 
     def refresh(self) -> None:
         logging.info('DATABASE: Erneuere Datenbestand')
@@ -78,13 +81,17 @@ class Database:
         return result_list
 
     def abrechnen(self,
-              mindate,
-              maxdate,
-              set_ergebnis=None,
-              verhaeltnis=50,
-              set_self_kategorie=None,
-              set_other_kategorie=None):
+                  now: datetime.datetime,
+                  filesystem: file_system.FileSystemImpl,
+                  mindate,
+                  maxdate,
+                  set_ergebnis=None,
+                  verhaeltnis=50,
+                  set_self_kategorie=None,
+                  set_other_kategorie=None):
         return abrechnen(
+            filesystem=filesystem,
+            now=now,
             database=self,
             mindate=mindate,
             maxdate=maxdate,

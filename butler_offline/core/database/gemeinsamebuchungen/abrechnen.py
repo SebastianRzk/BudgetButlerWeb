@@ -6,9 +6,13 @@ from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.converter import datum_to_german
 import pandas as pd
 from pandas import DataFrame
+from datetime import datetime
+from butler_offline.core import file_system
 
 
 def abrechnen(database,
+              now: datetime,
+              filesystem: file_system.FileSystemImpl,
               mindate,
               maxdate,
               set_ergebnis=None,
@@ -30,7 +34,7 @@ def abrechnen(database,
 
     abrechnunsdatei = StringWriter()
     zeitraum = datum_to_german(mindate) + '-' + datum_to_german(maxdate)
-    abrechnunsdatei.write_line('Abrechnung vom ' + datum_to_german(time.today()) + ' (' + zeitraum + ')')
+    abrechnunsdatei.write_line('Abrechnung vom ' + datum_to_german(now.date()) + ' (' + zeitraum + ')')
     write_trenner(abrechnunsdatei)
     abrechnunsdatei.write_line('Ergebnis:')
 
@@ -63,26 +67,26 @@ def abrechnen(database,
 
     for _, row in gemeinsame_buchungen_content.iterrows():
         buchung_partner = berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'],
-                                                   ("%.2f" % (row['Wert'] * faktor_partner)))
+                                             ("%.2f" % (row['Wert'] * faktor_partner)))
         buchung_partner.Dynamisch = False
         ausgaben_fuer_partner = pd.concat([ausgaben_fuer_partner, buchung_partner])
 
         buchung_self = berechne_abbuchung(row['Datum'], row['Kategorie'], row['Name'],
-                                                ("%.2f" % (row['Wert'] * faktor_self)))
+                                          ("%.2f" % (row['Wert'] * faktor_self)))
         buchung_self.Dynamisch = False
         ausgaben_fuer_self = pd.concat([ausgaben_fuer_self, buchung_self])
 
     if set_self_kategorie:
         extra_wert = (ausgaben_gesamt * compute_faktor_self(verhaeltnis)) - summe_halb
         extra_ausgleichs_buchung = berechne_abbuchung(maxdate, set_self_kategorie, set_self_kategorie,
-                                                            ("%.2f" % extra_wert))
+                                                      ("%.2f" % extra_wert))
         extra_ausgleichs_buchung.Dynamisch = False
         ausgaben_fuer_self = pd.concat([ausgaben_fuer_self, extra_ausgleichs_buchung])
 
     if set_other_kategorie:
         extra_wert = (ausgaben_gesamt * compute_faktor_other(verhaeltnis)) - summe_halb
         extra_ausgleichs_buchung = berechne_abbuchung(maxdate, set_other_kategorie, set_other_kategorie,
-                                                            ("%.2f" % extra_wert))
+                                                      ("%.2f" % extra_wert))
         extra_ausgleichs_buchung.Dynamisch = False
         ausgaben_fuer_partner = pd.concat([ausgaben_fuer_partner, extra_ausgleichs_buchung])
 
@@ -93,11 +97,15 @@ def abrechnen(database,
 
     database.gemeinsamebuchungen.drop(gemeinsame_buchungen_content.index.tolist())
     database.taint()
-    write_abrechnung("Abrechnung_" + str(time.now()), report)
+    write_abrechnung(
+        file_name="Abrechnung_" + str(now),
+        file_content=report,
+        filesystem=filesystem
+    )
     return report
 
 
-def write_trenner( abrechnunsdatei):
+def write_trenner(abrechnunsdatei):
     return abrechnunsdatei.write("".rjust(40, "#") + "\n ")
 
 

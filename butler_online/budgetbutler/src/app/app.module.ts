@@ -21,16 +21,16 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {LoginComponent} from './auth/login/login.component';
+import {LoginComponent} from './pages/auth/login/login.component';
 import {HttpClientModule} from '@angular/common/http';
-import {SidebarComponent} from './sidebar/sidebar/sidebar.component';
-import {AllebuchungenComponent} from './allebuchungen/allebuchungen.component';
-import {SettingsComponent} from './settings/settings.component';
-import {AdduserComponent} from './settings/adduser/adduser.component';
-import {PartnernameComponent} from './settings/partnername/partnername.component';
-import {AllegemeinsamebuchungenComponent} from './allegemeinsamebuchungen/allegemeinsamebuchungen.component';
-import {AddschnelleinstiegComponent} from './addschnelleinstieg/addschnelleinstieg.component';
-import {SidebarToggleComponent} from './sidebar/sidebar-toggle/sidebar-toggle.component';
+import {SidebarComponent} from './pages/sidebar/sidebar/sidebar.component';
+import {AllebuchungenComponent} from './pages/allebuchungen/allebuchungen.component';
+import {SettingsComponent} from './pages/settings/settings.component';
+import {AdduserComponent} from './pages/settings/adduser/adduser.component';
+import {PartnernameComponent} from './pages/settings/partnername/partnername.component';
+import {AllegemeinsamebuchungenComponent} from './pages/allegemeinsamebuchungen/allegemeinsamebuchungen.component';
+import {AddschnelleinstiegComponent} from './pages/addschnelleinstieg/addschnelleinstieg.component';
+import {SidebarToggleComponent} from './pages/sidebar/sidebar-toggle/sidebar-toggle.component';
 
 
 @NgModule({

@@ -41,8 +41,11 @@ def write_import(file_name, file_content):
     instance().write(IMPORT_PATH + file_name, file_content)
 
 
-def write_abrechnung(file_name, file_content):
-    instance().write(ABRECHNUNG_PATH + file_name, file_content)
+def write_abrechnung(file_name: str, file_content: str, filesystem: file_system.FileSystemImpl):
+    filesystem.write(
+        file_path=ABRECHNUNG_PATH + file_name,
+        file_content=file_content,
+    )
 
 
 def all_abrechnungen():
