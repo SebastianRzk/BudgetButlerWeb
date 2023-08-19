@@ -1,5 +1,5 @@
 # Stage 1
-FROM node:14-slim as build-step-angular
+FROM node:20-slim as build-step-angular
 RUN mkdir -p /app
 WORKDIR /app
 COPY butler_online/budgetbutler/package.json /app
