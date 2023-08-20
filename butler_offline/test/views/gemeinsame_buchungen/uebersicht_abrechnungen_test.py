@@ -2,8 +2,6 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.core import file_system
 from butler_offline.views.gemeinsame_buchungen import uebersicht_abrechnungen
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import request_handler
 
 
 ABRECHNUNG_A_CONTENT = '''
@@ -19,23 +17,24 @@ Datum,Kategorie,Name,Wert,Dynamisch
 #######MaschinenimportEnd'''
 
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    file_system.instance().write(file_system.ABRECHNUNG_PATH+'*Abrechnung_A', ABRECHNUNG_A_CONTENT)
-    file_system.instance().write(file_system.IMPORT_PATH+'*Import_A', IMPORT_A_CONTENT)
-
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
-
-
 def test_init():
-    set_up()
-    context = uebersicht_abrechnungen.index(GetRequest())
-    assert context['zusammenfassungen'] == [{
+    filesystem = FileSystemStub()
+    filesystem.write(file_system.ABRECHNUNG_PATH+'*Abrechnung_A', ABRECHNUNG_A_CONTENT)
+    filesystem.write(file_system.IMPORT_PATH+'*Import_A', IMPORT_A_CONTENT)
+
+    context = uebersicht_abrechnungen.handle_request(
+        request=GetRequest(),
+        context=uebersicht_abrechnungen.UbersichtAbrechnungenContext(
+            filesystem=filesystem
+        )
+    )
+
+    assert context.is_ok()
+    assert context.get('zusammenfassungen') == [{
         'jahr': 2017,
         'monate': [0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0]
     }]
-    assert context['abrechnungen'] == [
+    assert context.get('abrechnungen') == [
         {
             'content': ABRECHNUNG_A_CONTENT,
             'name': '../Abrechnungen/*Abrechnung_A'
@@ -45,4 +44,3 @@ def test_init():
             'name': '../Import/*Import_A'
         }
     ]
-
