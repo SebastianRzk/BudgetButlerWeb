@@ -2,6 +2,8 @@ from butler_offline.test.RequestStubs import GetRequest, VersionedPostRequest
 from butler_offline.views.gemeinsame_buchungen import uebersicht_gemeinsam
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+
 
 
 def test_context_should_be_transactional():
@@ -66,3 +68,13 @@ def test_list():
     )
     assert result.get('ausgaben') == [
         {'Datum': '01.01.2011', 'Kategorie': 'kat1', 'Name': 'name1', 'Wert': '1,00', 'Person': 'pers1', 'index': 0}]
+
+
+def test_index_should_be_secured_by_requesthandler():
+    def handle():
+        uebersicht_gemeinsam.index(request=GetRequest())
+
+    result = run_in_mocked_handler(handle)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['gemeinsame_buchungen/uebersicht_gemeinsam.html']

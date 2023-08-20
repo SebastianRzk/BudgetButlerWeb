@@ -2,6 +2,8 @@ from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.core import file_system
 from butler_offline.views.gemeinsame_buchungen import uebersicht_abrechnungen
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+
 
 
 ABRECHNUNG_A_CONTENT = '''
@@ -44,3 +46,14 @@ def test_init():
             'name': '../Import/*Import_A'
         }
     ]
+
+
+def test_index_should_be_secured_by_requesthandler():
+    def handle():
+        uebersicht_abrechnungen.index(request=GetRequest())
+
+    result = run_in_mocked_handler(handle)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['gemeinsame_buchungen/uebersicht_abrechnungen.html']
+
