@@ -1,7 +1,16 @@
 from butler_offline.viewcore.context import generate_base_context, generate_redirect_context
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.context import ERROR_KEY
+import logging
 from typing import Self
+
+
+class Message:
+    def __init__(self, message_content: str):
+        self._message_content = message_content
+
+    def content(self) -> str:
+        return self._message_content
 
 
 class PageContext:
@@ -10,6 +19,8 @@ class PageContext:
         self._basic_context_values = generate_base_context(pagename=pagename, database_name=database_name)
         self._error = False
         self._error_text = None
+        self._success_message = None
+        self._error_message = None
 
     def as_dict(self) -> dict:
         if self._error:
@@ -17,10 +28,10 @@ class PageContext:
 
         return self._basic_context_values | self._additional_context_values
 
-    def add(self, key: str, value):
+    def add(self, key: str, value) -> None:
         self._additional_context_values[key] = value
 
-    def is_transactional(self):
+    def is_transactional(self) -> bool:
         return False
 
     def is_redirect(self) -> bool:
@@ -48,6 +59,30 @@ class PageContext:
         self._error = True
         self._error_text = error_text
         return self
+
+    def add_user_success_message(self, message: str) -> None:
+        logging.info('SUCCESS: %s', message)
+        self._success_message = Message(
+            message_content=message
+        )
+        self._basic_context_values['message'] = True
+        self._basic_context_values['message_type'] = 'success'
+        self._basic_context_values['message_content'] = message.replace('\n', '<br>\n')
+
+    def add_user_error_message(self, message: str) -> None:
+        logging.error('ERROR: %s', message)
+        self._error_message = Message(
+            message_content=message
+        )
+        self._basic_context_values['message'] = True
+        self._basic_context_values['message_type'] = 'error'
+        self._basic_context_values['message_content'] = message.replace('\n', '<br>\n')
+
+    def user_success_message(self) -> Message | None:
+        return self._success_message
+
+    def user_error_message(self) -> Message | None:
+        return self._error_message
 
 
 class TransactionalPageContext(PageContext):

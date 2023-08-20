@@ -1,11 +1,8 @@
 from datetime import datetime
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.core.file_system import write_import
 from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
-from butler_offline.viewcore.context import generate_transactional_context
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.base_html import set_success_message, set_error_message
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import configuration_provider
@@ -18,6 +15,35 @@ from butler_offline.core.export.json_report import JSONReport
 from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
 import logging
 from butler_offline.viewcore.converter import datetime_to_filesystem_string
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
+from butler_offline.core import file_system
+
+
+class ImportDataContext:
+    def __init__(self,
+                 name: str,
+                 einzelbuchungen: Einzelbuchungen,
+                 gemeinsamebuchungen: Gemeinsamebuchungen,
+                 filesystem: file_system.FileSystemImpl
+                 ):
+        self._name = name
+        self._einzelbuchungen = einzelbuchungen
+        self._gemeinsamebuchungen = gemeinsamebuchungen
+        self._filesystem = filesystem
+
+    def name(self) -> str:
+        return self._name
+
+    def einzelbuchungen(self) -> Einzelbuchungen:
+        return self._einzelbuchungen
+
+    def gemeinsamebuchungen(self) -> Gemeinsamebuchungen:
+        return self._gemeinsamebuchungen
+
+    def filesystem(self) -> file_system.FileSystemImpl:
+        return self._filesystem
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -27,15 +53,15 @@ def _mapping_passt(post_parameter, unpassende_kategorien):
     return True
 
 
-def _import(import_data, gemeinsam):
+def _import(import_data, gemeinsam, context: ImportDataContext):
     logging.info('importing data:')
     logging.info(str(import_data))
-    if gemeinsam :
-        database_instance().gemeinsamebuchungen.parse(import_data)
-        database_instance().gemeinsamebuchungen.taint()
+    if gemeinsam:
+        context.gemeinsamebuchungen().parse(import_data)
+        context.gemeinsamebuchungen().taint()
     else:
-        database_instance().einzelbuchungen.parse(import_data)
-        database_instance().einzelbuchungen.taint()
+        context.einzelbuchungen().parse(import_data)
+        context.einzelbuchungen().taint()
 
 
 def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
@@ -47,13 +73,10 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
             logging.info(unpassende_kategorie + ' muss nicht gemappt werden')
             continue
         mapping_kategorie = mapping_string[4:len(' importieren') * -1]
-        logging.info('%s wird in %s gemappt', unpassende_kategorie,  mapping_kategorie)
-        import_data.Kategorie = import_data.Kategorie.map(lambda x: _kategorien_map(x, unpassende_kategorie, mapping_kategorie))
+        logging.info('%s wird in %s gemappt', unpassende_kategorie, mapping_kategorie)
+        import_data.Kategorie = import_data.Kategorie.map(
+            lambda x: _kategorien_map(x, unpassende_kategorie, mapping_kategorie))
     return import_data
-
-
-def index(request):
-    return request_handler.handle_request(request, handle_request , 'shared/import.html')
 
 
 def _get_success_message(last_elements):
@@ -63,8 +86,12 @@ def _get_success_message(last_elements):
     return '{anzahl} Buchungen wurden importiert'.format(anzahl=number)
 
 
-def handle_request(request, import_prefix='', gemeinsam=False):
-    context = generate_transactional_context('import')
+def handle_request(request, context: ImportDataContext):
+    return handle_request_internally(request=request, context=context)
+
+
+def handle_request_internally(request, context: ImportDataContext, import_prefix='', gemeinsam=False):
+    result_context = generate_transactional_page_context('import')
     if request.method == "POST":
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
@@ -79,7 +106,11 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             text_report = JSONToTextMapper().map(json_report)
             logging.info(str(text_report))
 
-            response = handle_request(PostRequest({'import': text_report}), import_prefix='Internet')
+            response = handle_request_internally(
+                request=PostRequest({'import': text_report}),
+                import_prefix='Internet',
+                context=context
+            )
 
             delete_einzelbuchungen(serverurl, auth_container=auth_container)
             return response
@@ -98,15 +129,23 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             table = JSONReport().dataframe_from_json_gemeinsam(online_content)
 
             logging.info('table before person mapping %s', table)
-            table.Person = table.Person.map(lambda x: database_instance().name if x == online_username else configuration_provider.get_configuration('PARTNERNAME'))
+            table.Person = table.Person.map(
+                lambda x: context.name() if x == online_username else configuration_provider.get_configuration(
+                    'PARTNERNAME'))
             online_content = TextReportWriter().generate_report(table)
-            response = handle_request(PostRequest({'import': online_content}), import_prefix='Internet_Gemeinsam', gemeinsam=True)
+            response = handle_request_internally(
+                request=PostRequest({'import': online_content}),
+                import_prefix='Internet_Gemeinsam',
+                gemeinsam=True,
+                context=context
+            )
 
             delete_gemeinsame_buchungen(serverurl, auth_container=auth_container)
             return response
 
         elif post_action_is(request, 'set_kategorien'):
-            kategorien = ','.join(sorted(database_instance().einzelbuchungen.get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
+            kategorien = ','.join(
+                sorted(context.einzelbuchungen().get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
 
             serverurl = _add_protokoll_if_needed(serverurl)
@@ -114,7 +153,7 @@ def handle_request(request, import_prefix='', gemeinsam=False):
 
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
-            set_success_message(context, 'Kategorien erfolgreich in die Online-Version übertragen.')
+            result_context.add_user_success_message('Kategorien erfolgreich in die Online-Version übertragen.')
 
         elif post_action_is(request, 'upload_gemeinsame_transactions'):
             serverurl = request.values['server']
@@ -124,17 +163,17 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             online_username = auth_container.online_name()
             logging.info('butler_online username: %s', online_username)
-            offline_username = database_instance().name
+            offline_username = context.name()
             logging.info('butler offline username: %s', offline_username)
             online_partnername = get_partnername(serverurl, auth_container=auth_container)
             logging.info('butler online partnername: %s', online_partnername)
             offline_partnername = configuration_provider.get_configuration('PARTNERNAME')
             logging.info('butler offline partnername: %s', offline_partnername)
 
-            buchungen = database_instance().gemeinsamebuchungen.get_renamed_list(offline_username,
-                                                                                 online_username,
-                                                                                 offline_partnername,
-                                                                                 online_partnername)
+            buchungen = context.gemeinsamebuchungen().get_renamed_list(offline_username,
+                                                                       online_username,
+                                                                       offline_partnername,
+                                                                       online_partnername)
             request_data = []
 
             for buchung in buchungen:
@@ -150,19 +189,23 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             anzahl_buchungen = len(buchungen)
             result = upload_gemeinsame_buchungen(serverurl, request_data, auth_container)
             if result:
-                set_success_message(context, '{anzahl_buchungen} Buchungen wurden erfolgreich hochgeladen.'.format(anzahl_buchungen=anzahl_buchungen))
-                database_instance().gemeinsamebuchungen.drop_all()
+                result_context.add_user_success_message(
+                    '{anzahl_buchungen} Buchungen wurden erfolgreich hochgeladen.'.format(
+                        anzahl_buchungen=anzahl_buchungen))
+                context.gemeinsamebuchungen().drop_all()
             else:
-                set_error_message(context, 'Fehler beim Hochladen der gemeinsamen Buchungen.')
+                result_context.add_user_error_message('Fehler beim Hochladen der gemeinsamen Buchungen.')
 
         else:
             logging.debug(str(request.values))
             content = request.values['import'].replace('\r', '')
-            write_import(import_prefix + 'Import_' + datetime_to_filesystem_string(datetime.now()), content)
+            write_import(
+                file_name=import_prefix + 'Import_' + datetime_to_filesystem_string(datetime.now()),
+                file_content=content,
+                filesystem=context.filesystem())
 
             imported_values = TextReportReader().read(content)
-            datenbank_kategorien = set(
-                database_instance().einzelbuchungen.get_alle_kategorien())
+            datenbank_kategorien = set(context.einzelbuchungen().get_alle_kategorien())
             nicht_passende_kategorien = []
             for imported_kategorie in set(imported_values.Kategorie):
                 if imported_kategorie not in datenbank_kategorien:
@@ -174,23 +217,30 @@ def handle_request(request, import_prefix='', gemeinsam=False):
             if not nicht_passende_kategorien:
                 logging.info('keine unpassenden kategorien gefunden')
                 logging.info('beginne mit dem direkten import')
-                _import(imported_values, gemeinsam)
+                _import(
+                    imported_values,
+                    gemeinsam,
+                    context=context)
 
                 last_elements = []
                 for row_index, row in imported_values.iterrows():
                     last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
-                context['ausgaben'] = last_elements
-                context = set_success_message(context, _get_success_message(last_elements))
+                result_context.add('ausgaben', last_elements)
+                result_context.add_user_success_message(_get_success_message(last_elements))
             elif _mapping_passt(request.values, nicht_passende_kategorien):
                 logging.info('import kann durchgeführt werden, weil mapping vorhanden')
                 imported_values = _map_kategorien(imported_values, nicht_passende_kategorien, request.values)
-                _import(imported_values, gemeinsam)
+                _import(
+                    imported_values,
+                    gemeinsam,
+                    context=context
+                )
 
                 last_elements = []
                 for row_index, row in imported_values.iterrows():
                     last_elements.append((row_index, row.Datum, row.Name, row.Kategorie, row.Wert))
-                context['ausgaben'] = last_elements
-                context = set_success_message(context, _get_success_message(last_elements))
+                result_context.add('ausgaben', last_elements)
+                result_context.add_user_success_message(_get_success_message(last_elements))
             else:
                 logging.info("Nicht passende Kategorien: %s", nicht_passende_kategorien)
                 options = ['neue Kategorie anlegen']
@@ -198,15 +248,15 @@ def handle_request(request, import_prefix='', gemeinsam=False):
                     options.append('als ' + str(kategorie_option) + ' importieren')
                 options = sorted(options)
                 options.insert(0, 'neue Kategorie anlegen')
-                context['element_titel'] = 'Kategorien zuweisen'
-                context['unpassende_kategorien'] = nicht_passende_kategorien
-                context['optionen'] = options
-                context['import'] = request.values['import']
-                context['special_page'] = 'shared/import_mapping.html'
+                result_context.add('element_titel', 'Kategorien zuweisen')
+                result_context.add('unpassende_kategorien', nicht_passende_kategorien)
+                result_context.add('optionen', options)
+                result_context.add('import', request.values['import'])
+                result_context.add('special_page', 'shared/import_mapping.html')
 
-    context['ONLINE_DEFAULT_SERVER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER')
-    context['ONLINE_DEFAULT_USER'] = configuration_provider.get_configuration('ONLINE_DEFAULT_USER')
-    return context
+    result_context.add('ONLINE_DEFAULT_SERVER', configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER'))
+    result_context.add('ONLINE_DEFAULT_USER', configuration_provider.get_configuration('ONLINE_DEFAULT_USER'))
+    return result_context
 
 
 def _kategorien_map(actual, target, goal):
@@ -224,3 +274,17 @@ def _add_protokoll_if_needed(serverurl):
 def _save_server_creds(serverurl, email):
     configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
     configuration_provider.set_configuration('ONLINE_DEFAULT_USER', email)
+
+
+def index(request):
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='shared/import.html',
+        context_creator=lambda db: ImportDataContext(
+            gemeinsamebuchungen=db.gemeinsamebuchungen,
+            einzelbuchungen=db.einzelbuchungen,
+            name=db.name,
+            filesystem=file_system.instance()
+        )
+    )
