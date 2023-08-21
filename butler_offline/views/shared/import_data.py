@@ -252,7 +252,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
                 result_context.add('unpassende_kategorien', nicht_passende_kategorien)
                 result_context.add('optionen', options)
                 result_context.add('import', request.values['import'])
-                result_context.add('special_page', 'shared/import_mapping.html')
+                result_context.overwrite_page_to_render('shared/import_mapping.html')
 
     result_context.add('ONLINE_DEFAULT_SERVER', configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER'))
     result_context.add('ONLINE_DEFAULT_USER', configuration_provider.get_configuration('ONLINE_DEFAULT_USER'))

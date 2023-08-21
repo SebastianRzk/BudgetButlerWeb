@@ -1,44 +1,49 @@
-from butler_offline.core import file_system
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.viewcore.state.persisted_state import persisted_state
-from butler_offline.viewcore import request_handler
-from butler_offline.views.sparen.uebersicht_etfs import index
+from butler_offline.views.sparen.uebersicht_etfs import handle_request, UebersichtEtfsContext
 from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.core.time import today
-from butler_offline.core.shares import SharesInfo
 from butler_offline.core.shares import sectors
-from butler_offline.viewcore.converter import datum_to_string,datum_to_german
+from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore import requester
 from butler_offline.test.RequesterStub import RequesterStub
 from butler_offline.test.RequestStubs import VersionedPostRequestAction
-from butler_offline.test.database_util import untaint_database
 from butler_offline.views.sparen import language
-from butler_offline.viewcore.context import get_error_message
+from butler_offline.core.shares.shares_manager import SharesInfo
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    persisted_state.SHARES_DATA = None
-    request_handler.stub_me()
+
+def basic_context(
+        shares_info: SharesInfo = SharesInfo({}),
+        depotwerte: Depotwerte = Depotwerte(),
+        depotauszuege: Depotauszuege = Depotauszuege()
+) -> UebersichtEtfsContext:
+    return UebersichtEtfsContext(
+        depotauszuege=depotauszuege,
+        shares_info=shares_info,
+        depotwerte=depotwerte
+    )
 
 
 def test_load_page_without_data():
-    set_up()
-    context = index(GetRequest())
+    context = handle_request(
+        request=GetRequest(),
+        context=basic_context())
 
-    assert get_error_message(context) == NO_VALID_ISIN_IN_DB
+    assert context.is_error()
+    assert context.error_text() == NO_VALID_ISIN_IN_DB
 
 
 def test_load_page_without_shares_data():
-    set_up()
-    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte = Depotwerte()
     depotwerte.add(name='some name', isin='isin56789012', typ=depotwerte.TYP_ETF)
-    untaint_database(database=persisted_state.database_instance())
 
-    context = index(GetRequest())
+    context = handle_request(
+        request=GetRequest(),
+        context=basic_context(depotwerte=depotwerte)
+    )
 
-    assert context['etfs'] == [
+    assert context.get('etfs') == [
         {
             'Name': 'some name (isin56789012)',
             'Datum': 'Noch keine Daten',
@@ -48,16 +53,16 @@ def test_load_page_without_shares_data():
 
 
 def test_content():
-    set_up()
-
-    depotwerte = persisted_state.database_instance().depotwerte
+    depotwerte = Depotwerte()
     depotwerte.add(name='large_etf', isin='1isin6789012', typ=depotwerte.TYP_ETF)
     depotwerte.add(name='small_etf', isin='2isin6789012', typ=depotwerte.TYP_ETF)
 
-    persisted_state.database_instance().depotauszuege.add(depotwert='1isin6789012', datum=today(), konto='', wert=900)
-    persisted_state.database_instance().depotauszuege.add(depotwert='2isin6789012', datum=today(), konto='', wert=100)
+    depotauszuege = Depotauszuege()
+    depotauszuege.add(depotwert='1isin6789012', datum=today(), konto='', wert=900)
+    depotauszuege.add(depotwert='2isin6789012', datum=today(), konto='', wert=100)
 
-    persisted_state.shares_data().save(
+    shares_data = SharesInfo({})
+    shares_data.save(
         isin='1isin6789012',
         source='',
         date=datum_to_string(today()),
@@ -73,7 +78,7 @@ def test_content():
             SharesInfo.KOSTEN: 0.20
         }
     )
-    persisted_state.shares_data().save(
+    shares_data.save(
         isin='2isin6789012',
         source='',
         date=datum_to_string(today()),
@@ -89,57 +94,61 @@ def test_content():
             SharesInfo.KOSTEN: 1.5,
         }
     )
-    untaint_database(database=persisted_state.database_instance())
 
-    result = index(GetRequest())
+    result = handle_request(
+        request=GetRequest(),
+        context=basic_context(shares_info=shares_data,
+                              depotwerte=depotwerte,
+                              depotauszuege=depotauszuege)
+    )
 
-    assert result['regions'] == {
-                                    'header': ['Gesamt',
-                                               'large_etf (1isin6789012)',
-                                               'small_etf (2isin6789012)'],
-                                    'data': [
-                                        ['United States',
-                                         {'euro': 5.4,
-                                          'euro_str': '5.40',
-                                          'percent': 0.54,
-                                          'percent_str': '0.54'},
-                                         {'euro': 5.4,
-                                          'euro_str': '5.40',
-                                          'percent': 0.6,
-                                          'percent_str': '0.60'},
-                                         {'euro': 0,
-                                          'euro_str': '0,00',
-                                          'percent': 0,
-                                          'percent_str': '0,00'}],
-                                        ['Germany',
-                                         {'euro': 4.5,
-                                          'euro_str': '4.50',
-                                          'percent': 0.45,
-                                          'percent_str': '0.45'},
-                                         {'euro': 3.6,
-                                          'euro_str': '3.60',
-                                          'percent': 0.4,
-                                          'percent_str': '0.40'},
-                                         {'euro': 0.9,
-                                          'euro_str': '0.90',
-                                          'percent': 0.9,
-                                          'percent_str': '0.90'}],
-                                        ['Norway',
-                                         {'euro': 0.1,
-                                          'euro_str': '0.10',
-                                          'percent': 0.01,
-                                          'percent_str': '0.01'},
-                                         {'euro': 0,
-                                          'euro_str': '0,00',
-                                          'percent': 0,
-                                          'percent_str': '0,00'},
-                                         {'euro': 0.1,
-                                          'euro_str': '0.10',
-                                          'percent': 0.1,
-                                          'percent_str': '0.10'}]],
-                                   }
+    assert result.get('regions') == {
+        'header': ['Gesamt',
+                   'large_etf (1isin6789012)',
+                   'small_etf (2isin6789012)'],
+        'data': [
+            ['United States',
+             {'euro': 5.4,
+              'euro_str': '5.40',
+              'percent': 0.54,
+              'percent_str': '0.54'},
+             {'euro': 5.4,
+              'euro_str': '5.40',
+              'percent': 0.6,
+              'percent_str': '0.60'},
+             {'euro': 0,
+              'euro_str': '0,00',
+              'percent': 0,
+              'percent_str': '0,00'}],
+            ['Germany',
+             {'euro': 4.5,
+              'euro_str': '4.50',
+              'percent': 0.45,
+              'percent_str': '0.45'},
+             {'euro': 3.6,
+              'euro_str': '3.60',
+              'percent': 0.4,
+              'percent_str': '0.40'},
+             {'euro': 0.9,
+              'euro_str': '0.90',
+              'percent': 0.9,
+              'percent_str': '0.90'}],
+            ['Norway',
+             {'euro': 0.1,
+              'euro_str': '0.10',
+              'percent': 0.01,
+              'percent_str': '0.01'},
+             {'euro': 0,
+              'euro_str': '0,00',
+              'percent': 0,
+              'percent_str': '0,00'},
+             {'euro': 0.1,
+              'euro_str': '0.10',
+              'percent': 0.1,
+              'percent_str': '0.10'}]],
+    }
 
-    assert result['sectors'] == {
+    assert result.get('sectors') == {
         'data': [[
             'Basiskonsumgüter',
             {'euro': 500.0,
@@ -167,21 +176,21 @@ def test_content():
               'euro_str': '0,00',
               'percent': 0,
               'percent_str': '0,00'}],
-           ['Immobilien',
-            {'euro': 50.0,
-             'euro_str': '50.00',
-             'percent': 5.0,
-             'percent_str': '5.00'},
-            {'euro': 0,
-             'euro_str': '0,00',
-             'percent': 0,
-             'percent_str': '0,00'},
-            {'euro': 50.0,
-             'euro_str': '50.00',
-             'percent': 50,
-             'percent_str': '50.00'}]],
+            ['Immobilien',
+             {'euro': 50.0,
+              'euro_str': '50.00',
+              'percent': 5.0,
+              'percent_str': '5.00'},
+             {'euro': 0,
+              'euro_str': '0,00',
+              'percent': 0,
+              'percent_str': '0,00'},
+             {'euro': 50.0,
+              'euro_str': '50.00',
+              'percent': 50,
+              'percent_str': '50.00'}]],
         'header': ['Gesamt', 'large_etf (1isin6789012)', 'small_etf (2isin6789012)']}
-    assert result['costs'] == {
+    assert result.get('costs') == {
         'data': [{'costs_eur': '1.80',
                   'costs_percent': '0.20',
                   'name': 'large_etf (1isin6789012)'},
@@ -225,17 +234,17 @@ DEMO_DATA = '''
 
 
 def test_refresh_data():
+    shares_info = SharesInfo({})
     requester.INSTANCE = RequesterStub(
         {
             'https://api.etf-data.com/product/DE000A14ND46': DEMO_DATA
         }
     )
 
-    result = index(VersionedPostRequestAction('update_data', {'isin': 'DE000A14ND46'}))
-    assert result['message']
-    assert result['message_type'] == 'success'
-    assert result['message_content'] == language.SHARES_DATA_UPDATED.format(isin='DE000A14ND46')
-    assert persisted_state.shares_data().get_last_changed_date_for('DE000A14ND46') == datum_to_german(today())
-
-
-
+    result = handle_request(
+        request=VersionedPostRequestAction('update_data', {'isin': 'DE000A14ND46'}),
+        context=basic_context(shares_info=shares_info)
+    )
+    assert result.user_success_message()
+    assert result.user_success_message().content() == language.SHARES_DATA_UPDATED.format(isin='DE000A14ND46')
+    assert shares_info.get_last_changed_date_for('DE000A14ND46') == datum_to_german(today())

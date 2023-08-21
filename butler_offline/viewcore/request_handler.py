@@ -2,8 +2,8 @@ from flask import redirect, Request
 from requests.exceptions import ConnectionError
 
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.context import generate_base_context, REDIRECT_KEY
-from butler_offline.viewcore.base_html import set_error_message
+from butler_offline.viewcore.context.builder import generate_page_context
+from butler_offline.viewcore.context import REDIRECT_KEY
 from butler_offline.core.shares import shares_manager
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.context import get_transaction_id, is_transactional_request, ERROR_KEY, is_error
@@ -15,8 +15,15 @@ from typing import Callable, TypeVar
 from butler_offline.core.database import Database
 from butler_offline.viewcore.context.builder import PageContext
 
-
 REDIRECTOR = lambda x: redirect(x, code=301)
+
+
+def set_basic_html_error_message(context, message):
+    logging.error('ERROR: %s', message)
+    context['message'] = True
+    context['message_type'] = 'error'
+    context['message_content'] = message.replace('\n', '<br>\n')
+    return context
 
 
 def handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page: str):
@@ -84,21 +91,21 @@ REQUEST_HANDLER = __handle_request
 def handle_transaction_out_of_sync(transaction_id):
     logging.error(
         'transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
-    context = generate_base_context('Fehler')
+    context = generate_page_context('Fehler')
     rendered_content = renderer_instance().render('core/error_race.html', **{})
-    context['content'] = rendered_content
-    return renderer_instance().render('index.html', **context)
+    context.add('content', rendered_content)
+    return renderer_instance().render('index.html', **context.as_dict())
 
 
 def take_action(request, request_action: Callable[[Request], dict]):
-    context = generate_base_context('Fehler')
+    context = generate_page_context('Fehler').as_dict()
     try:
         context = request_action(request)
     except ConnectionError as _:
-        set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
+        set_basic_html_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
         context[ERROR_KEY] = ''
     except Exception as e:
-        set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
+        set_basic_html_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
         logging.error(e)
         traceback.print_exc()
         context[ERROR_KEY] = ''

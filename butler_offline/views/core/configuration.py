@@ -2,12 +2,11 @@ from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
 from butler_offline.core.configuration_provider import ConfigurationProvider
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.core.configuration_provider import CONFIGURATION_PROVIDER
-from butler_offline.viewcore.base_html import set_success_message
 from butler_offline.viewcore import routes
 
 
@@ -40,7 +39,7 @@ def _handle_request(request, context: ConfigurationContext):
     if post_action_is(request, 'add_kategorie'):
         context.einzelbuchungen().add_kategorie(request.values['neue_kategorie'])
         if 'redirect' in request.values:
-            return generate_redirect_context('/' + str(request.values['redirect']) + '/')
+            return generate_redirect_page_context('/' + str(request.values['redirect']) + '/')
 
     if post_action_is(request, 'change_themecolor'):
         context.configuration().set_configuration('THEME_COLOR', request.values['themecolor'])
@@ -80,33 +79,34 @@ def _handle_request(request, context: ConfigurationContext):
             'kategorie': kategorie
             })
 
-    render_context = generate_transactional_context('configuration')
+    render_context = generate_transactional_page_context('configuration')
 
     if routes.CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE in request.values:
-        set_success_message(
-            context=render_context,
-            message=request.values[routes.CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE])
+        render_context.add_user_success_message(request.values[routes.CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE])
 
-    render_context['palette'] = farbmapping
+    render_context.add('palette', farbmapping)
     default_databases = ''
     for db in persisted_state.DATABASES:
         if len(default_databases) != 0:
             default_databases = default_databases + ','
         default_databases = default_databases + db
-    render_context['default_databases'] = default_databases
-    render_context['partnername'] = viewcore.name_of_partner()
-    render_context['themecolor'] = context.configuration().get_configuration('THEME_COLOR')
-    render_context['ausgeschlossene_kategorien'] = context.configuration().get_configuration('AUSGESCHLOSSENE_KATEGORIEN')
+    render_context.add('default_databases', default_databases)
+    render_context.add('partnername', viewcore.name_of_partner())
+    render_context.add('themecolor', context.configuration().get_configuration('THEME_COLOR'))
+    render_context.add('ausgeschlossene_kategorien', context.configuration().get_configuration('AUSGESCHLOSSENE_KATEGORIEN'))
     return render_context
 
 
 def index(request):
-    def handle_request_migration(r):
-        return _handle_request(r, ConfigurationContext(
+    return request_handler.handle(
+        request=request,
+        handle_function=_handle_request,
+        context_creator=lambda db: ConfigurationContext(
             conf_provider=CONFIGURATION_PROVIDER,
-            einzelbuchungen=persisted_state.database_instance().einzelbuchungen,
-            gemeinsame_buchungen=persisted_state.database_instance().gemeinsamebuchungen
-        ))
-    return request_handler.handle_request(request, handle_request_migration, 'core/configuration.html')
+            einzelbuchungen=db.einzelbuchungen,
+            gemeinsame_buchungen=db.gemeinsamebuchungen
+        ),
+        html_base_page='core/configuration.html'
+    )
 
 

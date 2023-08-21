@@ -18,14 +18,26 @@ class PageContext:
         self._additional_context_values = {}
         self._basic_context_values = generate_base_context(pagename=pagename, database_name=database_name)
         self._error = False
+        self._overwrite_page_to_render = False
+        self._page_to_render = None
         self._error_text = None
         self._success_message = None
         self._error_message = None
 
+    def overwrite_page_to_render(self, new_template_file: str):
+        self._basic_context_values['special_page'] = new_template_file
+        self._overwrite_page_to_render = True
+        self._page_to_render = new_template_file
+
+    def is_page_to_render_overwritten(self):
+        return self._overwrite_page_to_render
+
+    def page_to_render(self):
+        return self._page_to_render
+
     def as_dict(self) -> dict:
         if self._error:
             self._additional_context_values[ERROR_KEY] = self._error_text
-
         return self._basic_context_values | self._additional_context_values
 
     def add(self, key: str, value) -> None:

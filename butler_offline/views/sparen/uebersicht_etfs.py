@@ -1,39 +1,56 @@
 from butler_offline.viewcore import request_handler
 from butler_offline.core import time
 from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.online_services.shares import etf_data
-from butler_offline.viewcore import base_html
-from butler_offline.core.shares import SharesInfo
 import gettext
 import pycountry
 import traceback
 from butler_offline.views.sparen import language
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.state.persisted_state import SharesInfo
+
+
+class UebersichtEtfsContext:
+    def __init__(self, depotauszuege: Depotauszuege, depotwerte: Depotwerte, shares_info: SharesInfo):
+        self._depotauszuege = depotauszuege
+        self._depotwerte = depotwerte
+        self._shares_info = shares_info
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+    def depotauszuege(self) -> Depotauszuege:
+        return self._depotauszuege
+
+    def shares_info(self) -> SharesInfo:
+        return self._shares_info
+
 
 PAGE_NAME = 'uebersicht_etfs'
 
 
-def _handle_request(request):
-    context = generate_transactional_context(PAGE_NAME)
+def handle_request(request, context: UebersichtEtfsContext):
+    result_context = generate_transactional_page_context(PAGE_NAME)
     if post_action_is(request, 'update_data'):
-        context = _update_data(request.values['isin'], context)
-    return _generate_content(context)
+        result_context = _update_data(request.values['isin'], result_context, shares_info=context.shares_info())
+    return _generate_content(result_context, context=context)
 
 
-def _update_data(isin, context):
+def _update_data(isin, context: PageContext, shares_info: SharesInfo) -> PageContext:
     try:
         data = etf_data.get_data_for(isin)
         date = datum_to_german(time.today())
-        persisted_state.shares_data().save(isin, date, etf_data.SOURCE, data)
-        return base_html.set_success_message(context, language.SHARES_DATA_UPDATED.format(isin=isin))
+        shares_info.save(isin, date, etf_data.SOURCE, data)
+        context.add_user_success_message(language.SHARES_DATA_UPDATED.format(isin=isin))
     except:
         traceback.print_exc()
-        return base_html.set_error_message(
-            context,
-            language.SHARES_DATA_NOT_UPDATED.format(isin=isin))
+        context.add_user_error_message(language.SHARES_DATA_NOT_UPDATED.format(isin=isin))
+    return context
 
 
 def _translate(region_code, lang):
@@ -73,7 +90,7 @@ def get_data(shares_info_resolver, isins_with_data, wert_resolver, depotwerte, t
                 region_percent = data[region]
                 data_to_present = {
                     'euro': (region_percent * wert) / 100,
-                    'euro_str': '%.2f' % ((region_percent * wert)/100),
+                    'euro_str': '%.2f' % ((region_percent * wert) / 100),
                     'percent': region_percent,
                     'percent_str': '%.2f' % region_percent
                 }
@@ -81,11 +98,11 @@ def get_data(shares_info_resolver, isins_with_data, wert_resolver, depotwerte, t
             if region not in order:
                 order.append(region)
                 regions.append([{
-                                'euro': 0,
-                                'euro_str': '0,00',
-                                'percent': 0,
-                                'percent_str': '0,00'
-                                } for _ in range(0, isin_index)])
+                    'euro': 0,
+                    'euro_str': '0,00',
+                    'percent': 0,
+                    'percent_str': '0,00'
+                } for _ in range(0, isin_index)])
 
             region_index_in_list = order.index(region)
             regions[region_index_in_list].append(data_to_present)
@@ -95,11 +112,11 @@ def get_data(shares_info_resolver, isins_with_data, wert_resolver, depotwerte, t
             if len(r) == isin_index + 1:
                 continue
             r.append({
-                        'euro': 0,
-                        'euro_str': '0,00',
-                        'percent': 0,
-                        'percent_str': '0,00'
-                     })
+                'euro': 0,
+                'euro_str': '0,00',
+                'percent': 0,
+                'percent_str': '0,00'
+            })
     # Compute gesamt
     for region_index in range(0, len(regions)):
         region = regions[region_index]
@@ -123,9 +140,9 @@ def get_data(shares_info_resolver, isins_with_data, wert_resolver, depotwerte, t
     regions = list(reversed(sorted(regions, key=lambda x: x[1]['euro'])))
 
     return {
-                'header': ['Gesamt'] + [depotwerte.get_description_for(e) for e in isins_with_data],
-                'data': regions
-           }
+        'header': ['Gesamt'] + [depotwerte.get_description_for(e) for e in isins_with_data],
+        'data': regions
+    }
 
 
 def _get_costs(shares_data, isins_with_data, wert_resolver, depotwerte):
@@ -139,7 +156,7 @@ def _get_costs(shares_data, isins_with_data, wert_resolver, depotwerte):
     for isin in isins_with_data:
         wert = wert_resolver(isin)
         cost_percent = shares_data.get_latest_data_for(isin)[SharesInfo.KOSTEN]
-        cost_eur = wert*(cost_percent / 100)
+        cost_eur = wert * (cost_percent / 100)
         total_cost_eur += cost_eur
         total_eur += wert
 
@@ -162,13 +179,13 @@ def _get_costs(shares_data, isins_with_data, wert_resolver, depotwerte):
             'gesamt': gesamt}
 
 
-def _generate_content(context):
-    depotwerte = persisted_state.database_instance().depotwerte
-    shares_info = persisted_state.shares_data()
-    depotauszuege = persisted_state.database_instance().depotauszuege
+def _generate_content(result_context: PageContext, context: UebersichtEtfsContext):
+    depotwerte = context.depotwerte()
+    shares_info = context.shares_info()
+    depotauszuege = context.depotauszuege()
     isins = depotwerte.get_valid_isins()
     if not isins:
-        return generate_error_context(PAGE_NAME, NO_VALID_ISIN_IN_DB)
+        return result_context.throw_error(NO_VALID_ISIN_IN_DB)
 
     etfs = []
     for isin in isins:
@@ -189,26 +206,35 @@ def _generate_content(context):
 
     german = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['de'])
 
-    context['etfs'] = etfs
-    context['regions'] = get_data(
+    result_context.add('etfs', etfs)
+    result_context.add('regions', get_data(
         lambda x: shares_info.get_latest_data_for(x)[SharesInfo.REGIONEN],
         isins_with_data,
         lambda x: depotauszuege.get_depotwert_by(x),
         depotwerte,
         lambda x: _translate(x, german)
-    )
-    context['sectors'] = get_data(
+    ))
+    result_context.add('sectors', get_data(
         lambda x: shares_info.get_latest_data_for(x)[SharesInfo.SEKTOREN],
         isins_with_data,
         lambda x: depotauszuege.get_depotwert_by(x),
         depotwerte,
         lambda x: x
-    )
-    context['costs'] = _get_costs(shares_info, isins_with_data, lambda x: depotauszuege.get_depotwert_by(x), depotwerte)
+    ))
+    result_context.add('costs',
+                       _get_costs(shares_info, isins_with_data, lambda x: depotauszuege.get_depotwert_by(x), depotwerte))
 
-    return context
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_etfs.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/uebersicht_etfs.html',
+        context_creator=lambda db: UebersichtEtfsContext(
+            depotwerte=db.depotwerte,
+            depotauszuege=db.depotauszuege,
+            shares_info=persisted_state.shares_data()
+        )
+    )

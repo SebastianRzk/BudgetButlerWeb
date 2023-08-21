@@ -151,6 +151,8 @@ def test_adde_unpassenden_kategorie_should_show_import_mapping_page():
         request=VersionedPostRequest({'import': _IMPORT_DATA}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen)
     )
+    assert context.is_page_to_render_overwritten()
+    assert context.page_to_render() == 'shared/import_mapping.html'
     assert context.as_dict()['element_titel'] == 'Kategorien zuweisen'
 
 
