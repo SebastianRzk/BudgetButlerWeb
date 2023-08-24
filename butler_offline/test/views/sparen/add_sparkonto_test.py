@@ -6,7 +6,14 @@ from butler_offline.views.sparen import add_sparkoto
 from butler_offline.core import file_system
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.context import get_error_message
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+
+
+def basic_test_context(kontos: Kontos = Kontos()) -> add_sparkoto.AddSparkontoContext:
+    return add_sparkoto.AddSparkontoContext(
+        kontos=kontos
+    )
 
 
 def set_up():
@@ -16,157 +23,131 @@ def set_up():
 
 
 def test_init():
-    set_up()
-    context = add_sparkoto.index(GetRequest())
-    assert context['approve_title'] == 'Sparkonto hinzufügen'
+    context = add_sparkoto.handle_request(
+        request=GetRequest(),
+        context=basic_test_context()
+    )
+    assert context.is_ok()
+    assert context.get('approve_title') == 'Sparkonto hinzufügen'
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = add_sparkoto.index(GetRequest())
-    assert 'ID' in context
+    context = add_sparkoto.handle_request(
+        request=GetRequest(),
+        context=basic_test_context()
+    )
+    assert context.is_transactional()
 
 
 def test_add_should_add_sparkonto():
-    set_up()
-    add_sparkoto.index(VersionedPostRequest(
-        {'action': 'add',
-         'kontotyp': '1typ',
-         'kontoname': '1name'
-         }
-     ))
+    kontos = Kontos()
+    add_sparkoto.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'kontotyp': '1typ',
+             'kontoname': '1name'
+             }
+        ),
+        context=basic_test_context(kontos=kontos)
+    )
 
-    db = persisted_state.database_instance()
-    assert len(db.sparkontos.content) == 1
-    assert db.sparkontos.content.Kontoname[0] == '1name'
-    assert db.sparkontos.content.Kontotyp[0] == '1typ'
+    assert kontos.select().count() == 1
+    assert kontos.get(0) == {'Kontoname': '1name', 'Kontotyp': '1typ', 'index': 0}
 
 
 def test_add_with_underscore_in_name_should_return_error():
-    set_up()
-    result = add_sparkoto.index(VersionedPostRequest(
-        {'action': 'add',
-         'kontotyp': '1typ',
-         'kontoname': '1_name'
-         }
-     ))
+    result = add_sparkoto.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'kontotyp': '1typ',
+             'kontoname': '1_name'
+             }
+        ),
+        context=basic_test_context()
+    )
 
-    assert get_error_message(result) == 'Kontoname darf kein Unterstrich "_" enthalten.'
+    assert result.is_error()
+    assert result.error_text() == 'Kontoname darf kein Unterstrich "_" enthalten.'
 
 
 def test_add_sparkonto_should_show_in_recently_added():
-    set_up()
-    result = add_sparkoto.index(VersionedPostRequest(
-        {'action': 'add',
-         'kontotyp': '1typ',
-         'kontoname': '1name'
-         }
-     ))
-    result_element = list(result['letzte_erfassung'])[0]
+    result = add_sparkoto.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'kontotyp': '1typ',
+             'kontoname': '1name'
+             }
+        ),
+        context=basic_test_context())
+
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'plus'
     assert result_element['Kontotyp'] == '1typ'
     assert result_element['Kontoname'] == '1name'
 
 
-def test_add_should_only_fire_once():
-    set_up()
-    next_id = persisted_state.current_database_version()
-    add_sparkoto.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'kontotyp': '1typ',
-         'kontoname': '1name'
-         }
-     ))
-    add_sparkoto.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'kontotyp': 'overwritten',
-         'kontoname': 'overwritten'
-         }
-     ))
-    db = persisted_state.database_instance()
-    assert len(db.sparkontos.content) == 1
-    assert db.sparkontos.content.Kontoname[0] == '1name'
-    assert db.sparkontos.content.Kontotyp[0] == '1typ'
-
-
 def test_edit_sparkonto():
-    set_up()
-    add_sparkoto.index(VersionedPostRequest(
-        {'action': 'add',
-         'kontotyp': '1typ',
-         'kontoname': '1name'
-         }
-    ))
+    kontos = Kontos()
+    add_sparkoto.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'kontotyp': '1typ',
+             'kontoname': '1name'
+             }
+        ),
+        context=basic_test_context(kontos=kontos)
+    )
 
-    result = add_sparkoto.index(VersionedPostRequest(
-        {'action': 'add',
-         'edit_index': 0,
-         'kontotyp': '2typ',
-         'kontoname': '2name'
-         }
-    ))
+    result = add_sparkoto.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'edit_index': 0,
+             'kontotyp': '2typ',
+             'kontoname': '2name'
+             }
+        ),
+        context=basic_test_context(kontos=kontos)
+    )
 
-    db = persisted_state.database_instance()
-    assert len(db.sparkontos.content) == 1
-    assert db.sparkontos.content.Kontoname[0] == '2name'
-    assert db.sparkontos.content.Kontotyp[0] == '2typ'
+    assert kontos.select().count() == 1
+    assert kontos.get(0) == {'Kontoname': '2name', 'Kontotyp': '2typ', 'index': 0}
 
-    result_element = list(result['letzte_erfassung'])[0]
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'pencil'
     assert result_element['Kontotyp'] == '2typ'
     assert result_element['Kontoname'] == '2name'
 
 
-def test_edit_sparkonto_should_only_fire_once():
-    set_up()
-    add_sparkoto.index(VersionedPostRequest(
-        {'action': 'add',
-         'kontotyp': '1typ',
-         'kontoname': '1name'
-         }
-    ))
-
-    next_id = persisted_state.current_database_version()
-    add_sparkoto.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'kontotyp': '2typ',
-         'kontoname': '2name'
-         }
-    ))
-    add_sparkoto.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'kontotyp': 'overwritten',
-         'kontoname': 'overwritten'
-         }
-    ))
-
-    db = persisted_state.database_instance()
-    assert len(db.sparkontos.content) == 1
-    assert db.sparkontos.content.Kontoname[0] == '2name'
-    assert db.sparkontos.content.Kontotyp[0] == '2typ'
-
 def test_edit_call_from_ueberischt_should_preset_values_and_rename_button():
-    set_up()
-    add_sparkoto.index(VersionedPostRequest(
-        {'action': 'add',
-         'kontotyp': '1typ',
-         'kontoname': '1name'
-         }
-    ))
+    kontos = Kontos()
+    add_sparkoto.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'kontotyp': '1typ',
+             'kontoname': '1name'
+             }
+        ),
+        context=basic_test_context(kontos=kontos))
 
-    context = add_sparkoto.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
-    assert context['approve_title'] == 'Sparkonto aktualisieren'
-    preset = context['default_item']
+    context = add_sparkoto.handle_request(
+        request=PostRequest({'action': 'edit', 'edit_index': '0'}),
+        context=basic_test_context(kontos=kontos)
+    )
+    assert context.get('approve_title') == 'Sparkonto aktualisieren'
+    preset = context.get('default_item')
 
     assert preset['edit_index'] == '0'
     assert preset['kontotyp'] == '1typ'
     assert preset['kontoname'] == '1name'
 
+
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        add_sparkoto.index(GetRequest())
+
+    result = run_in_mocked_handler(index_handle=index)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/add_sparkonto.html']

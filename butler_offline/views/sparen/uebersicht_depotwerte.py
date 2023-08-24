@@ -4,6 +4,7 @@ from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german
 from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
 
+
 def _handle_request(request):
     depotwerte = persisted_state.database_instance().depotwerte
     order = persisted_state.database_instance().order
