@@ -1,9 +1,8 @@
-from butler_offline.test.RequestStubs import GetRequest, VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.views.gemeinsame_buchungen import uebersicht_gemeinsam
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
-
 
 
 def test_context_should_be_transactional():
@@ -34,7 +33,7 @@ def test_delete():
     gemeinsamebuchungen.add(datum('01.01.2013'), 'kat3', 'name3', 1, 'pers3')
 
     assert uebersicht_gemeinsam.handle_request(
-        request=VersionedPostRequest({
+        request=PostRequest({
             'action': 'delete',
             'delete_index': 1
         }),

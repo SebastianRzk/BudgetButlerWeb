@@ -28,7 +28,14 @@ class OrderDauerauftrag(DatabaseObject):
         self.content = pd.concat([self.content, raw_table], ignore_index=True)
         self.content = self.content.sort_values(by=['Startdatum'])
 
-    def edit(self, index, startdatum, endedatum, rhythmus, name, konto, depotwert, wert):
+    def edit(self, index: int,
+             startdatum: str,
+             endedatum: str,
+             rhythmus: str,
+             name: str,
+             konto: str,
+             depotwert: str,
+             wert: float):
         self.edit_element(index, {
             'Startdatum': startdatum,
             'Endedatum': endedatum,

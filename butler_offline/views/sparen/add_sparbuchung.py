@@ -1,11 +1,12 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.views.sparen.language import NO_VALID_SAVINGS_ACCOUNT_IN_DB
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.template import fa
+from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.core.database.sparen.kontos import Kontos
 
 EIGENSCHAFT = 'eigenschaft'
 EIGENSCHAFTEN = 'eigenschaften'
@@ -13,10 +14,22 @@ EIGENSCHAFT_EINZAHLUNG = 'Einzahlung'
 EIGENSCHAFT_AUSZAHLUNG = 'Auszahlung'
 
 
-def handle_request(request):
-    if not database_instance().sparkontos.get_sparfaehige_kontos():
-        return generate_error_context('add_sparbuchung', NO_VALID_SAVINGS_ACCOUNT_IN_DB)
+class AddSparbuchungContext:
+    def __init__(self, sparbuchungen: Sparbuchungen, kontos: Kontos):
+        self._sparbuchungen = sparbuchungen
+        self._kontos = kontos
 
+    def sparbuchungen(self) -> Sparbuchungen:
+        return self._sparbuchungen
+
+    def kontos(self) -> Kontos:
+        return self._kontos
+
+
+def handle_request(request, context: AddSparbuchungContext):
+    result_context = generate_transactional_page_context('add_sparbuchung')
+    if not context.kontos().get_sparfaehige_kontos():
+        return result_context.throw_error(NO_VALID_SAVINGS_ACCOUNT_IN_DB)
 
     if post_action_is(request, 'add'):
         date = datum(request.values['datum'])
@@ -27,10 +40,10 @@ def handle_request(request):
             value = value * -1
 
         if "edit_index" in request.values:
-            database_instance().sparbuchungen.edit(int(request.values['edit_index']),
+            context.sparbuchungen().edit(int(request.values['edit_index']),
                 datum=date,
                 name=request.values['name'],
-                wert="%.2f" % value,
+                wert=value,
                 typ=request.values['typ'],
                 konto=request.values['konto'])
             non_persisted_state.add_changed_sparbuchungen(
@@ -44,10 +57,10 @@ def handle_request(request):
                 })
 
         else:
-            database_instance().sparbuchungen.add(
+            context.sparbuchungen().add(
                 datum=date,
                 name=request.values['name'],
-                wert="%.2f" % value,
+                wert=value,
                 typ=request.values['typ'],
                 konto=request.values['konto'])
             non_persisted_state.add_changed_sparbuchungen(
@@ -60,12 +73,11 @@ def handle_request(request):
                     'konto': request.values['konto']
                     })
 
-    context = generate_transactional_context('add_sparbuchung')
-    context['approve_title'] = 'Sparbuchung hinzufügen'
+    result_context.add('approve_title', 'Sparbuchung hinzufügen')
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
-        db_row = database_instance().sparbuchungen.get(db_index)
+        db_row = context.sparbuchungen().get(db_index)
 
         if db_row['Wert'] > 0:
             eigenschaft = EIGENSCHAFT_EINZAHLUNG
@@ -82,27 +94,34 @@ def handle_request(request):
             'konto': db_row['Konto']
         }
 
-        context['default_item'] = default_item
-        context['bearbeitungsmodus'] = True
-        context['edit_index'] = db_index
-        context['approve_title'] = 'Sparbuchung aktualisieren'
+        result_context.add('default_item', default_item)
+        result_context.add('bearbeitungsmodus', True)
+        result_context.add('edit_index', db_index)
+        result_context.add('approve_title', 'Sparbuchung aktualisieren')
 
-    if 'default_item' not in context:
-        context['default_item'] = {
+    if not result_context.contains('default_item'):
+        result_context.add('default_item', {
             'name': '',
             'wert': '',
             'datum': '',
             'typ': '',
             'konto': ''
-        }
+        })
 
-    context['kontos'] = database_instance().sparkontos.get_sparfaehige_kontos()
-    context['typen'] = database_instance().sparbuchungen.AUFTRAGS_TYPEN
-    context[EIGENSCHAFTEN] = [EIGENSCHAFT_EINZAHLUNG, EIGENSCHAFT_AUSZAHLUNG]
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_sparbuchungen())
-    return context
+    result_context.add('kontos', context.kontos().get_sparfaehige_kontos())
+    result_context.add('typen', context.sparbuchungen().AUFTRAGS_TYPEN)
+    result_context.add(EIGENSCHAFTEN, [EIGENSCHAFT_EINZAHLUNG, EIGENSCHAFT_AUSZAHLUNG])
+    result_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_sparbuchungen()))
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_sparbuchung.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/add_sparbuchung.html',
+        context_creator=lambda db: AddSparbuchungContext(
+            kontos=db.sparkontos,
+            sparbuchungen=db.sparbuchungen
+        )
+    )

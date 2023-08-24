@@ -2,7 +2,7 @@ import numpy as np
 import datetime
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.core import file_system, configuration_provider
 from butler_offline.views.shared import import_data
 from butler_offline.views.core import configuration
@@ -68,7 +68,7 @@ def test_add_passende_kategorie_should_import_value():
     filesystem = FileSystemStub()
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'import': _IMPORT_DATA}),
+        request=PostRequest({'import': _IMPORT_DATA}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen, filesystem=filesystem)
     )
     assert context.as_dict()['element_titel'] == 'Export / Import'
@@ -81,7 +81,7 @@ def test_import_with_one_buchung_should_show_success_single_message():
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'import': _IMPORT_DATA}),
+        request=PostRequest({'import': _IMPORT_DATA}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen)
     )
     assert context.user_success_message()
@@ -93,7 +93,7 @@ def test_import_with_one_buchung_should_show_success_message():
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'import': _IMPORT_DATA_GEMEINSAM}),
+        request=PostRequest({'import': _IMPORT_DATA_GEMEINSAM}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen)
     )
 
@@ -131,7 +131,7 @@ def test_import_should_write_into_abrechnungen():
     filesystem = FileSystemStub()
 
     import_data.handle_request(
-        request=VersionedPostRequest({'import': _IMPORT_DATA}),
+        request=PostRequest({'import': _IMPORT_DATA}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen, filesystem=filesystem)
     )
 
@@ -148,7 +148,7 @@ def test_adde_unpassenden_kategorie_should_show_import_mapping_page():
     einzelbuchungen.add(datum('01.01.2017'), 'unbekannt', 'some name', -1.54)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'import': _IMPORT_DATA}),
+        request=PostRequest({'import': _IMPORT_DATA}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen)
     )
     assert context.is_page_to_render_overwritten()
@@ -161,7 +161,7 @@ def test_add_unpassenden_kategorie_mit_passendem_mapping_should_import_value():
     einzelbuchungen.add(datum('01.01.2017'), 'Unpassend', 'some name', -1.54)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'import': _IMPORT_DATA, 'Essen_mapping': 'als Unpassend importieren'}),
+        request=PostRequest({'import': _IMPORT_DATA, 'Essen_mapping': 'als Unpassend importieren'}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen)
     )
     assert context.as_dict()['element_titel'] == 'Export / Import'
@@ -201,10 +201,10 @@ def test_einzelbuchung_import_adde_passende_kategorie_should_import_value():
         mocked_decode=DECODED_LOGIN_DATA)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'load_online_transactions',
-                                      'email': '',
-                                      'server': 'test.test',
-                                      'password': ''}),
+        request=PostRequest({'action': 'load_online_transactions',
+                             'email': '',
+                             'server': 'test.test',
+                             'password': ''}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen)
     )
 
@@ -242,10 +242,10 @@ def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
                                        auth_cookies=LOGIN_COOKIES)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'load_online_gemeinsame_transactions',
-                                      'email': '',
-                                      'server': 'test.test',
-                                      'password': ''}),
+        request=PostRequest({'action': 'load_online_gemeinsame_transactions',
+                             'email': '',
+                             'server': 'test.test',
+                             'password': ''}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen,
                                     gemeinsamebuchungen=gemeinsamebuchungen,
                                     name='TestUser')
@@ -282,10 +282,10 @@ def test_gemeinsam_import_with_unpassenden_partnername_should_import_value_and_r
         auth_cookies=LOGIN_COOKIES)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'load_online_gemeinsame_transactions',
-                                      'email': '',
-                                      'server': 'test.test',
-                                      'password': ''}),
+        request=PostRequest({'action': 'load_online_gemeinsame_transactions',
+                             'email': '',
+                             'server': 'test.test',
+                             'password': ''}),
         context=get_initial_context(
             einzelbuchungen=einzelbuchungen,
             gemeinsamebuchungen=gemeinsamebuchungen,
@@ -328,10 +328,10 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
                                        auth_cookies=LOGIN_COOKIES)
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'load_online_gemeinsame_transactions',
-                                      'email': '',
-                                      'server': 'test.test',
-                                      'password': ''}),
+        request=PostRequest({'action': 'load_online_gemeinsame_transactions',
+                             'email': '',
+                             'server': 'test.test',
+                             'password': ''}),
         context=get_initial_context(
             einzelbuchungen=einzelbuchungen,
             gemeinsamebuchungen=gemeinsamebuchungen,
@@ -343,9 +343,9 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
     assert context.get('unpassende_kategorien') == ['Essen']
 
     context = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'map_and_push',
-                                      'Essen_mapping': 'neue Kategorie anlegen',
-                                      'import': _IMPORT_DATA_GEMEINSAM}),
+        request=PostRequest({'action': 'map_and_push',
+                             'Essen_mapping': 'neue Kategorie anlegen',
+                             'import': _IMPORT_DATA_GEMEINSAM}),
         context=get_initial_context(
             einzelbuchungen=einzelbuchungen,
             gemeinsamebuchungen=gemeinsamebuchungen,
@@ -388,10 +388,10 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
         auth_cookies=LOGIN_COOKIES)
 
     result = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'set_kategorien',
-                                      'email': '',
-                                      'server': 'test.test',
-                                      'password': ''}),
+        request=PostRequest({'action': 'set_kategorien',
+                             'email': '',
+                             'server': 'test.test',
+                             'password': ''}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen,
                                     gemeinsamebuchungen=gemeinsamebuchungen,
                                     name='TestUser'
@@ -418,10 +418,10 @@ def test_upload_data():
                                        )
 
     result = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'upload_gemeinsame_transactions',
-                                      'email': '',
-                                      'server': 'test.test/api',
-                                      'password': ''}),
+        request=PostRequest({'action': 'upload_gemeinsame_transactions',
+                             'email': '',
+                             'server': 'test.test/api',
+                             'password': ''}),
         context=get_initial_context(gemeinsamebuchungen=gemeinsamebuchungen, name='TestUser')
     )
 
@@ -462,10 +462,10 @@ def test_upload_data_fehler():
                                        auth_cookies=LOGIN_COOKIES)
 
     result = import_data.handle_request(
-        request=VersionedPostRequest({'action': 'upload_gemeinsame_transactions',
-                                      'email': '',
-                                      'server': 'test.test/api',
-                                      'password': ''}),
+        request=PostRequest({'action': 'upload_gemeinsame_transactions',
+                             'email': '',
+                             'server': 'test.test/api',
+                             'password': ''}),
         context=get_initial_context(gemeinsamebuchungen=gemeinsamebuchungen, name='TestUser')
     )
 

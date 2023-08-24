@@ -1,10 +1,9 @@
 from butler_offline.viewcore.converter import datum_from_german
 
 
-
 def order_dict(
         datum: str,
-        wert: str,
+        wert: float,
         name: str,
         depotwert: str,
         konto: str,

@@ -1,4 +1,4 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.views.gemeinsame_buchungen import addgemeinsam
@@ -52,7 +52,7 @@ def test_transaction_id_should_be_in_context():
 def test_add_should_add_gemeinsame_buchung():
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
-    addgemeinsam.handle_request(VersionedPostRequest(
+    addgemeinsam.handle_request(PostRequest(
         {'action': 'add',
          'date': rfc('1.1.2017'),
          'kategorie': 'Essen',
@@ -75,7 +75,7 @@ def test_add_should_add_gemeinsame_buchung():
 def test_add_gemeinsame_ausgabe_should_show_in_recently_added():
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
-    result = addgemeinsam.handle_request(VersionedPostRequest(
+    result = addgemeinsam.handle_request(PostRequest(
         {'action': 'add',
          'date': rfc('1.1.2017'),
          'kategorie': 'Essen',
@@ -106,7 +106,7 @@ def test_edit_ausgabe():
         wert=2.00,
     )
 
-    addgemeinsam.handle_request(VersionedPostRequest(
+    addgemeinsam.handle_request(PostRequest(
         {'action': 'add',
          'edit_index': '0',
          'date': rfc('5.1.2017'),

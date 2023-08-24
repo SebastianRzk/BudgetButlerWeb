@@ -1,15 +1,17 @@
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
-from butler_offline.test.database_util import untaint_database
-from butler_offline.views.sparen import add_orderdauerauftrag
 from butler_offline.core import file_system
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
-from butler_offline.viewcore.state import persisted_state
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.test.database_util import untaint_database
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
-from butler_offline.viewcore.context import get_error_message
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.views.sparen import add_orderdauerauftrag
 
 
 def set_up():
@@ -22,83 +24,125 @@ def set_up():
     request_handler.stub_me()
 
 
+def basic_context_with_demo_data(
+        order_dauerauftrag: OrderDauerauftrag = OrderDauerauftrag()
+):
+    kontos = Kontos()
+    depotwerte = Depotwerte()
+    kontos.add('demokonto', Kontos.TYP_DEPOT)
+    depotwerte.add(name='demowert', isin='demoisin', typ=depotwerte.TYP_ETF)
+    return basic_context(
+        depotwerte=depotwerte,
+        kontos=kontos,
+        order_dauerauftrag=order_dauerauftrag
+    )
+
+
+def basic_context(
+        depotwerte: Depotwerte = Depotwerte(),
+        kontos: Kontos = Kontos(),
+        order_dauerauftrag: OrderDauerauftrag = OrderDauerauftrag()
+):
+    return add_orderdauerauftrag.AddOrderDauerauftragContext(
+        depotwerte=depotwerte,
+        kontos=kontos,
+        order_dauerauftrag=order_dauerauftrag
+    )
+
+
 def test_init():
-    set_up()
-    context = add_orderdauerauftrag.index(GetRequest())
-    assert context['approve_title'] == 'Order-Dauerauftrag hinzufügen'
-    assert context['kontos'] == ['demokonto']
-    assert context['depotwerte'] == [{'description': 'demowert (demoisin)', 'isin': 'demoisin'}]
-    assert context['typen'] == [add_orderdauerauftrag.TYP_KAUF, add_orderdauerauftrag.TYP_VERKAUF]
-    assert context['rhythmen'] == ALL_FREQUENCY_NAMES
+    context = add_orderdauerauftrag.handle_request(
+        request=GetRequest(),
+        context=basic_context_with_demo_data()
+    )
+    assert context.get('approve_title') == 'Order-Dauerauftrag hinzufügen'
+    assert context.get('kontos') == ['demokonto']
+    assert context.get('depotwerte') == [{'description': 'demowert (demoisin)', 'isin': 'demoisin'}]
+    assert context.get('typen') == [add_orderdauerauftrag.TYP_KAUF, add_orderdauerauftrag.TYP_VERKAUF]
+    assert context.get('rhythmen') == ALL_FREQUENCY_NAMES
 
 
 def test_init_empty_should_return_error():
-    set_up()
-    persisted_state.DATABASE_INSTANCE = None
+    context = add_orderdauerauftrag.handle_request(
+        request=GetRequest(),
+        context=basic_context()
+    )
 
-    context = add_orderdauerauftrag.index(GetRequest())
-
-    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert context.is_error()
+    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
 
 
 def test_init_without_depotwert_should_return_error():
-    set_up()
-    persisted_state.DATABASE_INSTANCE = None
-    sparkontos = persisted_state.database_instance().sparkontos
-    sparkontos.add('1name', sparkontos.TYP_DEPOT)
-
-    context = add_orderdauerauftrag.index(GetRequest())
-
-    assert get_error_message(context) == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    kontos = Kontos()
+    kontos.add('demokonto', Kontos.TYP_DEPOT)
+    context = add_orderdauerauftrag.handle_request(
+        request=GetRequest(),
+        context=basic_context(
+            kontos=kontos
+        )
+    )
+    assert context.is_error()
+    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Depotwert.'
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = add_orderdauerauftrag.index(GetRequest())
-    assert 'ID' in context
+    context = add_orderdauerauftrag.handle_request(
+        request=GetRequest(),
+        context=basic_context_with_demo_data()
+    )
+    assert context.is_transactional()
 
 
 def test_add():
-    set_up()
-    add_orderdauerauftrag.index(VersionedPostRequest(
-        {'action': 'add',
-         'startdatum': rfc('1.1.2017'),
-         'endedatum': rfc('1.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-     ))
+    order_dauerauftrag = OrderDauerauftrag()
+    context = add_orderdauerauftrag.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('1.1.2018'),
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00',
+             'typ': add_orderdauerauftrag.TYP_KAUF,
+             'depotwert': 'demoisin',
+             'konto': 'demokonto'
+             }
+        ),
+        context=basic_context_with_demo_data(
+            order_dauerauftrag=order_dauerauftrag
+        )
+    )
 
-    db = persisted_state.database_instance()
-    assert len(db.orderdauerauftrag.content) == 1
-    assert db.orderdauerauftrag.content.Startdatum[0] == datum('1.1.2017')
-    assert db.orderdauerauftrag.content.Endedatum[0] == datum('1.1.2018')
-    assert db.orderdauerauftrag.content.Rhythmus[0] == 'monatlich'
-    assert db.orderdauerauftrag.content.Wert[0] == float('2.00')
-    assert db.orderdauerauftrag.content.Name[0] == 'testname'
-    assert db.orderdauerauftrag.content.Depotwert[0] == 'demoisin'
-    assert db.orderdauerauftrag.content.Konto[0] == 'demokonto'
+    assert context.is_ok()
+    assert order_dauerauftrag.select().count() == 1
+    assert order_dauerauftrag.get(0) == {
+        'Startdatum': datum('1.1.2017'),
+        'Endedatum': datum('1.1.2018'),
+        'Rhythmus': 'monatlich',
+        'Wert': 2.00,
+        'Name': 'testname',
+        'Depotwert': 'demoisin',
+        'Konto': 'demokonto',
+        'index': 0
+    }
 
 
 def test_add_order_should_show_in_recently_added():
-    set_up()
-    result = add_orderdauerauftrag.index(VersionedPostRequest(
-        {'action': 'add',
-         'startdatum': rfc('1.1.2017'),
-         'endedatum': rfc('1.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-     ))
-    result_element = list(result['letzte_erfassung'])[0]
+    result = add_orderdauerauftrag.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('1.1.2018'),
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00',
+             'typ': add_orderdauerauftrag.TYP_KAUF,
+             'depotwert': 'demoisin',
+             'konto': 'demokonto'
+             }
+        ),
+        context=basic_context_with_demo_data())
+    result_element = list(result.get('letzte_erfassung'))[0]
 
     assert result_element['fa'] == 'plus'
     assert result_element['startdatum'] == '01.01.2017'
@@ -111,87 +155,51 @@ def test_add_order_should_show_in_recently_added():
     assert result_element['depotwert'] == 'demoisin'
 
 
-def test_add_should_only_fire_once():
-    set_up()
-    next_id = persisted_state.current_database_version()
-    add_orderdauerauftrag.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'startdatum': rfc('1.1.2017'),
-         'endedatum': rfc('1.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-     ))
-    add_orderdauerauftrag.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'startdatum': rfc('2.2.2012'),
-         'endedatum': rfc('2.2.2012'),
-         'rhythmus': 'monatlich',
-         'name': 'overwritten',
-         'wert': '0,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'overwritten',
-         'konto': 'overwritten'
-         }
-     ))
-    db = persisted_state.database_instance()
-    assert len(db.orderdauerauftrag.content) == 1
-    assert db.orderdauerauftrag.content.Startdatum[0] == datum('1.1.2017')
-    assert db.orderdauerauftrag.content.Endedatum[0] == datum('1.1.2018')
-    assert db.orderdauerauftrag.content.Rhythmus[0] == 'monatlich'
-    assert db.orderdauerauftrag.content.Wert[0] == float('2.00')
-    assert db.orderdauerauftrag.content.Name[0] == 'testname'
-    assert db.orderdauerauftrag.content.Depotwert[0] == 'demoisin'
-    assert db.orderdauerauftrag.content.Konto[0] == 'demokonto'
-
-
 def test_edit():
-    set_up()
-    add_orderdauerauftrag.index(VersionedPostRequest(
-        {'action': 'add',
-         'startdatum': rfc('1.1.2017'),
-         'endedatum': rfc('1.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-     ))
+    order_dauerauftrag = OrderDauerauftrag()
+    add_orderdauerauftrag.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('1.1.2018'),
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00',
+             'typ': add_orderdauerauftrag.TYP_KAUF,
+             'depotwert': 'demoisin',
+             'konto': 'demokonto'
+             }
+        ),
+        context=basic_context_with_demo_data(order_dauerauftrag=order_dauerauftrag))
 
-    result = add_orderdauerauftrag.index(VersionedPostRequest(
-        {'action': 'add',
-         'edit_index': 0,
-         'startdatum': rfc('2.1.2017'),
-         'endedatum': rfc('2.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': '2testname',
-         'wert': '3,00',
-         'typ': add_orderdauerauftrag.TYP_VERKAUF,
-         'depotwert': '2demoisin',
-         'konto': '2demokonto'
-         }
-     ))
+    result = add_orderdauerauftrag.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'edit_index': 0,
+             'startdatum': rfc('2.1.2017'),
+             'endedatum': rfc('2.1.2018'),
+             'rhythmus': 'monatlich',
+             'name': '2testname',
+             'wert': '3,00',
+             'typ': add_orderdauerauftrag.TYP_VERKAUF,
+             'depotwert': '2demoisin',
+             'konto': '2demokonto'
+             }
+        ),
+        context=basic_context_with_demo_data(order_dauerauftrag=order_dauerauftrag))
 
-    db = persisted_state.database_instance()
-    assert len(db.orderdauerauftrag.content) == 1
-    assert db.orderdauerauftrag.content.Startdatum[0] == datum('2.1.2017')
-    assert db.orderdauerauftrag.content.Endedatum[0] == datum('2.1.2018')
-    assert db.orderdauerauftrag.content.Rhythmus[0] == 'monatlich'
-    assert db.orderdauerauftrag.content.Wert[0] == float('-3.00')
-    assert db.orderdauerauftrag.content.Name[0] == '2testname'
-    assert db.orderdauerauftrag.content.Depotwert[0] == '2demoisin'
-    assert db.orderdauerauftrag.content.Konto[0] == '2demokonto'
-
-    result_element = list(result['letzte_erfassung'])[0]
-
+    assert order_dauerauftrag.select().count() == 1
+    assert order_dauerauftrag.get(0) == {
+        'Startdatum': datum('2.1.2017'),
+        'Endedatum': datum('2.1.2018'),
+        'Rhythmus': 'monatlich',
+        'Wert': -3.0,
+        'Name': '2testname',
+        'Depotwert': '2demoisin',
+        'Konto': '2demokonto',
+        'index': 0
+    }
+    result_element = list(result.get('letzte_erfassung'))[0]
     assert result_element['fa'] == 'pencil'
     assert result_element['startdatum'] == '02.01.2017'
     assert result_element['endedatum'] == '02.01.2018'
@@ -203,111 +211,75 @@ def test_edit():
     assert result_element['typ'] == add_orderdauerauftrag.TYP_VERKAUF
 
 
-def test_edit_should_only_fire_once():
-    set_up()
-    add_orderdauerauftrag.index(VersionedPostRequest(
-        {'action': 'add',
-         'startdatum': rfc('1.1.2017'),
-         'endedatum': rfc('1.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-    ))
-
-    next_id = persisted_state.current_database_version()
-    add_orderdauerauftrag.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'startdatum': rfc('2.1.2017'),
-         'endedatum': rfc('2.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': '2testname',
-         'wert': '3,00',
-         'typ': add_orderdauerauftrag.TYP_VERKAUF,
-         'depotwert': '2demoisin',
-         'konto': '2demokonto'
-         }
-    ))
-
-    add_orderdauerauftrag.index(PostRequest(
-        {'action': 'add',
-         'ID': next_id,
-         'edit_index': 0,
-         'endedatum': rfc('1.1.2010'),
-         'startdatum': rfc('1.1.2010'),
-         'rhythmus': 'monatlich',
-         'name': 'overwritten',
-         'wert': '0,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'overwritten',
-         'konto': 'overwritten'
-         }
-    ))
-
-    db = persisted_state.database_instance()
-    assert len(db.orderdauerauftrag.content) == 1
-    assert db.orderdauerauftrag.content.Startdatum[0] == datum('2.1.2017')
-    assert db.orderdauerauftrag.content.Endedatum[0] == datum('2.1.2018')
-    assert db.orderdauerauftrag.content.Rhythmus[0] == 'monatlich'
-    assert db.orderdauerauftrag.content.Wert[0] == float('-3.00')
-    assert db.orderdauerauftrag.content.Name[0] == '2testname'
-    assert db.orderdauerauftrag.content.Depotwert[0] == '2demoisin'
-    assert db.orderdauerauftrag.content.Konto[0] == '2demokonto'
-
-
 def test_edit_call_from_ueberischt_should_preset_values_and_rename_button():
-    set_up()
-    add_orderdauerauftrag.index(VersionedPostRequest(
-        {'action': 'add',
-         'startdatum': rfc('1.1.2017'),
-         'endedatum': rfc('1.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_orderdauerauftrag.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-    ))
+    order_dauerauftrag = OrderDauerauftrag()
+    add_orderdauerauftrag.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'startdatum': rfc('1.1.2017'),
+             'endedatum': rfc('1.1.2018'),
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2.00',
+             'typ': add_orderdauerauftrag.TYP_KAUF,
+             'depotwert': 'demoisin',
+             'konto': 'demokonto'
+             }
+        ),
+        context=basic_context_with_demo_data(order_dauerauftrag=order_dauerauftrag))
 
-    context = add_orderdauerauftrag.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
-    assert context['approve_title'] == 'Order-Dauerauftrag aktualisieren'
-    preset = context['default_item']
-
-    assert preset['edit_index'] == '0'
-    assert preset['startdatum'] == '2017-01-01'
-    assert preset['endedatum'] == '2018-01-01'
-    assert preset['rhythmus'] == 'monatlich'
-    assert preset['konto'] == 'demokonto'
-    assert preset['name'] == 'testname'
-    assert preset['wert'] == '2,00'
-    assert preset['typ'] == add_orderdauerauftrag.TYP_KAUF
-    assert preset['depotwert'] == 'demoisin'
+    context = add_orderdauerauftrag.handle_request(
+        request=PostRequest({'action': 'edit', 'edit_index': '0'}),
+        context=basic_context_with_demo_data(order_dauerauftrag=order_dauerauftrag)
+    )
+    assert context.get('approve_title') == 'Order-Dauerauftrag aktualisieren'
+    assert context.get('default_item') == {
+        'edit_index': '0',
+        'startdatum': '2017-01-01',
+        'endedatum': '2018-01-01',
+        'rhythmus': 'monatlich',
+        'name': 'testname',
+        'konto': 'demokonto',
+        'wert': '2,00',
+        'typ': add_orderdauerauftrag.TYP_KAUF,
+        'depotwert': 'demoisin'
+    }
 
 
 def test_edit_call_from_ueberischt_should_preset_values_verkauf():
-    set_up()
-    add_orderdauerauftrag.index(VersionedPostRequest(
-        {'action': 'add',
-         'endedatum': rfc('1.1.2017'),
-         'startdatum': rfc('1.1.2018'),
-         'rhythmus': 'monatlich',
-         'name': 'testname',
-         'wert': '2,00',
-         'typ': add_orderdauerauftrag.TYP_VERKAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }
-    ))
+    order_dauerauftrag = OrderDauerauftrag()
+    add_orderdauerauftrag.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'endedatum': rfc('1.1.2017'),
+             'startdatum': rfc('1.1.2018'),
+             'rhythmus': 'monatlich',
+             'name': 'testname',
+             'wert': '2,00',
+             'typ': add_orderdauerauftrag.TYP_VERKAUF,
+             'depotwert': 'demoisin',
+             'konto': 'demokonto'
+             }
+        ),
+        context=basic_context_with_demo_data(order_dauerauftrag=order_dauerauftrag)
+    )
 
-    context = add_orderdauerauftrag.index(PostRequest({'action': 'edit', 'edit_index': '0'}))
-    assert context['approve_title'] == 'Order-Dauerauftrag aktualisieren'
-    preset = context['default_item']
+    context = add_orderdauerauftrag.handle_request(
+        request=PostRequest({'action': 'edit', 'edit_index': '0'}),
+        context=basic_context_with_demo_data(order_dauerauftrag)
+    )
+    assert context.get('approve_title') == 'Order-Dauerauftrag aktualisieren'
+    preset = context.get('default_item')
 
     assert preset['wert'] == '2,00'
     assert preset['typ'] == add_orderdauerauftrag.TYP_VERKAUF
+
+
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        add_orderdauerauftrag.index(GetRequest())
+
+    result = run_in_mocked_handler(index_handle=index)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/add_orderdauerauftrag.html']

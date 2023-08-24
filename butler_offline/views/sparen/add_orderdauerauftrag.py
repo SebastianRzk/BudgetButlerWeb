@@ -1,12 +1,14 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
-from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
+from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
+from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
+from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -14,14 +16,29 @@ TYP_KAUF = 'Kauf'
 TYP_VERKAUF = 'Verkauf'
 
 
-def handle_request(request):
-    if not database_instance().sparkontos.get_depots():
-        return generate_error_context(
-            'add_orderdauerauftrag',
-            NO_VALID_DEPOT_IN_DB)
+class AddOrderDauerauftragContext:
+    def __init__(self, depotwerte: Depotwerte, order_dauerauftrag: OrderDauerauftrag, kontos: Kontos):
+        self._depotwerte = depotwerte
+        self._order_dauerauftrag = order_dauerauftrag
+        self._kontos = kontos
 
-    if not database_instance().depotwerte.get_depotwerte():
-        return generate_error_context('add_orderdauerauftrag', NO_VALID_SHARE_IN_DB)
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+    def order_dauerauftrag(self) -> OrderDauerauftrag:
+        return self._order_dauerauftrag
+
+    def kontos(self) -> Kontos:
+        return self._kontos
+
+
+def handle_request(request, context: AddOrderDauerauftragContext):
+    result_context = generate_transactional_page_context('add_orderdauerauftrag')
+    if not context.kontos().get_depots():
+        return result_context.throw_error(NO_VALID_DEPOT_IN_DB)
+
+    if not context.depotwerte().get_depotwerte():
+        return result_context.throw_error(NO_VALID_SHARE_IN_DB)
 
     if post_action_is(request, 'add'):
         startdatum = datum(request.values['startdatum'])
@@ -33,13 +50,13 @@ def handle_request(request):
             value = value * -1
 
         if "edit_index" in request.values:
-            database_instance().orderdauerauftrag.edit(
+            context.order_dauerauftrag().edit(
                 int(request.values['edit_index']),
                 startdatum=startdatum,
                 endedatum=endedatum,
                 rhythmus=request.values['rhythmus'],
                 name=request.values['name'],
-                wert="%.2f" % value,
+                wert=value,
                 depotwert=request.values['depotwert'],
                 konto=request.values['konto'])
             non_persisted_state.add_changed_orderdauerauftrag(
@@ -56,12 +73,12 @@ def handle_request(request):
                 })
 
         else:
-            database_instance().orderdauerauftrag.add(
+            context.order_dauerauftrag().add(
                 startdatum=startdatum,
                 endedatum=endedatum,
                 rhythmus=request.values['rhythmus'],
                 name=request.values['name'],
-                wert="%.2f" % value,
+                wert=value,
                 depotwert=request.values['depotwert'],
                 konto=request.values['konto'])
             non_persisted_state.add_changed_orderdauerauftrag(
@@ -76,14 +93,13 @@ def handle_request(request):
                     'value': '%.2f' % abs(value),
                     'depotwert': request.values['depotwert'],
                     'konto': request.values['konto']
-                    })
+                })
 
-    context = generate_transactional_context('add_orderdauerauftrag')
-    context['approve_title'] = 'Order-Dauerauftrag hinzufügen'
+    result_context.add('approve_title', 'Order-Dauerauftrag hinzufügen')
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
-        db_row = database_instance().orderdauerauftrag.get(db_index)
+        db_row = context.order_dauerauftrag().get(db_index)
 
         if db_row['Wert'] > 0:
             typ = TYP_KAUF
@@ -102,13 +118,13 @@ def handle_request(request):
             'konto': db_row['Konto']
         }
 
-        context['default_item'] = default_item
-        context['bearbeitungsmodus'] = True
-        context['edit_index'] = db_index
-        context['approve_title'] = 'Order-Dauerauftrag aktualisieren'
+        result_context.add('default_item', default_item)
+        result_context.add('bearbeitungsmodus', True)
+        result_context.add('edit_index', db_index)
+        result_context.add('approve_title', 'Order-Dauerauftrag aktualisieren')
 
-    if 'default_item' not in context:
-        context['default_item'] = {
+    if not result_context.contains('default_item'):
+        result_context.add('default_item', {
             'name': '',
             'wert': '',
             'startdatum': '',
@@ -116,15 +132,24 @@ def handle_request(request):
             'rhythmus': 'monatlich',
             'depotwert': '',
             'konto': ''
-        }
+        })
 
-    context['kontos'] = database_instance().sparkontos.get_depots()
-    context[TYPEN] = [TYP_KAUF, TYP_VERKAUF]
-    context['rhythmen'] = ALL_FREQUENCY_NAMES
-    context['depotwerte'] = database_instance().depotwerte.get_depotwerte_descriptions()
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_orderdauerauftrag())
-    return context
+    result_context.add('kontos', context.kontos().get_depots())
+    result_context.add(TYPEN, [TYP_KAUF, TYP_VERKAUF])
+    result_context.add('rhythmen', ALL_FREQUENCY_NAMES)
+    result_context.add('depotwerte', context.depotwerte().get_depotwerte_descriptions())
+    result_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_orderdauerauftrag()))
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_orderdauerauftrag.html')
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/add_orderdauerauftrag.html',
+        context_creator=lambda db: AddOrderDauerauftragContext(
+            depotwerte=db.depotwerte,
+            order_dauerauftrag=db.orderdauerauftrag,
+            kontos=db.sparkontos,
+        )
+    )

@@ -52,7 +52,7 @@ def handle_request(request, context: AddOrderContext):
                 index=int(request.values['edit_index']),
                 datum=date,
                 name=request.values['name'],
-                wert="%.2f" % value,
+                wert=value,
                 depotwert=request.values['depotwert'],
                 konto=request.values['konto'])
             non_persisted_state.add_changed_order(
@@ -70,7 +70,7 @@ def handle_request(request, context: AddOrderContext):
             context.order().add(
                 datum=date,
                 name=request.values['name'],
-                wert="%.2f" % value,
+                wert=value,
                 depotwert=request.values['depotwert'],
                 konto=request.values['konto'])
             non_persisted_state.add_changed_order(

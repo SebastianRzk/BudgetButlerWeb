@@ -48,4 +48,5 @@ def run_in_mocked_handler(index_handle: Callable) -> TestRequestHandlerResult:
 
     request_handler.REQUEST_HANDLER = request_handler_function_original
     persisted_state.DATABASE_INSTANCE = database_backup
+
     return request_handler_stub.result()

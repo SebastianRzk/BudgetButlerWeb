@@ -1,12 +1,13 @@
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 from datetime import date
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
-from butler_offline.viewcore.template import fa
+
 from butler_offline.core.database import Depotauszuege, Kontos, Depotwerte
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
+from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
+from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.template import fa
+from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 
 KEY_WERT = 'wert_'
 
@@ -46,7 +47,7 @@ def to_item(isin, description, wert):
     }
 
 
-def resolve_description(isin: str, all_elements) -> str:
+def resolve_description(isin: str, all_elements) -> str | None:
     for element in all_elements:
         if element['isin'] == isin:
             return element['description']
@@ -69,12 +70,13 @@ class AddDepotauszugContext:
         return self._depotwerte
 
 
-def handle_request(request, context: AddDepotauszugContext) -> dict:
+def handle_request(request, context: AddDepotauszugContext):
+    render_context = generate_transactional_page_context('add_depotauszug')
     if not context.kontos().get_depots():
-        return generate_error_context('add_depotauszug', NO_VALID_DEPOT_IN_DB)
+        return render_context.throw_error(NO_VALID_DEPOT_IN_DB)
 
     if not context.depotwerte().get_depotwerte():
-        return generate_error_context('add_depotauszug', NO_VALID_SHARE_IN_DB)
+        return render_context.throw_error(NO_VALID_SHARE_IN_DB)
 
     if post_action_is(request, 'add'):
         current_date = None
@@ -82,7 +84,7 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
             if element.startswith('datum_'):
                 current_date = datum(request.values[element])
         if not current_date:
-            return generate_error_context('add_depotauszug', 'Interner Fehler <Kein Datum gefunden>.')
+            return render_context.throw_error('Interner Fehler <Kein Datum gefunden>.')
         konto = request.values['konto']
 
         if "edit_index" in request.values:
@@ -97,7 +99,7 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
                         context.depotauszuege().edit(db_index,
                                                      datum=current_date,
                                                      depotwert=depotwert,
-                                                     wert="%.2f" % value,
+                                                     wert=value,
                                                      konto=konto)
                         non_persisted_state.add_changed_depotauszuege(
                             {
@@ -110,7 +112,7 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
                     else:
                         context.depotauszuege().add(datum=current_date,
                                                     depotwert=depotwert,
-                                                    wert="%.2f" % value,
+                                                    wert=value,
                                                     konto=konto)
                         non_persisted_state.add_changed_depotauszuege(
                             {
@@ -125,10 +127,10 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
 
             result = context.depotauszuege().get_by(current_date, konto)
             if len(result) > 0:
-                return generate_error_context('add_depotauszug',
-                                              'Für es besteht bereits ein Kontoauszug für {} am {}'.format(
-                                                  konto,
-                                                  datum_to_german(current_date)))
+                return render_context.throw_error(
+                    'Für es besteht bereits ein Kontoauszug für {} am {}'.format(
+                        konto,
+                        datum_to_german(current_date)))
 
             for element in request.values:
                 if element.startswith(KEY_WERT):
@@ -141,7 +143,7 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
 
                     context.depotauszuege().add(datum=current_date,
                                                 depotwert=depotwert,
-                                                wert="%.2f" % value,
+                                                wert=value,
                                                 konto=konto)
                     non_persisted_state.add_changed_depotauszuege(
                         {
@@ -152,8 +154,7 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
                             'konto': konto
                         })
 
-    render_context = generate_transactional_context('add_depotauszug')
-    render_context['approve_title'] = 'Depotauszug hinzufügen'
+    render_context.add('approve_title', 'Depotauszug hinzufügen')
 
     depotwerte = context.depotwerte().get_depotwerte_descriptions()
     if post_action_is(request, 'edit'):
@@ -175,13 +176,13 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
             'empty_items': empty_items
         }]
 
-        render_context['default_items'] = default_item
-        render_context['bearbeitungsmodus'] = True
-        render_context['edit_index'] = db_index
-        render_context['approve_title'] = 'Depotauszug aktualisieren'
+        render_context.add('default_items', default_item)
+        render_context.add('bearbeitungsmodus', True)
+        render_context.add('edit_index', db_index)
+        render_context.add('approve_title', 'Depotauszug aktualisieren')
 
-    if 'default_items' not in render_context:
-        render_context['default_items'] = []
+    if not render_context.contains('default_items'):
+        render_context.add('default_items',  [])
         for konto in context.kontos().get_depots():
             default_datum = context.depotauszuege().get_latest_datum_by(konto)
             if not default_datum:
@@ -202,21 +203,20 @@ def handle_request(request, context: AddDepotauszugContext) -> dict:
                 'filled_items': filled_items,
                 'empty_items': empty_items
             }
-            render_context['default_items'].append(default_item)
+            render_context.get('default_items').append(default_item)
 
-    render_context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_depotauszuege())
+    render_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_depotauszuege()))
     return render_context
 
 
-from butler_offline.viewcore.state.persisted_state import database_instance
-
-
 def index(request):
-    context = AddDepotauszugContext(depotauszuege=database_instance().depotauszuege,
-                                    kontos=database_instance().sparkontos,
-                                    depotwerte=database_instance().depotwerte)
-
-    def migration_function(r):
-        return handle_request(request=r, context=context)
-
-    return request_handler.handle_request(request, migration_function, 'sparen/add_depotauszug.html')
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/add_depotauszug.html',
+        context_creator=lambda db: AddDepotauszugContext(
+            depotwerte=db.depotwerte,
+            kontos=db.sparkontos,
+            depotauszuege=db.depotauszuege
+        )
+    )
