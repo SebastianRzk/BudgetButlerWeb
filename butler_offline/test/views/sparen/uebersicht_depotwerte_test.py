@@ -1,45 +1,59 @@
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, VersionedPostRequest, PostRequest
-from butler_offline.test.database_util import untaint_database
-from butler_offline.core import file_system
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.views.sparen import uebersicht_depotwerte
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
+def generate_basic_test_context(
+        order: Order = Order(),
+        depotwerte: Depotwerte = Depotwerte(),
+        depotauszuege: Depotauszuege = Depotauszuege()
+):
+    return uebersicht_depotwerte.UebersichtDepotwerteContext(
+        order=order,
+        depotwerte=depotwerte,
+        depotauszuege=depotauszuege,
+    )
+
+
+def generate_test_context_with_data():
+    depotwerte = Depotwerte()
+    depotwerte.add(name='depotwert1', isin='isin1', typ=depotwerte.TYP_ETF)
+    depotwerte.add(name='depotwert2', isin='isin2', typ=depotwerte.TYP_ETF)
+    order = Order()
+    order.add(datum('12.12.2019'), 'demoname', 'demokonto', 'isin1', 100)
+
+    depotauszuege = Depotauszuege()
+    depotauszuege.add(datum('01.01.2020'), 'isin1', 'demokonto', 90)
+
+    return generate_basic_test_context(
+        order=order,
+        depotauszuege=depotauszuege,
+        depotwerte=depotwerte
+    )
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = uebersicht_depotwerte.index(GetRequest())
-    assert 'ID' in context
-
-
-def add_test_data():
-    depotwerte = persisted_state.database_instance().depotwerte
-    depotwerte.add(name='depotwert1', isin='isin1', typ=depotwerte.TYP_ETF)
-    depotwerte.add(name='depotwert2', isin='isin2', typ=depotwerte.TYP_ETF)
-    order = persisted_state.database_instance().order
-    order.add(datum('12.12.2019'), 'demoname', 'demokonto', 'isin1', 100)
-
-    depotauszuege = persisted_state.database_instance().depotauszuege
-    depotauszuege.add(datum('01.01.2020'), 'isin1', 'demokonto', 90)
-
-    untaint_database(database=persisted_state.database_instance())
+    context = uebersicht_depotwerte.handle_request(
+        request=GetRequest(),
+        context=generate_basic_test_context()
+    )
+    assert context.is_ok()
+    assert context.is_transactional()
 
 
 def test_should_list_depotwerte():
-    set_up()
-    add_test_data()
 
-    result = uebersicht_depotwerte.index(GetRequest())
+    result = uebersicht_depotwerte.handle_request(
+        request=GetRequest(),
+        context=generate_test_context_with_data()
+    )
 
-    assert result['depotwerte'] == [
+    assert result.is_ok()
+    assert result.get('depotwerte') == [
         {
             'index': 0,
             'name': 'depotwert1',
@@ -60,7 +74,7 @@ def test_should_list_depotwerte():
             'wert': '0,00'}
     ]
 
-    assert result['gesamt'] == {
+    assert result.get('gesamt') == {
         'buchung': '100,00',
         'difference': '-10,00',
         'difference_is_negativ': True,
@@ -68,36 +82,25 @@ def test_should_list_depotwerte():
     }
 
 
-def test_init_with_empty_database():
-    set_up()
-    uebersicht_depotwerte.index(GetRequest())
-
-
-def test_init_filled_database():
-    set_up()
-    add_test_data()
-    uebersicht_depotwerte.index(GetRequest())
-
-
 def test_delete():
-    set_up()
-    add_test_data()
-    uebersicht_depotwerte.index(VersionedPostRequest({'action': 'delete', 'delete_index': '1'}))
-    depotwerte = persisted_state.database_instance().depotwerte
-    assert len(depotwerte.content) == 1
+    context = generate_test_context_with_data()
+    uebersicht_depotwerte.handle_request(
+        request=PostRequest({'action': 'delete', 'delete_index': '1'}),
+        context=context
+    )
+    depotwerte = context.depotwerte()
+    assert depotwerte.select().count() == 1
     assert depotwerte.get(0) == {'Name': 'depotwert1',
                                  'ISIN': 'isin1',
                                  'Typ': depotwerte.TYP_ETF,
                                  'index': 0}
 
 
-def test_delete_should_only_fire_once():
-    set_up()
-    add_test_data()
-    next_id = persisted_state.current_database_version()
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        uebersicht_depotwerte.index(GetRequest())
 
-    assert len(persisted_state.database_instance().depotwerte.content) == 2
-    uebersicht_depotwerte.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
-    assert len(persisted_state.database_instance().depotwerte.content) == 1
-    uebersicht_depotwerte.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
-    assert len(persisted_state.database_instance().depotwerte.content) == 1
+    result = run_in_mocked_handler(index_handle=index)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/uebersicht_depotwerte.html']
