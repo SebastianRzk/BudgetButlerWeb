@@ -1,15 +1,23 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
+from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
 from butler_offline.viewcore.converter import datum_to_german, from_double_to_german
+from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 
 
-def _handle_request(request):
-    sparbuchungen = persisted_state.database_instance().sparbuchungen
+class UebersichtSparbuchungenContext:
+    def __init__(self, sparbuchungen: Sparbuchungen):
+        self._sparbuchungen = sparbuchungen
+
+    def sparbuchungen(self) -> Sparbuchungen:
+        return self._sparbuchungen
+
+
+def handle_request(request, context: UebersichtSparbuchungenContext):
+    sparbuchungen = context.sparbuchungen()
     if post_action_is(request, 'delete'):
         sparbuchungen.delete(int(request.values['delete_index']))
-        return generate_redirect_context('/uebersicht_sparbuchungen/')
+        return generate_redirect_page_context('/uebersicht_sparbuchungen/')
 
     db = sparbuchungen.get_all()
     sparbuchungen_monatlich = {}
@@ -35,11 +43,17 @@ def _handle_request(request):
     if datum_alt:
         sparbuchungen_monatlich["" + str(datum_alt.year) + "." + str(datum_alt.month)] = sparbuchungen_liste
 
-    context = generate_transactional_context('uebersicht_sparbuchungen')
-    context['alles'] = sparbuchungen_monatlich
-    return context
+    result_context = generate_transactional_page_context('uebersicht_sparbuchungen')
+    result_context.add('alles', sparbuchungen_monatlich)
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_sparbuchungen.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/uebersicht_sparbuchungen.html',
+        context_creator=lambda db: UebersichtSparbuchungenContext(
+            sparbuchungen=db.sparbuchungen
+        )
+    )

@@ -117,4 +117,3 @@ def test_index_should_be_secured_by_request_handler():
 
     assert result.number_of_calls() == 1
     assert result.html_pages_requested_to_render() == ['sparen/uebersicht_sparkontos.html']
-    
