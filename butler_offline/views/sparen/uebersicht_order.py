@@ -1,17 +1,31 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum_to_german
 from butler_offline.views.sparen.add_order import TYP_KAUF, TYP_VERKAUF
-from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 
-def _handle_request(request):
-    order = persisted_state.database_instance().order
-    depotwerte = persisted_state.database_instance().depotwerte
+
+class UebersichtOrderContext:
+    def __init__(self, depotwerte: Depotwerte, order: Order):
+        self._depotwerte = depotwerte
+        self._order = order
+
+    def order(self) -> Order:
+        return self._order
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+
+def handle_request(request, context: UebersichtOrderContext):
+    order = context.order()
+    depotwerte = context.depotwerte()
 
     if post_action_is(request, 'delete'):
         order.delete(int(request.values['delete_index']))
-        return generate_redirect_context('/uebersicht_order/')
+        return generate_redirect_page_context('/uebersicht_order/')
 
     db = order.get_all()
     order_liste = []
@@ -32,11 +46,18 @@ def _handle_request(request):
             'Dynamisch': row.Dynamisch
         })
 
-    context = generate_transactional_context('uebersicht_order')
-    context['order'] = order_liste
-    return context
+    result_context = generate_transactional_page_context('uebersicht_order')
+    result_context.add('order', order_liste)
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_order.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/uebersicht_order.html',
+        context_creator=lambda db: UebersichtOrderContext(
+            depotwerte=db.depotwerte,
+            order=db.order
+        )
+    )
