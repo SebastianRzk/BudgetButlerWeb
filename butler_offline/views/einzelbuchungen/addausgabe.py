@@ -17,7 +17,7 @@ class AddAusgabeContext:
 
 
 def handle_request(request, context: AddAusgabeContext):
-    result_context: TransactionalPageContext = generate_transactional_page_context('addeinzelbuchung')
+    result_context: TransactionalPageContext = generate_transactional_page_context('addausgabe')
     result_context.add('approve_title', 'Ausgabe hinzufügen')
 
     if post_action_is(request, 'add'):
