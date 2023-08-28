@@ -37,26 +37,23 @@ IMPORT_PATH = '../Import/'
 ABRECHNUNG_PATH = '../Abrechnungen/'
 
 
-def write_import(file_name, file_content):
-    instance().write(IMPORT_PATH + file_name, file_content)
+def write_import(file_name: str, file_content: str, filesystem: file_system.FileSystemImpl) -> None:
+    filesystem.write(IMPORT_PATH + file_name, file_content)
 
 
-def write_abrechnung(file_name: str, file_content: str, filesystem: file_system.FileSystemImpl):
+def write_abrechnung(file_name: str, file_content: str, filesystem: file_system.FileSystemImpl) -> None:
     filesystem.write(
         file_path=ABRECHNUNG_PATH + file_name,
         file_content=file_content,
     )
 
 
-def all_abrechnungen():
-    filenames = instance().list_files(ABRECHNUNG_PATH + '*') + instance().list_files(IMPORT_PATH + '*')
+def all_abrechnungen(filesystem: FileSystemImpl):
+    filenames = filesystem.list_files(ABRECHNUNG_PATH + '*') + filesystem.list_files(IMPORT_PATH + '*')
     all_contents = []
     for filename in filenames:
         all_contents.append({
             'name': filename,
-            'content': instance().read(filename)
+            'content': filesystem.read(filename)
         })
     return all_contents
-
-
-

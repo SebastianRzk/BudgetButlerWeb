@@ -19,7 +19,7 @@ class DashboardContext:
         return self._today
 
 
-def _handle_request(_, context: DashboardContext):
+def handle_request(_, context: DashboardContext):
     selector = context.einzelbuchungen().select()
 
     result_context = generate_page_context('dashboard')
@@ -77,7 +77,7 @@ def _monatsliste(current_month: int):
 def index(request):
     return request_handler.handle(
         request=request,
-        handle_function=_handle_request,
+        handle_function=handle_request,
         context_creator=lambda db: DashboardContext(einzelbuchungen=db.einzelbuchungen, today=time.today()),
         html_base_page='core/dashboard.html'
     )

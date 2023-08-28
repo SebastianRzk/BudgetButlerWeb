@@ -1,5 +1,5 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_dauerauftrag
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -30,7 +30,7 @@ def test_delete():
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '22', 'monatlich', 1)
 
     uebersicht_dauerauftrag._handle_request(
-        request=VersionedPostRequest({'action': 'delete', 'delete_index': '1'}),
+        request=PostRequest({'action': 'delete', 'delete_index': '1'}),
         context=uebersicht_dauerauftrag.UbersichtDauerauftragContext(dauerauftraege=dauerauftraege)
     )
 

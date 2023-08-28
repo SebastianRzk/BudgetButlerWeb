@@ -1,4 +1,4 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.views.einzelbuchungen import adddauerauftrag
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -35,7 +35,7 @@ def test_edit_call_from_ueberischt_presets_values():
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(datum('10.10.2010'), datum('10.10.2011'), '0kategorie', '0name', 'monatlich', 10)
 
-    context = adddauerauftrag.handle_request(VersionedPostRequest({'action': 'edit', 'edit_index': '0'}),
+    context = adddauerauftrag.handle_request(PostRequest({'action': 'edit', 'edit_index': '0'}),
                                              context=adddauerauftrag.AddDauerauftragContext(
                                                  dauerauftraege=dauerauftraege,
                                                  einzelbuchungen=Einzelbuchungen()
@@ -67,7 +67,7 @@ def test_edit_call_from_ueberischt_presets_values():
 
 def test_add_dauerauftrag():
     dauerauftraege = Dauerauftraege()
-    adddauerauftrag.handle_request(VersionedPostRequest(
+    adddauerauftrag.handle_request(PostRequest(
         {'action': 'add',
          'startdatum': rfc('1.1.2017'),
          'endedatum': rfc('6.1.2017'),
@@ -98,7 +98,7 @@ def test_add_dauerauftrag():
 
 def test_add_dauerauftrag_should_show_in_recently_added():
     non_persisted_state.CONTEXT = {}
-    result = adddauerauftrag.handle_request(VersionedPostRequest(
+    result = adddauerauftrag.handle_request(PostRequest(
         {'action': 'add',
          'startdatum': rfc('1.1.2017'),
          'endedatum': rfc('6.1.2017'),
@@ -127,7 +127,7 @@ def test_add_dauerauftrag_should_show_in_recently_added():
 
 def test_add_dauerauftrag_einnahme():
     dauerauftraege = Dauerauftraege()
-    adddauerauftrag.handle_request(VersionedPostRequest(
+    adddauerauftrag.handle_request(PostRequest(
         {'action': 'add',
          'startdatum': rfc('1.1.2017'),
          'endedatum': rfc('6.1.2017'),
@@ -165,7 +165,7 @@ def test_edit_dauerauftrag():
         wert=-2.00,
     )
 
-    adddauerauftrag.handle_request(VersionedPostRequest(
+    adddauerauftrag.handle_request(PostRequest(
         {'action': 'add',
          'edit_index': '0',
          'startdatum': rfc('2.1.2017'),

@@ -1,4 +1,4 @@
-from butler_offline.test.RequestStubs import GetRequest,  VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest,  PostRequest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.views.einzelbuchungen import uebersicht_einzelbuchungen
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
@@ -66,7 +66,7 @@ def test_get_request_should_filter_year():
 def test_delete():
     context = get_test_data()
     uebersicht_einzelbuchungen.handle_request(
-        VersionedPostRequest({'action': 'delete', 'delete_index': '1'}),
+        PostRequest({'action': 'delete', 'delete_index': '1'}),
         context=context
     )
     assert context.einzelbuchungen().select().sum() == 100

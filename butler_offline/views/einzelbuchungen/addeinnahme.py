@@ -1,13 +1,14 @@
-from butler_offline.viewcore.viewcore import post_action_is
+import logging
+
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import TransactionalPageContext
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.converter import datum, dezimal_float, from_double_to_german
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.template import fa
-from butler_offline.viewcore.context.builder import TransactionalPageContext
-from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-import logging
+from butler_offline.viewcore.viewcore import post_action_is
 
 
 class AddEinnahmeContext:
@@ -20,7 +21,6 @@ class AddEinnahmeContext:
 
 def handle_request(request, context: AddEinnahmeContext) -> TransactionalPageContext:
     page_context = generate_transactional_page_context('addeinnahme')
-    page_context.add('element_titel', 'Neue Einnahme')
     page_context.add('page_subtitle', 'Daten der Einnahme:')
     page_context.add('approve_title', 'Einnahme hinzufügen')
 
@@ -40,7 +40,7 @@ def handle_request(request, context: AddEinnahmeContext) -> TransactionalPageCon
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],
                     'wert': from_double_to_german(dezimal_float(request.values['wert']))
-                    })
+                })
 
         else:
             datum_object = datum(request.values['date'])
@@ -56,7 +56,7 @@ def handle_request(request, context: AddEinnahmeContext) -> TransactionalPageCon
                     'kategorie': request.values['kategorie'],
                     'name': request.values['name'],
                     'wert': from_double_to_german(dezimal_float(request.values['wert']))
-                    })
+                })
 
     if post_action_is(request, 'edit'):
         logging.info('Please edit: %s', request.values['edit_index'])
@@ -68,11 +68,11 @@ def handle_request(request, context: AddEinnahmeContext) -> TransactionalPageCon
         page_context.add('bearbeitungsmodus', True)
         page_context.add('edit_index', db_index)
         page_context.add('set_kategorie', True)
-        page_context.add('element_titel', 'Einnahme Nr.' + str(db_index) + ' bearbeiten')
+        page_context.overwrite_page_titel('Einnahme Nr.' + str(db_index) + ' bearbeiten')
         page_context.add('page_subtitle', 'Daten bearbeiten:')
         page_context.add('approve_title', 'Einnahme aktualisieren')
 
-    if  not page_context.contains('default_item'):
+    if not page_context.contains('default_item'):
         page_context.add('default_item', {
             'Datum': '',
             'Name': '',

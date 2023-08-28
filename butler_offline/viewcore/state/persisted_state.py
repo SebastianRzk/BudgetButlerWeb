@@ -1,16 +1,20 @@
 from butler_offline.core import database_manager, configuration_provider
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.core.shares.shares_manager import load_data
+from butler_offline.core.shares.shares_manager import load_data, SharesInfo
 import random
 import logging
 
 DATABASE_INSTANCE = None
 DATABASES = []
-SHARES_DATA = None
+SHARES_DATA: SharesInfo | None = None
 
 
 SESSION_RANDOM = str(random.random())
 DATABASE_VERSION = 0
+
+class CurrentDatabaseVersionProvider:
+    def current_database_version(self) -> str:
+        return current_database_version()
 
 
 def database_instance():
@@ -25,7 +29,7 @@ def database_instance():
     return persisted_state.DATABASE_INSTANCE
 
 
-def shares_data():
+def shares_data() -> SharesInfo:
     if not persisted_state.SHARES_DATA:
         persisted_state.SHARES_DATA = load_data()
     return persisted_state.SHARES_DATA

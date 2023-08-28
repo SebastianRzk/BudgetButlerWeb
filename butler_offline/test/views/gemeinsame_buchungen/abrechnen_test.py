@@ -1,5 +1,5 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.gemeinsame_buchungen import abrechnen
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -14,7 +14,7 @@ def test_abrechnen():
     testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
 
     abrechnen.handle_request(
-        request=VersionedPostRequest({
+        request=PostRequest({
             'set_mindate': '01.01.2010',
             'set_maxdate': '01.01.2010',
             'set_ergebnis': '',
@@ -37,7 +37,7 @@ def test_abrechnen_should_create_abrechnung_online():
     testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
 
     context = abrechnen.handle_request(
-        request=VersionedPostRequest({
+        request=PostRequest({
             'set_mindate': '01.01.2010',
             'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
@@ -84,7 +84,7 @@ def test_abrechnen_should_create_abrechnung_on_disk():
     testdb.gemeinsamebuchungen.add(datum('01.01.2010'), 'Eine Katgorie', 'Ein Name', 2.60, 'Eine Person')
 
     abrechnen.handle_request(
-        request=VersionedPostRequest({
+        request=PostRequest({
             'set_mindate': '01.01.2010',
             'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',
@@ -136,7 +136,7 @@ def test_abrechnen_should_create_abrechnung_on_disk():
 
 def test_index_should_be_secured_by_request_handler():
     def index():
-        abrechnen.index(VersionedPostRequest({
+        abrechnen.index(PostRequest({
             'set_mindate': '01.01.2010',
             'set_maxdate': '01.01.2010',
             'set_ergebnis': '%Ergebnis%',

@@ -1,23 +1,27 @@
-from butler_offline.viewcore.viewcore import name_of_partner
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.viewcore import request_handler
+from butler_offline.core import configuration_provider
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
+from butler_offline.viewcore.converter import datum
+from butler_offline.viewcore.converter import datum_to_german
+from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.viewcore import get_post_parameter_or_default
 from butler_offline.viewcore.viewcore import is_post_parameter_set
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum_to_string
-from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.viewcore.converter import datum
-from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
+from butler_offline.core.configuration_provider import ConfigurationProvider
 
 
 class AbrechnenVorschauContext:
     def __init__(self,
                  name: str,
                  gemeinsamebuchungen: Gemeinsamebuchungen,
-                 einzelbuchungen: Einzelbuchungen):
+                 einzelbuchungen: Einzelbuchungen,
+                 configuration: ConfigurationProvider
+                 ):
         self._name = name
         self._gemeinsamebuchungen = gemeinsamebuchungen
         self._einzelbuchungen = einzelbuchungen
+        self._configuration = configuration
 
     def name(self) -> str:
         return self._name
@@ -28,6 +32,9 @@ class AbrechnenVorschauContext:
     def einzelbuchungen(self) -> Einzelbuchungen:
         return self._einzelbuchungen
 
+    def configuration(self) -> ConfigurationProvider:
+        return self._configuration
+
 
 def handle_request(request, context: AbrechnenVorschauContext):
     result_context = generate_transactional_page_context('gemeinsamabrechnen')
@@ -36,7 +43,7 @@ def handle_request(request, context: AbrechnenVorschauContext):
         return result_context.throw_error('Keine gemeinsame Buchungen erfasst')
 
     name_self = context.name()
-    name_partner = name_of_partner()
+    name_partner = context.configuration().get_configuration('PARTNERNAME')
 
     mindate = context.gemeinsamebuchungen().min_date()
     maxdate = context.gemeinsamebuchungen().max_date()
@@ -68,7 +75,8 @@ def handle_request(request, context: AbrechnenVorschauContext):
             self_name=name_self, verhaeltnis=set_verhaeltnis)
 
     if is_post_parameter_set(request, 'set_limit'):
-        ergebnis_satz = '''Durch das Limit bei {name} von {limit_value} EUR wurde das Verhältnis von {verhaeltnis_alt} auf {verhaeltnis_neu} aktualisiert<br>'''
+        ergebnis_satz = '''Durch das Limit bei {name} von {limit_value} EUR wurde das ''' + \
+                        '''Verhältnis von {verhaeltnis_alt} auf {verhaeltnis_neu} aktualisiert<br>'''
         verhaeltnis_alt = set_verhaeltnis
         limited_person = request.values['set_limit_fuer']
         limit_value = int(request.values['set_limit_value'])
@@ -143,6 +151,7 @@ def index(request):
         context_creator=lambda db: AbrechnenVorschauContext(
             name=db.name,
             einzelbuchungen=db.einzelbuchungen,
-            gemeinsamebuchungen=db.gemeinsamebuchungen
+            gemeinsamebuchungen=db.gemeinsamebuchungen,
+            configuration=configuration_provider.CONFIGURATION_PROVIDER
         )
     )

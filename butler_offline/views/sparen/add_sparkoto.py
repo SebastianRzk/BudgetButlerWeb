@@ -1,22 +1,32 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.context import generate_transactional_context, generate_error_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.template import fa
+from butler_offline.core.database.sparen.kontos import Kontos
 
 
-def handle_request(request):
+class AddSparkontoContext:
+    def __init__(self, kontos: Kontos):
+        self._kontos = kontos
+
+    def kontos(self) -> Kontos:
+        return self._kontos
+
+
+def handle_request(request, context: AddSparkontoContext):
+    result_context = generate_transactional_page_context('add_sparkonto')
+
     if post_action_is(request, 'add'):
         kontoname = request.values['kontoname']
         if '_' in kontoname:
-            return generate_error_context('add_depotwert', 'Kontoname darf kein Unterstrich "_" enthalten.')
+            return result_context.throw_error('Kontoname darf kein Unterstrich "_" enthalten.')
         kontotyp = request.values['kontotyp']
 
         if "edit_index" in request.values:
-            database_instance().sparkontos.edit(int(request.values['edit_index']),
-                kontoname=kontoname,
-                kontotyp=kontotyp)
+            context.kontos().edit(int(request.values['edit_index']),
+                                  kontoname=kontoname,
+                                  kontotyp=kontotyp)
             non_persisted_state.add_changed_sparkontos(
                 {
                     'fa': fa.pencil,
@@ -25,7 +35,7 @@ def handle_request(request):
                 })
 
         else:
-            database_instance().sparkontos.add(
+            context.kontos().add(
                 kontoname=kontoname,
                 kontotyp=kontotyp)
             non_persisted_state.add_changed_sparkontos(
@@ -33,14 +43,13 @@ def handle_request(request):
                     'fa': fa.plus,
                     'Kontoname': kontoname,
                     'Kontotyp': kontotyp
-                    })
+                })
 
-    context = generate_transactional_context('add_sparkonto')
-    context['approve_title'] = 'Sparkonto hinzufügen'
+    result_context.add('approve_title', 'Sparkonto hinzufügen')
     if post_action_is(request, 'edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
-        db_row = database_instance().sparkontos.get(db_index)
+        db_row = context.kontos().get(db_index)
 
         default_item = {
             'edit_index': str(db_index),
@@ -48,22 +57,28 @@ def handle_request(request):
             'kontoname': db_row['Kontoname']
         }
 
-        context['default_item'] = default_item
-        context['bearbeitungsmodus'] = True
-        context['edit_index'] = db_index
-        context['approve_title'] = 'Sparkonto aktualisieren'
+        result_context.add('default_item', default_item)
+        result_context.add('bearbeitungsmodus', True)
+        result_context.add('edit_index', db_index)
+        result_context.add('approve_title', 'Sparkonto aktualisieren')
 
-    if 'default_item' not in context:
-        context['default_item'] = {
-            'kontoname': '',
-            'kontotyp': ''
-        }
-
-    context['kontotypen'] = database_instance().sparkontos.KONTO_TYPEN
-    context['letzte_erfassung'] = reversed(non_persisted_state.get_changed_sparkontos())
-    return context
+    if not result_context.contains('default_item'):
+        result_context.add('default_item',
+                           {
+                               'kontoname': '',
+                               'kontotyp': ''
+                           })
+        result_context.add('kontotypen', context.kontos().KONTO_TYPEN)
+        result_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_sparkontos()))
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, handle_request, 'sparen/add_sparkonto.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/add_sparkonto.html',
+        context_creator=lambda db: AddSparkontoContext(
+            kontos=db.sparkontos,
+        )
+    )

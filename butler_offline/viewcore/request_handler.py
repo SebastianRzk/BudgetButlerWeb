@@ -1,26 +1,26 @@
-from flask import redirect, Request
-from requests.exceptions import ConnectionError
-
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.context import generate_base_context, REDIRECT_KEY
-from butler_offline.viewcore.base_html import set_error_message
-from butler_offline.core.shares import shares_manager
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore.context import get_transaction_id, is_transactional_request, ERROR_KEY, is_error
-import traceback
 import logging
-from butler_offline.viewcore import template
-from butler_offline.viewcore.template import renderer_instance
 from typing import Callable, TypeVar
+
+from flask import Request
+
 from butler_offline.core.database import Database
+from butler_offline.core.shares import shares_manager
+from butler_offline.viewcore.context import get_transaction_id, is_transactional_request
 from butler_offline.viewcore.context.builder import PageContext
+from butler_offline.viewcore.context.builder import generate_page_context
+from butler_offline.viewcore.http import Redirector
+from butler_offline.viewcore.page_executor import PageExecutor
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.state.persisted_state import CurrentDatabaseVersionProvider
+from butler_offline.viewcore.template import Renderer
 
 
-REDIRECTOR = lambda x: redirect(x, code=301)
+class WireThroughInterceptor:
+    def __init__(self, handler):
+        self._handler = handler
 
-
-def handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page: str):
-    return REQUEST_HANDLER(request=request, request_action=request_action, html_base_page=html_base_page)
+    def intercept(self, **varargs):
+        return self._handler(**varargs)
 
 
 TYPE_INPUT_CONTEXT = TypeVar("TYPE_INPUT_CONTEXT")
@@ -32,99 +32,99 @@ TYPE_USECASE = Callable[[Request, TYPE_INPUT_CONTEXT], TYPE_OUTPUT_PAGE_CONTEXT]
 def handle(request: Request,
            context_creator: TYPE_INPUT_CONTEXT_CREATOR,
            handle_function: TYPE_USECASE,
-           html_base_page: str):
-    input_context: TYPE_INPUT_CONTEXT = context_creator(persisted_state.database_instance())
+           html_base_page: str,
+           renderer: Renderer = Renderer(),
+           redirector: Redirector = Redirector(),
+           page_executor: PageExecutor = PageExecutor(),
+           current_database_version_provider: CurrentDatabaseVersionProvider = CurrentDatabaseVersionProvider()
+           ):
+    return REQUEST_HANDLER_INTERCEPTOR.intercept(request=request,
+                                                 request_action=handle_function,
+                                                 context_creator=context_creator,
+                                                 html_base_page=html_base_page,
+                                                 renderer=renderer,
+                                                 page_executor=page_executor,
+                                                 redirector=redirector,
+                                                 current_database_version_provider=current_database_version_provider
+                                                 )
 
-    def migration_function(r: Request) -> dict:
-        result: TYPE_OUTPUT_PAGE_CONTEXT = handle_function(r, input_context)
-        return result.as_dict()
 
-    return handle_request(request=request,
-                          request_action=migration_function,
-                          html_base_page=html_base_page)
-
-
-def __handle_request(request: Request, request_action: Callable[[Request], dict], html_base_page: str):
+def __handle_request(
+        request: Request,
+        request_action: TYPE_USECASE,
+        context_creator: TYPE_INPUT_CONTEXT_CREATOR,
+        html_base_page: str,
+        renderer: Renderer,
+        page_executor: PageExecutor,
+        redirector: Redirector,
+        current_database_version_provider: CurrentDatabaseVersionProvider
+):
+    database = persisted_state.database_instance()
     if is_transactional_request(request):
         logging.info('transactional request found')
         transaction_id = get_transaction_id(request)
         if transaction_id != persisted_state.current_database_version():
-            return handle_transaction_out_of_sync(transaction_id)
+            logging.error(
+                'transaction rejected (requested:' +
+                current_database_version_provider.current_database_version() +
+                ", got:" +
+                transaction_id + ')')
+            return handle_transaction_out_of_sync(
+                renderer=renderer,
+                database_name=database.name
+            )
         logging.info('transaction allowed')
         persisted_state.increase_database_version()
         logging.info('new db version: ' + str(persisted_state.current_database_version()))
 
-    context = take_action(request, request_action)
+    input_context = context_creator(database)
+    context = page_executor.execute(page_handler=request_action, request=request, context=input_context)
 
-    if not is_error(context):
-        if persisted_state.database_instance().is_tainted():
+    if not context.is_error():
+        if database.is_tainted():
             if not is_transactional_request(request):
                 raise ModificationWithoutTransactionContext()
             persisted_state.save_tainted()
 
     shares_manager.save_if_needed(persisted_state.shares_data())
 
-    if is_error(context):
-        rendered_content = context[ERROR_KEY]
-    elif REDIRECT_KEY in context:
-        return REDIRECTOR(context[REDIRECT_KEY])
+    if context.is_error():
+        rendered_content = context.error_text()
+    elif context.is_redirect():
+        return redirector.temporary_redirect(context.redirect_target_url())
     else:
-        if 'special_page' in context:
-            html_base_page = context['special_page']
-        rendered_content = renderer_instance().render(html_base_page, **context)
+        if context.is_page_to_render_overwritten():
+            html_base_page = context.page_to_render()
+        page_context = context.get_page_context_map()
+        if context.is_transactional():
+            page_context['ID'] = current_database_version_provider.current_database_version()
+        rendered_content = renderer.render(
+            html=html_base_page,
+            **page_context)
 
-    context['content'] = rendered_content
-    response = renderer_instance().render('index.html', **context)
+    response = renderer.render(
+        html='index.html',
+        **context.generate_basic_page_context(
+            inner_page=rendered_content,
+            database_name=database.name
+        )
+    )
     return response
 
 
-REQUEST_HANDLER = __handle_request
+REQUEST_HANDLER_INTERCEPTOR = WireThroughInterceptor(handler=__handle_request)
 
 
-def handle_transaction_out_of_sync(transaction_id):
-    logging.error(
-        'transaction rejected (requested:' + persisted_state.current_database_version() + ", got:" + transaction_id + ')')
-    context = generate_base_context('Fehler')
-    rendered_content = renderer_instance().render('core/error_race.html', **{})
-    context['content'] = rendered_content
-    return renderer_instance().render('index.html', **context)
-
-
-def take_action(request, request_action: Callable[[Request], dict]):
-    context = generate_base_context('Fehler')
-    try:
-        context = request_action(request)
-    except ConnectionError as _:
-        set_error_message(context, 'Verbindung zum Server konnte nicht aufgebaut werden.')
-        context[ERROR_KEY] = ''
-    except Exception as e:
-        set_error_message(context, 'Ein Fehler ist aufgetreten: \n ' + str(e))
-        logging.error(e)
-        traceback.print_exc()
-        context[ERROR_KEY] = ''
-    return context
-
-
-def stub_me():
-    template.RENDERER = RendererStub()
-    request_handler.REDIRECTOR = lambda x: x
-
-
-def stub_me_theme():
-    template.RENDERER = RendererThemeStub()
-    request_handler.REDIRECTOR = lambda x: x
-
-
-class RendererStub:
-    def render(self, template, **context):
-        return context
-
-
-class RendererThemeStub:
-    def render(self, template, **context):
-        if not 'content' in context:
-            return template
-        return context
+def handle_transaction_out_of_sync(
+        renderer: Renderer,
+        database_name: str,
+):
+    context = generate_page_context('Fehler')
+    rendered_content = renderer.render('core/error_race.html', **{})
+    return renderer.render('index.html', **context.generate_basic_page_context(
+        inner_page=rendered_content,
+        database_name=database_name,
+    ))
 
 
 class ModificationWithoutTransactionContext(Exception):

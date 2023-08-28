@@ -1,9 +1,10 @@
+import json
+import logging
+from textwrap import shorten
+
 from butler_offline.viewcore import requester
 from butler_offline.core.shares import sectors
 from butler_offline.core.shares import SharesInfo
-from textwrap import shorten
-import json
-import logging
 
 URL = 'https://api.etf-data.com/product/{isin}'
 SOURCE = 'api.etf-data.com'

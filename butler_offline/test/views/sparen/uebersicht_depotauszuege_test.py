@@ -1,5 +1,4 @@
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.views.sparen import uebersicht_depotauszuege
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
@@ -70,7 +69,7 @@ def test_init_filled_database():
 def test_delete():
     context = get_test_data()
     uebersicht_depotauszuege.handle_request(
-        VersionedPostRequest({'action': 'delete', 'delete_index': '1'}),
+        PostRequest({'action': 'delete', 'delete_index': '1'}),
         context=context
     )
 

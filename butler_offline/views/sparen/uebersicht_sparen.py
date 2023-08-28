@@ -12,6 +12,7 @@ from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauft
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 
+
 class SparenUebersichtContext:
     def __init__(self,
                  einzelbuchungen: Einzelbuchungen,
@@ -150,15 +151,15 @@ def generate_konto_uebersicht(color_kontos, color_typen,
             gesamt += depotauszuege.get_depotwert_by(isin)
         diff = gesamt - aufbuchungen
         kontotypen_liste.append({
-                'name': typ,
-                'color': color_typen.get_for_value(typ),
-                'wert': gesamt,
-                'wert_str': from_double_to_german(gesamt),
-                'aufbuchungen': aufbuchungen,
-                'aufbuchungen_str': from_double_to_german(aufbuchungen),
-                'difference': diff,
-                'difference_str': from_double_to_german(diff)
-            })
+            'name': typ,
+            'color': color_typen.get_for_value(typ),
+            'wert': gesamt,
+            'wert_str': from_double_to_german(gesamt),
+            'aufbuchungen': aufbuchungen,
+            'aufbuchungen_str': from_double_to_german(aufbuchungen),
+            'difference': diff,
+            'difference_str': from_double_to_german(diff)
+        })
 
     gesamt_diff = gesamt_kontostand - gesamt_aufbuchungen
 
@@ -192,7 +193,7 @@ def gesamt_uebersicht(
         sparbuchungen: Sparbuchungen,
         depotauszuege: Depotauszuege,
         order: Order
-    ):
+):
     min_jahr = einzelbuchungen.content.copy()[einzelbuchungen.content.copy().Kategorie != 'Sparen'].Datum.min().year
     max_jahr = date.today().year
 
@@ -244,12 +245,12 @@ def gesamt_uebersicht(
             sparen_aufbuchung += aufbuchungen
 
         year_kontos['Gesamt'] = {
-                'kontostand': gesamt_sparen,
-                'aufbuchungen': sparen_aufbuchung,
-                'kontostand_str': from_double_to_german(gesamt_sparen),
-                'aufbuchungen_str': from_double_to_german(sparen_aufbuchung),
-                'name': 'Gesamt'
-            }
+            'kontostand': gesamt_sparen,
+            'aufbuchungen': sparen_aufbuchung,
+            'kontostand_str': from_double_to_german(gesamt_sparen),
+            'aufbuchungen_str': from_double_to_german(sparen_aufbuchung),
+            'name': 'Gesamt'
+        }
 
         year_kontostaende.append(year_kontos)
 

@@ -1,36 +1,46 @@
 from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.test.database_util import untaint_database
 from butler_offline.views.gemeinsame_buchungen import abrechnen_vorschau
-from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.core.configuration_provider import DictConfiguration
+
+CONF_PARTERNAME = 'conf.partnername'
+
+
+def generate_basic_test_context(
+        name: str = 'abc',
+        einzelbuchungen: Einzelbuchungen = Einzelbuchungen(),
+        gemeinsamebuchungen: Gemeinsamebuchungen = Gemeinsamebuchungen(),
+        configuration: DictConfiguration = DictConfiguration({
+            'PARTNERNAME': CONF_PARTERNAME
+        })
+):
+    return abrechnen_vorschau.AbrechnenVorschauContext(
+        configuration=configuration,
+        einzelbuchungen=einzelbuchungen,
+        gemeinsamebuchungen=gemeinsamebuchungen,
+        name=name
+    )
 
 
 def test_init():
     abrechnen_vorschau.handle_request(request=GetRequest(),
-                                      context=abrechnen_vorschau.AbrechnenVorschauContext(
-                                          name='abc',
-                                          gemeinsamebuchungen=Gemeinsamebuchungen(),
-                                          einzelbuchungen=Einzelbuchungen()
-                                      ))
+                                      context=generate_basic_test_context())
 
 
 def test__short_result__with_equal_value__should_return_equal_sentence():
     database_name = "my-name"
-    name_partner = viewcore.name_of_partner()
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
     gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, database_name)
-    gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, name_partner)
+    gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=GetRequest(),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=database_name,
-            einzelbuchungen=Einzelbuchungen(),
             gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
@@ -40,50 +50,46 @@ def test__short_result__with_equal_value__should_return_equal_sentence():
 
 
 def test__short_result__with_selected_date__should_filter_entries():
-    name_partner = viewcore.name_of_partner()
     self_name = 'Test_User'
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
     gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -1000, self_name)
-    gemeinsame_buchungen.add(datum('15.01.2011'), some_name(), some_kategorie(), -20, name_partner)
-    gemeinsame_buchungen.add(datum('15.01.2012'), some_name(), some_kategorie(), -1000, name_partner)
+    gemeinsame_buchungen.add(datum('15.01.2011'), some_name(), some_kategorie(), -20, CONF_PARTERNAME)
+    gemeinsame_buchungen.add(datum('15.01.2012'), some_name(), some_kategorie(), -1000, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=PostRequest({'set_mindate': '2011-01-01', 'set_maxdate': '2011-02-01'}),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=self_name,
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
+            gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
 
     assert result.is_ok()
-    assert result.get('ergebnis') == 'Partner bekommt von Test_User noch 10.00€.'
+    assert result.get('ergebnis') == 'conf.partnername bekommt von Test_User noch 10.00€.'
     assert result.get('count') == 3
     assert result.get('set_count') == 1
 
 
 def test_result__with_selektiertem_verhaeltnis():
-    name_partner = viewcore.name_of_partner()
     self_name = 'Test_User'
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
     gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, self_name)
-    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, name_partner)
+    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=PostRequest({'set_verhaeltnis': 60}),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=self_name,
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
+            gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
 
     assert result.is_ok()
     assert result.get(
         'ergebnis') == 'Test_User übernimmt einen Anteil von 60% der Ausgaben.' \
-                       '<br>Partner bekommt von Test_User noch 10.00€.'
+                       '<br>conf.partnername bekommt von Test_User noch 10.00€.'
     assert result.get('self_soll') == '60.00'
     assert result.get('partner_soll') == '40.00'
     assert result.get('self_diff') == '-10.00'
@@ -91,22 +97,20 @@ def test_result__with_selektiertem_verhaeltnis():
 
 
 def test_result_with_limit_partner_and_value_under_limit__should_return_default_verhaeltnis():
-    name_partner = viewcore.name_of_partner()
     self_name = 'Test_User'
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
     gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, self_name)
-    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, name_partner)
+    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=PostRequest({'set_verhaeltnis': 50,
                              'set_limit': 'on',
-                             'set_limit_fuer': name_partner,
+                             'set_limit_fuer': CONF_PARTERNAME,
                              'set_limit_value': 100}),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=self_name,
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
+            gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
 
@@ -119,29 +123,27 @@ def test_result_with_limit_partner_and_value_under_limit__should_return_default_
 
 
 def test_result_with_limit_partner_and_value_over_limit__should_modify_verhaeltnis():
-    name_partner = viewcore.name_of_partner()
     self_name = 'Test_User'
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
     gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, self_name)
-    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, name_partner)
+    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=PostRequest({'set_verhaeltnis': 50,
                              'set_limit': 'on',
-                             'set_limit_fuer': name_partner,
+                             'set_limit_fuer': CONF_PARTERNAME,
                              'set_limit_value': 40}),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=self_name,
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
+            gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
 
     assert result.is_ok()
     assert result.get(
-        'ergebnis') == 'Durch das Limit bei Partner von 40 EUR wurde das Verhältnis von 50 auf 60.0 ' \
-                       'aktualisiert<br>Partner bekommt von Test_User noch 10.00€.'
+        'ergebnis') == 'Durch das Limit bei conf.partnername von 40 EUR wurde das Verhältnis von 50 auf 60.0 ' \
+                       'aktualisiert<br>conf.partnername bekommt von Test_User noch 10.00€.'
     assert result.get('self_soll') == '60.00'
     assert result.get('partner_soll') == '40.00'
     assert result.get('self_diff') == '-10.00'
@@ -151,22 +153,20 @@ def test_result_with_limit_partner_and_value_over_limit__should_modify_verhaeltn
 
 
 def test_result_with_limit_self_and_value_under_limit__should_return_default_verhaeltnis():
-    name_partner = viewcore.name_of_partner()
     self_name = 'Test_User'
     gemeinsame_buchungen = Gemeinsamebuchungen()
 
     gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, self_name)
-    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, name_partner)
+    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=PostRequest({'set_verhaeltnis': 50,
                              'set_limit': 'on',
                              'set_limit_fuer': self_name,
                              'set_limit_value': 100}),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=self_name,
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
+            gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
 
@@ -179,31 +179,27 @@ def test_result_with_limit_self_and_value_under_limit__should_return_default_ver
 
 
 def test_result__with_limit_self_and_value_over_limit__should_modify_verhaeltnis():
-    name_partner = viewcore.name_of_partner()
     self_name = 'Test_User'
-    gemeinsame_buchungen = persisted_state.database_instance().gemeinsamebuchungen
+    gemeinsame_buchungen = Gemeinsamebuchungen()
 
     gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, self_name)
-    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, name_partner)
-
-    untaint_database(database=persisted_state.database_instance())
+    gemeinsame_buchungen.add(some_datum(), some_name(), some_kategorie(), -50, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=PostRequest({'set_verhaeltnis': 50,
                              'set_limit': 'on',
                              'set_limit_fuer': self_name,
                              'set_limit_value': 40}),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=self_name,
-            einzelbuchungen=Einzelbuchungen(),
             gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
 
     assert result.is_ok()
     assert result.get(
-               'ergebnis') == 'Durch das Limit bei Test_User von 40 EUR wurde das Verhältnis von 50 auf 40.0 ' \
-                              'aktualisiert<br>Test_User bekommt von Partner noch 10.00€.'
+        'ergebnis') == 'Durch das Limit bei Test_User von 40 EUR wurde das Verhältnis von 50 auf 40.0 ' \
+                       'aktualisiert<br>Test_User bekommt von conf.partnername noch 10.00€.'
     assert result.get('self_soll') == '40.00'
     assert result.get('partner_soll') == '60.00'
     assert result.get('self_diff') == '10.00'
@@ -221,12 +217,7 @@ def some_datum():
 def test_with_empty_databse_should_return_error():
     result = abrechnen_vorschau.handle_request(
         request=GetRequest(),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
-            name='asdf',
-            gemeinsamebuchungen=Gemeinsamebuchungen(),
-            einzelbuchungen=Einzelbuchungen()
-        )
-    )
+        context=generate_basic_test_context())
 
     assert not result.is_ok()
     assert result.is_error()
@@ -234,20 +225,18 @@ def test_with_empty_databse_should_return_error():
 
 def test__short_result__with_partner_more_spendings_should_return_equal_sentence():
     gemeinsame_buchungen = Gemeinsamebuchungen()
-    name_partner = viewcore.name_of_partner()
-    gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, name_partner)
+    gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, CONF_PARTERNAME)
 
     result = abrechnen_vorschau.handle_request(
         request=GetRequest(),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name='Test_User',
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
+            gemeinsamebuchungen=gemeinsame_buchungen
         )
     )
 
     assert result.is_ok()
-    assert result.get('ergebnis') == 'Partner bekommt von Test_User noch 5.50€.'
+    assert result.get('ergebnis') == 'conf.partnername bekommt von Test_User noch 5.50€.'
 
 
 def some_kategorie():
@@ -261,30 +250,24 @@ def test__short_result__with_self_more_spendings__should_return_equal_sentence()
 
     result = abrechnen_vorschau.handle_request(
         request=GetRequest(),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
+        context=generate_basic_test_context(
             name=name_self,
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
-        )
-    )
+            gemeinsamebuchungen=gemeinsame_buchungen
+        ))
 
     assert result.is_ok()
-    assert result.get('ergebnis') == 'Test_User bekommt von Partner noch 5.50€.'
+    assert result.get('ergebnis') == 'Test_User bekommt von conf.partnername noch 5.50€.'
 
 
 def test_context_should_be_transactional():
     gemeinsame_buchungen = Gemeinsamebuchungen()
-    name_self = 'Test_User'
-    gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, name_self)
+    gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, 'name_self')
 
     result = abrechnen_vorschau.handle_request(
         request=GetRequest(),
-        context=abrechnen_vorschau.AbrechnenVorschauContext(
-            name=name_self,
-            gemeinsamebuchungen=gemeinsame_buchungen,
-            einzelbuchungen=Einzelbuchungen()
-        )
-    )
+        context=generate_basic_test_context(
+            gemeinsamebuchungen=gemeinsame_buchungen
+        ))
 
     assert result.is_transactional()
 
@@ -297,4 +280,3 @@ def test_index_should_be_secured_by_request_handler():
 
     assert result.number_of_calls() == 1
     assert result.html_pages_requested_to_render() == ['gemeinsame_buchungen/gemeinsamabrechnen.html']
-

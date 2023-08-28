@@ -1,44 +1,49 @@
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest, PostRequest
-from butler_offline.test.database_util import untaint_database
-from butler_offline.core import file_system
+from butler_offline.test.RequestStubs import PostRequest
 from butler_offline.views.sparen import uebersicht_order
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
+def basic_test_context(depotwerte: Depotwerte = Depotwerte,
+                       order: Order = Order()) -> uebersicht_order.UebersichtOrderContext:
+    return uebersicht_order.UebersichtOrderContext(
+        depotwerte=depotwerte,
+        order=order
+    )
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = uebersicht_order.index(GetRequest())
-    assert 'ID' in context
+    context = uebersicht_order.handle_request(
+        request=GetRequest(),
+        context=basic_test_context()
+    )
+    assert context.is_transactional()
 
 
-def add_test_data():
-    depotwerte = persisted_state.database_instance().depotwerte
+def context_with_test_data() -> uebersicht_order.UebersichtOrderContext:
+    depotwerte = Depotwerte()
     depotwerte.add(name='depotwert1', isin='isin1', typ=depotwerte.TYP_ETF)
 
-    order = persisted_state.database_instance().order
+    order = Order()
     order.add(datum_from_german('01.01.2020'), '1name', '1konto', 'isin1', 100)
     order.add(datum_from_german('02.02.2020'), '2name', '2konto', 'isin1', -200)
 
-    untaint_database(database=persisted_state.database_instance())
+    return basic_test_context(
+        depotwerte=depotwerte,
+        order=order
+    )
 
 
 def test_should_list_order():
-    set_up()
-    add_test_data()
+    result = uebersicht_order.handle_request(
+        request=GetRequest(),
+        context=context_with_test_data()
+    )
 
-    result = uebersicht_order.index(GetRequest())
-
-    assert result['order'] == [
+    assert result.get('order') == [
         {'Datum': '01.01.2020',
          'Depotwert': 'depotwert1 (isin1)',
          'Konto': '1konto',
@@ -57,23 +62,32 @@ def test_should_list_order():
          'Dynamisch': False},
     ]
 
-def test_init_withEmptyDatabase():
-    set_up()
-    uebersicht_order.index(GetRequest())
+
+def test_init_with_empty_database():
+    result = uebersicht_order.handle_request(
+        request=GetRequest(),
+        context=basic_test_context()
+    )
+    assert result.is_ok()
 
 
-def test_init_filledDatabase():
-    set_up()
-    add_test_data()
-    uebersicht_order.index(GetRequest())
+def test_init_filled_database():
+    result = uebersicht_order.handle_request(
+        request=GetRequest(),
+        context=context_with_test_data()
+    )
+    assert result.is_ok()
 
 
 def test_delete():
-    set_up()
-    add_test_data()
-    uebersicht_order.index(VersionedPostRequest({'action': 'delete', 'delete_index': '1'}))
-    order = persisted_state.database_instance().order
-    assert len(order.content) == 1
+    context = context_with_test_data()
+    uebersicht_order.handle_request(
+        request=PostRequest({'action': 'delete', 'delete_index': '1'}),
+        context=context
+    )
+
+    order = context.order()
+    assert order.select().count() == 1
     assert order.get(0) == {
         'Datum': datum_from_german('01.01.2020'),
         'Depotwert': 'isin1',
@@ -82,16 +96,14 @@ def test_delete():
         'Wert': 100,
         'index': 0,
         'Dynamisch': False
-        }
+    }
 
 
-def test_delete_should_only_fire_once():
-    set_up()
-    add_test_data()
-    next_id = persisted_state.current_database_version()
+def test_index_should_be_secured_by_request_handler():
+    def index():
+        uebersicht_order.index(GetRequest())
 
-    assert len(persisted_state.database_instance().order.content) == 2
-    uebersicht_order.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
-    assert len(persisted_state.database_instance().order.content) == 1
-    uebersicht_order.index(PostRequest({'action': 'delete', 'delete_index': '1', 'ID': next_id}))
-    assert len(persisted_state.database_instance().order.content) == 1
+    result = run_in_mocked_handler(index_handle=index)
+
+    assert result.number_of_calls() == 1
+    assert result.html_pages_requested_to_render() == ['sparen/uebersicht_order.html']

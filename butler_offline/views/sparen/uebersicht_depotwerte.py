@@ -1,17 +1,37 @@
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german
-from butler_offline.viewcore.context import generate_transactional_context, generate_redirect_context
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 
-def _handle_request(request):
-    depotwerte = persisted_state.database_instance().depotwerte
-    order = persisted_state.database_instance().order
-    depotauszuege = persisted_state.database_instance().depotauszuege
+
+class UebersichtDepotwerteContext:
+    def __init__(self, depotwerte: Depotwerte, order: Order, depotauszuege: Depotauszuege):
+        self._depotwerte = depotwerte
+        self._order = order
+        self._depotauszuege = depotauszuege
+
+    def depotwerte(self) -> Depotwerte:
+        return self._depotwerte
+
+    def order(self) -> Order:
+        return self._order
+
+    def depotauszuege(self) -> Depotauszuege:
+        return self._depotauszuege
+
+
+def handle_request(request, context: UebersichtDepotwerteContext):
+    result_context = generate_transactional_page_context('uebersicht_depotwerte')
+    depotwerte = context.depotwerte()
+    order = context.order()
+    depotauszuege = context.depotauszuege()
 
     if post_action_is(request, 'delete'):
         depotwerte.delete(int(request.values['delete_index']))
-        return generate_redirect_context('/uebersicht_depotwerte/')
+        return generate_redirect_page_context('/uebersicht_depotwerte/')
 
     db = depotwerte.get_all()
     depotwerte_liste = []
@@ -46,12 +66,19 @@ def _handle_request(request):
         'buchung': from_double_to_german(gesamt_buchungen)
     }
 
-    context = generate_transactional_context('uebersicht_depotwerte')
-    context['depotwerte'] = depotwerte_liste
-    context['gesamt'] = gesamt
-    return context
+    result_context.add('depotwerte', depotwerte_liste)
+    result_context.add('gesamt', gesamt)
+    return result_context
 
 
 def index(request):
-    return request_handler.handle_request(request, _handle_request, 'sparen/uebersicht_depotwerte.html')
-
+    return request_handler.handle(
+        request=request,
+        handle_function=handle_request,
+        html_base_page='sparen/uebersicht_depotwerte.html',
+        context_creator=lambda db: UebersichtDepotwerteContext(
+            depotwerte=db.depotwerte,
+            depotauszuege=db.depotauszuege,
+            order=db.order
+        )
+    )

@@ -1,5 +1,5 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, PostRequest, VersionedPostRequest
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.views.einzelbuchungen import addeinnahme
 from butler_offline.core import file_system
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -36,7 +36,7 @@ def test__edit_call_from_ueberischt__should_name_button_edit():
 
 def test_add_ausgabe():
     einzelbuchungen = Einzelbuchungen()
-    addeinnahme.handle_request(VersionedPostRequest(
+    addeinnahme.handle_request(PostRequest(
         {'action': 'add',
          'date': rfc('1.1.2017'),
          'kategorie': 'Essen',
@@ -69,7 +69,7 @@ def test_index_should_be_secured_by_request_handler():
 
 def test_add_einnahme_should_show_in_recently_added():
     non_persisted_state.CONTEXT = {}
-    result = addeinnahme.handle_request(VersionedPostRequest(
+    result = addeinnahme.handle_request(PostRequest(
         {'action': 'add',
          'date': rfc('1.1.2017'),
          'kategorie': 'Essen',
@@ -95,7 +95,7 @@ def test_edit_ausgabe():
         wert=float('2.00')
     )
 
-    addeinnahme.handle_request(VersionedPostRequest(
+    addeinnahme.handle_request(PostRequest(
         {'action': 'add',
          'edit_index': '0',
          'date': rfc('5.1.2017'),

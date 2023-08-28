@@ -1,6 +1,5 @@
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.sparen import add_depotwert
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
@@ -28,7 +27,7 @@ def test_add_should_add_depotwert():
     typ_etf = depotwerte.TYP_ETF
 
     add_depotwert.handle_request(
-        VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'name': '1name',
              'isin': '1isin',
@@ -52,7 +51,7 @@ def test_add_depotwert_should_show_in_recently_added():
     typ_etf = depotwerte.TYP_ETF
 
     result = add_depotwert.handle_request(
-        VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'name': '1name',
              'isin': '1isin',
@@ -83,7 +82,7 @@ def test_edit_depotwert():
     )
 
     result = add_depotwert.handle_request(
-        VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'edit_index': 0,
              'name': '2name',
@@ -122,7 +121,7 @@ def test_edit_depotwert_with_underscore_should_return_error():
     )
 
     result = add_depotwert.handle_request(
-        VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'edit_index': 0,
              'name': '2name',
@@ -168,4 +167,3 @@ def test_index_should_be_secured_by_request_handler():
 
     assert result.number_of_calls() == 1
     assert result.html_pages_requested_to_render() == ['sparen/add_depotwert.html']
-

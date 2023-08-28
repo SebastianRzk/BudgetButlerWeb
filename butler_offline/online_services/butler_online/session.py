@@ -1,6 +1,7 @@
+import json
+
 from butler_offline.viewcore import requester
 from butler_offline.online_services.butler_online.online_routes import LOGIN_URL, PARTNER_URL
-import json
 
 
 def get_partnername(server_url, auth_container):
@@ -12,7 +13,8 @@ def get_partnername(server_url, auth_container):
 
 
 def login(server_url, email, password):
-    auth_request = requester.instance().post_raw(LOGIN_URL.format(server_url=server_url), data={'email': email, 'password': password})
+    auth_request = requester.instance().post_raw(
+        LOGIN_URL.format(server_url=server_url), data={'email': email, 'password': password})
     auth_container = json.loads(requester.instance().decode(auth_request))
     return OnlineAuth(server_url, auth_container['username'], auth_request.cookies)
 

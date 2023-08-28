@@ -1,6 +1,5 @@
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.einzelbuchungen import addausgabe
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
@@ -41,7 +40,7 @@ def test__edit_call_from_uebersicht__should_name_button_edit():
 def test_add_ausgabe():
     einzelbuchungen = Einzelbuchungen()
     addausgabe.handle_request(
-        request=VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'date': rfc('1.1.2017'),
              'kategorie': 'Essen',
@@ -66,7 +65,7 @@ def test_add_ausgabe():
 
 def test_add_ausgabe_should_show_in_recently_added():
     result = addausgabe.handle_request(
-        request=VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'date': rfc('1.1.2017'),
              'kategorie': 'Essen',
@@ -97,7 +96,7 @@ def test_edit_ausgabe():
     )
 
     addausgabe.handle_request(
-        request=VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'edit_index': '0',
              'date': rfc('5.1.2017'),

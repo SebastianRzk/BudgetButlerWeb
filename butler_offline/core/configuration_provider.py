@@ -87,3 +87,15 @@ CONFIGURATION_PROVIDER = ConfigurationProvider(
     set_configuration_fun=set_configuration,
     get_configuration_fun=get_configuration,
 )
+
+
+class DictConfiguration(ConfigurationProvider):
+    def __init__(self, initial_conf: dict):
+        super().__init__(set_configuration_fun=self.set_to_dict, get_configuration_fun=self.get_from_dict)
+        self._conf = initial_conf
+
+    def get_from_dict(self, key: str):
+        return self._conf[key]
+
+    def set_to_dict(self, key: str, value: str):
+        self._conf[key] = value

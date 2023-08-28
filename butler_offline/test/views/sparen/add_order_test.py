@@ -1,5 +1,4 @@
 from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
 from butler_offline.views.sparen import add_order
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
@@ -78,22 +77,23 @@ def test_transaction_id_should_be_in_context():
 def test_add():
     context = get_basic_test_data()
 
-    add_order.handle_request(VersionedPostRequest(
-        {'action': 'add',
-         'datum': rfc('1.1.2017'),
-         'name': 'testname',
-         'wert': '2.00',
-         'typ': add_order.TYP_KAUF,
-         'depotwert': 'demoisin',
-         'konto': 'demokonto'
-         }),
+    add_order.handle_request(
+        request=PostRequest(
+            {'action': 'add',
+             'datum': rfc('1.1.2017'),
+             'name': 'testname',
+             'wert': '2.00',
+             'typ': add_order.TYP_KAUF,
+             'depotwert': 'demoisin',
+             'konto': 'demokonto'
+             }),
         context=context
     )
 
     assert context.order().select().count() == 1
     assert context.order().get(0) == {
         'Datum': datum('1.1.2017'),
-        'Wert': '2.00',
+        'Wert': 2.00,
         'Name': 'testname',
         'Depotwert': 'demoisin',
         'Konto': 'demokonto',
@@ -104,7 +104,7 @@ def test_add():
 
 def test_add_order_should_show_in_recently_added():
     result = add_order.handle_request(
-        VersionedPostRequest(
+        PostRequest(
             {'action': 'add',
              'datum': rfc('1.1.2017'),
              'name': 'testname',
@@ -140,7 +140,7 @@ def test_edit():
     )
 
     result = add_order.handle_request(
-        VersionedPostRequest(
+        request=PostRequest(
             {'action': 'add',
              'edit_index': 0,
              'datum': rfc('2.1.2017'),
@@ -160,7 +160,7 @@ def test_edit():
         depotwert='2demoisin',
         konto='2demokonto',
         name='2testname',
-        wert='-3.00',
+        wert=-3.00,
     )
 
     result_element = list(result.get('letzte_erfassung'))[0]
@@ -238,4 +238,3 @@ def test_index_should_be_secured_by_request_handler():
 
     assert result.number_of_calls() == 1
     assert result.html_pages_requested_to_render() == ['sparen/add_order.html']
-
