@@ -11,7 +11,9 @@ class RequesterStub:
             self.call_count[url] = []
         self.auth_cookies = auth_cookies
 
-    def post(self, url, data={}, cookies=None):
+    def post(self, url, data: dict | None = None, cookies=None):
+        if not data:
+            data = {}
         logging.info('-----------------' + url)
         if url in self.mocked_requests:
             self.call_count[url].append(data)

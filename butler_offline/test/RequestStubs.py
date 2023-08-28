@@ -5,11 +5,6 @@ class GetRequest:
     POST = {}
 
 
-from butler_offline.viewcore.state import persisted_state
-
-CONFIGURED = False
-
-
 class PostRequest:
     method = 'POST'
 
@@ -19,17 +14,5 @@ class PostRequest:
 
 class PostRequestAction(PostRequest):
     def __init__(self, action: str, args):
+        super().__init__(args)
         args['action'] = action
-        self.values = args
-
-
-class VersionedPostRequest(PostRequest):
-    def __init__(self, args):
-        args['ID'] = persisted_state.current_database_version()
-        self.values = args
-
-
-class VersionedPostRequestAction(VersionedPostRequest):
-    def __init__(self, action: str, args):
-        args['action'] = action
-        self.values = args

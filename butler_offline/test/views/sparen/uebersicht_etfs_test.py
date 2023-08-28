@@ -6,7 +6,7 @@ from butler_offline.core.shares import sectors
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore import requester
 from butler_offline.test.RequesterStub import RequesterStub
-from butler_offline.test.RequestStubs import VersionedPostRequestAction
+from butler_offline.test.RequestStubs import PostRequestAction
 from butler_offline.views.sparen import language
 from butler_offline.core.shares.shares_manager import SharesInfo
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
@@ -242,7 +242,7 @@ def test_refresh_data():
     )
 
     result = handle_request(
-        request=VersionedPostRequestAction('update_data', {'isin': 'DE000A14ND46'}),
+        request=PostRequestAction('update_data', {'isin': 'DE000A14ND46'}),
         context=basic_context(shares_info=shares_info)
     )
     assert result.user_success_message()
