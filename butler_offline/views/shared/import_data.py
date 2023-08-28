@@ -1,24 +1,26 @@
+import logging
 from datetime import datetime
-from butler_offline.core.file_system import write_import
-from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
-from butler_offline.viewcore.converter import datum_to_string
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.test.RequestStubs import PostRequest
+
 from butler_offline.core import configuration_provider
-from butler_offline.online_services.butler_online.session import get_partnername, login
+from butler_offline.core import file_system
+from butler_offline.core.configuration_provider import ConfigurationProvider
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.core.export.json_report import JSONReport
+from butler_offline.core.export.json_to_text_mapper import JSONToTextMapper
+from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
+from butler_offline.core.file_system import write_import
 from butler_offline.online_services.butler_online.einzelbuchungen import get_einzelbuchungen, delete_einzelbuchungen
 from butler_offline.online_services.butler_online.gemeinsame_buchungen import get_gemeinsame_buchungen, \
     upload_gemeinsame_buchungen, delete_gemeinsame_buchungen
+from butler_offline.online_services.butler_online.session import get_partnername, login
 from butler_offline.online_services.butler_online.settings import set_kategorien
-from butler_offline.core.export.json_report import JSONReport
-from butler_offline.core.export.text_report import TextReportWriter, TextReportReader
-import logging
-from butler_offline.viewcore.converter import datetime_to_filesystem_string
-from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context
-from butler_offline.core import file_system
+from butler_offline.viewcore.converter import datetime_to_filesystem_string
+from butler_offline.viewcore.converter import datum_to_string
+from butler_offline.viewcore.viewcore import post_action_is
 
 
 class ImportDataContext:
@@ -26,12 +28,14 @@ class ImportDataContext:
                  name: str,
                  einzelbuchungen: Einzelbuchungen,
                  gemeinsamebuchungen: Gemeinsamebuchungen,
-                 filesystem: file_system.FileSystemImpl
+                 filesystem: file_system.FileSystemImpl,
+                 conf: ConfigurationProvider
                  ):
         self._name = name
         self._einzelbuchungen = einzelbuchungen
         self._gemeinsamebuchungen = gemeinsamebuchungen
         self._filesystem = filesystem
+        self._conf = conf
 
     def name(self) -> str:
         return self._name
@@ -44,6 +48,9 @@ class ImportDataContext:
 
     def filesystem(self) -> file_system.FileSystemImpl:
         return self._filesystem
+
+    def conf(self) -> ConfigurationProvider:
+        return self._conf
 
 
 def _mapping_passt(post_parameter, unpassende_kategorien):
@@ -96,7 +103,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
         if post_action_is(request, 'load_online_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
-            _save_server_creds(serverurl, request.values['email'])
+            _save_server_creds(context.conf(), serverurl, request.values['email'])
 
             auth_container = login(serverurl, request.values['email'], request.values['password'])
 
@@ -118,7 +125,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
         if post_action_is(request, 'load_online_gemeinsame_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
-            _save_server_creds(serverurl, request.values['email'])
+            _save_server_creds(context.conf(), serverurl, request.values['email'])
             logging.info(serverurl)
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             online_username = auth_container.online_name()
@@ -130,7 +137,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
 
             logging.info('table before person mapping %s', table)
             table.Person = table.Person.map(
-                lambda x: context.name() if x == online_username else configuration_provider.get_configuration(
+                lambda x: context.name() if x == online_username else context.conf().get_configuration(
                     'PARTNERNAME'))
             online_content = TextReportWriter().generate_report(table)
             response = handle_request_internally(
@@ -149,7 +156,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
             serverurl = request.values['server']
 
             serverurl = _add_protokoll_if_needed(serverurl)
-            _save_server_creds(serverurl, request.values['email'])
+            _save_server_creds(conf=context.conf(), serverurl=serverurl, email=request.values['email'])
 
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
@@ -158,7 +165,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
         elif post_action_is(request, 'upload_gemeinsame_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
-            _save_server_creds(serverurl, request.values['email'])
+            _save_server_creds(conf=context.conf(), serverurl=serverurl, email=request.values['email'])
             logging.info(serverurl)
             auth_container = login(serverurl, request.values['email'], request.values['password'])
             online_username = auth_container.online_name()
@@ -167,7 +174,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
             logging.info('butler offline username: %s', offline_username)
             online_partnername = get_partnername(serverurl, auth_container=auth_container)
             logging.info('butler online partnername: %s', online_partnername)
-            offline_partnername = configuration_provider.get_configuration('PARTNERNAME')
+            offline_partnername = context.conf().get_configuration('PARTNERNAME')
             logging.info('butler offline partnername: %s', offline_partnername)
 
             buchungen = context.gemeinsamebuchungen().get_renamed_list(offline_username,
@@ -248,14 +255,13 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
                     options.append('als ' + str(kategorie_option) + ' importieren')
                 options = sorted(options)
                 options.insert(0, 'neue Kategorie anlegen')
-                result_context.add('element_titel', 'Kategorien zuweisen')
                 result_context.add('unpassende_kategorien', nicht_passende_kategorien)
                 result_context.add('optionen', options)
                 result_context.add('import', request.values['import'])
-                result_context.overwrite_page_to_render('shared/import_mapping.html')
+                result_context.overwrite_page_to_render('shared/import_mapping.html', 'Kategorien zuweisen')
 
-    result_context.add('ONLINE_DEFAULT_SERVER', configuration_provider.get_configuration('ONLINE_DEFAULT_SERVER'))
-    result_context.add('ONLINE_DEFAULT_USER', configuration_provider.get_configuration('ONLINE_DEFAULT_USER'))
+    result_context.add('ONLINE_DEFAULT_SERVER', context.conf().get_configuration('ONLINE_DEFAULT_SERVER'))
+    result_context.add('ONLINE_DEFAULT_USER', context.conf().get_configuration('ONLINE_DEFAULT_USER'))
     return result_context
 
 
@@ -271,9 +277,9 @@ def _add_protokoll_if_needed(serverurl):
     return serverurl
 
 
-def _save_server_creds(serverurl, email):
-    configuration_provider.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
-    configuration_provider.set_configuration('ONLINE_DEFAULT_USER', email)
+def _save_server_creds(conf: ConfigurationProvider, serverurl: str, email: str):
+    conf.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
+    conf.set_configuration('ONLINE_DEFAULT_USER', email)
 
 
 def index(request):
@@ -285,6 +291,7 @@ def index(request):
             gemeinsamebuchungen=db.gemeinsamebuchungen,
             einzelbuchungen=db.einzelbuchungen,
             name=db.name,
-            filesystem=file_system.instance()
+            filesystem=file_system.instance(),
+            conf=configuration_provider.CONFIGURATION_PROVIDER
         )
     )

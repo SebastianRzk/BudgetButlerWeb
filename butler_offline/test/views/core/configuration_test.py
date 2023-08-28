@@ -1,135 +1,183 @@
-from butler_offline.viewcore.state.persisted_state import database_instance
-from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.core.configuration_provider import DictConfiguration
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.test.RequestStubs import VersionedPostRequest
-from butler_offline.views.core import configuration
-from butler_offline.core import file_system, configuration_provider
-from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.test.database_util import untaint_database
 from butler_offline.viewcore.routes import CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE
+from butler_offline.views.core import configuration
 
 
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    configuration_provider.LOADED_CONFIG = None
-    request_handler.stub_me()
+def generate_basic_test_context(
+        einzelbuchungen: Einzelbuchungen = Einzelbuchungen(),
+        gemeinsamebuchungen: Gemeinsamebuchungen = Gemeinsamebuchungen()
+):
+    conf: DictConfiguration = DictConfiguration(
+        {
+            'THEME_COLOR': 'conf.theme.color',
+            'AUSGESCHLOSSENE_KATEGORIEN': ['conf.ausgeschlossenene.kategorie'],
+            'PARTNERNAME': 'conf.partnername',
+            'DESIGN_COLORS': 'conf.color1,conf.color2'
+        }
+    )
+    return configuration.ConfigurationContext(
+        conf_provider=conf,
+        einzelbuchungen=einzelbuchungen,
+        gemeinsame_buchungen=gemeinsamebuchungen
+    )
 
 
 def test_init():
-    set_up()
-    configuration.index(GetRequest())
+    result = configuration.handle_request(
+        request=GetRequest(),
+        context=generate_basic_test_context()
+    )
+    assert result.is_ok()
 
 
 def test_transaction_id_should_be_in_context():
-    set_up()
-    context = configuration.index(GetRequest())
-    assert 'ID' in context
+    context = configuration.handle_request(
+        request=GetRequest(),
+        context=generate_basic_test_context()
+    )
+    assert context.is_transactional()
 
 
 def test_add_kategorie():
-    set_up()
-    configuration.index(PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test'}))
-    assert database_instance().einzelbuchungen.get_alle_kategorien() == {'test'}
+    einzelbuchungen = Einzelbuchungen()
+    context = generate_basic_test_context(einzelbuchungen=einzelbuchungen)
+    configuration.handle_request(
+        request=PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test'}),
+        context=context
+    )
+    assert einzelbuchungen.get_alle_kategorien() == {'test'}
 
 
 def test_with_no_message_in_params_should_not_show_message():
-    set_up()
-    result = configuration.index(GetRequest())
-    assert 'message' not in result
+    result = configuration.handle_request(
+        request=GetRequest(),
+        context=generate_basic_test_context()
+    )
+    assert not result.user_success_message()
+    assert not result.user_error_message()
 
 
 def test_with_message_in_params_should_show_message():
-    set_up()
-    result = configuration.index(PostRequest(
-        {
-            CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE: 'my message'
-        }
-    ))
-    assert result['message']
-    assert result['message_content'] == 'my message'
+    result = configuration.handle_request(
+        request=PostRequest(
+            {
+                CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE: 'my message'
+            }
+        ),
+        context=generate_basic_test_context()
+    )
+    assert result.user_success_message()
+    assert result.user_success_message().content() == 'my message'
 
 
 def test_add_kategorie_with_redirect():
-    set_up()
-    result = configuration.index(
-        PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test', 'redirect': 'destination'})
+    result = configuration.handle_request(
+        request=PostRequest({'action': 'add_kategorie', 'neue_kategorie': 'test', 'redirect': 'destination'}),
+        context=generate_basic_test_context(einzelbuchungen=Einzelbuchungen())
     )
-    assert result == '/destination/'
+    assert result.is_redirect()
+    assert result.redirect_target_url() == '/destination/'
 
 
 def test_change_db_should_trigger_db_reload():
-    set_up()
-    configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test'}))
-    assert database_instance().name == 'test'
-
-    configuration.index(PostRequest({'action': 'edit_databases', 'dbs': 'test2'}))
-    assert database_instance().name == 'test2'
+    context = generate_basic_test_context()
+    configuration.handle_request(
+        request=PostRequest({'action': 'edit_databases', 'dbs': 'test123'}),
+        context=context
+    )
+    assert context.configuration().get_configuration('DATABASES') == 'test123'
 
 
 def test_change_partnername_should_change_partnername():
-    set_up()
-    assert viewcore.name_of_partner() == 'kein_Partnername_gesetzt'
-    configuration.index(VersionedPostRequest({'action': 'set_partnername', 'partnername': 'testpartner'}))
-    assert viewcore.name_of_partner() == 'testpartner'
+    context = generate_basic_test_context()
+    assert context.configuration().get_configuration('PARTNERNAME') == 'conf.partnername'
+    configuration.handle_request(
+        request=PostRequest({'action': 'set_partnername', 'partnername': 'testpartner'}),
+        context=context
+    )
+    assert context.configuration().get_configuration('PARTNERNAME') == 'testpartner'
 
 
 def test_change_themecolor_should_change_themecolor():
-    set_up()
-    assert configuration_provider.get_configuration('THEME_COLOR') == '#00acd6'
-    configuration.index(PostRequest({'action': 'change_themecolor', 'themecolor': '#000000'}))
-    assert configuration_provider.get_configuration('THEME_COLOR') == '#000000'
+    context = generate_basic_test_context()
+    assert context.configuration().get_configuration('THEME_COLOR') == 'conf.theme.color'
+    configuration.handle_request(
+        request=PostRequest({'action': 'change_themecolor', 'themecolor': '#000000'}),
+        context=context
+    )
+    assert context.configuration().get_configuration('THEME_COLOR') == '#000000'
 
 
 def test_change_schliesse_kateorien_aus_should_change_add_ausgeschlossene_kategorien():
-    set_up()
-    assert configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == ''
-    configuration.index(
-        PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'Alkohol'}))
-    assert configuration_provider.get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == 'Alkohol'
+    context = generate_basic_test_context()
+    assert context.configuration().get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == [
+        'conf.ausgeschlossenene.kategorie']
+    configuration.handle_request(
+        request=PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'Alkohol'}),
+        context=context
+    )
+    assert context.configuration().get_configuration('AUSGESCHLOSSENE_KATEGORIEN') == 'Alkohol'
 
 
 def test_change_partnername_should_mirgrate_old_partnernames():
-    set_up()
-    name_of_partner = viewcore.name_of_partner()
-    gemeinsame_buchungen = database_instance().gemeinsamebuchungen
+    name_of_partner = generate_basic_test_context().configuration().get_configuration('PARTNERNAME')
+    gemeinsame_buchungen = Gemeinsamebuchungen()
     gemeinsame_buchungen.add(datum('01.01.2017'), 'kat', 'name', 1, name_of_partner)
-    untaint_database(database=database_instance())
+    context = generate_basic_test_context(gemeinsamebuchungen=gemeinsame_buchungen)
 
-    configuration.index(VersionedPostRequest({'action': 'set_partnername', 'partnername': 'testpartner_renamed'}))
-    gemeinsame_buchungen = database_instance().gemeinsamebuchungen
-    database_partners = gemeinsame_buchungen.content.Person
+    configuration.handle_request(
+        request=PostRequest({'action': 'set_partnername', 'partnername': 'testpartner_renamed'}),
+        context=context
+    )
+
+    database_partners = context.gemeinsame_buchungen().content.Person
 
     assert set(database_partners) == {'testpartner_renamed'}
 
 
 def test_change_colors():
-    set_up()
-    assert viewcore.design_colors() == '3c8dbc,' \
-                                       'f56954,' \
-                                       '00a65a,' \
-                                       '00c0ef,' \
-                                       'f39c12,' \
-                                       'd2d6de,' \
-                                       '001F3F,' \
-                                       '39CCCC,' \
-                                       '3D9970,' \
-                                       '01FF70,' \
-                                       'FF851B,' \
-                                       'F012BE,' \
-                                       '8E24AA,' \
-                                       'D81B60,' \
-                                       '222222,' \
-                                       'd2d6de'.split(',')
-    configuration.index(PostRequest({'action': 'change_colorpalette',
-                                     '0_checked': 'on',
-                                     '0_farbe': '#000000',
-                                     '1_checked': 'on',
-                                     '1_farbe': '#FFFFFF',
-                                     '2_farbe': '#555555'}))
-    assert viewcore.design_colors() == ['000000', 'FFFFFF']
-    set_up()
+    context = generate_basic_test_context()
+
+    assert context.configuration().get_configuration('DESIGN_COLORS') == 'conf.color1,conf.color2'
+    configuration.handle_request(
+        request=PostRequest({'action': 'change_colorpalette',
+                             '0_checked': 'on',
+                             '0_farbe': '#000000',
+                             '1_checked': 'on',
+                             '1_farbe': '#FFFFFF',
+                             '2_farbe': '#555555'}),
+        context=context
+    )
+    assert context.configuration().get_configuration('DESIGN_COLORS') == '000000,FFFFFF'
+
+
+def test_get_colors():
+    result = configuration.handle_request(
+        request=GetRequest(),
+        context=generate_basic_test_context()
+    )
+    assert result.get('palette') == [{'checked': True, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 0},
+                                     {'checked': True, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 1},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 2},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 3},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 4},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 5},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 6},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 7},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 8},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 9},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 10},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 11},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 12},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 13},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 14},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 15},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 16},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 17},
+                                     {'checked': False, 'farbe': 'conf.color1', 'kategorie': 'keine', 'nummer': 18},
+                                     {'checked': False, 'farbe': 'conf.color2', 'kategorie': 'keine', 'nummer': 19}]

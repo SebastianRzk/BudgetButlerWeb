@@ -1,7 +1,7 @@
-from flask import Flask
-from flask import request
 import logging
 import flask
+from flask import Flask
+from flask import request
 
 from butler_offline.views.einzelbuchungen import addausgabe, \
     adddauerauftrag, \
@@ -145,11 +145,6 @@ def create_backup():
 @app.route(routes.GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN, methods=['GET'])
 def view_uebersicht_abrechnungen():
     return uebersicht_abrechnungen.index(request)
-
-
-'''
-Sparen:
-'''
 
 
 @app.route(routes.SPAREN_SPARBUCHUNG_ADD, methods=['GET', 'POST'])

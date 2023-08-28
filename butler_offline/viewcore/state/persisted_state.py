@@ -12,6 +12,10 @@ SHARES_DATA: SharesInfo | None = None
 SESSION_RANDOM = str(random.random())
 DATABASE_VERSION = 0
 
+class CurrentDatabaseVersionProvider:
+    def current_database_version(self) -> str:
+        return current_database_version()
+
 
 def database_instance():
     if not persisted_state.DATABASES:

@@ -1,13 +1,13 @@
-from butler_offline.viewcore.viewcore import name_of_partner
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
+from butler_offline.viewcore.converter import datum
+from butler_offline.viewcore.converter import datum_to_german
+from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.viewcore import get_post_parameter_or_default
 from butler_offline.viewcore.viewcore import is_post_parameter_set
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum_to_string
-from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.viewcore.converter import datum
-from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
+from butler_offline.viewcore.viewcore import name_of_partner
 
 
 class AbrechnenVorschauContext:
@@ -68,7 +68,8 @@ def handle_request(request, context: AbrechnenVorschauContext):
             self_name=name_self, verhaeltnis=set_verhaeltnis)
 
     if is_post_parameter_set(request, 'set_limit'):
-        ergebnis_satz = '''Durch das Limit bei {name} von {limit_value} EUR wurde das Verhältnis von {verhaeltnis_alt} auf {verhaeltnis_neu} aktualisiert<br>'''
+        ergebnis_satz = '''Durch das Limit bei {name} von {limit_value} EUR wurde das ''' + \
+                        '''Verhältnis von {verhaeltnis_alt} auf {verhaeltnis_neu} aktualisiert<br>'''
         verhaeltnis_alt = set_verhaeltnis
         limited_person = request.values['set_limit_fuer']
         limit_value = int(request.values['set_limit_value'])

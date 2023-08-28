@@ -334,14 +334,7 @@ def test_add_order_for_existing_auszug_should_return_error():
 
 def test_add_should_be_secured_by_request_handler():
     def index_handle():
-        add_depotauszug.index(PostRequest(
-            {'action': 'add',
-             'ID': 'idasdasd',
-             'datum_2demokonto': rfc('01.03.2020'),
-             'konto': '2demokonto',
-             'wert_2demokonto_2demoisin': '100,00'
-             }
-        ))
+        add_depotauszug.index(GetRequest())
 
     result = run_in_mocked_handler(index_handle=index_handle)
 
@@ -404,15 +397,7 @@ def test_edit():
 
 def test_edit_should_be_secured_by_request_handler():
     def index_handle():
-        add_depotauszug.index(PostRequest(
-            {'action': 'add',
-             'ID': 'asdf',
-             'edit_index': 0,
-             'datum_2demokonto': rfc('01.03.2020'),
-             'konto': '2demokonto',
-             'wert_2demokonto_2demoisin': '200,00'
-             }
-        ))
+        add_depotauszug.index(GetRequest())
 
     result = run_in_mocked_handler(index_handle)
 

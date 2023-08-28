@@ -1,13 +1,13 @@
 from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, datum_to_german
+from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, \
+    datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
 from butler_offline.viewcore.template import fa
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, TransactionalPageContext
-
 
 TYP_AUSGABE = 'Ausgabe'
 TYPE_EINNAHME = 'Einnahme'
@@ -46,12 +46,12 @@ def handle_request(request, context: AddDauerauftragContext) -> TransactionalPag
             non_persisted_state.add_changed_dauerauftraege({
                 'fa': fa.pencil,
                 'startdatum': datum_to_german(startdatum),
-                'endedatum':  datum_to_german(endedatum),
+                'endedatum': datum_to_german(endedatum),
                 'kategorie': request.values['kategorie'],
                 'name': request.values['name'],
                 'rhythmus': request.values['rhythmus'],
                 'wert': from_double_to_german(value)
-                })
+            })
         else:
             startdatum = datum(request.values['startdatum'])
             endedatum = datum(request.values['endedatum'])
@@ -70,7 +70,7 @@ def handle_request(request, context: AddDauerauftragContext) -> TransactionalPag
                 'name': request.values['name'],
                 'rhythmus': request.values['rhythmus'],
                 'wert': from_double_to_german(value)
-                })
+            })
 
     page_context = generate_transactional_page_context('adddauerauftrag')
     page_context.add('approve_title', 'Dauerauftrag hinzufügen')
@@ -93,8 +93,8 @@ def handle_request(request, context: AddDauerauftragContext) -> TransactionalPag
         page_context.add('bearbeitungsmodus', True)
         page_context.add('edit_index', db_index)
         page_context.add('approve_title', 'Dauerauftrag aktualisieren')
-        page_context.add('element_titel', 'Dauerauftrag bearbeiten')
         page_context.add('active_name', 'Dauerauftrag bearbeiten')
+        page_context.overwrite_page_titel('Dauerauftrag bearbeiten')
 
     if not page_context.contains('default_item'):
         page_context.add('default_item', {

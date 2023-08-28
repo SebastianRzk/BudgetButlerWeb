@@ -7,14 +7,14 @@ from datetime import date
 
 
 def test_init_with_empty_database():
-    dashboard._handle_request(None, dashboard.DashboardContext(
+    dashboard.handle_request(None, dashboard.DashboardContext(
         einzelbuchungen=Einzelbuchungen(),
         today=date(2018, 2, 13)
     ))
 
 
 def test_should_return_month_list():
-    result: PageContext = dashboard._handle_request(None, dashboard.DashboardContext(
+    result: PageContext = dashboard.handle_request(None, dashboard.DashboardContext(
         einzelbuchungen=Einzelbuchungen(),
         today=date(2018, 2, 13)
     ))
@@ -27,7 +27,7 @@ def test_with_entry_should_return_german_date():
     einzelbuchungen = Einzelbuchungen()
     einzelbuchungen.add(date(2019, 2, 16), 'eine einnahme kategorie', 'some name', 10)
 
-    result: PageContext = dashboard._handle_request(
+    result: PageContext = dashboard.handle_request(
         None,
         dashboard.DashboardContext(
             einzelbuchungen=einzelbuchungen,

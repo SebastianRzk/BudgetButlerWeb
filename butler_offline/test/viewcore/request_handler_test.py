@@ -1,17 +1,15 @@
 from requests.exceptions import ConnectionError
-from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_page_context, PageContext
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import request_handler
+
+from butler_offline.core import file_system
 from butler_offline.test.RequestStubs import GetRequest
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.core import file_system
+from butler_offline.test.viewcore.request_handler import RedirectorStub, RendererStub
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_page_context, PageContext
 
 
 def set_up():
     file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    persisted_state.database_instance()
-    request_handler.stub_me_theme()
 
 
 class EmptyContext:
@@ -28,27 +26,31 @@ def test_manual_redirect():
         request=GetRequest(),
         handle_function=index_make_redirect,
         html_base_page='nothing',
-        context_creator=lambda db: EmptyContext()
+        context_creator=lambda db: EmptyContext(),
+        redirector=RedirectorStub()
     )
-    assert result == 'to_url'
+    assert result == 'to: to_url'
 
 
 def index_generate_extra_page(request, context: EmptyContext):
     context = generate_page_context('asdf')
-    context.overwrite_page_to_render('something_special')
+    context.overwrite_page_to_render(new_template_file='something_special', new_title='new title')
     return context
 
 
 def test_extra_page():
-    set_up()
+    renderer = RendererStub()
 
-    result = request_handler.handle(
+    request_handler.handle(
         request=GetRequest(),
         html_base_page='something_normal',
         context_creator=lambda db: EmptyContext(),
-        handle_function=index_generate_extra_page
+        handle_function=index_generate_extra_page,
+        renderer=renderer
     )
-    assert result['content'] == 'something_special'
+
+    assert renderer.result().html_pages_requested_to_render() == ['something_special']
+    assert renderer.get_index_content()['element_titel'] == 'new title'
 
 
 def index_generate_normal_page(request, context: EmptyContext):
@@ -56,14 +58,15 @@ def index_generate_normal_page(request, context: EmptyContext):
 
 
 def test_default_page():
-    set_up()
-    result = request_handler.handle(
+    renderer = RendererStub()
+    request_handler.handle(
         request=GetRequest(),
         html_base_page='something_normal',
         handle_function=index_generate_normal_page,
-        context_creator=lambda db: EmptyContext()
+        context_creator=lambda db: EmptyContext(),
+        renderer=renderer
     )
-    assert result['content'] == 'something_normal'
+    assert renderer.result().html_pages_requested_to_render() == ['something_normal']
 
 
 def index_raise_exception(request, context: EmptyContext) -> PageContext:
@@ -75,30 +78,30 @@ def index_raise_http_error(request, context: EmptyContext) -> PageContext:
 
 
 def test_http_exception():
-    set_up()
-    request_handler.stub_me()
+    renderer = RendererStub()
 
     result = request_handler.handle(
         request=GetRequest(),
         html_base_page='something_normal',
         handle_function=index_raise_http_error,
-        context_creator=lambda db: EmptyContext()
+        context_creator=lambda db: EmptyContext(),
+        renderer=renderer
     )
-    assert result['message']
-    assert result['message_type'] == 'error'
-    assert result['message_content'] == 'Verbindung zum Server konnte nicht aufgebaut werden.'
+
+    assert renderer.result().html_pages_requested_to_render() == []
+    result = renderer.get_index_content()
+    assert result['content'] == 'Verbindung zum Server konnte nicht aufgebaut werden.'
 
 
 def test_exception():
-    set_up()
-    request_handler.stub_me()
-
-    result = request_handler.handle(
+    renderer = RendererStub()
+    request_handler.handle(
         request=GetRequest(),
         handle_function=index_raise_exception,
         html_base_page='something_normal',
-        context_creator=lambda db: EmptyContext()
+        context_creator=lambda db: EmptyContext(),
+        renderer=renderer
     )
-    assert result['message']
-    assert result['message_type'] == 'error'
-    assert result['message_content'] == 'Ein Fehler ist aufgetreten: <br>\n '
+    assert renderer.result().html_pages_requested_to_render() == []
+    result = renderer.get_index_content()
+    assert result['content'] == 'Ein Fehler ist aufgetreten: \n '

@@ -1,11 +1,11 @@
-from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, TransactionalPageContext
 from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-from butler_offline.viewcore.context.builder import generate_transactional_page_context, TransactionalPageContext
+from butler_offline.viewcore.viewcore import post_action_is
 
 
 class AddAusgabeContext:
@@ -18,7 +18,6 @@ class AddAusgabeContext:
 
 def handle_request(request, context: AddAusgabeContext):
     result_context: TransactionalPageContext = generate_transactional_page_context('addeinzelbuchung')
-    result_context.add('element_titel', 'Neue Ausgabe')
     result_context.add('approve_title', 'Ausgabe hinzufügen')
 
     if post_action_is(request, 'add'):
@@ -68,7 +67,7 @@ def handle_request(request, context: AddAusgabeContext):
         result_context.add('bearbeitungsmodus', True)
         result_context.add('edit_index', db_index)
         result_context.add('set_kategorie', True)
-        result_context.add('element_titel', 'Einzelbuchung bearbeiten')
+        result_context.overwrite_page_titel('Einzelbuchung bearbeiten')
         result_context.add('active_name', 'Einzelbuchung bearbeiten')
         result_context.add('approve_title', 'Ausgabe aktualisieren')
 

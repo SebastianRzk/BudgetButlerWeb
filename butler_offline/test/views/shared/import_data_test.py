@@ -51,7 +51,9 @@ def test_init_should_return_index_page():
         request=GetRequest(),
         context=get_initial_context()
     )
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.is_ok()
+    assert not context.is_page_to_render_overwritten()
+    assert context.pagename() == 'import'
 
 
 _IMPORT_DATA = '''
@@ -71,7 +73,8 @@ def test_add_passende_kategorie_should_import_value():
         request=PostRequest({'import': _IMPORT_DATA}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen, filesystem=filesystem)
     )
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.pagename() == 'import'
+    assert not context.is_page_to_render_overwritten()
     assert einzelbuchungen.select().select_year(2017).sum() == -11.54
     assert filesystem.get_interaction_count() == 1
 
@@ -121,7 +124,8 @@ def test_gemeinsam_add_passende_kategorie_should_import_value():
     )
 
     assert context.is_ok()
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.pagename() == 'import'
+    assert not context.is_page_to_render_overwritten()
     assert gemeinsamebuchungen.select().count() == 2
 
 
@@ -153,7 +157,7 @@ def test_adde_unpassenden_kategorie_should_show_import_mapping_page():
     )
     assert context.is_page_to_render_overwritten()
     assert context.page_to_render() == 'shared/import_mapping.html'
-    assert context.as_dict()['element_titel'] == 'Kategorien zuweisen'
+    assert context.generate_basic_page_context('asdf', 'asdf')['element_titel'] == 'Kategorien zuweisen'
 
 
 def test_add_unpassenden_kategorie_mit_passendem_mapping_should_import_value():
@@ -164,7 +168,7 @@ def test_add_unpassenden_kategorie_mit_passendem_mapping_should_import_value():
         request=PostRequest({'import': _IMPORT_DATA, 'Essen_mapping': 'als Unpassend importieren'}),
         context=get_initial_context(einzelbuchungen=einzelbuchungen)
     )
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.get_page_context_map()['element_titel'] == 'Export / Import'
     assert einzelbuchungen.select().select_year(2017).sum() == -11.54
 
 
@@ -172,7 +176,7 @@ _IMPORT_DATA_GEMEINSAM = '''\n
 #######MaschinenimportStart
 Datum,Kategorie,Name,Wert,Person,Dynamisch
 2019-01-01,Essen,Testausgabe1,-1.3,TestUser,False
-2019-07-11,Essen,Testausgabe2,-0.9,Partner,False
+2019-07-11,Essen,Testausgabe2,-0.9,conf.partnername,False
 #######MaschinenimportEnd
 '''
 
@@ -209,7 +213,7 @@ def test_einzelbuchung_import_adde_passende_kategorie_should_import_value():
     )
 
     assert context.is_ok()
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.get_page_context_map()['element_titel'] == 'Export / Import'
     assert einzelbuchungen.select().count() == 3
     assert einzelbuchungen.get(1) == {'Datum': datum('11.07.2019'),
                                       'Dynamisch': False,
@@ -251,7 +255,7 @@ def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
                                     name='TestUser')
     )
 
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.get_page_context_map()['element_titel'] == 'Export / Import'
     assert gemeinsamebuchungen.select().count() == 2
     assert gemeinsamebuchungen.get(0)['Name'] == 'Testausgabe1'
     assert gemeinsamebuchungen.get(0)['Person'] == 'TestUser'
@@ -292,7 +296,7 @@ def test_gemeinsam_import_with_unpassenden_partnername_should_import_value_and_r
             name='TestUser')
     )
 
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.get_page_context_map()['element_titel'] == 'Export / Import'
     assert gemeinsamebuchungen.select().count() == 2
     assert gemeinsamebuchungen.get(0) == {
         'Datum': datetime.date(2019, 7, 11),
@@ -308,7 +312,7 @@ def test_gemeinsam_import_with_unpassenden_partnername_should_import_value_and_r
         'Dynamisch': False,
         'Kategorie': 'Essen',
         'Name': 'Testausgabe1',
-        'Person': 'Partner',
+        'Person': 'conf.partnername',
         'Wert': -1.3,
         'index': 1}
 
@@ -338,7 +342,7 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
             name='TestUser')
     )
 
-    assert context.as_dict()['element_titel'] == 'Kategorien zuweisen'
+    assert context.get_page_context_map()['element_titel'] == 'Kategorien zuweisen'
     assert context.get('import') == _IMPORT_DATA_GEMEINSAM
     assert context.get('unpassende_kategorien') == ['Essen']
 
@@ -353,10 +357,10 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
         )
     )
 
-    assert context.as_dict()['element_titel'] == 'Export / Import'
+    assert context.get_page_context_map()['element_titel'] == 'Export / Import'
     assert gemeinsamebuchungen.select().count() == 2
     assert gemeinsamebuchungen.content.Person[0] == 'TestUser'
-    assert gemeinsamebuchungen.content.Person[1] == 'Partner'
+    assert gemeinsamebuchungen.content.Person[1] == 'conf.partnername'
 
     assert gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
     assert gemeinsamebuchungen.content.Kategorie[1] == 'Essen'
@@ -372,7 +376,7 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
     einzelbuchungen.add(datum('20.01.1990'), 'JaZwei', 'SomeTitle', -10)
     gemeinsamebuchungen = Gemeinsamebuchungen()
 
-    configuration._handle_request(
+    configuration.handle_request(
         request=PostRequest({'action': 'set_ausgeschlossene_kategorien', 'ausgeschlossene_kategorien': 'NeinEins'}),
         context=configuration.ConfigurationContext(
             einzelbuchungen=einzelbuchungen,
@@ -408,7 +412,7 @@ def test_upload_data():
     gemeinsamebuchungen = Gemeinsamebuchungen()
 
     gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
-    gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Partner')
+    gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'conf.partnername')
 
     requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
                                         'https://test.test/api/partner.php': _JSON_DATA_PARTNER,
@@ -453,7 +457,7 @@ def test_upload_data_fehler():
     gemeinsamebuchungen = Gemeinsamebuchungen()
 
     gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
-    gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'Partner')
+    gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'conf.partnername')
 
     requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "error"}',
                                         'https://test.test/api/partner.php': _JSON_DATA_PARTNER,
@@ -496,11 +500,17 @@ def get_initial_context(
         name: str = 'asdf',
         einzelbuchungen: Einzelbuchungen = Einzelbuchungen(),
         gemeinsamebuchungen: Gemeinsamebuchungen = Gemeinsamebuchungen(),
-        filesystem: file_system.FileSystemImpl = FileSystemStub()
+        filesystem: file_system.FileSystemImpl = FileSystemStub(),
+        conf: configuration_provider.ConfigurationProvider = configuration_provider.DictConfiguration({
+            'ONLINE_DEFAULT_SERVER': 'online.default.server',
+            'ONLINE_DEFAULT_USER': 'online.default.user',
+            'PARTNERNAME': 'conf.partnername'
+        })
 ) -> import_data.ImportDataContext:
     return import_data.ImportDataContext(
         name=name,
         einzelbuchungen=einzelbuchungen,
         gemeinsamebuchungen=gemeinsamebuchungen,
-        filesystem=filesystem
+        filesystem=filesystem,
+        conf=conf
     )

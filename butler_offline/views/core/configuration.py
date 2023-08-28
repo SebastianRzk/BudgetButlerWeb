@@ -1,13 +1,13 @@
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.core.configuration_provider import CONFIGURATION_PROVIDER
 from butler_offline.core.configuration_provider import ConfigurationProvider
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from butler_offline.core.configuration_provider import CONFIGURATION_PROVIDER
+from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import routes
+from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.viewcore import post_action_is
 
 
 class ConfigurationContext:
@@ -29,7 +29,7 @@ class ConfigurationContext:
         return self._gemeinsame_buchungen
 
 
-def _handle_request(request, context: ConfigurationContext):
+def handle_request(request, context: ConfigurationContext):
     if post_action_is(request, 'edit_databases'):
         dbs = request.values['dbs']
         context.configuration().set_configuration('DATABASES', dbs)
@@ -52,24 +52,27 @@ def _handle_request(request, context: ConfigurationContext):
         context.configuration().set_configuration('DESIGN_COLORS', ','.join(request_colors))
 
     if post_action_is(request, 'set_partnername'):
-        context.gemeinsame_buchungen().rename(viewcore.name_of_partner(), request.values['partnername'])
+        context.gemeinsame_buchungen().rename(
+            context.configuration().get_configuration('PARTNERNAME'), request.values['partnername'])
         context.configuration().set_configuration('PARTNERNAME', request.values['partnername'])
 
     if post_action_is(request, 'set_ausgeschlossene_kategorien'):
-        context.configuration().set_configuration('AUSGESCHLOSSENE_KATEGORIEN', request.values['ausgeschlossene_kategorien'])
+        context.configuration().set_configuration('AUSGESCHLOSSENE_KATEGORIEN',
+                                                  request.values['ausgeschlossene_kategorien'])
         new_set = set(list(request.values['ausgeschlossene_kategorien'].split(',')))
         context.einzelbuchungen().ausgeschlossene_kategorien = new_set
 
     farbmapping = []
     kategorien = sorted(list(context.einzelbuchungen().get_alle_kategorien()))
+    design_colors = context.configuration().get_configuration('DESIGN_COLORS').split(',')
     for colornumber in range(0, 20):
         checked = False
         kategorie = 'keine'
-        color = viewcore.design_colors()[colornumber % len(viewcore.design_colors())]
+        color = design_colors[colornumber % len(design_colors)]
         len_kategorien = len(kategorien)
         if colornumber < len_kategorien:
             kategorie = kategorien[colornumber % len_kategorien]
-        if colornumber < len(viewcore.design_colors()):
+        if colornumber < len(design_colors):
             checked = True
 
         farbmapping.append({
@@ -77,7 +80,7 @@ def _handle_request(request, context: ConfigurationContext):
             'checked': checked,
             'farbe': color,
             'kategorie': kategorie
-            })
+        })
 
     render_context = generate_transactional_page_context('configuration')
 
@@ -93,14 +96,15 @@ def _handle_request(request, context: ConfigurationContext):
     render_context.add('default_databases', default_databases)
     render_context.add('partnername', viewcore.name_of_partner())
     render_context.add('themecolor', context.configuration().get_configuration('THEME_COLOR'))
-    render_context.add('ausgeschlossene_kategorien', context.configuration().get_configuration('AUSGESCHLOSSENE_KATEGORIEN'))
+    render_context.add('ausgeschlossene_kategorien',
+                       context.configuration().get_configuration('AUSGESCHLOSSENE_KATEGORIEN'))
     return render_context
 
 
 def index(request):
     return request_handler.handle(
         request=request,
-        handle_function=_handle_request,
+        handle_function=handle_request,
         context_creator=lambda db: ConfigurationContext(
             conf_provider=CONFIGURATION_PROVIDER,
             einzelbuchungen=db.einzelbuchungen,
@@ -108,5 +112,3 @@ def index(request):
         ),
         html_base_page='core/configuration.html'
     )
-
-
