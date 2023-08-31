@@ -1,131 +1,178 @@
 <div class="theme-double-columns">
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Datenbanken</h3>
-		</div>
-		<form role="form" action="/configuration/" method="post">
-			<div class="box-body">
-				<div class="form-group">
-					<label>Installierte Datenbanken (mit Komma getrennt)</label> <input value="{{default_databases}}" type="text" name="dbs" class="form-control" placeholder="Enter ..." />
-				</div>
-				</div>
-			<div class="box-footer">
-				<input type="hidden" name="ID" value="{{ID}}">
-				<button type="submit" name="action" value="edit_databases">Daten aktualisieren</button>
-			</div>
-		</form>
-	</div>
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Kategorien</h3>
-		</div>
-		<form role="form" action="/configuration/" method="post">
-			<div class="box-body">
-				<div class="form-group">
-					<label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text" name="neue_kategorie" class="form-control" placeholder="Enter ..." />
-				</div>
-				</div>
-			<div class="box-footer">
-				<input type="hidden" name="ID" value="{{ID}}">
-				<button type="submit" name="action" value="add_kategorie" id="add_kategorie">Daten aktualisieren</button>
-			</div>
-		</form>
-	</div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Datenbanken</h3>
+        </div>
+        <form role="form" action="/configuration/" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Installierte Datenbanken (mit Komma getrennt)</label> <input value="{{default_databases}}"
+                                                                                        type="text" name="dbs"
+                                                                                        class="form-control"
+                                                                                        placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="ID" value="{{ID}}">
+                <button type="submit" name="action" value="edit_databases">Daten aktualisieren</button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Kategorien</h3>
+        </div>
+        <form role="form" action="/configuration/" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text"
+                                                                                                         name="neue_kategorie"
+                                                                                                         class="form-control"
+                                                                                                         placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="ID" value="{{ID}}">
+                <button type="submit" name="action" value="add_kategorie" id="add_kategorie">Daten aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="theme-double-columns">
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Partnername</h3>
-		</div>
-		<form role="form" action="/configuration/" method="post">
-			<div class="box-body">
-				<div class="form-group">
-					<label>Name des Partners ändern</label> <input type="text" name="partnername" class="form-control" value="{{partnername}}" placeholder="Enter ..." />
-				</div>
-				</div>
-			<div class="box-footer">
-				<input type="hidden" name="ID" value="{{ID}}">
-				<button type="submit" name="action" value="set_partnername" id="set_partnername">Daten aktualisieren</button>
-			</div>
-		</form>
-	</div>
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Farbe des Hauptdesigns ändern</h3>
-		</div>
-		<form role="form" action="/configuration/" method="post">
-			<div class="box-body">
-				<div class="form-group">
-					<label></label><input id="themecolor" name="themecolor" type="color" value="{{themecolor}}"/>
-				</div>
-				</div>
-			<div class="box-footer">
-				<button type="submit" name="action" value="change_themecolor" id="change_themecolor">Daten aktualisieren</button>
-			</div>
-		</form>
-	</div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Partnername</h3>
+        </div>
+        <form role="form" action="/configuration/" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Name des Partners ändern</label> <input type="text" name="partnername" class="form-control"
+                                                                   value="{{partnername}}" placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="ID" value="{{ID}}">
+                <button type="submit" name="action" value="set_partnername" id="set_partnername">Daten aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Farbe des Hauptdesigns ändern</h3>
+        </div>
+        <form role="form" action="/configuration/" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label></label><input id="themecolor" name="themecolor" type="color" value="{{themecolor}}"/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="change_themecolor" id="change_themecolor">Daten
+                    aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="theme-double-columns">
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Backup der aktuellen Datenbank anlegen</h3>
-		</div>
-		<form role="form" action="/configuration/backup/" method="post">
-			<div class="box-footer">
-				<button type="submit" name="action" value="change_colorpalette" id="create_backup">Backup jetzt anlegen</button>
-			</div>
-		</form>
-	</div>
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Kategorien in Formularen ausschließen</h3>
-		</div>
-		<form role="form" action="/configuration/" method="post">
-			<div class="box-body">
-				<div class="form-group">
-					<label>Ausgeschlossene Kategorien (mit einem Komma getrennt)</label> <input type="text" name="ausgeschlossene_kategorien" class="form-control" value="{{ausgeschlossene_kategorien}}" placeholder="Enter ..." />
-				</div>
-				</div>
-			<div class="box-footer">
-				<input type="hidden" name="ID" value="{{ID}}">
-				<button type="submit" name="action" value="set_ausgeschlossene_kategorien" id="set_ausgeschlossene_kategorien">Daten aktualisieren</button>
-			</div>
-		</form>
-	</div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Backup der aktuellen Datenbank anlegen</h3>
+        </div>
+        <form role="form" action="/configuration/backup/" method="post">
+            <div class="box-footer">
+                <button type="submit" name="action" value="change_colorpalette" id="create_backup">Backup jetzt
+                    anlegen
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Kategorien in Formularen ausschließen</h3>
+        </div>
+        <form role="form" action="/configuration/" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Ausgeschlossene Kategorien (mit einem Komma getrennt)</label> <input type="text"
+                                                                                                name="ausgeschlossene_kategorien"
+                                                                                                class="form-control"
+                                                                                                value="{{ausgeschlossene_kategorien}}"
+                                                                                                placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="ID" value="{{ID}}">
+                <button type="submit" name="action" value="set_ausgeschlossene_kategorien"
+                        id="set_ausgeschlossene_kategorien">Daten aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
-
 <div class="theme-double-columns">
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Farbpalette für Kategorien ändern</h3>
-		</div>
-		<form role="form" action="/configuration/" method="post">
-			<div class="box-body">
-				<div class="form-group">
-					<table class="table">
-					<tbody>
-						{% for farbe in palette %}
-						<tr>
-							<td>{{farbe.nummer}}</td>
-							<td><input type="checkbox" name="{{farbe.nummer}}_checked"
-								{% if farbe.checked %}
-								checked="checked"
-								{% endif %}>
-							</td>
-							<td><input id="{{farbe.nummer}}_farbe" name="{{farbe.nummer}}_farbe" type="color" value="#{{farbe.farbe}}"/></td>
-							<td>Entspricht momentan : {{farbe.kategorie}}</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				</div>
-				</div>
-			<div class="box-footer">
-				<button type="submit" name="action" value="change_colorpalette" id="change_colorpalette">Daten aktualisieren</button>
-			</div>
-		</form>
-	</div>
-	<div></div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Bestehende Kategorie umbenennen</h3>
+        </div>
+        <form role="form" action="/rename_kategorie/" method="post">
+            <input type="hidden" name="ID" value="{{ID}}">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Bestehende Kategorie, welche umbenannt werden soll</label>
+                    <select class="form-control" id="kategorie_rename_alt" name="kategorie_alt">
+                        {% for kategorie in kategorien %}
+                        <option>{{kategorie}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Neuer Name für die Kategorie</label>
+                    <input type="text" name="kategorie_neu" id="kategorie_rename_neu" class="form-control" placeholder="" required="required"/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" id="rename_kategorie">
+                    Kategorie umbenennen
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Farbpalette für Kategorien ändern</h3>
+        </div>
+        <form role="form" action="/configuration/" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <table class="table">
+                        <tbody>
+                        {% for farbe in palette %}
+                        <tr>
+                            <td>{{farbe.nummer}}</td>
+                            <td><input type="checkbox" name="{{farbe.nummer}}_checked"
+                                       {% if farbe.checked %}
+                                       checked="checked"
+                                       {% endif %}>
+                            </td>
+                            <td><input id="{{farbe.nummer}}_farbe" name="{{farbe.nummer}}_farbe" type="color"
+                                       value="#{{farbe.farbe}}"/></td>
+                            <td>Entspricht momentan : {{farbe.kategorie}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="change_colorpalette" id="change_colorpalette">Daten
+                    aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

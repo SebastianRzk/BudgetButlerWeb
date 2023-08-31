@@ -1,5 +1,6 @@
-from butler_offline_selenium_tests.page.util import fill_element, select_option, click_add_button, get_selected_option
+import time
 from selenium.webdriver.common.by import By
+from butler_offline_selenium_tests.page.util import fill_element, select_option, click_add_button, get_selected_option
 
 
 class EinzelbuchungAdd:
@@ -28,3 +29,14 @@ class EinzelbuchungAdd:
     def add_button_color(self):
         add_button = self.driver.find_element(By.ID, 'add')
         return add_button.value_of_css_property("background-color")
+
+    def define_kategorie(self, kategorie_name: str):
+        open_table_button = self.driver.find_element(By.ID, 'open_add_kategorie')
+        open_table_button.click()
+        time.sleep(1)
+
+        fill_element(self.driver, 'neue_kategorie', kategorie_name)
+
+        add_kategorie_button = self.driver.find_element(By.ID, 'add_kategorie')
+        add_kategorie_button.click()
+        time.sleep(1)

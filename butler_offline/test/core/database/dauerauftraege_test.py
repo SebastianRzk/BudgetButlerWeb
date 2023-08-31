@@ -2,8 +2,8 @@ from datetime import date
 
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME, \
-    FREQUENCY_VIERTELJAEHRLICH_NAME,\
-    FREQUENCY_HALBJAEHRLICH_NAME,\
+    FREQUENCY_VIERTELJAEHRLICH_NAME, \
+    FREQUENCY_HALBJAEHRLICH_NAME, \
     FREQUENCY_JAEHRLICH_NAME
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.test.core.database import extract_name_column, extract_index
@@ -92,7 +92,6 @@ def test_edit_should_sort_and_drop_index():
 
     assert extract_name_column(component_under_test) == ['name2', 'name1']
     assert extract_index(component_under_test) == [0, 1]
-
 
 
 def test_delete_should_taint():
@@ -497,3 +496,132 @@ def test_sort_columns_should_be_containing_all_values_of_read_columns_to_prevent
     component_under_test = Dauerauftraege()
 
     assert set(component_under_test.TABLE_HEADER) == set(component_under_test.SORT_ORDER)
+
+
+def test_rename_should_rename():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        any_datum_1(),
+        any_datum_2(),
+        'kategorie1',
+        'some name3',
+        FREQUENCY_MONATLICH_NAME,
+        1.23)
+    component_under_test.add(
+        any_datum_3(),
+        any_datum_4(),
+        'kategorie2',
+        'some name3',
+        FREQUENCY_MONATLICH_NAME,
+        1.23)
+    component_under_test.add(
+        any_datum_5(),
+        any_datum_6(),
+        'kategorie3',
+        'some name3',
+        FREQUENCY_MONATLICH_NAME,
+        1.23)
+
+    element1 = {'Endedatum': any_datum_2(),
+                'Kategorie': 'kategorie1',
+                'Name': 'some name3',
+                'Rhythmus': 'monatlich',
+                'Startdatum': any_datum_1(),
+                'Wert': 1.23,
+                'index': 0}
+    element2 = {'Endedatum': any_datum_4(),
+                'Kategorie': 'kategorie2',
+                'Name': 'some name3',
+                'Rhythmus': 'monatlich',
+                'Startdatum': any_datum_3(),
+                'Wert': 1.23,
+                'index': 1}
+    element3 = {'Endedatum': any_datum_6(),
+                'Kategorie': 'kategorie3',
+                'Name': 'some name3',
+                'Rhythmus': 'monatlich',
+                'Startdatum': any_datum_5(),
+                'Wert': 1.23,
+                'index': 2}
+    assert component_under_test.select().to_list() == [element1, element2, element3]
+
+    component_under_test.rename_kategorie(alter_name='kategorie2', neuer_name='kategorie4')
+
+    assert component_under_test.select().to_list() == [element1,
+                                                       {'Endedatum': any_datum_4(),
+                                                        'Kategorie': 'kategorie4',
+                                                        'Name': 'some name3',
+                                                        'Rhythmus': 'monatlich',
+                                                        'Startdatum': any_datum_3(),
+                                                        'Wert': 1.23,
+                                                        'index': 1},
+                                                       element3]
+    assert component_under_test.tainted
+
+
+def test_rename_should_resort():
+    component_under_test = Dauerauftraege()
+    component_under_test.add(
+        any_datum_1(),
+        any_datum_2(),
+        'kategorie1',
+        'some name3',
+        FREQUENCY_MONATLICH_NAME,
+        1.23)
+    component_under_test.add(
+        any_datum_1(),
+        any_datum_2(),
+        'kategorie2',
+        'some name3',
+        FREQUENCY_MONATLICH_NAME,
+        1.23)
+    element1 = {'Endedatum': any_datum_2(),
+                'Kategorie': 'kategorie1',
+                'Name': 'some name3',
+                'Rhythmus': 'monatlich',
+                'Startdatum': any_datum_1(),
+                'Wert': 1.23,
+                'index': 0}
+    element2 = {'Endedatum': any_datum_2(),
+                'Kategorie': 'kategorie2',
+                'Name': 'some name3',
+                'Rhythmus': 'monatlich',
+                'Startdatum': any_datum_1(),
+                'Wert': 1.23,
+                'index': 1}
+    assert component_under_test.select().to_list() == [element1, element2]
+
+    component_under_test.rename_kategorie(alter_name='kategorie2', neuer_name='kategorie0')
+
+    assert component_under_test.select().to_list() == [{'Endedatum': any_datum_2(),
+                                                        'Kategorie': 'kategorie0',
+                                                        'Name': 'some name3',
+                                                        'Rhythmus': 'monatlich',
+                                                        'Startdatum': any_datum_1(),
+                                                        'Wert': 1.23,
+                                                        'index': 1} | {'index': 0},
+                                                       element1 | {'index': 1}]
+
+
+def any_datum_6():
+    return datum('2.2.2013')
+
+
+def any_datum_5():
+    return datum('31.1.2012')
+
+
+def any_datum_4():
+    return datum('2.2.2011')
+
+
+def any_datum_3():
+    return datum('31.1.2011')
+
+
+def any_datum_2():
+    return datum('2.2.2010')
+
+
+def any_datum_1():
+    return datum('31.1.2010')

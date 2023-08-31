@@ -6,7 +6,9 @@ from butler_offline.core.database.stated_object import StatedObject
 
 class DatabaseObject(StatedObject):
 
-    def __init__(self, stored_columns = []):
+    def __init__(self, stored_columns: list = None):
+        if not stored_columns:
+            stored_columns = []
         super().__init__()
         self.content = pd.DataFrame({}, columns=stored_columns)
 
@@ -33,7 +35,7 @@ class DatabaseObject(StatedObject):
         self.taint()
 
     def select(self) -> Selektor:
-        return Selektor(self.content)
+        return Selektor(self.content.copy(deep=True))
 
     def get_static_content(self) -> pd.DataFrame:
         return self.content
@@ -44,6 +46,9 @@ class DatabaseObject(StatedObject):
             row = row_to_dict(dataframe.columns, index, row_data)
             result_list.append(row)
         return result_list
+
+    def _sort(self):
+        raise Exception('not implemented')
 
 
 def row_to_dict(columns, index, row_data):

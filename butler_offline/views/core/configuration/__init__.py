@@ -98,6 +98,7 @@ def handle_request(request, context: ConfigurationContext):
     render_context.add('themecolor', context.configuration().get_configuration('THEME_COLOR'))
     render_context.add('ausgeschlossene_kategorien',
                        context.configuration().get_configuration('AUSGESCHLOSSENE_KATEGORIEN'))
+    render_context.add('kategorien', kategorien)
     return render_context
 
 

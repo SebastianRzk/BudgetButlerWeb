@@ -1,10 +1,10 @@
 from datetime import datetime, date
 from typing import List
+import pandas as pd
+import logging
 
 from butler_offline.core.frequency import get_function_for_name
 from butler_offline.core.database.database_object import DatabaseObject
-import pandas as pd
-import logging
 
 
 class Dauerauftraege(DatabaseObject):
@@ -112,6 +112,10 @@ class Dauerauftraege(DatabaseObject):
         self.content = self.content.sort_values(by=self.SORT_ORDER)
         self.content = self.content.reset_index(drop=True)
 
+    def rename_kategorie(self, alter_name: str, neuer_name: str):
+        self.content[self._TABLE_HEADER_KATEGORIE].replace(to_replace=alter_name, value=neuer_name, inplace=True)
+        self.taint()
+        self._sort()
 
     def _berechne_abbuchung(self, laufdatum, kategorie, name, wert):
         return pd.DataFrame(

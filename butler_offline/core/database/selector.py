@@ -1,5 +1,6 @@
 import itertools as it
 from datetime import date
+from typing import Self
 
 import pandas as pd
 from pandas import DataFrame
@@ -78,7 +79,8 @@ class Selektor:
         injections = it.product(dates, kategorien)
         for injection_date, injection_kategorie in injections:
             data = pd.concat([data,
-                              pd.DataFrame([[injection_date, injection_kategorie, 0]], columns=['Datum', 'Kategorie', 'Wert'])],
+                              pd.DataFrame([[injection_date, injection_kategorie, 0]],
+                                           columns=['Datum', 'Kategorie', 'Wert'])],
                              ignore_index=True)
         return Selektor(data)
 
@@ -123,7 +125,7 @@ class Selektor:
                 if datum_alt != row.Datum:
                     zusammenfassung.append((datum_alt, tag_liste))
                     tag_liste = []
-            tag_liste.append({'kategorie':row.Kategorie, 'name':row.Name, 'summe': row.Wert})
+            tag_liste.append({'kategorie': row.Kategorie, 'name': row.Name, 'summe': row.Wert})
             datum_alt = row.Datum
 
         if datum_alt:
@@ -143,11 +145,11 @@ class Selektor:
         tag_liste = []
         more_than_one = False
         for _, row in kopierte_tabelle.iterrows():
-            if(kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != '':  # next cat or day
+            if (kategorie_alt != row.Kategorie or datum_alt != row.Datum) and kategorie_alt != '':  # next cat or day
                 if datum_alt != row.Datum:
                     zusammenfassung.append((datum_to_german(datum_alt), tag_liste))
                     tag_liste = []
-                tag_liste.append({'kategorie': kategorie_alt, 'name':name_alt, 'summe': '%.2f' % summe_alt})
+                tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': '%.2f' % summe_alt})
                 datum_alt = row.Datum
                 summe_alt = row.Wert
                 kategorie_alt = row.Kategorie
@@ -171,7 +173,7 @@ class Selektor:
 
     def faktor(self, faktor):
         data = self.content.copy()
-        data.Wert = data.Wert.map(lambda x: x*faktor)
+        data.Wert = data.Wert.map(lambda x: x * faktor)
         return Selektor(data)
 
     def count(self) -> int:
@@ -185,6 +187,12 @@ class Selektor:
 
     def get_all_raw(self) -> DataFrame:
         return self.content
+
+    def select_kategorie(self, kategorie: str) -> Self:
+        return Selektor(self.content[self.content['Kategorie'] == kategorie])
+
+    def select_statischen_content(self) -> Self:
+        return Selektor(self.content[self.content['Dynamisch'] == False])
 
 
 class GemeinsamSelector(Selektor):
@@ -201,4 +209,3 @@ class GemeinsamSelector(Selektor):
         data = data[data.Datum <= maxdate]
 
         return GemeinsamSelector(data)
-

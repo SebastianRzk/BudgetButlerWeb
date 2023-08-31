@@ -4,9 +4,11 @@ import pandas as pd
 
 from butler_offline.core.database.database_object import DatabaseObject
 
+COLUMN_KATEGORIE = 'Kategorie'
+
 
 class Einzelbuchungen(DatabaseObject):
-    STATIC_TABLE_HEADER = ['Datum', 'Kategorie', 'Name', 'Wert', 'Tags']
+    STATIC_TABLE_HEADER = ['Datum', COLUMN_KATEGORIE, 'Name', 'Wert', 'Tags']
     TABLE_HEADER = STATIC_TABLE_HEADER + ['Dynamisch']
     tmp_kategorie = None
     ausgeschlossene_kategorien = set()
@@ -15,7 +17,7 @@ class Einzelbuchungen(DatabaseObject):
         super().__init__(self.TABLE_HEADER)
 
     def _sort(self):
-        self.content = self.content.sort_values(by=['Datum', 'Kategorie', 'Name', 'Wert'])
+        self.content = self.content.sort_values(by=['Datum', COLUMN_KATEGORIE, 'Name', 'Wert'])
         self.content = self.content.reset_index(drop=True)
 
     def add(self, datum, kategorie, name, wert, dynamisch=False):
@@ -48,7 +50,7 @@ class Einzelbuchungen(DatabaseObject):
             return {}
 
         tabelle_gesamtsumme = tabelle.Wert.sum()
-        tabelle = tabelle.copy()[['Kategorie', 'Wert']].groupby(['Kategorie']).sum()
+        tabelle = tabelle.copy()[[COLUMN_KATEGORIE, 'Wert']].groupby([COLUMN_KATEGORIE]).sum()
         result = {}
         for kategorie, row in tabelle.iterrows():
             result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
@@ -89,8 +91,13 @@ class Einzelbuchungen(DatabaseObject):
 
         return kategorien
 
-    def add_kategorie(self, tmp_kategorie):
+    def add_kategorie(self, tmp_kategorie: str):
         self.tmp_kategorie = tmp_kategorie
+
+    def rename_kategorie(self, alter_name: str, neuer_name: str):
+        self.content[COLUMN_KATEGORIE].replace(to_replace=alter_name, value=neuer_name, inplace=True)
+        self.taint()
+        self._sort()
 
     def durchschnittliche_ausgaben_pro_monat(self, jahr, today=date.today()):
         data = self.content.copy()
@@ -115,8 +122,8 @@ class Einzelbuchungen(DatabaseObject):
             if monats_teiler == 0:
                 return {}
         data.Wert = data.Wert.map(lambda x: abs(x / monats_teiler))
-        data = data[['Wert', 'Kategorie']]
-        data = data.groupby(by='Kategorie').sum()
+        data = data[['Wert', COLUMN_KATEGORIE]]
+        data = data.groupby(by=COLUMN_KATEGORIE).sum()
         data = data.sort_index()
         result = {}
         for kategorie, wert in data.iterrows():
