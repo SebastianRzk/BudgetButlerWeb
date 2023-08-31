@@ -61,4 +61,4 @@ def test_index_should_be_secured_by_request_handler():
     result = run_in_mocked_handler(handle)
 
     assert result.number_of_calls() == 1
-    assert result.html_pages_requested_to_render() == ['core/dashboard.html']
+    assert result.html_pages_requested_to_render() == ['core/configuration.html']
