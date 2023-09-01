@@ -47,6 +47,7 @@
   * Farben der Kategorien anpassen
   * Verwendung mehrerer Datenbanken
   * Backup der Datenbank-Datei anlegen
+  * Kategorien übergreifend umbenennen
 
 ## Offline Anwendung: BudgetButlerWeb
 

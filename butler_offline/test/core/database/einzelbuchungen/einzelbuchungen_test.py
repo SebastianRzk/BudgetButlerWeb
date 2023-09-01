@@ -216,3 +216,86 @@ def test_get_static_content_should_filter_dynamic_content():
     assert static_content.Name[0] == '1name'
     assert static_content.Wert[0] == 1
     assert 'Dynamisch' not in static_content.columns
+
+
+def test_rename_should_rename():
+    component_under_test = Einzelbuchungen()
+    component_under_test.add(datum('01.01.2012'), '1kategorie', '1name', 1)
+    component_under_test.add(datum('01.01.2013'), '2kategorie', '2name', 2)
+    component_under_test.add(datum('01.01.2014'), '3kategorie', '3name', 3)
+
+    element1 = {'Datum': datum('01.01.2012'),
+                'Dynamisch': False,
+                'Kategorie': '1kategorie',
+                'Name': '1name',
+                'Tags': [],
+                'Wert': 1,
+                'index': 0}
+    element2 = {'Datum': datum('01.01.2013'),
+                'Dynamisch': False,
+                'Kategorie': '2kategorie',
+                'Name': '2name',
+                'Tags': [],
+                'Wert': 2,
+                'index': 1}
+    element3 = {'Datum': datum('01.01.2014'),
+                'Dynamisch': False,
+                'Kategorie': '3kategorie',
+                'Name': '3name',
+                'Tags': [],
+                'Wert': 3,
+                'index': 2}
+    assert component_under_test.select().to_list() == [element1,
+                                                       element2,
+                                                       element3]
+    component_under_test.rename_kategorie(alter_name='2kategorie', neuer_name='4kategorie')
+
+    assert component_under_test.select().to_list() == [element1,
+                                                       {'Datum': datum('01.01.2013'),
+                                                        'Dynamisch': False,
+                                                        'Kategorie': '4kategorie',
+                                                        'Name': '2name',
+                                                        'Tags': [],
+                                                        'Wert': 2,
+                                                        'index': 1},
+                                                       element3]
+    assert component_under_test.tainted
+
+
+def test_rename_should_sort():
+    component_under_test = Einzelbuchungen()
+    component_under_test.add(datum('01.01.2012'), '1kategorie', '1name', 1)
+    component_under_test.add(datum('01.01.2012'), '2kategorie', '2name', 2)
+
+    element1 = {'Datum': datum('01.01.2012'),
+                'Dynamisch': False,
+                'Kategorie': '1kategorie',
+                'Name': '1name',
+                'Tags': [],
+                'Wert': 1,
+                'index': 0}
+    element2 = {'Datum': datum('01.01.2012'),
+                'Dynamisch': False,
+                'Kategorie': '2kategorie',
+                'Name': '2name',
+                'Tags': [],
+                'Wert': 2,
+                'index': 1}
+    assert component_under_test.select().to_list() == [element1,
+                                                       element2]
+    component_under_test.rename_kategorie(alter_name='2kategorie', neuer_name='0kategorie')
+
+    assert component_under_test.select().to_list() == [{'Datum': datum('01.01.2012'),
+                                                        'Dynamisch': False,
+                                                        'Kategorie': '0kategorie',
+                                                        'Name': '2name',
+                                                        'Tags': [],
+                                                        'Wert': 2,
+                                                        'index': 0},
+                                                       element1 | index(1)
+                                                       ]
+    assert component_under_test.tainted
+
+
+def index(new_index: int):
+    return {'index': new_index}

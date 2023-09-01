@@ -16,6 +16,7 @@ from butler_offline.views.core import dashboard, \
     backup, \
     testmode_switch,\
     theme
+from butler_offline.views.core.configuration import rename_kategorie
 
 from butler_offline.views.gemeinsame_buchungen import abrechnen,\
     abrechnen_vorschau, \
@@ -135,6 +136,11 @@ def view_import():
 @app.route(routes.CORE_CONFIGURATION, methods=['GET', 'POST'])
 def view_configuration():
     return configuration.index(request)
+
+
+@app.route(routes.CORE_RENAME, methods=['POST'])
+def handle_rename_kategorie():
+    return rename_kategorie.index(request)
 
 
 @app.route(routes.CORE_CONFIGURATION_BACKUP, methods=['POST'])

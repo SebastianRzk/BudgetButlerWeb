@@ -29,6 +29,7 @@ SPAREN_DEPOTAUSZUEGE_UEBERSICHT = '/uebersicht_depotauszuege/'
 SPAREN_UEBERSICHT_ETFS = '/uebersicht_etfs/'
 
 CORE_CONFIGURATION = '/configuration/'
+CORE_RENAME = '/rename_kategorie/'
 CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE = 'success_message'
 CORE_CONFIGURATION_BACKUP = '/configuration/backup/'
 CORE_IMPORT = '/import/'

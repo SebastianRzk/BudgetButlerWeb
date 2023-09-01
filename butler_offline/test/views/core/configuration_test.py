@@ -53,6 +53,19 @@ def test_add_kategorie():
     assert einzelbuchungen.get_alle_kategorien() == {'test'}
 
 
+def test_should_provide_kategorien_for_rename():
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum=datum('01.01.2012'), kategorie='Kategorie A', name='', wert=1)
+    einzelbuchungen.add(datum=datum('01.01.2012'), kategorie='Kategorie B', name='', wert=1)
+    context = generate_basic_test_context(einzelbuchungen=einzelbuchungen)
+
+    result = configuration.handle_request(
+        request=GetRequest(),
+        context=context
+    )
+
+    assert result.get('kategorien') == ['Kategorie A', 'Kategorie B']
+
 def test_with_no_message_in_params_should_not_show_message():
     result = configuration.handle_request(
         request=GetRequest(),
