@@ -15,7 +15,8 @@ from butler_offline.views.core import dashboard, \
     configuration, \
     backup, \
     testmode_switch,\
-    theme
+    theme, \
+    health
 from butler_offline.views.core.configuration import rename_kategorie
 
 from butler_offline.views.gemeinsame_buchungen import abrechnen,\
@@ -229,7 +230,8 @@ def theme_color():
 
 
 @app.route('/health', methods=['GET'])
-def health():
+def health_route():
+    health.index(request)
     response = flask.jsonify({'status': 'up'})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
