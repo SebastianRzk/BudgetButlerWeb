@@ -23,7 +23,7 @@
 					<td id="item_{{o.index}}_name">{{o.Name}}</td>
 					<td id="item_{{o.index}}_depotwert">{{o.Depotwert}}</td>
 					<td id="item_{{o.index}}_typ">{{o.Typ}}</td>
-					<td id="item_{{o.index}}_wert" class="table-wert">{{o.Wert}}</td>
+					<td id="item_{{o.index}}_wert" class="table-wert">{{o.Wert.deutsch()}} €</td>
 					<td class="flex end">
 						{% if not o.Dynamisch %}
 						<form onsubmit="return confirm('Willst du wirklich die Order {{o.name}} löschen?');" role="form" action="/uebersicht_order/" method="post">

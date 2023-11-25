@@ -19,6 +19,9 @@ class Betrag:
     def __str__(self):
         return 'Betrag({betrag})'.format(betrag=self.js())
 
+    def __repr__(self):
+        return str(self)
+
 
 class BetragListe:
 
@@ -44,3 +47,6 @@ class BetragListe:
         if not isinstance(other, BetragListe):
             return False
         return self.js() == other.js()
+
+    def __repr__(self):
+        return str(self)

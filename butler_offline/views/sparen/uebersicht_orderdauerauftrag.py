@@ -5,6 +5,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 class UbersichtOrderDauerauftragContext:
@@ -34,7 +35,7 @@ def handle_request(request: Request, context: UbersichtOrderDauerauftragContext)
 
 def _format_dauerauftrag_floatpoint(dauerauftraege):
     for dauerauftrag in dauerauftraege:
-        dauerauftrag['Wert'] = '%.2f' % dauerauftrag['Wert']
+        dauerauftrag['Wert'] = Betrag(dauerauftrag['Wert'])
         dauerauftrag['Startdatum'] = datum_to_german(dauerauftrag['Startdatum'])
         dauerauftrag['Endedatum'] = datum_to_german(dauerauftrag['Endedatum'])
 

@@ -5,6 +5,7 @@ from butler_offline.views.sparen import uebersicht_sparbuchungen
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 def generate_base_context(sparbuchungen: Sparbuchungen = Sparbuchungen()):
@@ -55,13 +56,13 @@ def test_get_request__with_einnahme__should_return_edit_link_of_einnahme():
         context=generate_testdata_context()
     )
     first_item = result.get('alles')['2012.12'][0]
-    assert first_item['wert'] == '100,00'
+    assert first_item['wert'] == Betrag(100)
     assert first_item['name'] == 'sparen'
     assert first_item['typ'] == persisted_state.database_instance().sparbuchungen.TYP_MANUELLER_AUFTRAG
     assert first_item['konto'] == 'Demokonto'
 
     second_item = result.get('alles')['2012.12'][0]
-    assert second_item['wert'] == '100,00'
+    assert second_item['wert'] == Betrag(100)
     assert second_item['name'] == 'sparen'
     assert second_item['typ'] == persisted_state.database_instance().sparbuchungen.TYP_MANUELLER_AUFTRAG
     assert second_item['konto'] == 'Demokonto'

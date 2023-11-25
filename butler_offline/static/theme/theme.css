@@ -119,6 +119,7 @@ a:focus {
     margin: 0.5rem;
     line-height: 1;
     align-items: center;
+    width: 100%;
 }
 
 .box-header > .pull-right {
@@ -180,7 +181,7 @@ a:focus {
 .table-wert {
     text-align: right;
     white-space: nowrap;
-    padding-right: 50pt !important;
+    padding-right: 20pt !important;
 }
 
 .sidebar-menu {

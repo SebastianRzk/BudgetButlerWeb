@@ -5,6 +5,7 @@ from butler_offline.viewcore.converter import datum_from_german
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 def basic_test_context(depotwerte: Depotwerte = Depotwerte,
@@ -50,7 +51,7 @@ def test_should_list_order():
          'Name': '1name',
          'Typ': 'Kauf',
          'index': 0,
-         'Wert': '100,00',
+         'Wert': Betrag(100),
          'Dynamisch': False},
         {'Datum': '02.02.2020',
          'Depotwert': 'depotwert1 (isin1)',
@@ -58,7 +59,7 @@ def test_should_list_order():
          'Name': '2name',
          'Typ': 'Verkauf',
          'index': 1,
-         'Wert': '200,00',
+         'Wert': Betrag(200),
          'Dynamisch': False},
     ]
 

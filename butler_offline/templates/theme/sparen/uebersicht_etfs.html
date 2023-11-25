@@ -21,7 +21,7 @@
 							<form role="form" action="/uebersicht_etfs/" method="post">
 								<input type="hidden" name="isin" value="{{etf.ISIN}}">
 								<input type="hidden" name="action" value="update_data">
-								<button type="submit" name="action" value="update_etf_data" id="edit_{{etf.ISIN}}">Daten aktualisiern</button>
+								<button type="submit" name="action" value="update_etf_data" id="edit_{{etf.ISIN}}">Daten aktualisieren</button>
 							</form>
 						</td>
 					</tr>
@@ -40,26 +40,19 @@
     </div>
     <div class="box-body">
         <table class="table">
-          <thead>
-            <tr>
-              <th></th>
-              <th class="table-wert">Prozent</th>
-              <th class="table-wert">Euro</th>
-            </tr>
-          </thead>
           <tbody>
             {% for cost in costs['data'] %}
             <tr>
               <td>{{cost.name}}</td>
-              <td class="table-wert">{{cost.costs_percent}}</td>
-              <td class="table-wert">{{cost.costs_eur}}</td>
+              <td class="table-wert">{{cost.costs_percent}} %</td>
+              <td class="table-wert">{{cost.costs_eur}} €</td>
             </tr>
             {% endfor %}
             <tfooter>
             <tr>
               <td>Gesamt</td>
-              <td class="table-wert">{{costs['gesamt'].costs_percent}}</td>
-              <td class="table-wert">{{costs['gesamt'].costs_eur}}</td>
+              <td class="table-wert">{{costs['gesamt'].costs_percent}} %</td>
+              <td class="table-wert">{{costs['gesamt'].costs_eur}} €</td>
             </tr>
             </tfooter>
           </tbody>
@@ -132,19 +125,18 @@
 				<tr>
 					<th>Land</th>
 					{% for region in regions['header'] %}
-					<th class="table-border-left table-gap">Euro</th>
-					<th class="table-gap-left">Anteil</th>
+					<th class="table-border-left table-gap table-wert">Euro</th>
+					<th class="table-gap-left table-wert">Anteil</th>
 					{% endfor%}
 				</tr>
 			</thead>
 			<tbody>
 				{% for region in regions['data'] %}
 				<tr>
-
 					<td>{{region[0]}}</td>
 					{% for etf in region[1:]%}
-						<td class="table-border-left table-gap">{{etf.euro_str}}€</td>
-						<td class="table-gap">{{etf.percent_str}}%</td>
+						<td class="table-border-left table-gap table-wert">{{etf.euro_str}} €</td>
+						<td class="table-gap table-wert">{{etf.percent_str}} %</td>
 					{% endfor %}
 				</tr>
 				{% endfor %}
@@ -218,19 +210,18 @@
 				<tr>
 					<th>Land</th>
 					{% for sektor in sectors['header'] %}
-					<th class="table-border-left table-gap">Euro</th>
-					<th class="table-gap-left">Anteil</th>
+					<th class="table-border-left table-gap table-wert">Euro</th>
+					<th class="table-gap-left table-wert">Anteil</th>
 					{% endfor%}
 				</tr>
 			</thead>
 			<tbody>
 				{% for sector in sectors['data'] %}
 				<tr>
-
 					<td>{{sector[0]}}</td>
 					{% for etf in sector[1:]%}
-						<td class="table-border-left table-gap">{{etf.euro_str}}€</td>
-						<td class="table-gap">{{etf.percent_str}}%</td>
+						<td class="table-border-left table-gap table-wert">{{etf.euro_str}} €</td>
+						<td class="table-gap table-wert">{{etf.percent_str}} %</td>
 					{% endfor %}
 				</tr>
 				{% endfor %}

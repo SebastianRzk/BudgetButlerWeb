@@ -21,15 +21,15 @@
 					<td id="item_{{sparkonto.index}}_id">{{sparkonto.index}}</td>
 					<td id="item_{{sparkonto.index}}_kontoname">{{sparkonto.kontoname}}</td>
 					<td id="item_{{sparkonto.index}}_kontotyp">{{sparkonto.kontotyp}}</td>
-					<td id="item_{{sparkonto.index}}_aufbuchungen" class="table-wert">{{sparkonto.aufbuchungen}}</td>
+					<td id="item_{{sparkonto.index}}_aufbuchungen" class="table-wert">{{sparkonto.aufbuchungen.deutsch()}} €</td>
 					<td id="item_{{sparkonto.index}}_difference"
 								class="table-wert
 								{% if sparkonto.difference_is_negativ %}
 								negativ
 								{% endif %}
 								"
-							>{{sparkonto.difference}}</td>
-					<td id="item_{{sparkonto.index}}_wert" class="table-wert">{{sparkonto.wert}}</td>
+							>{{sparkonto.difference.deutsch()}} €</td>
+					<td id="item_{{sparkonto.index}}_wert" class="table-wert">{{sparkonto.wert.deutsch()}} €</td>
 					<td class="flex end">
 						<form onsubmit="return confirm('Willst du wirklich das Sparkonto {{sparkonto.name}} löschen?');" role="form" action="/uebersicht_sparkontos/" method="post">
 							<input type="hidden" name="ID" value="{{ID}}">
@@ -47,15 +47,15 @@
 					<td></td>
 					<td><b>Gesamt</b></td>
 					<td></td>
-					<td class="table-wert"><b id="item_gesamt_aufbuchungen">{{gesamt.aufbuchungen}}</b></td>
+					<td class="table-wert"><b id="item_gesamt_aufbuchungen">{{gesamt.aufbuchungen.deutsch()}} €</b></td>
 					<td
 								class="table-wert
 								{% if gesamt.difference_is_negativ %}
 								negativ
 								{% endif %}
 								"
-					><b id="item_gesamt_difference">{{gesamt.difference}}</b></td>
-					<td class="table-wert"><b id="item_gesamt_wert">{{gesamt.wert}}</b></td>
+					><b id="item_gesamt_difference">{{gesamt.difference.deutsch()}} €</b></td>
+					<td class="table-wert"><b id="item_gesamt_wert">{{gesamt.wert.deutsch()}} €</b></td>
 					<td></td>
 				</tr>
 			</tbody>

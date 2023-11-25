@@ -1,6 +1,6 @@
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.http import Request
-from butler_offline.viewcore.converter import from_double_to_german
+from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
@@ -64,18 +64,18 @@ def handle_request(request: Request, context: UebersichtSparkontosContext):
             'index': row_index,
             'kontoname': kontoname,
             'kontotyp': kontotyp,
-            'wert': from_double_to_german(aktueller_kontostand),
-            'difference': from_double_to_german(diff),
-            'aufbuchungen': from_double_to_german(aufbuchungen),
+            'wert': Betrag(aktueller_kontostand),
+            'difference': Betrag(diff),
+            'aufbuchungen': Betrag(aufbuchungen),
             'difference_is_negativ': diff < 0
         })
 
     gesamt_diff = gesamt_kontostand - gesamt_aufbuchungen
 
     gesamt = {
-        'wert': from_double_to_german(gesamt_kontostand),
-        'difference': from_double_to_german(gesamt_diff),
-        'aufbuchungen': from_double_to_german(gesamt_aufbuchungen),
+        'wert': Betrag(gesamt_kontostand),
+        'difference': Betrag(gesamt_diff),
+        'aufbuchungen': Betrag(gesamt_aufbuchungen),
         'difference_is_negativ': gesamt_diff < 0
     }
 

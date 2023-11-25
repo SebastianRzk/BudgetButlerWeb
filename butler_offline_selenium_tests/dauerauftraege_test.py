@@ -154,7 +154,7 @@ class TestUI(SeleniumTestClass):
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '31.01.2010',
-            'wert': '-2,00'
+            'wert': '-2,00 €'
         }
 
         page_einzelbuchungen.open_module(year=2010, month=4)
@@ -163,7 +163,7 @@ class TestUI(SeleniumTestClass):
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '30.04.2010',
-            'wert': '-2,00'
+            'wert': '-2,00 €'
         }
         page_einzelbuchungen.open_module(year=2010, month=7)
 
@@ -171,7 +171,7 @@ class TestUI(SeleniumTestClass):
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '31.07.2010',
-            'wert': '-2,00'
+            'wert': '-2,00 €'
         }
 
         close_driver(driver)

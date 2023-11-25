@@ -25,7 +25,7 @@
 					<td id="item_{{sparbuchung.index}}_datum">{{sparbuchung.datum}}</td>
 					<td id="item_{{sparbuchung.index}}_name">{{sparbuchung.name}}</td>
 					<td id="item_{{sparbuchung.index}}_konto">{{sparbuchung.konto}}</td>
-					<td id="item_{{sparbuchung.index}}_wert" class="table-wert">{{sparbuchung.wert}}</td>
+					<td id="item_{{sparbuchung.index}}_wert" class="table-wert">{{sparbuchung.wert.deutsch()}} €</td>
 					<td id="item_{{sparbuchung.index}}_typ">{{sparbuchung.typ}}
 					<td class="flex end">
 						{% if not sparbuchung.dynamisch %}

@@ -28,15 +28,15 @@ class TestUI(SeleniumTestClass):
         assert page_sparkonto_uebersicht.get(0) == {
             'name': 'TestKonto',
             'typ': 'Sparkonto',
-            'wert': '10,00',
-            'aufbuchungen': '10,00',
-            'difference': '0,00'
+            'wert': '10,00 €',
+            'aufbuchungen': '10,00 €',
+            'difference': '0,00 €'
         }
 
         assert page_sparkonto_uebersicht.get_gesamt() == {
-            'wert': '10,00',
-            'aufbuchungen': '10,00',
-            'difference': '0,00'
+            'wert': '10,00 €',
+            'aufbuchungen': '10,00 €',
+            'difference': '0,00 €'
         }
         close_driver(driver)
 
@@ -63,7 +63,7 @@ class TestUI(SeleniumTestClass):
             'name': 'testname',
             'konto': 'TestKonto',
             'typ': 'Manueller Auftrag',
-            'wert': '10,00'
+            'wert': '10,00 €'
         }
 
         page_einzelbuchung_uebersicht.visit()
@@ -73,6 +73,6 @@ class TestUI(SeleniumTestClass):
             'name': 'testname',
             'datum': '01.01.2020',
             'kategorie': 'Sparen',
-            'wert': '-10,00'
+            'wert': '-10,00 €'
         }
         close_driver(driver)

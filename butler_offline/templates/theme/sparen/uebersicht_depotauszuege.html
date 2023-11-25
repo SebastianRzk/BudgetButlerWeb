@@ -30,7 +30,7 @@
 				{% for buchung in depotauszug.buchungen %}
 				<tr>
 					<td id="item_{{depotauszug.name}}{{depotauszug.datum}}{{buchung.name}}_name">{{buchung.depotwert}}</td>
-					<td id="item_{{depotauszug.name}}{{depotauszug.datum}}{{buchung.name}}_wert" class="table-wert">{{buchung.wert}}</td>
+					<td id="item_{{depotauszug.name}}{{depotauszug.datum}}{{buchung.name}}_wert" class="table-wert">{{buchung.wert}} €</td>
 				</tr>
 				{% endfor %}
 			</tbody>

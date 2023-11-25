@@ -12,6 +12,10 @@ def test_to_str():
     assert str(Betrag(2.00)) == 'Betrag(2.00)'
 
 
+def test_to_repr():
+    assert repr(Betrag(2.00)) == 'Betrag(2.00)'
+
+
 def test_js():
     assert Betrag(2.34).js() == '2.34'
 

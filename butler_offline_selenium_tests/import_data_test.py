@@ -35,7 +35,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
             'name': 'Edeka',
             'kategorie': 'Essen',
             'datum': '06.03.2017',
-            'wert': '-10,00'
+            'wert': '-10,00 €'
         }
         close_driver(driver)
 
@@ -64,7 +64,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
             'name': 'Edeka',
             'kategorie': 'nicht essen',
             'datum': '06.03.2017',
-            'wert': '-10,00'
+            'wert': '-10,00 €'
         }
         close_driver(driver)
 
@@ -90,7 +90,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
             'name': 'Edeka',
             'kategorie': 'Essen',
             'datum': '06.03.2017',
-            'wert': '-10,00'
+            'wert': '-10,00 €'
         }
 
         close_driver(driver)
