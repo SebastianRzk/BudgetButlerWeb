@@ -17,3 +17,4 @@
 config
 **/shares_info_cache.json
 
+.coverage

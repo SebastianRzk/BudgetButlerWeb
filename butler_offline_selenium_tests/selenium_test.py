@@ -15,7 +15,7 @@ class SeleniumTestClass:
         return pytest.param(provider, closer, id=name)
 
     def pytest_generate_tests(self, metafunc):
-        if 'TRAVIS_INTEGRATION' in os.environ:
+        if 'INTEGRATION_TESTS' in os.environ:
             chrome = [self._to_param('Firefox headless', _launch_headles_firefox, close_driver)]
         else:
             chrome = [self._to_param('Firefox', _launch_head_firefox, close_driver)]

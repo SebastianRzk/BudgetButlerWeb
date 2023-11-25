@@ -14,8 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-        #PATH: $PATH:$PWD/geckodriver
-        INTEGRATION_TESTS: TRUE
+      INTEGRATION_TESTS: TRUE
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.11
@@ -47,7 +46,7 @@ jobs:
         sh ci/run_integration_tests.sh
   butler_online_frontend:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       -
         name: Set up QEMU
