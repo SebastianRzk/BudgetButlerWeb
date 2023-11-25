@@ -5,6 +5,7 @@ from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 def generate_basic_test_context(
@@ -59,26 +60,26 @@ def test_should_list_depotwerte():
             'name': 'depotwert1',
             'isin': 'isin1',
             'typ': 'ETF',
-            'buchung': '100,00',
-            'difference': '-10,00',
+            'buchung': Betrag(100),
+            'difference': Betrag(-10),
             'difference_is_negativ': True,
-            'wert': '90,00'},
+            'wert': Betrag(90)},
         {
             'index': 1,
             'name': 'depotwert2',
             'isin': 'isin2',
             'typ': 'ETF',
-            'buchung': '0,00',
-            'difference': '0,00',
+            'buchung': Betrag(0),
+            'difference': Betrag(0),
             'difference_is_negativ': False,
-            'wert': '0,00'}
+            'wert': Betrag(0)}
     ]
 
     assert result.get('gesamt') == {
-        'buchung': '100,00',
-        'difference': '-10,00',
+        'buchung': Betrag(100),
+        'difference': Betrag(-10),
         'difference_is_negativ': True,
-        'wert': '90,00'
+        'wert': Betrag(90)
     }
 
 

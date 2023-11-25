@@ -7,6 +7,7 @@ from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 def generate_basic_test_context(
@@ -62,26 +63,26 @@ def test_should_list_kontos():
             'index': 0,
             'kontoname': 'demokonto2',
             'kontotyp': 'Depot',
-            'wert': '990,00',
-            'aufbuchungen': '999,00',
-            'difference': '-9,00',
+            'wert': Betrag(990),
+            'aufbuchungen': Betrag(999),
+            'difference': Betrag(-9),
             'difference_is_negativ': True
         },
         {
             'index': 1,
             'kontoname': 'demokonto1',
             'kontotyp': 'Sparkonto',
-            'wert': '110,00',
-            'aufbuchungen': '100,00',
-            'difference': '10,00',
+            'wert': Betrag(110),
+            'aufbuchungen': Betrag(100),
+            'difference': Betrag(10),
             'difference_is_negativ': False
         }
     ]
 
     assert result.get('gesamt') == {
-        'wert': '1100,00',
-        'aufbuchungen': '1099,00',
-        'difference': '1,00',
+        'wert': Betrag(1100),
+        'aufbuchungen': Betrag(1099),
+        'difference': Betrag(1),
         'difference_is_negativ': False
     }
 

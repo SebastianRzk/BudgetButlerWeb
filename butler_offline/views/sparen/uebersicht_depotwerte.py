@@ -3,7 +3,7 @@ from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
-from butler_offline.viewcore.converter import from_double_to_german
+from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.http import Request
 
 
@@ -50,20 +50,20 @@ def handle_request(request: Request, context: UebersichtDepotwerteContext):
             'name': row.Name,
             'isin': isin,
             'typ': typ,
-            'buchung': from_double_to_german(buchungen),
-            'difference': from_double_to_german(differenz),
+            'buchung': Betrag(buchungen),
+            'difference': Betrag(differenz),
             'difference_is_negativ': differenz < 0,
-            'wert': from_double_to_german(wert)
+            'wert': Betrag(wert)
         })
         gesamt_buchungen += buchungen
         gesamt_wert += wert
 
     gesamt_difference = gesamt_wert - gesamt_buchungen
     gesamt = {
-        'wert': from_double_to_german(gesamt_wert),
-        'difference': from_double_to_german(gesamt_difference),
+        'wert': Betrag(gesamt_wert),
+        'difference': Betrag(gesamt_difference),
         'difference_is_negativ': gesamt_difference < 0,
-        'buchung': from_double_to_german(gesamt_buchungen)
+        'buchung': Betrag(gesamt_buchungen)
     }
 
     result_context.add('depotwerte', depotwerte_liste)

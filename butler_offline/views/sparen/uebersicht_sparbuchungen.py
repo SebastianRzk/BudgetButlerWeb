@@ -1,7 +1,8 @@
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
-from butler_offline.viewcore.converter import datum_to_german, from_double_to_german
+from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 
 
@@ -36,7 +37,7 @@ def handle_request(request: Request, context: UebersichtSparbuchungenContext):
             'datum': datum_to_german(row.Datum),
             'name': row.Name,
             'konto': row.Konto,
-            'wert': from_double_to_german(row.Wert),
+            'wert': Betrag(row.Wert),
             'typ': row.Typ,
             'dynamisch': row.Dynamisch})
 

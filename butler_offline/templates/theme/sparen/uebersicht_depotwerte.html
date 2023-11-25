@@ -23,15 +23,15 @@
 					<td id="item_{{depotwert.index}}_name">{{depotwert.name}}</td>
 					<td id="item_{{depotwert.index}}_typ">{{depotwert.typ}}</td>
 					<td id="item_{{depotwert.index}}_isin">{{depotwert.isin}}</td>
-					<td id="item_{{depotwert.index}}_buchung" class="table-wert">{{depotwert.buchung}}</td>
+					<td id="item_{{depotwert.index}}_buchung" class="table-wert">{{depotwert.buchung.deutsch()}} €</td>
 					<td id="item_{{depotwert.index}}_difference"
 								class="table-wert
 								{% if depotwert.difference_is_negativ %}
 								negativ
 								{% endif %}
 								"
-							>{{depotwert.difference}}</td>
-					<td id="item_{{depotwert.index}}_wert" class="table-wert">{{depotwert.wert}}</td>
+							>{{depotwert.difference.deutsch()}} €</td>
+					<td id="item_{{depotwert.index}}_wert" class="table-wert">{{depotwert.wert.deutsch()}} €</td>
 					<td class="flex end">
 						<form onsubmit="return confirm('Willst du wirklich den Depotwert {{depotwert.name}} löschen?');" role="form" action="/uebersicht_depotwerte/" method="post">
 							<input type="hidden" name="ID" value="{{ID}}">
@@ -50,15 +50,15 @@
 					<td><b>Gesamt</b></td>
 					<td></td>
 					<td></td>
-					<td id="item_gesamt_buchung" class="table-wert"><b>{{gesamt.buchung}}</b></td>
+					<td id="item_gesamt_buchung" class="table-wert"><b>{{gesamt.buchung.deutsch()}} €</b></td>
 					<td id="item_gesamt_difference"
 								class="table-wert
 								{% if gesamt.difference_is_negativ %}
 								negativ
 								{% endif %}
 								"
-					><b>{{gesamt.difference}}</b></td>
-					<td id="item_gesamt_wert" class="table-wert"><b>{{gesamt.wert}}</b></td>
+					><b>{{gesamt.difference.deutsch()}} €</b></td>
+					<td id="item_gesamt_wert" class="table-wert"><b>{{gesamt.wert.deutsch()}} €</b></td>
 					<td></td>
 				</tr>
 			</tbody>

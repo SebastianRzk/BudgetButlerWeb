@@ -58,13 +58,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for abrechnung in ausgaben_des_aktuellen_monats %}
+					{% for buchung in ausgaben_des_aktuellen_monats %}
 					<tr>
-						<td>{{abrechnung.index}}</td>
-						<td>{{abrechnung.Datum}}</td>
-						<td>{{abrechnung.Name}}</td>
-						<td>{{abrechnung.Kategorie}}</td>
-						<td class="table-wert">{{abrechnung.Wert}}</td>
+						<td>{{buchung.index}}</td>
+						<td>{{buchung.Datum}}</td>
+						<td>{{buchung.Name}}</td>
+						<td>{{buchung.Kategorie}}</td>
+						<td class="table-wert">{{buchung.Wert}} €</td>
 					</tr>
 					{% endfor %}
 				</tbody>

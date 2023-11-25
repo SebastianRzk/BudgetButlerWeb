@@ -259,14 +259,14 @@ Datum,Kategorie,Name,Wert,Dynamisch
             'name': '0name',
             'kategorie': '0test_kategorie',
             'datum': '01.01.2010',
-            'wert': '-50,00'
+            'wert': '-50,00 €'
         }
 
         assert page_einzelbuchung_uebersicht.get_item_in_opened_module(1) == {
             'name': '1test_kategorie',
             'kategorie': '1test_kategorie',
             'datum': '01.01.2010',
-            'wert': '20,00'
+            'wert': '20,00 €'
         }
 
         close_driver(driver)

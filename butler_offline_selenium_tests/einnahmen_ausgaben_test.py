@@ -41,7 +41,7 @@ class TestUI(SeleniumTestClass):
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '01.01.2012',
-            'wert': '-2,00'
+            'wert': '-2,00 €'
         }
 
         page_einzelbuchungen_uebersicht.click_edit_button(2)

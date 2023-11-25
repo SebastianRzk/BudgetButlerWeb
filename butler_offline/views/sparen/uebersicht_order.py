@@ -1,5 +1,6 @@
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import from_double_to_german, datum_to_german
+from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.views.sparen.add_order import TYP_KAUF, TYP_VERKAUF
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
 from butler_offline.core.database.sparen.order import Order
@@ -42,7 +43,7 @@ def handle_request(request: Request, context: UebersichtOrderContext):
             'Konto': row.Konto,
             'Typ': typ,
             'Depotwert': depotwerte.get_description_for(row.Depotwert),
-            'Wert': from_double_to_german(abs(row.Wert)),
+            'Wert': Betrag(abs(row.Wert)),
             'Dynamisch': row.Dynamisch
         })
 

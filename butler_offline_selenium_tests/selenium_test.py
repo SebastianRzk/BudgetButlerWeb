@@ -16,11 +16,11 @@ class SeleniumTestClass:
 
     def pytest_generate_tests(self, metafunc):
         if 'INTEGRATION_TESTS' in os.environ:
-            chrome = [self._to_param('Firefox headless', _launch_headles_firefox, close_driver)]
+            firefox = [self._to_param('Firefox headless', _launch_headless_firefox, close_driver)]
         else:
-            chrome = [self._to_param('Firefox', _launch_head_firefox, close_driver)]
+            firefox = [self._to_param('Firefox', _launch_head_firefox, close_driver)]
 
-        metafunc.parametrize(argnames=['get_driver', 'close_driver'], argvalues=chrome, scope="module")
+        metafunc.parametrize(argnames=['get_driver', 'close_driver'], argvalues=firefox, scope="module")
 
 
 def close_driver(driver):
@@ -39,7 +39,7 @@ def _launch_head_firefox():
     return webdriver.Firefox(options=firefox_options)
 
 
-def _launch_headles_firefox():
+def _launch_headless_firefox():
     if selenium_test.BROWSER_CACHE:
         browser = selenium_test.BROWSER_CACHE[0]
         selenium_test.BROWSER_CACHE.remove(browser)
