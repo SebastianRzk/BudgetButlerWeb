@@ -27,7 +27,7 @@ class OrderDauerauftrag(DatabaseObject):
         raw_table['Startdatum'] = raw_table['Startdatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         raw_table['Endedatum'] = raw_table['Endedatum'].map(lambda x: datetime.strptime(x, '%Y-%m-%d').date())
         self.content = pd.concat([self.content, raw_table], ignore_index=True)
-        self.content = self.content.sort_values(by=['Startdatum'])
+        self._sort()
 
     def edit(self, index: int,
              startdatum: str,
