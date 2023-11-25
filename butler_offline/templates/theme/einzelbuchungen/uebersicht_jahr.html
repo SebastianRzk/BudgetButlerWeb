@@ -194,14 +194,14 @@
 				<tbody>
 					{% for ausgabe in zusammenfassung_ausgaben %}
 					<tr>
-						<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-						<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
+						<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.color}};"></span> {{ausgabe.kategorie}}</td>
+						<td style="vertical-align: middle" class="table-wert">{{ausgabe.wert.deutsch()}} €</td>
 					</tr>
 					{% endfor %}
 					<tfooter>
 					<tr>
 						<td style="vertical-align: middle">Summe</td>
-						<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben}}</td>
+						<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben.deutsch()}} €</td>
 						<td/>
 					</tr>
 					<tr>
@@ -228,14 +228,14 @@
 					<tbody>
 						{% for ausgabe in zusammenfassung_einnahmen %}
 						<tr>
-							<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-							<td style="vertical-align: middle" class="table-wert">{{ausgabe.1}}</td>
+							<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.color}};"></span> {{ausgabe.kategorie}}</td>
+							<td style="vertical-align: middle" class="table-wert">{{ausgabe.wert.deutsch()}} €</td>
 						</tr>
 						{% endfor %}
 						<tfooter>
 						<tr>
 							<td style="vertical-align: middle">Summe</td>
-							<td style="vertical-align: middle" class="table-wert">{{gesamt_einnahmen}}</td>
+							<td style="vertical-align: middle" class="table-wert">{{gesamt_einnahmen.deutsch()}} €</td>
 						</tr>
 						</tfooter>
 					</tbody>
@@ -258,7 +258,7 @@
 			var pieData = {
 			labels:{{pie_ausgaben_labels|safe}},
 			datasets: [{
-			data: {{pie_ausgaben_data_prozentual|safe}},
+			data: {{pie_ausgaben_data_prozentual.js()|safe}},
 			backgroundColor: {{pie_ausgaben_colors|safe}},
 			}],
 			};
@@ -285,7 +285,7 @@
 			var pieData = {
 			labels:{{pie_einnahmen_labels|safe}},
 			datasets: [{
-			data: {{pie_einnahmen_data_prozentual|safe}},
+			data: {{pie_einnahmen_data_prozentual.js()|safe}},
 			backgroundColor: {{pie_einnahmen_colors|safe}},
 			}],
 			};

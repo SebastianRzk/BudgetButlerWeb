@@ -1,9 +1,9 @@
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.context.builder import generate_transactional_page_context
-from butler_offline.viewcore.template import fa
 from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
+from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.template import fa
 
 
 class AddSparkontoContext:
@@ -14,10 +14,10 @@ class AddSparkontoContext:
         return self._kontos
 
 
-def handle_request(request, context: AddSparkontoContext):
+def handle_request(request: Request, context: AddSparkontoContext):
     result_context = generate_transactional_page_context('add_sparkonto')
 
-    if post_action_is(request, 'add'):
+    if request.post_action_is('add'):
         kontoname = request.values['kontoname']
         if '_' in kontoname:
             return result_context.throw_error('Kontoname darf kein Unterstrich "_" enthalten.')
@@ -46,7 +46,7 @@ def handle_request(request, context: AddSparkontoContext):
                 })
 
     result_context.add('approve_title', 'Sparkonto hinzufügen')
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         db_row = context.kontos().get(db_index)

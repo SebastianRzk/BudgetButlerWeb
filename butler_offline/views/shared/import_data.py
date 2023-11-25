@@ -20,7 +20,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.converter import datetime_to_filesystem_string
 from butler_offline.viewcore.converter import datum_to_string
-from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.viewcore.http import Request
 
 
 class ImportDataContext:
@@ -97,10 +97,10 @@ def handle_request(request, context: ImportDataContext):
     return handle_request_internally(request=request, context=context)
 
 
-def handle_request_internally(request, context: ImportDataContext, import_prefix='', gemeinsam=False):
+def handle_request_internally(request: Request, context: ImportDataContext, import_prefix='', gemeinsam=False):
     result_context = generate_transactional_page_context('import')
-    if request.method == "POST":
-        if post_action_is(request, 'load_online_transactions'):
+    if request.is_post_request():
+        if request.post_action_is('load_online_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(context.conf(), serverurl, request.values['email'])
@@ -122,7 +122,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
             delete_einzelbuchungen(serverurl, auth_container=auth_container)
             return response
 
-        if post_action_is(request, 'load_online_gemeinsame_transactions'):
+        if request.post_action_is('load_online_gemeinsame_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(context.conf(), serverurl, request.values['email'])
@@ -150,7 +150,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
             delete_gemeinsame_buchungen(serverurl, auth_container=auth_container)
             return response
 
-        elif post_action_is(request, 'set_kategorien'):
+        elif request.post_action_is('set_kategorien'):
             kategorien = ','.join(
                 sorted(context.einzelbuchungen().get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
@@ -162,7 +162,7 @@ def handle_request_internally(request, context: ImportDataContext, import_prefix
             set_kategorien(serverurl, kategorien=kategorien, auth_container=auth_container)
             result_context.add_user_success_message('Kategorien erfolgreich in die Online-Version übertragen.')
 
-        elif post_action_is(request, 'upload_gemeinsame_transactions'):
+        elif request.post_action_is('upload_gemeinsame_transactions'):
             serverurl = request.values['server']
             serverurl = _add_protokoll_if_needed(serverurl)
             _save_server_creds(conf=context.conf(), serverurl=serverurl, email=request.values['email'])

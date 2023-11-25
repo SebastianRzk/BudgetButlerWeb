@@ -1,13 +1,13 @@
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
-from butler_offline.viewcore.context.builder import generate_transactional_page_context
-from butler_offline.viewcore.template import fa
-from butler_offline.core.database.sparen.order import Order
-from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
+from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
+from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.template import fa
+from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -31,7 +31,7 @@ class AddOrderContext:
         return self._depotwerte
 
 
-def handle_request(request, context: AddOrderContext):
+def handle_request(request: Request, context: AddOrderContext):
     result_context = generate_transactional_page_context(page_name='add_order')
     if not context.sparkontos().get_depots():
         return result_context.throw_error(NO_VALID_DEPOT_IN_DB)
@@ -39,7 +39,7 @@ def handle_request(request, context: AddOrderContext):
     if not context.depotwerte().get_depotwerte():
         return result_context.throw_error(NO_VALID_SHARE_IN_DB)
 
-    if post_action_is(request, 'add'):
+    if request.post_action_is('add'):
         date = datum(request.values['datum'])
         value = request.values['wert'].replace(",", ".")
         value = float(value)
@@ -86,7 +86,7 @@ def handle_request(request, context: AddOrderContext):
                 })
 
     result_context.add('approve_title', 'Order hinzufügen')
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         db_row = context.order().get(db_index)

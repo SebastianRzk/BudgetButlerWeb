@@ -1,9 +1,10 @@
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum_to_german
 import collections
-from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.viewcore.converter import datum_to_german
+from butler_offline.viewcore.http import Request
 
 
 class UbersichtOrderDauerauftragContext:
@@ -14,10 +15,10 @@ class UbersichtOrderDauerauftragContext:
         return self._orderdauerauftrag
 
 
-def handle_request(request, context: UbersichtOrderDauerauftragContext):
+def handle_request(request: Request, context: UbersichtOrderDauerauftragContext):
     orderdauerauftrag = context.orderdauerauftrag()
 
-    if post_action_is(request, 'delete'):
+    if request.post_action_is('delete'):
         print("Delete: ", request.values['delete_index'])
         orderdauerauftrag.delete(int(request.values['delete_index']))
         return generate_redirect_page_context('/uebersicht_orderdauerauftrag/')

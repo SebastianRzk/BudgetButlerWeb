@@ -1,5 +1,5 @@
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.converter import from_double_to_german
 from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
 from butler_offline.core.database.sparen.kontos import Kontos
@@ -28,9 +28,9 @@ class UebersichtSparkontosContext:
         return self._order
 
 
-def handle_request(request, context: UebersichtSparkontosContext):
+def handle_request(request: Request, context: UebersichtSparkontosContext):
     sparkontos = context.kontos()
-    if post_action_is(request, 'delete'):
+    if request.post_action_is('delete'):
         sparkontos.delete(int(request.values['delete_index']))
         return generate_redirect_page_context('/uebersicht_sparkontos/')
 

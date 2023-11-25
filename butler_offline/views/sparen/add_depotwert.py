@@ -1,9 +1,9 @@
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.template import fa
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.viewcore.http import Request
 
 
 class AddDepotwertContext:
@@ -14,10 +14,10 @@ class AddDepotwertContext:
         return self._depotwerte
 
 
-def handle_request(request, context: AddDepotwertContext):
+def handle_request(request: Request, context: AddDepotwertContext):
     result_context = generate_transactional_page_context('add_depotwert')
 
-    if post_action_is(request, 'add'):
+    if request.post_action_is('add'):
         isin = request.values['isin']
         if '_' in isin:
             return result_context.throw_error('ISIN darf kein Unterstrich "_" enthalten.')
@@ -26,9 +26,9 @@ def handle_request(request, context: AddDepotwertContext):
 
         if "edit_index" in request.values:
             context.depotwerte().edit(int(request.values['edit_index']),
-                name=name,
-                isin=isin,
-                typ=typ)
+                                      name=name,
+                                      isin=isin,
+                                      typ=typ)
             non_persisted_state.add_changed_depotwerte(
                 {
                     'fa': fa.pencil,
@@ -47,11 +47,11 @@ def handle_request(request, context: AddDepotwertContext):
                     'Name': name,
                     'Isin': isin,
                     'Typ': typ
-                    })
+                })
 
     result_context.add('approve_title', 'Depotwert hinzufügen')
 
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         db_index = int(request.values['edit_index'])
         db_row = context.depotwerte().get(db_index)
 

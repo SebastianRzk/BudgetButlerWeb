@@ -1,10 +1,10 @@
 from butler_offline.core.database import Dauerauftraege
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.views.einzelbuchungen.dauerauftrag.split import split_dauerauftrag, get_ausführungszeitpunkte
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german, dezimal_float, datum
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, \
     TransactionalPageContext, generate_redirect_page_context
+from butler_offline.viewcore.http import Request
 
 
 class SplitDauerauftraegeContext:
@@ -16,10 +16,10 @@ class SplitDauerauftraegeContext:
         return self._dauerauftraege
 
 
-def handle_request(request, context: SplitDauerauftraegeContext):
+def handle_request(request: Request, context: SplitDauerauftraegeContext):
     dauerauftrag_id: int = int(request.values['dauerauftrag_id'])
 
-    if post_action_is(request, 'preset_values'):
+    if request.post_action_is('preset_values'):
 
         result_context: TransactionalPageContext = generate_transactional_page_context('adddauerauftrag')
 
@@ -46,7 +46,7 @@ def handle_request(request, context: SplitDauerauftraegeContext):
         result_context.add('dauerauftrag_id', dauerauftrag_id)
         return result_context
 
-    if post_action_is(request, 'split'):
+    if request.post_action_is('split'):
         wert = dezimal_float(request.values['wert'])
         aenderungsdatum = datum(request.values['datum'])
         split_dauerauftrag(

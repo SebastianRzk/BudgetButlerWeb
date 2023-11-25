@@ -1,10 +1,10 @@
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum_to_german
 from butler_offline.views.sparen.add_order import TYP_KAUF, TYP_VERKAUF
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.viewcore.http import Request
 
 
 class UebersichtOrderContext:
@@ -19,11 +19,11 @@ class UebersichtOrderContext:
         return self._depotwerte
 
 
-def handle_request(request, context: UebersichtOrderContext):
+def handle_request(request: Request, context: UebersichtOrderContext):
     order = context.order()
     depotwerte = context.depotwerte()
 
-    if post_action_is(request, 'delete'):
+    if request.post_action_is('delete'):
         order.delete(int(request.values['delete_index']))
         return generate_redirect_page_context('/uebersicht_order/')
 

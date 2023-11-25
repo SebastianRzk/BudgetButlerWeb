@@ -13,6 +13,7 @@ from butler_offline.viewcore.page_executor import PageExecutor
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.state.persisted_state import CurrentDatabaseVersionProvider
 from butler_offline.viewcore.template import Renderer
+from butler_offline.viewcore.http import Request as InternalRequest
 
 
 class WireThroughInterceptor:
@@ -26,7 +27,7 @@ class WireThroughInterceptor:
 TYPE_INPUT_CONTEXT = TypeVar("TYPE_INPUT_CONTEXT")
 TYPE_INPUT_CONTEXT_CREATOR = Callable[[Database], TYPE_INPUT_CONTEXT]
 TYPE_OUTPUT_PAGE_CONTEXT = TypeVar("TYPE_OUTPUT_PAGE_CONTEXT", bound=PageContext)
-TYPE_USECASE = Callable[[Request, TYPE_INPUT_CONTEXT], TYPE_OUTPUT_PAGE_CONTEXT]
+TYPE_USECASE = Callable[[InternalRequest, TYPE_INPUT_CONTEXT], TYPE_OUTPUT_PAGE_CONTEXT]
 
 
 def handle(request: Request,
@@ -60,6 +61,7 @@ def __handle_request(
         current_database_version_provider: CurrentDatabaseVersionProvider
 ):
     database = persisted_state.database_instance()
+    request = create_internal_request(request)
     if is_transactional_request(request):
         logging.info('transactional request found')
         transaction_id = get_transaction_id(request)
@@ -114,6 +116,13 @@ def __handle_request(
 
 REQUEST_HANDLER_INTERCEPTOR = WireThroughInterceptor(handler=__handle_request)
 
+
+def create_internal_request(request: Request) -> InternalRequest:
+    return InternalRequest(
+        values=request.values.copy(),
+        args=request.args.copy(),
+        method=request.method
+    )
 
 def handle_transaction_out_of_sync(
         renderer: Renderer,

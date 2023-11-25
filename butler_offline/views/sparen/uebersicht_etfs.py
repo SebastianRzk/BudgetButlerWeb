@@ -1,18 +1,20 @@
-from butler_offline.viewcore import request_handler
-from butler_offline.core import time
-from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
-from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.online_services.shares import etf_data
 import gettext
-import pycountry
 import traceback
-from butler_offline.views.sparen import language
-from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
+
+import pycountry
+
+from butler_offline.core import time
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.online_services.shares import etf_data
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
+from butler_offline.viewcore.converter import datum_to_german
+from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.state.persisted_state import SharesInfo
+from butler_offline.views.sparen import language
+from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
 
 
 class UebersichtEtfsContext:
@@ -34,9 +36,9 @@ class UebersichtEtfsContext:
 PAGE_NAME = 'uebersicht_etfs'
 
 
-def handle_request(request, context: UebersichtEtfsContext):
+def handle_request(request: Request, context: UebersichtEtfsContext):
     result_context = generate_transactional_page_context(PAGE_NAME)
-    if post_action_is(request, 'update_data'):
+    if request.post_action_is('update_data'):
         result_context = _update_data(request.values['isin'], result_context, shares_info=context.shares_info())
     return _generate_content(result_context, context=context)
 
@@ -222,7 +224,8 @@ def _generate_content(result_context: PageContext, context: UebersichtEtfsContex
         lambda x: x
     ))
     result_context.add('costs',
-                       _get_costs(shares_info, isins_with_data, lambda x: depotauszuege.get_depotwert_by(x), depotwerte))
+                       _get_costs(shares_info, isins_with_data, lambda x: depotauszuege.get_depotwert_by(x),
+                                  depotwerte))
 
     return result_context
 

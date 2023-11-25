@@ -1,5 +1,4 @@
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.state import non_persisted_state
@@ -8,6 +7,7 @@ from butler_offline.viewcore.template import fa
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from typing import List
 import logging
+from butler_offline.viewcore.http import Request
 
 
 class AddGemeinsameBuchungContext:
@@ -34,8 +34,8 @@ class AddGemeinsameBuchungContext:
         return self._database_name
 
 
-def handle_request(request, context: AddGemeinsameBuchungContext):
-    if post_action_is(request, 'add'):
+def handle_request(request: Request, context: AddGemeinsameBuchungContext):
+    if request.post_action_is('add'):
         date = datum(request.values['date'])
         value = request.values['wert'].replace(",", ".")
         value = float(value)
@@ -76,7 +76,7 @@ def handle_request(request, context: AddGemeinsameBuchungContext):
 
     result_context = generate_transactional_page_context("addgemeinsam")
     result_context.add('approve_title', 'Gemeinsame Ausgabe hinzufügen')
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         logging.info('Please edit: %s', request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         db_row = context.gemeinsame_buchungen().get(db_index)

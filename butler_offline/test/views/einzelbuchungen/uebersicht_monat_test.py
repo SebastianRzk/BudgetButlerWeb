@@ -1,8 +1,9 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.views.einzelbuchungen import uebersicht_monat
-from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.viewcore.renderhelper import Betrag, BetragListe
+from butler_offline.views.einzelbuchungen import uebersicht_monat
 
 
 def test_init():
@@ -31,16 +32,27 @@ def teste__mit_mehr_ausgaben_als_einnahmen():
         context=uebersicht_monat.UebersichtMonatContext(einzelbuchungen=einzelbuchungen)
     )
 
-    assert result_context.get('gesamt') == '-100.00'
-    assert result_context.get('gesamt_einnahmen') == '10.00'
+    assert result_context.get('gesamt') == Betrag(-100)
+    assert result_context.get('gesamt_einnahmen') == Betrag(10)
 
-    assert result_context.get('einnahmen') == [('eine einnahme kategorie', '10.00', '#3c8dbc')]
+    assert result_context.get('einnahmen') == [
+        {
+            'kategorie': 'eine einnahme kategorie',
+            'wert': Betrag(10.00),
+            'color': '#3c8dbc'
+        }
+    ]
     assert result_context.get('einnahmen_labels') == ['eine einnahme kategorie']
-    assert result_context.get('einnahmen_data') == ['10.00']
+    assert result_context.get('einnahmen_data') == BetragListe([Betrag(10)])
 
-    assert result_context.get('ausgaben') == [('some kategorie', '-100.00', '#f56954')]
+    assert result_context.get('ausgaben') == [
+        {
+            'kategorie': 'some kategorie',
+            'wert': Betrag(-100.00),
+            'color': '#f56954'
+        }]
     assert result_context.get('ausgaben_labels') == ['some kategorie']
-    assert result_context.get('ausgaben_data') == ['100.00']
+    assert result_context.get('ausgaben_data') == BetragListe([Betrag(100)])
 
 
 def teste_gleitkommadarstellung_monats_zusammenfassung():
@@ -52,8 +64,8 @@ def teste_gleitkommadarstellung_monats_zusammenfassung():
         uebersicht_monat.UebersichtMonatContext(einzelbuchungen=einzelbuchungen)
     )
 
-    assert result_context.get('wert_uebersicht_gruppe_1') == '0.00'
-    assert result_context.get('wert_uebersicht_gruppe_2') == '100.00'
+    assert result_context.get('wert_uebersicht_gruppe_1') == Betrag(0)
+    assert result_context.get('wert_uebersicht_gruppe_2') == Betrag(100)
 
 
 def teste_gleitkommadarstellung_jahres_zusammenfassung():
@@ -65,8 +77,8 @@ def teste_gleitkommadarstellung_jahres_zusammenfassung():
         context=uebersicht_monat.UebersichtMonatContext(einzelbuchungen=einzelbuchungen)
     )
 
-    assert result_context.get('wert_uebersicht_jahr_gruppe_1') == '0.00'
-    assert result_context.get('wert_uebersicht_jahr_gruppe_2') == '100.00'
+    assert result_context.get('wert_uebersicht_jahr_gruppe_1') == Betrag(0)
+    assert result_context.get('wert_uebersicht_jahr_gruppe_2') == Betrag(100)
 
 
 def teste__mit_unterschiedlichen_monaten__should_select_neuster_monat():
@@ -105,6 +117,6 @@ def test_index_should_be_secured_by_request_handler():
 
 
 def test_context_should_not_be_transactional():
-    result = uebersicht_monat.\
+    result = uebersicht_monat. \
         handle_request(GetRequest(), context=uebersicht_monat.UebersichtMonatContext(Einzelbuchungen()))
     assert not result.is_transactional()

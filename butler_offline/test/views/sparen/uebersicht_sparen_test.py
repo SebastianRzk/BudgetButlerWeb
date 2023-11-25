@@ -11,6 +11,7 @@ from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.renderhelper import Betrag, BetragListe
 
 
 def test_index_should_be_secured_by_requesthandler():
@@ -81,12 +82,9 @@ def test_should_list_kontos():
             'index': 0,
             'name': 'demokonto2',
             'kontotyp': 'Depot',
-            'wert': 990,
-            'aufbuchungen': 999,
-            'difference': -9,
-            'wert_str': '990,00',
-            'aufbuchungen_str': '999,00',
-            'difference_str': '-9,00',
+            'wert': Betrag(990),
+            'aufbuchungen': Betrag(999),
+            'difference': Betrag(-9),
             'color': '#f56954',
             'difference_is_negativ': True
         },
@@ -94,12 +92,9 @@ def test_should_list_kontos():
             'index': 1,
             'name': 'demokonto1',
             'kontotyp': 'Sparkonto',
-            'wert': 110,
-            'aufbuchungen': 100,
-            'difference': 10,
-            'wert_str': '110,00',
-            'aufbuchungen_str': '100,00',
-            'difference_str': '10,00',
+            'wert': Betrag(110),
+            'aufbuchungen': Betrag(100),
+            'difference': Betrag(10),
             'color': '#3c8dbc',
             'difference_is_negativ': False
         }
@@ -110,12 +105,9 @@ def test_gesamt():
     result = uebersicht_sparen.handle_request(GetRequest(), get_test_data())
 
     assert result.get('gesamt') == {
-        'wert': 1100,
-        'aufbuchungen': 1099,
-        'difference': 1,
-        'wert_str': '1100,00',
-        'aufbuchungen_str': '1099,00',
-        'difference_str': '1,00',
+        'wert': Betrag(1100),
+        'aufbuchungen': Betrag(1099),
+        'difference': Betrag(1),
         'difference_is_negativ': False
     }
 
@@ -124,38 +116,26 @@ def test_typen():
     result = uebersicht_sparen.handle_request(GetRequest(), get_typen_test_data())
 
     assert result.get('typen') == [
-        {'aufbuchungen': 100,
-         'aufbuchungen_str': '100,00',
+        {'aufbuchungen': Betrag(100),
          'color': '#39CCCC',
-         'difference': 10,
-         'difference_str': '10,00',
+         'difference': Betrag(10),
          'name': 'Sparkonto',
-         'wert': 110,
-         'wert_str': '110,00'},
-        {'aufbuchungen': 0,
-         'aufbuchungen_str': '0,00',
+         'wert': Betrag(110)},
+        {'aufbuchungen': Betrag(0),
          'color': '#d2d6de',
-         'difference': 0,
-         'difference_str': '0,00',
+         'difference': Betrag(0),
          'name': 'Genossenschafts-Anteile',
-         'wert': 0,
-         'wert_str': '0,00'},
-        {'aufbuchungen': 1887,
-         'aufbuchungen_str': '1887,00',
+         'wert': Betrag(0)},
+        {'aufbuchungen': Betrag(1887),
          'color': '#00a65a',
-         'difference': -17,
-         'difference_str': '-17,00',
+         'difference': Betrag(-17),
          'name': 'ETF',
-         'wert': 1870,
-         'wert_str': '1870,00'},
-        {'aufbuchungen': 777,
-         'aufbuchungen_str': '777,00',
+         'wert': Betrag(1870)},
+        {'aufbuchungen': Betrag(777),
          'color': '#f39c12',
-         'difference': -7,
-         'difference_str': '-7,00',
+         'difference': Betrag(-7),
          'name': 'Fond',
-         'wert': 770,
-         'wert_str': '770,00'},
+         'wert': Betrag(770)},
     ]
 
 
@@ -164,7 +144,7 @@ def test_konto_diagramm():
 
     assert result.get('konto_diagramm') == {
         'colors': ['#f56954', '#3c8dbc'],
-        'datasets': ['90.00', '10.00'],
+        'datasets': BetragListe([Betrag(90.00), Betrag(10.00)]),
         'labels': ['demokonto2', 'demokonto1'],
     }
 
@@ -174,7 +154,7 @@ def test_typen_diagramm():
 
     assert result.get('typen_diagramm') == {
         'colors': ['#39CCCC', '#d2d6de', '#00a65a', '#f39c12'],
-        'datasets': ['4.00', '0.00', '68.00', '28.00'],
+        'datasets': BetragListe([Betrag(4), Betrag(0), Betrag(68), Betrag(28)]),
         'labels': ['Sparkonto', 'Genossenschafts-Anteile', 'ETF', 'Fond'],
     }
 
@@ -297,10 +277,8 @@ def test_order_typ():
     )
 
     assert result.get('order_typ') == {
-        'manual': '100,00',
-        'dauerauftrag': '66,00',
-        'manual_raw': '100.00',
-        'dauerauftrag_raw': '66.00'
+        'manual': Betrag(100),
+        'dauerauftrag': Betrag(66),
     }
 
 
@@ -350,8 +328,8 @@ def test_aktuelle_dauerauftraege():
 
     assert result.get('monatlich') == {
         'colors': ['#3c8dbc', '#f56954'],
-        'einzelwerte': [{'color': '#3c8dbc', 'name': 'DemoName1 (is1)', 'wert': '100,00'},
-                        {'color': '#f56954', 'name': 'DemoName2 (is2)', 'wert': '50,00'}],
+        'einzelwerte': [{'color': '#3c8dbc', 'name': 'DemoName1 (is1)', 'wert': Betrag(100)},
+                        {'color': '#f56954', 'name': 'DemoName2 (is2)', 'wert': Betrag(50)}],
         'namen': ['DemoName1 (is1)', 'DemoName2 (is2)'],
-        'werte': ['100.00', '50.00']
+        'werte': BetragListe([Betrag(100), Betrag(50)])
     }

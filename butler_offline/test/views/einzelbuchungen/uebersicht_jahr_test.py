@@ -1,8 +1,9 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-from butler_offline.views.einzelbuchungen import uebersicht_jahr
+from butler_offline.test.RequestStubs import GetRequest, PostRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.views.einzelbuchungen import uebersicht_jahr
 
 
 def test_init():
@@ -19,8 +20,21 @@ def teste__context_values__with_single_einnahme_and_single_ausgabe():
         uebersicht_jahr.UebersichtJahrContext(einzelbuchungen=einzelbuchungen)
     )
 
-    assert result_context.get('zusammenfassung_ausgaben') == [['some kategorie', '-100.00', '#f56954']]
-    assert result_context.get('zusammenfassung_einnahmen') == [['eine einnahme kategorie', '10.00', '#3c8dbc']]
+    assert result_context.get('zusammenfassung_ausgaben') == [
+        {
+            'kategorie': 'some kategorie',
+            'wert': Betrag(-100),
+            'color': '#f56954'
+        }]
+    assert result_context.get('zusammenfassung_einnahmen') == [
+        {
+            'kategorie': 'eine einnahme kategorie',
+            'wert': Betrag(10),
+            'color': '#3c8dbc'
+        }
+    ]
+    assert result_context.get('gesamt_einnahmen') == Betrag(10)
+    assert result_context.get('gesamt_ausgaben') == Betrag(-100)
     assert 'eine einnahme kategorie' in result_context.get('einnahmen')
     assert result_context.get('einnahmen')['eine einnahme kategorie']['values'] == '[10.00]'
     assert result_context.get('jahre') == [2010]
@@ -41,10 +55,31 @@ def teste__context_values__with_mutlible_einnahme_and_ausgabe():
         uebersicht_jahr.UebersichtJahrContext(einzelbuchungen=einzelbuchungen)
     )
 
-    assert result_context.get('zusammenfassung_ausgaben') == [['some kategorie', '-200.00', '#00a65a'],
-                                                              ['some kategorie2', '-100.00', '#00c0ef']]
-    assert result_context.get('zusammenfassung_einnahmen') == [['eine einnahme kategorie', '20.00', '#3c8dbc'],
-                                                               ['eine einnahme kategorie2', '10.00', '#f56954']]
+    assert result_context.get('zusammenfassung_ausgaben') == [
+        {
+            'kategorie': 'some kategorie',
+            'wert': Betrag(-200),
+            'color': '#00a65a'
+        },
+        {
+            'kategorie': 'some kategorie2',
+            'wert': Betrag(-100),
+            'color': '#00c0ef'
+        }]
+    assert result_context.get('zusammenfassung_einnahmen') == [
+        {
+            'kategorie': 'eine einnahme kategorie',
+            'wert': Betrag(20),
+            'color': '#3c8dbc'
+        },
+        {
+            'kategorie': 'eine einnahme kategorie2',
+            'wert': Betrag(10),
+            'color': '#f56954'
+        }
+    ]
+    assert result_context.get('gesamt_einnahmen') == Betrag(30)
+    assert result_context.get('gesamt_ausgaben') == Betrag(-300)
     assert result_context.get('buchungen')[0]['wert'] == ['30.00']
     assert result_context.get('buchungen')[1]['wert'] == ['300.00']
 
@@ -60,6 +95,6 @@ def test_index_should_be_secured_by_request_handler():
 
 
 def test_context_should_not_be_transactional():
-    result = uebersicht_jahr.\
+    result = uebersicht_jahr. \
         handle_request(GetRequest(), context=uebersicht_jahr.UebersichtJahrContext(Einzelbuchungen()))
     assert not result.is_transactional()

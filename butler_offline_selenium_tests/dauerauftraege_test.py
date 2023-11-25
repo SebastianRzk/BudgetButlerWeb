@@ -42,7 +42,7 @@ class TestUI(SeleniumTestClass):
             'kategorie': '2test_kategorie',
             'startdatum': '01.01.2012',
             'endedatum': '02.02.2012',
-            'wert': '-2.00'
+            'wert': '-2,00 €'
         }
         close_driver(driver)
 
