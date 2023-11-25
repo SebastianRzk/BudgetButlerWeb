@@ -5,6 +5,7 @@ from butler_offline.views.einzelbuchungen import uebersicht_dauerauftrag
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 file_system.INSTANCE = FileSystemStub()
@@ -38,7 +39,7 @@ def test_delete():
     assert dauerauftraege.content.Name.tolist() == ['11']
 
 
-def test_german_datum():
+def test_render():
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
 
@@ -50,6 +51,7 @@ def test_german_datum():
     result_dauerauftrag = result.get('dauerauftraege')['Vergangene  Daueraufträge'][0]
     assert result_dauerauftrag['Startdatum'] == '01.01.2011'
     assert result_dauerauftrag['Endedatum'] == '01.01.2011'
+    assert result_dauerauftrag['Wert'] == Betrag(1)
 
 
 def test_index_should_be_secured_by_requesthandler():

@@ -6,8 +6,8 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import routes
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore.viewcore import post_action_is
 
 
 class ConfigurationContext:
@@ -29,34 +29,34 @@ class ConfigurationContext:
         return self._gemeinsame_buchungen
 
 
-def handle_request(request, context: ConfigurationContext):
-    if post_action_is(request, 'edit_databases'):
+def handle_request(request: Request, context: ConfigurationContext):
+    if request.post_action_is('edit_databases'):
         dbs = request.values['dbs']
         context.configuration().set_configuration('DATABASES', dbs)
         persisted_state.DATABASES = []
         persisted_state.DATABASE_INSTANCE = None
 
-    if post_action_is(request, 'add_kategorie'):
+    if request.post_action_is('add_kategorie'):
         context.einzelbuchungen().add_kategorie(request.values['neue_kategorie'])
         if 'redirect' in request.values:
             return generate_redirect_page_context('/' + str(request.values['redirect']) + '/')
 
-    if post_action_is(request, 'change_themecolor'):
+    if request.post_action_is('change_themecolor'):
         context.configuration().set_configuration('THEME_COLOR', request.values['themecolor'])
 
-    if post_action_is(request, 'change_colorpalette'):
+    if request.post_action_is('change_colorpalette'):
         request_colors = []
         for colornumber in range(0, 20):
             if str(colornumber) + '_checked' in request.values:
                 request_colors.append(request.values[str(colornumber) + '_farbe'][1:])
         context.configuration().set_configuration('DESIGN_COLORS', ','.join(request_colors))
 
-    if post_action_is(request, 'set_partnername'):
+    if request.post_action_is('set_partnername'):
         context.gemeinsame_buchungen().rename(
             context.configuration().get_configuration('PARTNERNAME'), request.values['partnername'])
         context.configuration().set_configuration('PARTNERNAME', request.values['partnername'])
 
-    if post_action_is(request, 'set_ausgeschlossene_kategorien'):
+    if request.post_action_is('set_ausgeschlossene_kategorien'):
         context.configuration().set_configuration('AUSGESCHLOSSENE_KATEGORIEN',
                                                   request.values['ausgeschlossene_kategorien'])
         new_set = set(list(request.values['ausgeschlossene_kategorien'].split(',')))

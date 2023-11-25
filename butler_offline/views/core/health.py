@@ -6,8 +6,7 @@ class HealthContext:
     pass
 
 
-def handle_request(request, context: HealthContext) -> PageContext:
-    print("I am here")
+def handle_request(_, context: HealthContext) -> PageContext:
     return generate_page_context('dashboard')
 
 

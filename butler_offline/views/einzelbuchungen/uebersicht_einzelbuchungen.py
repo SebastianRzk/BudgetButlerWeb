@@ -1,9 +1,10 @@
 from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore.converter import datum_to_german, from_double_to_german
+from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
 from butler_offline.core.time import today
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.http import Request
 
 
 class UebersichtEinzelbuchungenContext:
@@ -14,17 +15,20 @@ class UebersichtEinzelbuchungenContext:
         return self._einzelbuchungen
 
 
-def handle_request(request, context: UebersichtEinzelbuchungenContext):
+def handle_request(request: Request, context: UebersichtEinzelbuchungenContext):
     year = today().year
     years = sorted(context.einzelbuchungen().get_jahre(), reverse=True)
+
     if years:
         year = years[0]
+    year = request.get_post_parameter_or_default(
+        key='date',
+        mapping_function=lambda x: int(float(x)),
+        default=year)
 
-    if request.method == 'POST' and 'date' in request.values:
-        year = int(float(request.values['date']))
     einzelbuchungen_filtered = context.einzelbuchungen().select().select_year(year).get_all_raw()
 
-    if post_action_is(request, 'delete'):
+    if request.post_action_is('delete'):
         context.einzelbuchungen().delete(int(request.values['delete_index']))
         return generate_redirect_page_context('/uebersicht/')
 
@@ -47,7 +51,7 @@ def handle_request(request, context: UebersichtEinzelbuchungenContext):
             'datum': datum_to_german(row.Datum),
             'name': row.Name,
             'kategorie': row.Kategorie,
-            'wert': from_double_to_german(row.Wert),
+            'wert': Betrag(row.Wert),
             'dynamisch': row.Dynamisch,
             'link': link,
             'tags': str(row.Tags)})

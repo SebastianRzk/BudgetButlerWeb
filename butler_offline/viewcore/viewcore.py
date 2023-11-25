@@ -12,21 +12,3 @@ def design_colors():
 
 def get_generic_color_chooser(values):
     return GenericDesignColorChooser(values, design_colors())
-
-
-def post_action_is(request, action_name: str) -> bool:
-    if not is_post_parameter_set(request, 'action'):
-        return False
-    return request.values['action'] == action_name
-
-
-def get_post_parameter_or_default(request, key, default, mapping_function=lambda x: x):
-    if not is_post_parameter_set(request, key):
-        return default
-    return mapping_function(request.values[key])
-
-
-def is_post_parameter_set(request, parameter):
-    if request.method != 'POST':
-        return False
-    return parameter in request.values.keys()

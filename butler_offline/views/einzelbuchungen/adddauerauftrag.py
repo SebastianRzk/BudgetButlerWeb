@@ -1,4 +1,3 @@
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, \
     datum_to_german
@@ -8,6 +7,8 @@ from butler_offline.viewcore.template import fa
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, TransactionalPageContext
+from butler_offline.viewcore.http import Request
+
 
 TYP_AUSGABE = 'Ausgabe'
 TYPE_EINNAHME = 'Einnahme'
@@ -26,7 +27,7 @@ class AddDauerauftragContext:
         return self._einzelbuchungen
 
 
-def handle_request(request, context: AddDauerauftragContext) -> TransactionalPageContext:
+def handle_request(request: Request, context: AddDauerauftragContext) -> TransactionalPageContext:
     if request.method == 'POST' and request.values['action'] == 'add':
         value = dezimal_float(request.values['wert'])
         if request.values['typ'] == TYP_AUSGABE:
@@ -75,7 +76,7 @@ def handle_request(request, context: AddDauerauftragContext) -> TransactionalPag
     page_context = generate_transactional_page_context('adddauerauftrag')
     page_context.add('approve_title', 'Dauerauftrag hinzufügen')
 
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         db_index = int(request.values['edit_index'])
         default_item = context.dauerauftraege().get(db_index)
         default_item['Startdatum'] = datum_to_string(default_item['Startdatum'])

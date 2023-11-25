@@ -1,9 +1,9 @@
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.viewcore import post_action_is
-from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
+from butler_offline.viewcore.converter import datum_to_german
+from butler_offline.viewcore.http import Request
 
 
 class UebersichtDepotauszuegeContext:
@@ -18,9 +18,9 @@ class UebersichtDepotauszuegeContext:
         return self._depotwerte
 
 
-def handle_request(request, context: UebersichtDepotauszuegeContext):
+def handle_request(request: Request, context: UebersichtDepotauszuegeContext):
 
-    if post_action_is(request, 'delete'):
+    if request.post_action_is('delete'):
         delete_index = int(request.values['delete_index'])
         delete_konto = context.depotauszuege().resolve_konto(delete_index)
         delete_datum = context.depotauszuege().resolve_datum(delete_index)

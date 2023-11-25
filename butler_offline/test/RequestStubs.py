@@ -1,15 +1,14 @@
-
-class GetRequest:
-    method = "GET"
-    values = {}
-    POST = {}
+from butler_offline.viewcore.http import Request
 
 
-class PostRequest:
-    method = 'POST'
+class GetRequest(Request):
+    def __init__(self):
+        super().__init__(values={}, args={}, method='GET')
 
+
+class PostRequest(Request):
     def __init__(self, args):
-        self.values = args
+        super().__init__(values=args, args={}, method='POST')
 
 
 class PostRequestAction(PostRequest):

@@ -1,14 +1,13 @@
+from butler_offline.core import configuration_provider
+from butler_offline.core.configuration_provider import ConfigurationProvider
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.viewcore import request_handler
-from butler_offline.core import configuration_provider
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, PageContext
 from butler_offline.viewcore.converter import datum
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.converter import datum_to_string
-from butler_offline.viewcore.viewcore import get_post_parameter_or_default
-from butler_offline.viewcore.viewcore import is_post_parameter_set
-from butler_offline.core.configuration_provider import ConfigurationProvider
+from butler_offline.viewcore.http import Request
 
 
 class AbrechnenVorschauContext:
@@ -36,7 +35,7 @@ class AbrechnenVorschauContext:
         return self._configuration
 
 
-def handle_request(request, context: AbrechnenVorschauContext):
+def handle_request(request: Request, context: AbrechnenVorschauContext):
     result_context = generate_transactional_page_context('gemeinsamabrechnen')
 
     if context.gemeinsamebuchungen().is_empty():
@@ -48,8 +47,8 @@ def handle_request(request, context: AbrechnenVorschauContext):
     mindate = context.gemeinsamebuchungen().min_date()
     maxdate = context.gemeinsamebuchungen().max_date()
 
-    set_mindate = get_post_parameter_or_default(request, 'set_mindate', mindate, mapping_function=datum)
-    set_maxdate = get_post_parameter_or_default(request, 'set_maxdate', maxdate, mapping_function=datum)
+    set_mindate = request.get_post_parameter_or_default('set_mindate', mindate, mapping_function=datum)
+    set_maxdate = request.get_post_parameter_or_default('set_maxdate', maxdate, mapping_function=datum)
     selector = context.gemeinsamebuchungen().select().select_range(set_mindate, set_maxdate)
 
     replay_value_if_defined(result_context, 'set_verhaeltnis', request, default=50)
@@ -74,7 +73,7 @@ def handle_request(request, context: AbrechnenVorschauContext):
         ergebnis += '{self_name} übernimmt einen Anteil von {verhaeltnis}% der Ausgaben.<br>'.format(
             self_name=name_self, verhaeltnis=set_verhaeltnis)
 
-    if is_post_parameter_set(request, 'set_limit'):
+    if request.is_post_parameter_set('set_limit'):
         ergebnis_satz = '''Durch das Limit bei {name} von {limit_value} EUR wurde das ''' + \
                         '''Verhältnis von {verhaeltnis_alt} auf {verhaeltnis_neu} aktualisiert<br>'''
         verhaeltnis_alt = set_verhaeltnis
@@ -136,8 +135,8 @@ def handle_request(request, context: AbrechnenVorschauContext):
     return result_context
 
 
-def replay_value_if_defined(context: PageContext, replay_name, request, default: bool | object | int = False):
-    if is_post_parameter_set(request, replay_name):
+def replay_value_if_defined(context: PageContext, replay_name, request: Request, default: bool | object | int = False):
+    if request.is_post_parameter_set(replay_name):
         context.add(replay_name, request.values[replay_name])
     elif default:
         context.add(replay_name, default)

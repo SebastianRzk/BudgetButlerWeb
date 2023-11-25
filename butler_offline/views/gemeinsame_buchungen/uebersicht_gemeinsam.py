@@ -1,8 +1,8 @@
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import to_descriptive_list
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.viewcore.http import Request
 
 
 class UebersichtGemeinsamContext:
@@ -13,8 +13,8 @@ class UebersichtGemeinsamContext:
         return self._gemeinsamebuchungen
 
 
-def handle_request(request, context: UebersichtGemeinsamContext):
-    if post_action_is(request, 'delete'):
+def handle_request(request: Request, context: UebersichtGemeinsamContext):
+    if request.post_action_is('delete'):
         context.gemeinsamebuchungen().delete(int(request.values['delete_index']))
         return generate_redirect_page_context('/gemeinsameuebersicht/')
 

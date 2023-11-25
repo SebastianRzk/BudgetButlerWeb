@@ -8,7 +8,7 @@ from butler_offline.viewcore.converter import datum, dezimal_float, from_double_
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.viewcore.http import Request
 
 
 class AddEinnahmeContext:
@@ -19,12 +19,12 @@ class AddEinnahmeContext:
         return self._einzelbuchungen
 
 
-def handle_request(request, context: AddEinnahmeContext) -> TransactionalPageContext:
+def handle_request(request: Request, context: AddEinnahmeContext) -> TransactionalPageContext:
     page_context = generate_transactional_page_context('addeinnahme')
     page_context.add('page_subtitle', 'Daten der Einnahme:')
     page_context.add('approve_title', 'Einnahme hinzufügen')
 
-    if post_action_is(request, 'add'):
+    if request.post_action_is('add'):
         if 'edit_index' in request.values:
             datum_object = datum(request.values['date'])
             context.einzelbuchungen().edit(
@@ -58,7 +58,7 @@ def handle_request(request, context: AddEinnahmeContext) -> TransactionalPageCon
                     'wert': from_double_to_german(dezimal_float(request.values['wert']))
                 })
 
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         logging.info('Please edit: %s', request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         selected_item = context.einzelbuchungen().get(db_index)

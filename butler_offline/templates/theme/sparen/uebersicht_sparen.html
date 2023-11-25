@@ -13,7 +13,7 @@
 			{% for item in gesamt_diagramm_data%}
 			{
 				label: '{{item.label}}',
-				data: {{item.datasets|safe}},
+				data: {{item.datasets.js()|safe}},
 				backgroundColor: '{{item.color}}'
 			},
 			{% endfor %}
@@ -53,14 +53,14 @@
 			pointBorderColor: 'rgb(0, 166, 90)',
 			borderColor: 'rgb(0, 166, 90)',
 			pointStrokeColor: 'rgb(0, 166, 90)',
-			data: {{gesamt_linechart.kontostand|safe}}
+			data: {{gesamt_linechart.kontostand.js()|safe}}
 		  },
 		   {
 			label: "Aufbuchungen",
 			pointBorderColor: 'rgb(60, 141, 188)',
 			borderColor: 'rgb(60, 141, 188)',
 			pointStrokeColor: 'rgb(60, 141, 188)',
-			data: {{gesamt_linechart.aufbuchungen|safe}}
+			data: {{gesamt_linechart.aufbuchungen.js()|safe}}
 		  },
 		]
 	  };
@@ -127,29 +127,29 @@
 					<tr>
 						<td id="item_{{sparkonto.index}}_kontoname"><span class="fa fa-circle" style="color: {{sparkonto.color}};"></span>{{sparkonto.name}}</td>
 						<td id="item_{{sparkonto.index}}_kontotyp">{{sparkonto.kontotyp}}</td>
-						<td id="item_{{sparkonto.index}}_aufbuchungen" class="table-wert">{{sparkonto.aufbuchungen_str}}</td>
+						<td id="item_{{sparkonto.index}}_aufbuchungen" class="table-wert">{{sparkonto.aufbuchungen.deutsch()}} €</td>
 						<td id="item_{{sparkonto.index}}_difference"
 									class="table-wert
 									{% if sparkonto.difference_is_negativ %}
 									negativ
 									{% endif %}
 									"
-								>{{sparkonto.difference_str}}</td>
-						<td id="item_{{sparkonto.index}}_wert" class="table-wert">{{sparkonto.wert_str}}</td>
+								>{{sparkonto.difference.deutsch()}} €</td>
+						<td id="item_{{sparkonto.index}}_wert" class="table-wert">{{sparkonto.wert.deutsch()}} €</td>
 					</tr>
 					{% endfor %}
 					<tr>
 						<td><b>Gesamt</b></td>
 						<td></td>
-						<td class="table-wert"><b id="item_gesamt_aufbuchungen">{{gesamt.aufbuchungen_str}}</b></td>
+						<td class="table-wert"><b id="item_gesamt_aufbuchungen">{{gesamt.aufbuchungen.deutsch()}} €</b></td>
 						<td
 									class="table-wert
 									{% if gesamt.difference_is_negativ %}
 									negativ
 									{% endif %}
 									"
-						><b id="item_gesamt_difference">{{gesamt.difference_str}}</b></td>
-						<td class="table-wert"><b id="item_gesamt_wert">{{gesamt.wert_str}}</b></td>
+						><b id="item_gesamt_difference">{{gesamt.difference.deutsch()}} €</b></td>
+						<td class="table-wert"><b id="item_gesamt_wert">{{gesamt.wert.deutsch()}} €</b></td>
 						<td></td>
 					</tr>
 				</tbody>
@@ -166,7 +166,7 @@
 			var pieData = {
 			labels:{{konto_diagramm.labels|safe}},
 			datasets: [{
-			data: {{konto_diagramm.datasets|safe}},
+			data: {{konto_diagramm.datasets.js()|safe}},
 			backgroundColor: {{konto_diagramm.colors|safe}},
 			}],
 			};
@@ -200,28 +200,28 @@
 					{% for typ in typen %}
 					<tr>
 						<td id="item_{{typ.index}}_kontoname"><span class="fa fa-circle" style="color: {{typ.color}};"></span>{{typ.name}}</td>
-						<td id="item_{{typ.index}}_aufbuchungen" class="table-wert">{{typ.aufbuchungen_str}}</td>
+						<td id="item_{{typ.index}}_aufbuchungen" class="table-wert">{{typ.aufbuchungen.deutsch()}} €</td>
 						<td id="item_{{typ.index}}_difference"
 									class="table-wert
 									{% if typ.difference_is_negativ %}
 									negativ
 									{% endif %}
 									"
-								>{{typ.difference_str}}</td>
-						<td id="item_{{typ.index}}_wert" class="table-wert">{{typ.wert_str}}</td>
+								>{{typ.difference.deutsch()}} €</td>
+						<td id="item_{{typ.index}}_wert" class="table-wert">{{typ.wert.deutsch()}} €</td>
 					</tr>
 					{% endfor %}
 					<tr>
 						<td><b>Gesamt</b></td>
-						<td class="table-wert"><b>{{gesamt.aufbuchungen_str}}</b></td>
+						<td class="table-wert"><b>{{gesamt.aufbuchungen.deutsch()}} €</b></td>
 						<td
 									class="table-wert
 									{% if gesamt.difference_is_negativ %}
 									negativ
 									{% endif %}
 									"
-						><b>{{gesamt.difference_str}}</b></td>
-						<td class="table-wert"><b>{{gesamt.wert_str}}</b></td>
+						><b>{{gesamt.difference.deutsch()}} €</b></td>
+						<td class="table-wert"><b>{{gesamt.wert.deutsch()}} €</b></td>
 						<td></td>
 					</tr>
 				</tbody>
@@ -238,7 +238,7 @@
 			var pieData = {
 			labels:{{typen_diagramm.labels|safe}},
 			datasets: [{
-			data: {{typen_diagramm.datasets|safe}},
+			data: {{typen_diagramm.datasets.js()|safe}},
 			backgroundColor: {{typen_diagramm.colors|safe}},
 			}],
 			};
@@ -269,11 +269,11 @@
 				<tbody>
 					<tr>
 						<td><span class="fa fa-circle" style="color: #39CCCC;"></span>Manuelle Order</td>
-						<td class="table-wert">{{order_typ.manual}}</td>
+						<td class="table-wert">{{order_typ.manual.deutsch()}} €</td>
 					</tr>
 					<tr>
 						<td><span class="fa fa-circle" style="color: #3D9970;"></span>Order durch Daueraufträge</td>
-						<td class="table-wert">{{order_typ.dauerauftrag}}</td>
+						<td class="table-wert">{{order_typ.dauerauftrag.deutsch()}} €</td>
 					</tr>
 				</tbody>
 			</table>
@@ -289,7 +289,7 @@
 			var pieData = {
 			labels: ['Manuelle Order', 'Order durch Daueraufträge'],
 			datasets: [{
-			data: [{{order_typ.manual_raw}}, {{order_typ.dauerauftrag}}],
+			data: [{{order_typ.manual.js()}}, {{order_typ.dauerauftrag.js()}}],
 			backgroundColor: ['#39CCCC', '#3D9970'],
 			}],
 			};
@@ -325,7 +325,7 @@
 					{% for depotwert in monatlich.einzelwerte %}
 					<tr>
 						<td><span class="fa fa-circle" style="color: {{depotwert.color}};"></span>{{depotwert.name}}</td>
-						<td class="table-wert">{{depotwert.wert}}</td>
+						<td class="table-wert">{{depotwert.wert.deutsch()}} €</td>
 
 					</tr>
 					{% endfor %}
@@ -343,7 +343,7 @@
 			var pieData = {
 			labels:{{monatlich.namen|safe}},
 			datasets: [{
-			data: {{monatlich.werte|safe}},
+			data: {{monatlich.werte.js()|safe}},
 			backgroundColor: {{monatlich.colors|safe}},
 			}],
 			};

@@ -4,9 +4,9 @@ from butler_offline.core.database import Depotauszuege, Kontos, Depotwerte
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
+from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 
 KEY_WERT = 'wert_'
@@ -70,7 +70,7 @@ class AddDepotauszugContext:
         return self._depotwerte
 
 
-def handle_request(request, context: AddDepotauszugContext):
+def handle_request(request: Request, context: AddDepotauszugContext):
     render_context = generate_transactional_page_context('add_depotauszug')
     if not context.kontos().get_depots():
         return render_context.throw_error(NO_VALID_DEPOT_IN_DB)
@@ -78,7 +78,7 @@ def handle_request(request, context: AddDepotauszugContext):
     if not context.depotwerte().get_depotwerte():
         return render_context.throw_error(NO_VALID_SHARE_IN_DB)
 
-    if post_action_is(request, 'add'):
+    if request.post_action_is('add'):
         current_date = None
         for element in request.values:
             if element.startswith('datum_'):
@@ -124,7 +124,6 @@ def handle_request(request, context: AddDepotauszugContext):
                             })
 
         else:
-
             result = context.depotauszuege().get_by(current_date, konto)
             if len(result) > 0:
                 return render_context.throw_error(
@@ -157,7 +156,7 @@ def handle_request(request, context: AddDepotauszugContext):
     render_context.add('approve_title', 'Depotauszug hinzufügen')
 
     depotwerte = context.depotwerte().get_depotwerte_descriptions()
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         print("Please edit:", request.values['edit_index'])
         db_index = int(request.values['edit_index'])
         db_row = context.depotauszuege().get(db_index)
@@ -182,7 +181,7 @@ def handle_request(request, context: AddDepotauszugContext):
         render_context.add('approve_title', 'Depotauszug aktualisieren')
 
     if not render_context.contains('default_items'):
-        render_context.add('default_items',  [])
+        render_context.add('default_items', [])
         for konto in context.kontos().get_depots():
             default_datum = context.depotauszuege().get_latest_datum_by(konto)
             if not default_datum:

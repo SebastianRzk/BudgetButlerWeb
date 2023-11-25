@@ -31,12 +31,12 @@
           datasets: [{
             label: '{{name_uebersicht_gruppe_1}}',
             backgroundColor: "{{color_uebersicht_gruppe_1}}",
-            data: [{{wert_uebersicht_gruppe_1}}]
+            data: [{{wert_uebersicht_gruppe_1.js()}}]
           },
           {
             label: '{{name_uebersicht_gruppe_2}}',
             backgroundColor: "{{color_uebersicht_gruppe_2}}",
-            data: [{{wert_uebersicht_gruppe_2}}]
+            data: [{{wert_uebersicht_gruppe_2.js()}}]
           }]
         };
         window.onload = function() {
@@ -78,12 +78,12 @@
         datasets: [{
           label: '{{name_uebersicht_jahr_gruppe_1}}',
           backgroundColor: "{{color_uebersicht_jahr_gruppe_1}}",
-          data: [{{wert_uebersicht_jahr_gruppe_1}}]
+          data: [{{wert_uebersicht_jahr_gruppe_1.js()}}]
         },
         {
           label: '{{name_uebersicht_jahr_gruppe_2}}',
           backgroundColor: "{{color_uebersicht_jahr_gruppe_2}}",
-          data: [{{wert_uebersicht_jahr_gruppe_2}}]
+          data: [{{wert_uebersicht_jahr_gruppe_2.js()}}]
         }]
       };
       var ctx2 = document.getElementById("balance_jahr_canvas").getContext("2d");
@@ -124,7 +124,7 @@
       var pieData = {
         labels:{{ausgaben_labels|safe}},
         datasets: [{
-          data: {{ausgaben_data|safe}},
+          data: {{ausgaben_data.js()|safe}},
           backgroundColor: {{ausgaben_colors|safe}},
         }],
       };
@@ -152,7 +152,7 @@
       var pieData = {
         labels:{{einnahmen_labels|safe}},
         datasets: [{
-          data: {{einnahmen_data|safe}},
+          data: {{einnahmen_data.js()|safe}},
           backgroundColor: {{einnahmen_colors|safe}},
         }],
       };
@@ -184,14 +184,14 @@
         <tbody>
           {% for ausgabe in ausgaben %}
           <tr>
-            <td> <span class="fa fa-circle" style="color: {{ausgabe.2}};"></span> {{ausgabe.0}}</td>
-            <td class="table-wert">{{ausgabe.1}}</td>
+            <td> <span class="fa fa-circle" style="color: {{ausgabe.color}};"></span> {{ausgabe.kategorie}}</td>
+            <td class="table-wert">{{ausgabe.wert.deutsch()}} €</td>
           </tr>
           {% endfor %}
           <tfooter>
           <tr>
             <td>Summe</td>
-            <td class="table-wert">{{gesamt}}</td>
+            <td class="table-wert">{{gesamt.deutsch()}} €</td>
           </tr>
           </tfooter>
         </tbody>
@@ -214,14 +214,14 @@
         <tbody>
           {% for einnahme in einnahmen %}
           <tr>
-            <td><span class="fa fa-circle" style="color: {{einnahme.2}};"></span> {{einnahme.0}}</td>
-            <td class="table-wert">{{einnahme.1}}</td>
+            <td><span class="fa fa-circle" style="color: {{einnahme.color}};"></span> {{einnahme.kategorie}}</td>
+            <td class="table-wert">{{einnahme.wert.deutsch()}} €</td>
           </tr>
           {% endfor %}
           <tfooter>
             <tr>
               <td>Summe</td>
-              <td class="table-wert">{{gesamt_einnahmen}}</td>
+              <td class="table-wert">{{gesamt_einnahmen.deutsch()}} €</td>
             </tr>
           </tfooter>
         </tbody>
@@ -251,7 +251,7 @@
         <tr>
           <td class="table-kategorie"><span class="fa fa-circle" style="color: {{kategorie.farbe}};"></span> {{kategorie.kategorie}}</td>
           <td>{{kategorie.name}}</td>
-          <td class="table-wert">{{kategorie.summe}}</td>
+          <td class="table-wert">{{kategorie.summe}} €</td>
         </tr>
         {% endfor %}
       </tbody>

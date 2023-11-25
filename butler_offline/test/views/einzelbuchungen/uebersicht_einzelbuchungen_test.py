@@ -3,6 +3,7 @@ from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.views.einzelbuchungen import uebersicht_einzelbuchungen
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 def test_transaction_id_should_be_in_context():
@@ -41,10 +42,10 @@ def test_with_entry_should_return_german_date_format():
 def test_get_request_with_einnahme_should_return_edit_link_of_einnahme():
     result = uebersicht_einzelbuchungen.handle_request(GetRequest(), get_test_data())
     item = result.get('alles')['2012.12'][0]
-    assert item['wert'] == '100,00'
+    assert item['wert'] == Betrag(100)
     assert item['link'] == 'addeinnahme'
     item = result.get('alles')['2012.12'][1]
-    assert item['wert'] == '-100,00'
+    assert item['wert'] == Betrag(-100)
     assert item['link'] == 'addausgabe'
 
 

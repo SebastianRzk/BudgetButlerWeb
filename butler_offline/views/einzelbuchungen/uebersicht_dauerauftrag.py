@@ -1,4 +1,3 @@
-from butler_offline.viewcore.viewcore import post_action_is
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_to_german
 import collections
@@ -6,6 +5,8 @@ from butler_offline.viewcore.context.builder import PageContext, \
     generate_transactional_page_context, generate_redirect_page_context
 import logging
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
+from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.http import Request
 
 
 class UbersichtDauerauftragContext:
@@ -16,9 +17,9 @@ class UbersichtDauerauftragContext:
         return self._dauerauftraege
 
 
-def _handle_request(request, context: UbersichtDauerauftragContext) -> PageContext:
+def _handle_request(request: Request, context: UbersichtDauerauftragContext) -> PageContext:
 
-    if post_action_is(request, 'delete'):
+    if request.post_action_is('delete'):
         logging.info('Please edit: %s', request.values['delete_index'])
         context.dauerauftraege().delete(int(request.values['delete_index']))
         return generate_redirect_page_context('/dauerauftraguebersicht/')
@@ -34,7 +35,7 @@ def _handle_request(request, context: UbersichtDauerauftragContext) -> PageConte
 
 def _format_dauerauftrag_floatpoint(dauerauftraege):
     for dauerauftrag in dauerauftraege:
-        dauerauftrag['Wert'] = '%.2f' % dauerauftrag['Wert']
+        dauerauftrag['Wert'] = Betrag(dauerauftrag['Wert'])
         dauerauftrag['Startdatum'] = datum_to_german(dauerauftrag['Startdatum'])
         dauerauftrag['Endedatum'] = datum_to_german(dauerauftrag['Endedatum'])
     return dauerauftraege

@@ -14,8 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-        #PATH: $PATH:$PWD/geckodriver
-        TRAVIS_INTEGRATION: TRUE
+      INTEGRATION_TESTS: TRUE
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.11
@@ -26,9 +25,9 @@ jobs:
       run: |
         sh ./ci/install_requirements.sh
         pip install flake8 pytest
-        wget https://github.com/mozilla/geckodriver/releases/download/v0.32.0/geckodriver-v0.32.0-linux64.tar.gz
+        wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz
         mkdir geckodriver
-        tar -xzf geckodriver-v0.32.0-linux64.tar.gz -C geckodriver
+        tar -xzf geckodriver-v0.33.0-linux64.tar.gz -C geckodriver
         firefox --version
         wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
         source ~/.nvm/nvm.sh
@@ -47,7 +46,7 @@ jobs:
         sh ci/run_integration_tests.sh
   butler_online_frontend:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       -
         name: Set up QEMU

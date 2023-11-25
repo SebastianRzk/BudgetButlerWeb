@@ -11,6 +11,7 @@ from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.viewcore.renderhelper import Betrag, BetragListe
 
 
 class SparenUebersichtContext:
@@ -55,13 +56,13 @@ class SparenUebersichtContext:
 def to_piechart(data_list, gesamt_wert):
     colors = []
     labels = []
-    datasets = []
+    datasets = BetragListe()
 
     for element in data_list:
-        if gesamt_wert != 0:
-            prozent = '%.2f' % ((100 * element['wert']) / gesamt_wert)
+        if gesamt_wert.value() != 0:
+            prozent = Betrag((100 * element['wert'].value()) / gesamt_wert.value())
         else:
-            prozent = 0
+            prozent = Betrag(0)
 
         colors.append(element['color'])
         labels.append(element['name'])
@@ -117,12 +118,9 @@ def generate_konto_uebersicht(color_kontos, color_typen,
             'color': color_kontos.get_for_value(kontoname),
             'name': kontoname,
             'kontotyp': kontotyp,
-            'wert': aktueller_kontostand,
-            'difference': diff,
-            'aufbuchungen': aufbuchungen,
-            'wert_str': from_double_to_german(aktueller_kontostand),
-            'difference_str': from_double_to_german(diff),
-            'aufbuchungen_str': from_double_to_german(aufbuchungen),
+            'wert': Betrag(aktueller_kontostand),
+            'difference': Betrag(diff),
+            'aufbuchungen': Betrag(aufbuchungen),
             'difference_is_negativ': diff < 0
         })
 
@@ -134,12 +132,9 @@ def generate_konto_uebersicht(color_kontos, color_typen,
         kontotypen_liste.append({
             'name': kontotyp,
             'color': color_typen.get_for_value(kontotyp),
-            'wert': kontotypen_werte[kontotyp]['gesamt'],
-            'wert_str': from_double_to_german(kontotypen_werte[kontotyp]['gesamt']),
-            'aufbuchungen': kontotypen_werte[kontotyp]['aufbuchungen'],
-            'aufbuchungen_str': from_double_to_german(kontotypen_werte[kontotyp]['aufbuchungen']),
-            'difference': diff,
-            'difference_str': from_double_to_german(diff)
+            'wert': Betrag(kontotypen_werte[kontotyp]['gesamt']),
+            'aufbuchungen': Betrag(kontotypen_werte[kontotyp]['aufbuchungen']),
+            'difference': Betrag(diff),
         })
 
     depotwerte_nach_typ = depotwerte.get_isin_nach_typ()
@@ -153,23 +148,17 @@ def generate_konto_uebersicht(color_kontos, color_typen,
         kontotypen_liste.append({
             'name': typ,
             'color': color_typen.get_for_value(typ),
-            'wert': gesamt,
-            'wert_str': from_double_to_german(gesamt),
-            'aufbuchungen': aufbuchungen,
-            'aufbuchungen_str': from_double_to_german(aufbuchungen),
-            'difference': diff,
-            'difference_str': from_double_to_german(diff)
+            'wert': Betrag(gesamt),
+            'aufbuchungen': Betrag(aufbuchungen),
+            'difference': Betrag(diff),
         })
 
     gesamt_diff = gesamt_kontostand - gesamt_aufbuchungen
 
     gesamt = {
-        'wert': gesamt_kontostand,
-        'difference': gesamt_diff,
-        'aufbuchungen': gesamt_aufbuchungen,
-        'wert_str': from_double_to_german(gesamt_kontostand),
-        'difference_str': from_double_to_german(gesamt_diff),
-        'aufbuchungen_str': from_double_to_german(gesamt_aufbuchungen),
+        'wert': Betrag(gesamt_kontostand),
+        'difference': Betrag(gesamt_diff),
+        'aufbuchungen': Betrag(gesamt_aufbuchungen),
         'difference_is_negativ': gesamt_diff < 0
     }
     return gesamt, sparkonto_liste, kontotypen_liste
@@ -234,10 +223,8 @@ def gesamt_uebersicht(
                 kontostand = depotauszuege_year.get_kontostand_by(kontoname)
 
             year_kontos[kontoname] = {
-                'kontostand': kontostand,
-                'kontostand_str': from_double_to_german(kontostand),
-                'aufbuchungen': aufbuchungen,
-                'aufbuchungen_str': from_double_to_german(aufbuchungen),
+                'kontostand': Betrag(kontostand),
+                'aufbuchungen': Betrag(aufbuchungen),
                 'name': kontoname
             }
 
@@ -245,10 +232,8 @@ def gesamt_uebersicht(
             sparen_aufbuchung += aufbuchungen
 
         year_kontos['Gesamt'] = {
-            'kontostand': gesamt_sparen,
-            'aufbuchungen': sparen_aufbuchung,
-            'kontostand_str': from_double_to_german(gesamt_sparen),
-            'aufbuchungen_str': from_double_to_german(sparen_aufbuchung),
+            'kontostand': Betrag(gesamt_sparen),
+            'aufbuchungen': Betrag(sparen_aufbuchung),
             'name': 'Gesamt'
         }
 
@@ -265,7 +250,7 @@ def gesamt_uebersicht(
     return gesamt_uebersicht, year_kontostaende
 
 
-def berechne_gesamt_tabelle(jahresdaten):
+def berechne_gesamt_tabelle(jahresdaten: BetragListe):
     if len(jahresdaten) == 0:
         return [[]]
 
@@ -282,7 +267,7 @@ def berechne_gesamt_tabelle(jahresdaten):
     for jahr in jahresdaten:
         for konto in jahr:
             if konto not in kontodaten:
-                kontodaten[konto] = []
+                kontodaten[konto] = BetragListe()
             kontodaten[konto].append(jahr[konto])
 
     gesamt = []
@@ -298,26 +283,26 @@ def berechne_diagramm(data):
         {
             'label': 'Einnahmen',
             'color': 'rgb(210, 214, 222)',
-            'datasets': []
+            'datasets': BetragListe()
         },
         {
             'label': 'Ausgaben',
             'color': 'rgba(60, 141, 188, 0.8)',
-            'datasets': []
+            'datasets': BetragListe()
         },
         {
             'label': 'Sparen',
             'color': 'rgb(0, 166, 90)',
-            'datasets': []
+            'datasets': BetragListe()
         }
     ]
     labels = []
 
     for jahr in data:
         labels.append(jahr['jahr'])
-        result[0]['datasets'].append('%.2f' % jahr['einnahmen'])
-        result[1]['datasets'].append('%.2f' % abs(jahr['ausgaben']))
-        result[2]['datasets'].append('%.2f' % jahr['sparen_aufbuchung'])
+        result[0]['datasets'].append(Betrag(jahr['einnahmen']))
+        result[1]['datasets'].append(Betrag(abs(jahr['ausgaben'])))
+        result[2]['datasets'].append(Betrag(jahr['sparen_aufbuchung']))
 
     return labels, result
 
@@ -325,10 +310,10 @@ def berechne_diagramm(data):
 def berechne_kontogesamt(data):
     data_gesamt = data[-1]
 
-    kontostand = []
-    aufbuchungen = []
+    kontostand = BetragListe()
+    aufbuchungen = BetragListe()
 
-    for year in data_gesamt:
+    for year in data_gesamt.content():
         kontostand.append(year['kontostand'])
         aufbuchungen.append(year['aufbuchungen'])
 
@@ -406,10 +391,8 @@ def berechne_order_typ(dauerauftrag_order, order: Order):
     dauerauftrag_order = get_wert_sum(dauerauftrag_order)
 
     return {
-        'manual': from_double_to_german(order_summe - dauerauftrag_order),
-        'dauerauftrag': from_double_to_german(dauerauftrag_order),
-        'manual_raw': '%.2f' % (order_summe - dauerauftrag_order),
-        'dauerauftrag_raw': '%.2f' % dauerauftrag_order
+        'manual': Betrag(order_summe - dauerauftrag_order),
+        'dauerauftrag': Betrag(dauerauftrag_order),
     }
 
 
@@ -422,7 +405,7 @@ def berechne_monatlich(order_dauerauftrag: OrderDauerauftrag,
 
     namen = []
     colors = []
-    werte = []
+    werte = BetragListe()
     monatlich = []
     color_chooser = viewcore.get_generic_color_chooser(list(sorted(isins)))
 
@@ -432,11 +415,11 @@ def berechne_monatlich(order_dauerauftrag: OrderDauerauftrag,
         color = color_chooser.get_for_value(isin)
 
         namen.append(name)
-        werte.append('%.2f' % wert)
+        werte.append(Betrag(wert))
         colors.append(color)
         monatlich.append({
             'name': name,
-            'wert': from_double_to_german(wert),
+            'wert': Betrag(wert),
             'color': color
         })
 

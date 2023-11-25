@@ -5,7 +5,7 @@ from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_str
     from_double_to_german, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.viewcore.viewcore import post_action_is
+from butler_offline.viewcore.http import Request
 
 
 class AddAusgabeContext:
@@ -16,11 +16,11 @@ class AddAusgabeContext:
         return self._einzelbuchungen
 
 
-def handle_request(request, context: AddAusgabeContext):
+def handle_request(request: Request, context: AddAusgabeContext):
     result_context: TransactionalPageContext = generate_transactional_page_context('addausgabe')
     result_context.add('approve_title', 'Ausgabe hinzufügen')
 
-    if post_action_is(request, 'add'):
+    if request.post_action_is('add'):
         value = dezimal_float(request.values['wert']) * -1
         if 'edit_index' in request.values:
             database_index = int(request.values['edit_index'])
@@ -56,7 +56,7 @@ def handle_request(request, context: AddAusgabeContext):
                     'wert': from_double_to_german(value)
                 })
 
-    if post_action_is(request, 'edit'):
+    if request.post_action_is('edit'):
         db_index = int(request.values['edit_index'])
 
         selected_item = context.einzelbuchungen().get(db_index)

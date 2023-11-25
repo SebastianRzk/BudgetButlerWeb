@@ -1,11 +1,12 @@
-from butler_offline.viewcore.viewcore import get_post_parameter_or_default
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum_from_german
-from butler_offline.core.database import Database
-from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from datetime import datetime
+
 from butler_offline.core import file_system
+from butler_offline.core.database import Database
 from butler_offline.core.time import time
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
+from butler_offline.viewcore.converter import datum_from_german
+from butler_offline.viewcore.http import Request
 
 
 class AbrechnenContext:
@@ -28,18 +29,18 @@ class AbrechnenContext:
         return self._filesystem
 
 
-def handle_request(request, context: AbrechnenContext):
+def handle_request(request: Request, context: AbrechnenContext):
     result_context = generate_transactional_page_context('gemeinsamabrechnen')
 
     set_mindate = datum_from_german(request.values['set_mindate'])
     set_maxdate = datum_from_german(request.values['set_maxdate'])
-    set_self_kategorie = get_post_parameter_or_default(request, 'set_self_kategorie', None)
-    set_other_kategorie = get_post_parameter_or_default(request, 'set_other_kategorie', None)
+    set_self_kategorie = request.get_post_parameter_or_default('set_self_kategorie', None)
+    set_other_kategorie = request.get_post_parameter_or_default('set_other_kategorie', None)
 
     abrechnungs_text = context.database().abrechnen(
         now=context.now(),
         filesystem=context.filesystem(),
-         mindate=set_mindate,
+        mindate=set_mindate,
         maxdate=set_maxdate,
         set_ergebnis=request.values['set_ergebnis'],
         verhaeltnis=int(request.values['set_verhaeltnis']),

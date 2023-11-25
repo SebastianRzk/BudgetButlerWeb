@@ -179,6 +179,7 @@ a:focus {
 
 .table-wert {
     text-align: right;
+    white-space: nowrap;
     padding-right: 50pt !important;
 }
 

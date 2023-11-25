@@ -149,7 +149,7 @@ class Selektor:
                 if datum_alt != row.Datum:
                     zusammenfassung.append((datum_to_german(datum_alt), tag_liste))
                     tag_liste = []
-                tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': '%.2f' % summe_alt})
+                tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': ('%.2f' % summe_alt).replace('.', ',')})
                 datum_alt = row.Datum
                 summe_alt = row.Wert
                 kategorie_alt = row.Kategorie
@@ -162,12 +162,12 @@ class Selektor:
                 name_alt = row.Name
             else:
                 if not more_than_one:
-                    name_alt = name_alt + '(' + str(summe_alt) + '€)'
+                    name_alt = name_alt + ' (' + (('%.2f' % summe_alt).replace('.', ',')) + '€)'
                     more_than_one = True
-                name_alt = name_alt + ', ' + row.Name + '(' + str(row.Wert) + '€)'
+                name_alt = name_alt + ', ' + row.Name + ' (' + (('%.2f' % row.Wert).replace('.', ',')) + '€)'
                 summe_alt += row.Wert
 
-        tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': '%.2f' % summe_alt})
+        tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': ('%.2f' % summe_alt).replace('.', ',')})
         zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
         return zusammenfassung
 
