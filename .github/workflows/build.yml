@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         #PATH: $PATH:$PWD/geckodriver
-      INTEGRATION_TESTS: TRUE
+        INTEGRATION_TESTS: TRUE
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.11
