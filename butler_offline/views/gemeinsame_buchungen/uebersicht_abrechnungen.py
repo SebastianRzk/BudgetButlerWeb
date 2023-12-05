@@ -4,6 +4,7 @@ from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core import file_system
 from butler_offline.core.file_system import all_abrechnungen, FileSystemImpl
 from butler_offline.viewcore.context.builder import generate_page_context
+from butler_offline.viewcore.http import Request
 
 
 class UbersichtAbrechnungenContext:
@@ -14,7 +15,7 @@ class UbersichtAbrechnungenContext:
         return self._filesystem
 
 
-def handle_request(request, context: UbersichtAbrechnungenContext):
+def handle_request(request: Request, context: UbersichtAbrechnungenContext):
 
     all_files = all_abrechnungen(filesystem=context.filesystem())
 

@@ -9,6 +9,9 @@ from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.state.non_persisted_state.einzelbuchungen import EinzelbuchungAddedChange, \
+    EinzelbuchungEditiertChange
 
 
 class AddEinnahmeContext:
@@ -34,13 +37,12 @@ def handle_request(request: Request, context: AddEinnahmeContext) -> Transaction
                 request.values['name'],
                 dezimal_float(request.values['wert']))
             non_persisted_state.add_changed_einzelbuchungen(
-                {
-                    'fa': fa.pencil,
-                    'datum': datum_to_german(datum_object),
-                    'kategorie': request.values['kategorie'],
-                    'name': request.values['name'],
-                    'wert': from_double_to_german(dezimal_float(request.values['wert']))
-                })
+                EinzelbuchungEditiertChange(
+                    datum=datum_to_german(datum_object),
+                    kategorie=request.values['kategorie'],
+                    name=request.values['name'],
+                    wert=Betrag(dezimal_float(request.values['wert']))
+                ))
 
         else:
             datum_object = datum(request.values['date'])
@@ -50,13 +52,12 @@ def handle_request(request: Request, context: AddEinnahmeContext) -> Transaction
                 request.values['name'],
                 dezimal_float(request.values['wert']))
             non_persisted_state.add_changed_einzelbuchungen(
-                {
-                    'fa': fa.plus,
-                    'datum': datum_to_german(datum_object),
-                    'kategorie': request.values['kategorie'],
-                    'name': request.values['name'],
-                    'wert': from_double_to_german(dezimal_float(request.values['wert']))
-                })
+                EinzelbuchungAddedChange(
+                    datum=datum_to_german(datum_object),
+                    name=request.values['name'],
+                    kategorie=request.values['kategorie'],
+                    wert=Betrag(dezimal_float(request.values['wert'])),
+                ))
 
     if request.post_action_is('edit'):
         logging.info('Please edit: %s', request.values['edit_index'])
@@ -89,6 +90,6 @@ def index(request):
     return request_handler.handle(
         request=request,
         handle_function=handle_request,
-        html_base_page='einzelbuchungen/addeinnahme.html',
+        html_base_page='einzelbuchungen/add_einnahme.html',
         context_creator=lambda db: AddEinnahmeContext(einzelbuchungen=db.einzelbuchungen)
     )

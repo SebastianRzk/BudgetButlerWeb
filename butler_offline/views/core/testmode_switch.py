@@ -19,7 +19,7 @@ def enter_testmode(request):
     file_system.INSTANCE = FileSystemStub()
     persisted_state.DATABASE_INSTANCE = None
     persisted_state.DATABASES = ['test']
-    non_persisted_state.CONTEXT = {}
+    non_persisted_state.CONTEXT = non_persisted_state.NonPersistedContext()
     configuration_provider.LOADED_CONFIG = None
     configuration_provider.set_configuration('PARTNERNAME', 'Partner')
     time.stub_today_with(datum('22.01.2019'))

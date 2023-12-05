@@ -1,5 +1,5 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
+from butler_offline.test.request_stubs import GetRequest
 from butler_offline.core import file_system
 from butler_offline.views.gemeinsame_buchungen import uebersicht_abrechnungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler

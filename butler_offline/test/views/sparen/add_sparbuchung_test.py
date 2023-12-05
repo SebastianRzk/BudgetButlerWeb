@@ -1,6 +1,6 @@
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.views.sparen import add_sparbuchung

@@ -1,5 +1,5 @@
 from butler_offline.views.einzelbuchungen.split_dauerauftrag import handle_request, SplitDauerauftraegeContext, index
-from butler_offline.test.RequestStubs import PostRequestAction
+from butler_offline.test.request_stubs import PostRequestAction
 from butler_offline.core.database import Dauerauftraege
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME

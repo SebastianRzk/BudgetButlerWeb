@@ -15,7 +15,7 @@ from butler_offline.online_services.butler_online.gemeinsame_buchungen import ge
     upload_gemeinsame_buchungen, delete_gemeinsame_buchungen
 from butler_offline.online_services.butler_online.session import get_partnername, login
 from butler_offline.online_services.butler_online.settings import set_kategorien
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.request_stubs import PostRequest
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context
 from butler_offline.viewcore.converter import datetime_to_filesystem_string

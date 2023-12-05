@@ -1,4 +1,4 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.views.einzelbuchungen import adddauerauftrag
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.converter import datum_from_german as datum
@@ -9,6 +9,7 @@ from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.core import file_system
 from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.viewcore.state.non_persisted_state import NonPersistedContext
 
 
 file_system.INSTANCE = FileSystemStub()
@@ -97,7 +98,7 @@ def test_add_dauerauftrag():
 
 
 def test_add_dauerauftrag_should_show_in_recently_added():
-    non_persisted_state.CONTEXT = {}
+    non_persisted_state.CONTEXT = NonPersistedContext()
     result = adddauerauftrag.handle_request(PostRequest(
         {'action': 'add',
          'startdatum': rfc('1.1.2017'),

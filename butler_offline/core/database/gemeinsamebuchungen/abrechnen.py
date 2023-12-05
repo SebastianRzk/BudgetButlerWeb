@@ -1,5 +1,4 @@
 from butler_offline.core.file_system import write_abrechnung
-from butler_offline.core.time import time
 from butler_offline.core.export.string_writer import StringWriter
 from butler_offline.core.export.text_report import TextReportWriter
 from butler_offline.viewcore import viewcore

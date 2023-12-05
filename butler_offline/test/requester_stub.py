@@ -18,7 +18,7 @@ class RequesterStub:
         if url in self.mocked_requests:
             self.call_count[url].append(data)
             return self.mocked_requests[url]
-        logging.error('WARNING, NON MATCHING REQUEST: %s %s', url, data)
+        logging.error('ERROR, NON MATCHING REQUEST: %s %s', url, data)
         return None
 
     def get(self, url):
@@ -26,7 +26,7 @@ class RequesterStub:
         if url in self.mocked_requests:
             self.call_count[url].append('')
             return self.mocked_requests[url]
-        logging.error('WARNING, NON MATCHING REQUEST: %s', url)
+        logging.error('ERROR, NON MATCHING REQUEST: %s', url)
         return None
 
     def post_raw(self, url, data):

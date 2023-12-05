@@ -17,7 +17,7 @@ class Depotwerte(DatabaseObject):
     def __init__(self):
         super().__init__(self.TABLE_HEADER)
 
-    def add(self, name, isin, typ):
+    def add(self, name: str, isin: str, typ: str):
         neuer_depotwert = pd.DataFrame([[name, isin, typ]], columns=self.TABLE_HEADER)
         self.content = pd.concat([self.content, neuer_depotwert], ignore_index=True)
         self.taint()
@@ -26,7 +26,7 @@ class Depotwerte(DatabaseObject):
     def get_all(self):
         return self.content
 
-    def edit(self, index, name, isin, typ):
+    def edit(self, index: int, name: str, isin: str, typ:str):
         self.edit_element(index, {
             'Name': name,
             'ISIN': isin,
@@ -54,7 +54,7 @@ class Depotwerte(DatabaseObject):
             })
         return result
 
-    def get_description_for(self, isin):
+    def get_description_for(self, isin: str):
         name = self.content[self.content.ISIN == isin].Name.to_list()[0]
         return '{} ({})'.format(name, isin)
     

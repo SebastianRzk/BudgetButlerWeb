@@ -82,7 +82,7 @@ def __handle_request(
     input_context = context_creator(database)
     context = page_executor.execute(page_handler=request_action, request=request, context=input_context)
 
-    if not context.is_error():
+    if context.is_ok():
         if database.is_tainted():
             if not is_transactional_request(request):
                 raise ModificationWithoutTransactionContext()
@@ -123,6 +123,7 @@ def create_internal_request(request: Request) -> InternalRequest:
         args=request.args.copy(),
         method=request.method
     )
+
 
 def handle_transaction_out_of_sync(
         renderer: Renderer,

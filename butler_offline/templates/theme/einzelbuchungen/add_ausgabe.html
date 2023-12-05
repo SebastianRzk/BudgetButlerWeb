@@ -80,11 +80,11 @@
 				<tbody>
 				{% for ausgabe in letzte_erfassung %}
 					<tr>
-						<td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
+						<td><span class="fa {{ausgabe.fa}} pull-right"></span></td>
 						<td>{{ausgabe.datum}}</td>
 						<td>{{ausgabe.name}}</td>
 						<td>{{ausgabe.kategorie}}</td>
-						<td class="table-wert">{{ausgabe.wert}}</td>
+						<td class="table-wert">{{ausgabe.wert.deutsch()}} €</td>
 					</tr>
 				{% endfor %}
 				</tbody>

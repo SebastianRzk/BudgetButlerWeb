@@ -21,8 +21,7 @@ def handle_request(request: Request, context: UebersichtMonatContext):
     result_context.add('monate', monate)
 
     if not monate:
-        result_context.throw_error('Keine Ausgaben erfasst')
-        return result_context
+        return result_context.throw_error('Keine Ausgaben erfasst')
 
     selected_item = monate[0]
     if request.is_post_request():

@@ -1,5 +1,5 @@
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.request_stubs import GetRequest
+from butler_offline.test.request_stubs import PostRequest
 from butler_offline.views.einzelbuchungen import addausgabe
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
@@ -7,6 +7,8 @@ from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.core import file_system
 from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.viewcore.state.non_persisted_state.einzelbuchungen import EinzelbuchungAddedChange
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 file_system.INSTANCE = FileSystemStub()
@@ -78,11 +80,12 @@ def test_add_ausgabe_should_show_in_recently_added():
 
     result_element = list(result.get('letzte_erfassung'))[0]
 
-    assert result_element['fa'] == 'plus'
-    assert result_element['datum'] == '01.01.2017'
-    assert result_element['kategorie'] == 'Essen'
-    assert result_element['name'] == 'testname'
-    assert result_element['wert'] == '-2,00'
+    assert result_element == EinzelbuchungAddedChange(
+        datum='01.01.2017',
+        kategorie='Essen',
+        name='testname',
+        wert=Betrag(-2)
+    )
 
 
 def test_edit_ausgabe():

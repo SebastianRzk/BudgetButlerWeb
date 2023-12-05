@@ -1,8 +1,8 @@
 from butler_offline.core.configuration_provider import DictConfiguration
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.request_stubs import GetRequest
+from butler_offline.test.request_stubs import PostRequest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.routes import CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE
 from butler_offline.views.core import configuration

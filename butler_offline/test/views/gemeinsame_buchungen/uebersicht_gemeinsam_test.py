@@ -1,4 +1,4 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.views.gemeinsame_buchungen import uebersicht_gemeinsam
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen

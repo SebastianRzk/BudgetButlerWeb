@@ -1,10 +1,12 @@
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.core.database import Database
+from butler_offline.test.viewcore.state.non_persisted_state.einzelbuchung_changed_test_factory import \
+    EINZELBUCHUNG_ADDED_CHANGE
 
 
 def clear_context():
-    non_persisted_state.CONTEXT = {}
+    non_persisted_state.CONTEXT = non_persisted_state.NonPersistedContext()
     persisted_state.DATABASE_INSTANCE = Database('db')
 
 
@@ -13,9 +15,9 @@ def test_einzelbuchungen():
 
     assert non_persisted_state.get_changed_einzelbuchungen() == []
 
-    non_persisted_state.add_changed_einzelbuchungen('demo')
+    non_persisted_state.add_changed_einzelbuchungen(EINZELBUCHUNG_ADDED_CHANGE)
 
-    assert non_persisted_state.get_changed_einzelbuchungen() == ['demo']
+    assert non_persisted_state.get_changed_einzelbuchungen() == [EINZELBUCHUNG_ADDED_CHANGE]
 
 
 def test_dauerauftraege():

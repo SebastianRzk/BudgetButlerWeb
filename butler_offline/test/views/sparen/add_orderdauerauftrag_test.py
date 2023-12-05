@@ -3,25 +3,11 @@ from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.database_util import untaint_database
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
-from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
-from butler_offline.viewcore.state import persisted_state
 from butler_offline.views.sparen import add_orderdauerauftrag
-
-
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    depotwerte = persisted_state.database_instance().depotwerte
-    persisted_state.database_instance().sparkontos.add('demokonto', Kontos.TYP_DEPOT)
-    depotwerte.add(name='demowert', isin='demoisin', typ=depotwerte.TYP_ETF)
-    untaint_database(database=persisted_state.database_instance())
-    request_handler.stub_me()
 
 
 def basic_context_with_demo_data(

@@ -1,6 +1,5 @@
 from butler_offline.viewcore.state import persisted_state
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.database_util import untaint_database
+from butler_offline.test.request_stubs import GetRequest
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.views.sparen import uebersicht_sparen
 from butler_offline.core.database.sparen.kontos import Kontos
@@ -49,8 +48,6 @@ def get_test_data() -> uebersicht_sparen.SparenUebersichtContext:
 
     einzelbuchungen = Einzelbuchungen()
     einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
-
-    untaint_database(persisted_state.database_instance())
 
     return uebersicht_sparen.SparenUebersichtContext(
         einzelbuchungen=einzelbuchungen,
@@ -199,8 +196,6 @@ def test_info():
 
     einzelbuchungen = Einzelbuchungen()
     einzelbuchungen.add(datum('01.01.2020'), '1', '1', 1)
-
-    untaint_database(persisted_state.database_instance())
 
     result = uebersicht_sparen.handle_request(
         GetRequest(),

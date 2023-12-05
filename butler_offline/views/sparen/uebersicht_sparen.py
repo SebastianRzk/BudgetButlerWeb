@@ -250,7 +250,7 @@ def gesamt_uebersicht(
     return gesamt_uebersicht, year_kontostaende
 
 
-def berechne_gesamt_tabelle(jahresdaten: BetragListe):
+def berechne_gesamt_tabelle(jahresdaten: list):
     if len(jahresdaten) == 0:
         return [[]]
 

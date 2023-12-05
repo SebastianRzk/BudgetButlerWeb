@@ -4,8 +4,7 @@ from butler_offline.core.database import Database
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.kontos import Kontos
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.test.database_util import untaint_database
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import datum_to_string
@@ -14,6 +13,7 @@ from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.views.sparen import add_depotauszug
 from butler_offline.views.sparen.add_depotauszug import AddDepotauszugContext
+from butler_offline.viewcore.state.non_persisted_state import NonPersistedContext
 
 
 def initial_database() -> Database:
@@ -40,8 +40,6 @@ def initial_database() -> Database:
     depotauszuege.add(datum('02.01.2020'), '1demoisin', '1demokonto', 20)
     depotauszuege.add(datum('02.01.2020'), '2demoisin', '2demokonto', 30)
     depotauszuege.add(datum('02.01.2020'), '3demoisin', '2demokonto', 40)
-
-    untaint_database(database=database)
 
     return database
 
@@ -343,7 +341,7 @@ def test_add_should_be_secured_by_request_handler():
 
 
 def test_edit():
-    non_persisted_state.CONTEXT = {}
+    non_persisted_state.CONTEXT = NonPersistedContext()
     database = initial_database()
     database.depotauszuege = Depotauszuege()
 

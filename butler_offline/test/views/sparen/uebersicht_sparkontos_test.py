@@ -1,5 +1,5 @@
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.request_stubs import GetRequest
+from butler_offline.test.request_stubs import PostRequest
 from butler_offline.views.sparen import uebersicht_sparkontos
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.kontos import Kontos

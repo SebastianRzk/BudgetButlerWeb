@@ -1,12 +1,12 @@
 from butler_offline.views.sparen.uebersicht_etfs import handle_request, UebersichtEtfsContext
 from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
-from butler_offline.test.RequestStubs import GetRequest
+from butler_offline.test.request_stubs import GetRequest
 from butler_offline.core.time import today
 from butler_offline.core.shares import sectors
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore import requester
-from butler_offline.test.RequesterStub import RequesterStub
-from butler_offline.test.RequestStubs import PostRequestAction
+from butler_offline.test.requester_stub import RequesterStub
+from butler_offline.test.request_stubs import PostRequestAction
 from butler_offline.views.sparen import language
 from butler_offline.core.shares.shares_manager import SharesInfo
 from butler_offline.core.database.sparen.depotwerte import Depotwerte

@@ -1,5 +1,5 @@
 from butler_offline.views.core import backup
-from butler_offline.test.RequestStubs import GetRequest
+from butler_offline.test.request_stubs import GetRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.core.database import Database
 from butler_offline.test.core.file_system_stub import FileSystemStub

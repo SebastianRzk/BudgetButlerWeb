@@ -1,5 +1,5 @@
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.core import file_system
 from butler_offline.views.einzelbuchungen import uebersicht_dauerauftrag
 from butler_offline.viewcore.converter import datum_from_german as datum
