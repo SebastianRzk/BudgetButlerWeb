@@ -89,10 +89,10 @@ def handle_request(request: Request, context: ConfigurationContext):
 
     render_context.add('palette', farbmapping)
     default_databases = ''
-    for db in persisted_state.DATABASES:
+    for database in persisted_state.DATABASES:
         if len(default_databases) != 0:
             default_databases = default_databases + ','
-        default_databases = default_databases + db
+        default_databases = default_databases + database
     render_context.add('default_databases', default_databases)
     render_context.add('partnername', viewcore.name_of_partner())
     render_context.add('themecolor', context.configuration().get_configuration('THEME_COLOR'))

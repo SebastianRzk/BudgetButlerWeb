@@ -6,11 +6,13 @@ from butler_offline.core.database.stated_object import StatedObject
 
 class DatabaseObject(StatedObject):
 
-    def __init__(self, stored_columns: list = None):
-        if not stored_columns:
-            stored_columns = []
+    def __init__(self, stored_columns: list[str]):
         super().__init__()
         self.content = pd.DataFrame({}, columns=stored_columns)
+        if 'Dynamisch' in self.content.columns:
+            self.content['Dynamisch'] = self.content['Dynamisch'].astype('bool')
+        if 'Wert' in self.content.columns:
+            self.content['Wert'] = self.content['Wert'].astype('float')
 
     def get(self, db_index):
         row = self.content.loc[db_index]
@@ -22,7 +24,7 @@ class DatabaseObject(StatedObject):
         self._sort()
         self.taint()
 
-    def parse(self, raw_table):
+    def parse(self, raw_table: pd.DataFrame):
         if 'Datum' in raw_table.columns:
             raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         if 'Dynamisch' in self.content.columns:

@@ -1,12 +1,13 @@
+import logging
+
 from flask import redirect
 
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.core import time, configuration_provider
-from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.core import file_system
+from butler_offline.core import time, configuration_provider
+from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.viewcore.converter import datum_from_german as datum
-import logging
+from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.state import persisted_state
 
 
 def leave_debug(request):
@@ -25,4 +26,3 @@ def enter_testmode(request):
     time.stub_today_with(datum('22.01.2019'))
     logging.warning('WARNUNG: ENTERING TESTMODE')
     return redirect('/', code=301)
-

@@ -30,7 +30,7 @@ DECODED_LOGIN_DATA = '''{
 
 
 def test_pad_protocoll_with_no_protocoll_should_add_https():
-    assert import_data._add_protokoll_if_needed('myurl') == 'https://myurl'
+    assert import_data.add_protokoll_if_needed('myurl') == 'https://myurl'
 
 
 def test_transaction_id_should_be_in_context():
@@ -42,8 +42,8 @@ def test_transaction_id_should_be_in_context():
 
 
 def test_pad_protocoll_with_existing_protocoll_should_not_change_protocoll():
-    assert import_data._add_protokoll_if_needed('http://myurl') == 'http://myurl'
-    assert import_data._add_protokoll_if_needed('https://myurl') == 'https://myurl'
+    assert import_data.add_protokoll_if_needed('http://myurl') == 'http://myurl'
+    assert import_data.add_protokoll_if_needed('https://myurl') == 'https://myurl'
 
 
 def test_init_should_return_index_page():

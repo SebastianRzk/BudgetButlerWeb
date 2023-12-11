@@ -1,4 +1,3 @@
-from butler_offline.core import file_system
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag

@@ -102,7 +102,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
     if request.is_post_request():
         if request.post_action_is('load_online_transactions'):
             serverurl = request.values['server']
-            serverurl = _add_protokoll_if_needed(serverurl)
+            serverurl = add_protokoll_if_needed(serverurl)
             _save_server_creds(context.conf(), serverurl, request.values['email'])
 
             auth_container = login(serverurl, request.values['email'], request.values['password'])
@@ -124,7 +124,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
 
         if request.post_action_is('load_online_gemeinsame_transactions'):
             serverurl = request.values['server']
-            serverurl = _add_protokoll_if_needed(serverurl)
+            serverurl = add_protokoll_if_needed(serverurl)
             _save_server_creds(context.conf(), serverurl, request.values['email'])
             logging.info(serverurl)
             auth_container = login(serverurl, request.values['email'], request.values['password'])
@@ -155,7 +155,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
                 sorted(context.einzelbuchungen().get_alle_kategorien(hide_ausgeschlossene_kategorien=True)))
             serverurl = request.values['server']
 
-            serverurl = _add_protokoll_if_needed(serverurl)
+            serverurl = add_protokoll_if_needed(serverurl)
             _save_server_creds(conf=context.conf(), serverurl=serverurl, email=request.values['email'])
 
             auth_container = login(serverurl, request.values['email'], request.values['password'])
@@ -164,7 +164,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
 
         elif request.post_action_is('upload_gemeinsame_transactions'):
             serverurl = request.values['server']
-            serverurl = _add_protokoll_if_needed(serverurl)
+            serverurl = add_protokoll_if_needed(serverurl)
             _save_server_creds(conf=context.conf(), serverurl=serverurl, email=request.values['email'])
             logging.info(serverurl)
             auth_container = login(serverurl, request.values['email'], request.values['password'])
@@ -271,7 +271,7 @@ def _kategorien_map(actual, target, goal):
     return goal
 
 
-def _add_protokoll_if_needed(serverurl):
+def add_protokoll_if_needed(serverurl):
     if not serverurl.startswith('http://') and not serverurl.startswith('https://'):
         return 'https://' + serverurl
     return serverurl

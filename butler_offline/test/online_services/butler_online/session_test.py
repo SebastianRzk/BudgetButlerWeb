@@ -4,35 +4,29 @@ from butler_offline.online_services.butler_online.session import get_partnername
 from butler_offline.test.requester_stub import RequesterStub, MockedResponse
 from butler_offline.online_services.butler_online.session import OnlineAuth
 
-auth_response = '''
-{
-    "username": "Sebastian",
-    "token": "0x00",
-    "role": "User"
-}
-'''
 
-partnername_response = '''
+PARTNERNAME_RESPONSE = '''
 {
     "partnername": "Partner1"
 }
 '''
 
-login_response = MockedResponse('data', 'login cookies')
+LOGIN_RESPONSE = MockedResponse('data', 'login cookies')
 
-decoded_login_data = '''{
+DECODED_LOGIN_DATA = '''{
     "username": "online user name"
 }'''
 
+
 def test_get_partnername():
-    requester.INSTANCE = RequesterStub({'https://test.test/api/partner.php': partnername_response})
+    requester.INSTANCE = RequesterStub({'https://test.test/api/partner.php': PARTNERNAME_RESPONSE})
 
     assert get_partnername('https://test.test/api', OnlineAuth(None, None, None)) == 'Partner1'
 
 
 def test_login():
-    requester.INSTANCE = RequesterStub({'https://test.test/api/login.php': login_response},
-                                       decoded_login_data)
+    requester.INSTANCE = RequesterStub({'https://test.test/api/login.php': LOGIN_RESPONSE},
+                                       DECODED_LOGIN_DATA)
 
     auth_container = login('https://test.test/api', '', '')
 

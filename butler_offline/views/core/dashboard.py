@@ -1,10 +1,10 @@
 import datetime
 
-from butler_offline.viewcore.context.builder import generate_page_context
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import to_descriptive_list
 from butler_offline.core import time
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_page_context
+from butler_offline.viewcore.converter import to_descriptive_list
 
 
 class DashboardContext:
@@ -24,19 +24,19 @@ def handle_request(_, context: DashboardContext):
 
     result_context = generate_page_context('dashboard')
 
-    result_context.add('zusammenfassung_monatsliste', str(_monatsliste(current_month=context.today().month))),
+    result_context.add('zusammenfassung_monatsliste', str(_monatsliste(current_month=context.today().month)))
     result_context.add('zusammenfassung_einnahmenliste',
                        str(selector
                            .select_einnahmen()
                            .inject_zeros_for_last_6_months(today=context.today())
                            .select_letzte_6_montate(today=context.today())
-                           .sum_monthly())),
+                           .sum_monthly()))
     result_context.add('zusammenfassung_ausgabenliste',
                        str(selector
                            .select_ausgaben()
                            .inject_zeros_for_last_6_months(today=context.today())
                            .select_letzte_6_montate(today=context.today())
-                           .sum_monthly())),
+                           .sum_monthly()))
     result_context.add('ausgaben_des_aktuellen_monats',
                        to_descriptive_list(selector
                                            .select_year(context.today().year)

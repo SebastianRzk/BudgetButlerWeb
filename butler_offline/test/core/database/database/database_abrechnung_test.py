@@ -6,7 +6,7 @@ from butler_offline.core.database import Database
 import datetime
 
 
-abrechnung = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
+ABRECHNUNG = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
 ########################################
  Ergebnis:
 %Ergebnis%
@@ -43,7 +43,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 #######MaschinenimportEnd
 """
 
-abrechnung_verhaeltnis = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
+ABRECHNUNG_VERHAELTNIS = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
 ########################################
  Ergebnis:
 %Ergebnis%
@@ -73,7 +73,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
 #######MaschinenimportEnd
 """
 
-abrechnung_verhaeltnis_other = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
+ABRECHNUNG_VERHAELTNIS_OTHER = """Abrechnung vom 01.01.2010 (17.03.2017-17.03.2017)
 ########################################
  Ergebnis:
 %Ergebnis%
@@ -104,20 +104,24 @@ Datum,Kategorie,Name,Wert,Dynamisch
 #######MaschinenimportEnd
 """
 
+MIN_DATE = datum('17.03.2017')
+MAX_DATE = datum('17.03.2017')
+NOW = datetime.datetime.combine(MIN_DATE, datetime.time.min)
+
 
 def test_abrechnen_should_add_einzelbuchungen():
-    db = Database()
-    db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
+    database = Database()
+    database.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
 
-    db.abrechnen(
-        mindate=datum('17.03.2017'),
-        maxdate=datum('17.03.2017'),
+    database.abrechnen(
+        mindate=MAX_DATE,
+        maxdate=MAX_DATE,
         filesystem=FileSystemStub(),
-        now=datetime.datetime.combine(datum('17.03.2017'), datetime.time.min)
+        now=NOW
     )
 
-    assert len(db.einzelbuchungen.content) == 1
-    uebertragene_buchung = db.einzelbuchungen.get(0)
+    assert database.einzelbuchungen.select().count() == 1
+    uebertragene_buchung = database.einzelbuchungen.get(0)
     assert uebertragene_buchung['Name'] == 'some name'
     assert uebertragene_buchung['Datum'] == datum('17.03.2017')
     assert uebertragene_buchung['Kategorie'] == 'some kategorie'
@@ -125,13 +129,13 @@ def test_abrechnen_should_add_einzelbuchungen():
 
 
 def test_refresh_should_import_sparbuchungen():
-    db = Database()
-    db.sparbuchungen.add(datum('01.01.2020'), '1name', 123, db.sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto')
+    database = Database()
+    database.sparbuchungen.add(datum('01.01.2020'), '1name', 123, database.sparbuchungen.TYP_MANUELLER_AUFTRAG, 'demokonto')
 
-    db.refresh()
+    database.refresh()
 
-    assert len(db.einzelbuchungen.get_all()) == 1
-    assert db.einzelbuchungen.get(0) == {'Datum': datum('01.01.2020'),
+    assert len(database.einzelbuchungen.get_all()) == 1
+    assert database.einzelbuchungen.get(0) == {'Datum': datum('01.01.2020'),
                                          'Dynamisch': True,
                                          'Kategorie': 'Sparen',
                                          'Name': '1name',
@@ -141,65 +145,65 @@ def test_refresh_should_import_sparbuchungen():
 
 
 def test_abrechnen_with_date_range_should_only_import_matching_elements():
-    db = Database()
-    db.gemeinsamebuchungen.add(datum('17.03.2010'), 'to early', 'to early', 99, viewcore.name_of_partner())
-    db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
-    db.gemeinsamebuchungen.add(datum('17.03.2020'), 'to late', 'to late', 99, viewcore.name_of_partner())
+    database = Database()
+    database.gemeinsamebuchungen.add(datum('17.03.2010'), 'to early', 'to early', 99, viewcore.name_of_partner())
+    database.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', 10, viewcore.name_of_partner())
+    database.gemeinsamebuchungen.add(datum('17.03.2020'), 'to late', 'to late', 99, viewcore.name_of_partner())
 
-    db.abrechnen(
+    database.abrechnen(
         mindate=datum('01.01.2017'),
         maxdate=datum('01.12.2017'),
         filesystem=FileSystemStub(),
         now=datetime.datetime.combine(datum('17.03.2017'), datetime.time.min)
     )
 
-    assert len(db.einzelbuchungen.content) == 1
-    uebertragene_buchung = db.einzelbuchungen.get(0)
+    assert database.einzelbuchungen.select().count() == 1
+    uebertragene_buchung = database.einzelbuchungen.get(0)
     assert uebertragene_buchung['Name'] == 'some name'
     assert uebertragene_buchung['Datum'] == datum('17.03.2017')
     assert uebertragene_buchung['Kategorie'] == 'some kategorie'
     assert uebertragene_buchung['Wert'] == '5.00'
 
-    assert len(db.gemeinsamebuchungen.select().to_list()) == 2
-    uebertragene_buchung = db.gemeinsamebuchungen.select().to_list()[0]
+    assert database.gemeinsamebuchungen.select().count() == 2
+    uebertragene_buchung = database.gemeinsamebuchungen.select().to_list()[0]
     assert uebertragene_buchung['Name'] == 'to early'
-    uebertragene_buchung = db.gemeinsamebuchungen.select().to_list()[1]
+    uebertragene_buchung = database.gemeinsamebuchungen.select().to_list()[1]
     assert uebertragene_buchung['Name'] == 'to late'
 
 
 def test_abrechnen_with_date_range():
     configuration_provider.set_configuration('PARTNERNAME', 'Partner')
 
-    db = Database(name='Test_User')
-    db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+    database = Database(name='Test_User')
+    database.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-    abrechnungs_text = db.abrechnen(
-        mindate=datum('17.03.2017'),
-        maxdate=datum('17.03.2017'),
+    abrechnungs_text = database.abrechnen(
+        mindate=MIN_DATE,
+        maxdate=MAX_DATE,
         set_ergebnis='%Ergebnis%',
         verhaeltnis=70,
         filesystem=FileSystemStub(),
         now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
     )
 
-    assert len(db.einzelbuchungen.content) == 1
-    uebertragene_buchung = db.einzelbuchungen.get(0)
+    assert database.einzelbuchungen.select().count() == 1
+    uebertragene_buchung = database.einzelbuchungen.get(0)
     assert uebertragene_buchung['Name'] == 'some name'
     assert uebertragene_buchung['Datum'] == datum('17.03.2017')
     assert uebertragene_buchung['Kategorie'] == 'some kategorie'
     assert uebertragene_buchung['Wert'] == '-70.00'
 
-    assert abrechnungs_text == abrechnung_verhaeltnis
+    assert abrechnungs_text == ABRECHNUNG_VERHAELTNIS
 
 
 def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie():
     configuration_provider.set_configuration('PARTNERNAME', 'Partner')
-    db = Database(name='Test_User')
-    db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+    database = Database(name='Test_User')
+    database.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-    abrechnungs_text = db.abrechnen(
-        mindate=datum('17.03.2017'),
-        maxdate=datum('17.03.2017'),
+    abrechnungs_text = database.abrechnen(
+        mindate=MIN_DATE,
+        maxdate=MAX_DATE,
         set_ergebnis='%Ergebnis%',
         verhaeltnis=70,
         set_self_kategorie='Ausgleich',
@@ -207,14 +211,14 @@ def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie():
         now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
     )
 
-    assert len(db.einzelbuchungen.content) == 2
+    assert database.einzelbuchungen.select().count() == 2
 
-    if db.einzelbuchungen.get(0)['Name'] == 'Ausgleich':
-        uebertragene_buchung = db.einzelbuchungen.get(1)
-        ausgleichsbuchung = db.einzelbuchungen.get(0)
+    if database.einzelbuchungen.get(0)['Name'] == 'Ausgleich':
+        uebertragene_buchung = database.einzelbuchungen.get(1)
+        ausgleichsbuchung = database.einzelbuchungen.get(0)
     else:
-        uebertragene_buchung = db.einzelbuchungen.get(0)
-        ausgleichsbuchung = db.einzelbuchungen.get(1)
+        uebertragene_buchung = database.einzelbuchungen.get(0)
+        ausgleichsbuchung = database.einzelbuchungen.get(1)
 
     assert uebertragene_buchung['Name'] == 'some name'
     assert uebertragene_buchung['Datum'] == datum('17.03.2017')
@@ -226,14 +230,14 @@ def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie():
     assert ausgleichsbuchung['Kategorie'] == 'Ausgleich'
     assert ausgleichsbuchung['Wert'] == '-20.00'
 
-    assert abrechnungs_text == abrechnung_verhaeltnis
+    assert abrechnungs_text == ABRECHNUNG_VERHAELTNIS
 
 
 def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie_inverse():
-    db = Database('Test_User')
-    db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+    database = Database('Test_User')
+    database.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-    db.abrechnen(
+    database.abrechnen(
         mindate=datum('17.03.2017'),
         maxdate=datum('17.03.2017'),
         set_ergebnis='%Ergebnis%',
@@ -243,14 +247,14 @@ def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie_inverse():
         now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
     )
 
-    assert len(db.einzelbuchungen.content) == 2
+    assert database.einzelbuchungen.select().count() == 2
 
-    if db.einzelbuchungen.get(0)['Name'] == 'Ausgleich':
-        uebertragene_buchung = db.einzelbuchungen.get(1)
-        ausgleichsbuchung = db.einzelbuchungen.get(0)
+    if database.einzelbuchungen.get(0)['Name'] == 'Ausgleich':
+        uebertragene_buchung = database.einzelbuchungen.get(1)
+        ausgleichsbuchung = database.einzelbuchungen.get(0)
     else:
-        uebertragene_buchung = db.einzelbuchungen.get(0)
-        ausgleichsbuchung = db.einzelbuchungen.get(1)
+        uebertragene_buchung = database.einzelbuchungen.get(0)
+        ausgleichsbuchung = database.einzelbuchungen.get(1)
 
     assert uebertragene_buchung['Name'] == 'some name'
     assert uebertragene_buchung['Datum'] == datum('17.03.2017')
@@ -265,10 +269,10 @@ def test_abrechnen_with_self_kategorie_set_should_add_self_kategorie_inverse():
 
 def test_abrechnen_with_other_kategorie_set_should_add_other_kategorie():
     configuration_provider.set_configuration('PARTNERNAME', 'Partner')
-    db = Database('Test_User')
-    db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
+    database = Database('Test_User')
+    database.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -100, viewcore.name_of_partner())
 
-    abrechnungs_text = db.abrechnen(
+    abrechnungs_text = database.abrechnen(
         mindate=datum('17.03.2017'),
         maxdate=datum('17.03.2017'),
         set_ergebnis='%Ergebnis%',
@@ -278,23 +282,23 @@ def test_abrechnen_with_other_kategorie_set_should_add_other_kategorie():
         now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
     )
 
-    assert len(db.einzelbuchungen.content) == 1
+    assert database.einzelbuchungen.select().count() == 1
 
-    uebertragene_buchung = db.einzelbuchungen.get(0)
+    uebertragene_buchung = database.einzelbuchungen.get(0)
 
     assert uebertragene_buchung['Name'] == 'some name'
     assert uebertragene_buchung['Datum'] == datum('17.03.2017')
     assert uebertragene_buchung['Kategorie'] == 'some kategorie'
     assert uebertragene_buchung['Wert'] == '-70.00'
 
-    assert abrechnungs_text == abrechnung_verhaeltnis_other
+    assert abrechnungs_text == ABRECHNUNG_VERHAELTNIS_OTHER
 
 
 def test_abrechnen_should_print_file_content():
     configuration_provider.set_configuration('PARTNERNAME', 'Partner')
-    db = Database(name='Test_User')
-    db.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
-    abrechnungs_text = db.abrechnen(
+    database = Database(name='Test_User')
+    database.gemeinsamebuchungen.add(datum('17.03.2017'), 'some kategorie', 'some name', -10, viewcore.name_of_partner())
+    abrechnungs_text = database.abrechnen(
         mindate=datum('17.03.2017'),
         maxdate=datum('17.03.2017'),
         set_ergebnis='%Ergebnis%',
@@ -302,4 +306,4 @@ def test_abrechnen_should_print_file_content():
         now=datetime.datetime.combine(datum('01.01.2010'), datetime.time.min)
     )
 
-    assert abrechnungs_text == abrechnung
+    assert abrechnungs_text == ABRECHNUNG

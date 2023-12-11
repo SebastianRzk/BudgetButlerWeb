@@ -12,14 +12,14 @@ file_system.INSTANCE = FileSystemStub()
 
 
 def test_init():
-    uebersicht_dauerauftrag._handle_request(GetRequest(), uebersicht_dauerauftrag.UbersichtDauerauftragContext(
+    uebersicht_dauerauftrag.handle_request(GetRequest(), uebersicht_dauerauftrag.UbersichtDauerauftragContext(
         dauerauftraege=Dauerauftraege()
     ))
 
 
 def test_transaction_id_should_be_in_context():
-    context = uebersicht_dauerauftrag._handle_request(GetRequest(),
-                                                      context=uebersicht_dauerauftrag.UbersichtDauerauftragContext(
+    context = uebersicht_dauerauftrag.handle_request(GetRequest(),
+                                                     context=uebersicht_dauerauftrag.UbersichtDauerauftragContext(
                                                           dauerauftraege=Dauerauftraege()
                                                       ))
     assert context.is_transactional()
@@ -30,7 +30,7 @@ def test_delete():
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '22', 'monatlich', 1)
 
-    uebersicht_dauerauftrag._handle_request(
+    uebersicht_dauerauftrag.handle_request(
         request=PostRequest({'action': 'delete', 'delete_index': '1'}),
         context=uebersicht_dauerauftrag.UbersichtDauerauftragContext(dauerauftraege=dauerauftraege)
     )
@@ -43,8 +43,8 @@ def test_render():
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(datum('01.01.2011'), datum('01.01.2011'), '', '11', 'monatlich', 1)
 
-    result = uebersicht_dauerauftrag._handle_request(request=GetRequest(),
-                                                     context=uebersicht_dauerauftrag.UbersichtDauerauftragContext(
+    result = uebersicht_dauerauftrag.handle_request(request=GetRequest(),
+                                                    context=uebersicht_dauerauftrag.UbersichtDauerauftragContext(
                                                          dauerauftraege=dauerauftraege
                                                      ))
 

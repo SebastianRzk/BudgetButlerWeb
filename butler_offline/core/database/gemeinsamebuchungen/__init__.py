@@ -90,4 +90,4 @@ class Gemeinsamebuchungen(DatabaseObject):
         return self.content.empty
 
     def select(self) -> GemeinsamSelector:
-        return GemeinsamSelector(self.content)
+        return GemeinsamSelector(self.content.copy(deep=True))

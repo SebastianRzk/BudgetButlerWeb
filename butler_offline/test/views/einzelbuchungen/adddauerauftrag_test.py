@@ -1,16 +1,17 @@
-from butler_offline.test.request_stubs import GetRequest, PostRequest
-from butler_offline.views.einzelbuchungen import adddauerauftrag
-from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.viewcore.converter import german_to_rfc as rfc
-from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
+from butler_offline.core import file_system
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
-from butler_offline.core import file_system
+from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
 from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.state.non_persisted_state import NonPersistedContext
-
+from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import DauerauftraegeAddedChange
+from butler_offline.views.einzelbuchungen import adddauerauftrag
+from butler_offline.viewcore.renderhelper import Betrag
 
 file_system.INSTANCE = FileSystemStub()
 
@@ -117,13 +118,13 @@ def test_add_dauerauftrag_should_show_in_recently_added():
     )
 
     result_element = list(result.get('letzte_erfassung'))
-    assert result_element == [{'endedatum': '06.01.2017',
-                               'fa': 'plus',
-                               'kategorie': 'Essen',
-                               'name': 'testname',
-                               'rhythmus': 'monatlich',
-                               'startdatum': '01.01.2017',
-                               'wert': '-2,00'}]
+    assert result_element == [DauerauftraegeAddedChange(
+        ende_datum='06.01.2017',
+        kategorie='Essen',
+        name='testname',
+        rhythmus='monatlich',
+        start_datum='01.01.2017',
+        wert=Betrag(-2))]
 
 
 def test_add_dauerauftrag_einnahme():
@@ -203,4 +204,3 @@ def test_index_should_be_secured_by_request_handler():
 
     assert result.number_of_calls() == 1
     assert result.html_pages_requested_to_render() == ['einzelbuchungen/add_dauerauftrag.html']
-

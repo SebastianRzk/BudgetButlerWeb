@@ -127,7 +127,7 @@ class Einzelbuchungen(DatabaseObject):
         data = data.sort_index()
         result = {}
         for kategorie, wert in data.iterrows():
-            result[kategorie] = "%.2f" % wert
+            result[kategorie] = "%.2f" % wert['Wert']
         return result
 
     def get_static_content(self):

@@ -1,6 +1,5 @@
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.converter import from_double_to_german
 from butler_offline.viewcore.converter import datum_to_german
 from datetime import date
 from butler_offline.viewcore.context.builder import generate_page_context

@@ -206,7 +206,7 @@ def _generate_content(result_context: PageContext, context: UebersichtEtfsContex
     all_relevant_isins = depotauszuege.get_isins_invested_by()
     isins_with_data = shares_info.filter_out_isins_without_data(all_relevant_isins)
 
-    german = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['de'])
+    german = gettext.translation('iso3166-3', pycountry.LOCALES_DIR, languages=['de'])
 
     result_context.add('etfs', etfs)
     result_context.add('regions', get_data(

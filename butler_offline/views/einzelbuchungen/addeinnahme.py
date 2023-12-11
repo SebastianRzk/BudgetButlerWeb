@@ -7,7 +7,6 @@ from butler_offline.viewcore.context.builder import generate_transactional_page_
 from butler_offline.viewcore.converter import datum, dezimal_float, from_double_to_german
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.template import fa
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.state.non_persisted_state.einzelbuchungen import EinzelbuchungAddedChange, \

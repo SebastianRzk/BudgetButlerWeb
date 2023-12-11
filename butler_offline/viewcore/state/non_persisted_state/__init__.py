@@ -1,10 +1,11 @@
 from butler_offline.viewcore.state.non_persisted_state.einzelbuchungen import EinzelbuchungsChange
+from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import DauerauftraegeChange
 
 
 class NonPersistedContext:
     def __init__(self):
         self.einzelbuchungen_changed: list[EinzelbuchungsChange] = []
-        self.dauerauftraege_changed: list = []
+        self.dauerauftraege_changed: list[DauerauftraegeChange] = []
         self.gemeinsamebuchungen_changed: list = []
         self.sparbuchungen_changed: list = []
         self.sparkontos_changed: list = []
@@ -25,11 +26,11 @@ def add_changed_einzelbuchungen(new_event: EinzelbuchungsChange) -> None:
     CONTEXT.einzelbuchungen_changed.append(new_event)
 
 
-def get_changed_dauerauftraege() -> list:
+def get_changed_dauerauftraege() -> list[DauerauftraegeChange]:
     return CONTEXT.dauerauftraege_changed
 
 
-def add_changed_dauerauftraege(new_event) -> None:
+def add_changed_dauerauftraege(new_event: DauerauftraegeChange) -> None:
     CONTEXT.dauerauftraege_changed.append(new_event)
 
 

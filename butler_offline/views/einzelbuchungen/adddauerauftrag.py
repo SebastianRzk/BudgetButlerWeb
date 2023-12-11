@@ -1,14 +1,15 @@
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, \
-    datum_to_german
-from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
-from butler_offline.viewcore.template import fa
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
+from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, TransactionalPageContext
+from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, from_double_to_german, \
+    datum_to_german
 from butler_offline.viewcore.http import Request
-
+from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import (DauerauftraegeAddedChange,
+                                                                              DauerauftraegeEditiertChange)
 
 TYP_AUSGABE = 'Ausgabe'
 TYPE_EINNAHME = 'Einnahme'
@@ -44,15 +45,15 @@ def handle_request(request: Request, context: AddDauerauftragContext) -> Transac
                 request.values['name'],
                 request.values['rhythmus'],
                 value)
-            non_persisted_state.add_changed_dauerauftraege({
-                'fa': fa.pencil,
-                'startdatum': datum_to_german(startdatum),
-                'endedatum': datum_to_german(endedatum),
-                'kategorie': request.values['kategorie'],
-                'name': request.values['name'],
-                'rhythmus': request.values['rhythmus'],
-                'wert': from_double_to_german(value)
-            })
+            non_persisted_state.add_changed_dauerauftraege(
+                DauerauftraegeEditiertChange(
+                    start_datum=datum_to_german(startdatum),
+                    ende_datum=datum_to_german(endedatum),
+                    kategorie=request.values['kategorie'],
+                    name=request.values['name'],
+                    rhythmus=request.values['rhythmus'],
+                    wert=Betrag(value)
+                ))
         else:
             startdatum = datum(request.values['startdatum'])
             endedatum = datum(request.values['endedatum'])
@@ -63,15 +64,14 @@ def handle_request(request: Request, context: AddDauerauftragContext) -> Transac
                 request.values['name'],
                 request.values['rhythmus'],
                 value)
-            non_persisted_state.add_changed_dauerauftraege({
-                'fa': fa.plus,
-                'startdatum': datum_to_german(startdatum),
-                'endedatum': datum_to_german(endedatum),
-                'kategorie': request.values['kategorie'],
-                'name': request.values['name'],
-                'rhythmus': request.values['rhythmus'],
-                'wert': from_double_to_german(value)
-            })
+            non_persisted_state.add_changed_dauerauftraege(DauerauftraegeAddedChange(
+                start_datum=datum_to_german(startdatum),
+                ende_datum=datum_to_german(endedatum),
+                kategorie=request.values['kategorie'],
+                name=request.values['name'],
+                rhythmus=request.values['rhythmus'],
+                wert=Betrag(value)
+            ))
 
     page_context = generate_transactional_page_context('adddauerauftrag')
     page_context.add('approve_title', 'Dauerauftrag hinzufügen')
