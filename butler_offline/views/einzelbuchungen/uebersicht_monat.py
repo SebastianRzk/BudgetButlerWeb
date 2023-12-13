@@ -98,7 +98,7 @@ def berechne_plus_minus_chart_aktueller_monat(month, result_context, table_ausga
 
 def berechne_zusammenfassung(color_chooser, result_context, table_data_selection):
     zusammenfassung = table_data_selection.get_month_summary()
-    for tag, kategorien_liste in zusammenfassung:
+    for _, kategorien_liste in zusammenfassung:
         for einheit in kategorien_liste:
             einheit['farbe'] = color_chooser.get_for_value(einheit['kategorie'])
     result_context.add('zusammenfassung', zusammenfassung)

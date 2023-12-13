@@ -8,8 +8,8 @@ from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_str
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import (DauerauftraegeAddedChange,
-                                                                              DauerauftraegeEditiertChange)
+from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import (DauerauftragAddedChange,
+                                                                              DauerauftragEditiertChange)
 
 TYP_AUSGABE = 'Ausgabe'
 TYPE_EINNAHME = 'Einnahme'
@@ -46,7 +46,7 @@ def handle_request(request: Request, context: AddDauerauftragContext) -> Transac
                 request.values['rhythmus'],
                 value)
             non_persisted_state.add_changed_dauerauftraege(
-                DauerauftraegeEditiertChange(
+                DauerauftragEditiertChange(
                     start_datum=datum_to_german(startdatum),
                     ende_datum=datum_to_german(endedatum),
                     kategorie=request.values['kategorie'],
@@ -64,7 +64,7 @@ def handle_request(request: Request, context: AddDauerauftragContext) -> Transac
                 request.values['name'],
                 request.values['rhythmus'],
                 value)
-            non_persisted_state.add_changed_dauerauftraege(DauerauftraegeAddedChange(
+            non_persisted_state.add_changed_dauerauftraege(DauerauftragAddedChange(
                 start_datum=datum_to_german(startdatum),
                 ende_datum=datum_to_german(endedatum),
                 kategorie=request.values['kategorie'],

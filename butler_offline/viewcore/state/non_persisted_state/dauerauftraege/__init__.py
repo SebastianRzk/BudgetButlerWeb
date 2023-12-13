@@ -25,20 +25,20 @@ class DauerauftraegeChange:
                 and self.wert == other.wert)
 
     def __str__(self):
-        return (f'DauerauftraegeChange(fa={self.fa}, start_datum={self.start_datum}, ende_datum={self.ende_datum},'
+        return (f'DauerauftragChange(fa={self.fa}, start_datum={self.start_datum}, ende_datum={self.ende_datum},'
                 f' name={self.name}, kategorie={self.kategorie}, rhythmus={self.rhythmus}, wert={self.wert})')
 
     def __repr__(self):
         return str(self)
 
 
-class DauerauftraegeAddedChange(DauerauftraegeChange):
+class DauerauftragAddedChange(DauerauftraegeChange):
     def __init__(self, start_datum: str, ende_datum: str, name: str, kategorie: str, rhythmus: str, wert: Betrag):
         super().__init__(fa=fa_plus, start_datum=start_datum, ende_datum=ende_datum,
                          name=name, kategorie=kategorie, rhythmus=rhythmus, wert=wert)
 
 
-class DauerauftraegeEditiertChange(DauerauftraegeChange):
+class DauerauftragEditiertChange(DauerauftraegeChange):
     def __init__(self, start_datum: str, ende_datum: str, name: str, kategorie: str, rhythmus: str, wert: Betrag):
         super().__init__(fa=fa_pencil, start_datum=start_datum, ende_datum=ende_datum,
                          name=name, kategorie=kategorie, rhythmus=rhythmus, wert=wert)

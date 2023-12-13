@@ -14,7 +14,7 @@ KEY_WERT = 'wert_'
 
 def calculate_filled_items(actual, possible):
     filled_items = []
-    for i, element in actual.iterrows():
+    for _, element in actual.iterrows():
         isin = element.Depotwert
         if element.Wert != 0:
             filled_items.append(to_item(isin, resolve_description(isin, possible), element.Wert))

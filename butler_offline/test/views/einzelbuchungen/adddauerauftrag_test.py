@@ -9,7 +9,7 @@ from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.state.non_persisted_state import NonPersistedContext
-from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import DauerauftraegeAddedChange
+from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import DauerauftragAddedChange
 from butler_offline.views.einzelbuchungen import adddauerauftrag
 from butler_offline.viewcore.renderhelper import Betrag
 
@@ -118,7 +118,7 @@ def test_add_dauerauftrag_should_show_in_recently_added():
     )
 
     result_element = list(result.get('letzte_erfassung'))
-    assert result_element == [DauerauftraegeAddedChange(
+    assert result_element == [DauerauftragAddedChange(
         ende_datum='06.01.2017',
         kategorie='Essen',
         name='testname',
