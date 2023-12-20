@@ -6,7 +6,6 @@ from butler_offline.viewcore.converter import from_double_to_german, datum, datu
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.views.sparen.language import NO_VALID_SAVINGS_ACCOUNT_IN_DB
 from butler_offline.viewcore.requirements import sparkontos_needed_decorator
 
 

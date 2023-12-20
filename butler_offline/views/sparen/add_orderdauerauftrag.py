@@ -7,7 +7,6 @@ from butler_offline.viewcore.context.builder import generate_transactional_page_
 from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.requirements import depots_needed_decorator, depotwerte_needed_decorator
 
