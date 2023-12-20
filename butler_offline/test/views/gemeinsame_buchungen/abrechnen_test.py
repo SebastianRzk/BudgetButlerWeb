@@ -96,7 +96,7 @@ def test_abrechnen_should_create_abrechnung_on_disk():
             now=datetime.combine(datum('01.01.2019'), time.min)
         ))
 
-    abrechnung = filesystem.read('../Abrechnungen/Abrechnung_2019-01-01 00:00:00')
+    abrechnung = filesystem.read('./Abrechnungen/Abrechnung_2019-01-01 00:00:00')
     assert abrechnung == ['Abrechnung vom 01.01.2019 (01.01.2010-01.01.2010)\n',
                           '########################################\n',
                           ' Ergebnis:\n',

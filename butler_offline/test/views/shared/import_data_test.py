@@ -141,7 +141,7 @@ def test_import_should_write_into_abrechnungen():
 
     written_abrechnung = None
     for key in filesystem.get_all_files():
-        if key.startswith('../Import'):
+        if key.startswith('./Import'):
             written_abrechnung = filesystem.read(key)
 
     assert list(map(lambda x: x.strip(), written_abrechnung)) == _IMPORT_DATA.split('\n')

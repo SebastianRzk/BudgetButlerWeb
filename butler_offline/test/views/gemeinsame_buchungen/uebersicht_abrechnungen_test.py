@@ -39,11 +39,11 @@ def test_init():
     assert context.get('abrechnungen') == [
         {
             'content': ABRECHNUNG_A_CONTENT,
-            'name': '../Abrechnungen/*Abrechnung_A'
+            'name': './Abrechnungen/*Abrechnung_A'
         },
         {
             'content': IMPORT_A_CONTENT,
-            'name': '../Import/*Import_A'
+            'name': './Import/*Import_A'
         }
     ]
 
