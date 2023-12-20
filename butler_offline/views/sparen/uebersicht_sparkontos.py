@@ -6,6 +6,7 @@ from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 from butler_offline.core.database.sparen.order import Order
+from butler_offline.viewcore.requirements import sparkontos_needed_decorator
 
 
 class UebersichtSparkontosContext:
@@ -28,6 +29,7 @@ class UebersichtSparkontosContext:
         return self._order
 
 
+@sparkontos_needed_decorator()
 def handle_request(request: Request, context: UebersichtSparkontosContext):
     sparkontos = context.kontos()
     if request.post_action_is('delete'):

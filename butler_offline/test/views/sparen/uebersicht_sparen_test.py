@@ -11,6 +11,7 @@ from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.renderhelper import Betrag, BetragListe
+from butler_offline.test.test import assert_info_message_nichts_erfasst_in_context, assert_keine_message_set
 
 
 def test_index_should_be_secured_by_requesthandler():
@@ -156,7 +157,7 @@ def test_typen_diagramm():
     }
 
 
-def test_init_with_empty_database():
+def test_init_with_empty_database_should_show_message():
     persisted_state.DATABASE_INSTANCE = None
 
     context = uebersicht_sparen.handle_request(GetRequest(), uebersicht_sparen.SparenUebersichtContext(
@@ -169,12 +170,13 @@ def test_init_with_empty_database():
         order=Order()
     ))
 
-    assert context.is_error()
-    assert context.error_text() == 'Bitte erfassen Sie zuerst eine Einzelbuchung.'
+    assert context.is_ok()
+    assert_info_message_nichts_erfasst_in_context(result=context)
 
 
 def test_init_filled_database():
-    uebersicht_sparen.handle_request(GetRequest(), get_test_data())
+    context = uebersicht_sparen.handle_request(GetRequest(), get_test_data())
+    assert_keine_message_set(result=context)
 
 
 def test_info():

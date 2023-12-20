@@ -7,7 +7,7 @@ from butler_offline.viewcore.converter import from_double_to_german, datum, datu
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
+from butler_offline.viewcore.requirements import depots_needed_decorator, depotwerte_needed_decorator
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -24,20 +24,17 @@ class AddOrderContext:
     def order(self) -> Order:
         return self._order
 
-    def sparkontos(self) -> Kontos:
+    def kontos(self) -> Kontos:
         return self._sparkontos
 
     def depotwerte(self) -> Depotwerte:
         return self._depotwerte
 
 
+@depots_needed_decorator()
+@depotwerte_needed_decorator()
 def handle_request(request: Request, context: AddOrderContext):
     result_context = generate_transactional_page_context(page_name='add_order')
-    if not context.sparkontos().get_depots():
-        return result_context.throw_error(NO_VALID_DEPOT_IN_DB)
-
-    if not context.depotwerte().get_depotwerte():
-        return result_context.throw_error(NO_VALID_SHARE_IN_DB)
 
     if request.post_action_is('add'):
         date = datum(request.values['datum'])
@@ -120,7 +117,7 @@ def handle_request(request: Request, context: AddOrderContext):
             'konto': ''
         })
 
-    result_context.add('kontos', context.sparkontos().get_depots())
+    result_context.add('kontos', context.kontos().get_depots())
     result_context.add(TYPEN, [TYP_KAUF, TYP_VERKAUF])
     result_context.add('depotwerte', context.depotwerte().get_depotwerte_descriptions())
     result_context.add('letzte_erfassung', reversed(non_persisted_state.get_changed_order()))

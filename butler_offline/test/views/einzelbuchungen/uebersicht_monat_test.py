@@ -4,6 +4,8 @@ from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.renderhelper import Betrag, BetragListe
 from butler_offline.views.einzelbuchungen import uebersicht_monat
+from butler_offline.viewcore.requirements import KEINE_BUCHUNGEN_ERFASST_MESSAGE
+from butler_offline.test.test import assert_keine_message_set, assert_info_message_keine_buchungen_erfasst_in_context
 
 
 def test_init():
@@ -13,13 +15,28 @@ def test_init():
     )
 
 
-def test__with_no_data__should_generate_error_page():
+def test__with_no_data__should_show_info_box():
     context = uebersicht_monat.handle_request(
         GetRequest(),
         uebersicht_monat.UebersichtMonatContext(einzelbuchungen=Einzelbuchungen())
     )
-    assert context.is_error()
-    assert context.error_text() == 'Keine Ausgaben erfasst'
+    assert_info_message_keine_buchungen_erfasst_in_context(result=context)
+
+
+def test_with_data__should_not_show_info_box():
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(
+        datum=datum('01.01.2023'),
+        kategorie='test',
+        wert=123,
+        name='test',
+        dynamisch=False
+    )
+    context = uebersicht_monat.handle_request(
+        GetRequest(),
+        uebersicht_monat.UebersichtMonatContext(einzelbuchungen=einzelbuchungen)
+    )
+    assert_keine_message_set(result=context)
 
 
 def teste__mit_mehr_ausgaben_als_einnahmen():

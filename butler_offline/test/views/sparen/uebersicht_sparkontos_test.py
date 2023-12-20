@@ -8,6 +8,7 @@ from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.test.test import assert_info_message_kein_sparkonto_erfasst_in_context, assert_keine_message_set
 
 
 def generate_basic_test_context(
@@ -87,14 +88,16 @@ def test_should_list_kontos():
     }
 
 
-def test_init_with_empty_database():
+def test_init_with_empty_database_should_show_info_message():
     result = uebersicht_sparkontos.handle_request(GetRequest(), generate_basic_test_context())
     assert result.is_ok()
+    assert_info_message_kein_sparkonto_erfasst_in_context(result=result)
 
 
-def test_init_filled_database():
+def test_init_filled_database_shouldnt_show_message():
     result = uebersicht_sparkontos.handle_request(GetRequest(), generate_context_with_testdata())
     assert result.is_ok()
+    assert_keine_message_set(result=result)
 
 
 def test_delete():

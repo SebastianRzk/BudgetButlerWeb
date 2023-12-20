@@ -4,7 +4,7 @@ import pandas as pd
 import logging
 
 from butler_offline.core.frequency import get_function_for_name
-from butler_offline.core.database.database_object import DatabaseObject
+from butler_offline.core.database.database_object import DatabaseObject, map_column_types
 
 
 class Dauerauftraege(DatabaseObject):
@@ -69,7 +69,7 @@ class Dauerauftraege(DatabaseObject):
             )
             for buchung in dauerauftrag_buchungen:
                 all_rows = pd.concat([all_rows, buchung], ignore_index=True)
-        return all_rows
+        return map_column_types(all_rows)
 
     def add(self, startdatum, endedatum, kategorie, name, rhythmus, wert):
         neuer_dauerauftrag = pd.DataFrame(

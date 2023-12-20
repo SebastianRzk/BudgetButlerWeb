@@ -1,5 +1,5 @@
 from pandas.core.frame import DataFrame
-from butler_offline.core.database.database_object import DatabaseObject
+from butler_offline.core.database.database_object import DatabaseObject, map_column_types
 from butler_offline.core.database.selector import GemeinsamSelector
 import pandas as pd
 
@@ -27,9 +27,9 @@ class Gemeinsamebuchungen(DatabaseObject):
                     row.Wert * 0.5,
                     [],
                     True
-                ]], columns=('Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'))
+                ]], columns=['Datum', 'Kategorie', 'Name', 'Wert', 'Tags', 'Dynamisch'])
             anteil_gemeinsamer_buchungen = pd.concat([anteil_gemeinsamer_buchungen, einzelbuchung], ignore_index=True)
-        return anteil_gemeinsamer_buchungen
+        return map_column_types(anteil_gemeinsamer_buchungen)
 
     def drop(self, indices_to_drop):
         self.content = self.content.drop(indices_to_drop, axis=0)

@@ -25,7 +25,7 @@ def test_init():
     filesystem.write(file_system.IMPORT_PATH+'*Import_A', IMPORT_A_CONTENT)
 
     context = uebersicht_abrechnungen.handle_request(
-        request=GetRequest(),
+        GetRequest(),
         context=uebersicht_abrechnungen.UbersichtAbrechnungenContext(
             filesystem=filesystem
         )

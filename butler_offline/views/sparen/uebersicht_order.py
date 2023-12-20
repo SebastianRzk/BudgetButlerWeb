@@ -1,11 +1,12 @@
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.renderhelper import Betrag
-from butler_offline.viewcore.converter import datum_to_german
-from butler_offline.views.sparen.add_order import TYP_KAUF, TYP_VERKAUF
-from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
-from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
+from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.requirements import order_needed_decorator
+from butler_offline.views.sparen.add_order import TYP_KAUF, TYP_VERKAUF
 
 
 class UebersichtOrderContext:
@@ -20,6 +21,7 @@ class UebersichtOrderContext:
         return self._depotwerte
 
 
+@order_needed_decorator()
 def handle_request(request: Request, context: UebersichtOrderContext):
     order = context.order()
     depotwerte = context.depotwerte()

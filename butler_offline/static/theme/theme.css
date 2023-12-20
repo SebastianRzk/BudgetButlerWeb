@@ -528,3 +528,7 @@ table, thead, tr, td, th{
 .end {
     flex-direction: row-reverse;
 }
+
+.gap-between > * {
+    margin-bottom: 1rem;
+}

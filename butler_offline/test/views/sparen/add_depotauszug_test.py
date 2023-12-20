@@ -5,15 +5,17 @@ from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.test import assert_info_message_keine_depots_erfasst_in_context, \
+    assert_info_message_keine_depotwerte_erfasst_in_context
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.converter import german_to_rfc as rfc
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.state import persisted_state
+from butler_offline.viewcore.state.non_persisted_state import NonPersistedContext
 from butler_offline.views.sparen import add_depotauszug
 from butler_offline.views.sparen.add_depotauszug import AddDepotauszugContext
-from butler_offline.viewcore.state.non_persisted_state import NonPersistedContext
 
 
 def initial_database() -> Database:
@@ -180,15 +182,29 @@ def test_init_with_already_empty_should_handle_like_empty():
     ]
 
 
-def test_init_empty_should_return_error():
+def test_init_with_empty_depots_should_return_error():
+    depotwerte = Depotwerte()
+    depotwerte.add(
+        name='test',
+        typ='asdf',
+        isin='asdf'
+    )
+    context = add_depotauszug.handle_request(request=GetRequest(), context=AddDepotauszugContext(
+        depotauszuege=Depotauszuege(),
+        kontos=Kontos(),
+        depotwerte=depotwerte
+    ))
+    assert_info_message_keine_depots_erfasst_in_context(context)
+
+
+def test_init_empty_should_return_ok():
     context = add_depotauszug.handle_request(request=GetRequest(), context=AddDepotauszugContext(
         depotauszuege=Depotauszuege(),
         kontos=Kontos(),
         depotwerte=Depotwerte()
     ))
-
-    assert context.is_error()
-    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert len(context.get_info_messages()) == 2
+    assert context.is_ok()
 
 
 def test_init_without_depotwert_should_return_error():
@@ -200,9 +216,7 @@ def test_init_without_depotwert_should_return_error():
         depotwerte=Depotwerte(),
         kontos=sparkontos
     ))
-
-    assert context.is_error()
-    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert_info_message_keine_depotwerte_erfasst_in_context(context)
 
 
 def test_transaction_id_should_be_in_context():

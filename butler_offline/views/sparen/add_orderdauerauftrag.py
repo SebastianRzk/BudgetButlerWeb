@@ -9,6 +9,8 @@ from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
 from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.requirements import depots_needed_decorator, depotwerte_needed_decorator
+
 
 TYP = 'typ'
 TYPEN = 'typen'
@@ -32,13 +34,10 @@ class AddOrderDauerauftragContext:
         return self._kontos
 
 
+@depots_needed_decorator()
+@depotwerte_needed_decorator()
 def handle_request(request: Request, context: AddOrderDauerauftragContext):
     result_context = generate_transactional_page_context('add_orderdauerauftrag')
-    if not context.kontos().get_depots():
-        return result_context.throw_error(NO_VALID_DEPOT_IN_DB)
-
-    if not context.depotwerte().get_depotwerte():
-        return result_context.throw_error(NO_VALID_SHARE_IN_DB)
 
     if request.post_action_is('add'):
         startdatum = datum(request.values['startdatum'])

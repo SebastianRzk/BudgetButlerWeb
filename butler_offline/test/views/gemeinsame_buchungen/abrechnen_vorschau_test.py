@@ -1,10 +1,12 @@
-from butler_offline.test.request_stubs import GetRequest, PostRequest
-from butler_offline.views.gemeinsame_buchungen import abrechnen_vorschau
-from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.core.configuration_provider import DictConfiguration
+from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.test import assert_info_message_keine_gemeinsame_buchungen_erfasst_in_context, \
+    assert_keine_message_set
+from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.views.gemeinsame_buchungen import abrechnen_vorschau
 
 CONF_PARTERNAME = 'conf.partnername'
 
@@ -214,13 +216,23 @@ def some_datum():
     return datum('15.01.2010')
 
 
-def test_with_empty_databse_should_return_error():
+def test_with_empty_database_should_show_message():
     result = abrechnen_vorschau.handle_request(
         request=GetRequest(),
         context=generate_basic_test_context())
 
-    assert not result.is_ok()
-    assert result.is_error()
+    assert_info_message_keine_gemeinsame_buchungen_erfasst_in_context(result=result)
+
+
+def test_with_filled_database_should_not_show_any_message():
+    gemeinsame_buchungen = Gemeinsamebuchungen()
+    gemeinsame_buchungen.add(datum('01.01.2010'), some_name(), some_kategorie(), -11, CONF_PARTERNAME)
+    result = abrechnen_vorschau.handle_request(
+        request=GetRequest(),
+        context=generate_basic_test_context(
+            gemeinsamebuchungen=gemeinsame_buchungen
+        ))
+    assert_keine_message_set(result=result)
 
 
 def test__short_result__with_partner_more_spendings_should_return_equal_sentence():

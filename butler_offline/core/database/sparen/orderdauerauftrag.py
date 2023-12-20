@@ -2,7 +2,7 @@ from datetime import datetime
 import pandas as pd
 from datetime import date
 
-from butler_offline.core.database.database_object import DatabaseObject
+from butler_offline.core.database.database_object import DatabaseObject, map_column_types
 from butler_offline.core.frequency import get_function_for_name
 
 
@@ -61,7 +61,7 @@ class OrderDauerauftrag(DatabaseObject):
                 row['Wert'])
             for buchung in dauerauftrag_buchungen:
                 all_rows = pd.concat([all_rows, buchung], ignore_index=True)
-        return all_rows
+        return map_column_types(all_rows)
 
     def _order_until_today(self,
                            startdatum,

@@ -1,9 +1,12 @@
+from datetime import date
+
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore import request_handler
 from butler_offline.viewcore import viewcore
 from butler_offline.viewcore.context.builder import generate_page_context
-from butler_offline.viewcore.renderhelper import Betrag, BetragListe
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.renderhelper import Betrag, BetragListe
+from butler_offline.viewcore.requirements import einzelbuchung_needed_decorator
 
 
 class UebersichtMonatContext:
@@ -14,6 +17,7 @@ class UebersichtMonatContext:
         return self._einzelbuchungen
 
 
+@einzelbuchung_needed_decorator()
 def handle_request(request: Request, context: UebersichtMonatContext):
     result_context = generate_page_context('monatsuebersicht')
     einzelbuchungen = context.einzelbuchungen()
@@ -21,7 +25,7 @@ def handle_request(request: Request, context: UebersichtMonatContext):
     result_context.add('monate', monate)
 
     if not monate:
-        return result_context.throw_error('Keine Ausgaben erfasst')
+        monate = [str(date.today().year) + '_' + str(date.today().month)]
 
     selected_item = monate[0]
     if request.is_post_request():

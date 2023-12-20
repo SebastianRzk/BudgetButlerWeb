@@ -6,6 +6,7 @@ from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.test.test import assert_info_message_keine_order_erfasst_in_context, assert_keine_message_set
 
 
 def basic_test_context(depotwerte: Depotwerte = Depotwerte,
@@ -64,20 +65,22 @@ def test_should_list_order():
     ]
 
 
-def test_init_with_empty_database():
+def test_init_with_empty_database_should_add_info_message():
     result = uebersicht_order.handle_request(
         request=GetRequest(),
         context=basic_test_context()
     )
     assert result.is_ok()
+    assert_info_message_keine_order_erfasst_in_context(result=result)
 
 
-def test_init_filled_database():
+def test_init_filled_database_should_have_no_message_set():
     result = uebersicht_order.handle_request(
         request=GetRequest(),
         context=context_with_test_data()
     )
     assert result.is_ok()
+    assert_keine_message_set(result=result)
 
 
 def test_delete():

@@ -117,7 +117,7 @@
 				<tbody>
 					{% for ausgabe in letzte_erfassung %}
 					<tr>
-						<td><span class="fa fa-{{ausgabe.fa}} pull-right"></span></td>
+						<td><span class="fa {{ausgabe.fa}} pull-right"></span></td>
 						<td>{{ausgabe.startdatum}}</td>
 						<td>{{ausgabe.endedatum}}</td>
 						<td>{{ausgabe.rhythmus}}</td>

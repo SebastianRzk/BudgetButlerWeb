@@ -15,7 +15,7 @@ class UbersichtAbrechnungenContext:
         return self._filesystem
 
 
-def handle_request(request: Request, context: UbersichtAbrechnungenContext):
+def handle_request(_: Request, context: UbersichtAbrechnungenContext):
 
     all_files = all_abrechnungen(filesystem=context.filesystem())
 

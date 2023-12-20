@@ -1,5 +1,4 @@
 from butler_offline.views.sparen.uebersicht_etfs import handle_request, UebersichtEtfsContext
-from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
 from butler_offline.test.request_stubs import GetRequest
 from butler_offline.core.time import today
 from butler_offline.core.shares import sectors
@@ -11,6 +10,7 @@ from butler_offline.views.sparen import language
 from butler_offline.core.shares.shares_manager import SharesInfo
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.test.test import assert_info_message_keine_etfs_erfasst_in_context, assert_keine_message_set
 
 
 def basic_context(
@@ -25,22 +25,27 @@ def basic_context(
     )
 
 
-def test_load_page_without_data():
+def test_load_page_without_data_should_render_with_info_message():
     context = handle_request(
         request=GetRequest(),
         context=basic_context())
 
-    assert context.is_error()
-    assert context.error_text() == NO_VALID_ISIN_IN_DB
+    assert context.is_ok()
+    assert_info_message_keine_etfs_erfasst_in_context(result=context)
+
+
+def test_load_page_with_data_should_show_no_message():
+    context = handle_request(
+        request=GetRequest(),
+        context=context_with_test_data()
+    )
+    assert_keine_message_set(result=context)
 
 
 def test_load_page_without_shares_data():
-    depotwerte = Depotwerte()
-    depotwerte.add(name='some name', isin='isin56789012', typ=depotwerte.TYP_ETF)
-
     context = handle_request(
         request=GetRequest(),
-        context=basic_context(depotwerte=depotwerte)
+        context=context_with_test_data()
     )
 
     assert context.get('etfs') == [
@@ -50,6 +55,16 @@ def test_load_page_without_shares_data():
             'ISIN': 'isin56789012'
         }
     ]
+
+
+def context_with_test_data():
+    return basic_context(depotwerte=(get_test_data()))
+
+
+def get_test_data():
+    depotwerte = Depotwerte()
+    depotwerte.add(name='some name', isin='isin56789012', typ=depotwerte.TYP_ETF)
+    return depotwerte
 
 
 def test_content():

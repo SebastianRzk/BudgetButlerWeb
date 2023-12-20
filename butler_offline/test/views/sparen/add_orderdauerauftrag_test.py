@@ -3,6 +3,8 @@ from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.frequency import ALL_FREQUENCY_NAMES
 from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.test import assert_info_message_keine_depotwerte_erfasst_in_context, \
+    assert_info_message_keine_depots_erfasst_in_context
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
@@ -47,14 +49,14 @@ def test_init():
     assert context.get('rhythmen') == ALL_FREQUENCY_NAMES
 
 
-def test_init_empty_should_return_error():
+def test_init_empty_should_return_show_infos():
     context = add_orderdauerauftrag.handle_request(
         request=GetRequest(),
         context=basic_context()
     )
 
-    assert context.is_error()
-    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert context.is_ok()
+    assert len(context.get_info_messages()) == 2
 
 
 def test_init_without_depotwert_should_return_error():
@@ -66,8 +68,25 @@ def test_init_without_depotwert_should_return_error():
             kontos=kontos
         )
     )
-    assert context.is_error()
-    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert context.is_ok()
+    assert_info_message_keine_depotwerte_erfasst_in_context(context)
+
+
+def test_init_without_depot_should_return_error():
+    depotwerte = Depotwerte()
+    depotwerte.add(
+        typ=Depotwerte.TYP_ETF,
+        isin='isin',
+        name='testname'
+    )
+    context = add_orderdauerauftrag.handle_request(
+        request=GetRequest(),
+        context=basic_context(
+            depotwerte=depotwerte
+        )
+    )
+    assert context.is_ok()
+    assert_info_message_keine_depots_erfasst_in_context(context)
 
 
 def test_transaction_id_should_be_in_context():

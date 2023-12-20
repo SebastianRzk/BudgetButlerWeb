@@ -1,12 +1,14 @@
-from butler_offline.test.request_stubs import GetRequest, PostRequest
-from butler_offline.views.sparen import add_order
-from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.order import Order
-from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.test.core.database.builder import order_dict
+from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.test import assert_info_message_keine_depotwerte_erfasst_in_context, \
+    assert_info_message_keine_depots_erfasst_in_context
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.viewcore.converter import german_to_rfc as rfc
+from butler_offline.views.sparen import add_order
 
 
 def get_basic_test_data():
@@ -35,7 +37,7 @@ def test_init():
     assert context.get('typen') == [add_order.TYP_KAUF, add_order.TYP_VERKAUF]
 
 
-def test_init_empty_should_return_error():
+def test_init_empty_should_show_infos():
     context = add_order.handle_request(
         GetRequest(),
         context=add_order.AddOrderContext(
@@ -45,11 +47,31 @@ def test_init_empty_should_return_error():
         )
     )
 
-    assert context.is_error()
-    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Sparkonto vom Typ "Depot".'
+    assert context.is_ok()
+    assert len(context.get_info_messages()) == 2
 
 
-def test_init_without_depotwert_should_return_error():
+def test_init_with_missing_depot_should_show_info():
+    depotwerte = Depotwerte()
+    depotwerte.add(
+        isin='asdf',
+        name='asdf',
+        typ=Depotwerte.TYP_ETF
+    )
+    context = add_order.handle_request(
+        GetRequest(),
+        context=add_order.AddOrderContext(
+            order=Order(),
+            depotwerte=depotwerte,
+            sparkontos=Kontos()
+        )
+    )
+
+    assert context.is_ok()
+    assert_info_message_keine_depots_erfasst_in_context(context)
+
+
+def test_init_without_depotwert_should_show_info():
     sparkontos = Kontos()
     sparkontos.add('1name', sparkontos.TYP_DEPOT)
 
@@ -62,8 +84,8 @@ def test_init_without_depotwert_should_return_error():
         )
     )
 
-    assert context.is_error()
-    assert context.error_text() == 'Bitte erfassen Sie zuerst ein Depotwert.'
+    assert context.is_ok()
+    assert_info_message_keine_depotwerte_erfasst_in_context(context)
 
 
 def test_transaction_id_should_be_in_context():

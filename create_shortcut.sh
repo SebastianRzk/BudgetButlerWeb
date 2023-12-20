@@ -6,7 +6,7 @@ echo "[Desktop Entry]" >> budgetbutler.desktop
 echo "Encoding=UTF-8" >> budgetbutler.desktop
 echo "Version=1.0" >> budgetbutler.desktop
 echo "Type=Application" >> budgetbutler.desktop
-echo "Terminal=true" >> budgetbutler.desktop
+echo "Terminal=false" >> budgetbutler.desktop
 echo "Exec=$(pwd)/start_butler_offline.sh" >> budgetbutler.desktop
 echo "Name=BudgetButler" >> budgetbutler.desktop
 echo "Comment=Simple money manager" >> budgetbutler.desktop

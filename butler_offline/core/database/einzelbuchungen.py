@@ -56,7 +56,7 @@ class Einzelbuchungen(DatabaseObject):
             result[kategorie] = (row.Wert / tabelle_gesamtsumme) * 100
         return result
 
-    def append_row(self, row):
+    def append_row(self, row: pd.DataFrame):
         self.content = pd.concat([self.content, row], ignore_index=True)
         self._sort()
 

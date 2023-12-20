@@ -7,6 +7,8 @@ from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
 from butler_offline.views.sparen.language import NO_VALID_SAVINGS_ACCOUNT_IN_DB
+from butler_offline.viewcore.requirements import sparkontos_needed_decorator
+
 
 EIGENSCHAFT = 'eigenschaft'
 EIGENSCHAFTEN = 'eigenschaften'
@@ -26,10 +28,9 @@ class AddSparbuchungContext:
         return self._kontos
 
 
+@sparkontos_needed_decorator()
 def handle_request(request: Request, context: AddSparbuchungContext):
     result_context = generate_transactional_page_context('add_sparbuchung')
-    if not context.kontos().get_sparfaehige_kontos():
-        return result_context.throw_error(NO_VALID_SAVINGS_ACCOUNT_IN_DB)
 
     if request.post_action_is('add'):
         date = datum(request.values['datum'])

@@ -1,9 +1,10 @@
-from butler_offline.test.request_stubs import GetRequest,  PostRequest
-from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.views.einzelbuchungen import uebersicht_einzelbuchungen
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
+from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.test import assert_info_message_keine_buchungen_erfasst_in_context, assert_keine_message_set
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.views.einzelbuchungen import uebersicht_einzelbuchungen
 
 
 def test_transaction_id_should_be_in_context():
@@ -22,10 +23,28 @@ def get_test_data():
     return uebersicht_einzelbuchungen.UebersichtEinzelbuchungenContext(einzelbuchungen=einzelbuchungen)
 
 
-def test_init_with_empty_database():
+def test_init_with_empty_database_should_not_have_any_errors():
     uebersicht_einzelbuchungen.handle_request(
         GetRequest(),
-      context=uebersicht_einzelbuchungen.UebersichtEinzelbuchungenContext(einzelbuchungen=Einzelbuchungen()))
+        context=uebersicht_einzelbuchungen.UebersichtEinzelbuchungenContext(einzelbuchungen=Einzelbuchungen()))
+
+
+def test_init_with_empty_database_should_show_keine_buchungen_vorhanden_info_message():
+    result = uebersicht_einzelbuchungen.handle_request(
+        GetRequest(),
+        context=uebersicht_einzelbuchungen.UebersichtEinzelbuchungenContext(einzelbuchungen=Einzelbuchungen())
+    )
+
+    assert_info_message_keine_buchungen_erfasst_in_context(result=result)
+
+
+def test_init_with_filled_database_should_show_no_info_message():
+    result = uebersicht_einzelbuchungen.handle_request(
+        GetRequest(),
+        context=get_test_data()
+    )
+
+    assert_keine_message_set(result=result)
 
 
 def test_init_filled_database():

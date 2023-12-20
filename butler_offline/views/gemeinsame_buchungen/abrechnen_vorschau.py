@@ -1,3 +1,5 @@
+import datetime
+
 from butler_offline.core import configuration_provider
 from butler_offline.core.configuration_provider import ConfigurationProvider
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
@@ -8,6 +10,7 @@ from butler_offline.viewcore.converter import datum
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.converter import datum_to_string
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.requirements import gemeinsame_buchung_needed_decorator
 
 
 class AbrechnenVorschauContext:
@@ -35,11 +38,9 @@ class AbrechnenVorschauContext:
         return self._configuration
 
 
+@gemeinsame_buchung_needed_decorator()
 def handle_request(request: Request, context: AbrechnenVorschauContext):
     result_context = generate_transactional_page_context('gemeinsamabrechnen')
-
-    if context.gemeinsamebuchungen().is_empty():
-        return result_context.throw_error('Keine gemeinsame Buchungen erfasst')
 
     name_self = context.name()
     name_partner = context.configuration().get_configuration('PARTNERNAME')
@@ -118,14 +119,14 @@ def handle_request(request: Request, context: AbrechnenVorschauContext):
     result_context.add('myname', name_self)
     result_context.add('partnername', name_partner)
 
-    result_context.add('mindate', datum_to_german(mindate))
-    result_context.add('maxdate', datum_to_german(maxdate))
+    result_context.add('mindate', convert_date_if_present(datum_to_german, mindate))
+    result_context.add('maxdate', convert_date_if_present(datum_to_german, maxdate))
     result_context.add('count', context.gemeinsamebuchungen().select().count())
 
-    result_context.add('set_mindate_rfc', datum_to_string(set_mindate))
-    result_context.add('set_maxdate_rfc', datum_to_string(set_maxdate))
-    result_context.add('set_mindate', datum_to_german(set_mindate))
-    result_context.add('set_maxdate', datum_to_german(set_maxdate))
+    result_context.add('set_mindate_rfc', convert_date_if_present(datum_to_string, set_mindate))
+    result_context.add('set_maxdate_rfc', convert_date_if_present(datum_to_string, set_maxdate))
+    result_context.add('set_mindate', convert_date_if_present(datum_to_german, set_mindate))
+    result_context.add('set_maxdate', convert_date_if_present(datum_to_german, set_maxdate))
     result_context.add('set_count', selector.count())
     result_context.add('set_verhaeltnis_real', int(set_verhaeltnis))
 
@@ -133,6 +134,12 @@ def handle_request(request: Request, context: AbrechnenVorschauContext):
                        context.einzelbuchungen().get_alle_kategorien(hide_ausgeschlossene_kategorien=True))
 
     return result_context
+
+
+def convert_date_if_present(converter_func, value):
+    if not isinstance(value, datetime.date):
+        return ''
+    return converter_func(value)
 
 
 def replay_value_if_defined(context: PageContext, replay_name, request: Request, default: bool | object | int = False):

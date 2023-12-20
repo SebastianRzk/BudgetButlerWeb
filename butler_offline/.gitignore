@@ -4,3 +4,5 @@
 /.coverage
 /.project
 /.pydevproject
+/build
+/dist

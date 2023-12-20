@@ -4,6 +4,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.requirements import depotauszug_needed_decorator
 
 
 class UebersichtDepotauszuegeContext:
@@ -18,6 +19,7 @@ class UebersichtDepotauszuegeContext:
         return self._depotwerte
 
 
+@depotauszug_needed_decorator()
 def handle_request(request: Request, context: UebersichtDepotauszuegeContext):
 
     if request.post_action_is('delete'):

@@ -5,12 +5,31 @@ from butler_offline.viewcore.context import generate_base_context
 from butler_offline.viewcore.menu import get_name_from_key
 
 
+class VorgeschlageneProblembehebung:
+    def __init__(self, link: str, link_beschreibung: str):
+        self._link = link
+        self._link_beschreibung = link_beschreibung
+
+    def link(self) -> str:
+        return self._link
+
+    def link_beschreibung(self) -> str:
+        return self._link_beschreibung
+
+
 class Message:
-    def __init__(self, message_content: str):
+    def __init__(self, message_content: str,
+                 vorgeschlagene_problembehebungen: list[VorgeschlageneProblembehebung] | None = None):
         self._message_content = message_content
+        if not vorgeschlagene_problembehebungen:
+            _vorgeschlagene_problembehebungen = []
+        self._vorgeschlagene_problembehebungen = vorgeschlagene_problembehebungen
 
     def content(self) -> str:
         return self._message_content
+
+    def vorgeschlagene_problembehebungen(self) -> list[VorgeschlageneProblembehebung]:
+        return self._vorgeschlagene_problembehebungen
 
 
 class PageContext:
@@ -23,6 +42,7 @@ class PageContext:
         self._error_text = None
         self._success_message: Message | None = None
         self._error_message: Message | None = None
+        self._info_messages: list[Message] = []
         self._new_page_title: str | None = None
 
     def overwrite_page_to_render(self, new_template_file: str, new_title: str):
@@ -91,6 +111,8 @@ class PageContext:
             basic_context['message_type'] = 'error'
             basic_context['message_content'] = self._error_message.content().replace('\n', '<br>\n')
 
+        basic_context['info_messages'] = self._info_messages
+
         if self._new_page_title:
             basic_context['element_titel'] = self._new_page_title
         return basic_context
@@ -106,6 +128,17 @@ class PageContext:
         self._error_message = Message(
             message_content=message
         )
+
+    def add_info_message(self, message: str,
+                         vorgeschlagene_problembehebungen: list[VorgeschlageneProblembehebung] | None) -> None:
+        logging.info('INFO: %s', message)
+        self._info_messages.append(Message(
+            message_content=message,
+            vorgeschlagene_problembehebungen=vorgeschlagene_problembehebungen
+        ))
+
+    def get_info_messages(self) -> list[Message]:
+        return self._info_messages
 
     def user_success_message(self) -> Message | None:
         return self._success_message

@@ -1,6 +1,5 @@
 requests==2.27.1
 pandas==2.1.4
 pytest==7.2.2
-Flask==2.1.2
+Flask==3.0.0
 pycountry==23.12.7
-Werkzeug==2.3.8

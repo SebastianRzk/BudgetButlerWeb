@@ -169,8 +169,9 @@ class Selektor:
                 name_alt = name_alt + ', ' + row.Name + ' (' + (('%.2f' % row.Wert).replace('.', ',')) + '€)'
                 summe_alt += row.Wert
 
-        tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': ('%.2f' % summe_alt).replace('.', ',')})
-        zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
+        if datum_alt:
+            tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': ('%.2f' % summe_alt).replace('.', ',')})
+            zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
         return zusammenfassung
 
     def faktor(self, faktor):

@@ -6,6 +6,7 @@ from butler_offline.viewcore.context.builder import generate_transactional_page_
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.requirements import order_dauerauftrag_needed_decorator
 
 
 class UbersichtOrderDauerauftragContext:
@@ -16,6 +17,7 @@ class UbersichtOrderDauerauftragContext:
         return self._orderdauerauftrag
 
 
+@order_dauerauftrag_needed_decorator()
 def handle_request(request: Request, context: UbersichtOrderDauerauftragContext):
     orderdauerauftrag = context.orderdauerauftrag()
 
