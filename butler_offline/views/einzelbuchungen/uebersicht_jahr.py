@@ -7,6 +7,7 @@ from butler_offline.viewcore.context.builder import PageContext
 from butler_offline.viewcore.context.builder import generate_page_context
 from butler_offline.viewcore.renderhelper import Betrag, BetragListe
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.requirements import einzelbuchung_needed_decorator
 
 
 class UebersichtJahrContext:
@@ -82,6 +83,7 @@ def _compile_colors(result, num_monate, color_chooser):
     return einnahmen
 
 
+@einzelbuchung_needed_decorator()
 def handle_request(request: Request, context: UebersichtJahrContext):
     today = datetime.date.today()
     year = today.year

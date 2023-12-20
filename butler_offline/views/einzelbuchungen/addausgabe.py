@@ -4,8 +4,10 @@ from butler_offline.viewcore.context.builder import generate_transactional_page_
 from butler_offline.viewcore.converter import datum, dezimal_float, datum_to_string, \
     from_double_to_german, datum_to_german
 from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.template import fa
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.state.non_persisted_state.einzelbuchungen import EinzelbuchungAddedChange, \
+    EinzelbuchungEditiertChange
+from butler_offline.viewcore.renderhelper import Betrag
 
 
 class AddAusgabeContext:
@@ -26,35 +28,33 @@ def handle_request(request: Request, context: AddAusgabeContext):
             database_index = int(request.values['edit_index'])
             datum_object = datum(request.values['date'])
             context.einzelbuchungen().edit(
-                database_index,
-                datum_object,
-                request.values['kategorie'],
-                request.values['name'],
-                value)
+                index=database_index,
+                buchungs_datum=datum_object,
+                kategorie=request.values['kategorie'],
+                name=request.values['name'],
+                wert=value)
             non_persisted_state.add_changed_einzelbuchungen(
-                {
-                    'fa': fa.pencil,
-                    'datum': datum_to_german(datum_object),
-                    'kategorie': request.values['kategorie'],
-                    'name': request.values['name'],
-                    'wert': from_double_to_german(value)
-                })
+                EinzelbuchungEditiertChange(
+                    datum=datum_to_german(datum_object),
+                    name=request.values['name'],
+                    kategorie=request.values['kategorie'],
+                    wert=Betrag(value)
+                ))
         else:
             datum_object = datum(request.values['date'])
             context.einzelbuchungen().add(
-                datum_object,
-                request.values['kategorie'],
-                request.values['name'],
-                value)
+                datum=datum_object,
+                kategorie=request.values['kategorie'],
+                name=request.values['name'],
+                wert=value)
 
             non_persisted_state.add_changed_einzelbuchungen(
-                {
-                    'fa': fa.plus,
-                    'datum': datum_to_german(datum_object),
-                    'kategorie': request.values['kategorie'],
-                    'name': request.values['name'],
-                    'wert': from_double_to_german(value)
-                })
+                EinzelbuchungAddedChange(
+                    datum=datum_to_german(datum_object),
+                    kategorie=request.values['kategorie'],
+                    name=request.values['name'],
+                    wert=Betrag(value)
+                ))
 
     if request.post_action_is('edit'):
         db_index = int(request.values['edit_index'])

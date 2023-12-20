@@ -12,3 +12,4 @@ fa_plus = fa + plus
 fa_line_chart = fa + line_chart
 fa_cogs = fa + cogs
 fa_refresh = fa + refresh
+fa_pencil = fa + pencil

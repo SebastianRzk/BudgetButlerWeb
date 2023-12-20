@@ -1,5 +1,6 @@
-from butler_offline.core.database.database_object import DatabaseObject
 import pandas as pd
+
+from butler_offline.core.database.database_object import DatabaseObject
 
 
 class Kontos(DatabaseObject):
@@ -23,14 +24,15 @@ class Kontos(DatabaseObject):
     def get_all(self):
         return self.content
 
-    def edit(self, index, kontoname, kontotyp):
+    def edit(self, index, kontoname, kontotyp) -> None:
         self.edit_element(index, {
             'Kontoname': kontoname,
             'Kontotyp': kontotyp
         })
 
     def get_sparfaehige_kontos(self):
-        query = '{} == "{}" | {} == "{}"'.format(self.TYP, self.TYP_SPARKONTO, self.TYP, self.TYP_GENOSSENSCHAFTSANTEILE)
+        query = '{} == "{}" | {} == "{}"'.format(self.TYP, self.TYP_SPARKONTO, self.TYP,
+                                                 self.TYP_GENOSSENSCHAFTSANTEILE)
         return sorted(list(self.content.query(query).Kontoname))
 
     def get_depots(self):

@@ -1,5 +1,5 @@
 from butler_offline.online_services.shares.etf_data import get_data_for
-from butler_offline.test.RequesterStub import RequesterStub
+from butler_offline.test.requester_stub import RequesterStub
 from butler_offline.viewcore import requester
 
 DEMO_DATA = '''

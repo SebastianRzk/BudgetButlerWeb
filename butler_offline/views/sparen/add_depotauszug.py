@@ -7,14 +7,14 @@ from butler_offline.viewcore.converter import from_double_to_german, datum, datu
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import non_persisted_state
 from butler_offline.viewcore.template import fa
-from butler_offline.views.sparen.language import NO_VALID_DEPOT_IN_DB, NO_VALID_SHARE_IN_DB
+from butler_offline.viewcore.requirements import depots_needed_decorator, depotwerte_needed_decorator
 
 KEY_WERT = 'wert_'
 
 
 def calculate_filled_items(actual, possible):
     filled_items = []
-    for i, element in actual.iterrows():
+    for _, element in actual.iterrows():
         isin = element.Depotwert
         if element.Wert != 0:
             filled_items.append(to_item(isin, resolve_description(isin, possible), element.Wert))
@@ -70,13 +70,10 @@ class AddDepotauszugContext:
         return self._depotwerte
 
 
+@depots_needed_decorator()
+@depotwerte_needed_decorator()
 def handle_request(request: Request, context: AddDepotauszugContext):
     render_context = generate_transactional_page_context('add_depotauszug')
-    if not context.kontos().get_depots():
-        return render_context.throw_error(NO_VALID_DEPOT_IN_DB)
-
-    if not context.depotwerte().get_depotwerte():
-        return render_context.throw_error(NO_VALID_SHARE_IN_DB)
 
     if request.post_action_is('add'):
         current_date = None

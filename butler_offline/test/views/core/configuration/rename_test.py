@@ -1,7 +1,7 @@
 from butler_offline.views.core.configuration import rename_kategorie
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME

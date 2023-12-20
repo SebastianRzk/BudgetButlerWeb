@@ -4,13 +4,20 @@ from butler_offline.core.database.selector import Selektor
 from butler_offline.core.database.stated_object import StatedObject
 
 
+def map_column_types(content: pd.DataFrame):
+    if 'Dynamisch' in content.columns:
+        content['Dynamisch'] = content['Dynamisch'].astype('bool')
+    if 'Wert' in content.columns:
+        content['Wert'] = content['Wert'].astype('float')
+    return content
+
+
 class DatabaseObject(StatedObject):
 
-    def __init__(self, stored_columns: list = None):
-        if not stored_columns:
-            stored_columns = []
+    def __init__(self, stored_columns: list[str]):
         super().__init__()
         self.content = pd.DataFrame({}, columns=stored_columns)
+        self.content = map_column_types(self.content)
 
     def get(self, db_index):
         row = self.content.loc[db_index]
@@ -22,11 +29,12 @@ class DatabaseObject(StatedObject):
         self._sort()
         self.taint()
 
-    def parse(self, raw_table):
+    def parse(self, raw_table: pd.DataFrame):
         if 'Datum' in raw_table.columns:
             raw_table['Datum'] = raw_table['Datum'].map(lambda x:  datetime.strptime(x, '%Y-%m-%d').date())
         if 'Dynamisch' in self.content.columns:
             raw_table['Dynamisch'] = False
+        raw_table = map_column_types(raw_table)
         self.content = pd.concat([self.content, raw_table], ignore_index=True)
         self._sort()
 

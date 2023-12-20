@@ -99,28 +99,28 @@ def test_einnahmen__with_einnahme__should_return_value():
     assert component_under_test.select().select_einnahmen().select_year(2011).sum() == 10
 
 
-def test_einnahmen_withAusgabe_shoudReturnZero():
+def test_einnahmen_with_ausgabe_shoud_return_zero():
     component_under_test = Einzelbuchungen()
     component_under_test.add(datum('1.1.2011'), '', '', -10)
 
     assert component_under_test.select().select_einnahmen().select_year(2011).sum() == 0
 
 
-def test_ausgaben_withEinnahme_shoudReturnZero():
+def test_ausgaben_with_einnahme_shoud_return_zero():
     component_under_test = Einzelbuchungen()
     component_under_test.add(datum('1.1.2011'), '', '', 10)
 
     assert component_under_test.select().select_ausgaben().select_year(2011).sum() == 0
 
 
-def test_ausgaben_withAusgabe_shoudReturnValue():
+def test_ausgaben_with_ausgabe_shoud_return_value():
     component_under_test = Einzelbuchungen()
     component_under_test.add(datum('1.1.2011'), '', '', -10)
 
     assert component_under_test.select().select_ausgaben().select_year(2011).sum() == -10
 
 
-def test_select_withMonthSelection_andMatchingMonth_shouldReturnValue():
+def test_select_with_month_selection_and_matching_month_should_return_value():
     component_under_test = Einzelbuchungen()
     component_under_test.add(datum('1.1.2011'), '', '', -10)
 

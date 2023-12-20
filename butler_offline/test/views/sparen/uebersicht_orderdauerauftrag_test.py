@@ -1,8 +1,10 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
-from butler_offline.views.sparen import uebersicht_orderdauerauftrag
-from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
+from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.test import assert_info_message_keine_order_dauerauftraege_erfasst_in_context, \
+    assert_keine_message_set
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.views.sparen import uebersicht_orderdauerauftrag
 
 
 def generate_basic_context(
@@ -13,9 +15,20 @@ def generate_basic_context(
     )
 
 
-def test_init():
+def test_init_with_empty_database_should_show_message():
     result = uebersicht_orderdauerauftrag.handle_request(request=GetRequest(), context=generate_basic_context())
     assert result.is_ok()
+    assert_info_message_keine_order_dauerauftraege_erfasst_in_context(result=result)
+
+
+def test_init_with_filled_database_should_show_no_message():
+    orderdauerauftrag = OrderDauerauftrag()
+    orderdauerauftrag.add(datum('01.01.2011'), datum('01.01.2011'), 'monatlich', '1name', '1konto ', '1depotwert', 11)
+    result = uebersicht_orderdauerauftrag.handle_request(request=GetRequest(), context=generate_basic_context(
+        orderdauerauftrag=orderdauerauftrag
+    ))
+    assert result.is_ok()
+    assert_keine_message_set(result=result)
 
 
 def test_transaction_id_should_be_in_context():

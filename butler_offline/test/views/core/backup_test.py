@@ -1,5 +1,5 @@
 from butler_offline.views.core import backup
-from butler_offline.test.RequestStubs import GetRequest
+from butler_offline.test.request_stubs import GetRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.core.database import Database
 from butler_offline.test.core.file_system_stub import FileSystemStub
@@ -22,7 +22,7 @@ def test_should_save_a_database():
     result = backup.handle_request(None, context)
 
     assert filesystem_stub.get_interaction_count() == 1
-    backup_path = '../Backups/Backup_TestDatabase_2022-01-31 23:59:59.999999.multipart_csv'
+    backup_path = './Backups/Backup_TestDatabase_2022-01-31 23:59:59.999999.multipart_csv'
     assert filesystem_stub.get_all_files() == [backup_path]
     assert filesystem_stub.get_raw_file(backup_path) == expected_db_string
     assert not result.is_transactional()

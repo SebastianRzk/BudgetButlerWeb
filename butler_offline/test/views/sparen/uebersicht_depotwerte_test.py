@@ -1,4 +1,4 @@
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.views.sparen import uebersicht_depotwerte
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.order import Order
@@ -6,6 +6,7 @@ from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.test.test import assert_info_message_keine_depotwerte_erfasst_in_context, assert_keine_message_set
 
 
 def generate_basic_test_context(
@@ -105,3 +106,19 @@ def test_index_should_be_secured_by_request_handler():
 
     assert result.number_of_calls() == 1
     assert result.html_pages_requested_to_render() == ['sparen/uebersicht_depotwerte.html']
+
+
+def test_index_with_empty_database_should_add_info_message():
+    context = uebersicht_depotwerte.handle_request(
+        request=GetRequest(),
+        context=generate_basic_test_context()
+    )
+    assert_info_message_keine_depotwerte_erfasst_in_context(result=context)
+
+
+def test_index_with_filled_database_should_have_no_info_message():
+    context = uebersicht_depotwerte.handle_request(
+        request=GetRequest(),
+        context=generate_test_context_with_data()
+    )
+    assert_keine_message_set(result=context)

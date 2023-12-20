@@ -5,6 +5,7 @@ from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, generate_redirect_page_context
 from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.requirements import depotwerte_needed_decorator
 
 
 class UebersichtDepotwerteContext:
@@ -23,6 +24,7 @@ class UebersichtDepotwerteContext:
         return self._depotauszuege
 
 
+@depotwerte_needed_decorator()
 def handle_request(request: Request, context: UebersichtDepotwerteContext):
     result_context = generate_transactional_page_context('uebersicht_depotwerte')
     depotwerte = context.depotwerte()

@@ -82,8 +82,8 @@ def test_get_valid_isins():
     assert component_under_test.get_valid_isins() == ['isin56789012']
 
 
-def check_equal(L1, L2):
-    return len(L1) == len(L2) and sorted(L1) == sorted(L2)
+def check_equal(left, right):
+    return len(left) == len(right) and sorted(left) == sorted(right)
 
 
 def test_parse_and_migrate_without_type_shoud_set_type_etf():

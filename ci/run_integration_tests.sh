@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-cd butler_offline &&  FLASK_APP=start_as_flask.py flask run > build.log&
+flask --app butler_offline run&
 
 
 cd butler_offline_selenium_tests

@@ -18,7 +18,7 @@ class Depotauszuege(DatabaseObject):
     def get_all(self):
         return self.content
 
-    def edit(self, index, datum, depotwert, konto, wert):
+    def edit(self, index: int, datum, depotwert: str, konto: str, wert: float):
         self.edit_element(index, {
             'Datum': datum,
             'Depotwert': depotwert,
@@ -27,12 +27,12 @@ class Depotauszuege(DatabaseObject):
         })
         self._sort()
 
-    def get_by(self, datum, konto):
+    def get_by(self, datum, konto: str):
         auszuege = self.content[self.content.Konto == konto].copy()
         auszuege = auszuege[auszuege.Datum == datum]
         return auszuege
 
-    def get_latest_datum_by(self, konto):
+    def get_latest_datum_by(self, konto: str):
         auszuege = self.content[self.content.Konto == konto].copy()
         if len(auszuege) == 0:
             return None

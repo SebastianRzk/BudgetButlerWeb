@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from butler_offline.viewcore.routes import EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT, \
     EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT, \
     EINZELBUCHUNGEN_AUSGABE_ADD, \
@@ -25,11 +27,8 @@ from butler_offline.viewcore.routes import EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBER
     SPAREN_DEPOTAUSZUEGE_UEBERSICHT, \
     SPAREN_UEBERSICHT_ETFS, \
     CORE_CONFIGURATION
-from butler_offline.viewcore.template import fa
-
 from butler_offline.viewcore.state import persisted_state
-
-from collections import OrderedDict
+from butler_offline.viewcore.template import fa
 
 EINSTELLUNGEN_SUBMENU_NAME = 'Einstellungen'
 

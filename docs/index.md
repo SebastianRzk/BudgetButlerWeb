@@ -38,7 +38,7 @@
   * Sparen Übersicht:
     * Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
     * Zusammensetzung der Sparanlage
-  * ETF-Portfolio Vergleichen: Kosten, Sektoren und Länder jeweis pro ETF und nach Anteil im Portfolio
+  * ETF-Portfolio Vergleichen: Kosten, Sektoren und Länder jeweils pro ETF und nach Anteil im Portfolio
 
 
 * Konfiguration
@@ -55,8 +55,8 @@
 * Python 3.10+
 * Pip
 * Versionierung: git
-* Startup-Skript: shell, PyGObject, webkitgtk-6.0
-* Falls nicht das Startup-Skript verwendet wird: Webbrowser (z.B. Firefox oder Chromium)
+* Anwendungs-Icon sowie Startup-Skript: shell und npm (für Electron-Client)
+* Falls nicht der Electron-Client verwendet wird: Webbrowser (z.B. Firefox oder Chromium)
 
 ### Installation
 Das Git-Repository klonen:
@@ -71,21 +71,38 @@ Optional: Anwendungsicon anlegen:
 
     sh create_shortcut.sh
 
-### Server Starten
+### BudgetButlerWeb starten
 
-Flask-Server starten:
+Die Applikation kann über das Anwendungs-Icon gestartet werden. Der erste Start dauert durch die Installation der benötigten Abhängigkeiten etwas länger. Dies ist nur beim ersten Start der Anwendung nach dem Klonen des Repositories notwendig.
+
+
+Alternativ kann das Start-Skript manuell aufgerufen werden. Dieses startet das Backend und das Frontend automatisch. Beim ersten Start werden ggf. fehlende Abhängigkeiten nachinstalliert (für Python über `venv` und `pip`, `npm` installiert den Electron-Client):
 
 	sh start_butler_offline.sh
 
-BudgetButlerWeb ist unter folgender Adresse zu erreichen:
 
-	http://127.0.0.1:5000/
+Alternativ kann der Server auch manuell gestartet werden:
+
+    # venv anlegen
+    python -m venv venv
+    # venv aktivieren
+    source venv/bin/activate
+    # Abhängigkeiten installieren (falls nicht schon passiert)
+    pip install -r butler_offline/requirements.txt
+    # Flask starten
+    flask --app butler_offline run
+
+Über ein Webbrowser kann die Webseite nun lokal erreicht werden:
+
+    http://localhost:5000
+    
+
 
 ### Softwaretests ausführen
 
 Alle Softwaretestsmit pytest starten:
 
-	pytest
+	pytest butler_offline
 
 Testabdeckung mit pytest berechnen:
 
@@ -96,6 +113,10 @@ Testabdeckung mit pytest berechnen:
 BudgetButlerWeb aktualisieren:
 
 	git pull
+    # Abhängigkeiten aktualisieren
+    rm -rfv venv
+    rm -rfv butler_offline_client/node_modules
+
 
 
 ## Umgebungsvariablen

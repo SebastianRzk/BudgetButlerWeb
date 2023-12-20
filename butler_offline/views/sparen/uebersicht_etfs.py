@@ -14,7 +14,7 @@ from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.state import persisted_state
 from butler_offline.viewcore.state.persisted_state import SharesInfo
 from butler_offline.views.sparen import language
-from butler_offline.views.sparen.language import NO_VALID_ISIN_IN_DB
+from butler_offline.viewcore.requirements import etfs_needed_decorator
 
 
 class UebersichtEtfsContext:
@@ -36,6 +36,7 @@ class UebersichtEtfsContext:
 PAGE_NAME = 'uebersicht_etfs'
 
 
+@etfs_needed_decorator()
 def handle_request(request: Request, context: UebersichtEtfsContext):
     result_context = generate_transactional_page_context(PAGE_NAME)
     if request.post_action_is('update_data'):
@@ -186,9 +187,6 @@ def _generate_content(result_context: PageContext, context: UebersichtEtfsContex
     shares_info = context.shares_info()
     depotauszuege = context.depotauszuege()
     isins = depotwerte.get_valid_isins()
-    if not isins:
-        return result_context.throw_error(NO_VALID_ISIN_IN_DB)
-
     etfs = []
     for isin in isins:
         isin_datum = 'Noch keine Daten'
@@ -206,7 +204,7 @@ def _generate_content(result_context: PageContext, context: UebersichtEtfsContex
     all_relevant_isins = depotauszuege.get_isins_invested_by()
     isins_with_data = shares_info.filter_out_isins_without_data(all_relevant_isins)
 
-    german = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['de'])
+    german = gettext.translation('iso3166-3', pycountry.LOCALES_DIR, languages=['de'])
 
     result_context.add('etfs', etfs)
     result_context.add('regions', get_data(

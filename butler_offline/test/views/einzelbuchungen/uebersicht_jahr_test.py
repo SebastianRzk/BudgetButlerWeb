@@ -1,5 +1,6 @@
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.test import assert_info_message_keine_buchungen_erfasst_in_context, assert_keine_message_set
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.renderhelper import Betrag
@@ -7,7 +8,26 @@ from butler_offline.views.einzelbuchungen import uebersicht_jahr
 
 
 def test_init():
-    uebersicht_jahr.handle_request(GetRequest(), context=uebersicht_jahr.UebersichtJahrContext(Einzelbuchungen()))
+    uebersicht_jahr.handle_request(GetRequest(), context=empty_context())
+
+
+def empty_context():
+    return uebersicht_jahr.UebersichtJahrContext(Einzelbuchungen())
+
+
+def test_init_with_empty_database_should_show_info_message():
+    result = uebersicht_jahr.handle_request(GetRequest(), context=empty_context())
+    assert_info_message_keine_buchungen_erfasst_in_context(result=result)
+
+
+def test_init_with_filled_database_should_not_show_any_message():
+    einzelbuchungen = Einzelbuchungen()
+    einzelbuchungen.add(datum('10.10.2010'), 'some kategorie', 'some name', -100)
+
+    result = uebersicht_jahr.handle_request(GetRequest(), context=uebersicht_jahr.UebersichtJahrContext(
+        einzelbuchungen=einzelbuchungen))
+
+    assert_keine_message_set(result=result)
 
 
 def teste__context_values__with_single_einnahme_and_single_ausgabe():

@@ -4,6 +4,7 @@ from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.context.builder import generate_redirect_page_context, generate_transactional_page_context
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.viewcore.requirements import sparbuchungen_needed_decorator
 
 
 class UebersichtSparbuchungenContext:
@@ -14,6 +15,7 @@ class UebersichtSparbuchungenContext:
         return self._sparbuchungen
 
 
+@sparbuchungen_needed_decorator()
 def handle_request(request: Request, context: UebersichtSparbuchungenContext):
     sparbuchungen = context.sparbuchungen()
     if request.post_action_is('delete'):

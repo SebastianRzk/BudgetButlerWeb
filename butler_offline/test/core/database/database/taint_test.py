@@ -2,89 +2,89 @@ from butler_offline.core.database import Database
 
 
 def test_taint_should_increase_taint_number():
-    db = Database()
+    database = Database()
 
-    assert db.taint_number() == 0
-    db.taint()
-    assert db.taint_number() == 1
+    assert database.taint_number() == 0
+    database.taint()
+    assert database.taint_number() == 1
 
 
 def test_is_tainted_should_return_false_when_tainted():
-    db = Database()
+    database = Database()
 
-    assert not db.is_tainted()
-    db.taint()
-    assert db.is_tainted()
+    assert not database.is_tainted()
+    database.taint()
+    assert database.is_tainted()
 
 
-def test_tain_number_should_include_dauerauftraege():
-    db = Database()
+def test_taint_number_should_include_dauerauftraege():
+    database = Database()
 
-    assert db.taint_number() == 0
-    db.dauerauftraege.taint()
-    assert db.taint_number() == 1
+    assert database.taint_number() == 0
+    database.dauerauftraege.taint()
+    assert database.taint_number() == 1
 
 
 def test_taint_number_should_include_gemeinsame_buchungen():
-    db = Database()
+    database = Database()
 
-    assert db.taint_number() == 0
-    db.gemeinsamebuchungen.taint()
-    assert db.taint_number() == 1
+    assert database.taint_number() == 0
+    database.gemeinsamebuchungen.taint()
+    assert database.taint_number() == 1
 
 
 def test_taint_number_should_include_sparbuchungen():
-    db = Database()
+    database = Database()
 
-    assert db.taint_number() == 0
-    db.sparbuchungen.taint()
-    assert db.taint_number() == 1
-
-
-def test_tain_number_should_include_einzelbuchungen():
-    db = Database()
-
-    assert db.taint_number() == 0
-    db.einzelbuchungen.taint()
-    assert db.taint_number() == 1
+    assert database.taint_number() == 0
+    database.sparbuchungen.taint()
+    assert database.taint_number() == 1
 
 
-def test_tain_number_should_include_kontos():
-    db = Database()
+def test_taint_number_should_include_einzelbuchungen():
+    database = Database()
 
-    assert db.taint_number() == 0
-    db.sparkontos.taint()
-    assert db.taint_number() == 1
-
-
-def test_tain_number_should_include_depotwerte():
-    db = Database()
-
-    assert db.taint_number() == 0
-    db.depotwerte.taint()
-    assert db.taint_number() == 1
+    assert database.taint_number() == 0
+    database.einzelbuchungen.taint()
+    assert database.taint_number() == 1
 
 
-def test_tain_number_should_include_order():
-    db = Database()
+def test_taint_number_should_include_kontos():
+    database = Database()
 
-    assert db.taint_number() == 0
-    db.order.taint()
-    assert db.taint_number() == 1
-
-
-def test_tain_number_should_include_depotauszuege():
-    db = Database()
-
-    assert db.taint_number() == 0
-    db.depotauszuege.taint()
-    assert db.taint_number() == 1
+    assert database.taint_number() == 0
+    database.sparkontos.taint()
+    assert database.taint_number() == 1
 
 
-def test_tain_number_should_include_orderdauerauftraege():
-    db = Database()
+def test_taint_number_should_include_depotwerte():
+    database = Database()
 
-    assert db.taint_number() == 0
-    db.orderdauerauftrag.taint()
-    assert db.taint_number() == 1
+    assert database.taint_number() == 0
+    database.depotwerte.taint()
+    assert database.taint_number() == 1
+
+
+def test_taint_number_should_include_order():
+    database = Database()
+
+    assert database.taint_number() == 0
+    database.order.taint()
+    assert database.taint_number() == 1
+
+
+def test_taint_number_should_include_depotauszuege():
+    database = Database()
+
+    assert database.taint_number() == 0
+    database.depotauszuege.taint()
+    assert database.taint_number() == 1
+
+
+def test_taint_number_should_include_orderdauerauftraege():
+    database = Database()
+
+    assert database.taint_number() == 0
+    database.orderdauerauftrag.taint()
+    assert database.taint_number() == 1
 

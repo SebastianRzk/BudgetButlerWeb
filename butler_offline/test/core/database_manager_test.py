@@ -10,16 +10,16 @@ def mock_filesystem():
 
 
 def write_db_file_stub(name, stub):
-    file_system.instance().write('../Database_' + name + '.csv', stub)
+    file_system.instance().write('./Database_' + name + '.csv', stub)
 
 
 def test_database_path_from():
-    assert database_manager.database_path_from('TestUser') == '../Database_TestUser.csv'
+    assert database_manager.database_path_from('TestUser') == './Database_TestUser.csv'
 
 
 def teste_read_with_full_database():
     mock_filesystem()
-    write_db_file_stub('testuser', full_db)
+    write_db_file_stub('testuser', FULL_DB)
 
     database = database_manager.read('testuser', set())
 
@@ -39,25 +39,25 @@ def teste_read_with_full_database():
 
 def teste_write_with_full_database():
     mock_filesystem()
-    write_db_file_stub('testuser', full_db)
+    write_db_file_stub('testuser', FULL_DB)
 
     database = database_manager.read('testuser', set())
     database_manager.write(database)
 
-    assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(full_db)
+    assert file_system.instance().read('./Database_testuser.csv') == file_system.instance().stub_pad_content(FULL_DB)
 
 
 def teste_write_with_old_database_should_migrate():
     mock_filesystem()
-    write_db_file_stub('testuser', full_db_old)
+    write_db_file_stub('testuser', FULL_DB_OLD)
 
     database = database_manager.read('testuser', set())
     database_manager.write(database)
 
-    assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(full_db)
+    assert file_system.instance().read('./Database_testuser.csv') == file_system.instance().stub_pad_content(FULL_DB)
 
 
-full_db_old = '''Datum,Kategorie,Name,Wert,Tags
+FULL_DB_OLD = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
 2017-11-11,Essen,Nochwas,-1.0,[]
 
@@ -89,7 +89,7 @@ Datum,Depotwert,Konto,Wert
 stechzeiten...
 '''
 
-full_db = '''Datum,Kategorie,Name,Wert,Tags
+FULL_DB = '''Datum,Kategorie,Name,Wert,Tags
 2017-10-10,Essen,Essen gehen,-10.0,[]
 2017-11-11,Essen,Nochwas,-1.0,[]
 
@@ -105,7 +105,7 @@ Datum,Kategorie,Name,Wert,Person
 
  Sparbuchungen 
 Datum,Name,Wert,Typ,Konto
-2017-12-31,Beispielsparen,100,manueller Auftrag,Beispielkonto
+2017-12-31,Beispielsparen,100.0,manueller Auftrag,Beispielkonto
 
  Sparkontos 
 Kontoname,Kontotyp
@@ -116,15 +116,15 @@ Name,ISIN,Typ
 
  Order 
 Datum,Name,Konto,Depotwert,Wert
-2020-02-02,1order,1konto,1depotwert,200
+2020-02-02,1order,1konto,1depotwert,200.0
 
  Dauerauftr_Ordr 
 Startdatum,Endedatum,Rhythmus,Name,Konto,Depotwert,Wert
-2020-01-01,2020-02-02,monatlich,dauerauftrag_order,1konto,1depotwert,123
+2020-01-01,2020-02-02,monatlich,dauerauftrag_order,1konto,1depotwert,123.0
 
  Depotauszuege 
 Datum,Depotwert,Konto,Wert
-2020-01-01,1depotwert,1konto,111
+2020-01-01,1depotwert,1konto,111.0
 '''
 
 

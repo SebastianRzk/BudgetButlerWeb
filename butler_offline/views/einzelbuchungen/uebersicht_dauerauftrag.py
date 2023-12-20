@@ -7,6 +7,7 @@ import logging
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.requirements import dauerauftrag_needed_decorator
 
 
 class UbersichtDauerauftragContext:
@@ -17,10 +18,10 @@ class UbersichtDauerauftragContext:
         return self._dauerauftraege
 
 
-def _handle_request(request: Request, context: UbersichtDauerauftragContext) -> PageContext:
+@dauerauftrag_needed_decorator()
+def handle_request(request: Request, context: UbersichtDauerauftragContext) -> PageContext:
 
     if request.post_action_is('delete'):
-        logging.info('Please edit: %s', request.values['delete_index'])
         context.dauerauftraege().delete(int(request.values['delete_index']))
         return generate_redirect_page_context('/dauerauftraguebersicht/')
 
@@ -44,7 +45,7 @@ def _format_dauerauftrag_floatpoint(dauerauftraege):
 def index(request):
     return request_handler.handle(
         request=request,
-        handle_function=_handle_request,
+        handle_function=handle_request,
         html_base_page='einzelbuchungen/uebersicht_dauerauftrag.html',
         context_creator=lambda db: UbersichtDauerauftragContext(db.dauerauftraege)
     )

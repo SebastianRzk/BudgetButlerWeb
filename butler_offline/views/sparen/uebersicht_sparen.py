@@ -1,17 +1,18 @@
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.converter import from_double_to_german
-from butler_offline.viewcore.converter import datum_to_german
 from datetime import date
-from butler_offline.viewcore.context.builder import generate_page_context
+
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.core.database.sparen.order import Order
 from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
-from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context.builder import generate_page_context
+from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.renderhelper import Betrag, BetragListe
+from butler_offline.viewcore.requirements import irgendwas_needed_decorator
 
 
 class SparenUebersichtContext:
@@ -183,7 +184,7 @@ def gesamt_uebersicht(
         depotauszuege: Depotauszuege,
         order: Order
 ):
-    min_jahr = einzelbuchungen.content.copy()[einzelbuchungen.content.copy().Kategorie != 'Sparen'].Datum.min().year
+    min_jahr = get_min_jahr(einzelbuchungen)
     max_jahr = date.today().year
 
     year_kontostaende = []
@@ -250,7 +251,14 @@ def gesamt_uebersicht(
     return gesamt_uebersicht, year_kontostaende
 
 
-def berechne_gesamt_tabelle(jahresdaten: BetragListe):
+def get_min_jahr(einzelbuchungen):
+    datae = einzelbuchungen.content.copy()[einzelbuchungen.content.copy().Kategorie != 'Sparen'].Datum
+    if len(datae) == 0:
+        return date.today().year - 1
+    return datae.min().year
+
+
+def berechne_gesamt_tabelle(jahresdaten: list):
     if len(jahresdaten) == 0:
         return [[]]
 
@@ -431,11 +439,9 @@ def berechne_monatlich(order_dauerauftrag: OrderDauerauftrag,
     }
 
 
+@irgendwas_needed_decorator()
 def handle_request(_, context: SparenUebersichtContext):
     result_context = generate_page_context(page_name='sparen')
-    if context.einzelbuchungen().select().count() == 0:
-        result_context.throw_error('Bitte erfassen Sie zuerst eine Einzelbuchung.')
-        return result_context
 
     kontos = context.kontos().get_all().Kontoname.tolist()
     typen = context.kontos().KONTO_TYPEN

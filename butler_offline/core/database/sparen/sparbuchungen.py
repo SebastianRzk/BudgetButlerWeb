@@ -1,4 +1,4 @@
-from butler_offline.core.database.database_object import DatabaseObject
+from butler_offline.core.database.database_object import DatabaseObject, map_column_types
 import pandas as pd
 
 
@@ -65,7 +65,7 @@ class Sparbuchungen(DatabaseObject):
         del gesamt['Konto']
         del gesamt['Typ']
 
-        return gesamt
+        return map_column_types(gesamt)
 
     def select_year(self, year):
         include = self.content.copy()

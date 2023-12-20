@@ -2,13 +2,13 @@ import numpy as np
 import datetime
 
 from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest, PostRequest
+from butler_offline.test.request_stubs import GetRequest, PostRequest
 from butler_offline.core import file_system, configuration_provider
 from butler_offline.views.shared import import_data
 from butler_offline.views.core import configuration
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore import requester
-from butler_offline.test.RequesterStub import RequesterStub, MockedResponse
+from butler_offline.test.requester_stub import RequesterStub, MockedResponse
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
 
@@ -30,7 +30,7 @@ DECODED_LOGIN_DATA = '''{
 
 
 def test_pad_protocoll_with_no_protocoll_should_add_https():
-    assert import_data._add_protokoll_if_needed('myurl') == 'https://myurl'
+    assert import_data.add_protokoll_if_needed('myurl') == 'https://myurl'
 
 
 def test_transaction_id_should_be_in_context():
@@ -42,8 +42,8 @@ def test_transaction_id_should_be_in_context():
 
 
 def test_pad_protocoll_with_existing_protocoll_should_not_change_protocoll():
-    assert import_data._add_protokoll_if_needed('http://myurl') == 'http://myurl'
-    assert import_data._add_protokoll_if_needed('https://myurl') == 'https://myurl'
+    assert import_data.add_protokoll_if_needed('http://myurl') == 'http://myurl'
+    assert import_data.add_protokoll_if_needed('https://myurl') == 'https://myurl'
 
 
 def test_init_should_return_index_page():

@@ -1,10 +1,6 @@
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.request_stubs import GetRequest
+from butler_offline.test.request_stubs import PostRequest
 from butler_offline.views.sparen import add_sparkoto
-from butler_offline.core import file_system
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.viewcore import request_handler
 from butler_offline.core.database.sparen.kontos import Kontos
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 
@@ -13,12 +9,6 @@ def basic_test_context(kontos: Kontos = Kontos()) -> add_sparkoto.AddSparkontoCo
     return add_sparkoto.AddSparkontoContext(
         kontos=kontos
     )
-
-
-def set_up():
-    file_system.INSTANCE = FileSystemStub()
-    persisted_state.DATABASE_INSTANCE = None
-    request_handler.stub_me()
 
 
 def test_init():

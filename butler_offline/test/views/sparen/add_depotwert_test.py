@@ -1,5 +1,5 @@
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
+from butler_offline.test.request_stubs import GetRequest
+from butler_offline.test.request_stubs import PostRequest
 from butler_offline.views.sparen import add_depotwert
 from butler_offline.core.database.sparen.depotwerte import Depotwerte
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler

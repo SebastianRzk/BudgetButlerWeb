@@ -16,5 +16,8 @@
 *.iml
 config
 **/shares_info_cache.json
-
+/build/
+/dist/
+/BudgetButlerWeb.egg-info/
 .coverage
+/logs/

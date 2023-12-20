@@ -4,6 +4,7 @@ import requests
 
 INSTANCE = None
 
+
 def instance():
     if not requester.INSTANCE:
         requester.INSTANCE = Requester()
@@ -19,7 +20,9 @@ class Requester:
         response.raise_for_status()
         return self.decode(response)
 
-    def post(self, server_url, data={}, cookies=None):
+    def post(self, server_url, data: dict = None, cookies=None):
+        if not data:
+            data = {}
         logging.info('requested url %s', server_url, data)
         response = requests.post(server_url, data=data, cookies=cookies)
         response.raise_for_status()

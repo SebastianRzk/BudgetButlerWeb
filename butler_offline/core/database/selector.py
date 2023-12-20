@@ -1,6 +1,7 @@
 import itertools as it
 from datetime import date
-from typing import Self
+from typing import Self, Callable
+
 
 import pandas as pd
 from pandas import DataFrame
@@ -14,28 +15,29 @@ class Selektor:
     def __init__(self, content):
         self.content = content
 
-    def select_year(self, year):
+    def select_year(self, year) -> Self:
+        return self._select_date(
+            number_extractor=lambda x: x.year,
+            number_to_find=year
+        )
+
+    def select_month(self, month) -> Self:
+        return self._select_date(number_extractor=lambda x: x.month,
+                                 number_to_find=month)
+
+    def _select_date(self, number_extractor: Callable[[date], int], number_to_find: int) -> Self:
         data = self.content.copy()
         if data.empty:
             return Selektor(data)
-        data['TMP'] = data.Datum.map(lambda x: x.year)
-        data = data[data.TMP == year]
+        data['TMP'] = data.Datum.map(number_extractor)
+        data = data[data.TMP == number_to_find]
         del data['TMP']
         return Selektor(data)
 
-    def select_month(self, month):
-        data = self.content.copy()
-        if data.empty:
-            return Selektor(data)
-        data['TMP'] = data.Datum.map(lambda x: x.month)
-        data = data[data.TMP == month]
-        del data['TMP']
-        return Selektor(data)
-
-    def select_einnahmen(self):
+    def select_einnahmen(self) -> Self:
         return Selektor(self.content[self.content.Wert > 0])
 
-    def select_ausgaben(self):
+    def select_ausgaben(self) -> Self:
         return Selektor(self.content[self.content.Wert < 0])
 
     def raw_table(self) -> DataFrame:
@@ -44,7 +46,7 @@ class Selektor:
     def group_by_kategorie(self):
         return self.content.copy()[['Wert', 'Kategorie']].groupby(by='Kategorie').sum()
 
-    def select_letzte_6_montate(self, today: date):
+    def select_letzte_6_montate(self, today: date) -> Self:
         if today.month > 6:
             mindate = date(day=1, month=(today.month - 6), year=today.year)
         else:
@@ -94,7 +96,7 @@ class Selektor:
             result.append("%.2f" % abs(reihe.Wert))
         return result
 
-    def sum_kategorien_monthly(self):
+    def sum_kategorien_monthly(self) -> dict[int, dict[str, str]]:
         data = self.content.copy()
         data = data[['Datum', 'Kategorie', 'Wert']]
         data.Datum = data.Datum.map(lambda x: x.month)
@@ -167,8 +169,9 @@ class Selektor:
                 name_alt = name_alt + ', ' + row.Name + ' (' + (('%.2f' % row.Wert).replace('.', ',')) + '€)'
                 summe_alt += row.Wert
 
-        tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': ('%.2f' % summe_alt).replace('.', ',')})
-        zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
+        if datum_alt:
+            tag_liste.append({'kategorie': kategorie_alt, 'name': name_alt, 'summe': ('%.2f' % summe_alt).replace('.', ',')})
+            zusammenfassung.append([datum_to_german(datum_alt), tag_liste])
         return zusammenfassung
 
     def faktor(self, faktor):

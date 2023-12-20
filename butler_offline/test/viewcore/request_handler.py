@@ -6,6 +6,8 @@ from butler_offline.viewcore.http import Redirector
 from butler_offline.viewcore.page_executor import PageExecutor
 from butler_offline.viewcore.state.persisted_state import CurrentDatabaseVersionProvider
 from butler_offline.viewcore.template import Renderer
+from butler_offline.core import file_system
+from butler_offline.test.core import file_system_stub
 
 
 class TestRequestHandlerResult:
@@ -88,6 +90,8 @@ class DatabaseVersionProviderStub(CurrentDatabaseVersionProvider):
 
 def run_in_mocked_handler(index_handle: Callable) -> TestRequestHandlerResult:
     request_handler_function_original = request_handler.REQUEST_HANDLER_INTERCEPTOR
+    file_system_original = file_system.INSTANCE
+    file_system.INSTANCE = file_system_stub.FileSystemStub()
     renderer = RendererStub()
     request_handler.REQUEST_HANDLER_INTERCEPTOR = InterceptorWrapper(
         handler=request_handler_function_original,
@@ -101,5 +105,6 @@ def run_in_mocked_handler(index_handle: Callable) -> TestRequestHandlerResult:
     index_handle()
 
     request_handler.REQUEST_HANDLER_INTERCEPTOR = request_handler_function_original
+    file_system.INSTANCE = file_system_original
 
     return renderer.result()

@@ -1,11 +1,13 @@
-from butler_offline.viewcore.state import persisted_state
-from butler_offline.test.RequestStubs import GetRequest
-from butler_offline.test.RequestStubs import PostRequest
-from butler_offline.views.sparen import uebersicht_sparbuchungen
-from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
+from butler_offline.test.request_stubs import GetRequest
+from butler_offline.test.request_stubs import PostRequest
+from butler_offline.test.test import assert_info_message_keine_sparbuchungen_erfasst_in_context, \
+    assert_keine_message_set
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.state import persisted_state
+from butler_offline.views.sparen import uebersicht_sparbuchungen
 
 
 def generate_base_context(sparbuchungen: Sparbuchungen = Sparbuchungen()):
@@ -32,17 +34,19 @@ def test_transaction_id_should_be_in_context():
     assert context.is_transactional()
 
 
-def test_init_with_empty_database():
+def test_init_with_empty_database_should_show_info_message():
     result = uebersicht_sparbuchungen.handle_request(GetRequest(), generate_base_context())
     assert result.is_ok()
+    assert_info_message_keine_sparbuchungen_erfasst_in_context(result=result)
 
 
-def test_init_filled_database():
+def test_init_filled_database_should_show_no_message():
     result = uebersicht_sparbuchungen.handle_request(
         request=GetRequest(),
         context=generate_testdata_context()
     )
     assert result.is_ok()
+    assert_keine_message_set(result=result)
 
 
 def test_with_entry_should_return_german_date_format():

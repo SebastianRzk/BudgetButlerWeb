@@ -1,4 +1,4 @@
-from butler_offline.core.database.database_object import DatabaseObject
+from butler_offline.core.database.database_object import DatabaseObject, map_column_types
 import pandas as pd
 
 
@@ -54,7 +54,7 @@ class Order(DatabaseObject):
         del order['Konto']
         del order['Depotwert']
 
-        return order
+        return map_column_types(order)
 
     def select_year(self, year):
         include = self.content.copy()

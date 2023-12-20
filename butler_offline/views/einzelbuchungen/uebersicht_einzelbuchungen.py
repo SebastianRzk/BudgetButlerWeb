@@ -5,6 +5,7 @@ from butler_offline.core.time import today
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.requirements import einzelbuchung_needed_decorator
 
 
 class UebersichtEinzelbuchungenContext:
@@ -15,6 +16,7 @@ class UebersichtEinzelbuchungenContext:
         return self._einzelbuchungen
 
 
+@einzelbuchung_needed_decorator()
 def handle_request(request: Request, context: UebersichtEinzelbuchungenContext):
     year = today().year
     years = sorted(context.einzelbuchungen().get_jahre(), reverse=True)
