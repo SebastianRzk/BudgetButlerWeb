@@ -10,11 +10,11 @@ def mock_filesystem():
 
 
 def write_db_file_stub(name, stub):
-    file_system.instance().write('../Database_' + name + '.csv', stub)
+    file_system.instance().write('./Database_' + name + '.csv', stub)
 
 
 def test_database_path_from():
-    assert database_manager.database_path_from('TestUser') == '../Database_TestUser.csv'
+    assert database_manager.database_path_from('TestUser') == './Database_TestUser.csv'
 
 
 def teste_read_with_full_database():
@@ -44,7 +44,7 @@ def teste_write_with_full_database():
     database = database_manager.read('testuser', set())
     database_manager.write(database)
 
-    assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(FULL_DB)
+    assert file_system.instance().read('./Database_testuser.csv') == file_system.instance().stub_pad_content(FULL_DB)
 
 
 def teste_write_with_old_database_should_migrate():
@@ -54,7 +54,7 @@ def teste_write_with_old_database_should_migrate():
     database = database_manager.read('testuser', set())
     database_manager.write(database)
 
-    assert file_system.instance().read('../Database_testuser.csv') == file_system.instance().stub_pad_content(FULL_DB)
+    assert file_system.instance().read('./Database_testuser.csv') == file_system.instance().stub_pad_content(FULL_DB)
 
 
 FULL_DB_OLD = '''Datum,Kategorie,Name,Wert,Tags

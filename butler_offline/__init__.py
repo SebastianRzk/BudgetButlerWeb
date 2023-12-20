@@ -1,10 +1,10 @@
 import logging
+import sys
 from logging.handlers import RotatingFileHandler
 
 import flask
 from flask import Flask
 from flask import request
-from flask.logging import default_handler
 
 from butler_offline.viewcore import routes
 from butler_offline.views.core import dashboard, \
@@ -45,7 +45,7 @@ from butler_offline.views.sparen import uebersicht_sparen, \
 
 app = Flask(__name__)
 
-if app.debug:
+if app.debug or "pytest" in sys.modules:
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 else:
     handler = RotatingFileHandler('logs/flask.log', maxBytes=10_000, backupCount=2)
