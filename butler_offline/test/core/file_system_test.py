@@ -12,10 +12,10 @@ def test_alle_abrechnungen():
     assert abrechnungen == [
                              {
                                  'content': ['content abrechnung a'],
-                                 'name': '../Abrechnungen/*Abrechnung_A'
+                                 'name': './Abrechnungen/*Abrechnung_A'
                              },
                              {
                                  'content': ['content import a'],
-                                 'name': '../Import/*Import_A'
+                                 'name': './Import/*Import_A'
                              }
                           ]

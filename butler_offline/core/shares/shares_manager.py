@@ -3,7 +3,7 @@ import json
 from butler_offline.core import file_system
 from butler_offline.core.shares import SharesInfo
 
-SHARES_PATH = '../shares_info_cache.json'
+SHARES_PATH = './shares_info_cache.json'
 
 
 def save_if_needed(shares_data):

@@ -33,8 +33,8 @@ def instance() -> FileSystemImpl:
     return file_system.INSTANCE
 
 
-IMPORT_PATH = '../Import/'
-ABRECHNUNG_PATH = '../Abrechnungen/'
+IMPORT_PATH = './Import/'
+ABRECHNUNG_PATH = './Abrechnungen/'
 
 
 def write_import(file_name: str, file_content: str, filesystem: file_system.FileSystemImpl) -> None:
