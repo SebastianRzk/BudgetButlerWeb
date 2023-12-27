@@ -13,6 +13,7 @@ from butler_offline.viewcore.context.builder import generate_page_context
 from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.renderhelper import Betrag, BetragListe
 from butler_offline.viewcore.requirements import irgendwas_needed_decorator
+from butler_offline.core.time import today
 
 
 class SparenUebersichtContext:
@@ -185,7 +186,7 @@ def gesamt_uebersicht(
         order: Order
 ):
     min_jahr = get_min_jahr(einzelbuchungen)
-    max_jahr = date.today().year
+    max_jahr = today().year
 
     year_kontostaende = []
 
@@ -252,9 +253,9 @@ def gesamt_uebersicht(
 
 
 def get_min_jahr(einzelbuchungen):
-    datae = einzelbuchungen.content.copy()[einzelbuchungen.content.copy().Kategorie != 'Sparen'].Datum
+    datae = einzelbuchungen.content.copy().Datum
     if len(datae) == 0:
-        return date.today().year - 1
+        return today().year - 1
     return datae.min().year
 
 

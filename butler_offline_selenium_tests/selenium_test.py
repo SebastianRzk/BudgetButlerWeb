@@ -33,9 +33,11 @@ def close_driver(driver):
     driver.close()
 
 
-def _launch_head_firefox():
+def _launch_head_firefox(window_size_x: int = 1920, window_size_y: int = 1080):
     firefox_options = Options()
-    firefox_options.add_argument("--window-size=1920,1080")
+    firefox_options.add_argument(f'--window-size={window_size_x},{window_size_y}')
+    firefox_options.add_argument(f'--width={window_size_y}')
+    firefox_options.add_argument(f'--height={window_size_x}')
     return webdriver.Firefox(options=firefox_options)
 
 
@@ -59,7 +61,3 @@ def _launch_headless_firefox():
     browser = webdriver.Firefox(options=firefox_options, firefox_profile=profile)
     selenium_test.BROWSER_INSTANCES.append(browser)
     return browser
-
-
-
-

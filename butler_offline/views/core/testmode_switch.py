@@ -23,6 +23,6 @@ def enter_testmode(request):
     non_persisted_state.CONTEXT = non_persisted_state.NonPersistedContext()
     configuration_provider.LOADED_CONFIG = None
     configuration_provider.set_configuration('PARTNERNAME', 'Partner')
-    time.stub_today_with(datum('22.01.2019'))
+    time.stub_today_with(datum('22.10.2019'))
     logging.warning('WARNUNG: ENTERING TESTMODE')
     return redirect('/', code=301)

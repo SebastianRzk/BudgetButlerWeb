@@ -3,10 +3,6 @@
 * TOC
 {:toc}
 
-[Screenshots Desktop](screenshots_desktop)
-
-[Screenshots Companion App](screenshots_mobile)
-
 ## Idee
 
 * Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und damit mit einem Textverarbeitungsprogramm oder einem Tabellenverarbeitungsprogramm zugänglich.
@@ -47,6 +43,44 @@
   * Verwendung mehrerer Datenbanken
   * Backup der Datenbank-Datei anlegen
   * Kategorien übergreifend umbenennen
+
+## Screenshots
+
+### Screenshots BudgetButlerWeb Offline Anwendung
+
+<img src="img/screenshots_desktop/dashboard.png" alt="Dasboard" width="300"/>
+
+#### Einzelbuchungen
+
+<a href="img/screenshots_desktop/einzelbuchungen_add.png"><img src="img/screenshots_desktop/einzelbuchungen_add.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/uebersicht_einzelbuchungen.png"><img src="img/screenshots_desktop/uebersicht_einzelbuchungen.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/dauerauftraege_add.png"><img src="img/screenshots_desktop/dauerauftraege_add.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/uebersicht_dauerauftraege.png"><img src="img/screenshots_desktop/uebersicht_dauerauftraege.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/uebersicht_jahr.png"><img src="img/screenshots_desktop/uebersicht_jahr.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/uebersicht_monat.png"><img src="img/screenshots_desktop/uebersicht_monat.png" alt="Dasboard" width="300"/></a>
+
+#### Gemeinsame Buchungen
+<a href="img/screenshots_desktop/add_gemeinsam.png"><img src="img/screenshots_desktop/add_gemeinsam.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/gemeinsam_abrechnen.png"><img src="img/screenshots_desktop/gemeinsam_abrechnen.png" alt="Dasboard" width="300"/></a>
+
+#### Sparen
+
+<a href="img/screenshots_desktop/sparen_uebersicht.png"><img src="img/screenshots_desktop/sparen_uebersicht.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/sparen_uebersicht_depotwerte.png"><img src="img/screenshots_desktop/sparen_uebersicht_depotwerte.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/sparen_uebersicht_etfs.png"><img src="img/screenshots_desktop/sparen_uebersicht_etfs.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/sparen_uebersicht_sparkontos.png"><img src="img/screenshots_desktop/sparen_uebersicht_sparkontos.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_desktop/sparen_add_depotauszug.png"><img src="img/screenshots_desktop/sparen_add_depotauszug.png" alt="Dasboard" width="300"/></a>
+
+
+### Screenshots Begleiter Web-App
+
+<a href="img/screenshots_mobile/login.png"><img src="img/screenshots_mobile/login.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_mobile/menu.png"><img src="img/screenshots_mobile/menu.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_mobile/erfassen.png"><img src="img/screenshots_mobile/erfassen.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_mobile/erfassen_desktop.png"><img src="img/screenshots_mobile/erfassen_desktop.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_mobile/gemeinsam.png"><img src="img/screenshots_mobile/gemeinsam.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_mobile/einzel.png"><img src="img/screenshots_mobile/einzel.png" alt="Dasboard" width="300"/></a>
+
 
 ## Offline Anwendung: BudgetButlerWeb
 
