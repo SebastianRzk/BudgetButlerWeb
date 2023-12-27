@@ -8,6 +8,7 @@ from butler_offline.viewcore.context.builder import generate_page_context
 from butler_offline.viewcore.renderhelper import Betrag, BetragListe
 from butler_offline.viewcore.http import Request
 from butler_offline.viewcore.requirements import einzelbuchung_needed_decorator
+from butler_offline.core.time import today
 
 
 class UebersichtJahrContext:
@@ -85,8 +86,11 @@ def _compile_colors(result, num_monate, color_chooser):
 
 @einzelbuchung_needed_decorator()
 def handle_request(request: Request, context: UebersichtJahrContext):
-    today = datetime.date.today()
-    year = today.year
+    year = today().year
+
+    jahre = sorted(context.einzelbuchungen().get_jahre(), reverse=True)
+    if year not in jahre and len(jahre) > 0:
+        year = jahre[0]
 
     year = request.get_post_parameter_or_default(
         key='date',
@@ -131,8 +135,8 @@ def handle_request(request: Request, context: UebersichtJahrContext):
     result_context = _compute_pie_chart_prozentual(result_context, year, context)
 
     laenge = 12
-    if year == today.year:
-        laenge = today.month
+    if year == today().year:
+        laenge = today().month
 
     result_context.add('buchungen', [
         {
@@ -161,7 +165,7 @@ def handle_request(request: Request, context: UebersichtJahrContext):
         num_monate,
         color_chooser
     ))
-    result_context.add('jahre', sorted(context.einzelbuchungen().get_jahre(), reverse=True))
+    result_context.add('jahre', jahre)
     result_context.add('gesamt_ausgaben', Betrag(
         context.einzelbuchungen()
         .select()

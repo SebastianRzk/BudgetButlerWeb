@@ -3,12 +3,13 @@ from selenium.webdriver.common.by import By
 
 
 class GemeinsamAbrechnen:
+    URL = 'http://localhost:5000/gemeinsamabrechnen/'
 
     def __init__(self, driver):
         self.driver = driver
 
     def visit(self):
-        self.driver.get('http://localhost:5000/gemeinsamabrechnen/')
+        self.driver.get(self.URL)
 
     def update_abrechnungsverhältnis(self, neues_verhaeltnis):
         fill_element_by_id(self.driver, 'abrechnungsverhaeltnis', str(neues_verhaeltnis))
