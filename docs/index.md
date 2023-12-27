@@ -44,6 +44,14 @@
   * Backup der Datenbank-Datei anlegen
   * Kategorien übergreifend umbenennen
 
+## Weiterführende Links
+
+* Fehler, Fragen, Anmerkungen oder Ideen gerne als ["ISSUE" hier hinterlassen](https://github.com/SebastianRzk/BudgetButlerWeb/issues)
+* Code-Änderungen (Pull-Requests) immer bitte immer gegen den `dev`-[Branch hier hin](https://github.com/SebastianRzk/BudgetButlerWeb/pulls)
+* [Hier liegt der blanke Code](https://github.com/SebastianRzk/BudgetButlerWeb)
+* [Hier liegen die Docker-Images für die Begleiter Web-App](https://hub.docker.com/u/sebastianrzk)
+
+
 ## Screenshots
 
 ### Screenshots BudgetButlerWeb Offline Anwendung
@@ -202,5 +210,14 @@ oder:
 * Login auf `/`. Initiale Anmeldedaten:
   * User: admin@admin.de
   * Password: adminadminadmin
+
+
+## Ideen für die Zukunft / bekannte Limitierungen
+
+* Aktuell werden die Daten nur für eine retrospektive Visualisierung verwendet. Dabei könnte man die Daten auch für eine Projektion in die Zukunft verwenden. Dies konnte bei den Einnachmen/ Ausgaben sowie auch bei den Spar-Plänen nützlich sein.
+* Das Backend der Begleiter Web-App ist alt und unterstützt nicht moderne Anmeldeverfahren wie OpenID. Ggf Reimplementierung auf neuem Tech-Stack.
+* Implementierung von Tags an Einzelbuchung, um neben den der "Kategorie" noch weitere sortier- und durchsuchbare Marker zur Verfügung zu stellen. (Zum Beispiel Marker wie "steuerlich Absetzbar" oder "Weihnachtsgeschenke" oder "Sommerurlaub")
+* BudgetButlerWeb Anwendung im AUR verfügbar machen, damit Aktualisierungen automatisch über yay durchgeführt werden.
+* Codequalität und Testabdeckung automatisiert und langfristig tracken (z.B. durch SonarCloud)
 
 
