@@ -8,7 +8,7 @@ from butler_offline_selenium_tests.page.einzelbuchungen.einzelbuchungen_uebersic
 
 
 class TestGemeinsameAbrechnung(SeleniumTestClass):
-    test_change_veraeltnis_abrechnung = '''Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
+    test_change_veraeltnis_abrechnung = '''Abrechnung vom 22.10.2019 (01.01.2010-01.01.2010)
 ########################################
  Ergebnis:
 test übernimmt einen Anteil von 70% der Ausgaben.
@@ -87,7 +87,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert page_gemeinsam_abrechnen.abrechnung_result() == self.test_change_veraeltnis_abrechnung
         close_driver(driver)
 
-    set_limit_abrechnung = '''Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
+    set_limit_abrechnung = '''Abrechnung vom 22.10.2019 (01.01.2010-01.01.2010)
 ########################################
  Ergebnis:
 Durch das Limit bei test von 30 EUR wurde das Verhältnis von 50 auf 30.0 aktualisiert
@@ -167,7 +167,7 @@ Datum,Kategorie,Name,Wert,Dynamisch
         assert page_gemeinsam_abrechnen.abrechnung_result() == self.set_limit_abrechnung
         close_driver(driver)
 
-    set_limit_abrechnung_ausgleich = '''Abrechnung vom 22.01.2019 (01.01.2010-01.01.2010)
+    set_limit_abrechnung_ausgleich = '''Abrechnung vom 22.10.2019 (01.01.2010-01.01.2010)
 ########################################
  Ergebnis:
 Durch das Limit bei test von 30 EUR wurde das Verhältnis von 50 auf 30.0 aktualisiert
