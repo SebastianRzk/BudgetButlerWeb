@@ -19,7 +19,7 @@ export class AuthGuard  {
     return this.authService.auth$.pipe(take(1)).pipe(map(
       auth => {
         console.log(auth);
-        if (!auth.isLoggedIn) {
+        if (!auth.loggedIn) {
           console.log('routing away');
           this.router.navigate([LOGIN_ROUTE]);
           return false;

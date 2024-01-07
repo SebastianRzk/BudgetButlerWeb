@@ -8,22 +8,11 @@
         <mat-card-title>Login</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <form (ngSubmit)="login()" [formGroup]="loginForm">
-          <mat-form-field>
-            <mat-label>E-Mail Adresse</mat-label>
-            <input formControlName="email" matInput name="email" required>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Passwort</mat-label>
-            <input [type]="hide ? 'password' : 'text'" formControlName="password" matInput
-                   name="password"
-                   required>
-            <mat-icon (click)="hide = !hide" matSuffix>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </mat-form-field>
-          <button class="full-height" color="primary" mat-raised-button type="submit">
-            Login
-          </button>
-        </form>
+        <a href="/api/login/oauth2/authorization/oidc">
+        <button class="full-height" color="primary" mat-raised-button>
+          Click to Login
+        </button>
+        </a>
       </mat-card-content>
     </mat-card>
   </div>

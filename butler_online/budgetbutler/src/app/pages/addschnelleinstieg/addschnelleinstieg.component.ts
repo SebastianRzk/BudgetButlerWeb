@@ -34,7 +34,7 @@ export class AddschnelleinstiegComponent implements OnInit {
 
   ngOnInit() {
     this.kategorien = this.kategorieService.getAll();
-    this.authService.getLogin().pipe(first()).toPromise().then(data => this.personenName = data.username);
+    this.authService.getLogin().pipe(first()).toPromise().then(data => this.personenName = data.userName);
   }
 
   onFormSubmit() {

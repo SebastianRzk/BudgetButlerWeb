@@ -1,7 +1,6 @@
 <mat-sidenav-container [hasBackdrop]="isSmallScreen" autosize>
   <mat-sidenav (closed)="menuService.close()" *ngIf="user$ | async as user" [mode]="mode"
                [opened]="opened$ | async">
-
     <app-sidebar></app-sidebar>
   </mat-sidenav>
   <mat-sidenav-content>

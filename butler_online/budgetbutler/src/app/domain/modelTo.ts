@@ -28,7 +28,7 @@ export interface GemeinsameBuchungTO {
   readonly kategorie: string;
   readonly wert: number;
   readonly zielperson: string;
-  readonly id: number;
+  readonly id: string;
   readonly user: string;
 }
 
@@ -36,4 +36,11 @@ export interface AddUserDataTo {
   readonly username: string;
   readonly email: string;
   readonly password: string;
+}
+
+
+export interface KategorieTo {
+  readonly id: string;
+  readonly name: string;
+  readonly user: string;
 }
