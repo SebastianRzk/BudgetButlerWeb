@@ -22,7 +22,7 @@ export interface GemeinsameBuchungAnlegen {
   readonly datum: Date;
   readonly kategorie: string;
   readonly wert: number;
-  readonly zielperson: string;
+  readonly eigeneBuchung: boolean;
 }
 
 export interface GemeinsameBuchung {

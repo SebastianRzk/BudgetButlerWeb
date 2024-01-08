@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApiproviderService } from './apiprovider.service';
@@ -28,14 +28,14 @@ export class GemeinsamebuchungService {
   }
 
   public save(buchung: GemeinsameBuchungAnlegen) {
-    this.httpClient.put<Result>(this.api.getUrl('gemeinsamebuchung.php'), toGemeinsameBuchungAnlegenTO(buchung)).toPromise().then(
+    this.httpClient.post<Result>(this.api.getUrl('gemeinsame_buchung'), toGemeinsameBuchungAnlegenTO(buchung)).toPromise().then(
       data => this.notification.handleServerResult(data, 'Speichern der Ausgabe'),
       error => this.notification.handleServerResult(ERROR_RESULT, 'Speichern der Ausgabe')
     );
   }
 
   public refresh(): void {
-    this.httpClient.get<GemeinsameBuchungTO[]>(this.api.getUrl('gemeinsamebuchung.php'))
+    this.httpClient.get<GemeinsameBuchungTO[]>(this.api.getUrl('gemeinsame_buchungen'))
       .pipe(map((dtos: GemeinsameBuchungTO[]) => dtos.map(toGemeinsameBuchung)))
       .subscribe(
         x => this.gemeinsamebuchungen.next(x),
@@ -43,10 +43,7 @@ export class GemeinsamebuchungService {
   }
 
   public delete(buchung: GemeinsameBuchungLoeschen) {
-    const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'}), body: buchung
-    };
-    this.httpClient.delete<Result>(this.api.getUrl('gemeinsamebuchung.php'), httpOptions).toPromise().then(
+    this.httpClient.delete<Result>(this.api.getUrl('gemeinsame_buchung/' + buchung.id)).toPromise().then(
       data => {
         this.notification.handleServerResult(data, 'Löschen der Ausgabe');
         this.refresh();

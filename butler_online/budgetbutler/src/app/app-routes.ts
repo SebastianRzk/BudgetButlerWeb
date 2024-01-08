@@ -4,3 +4,5 @@ export const ALLE_GEMEINSAME_BUCHUNGEN_ROUTE = 'allegemeinsamebuchungen';
 export const SETTINGS_ROUTE = 'settings';
 export const ROOT_ROUTE = '';
 export const LOGIN_ROUTE = 'login';
+
+export const LOGOUT_ROUTE = "logout"

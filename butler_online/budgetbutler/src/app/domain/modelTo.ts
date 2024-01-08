@@ -18,7 +18,7 @@ export class GemeinsameBuchungAnlegenTO {
   public datum: string;
   public kategorie: string;
   public wert: number;
-  public zielperson: string;
+  public eigeneBuchung: boolean;
 }
 
 

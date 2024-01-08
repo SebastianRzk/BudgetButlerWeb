@@ -23,7 +23,6 @@ export class AddschnelleinstiegComponent implements OnInit {
   });
 
   kategorien: Observable<string[]>;
-  personenName: string;
 
   constructor(
     private einzelbuchungsService: EinzelbuchungService,
@@ -34,7 +33,6 @@ export class AddschnelleinstiegComponent implements OnInit {
 
   ngOnInit() {
     this.kategorien = this.kategorieService.getAll();
-    this.authService.getLogin().pipe(first()).toPromise().then(data => this.personenName = data.userName);
   }
 
   onFormSubmit() {
@@ -48,7 +46,7 @@ export class AddschnelleinstiegComponent implements OnInit {
         datum: this.buchungForm.get('datum').value,
         kategorie: this.buchungForm.get('kategorie').value,
         wert: this.buchungForm.get('wert').value * -1,
-        zielperson: this.personenName
+        eigeneBuchung: true
       };
       this.gemeinsameBuchungenService.save(neueBuchung);
     } else {

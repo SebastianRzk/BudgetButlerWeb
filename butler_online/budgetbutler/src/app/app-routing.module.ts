@@ -9,15 +9,17 @@ import {
   ADD_SCHNELLEINSTIEG_ROUTE,
   ALLE_EINZELBUCHUNGEN_ROUTE,
   ALLE_GEMEINSAME_BUCHUNGEN_ROUTE,
-  LOGIN_ROUTE,
+  LOGIN_ROUTE, LOGOUT_ROUTE,
   ROOT_ROUTE,
   SETTINGS_ROUTE
 } from './app-routes';
 import {AuthGuard} from './pages/auth/auth.guard';
+import {LogoutComponent} from "./pages/auth/logout/logout.component";
 
 
 const routes: Routes = [
   {path: LOGIN_ROUTE, component: LoginComponent},
+  {path: LOGOUT_ROUTE, component: LogoutComponent},
 
   {path: ADD_SCHNELLEINSTIEG_ROUTE, component: AddschnelleinstiegComponent, canActivate: [AuthGuard]},
   {path: ALLE_EINZELBUCHUNGEN_ROUTE, component: AllebuchungenComponent, canActivate: [AuthGuard]},

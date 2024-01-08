@@ -69,14 +69,10 @@ export class AuthService {
     );
   }
 
-  public getLogin: () => Observable<AuthContainer> = () => this.httpClient.get<AuthContainer>(this.api.getUrl('login/user'));
-
-
-  logout(): void {
-    this.httpClient.get<null>(this.api.getUrl('logout')).subscribe(() => {
-      this.handleLogOut();
-    });
+  callLogout(): Observable<LogoutState> {
+    return this.httpClient.post<LogoutState>(this.api.getUrl("login/logout"), {});
   }
+
 
   handleLogOut() {
     this.auth.next(LOGGED_OUT);
@@ -93,3 +89,8 @@ export const LOGGED_OUT: AuthContainer = {
   userName: '',
   loggedIn: false,
 };
+
+export interface LogoutState {
+  id_token: string,
+  logoutUrl?: string,
+}

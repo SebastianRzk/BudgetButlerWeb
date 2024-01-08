@@ -31,6 +31,7 @@ import {AllegemeinsamebuchungenComponent} from './pages/allegemeinsamebuchungen/
 import {AddschnelleinstiegComponent} from './pages/addschnelleinstieg/addschnelleinstieg.component';
 import {SidebarToggleComponent} from './pages/sidebar/sidebar-toggle/sidebar-toggle.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { LogoutComponent } from './pages/auth/logout/logout.component';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     AllegemeinsamebuchungenComponent,
     AddschnelleinstiegComponent,
     SidebarToggleComponent,
+    LogoutComponent,
   ],
     imports: [
         BrowserModule,
