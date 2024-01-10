@@ -11,10 +11,11 @@ _JSON_IMPORT_DATA = '''
 ]
 '''
 
-def test_import_einzelbuchungen():
-    requester.INSTANCE = RequesterStub({'https://test.test/einzelbuchung.php': _JSON_IMPORT_DATA})
 
-    result = get_einzelbuchungen('https://test.test', auth_container=OnlineAuth(None, None, None))
+def test_import_einzelbuchungen():
+
+    requester.INSTANCE = RequesterStub({'https://test.test/api/einzelbuchungen': _JSON_IMPORT_DATA})
+    result = get_einzelbuchungen('https://test.test/', auth_container=OnlineAuth(None, None))
 
     assert result[0]["id"] == "122"
     assert result[0]["name"] == "Testausgabe1"
@@ -23,9 +24,9 @@ def test_import_einzelbuchungen():
 
 
 def test_delete_einzelbuchhungen():
-    requester.INSTANCE = RequesterStub({'https://test.test/deleteitems.php': 'ok'})
+    requester.INSTANCE = RequesterStub({'https://test.test/api/einzelbuchungen': 'ok'})
 
-    delete_einzelbuchungen('https://test.test', auth_container=OnlineAuth(None, None, None))
+    delete_einzelbuchungen('https://test.test/', auth_container=OnlineAuth(None, None))
 
-    assert requester.INSTANCE.call_count_of('https://test.test/deleteitems.php') == 1
+    assert requester.INSTANCE.call_count_of('https://test.test/api/einzelbuchungen') == 1
 

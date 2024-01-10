@@ -13,18 +13,30 @@ def instance():
 
 class Requester:
 
-    def get(self, server_url):
+    def get(self, server_url, cookies=None):
         logging.info('requested url %s', server_url)
-        response = requests.get(server_url)
-        logging.info(response, self.decode(response))
+        response = requests.get(server_url, cookies=cookies)
+        logging.info("response: %s", response)
+        logging.info("decoded reponse %s", self.decode(response))
         response.raise_for_status()
         return self.decode(response)
+
+    def delete(self, server_url, cookies=None):
+        logging.info('requested url %s', server_url)
+        response = requests.delete(server_url, cookies=cookies)
+        logging.info("response: %s", response)
+        logging.info("decoded reponse %s", self.decode(response))
+        response.raise_for_status()
+        return self.decode(response)
+
 
     def post(self, server_url, data: dict = None, cookies=None):
         if not data:
             data = {}
-        logging.info('requested url %s', server_url, data)
-        response = requests.post(server_url, data=data, cookies=cookies)
+        logging.info('requested url for post %s', server_url)
+        logging.info("data %s", data)
+        logging.info("cookies %s", cookies)
+        response = requests.post(url=server_url, json=data, cookies=cookies)
         response.raise_for_status()
         return self.decode(response)
 
@@ -35,13 +47,7 @@ class Requester:
         return decoded_response
 
     def post_raw(self, server_url, data):
-        logging.info('requested url', server_url, data)
+        logging.info('requested url %s', server_url)
         response = requests.post(server_url, data=data)
         response.raise_for_status()
         return response
-
-    def put(self, server_url, data, cookies):
-        logging.info('requested url %s %s', server_url, data)
-        response = requests.put(url=server_url, json=data, cookies=cookies)
-        response.raise_for_status()
-        return self.decode(response)

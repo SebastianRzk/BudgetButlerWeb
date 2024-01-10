@@ -32,6 +32,7 @@ import {AddschnelleinstiegComponent} from './pages/addschnelleinstieg/addschnell
 import {SidebarToggleComponent} from './pages/sidebar/sidebar-toggle/sidebar-toggle.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { LogoutComponent } from './pages/auth/logout/logout.component';
+import { OfflineLoginComponent } from './pages/offline-login/offline-login.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { LogoutComponent } from './pages/auth/logout/logout.component';
     AddschnelleinstiegComponent,
     SidebarToggleComponent,
     LogoutComponent,
+    OfflineLoginComponent,
   ],
     imports: [
         BrowserModule,

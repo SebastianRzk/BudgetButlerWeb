@@ -267,7 +267,7 @@ def test_get_renamed_list():
         3.33,
         'unknown')
 
-    result = component_under_test.get_renamed_list('offline user', 'online user', 'offline partner', 'online partner')
+    result = component_under_test.get_list()
 
     assert result == [
         {
@@ -275,14 +275,14 @@ def test_get_renamed_list():
             'Name': 'name1',
             'Kategorie': 'kategorie1',
             'Wert': 1.11,
-            'Person': 'online user'
+            'Person': 'offline user'
         },
         {
             'Datum': datum('2.2.2020'),
             'Name': 'name2',
             'Kategorie': 'kategorie2',
             'Wert': 2.22,
-            'Person': 'online partner'
+            'Person': 'offline partner'
         },
         {
             'Datum': datum('3.3.2020'),

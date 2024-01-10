@@ -14,6 +14,7 @@ from butler_offline.views.core import dashboard, \
     testmode_switch, \
     theme, \
     health
+from butler_offline.views.core import online_callback
 from butler_offline.views.core.configuration import rename_kategorie
 from butler_offline.views.einzelbuchungen import addausgabe, \
     adddauerauftrag, \
@@ -46,7 +47,7 @@ from butler_offline.views.sparen import uebersicht_sparen, \
 
 app = Flask(__name__)
 
-if app.debug or "pytest" in sys.modules or 'INTEGRATION_TESTS' in os.environ.keys():
+if app.debug or "pytest" in sys.modules or 'INTEGRATION_TESTS' in os.environ.keys() or 'DEBUG' in os.environ.keys():
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 else:
     handler = RotatingFileHandler('logs/flask.log', maxBytes=10_000, backupCount=2)
@@ -224,6 +225,11 @@ def display_sparen_uebersicht():
 @app.route(routes.SPAREN_UEBERSICHT_ETFS, methods=['GET', 'POST'])
 def display_sparen_uebersicht_etfs():
     return uebersicht_etfs.index(request)
+
+
+@app.route(routes.ONLINE_CALLBACK, methods=['GET'])
+def display_online_callback():
+    return online_callback.index(request)
 
 
 @app.route('/theme/')

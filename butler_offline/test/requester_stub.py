@@ -3,13 +3,11 @@ import logging
 
 
 class RequesterStub:
-    def __init__(self, mocked_requests, mocked_decode='', auth_cookies=''):
+    def __init__(self, mocked_requests):
         self.mocked_requests = mocked_requests
         self.call_count = {}
-        self.mocked_decode = mocked_decode
         for url in mocked_requests.keys():
             self.call_count[url] = []
-        self.auth_cookies = auth_cookies
 
     def post(self, url, data: dict | None = None, cookies=None):
         if not data:
@@ -21,7 +19,17 @@ class RequesterStub:
         logging.error('ERROR, NON MATCHING REQUEST: %s %s', url, data)
         return None
 
-    def get(self, url):
+    def delete(self, url, data: dict | None = None, cookies=None):
+        if not data:
+            data = {}
+        logging.info('-----------------' + url)
+        if url in self.mocked_requests:
+            self.call_count[url].append(data)
+            return self.mocked_requests[url]
+        logging.error('ERROR, NON MATCHING REQUEST: %s %s', url, data)
+        return None
+
+    def get(self, url, cookies=None):
         logging.info('-----------------' + url)
         if url in self.mocked_requests:
             self.call_count[url].append('')
@@ -31,14 +39,6 @@ class RequesterStub:
 
     def post_raw(self, url, data):
         return self.post(url, data)
-
-    def put(self, url, data, cookies):
-        if not self.auth_cookies == cookies:
-            return 'error, auth not valid'
-        return self.post(url, data)
-
-    def decode(self, request):
-        return self.mocked_decode
 
     def call_count_of(self, url):
         if url not in self.call_count:
