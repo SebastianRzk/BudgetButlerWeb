@@ -48,6 +48,8 @@ mod openidconnect_configuration;
 mod result_dto;
 mod user;
 
+mod database_migrations;
+
 type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 
 #[actix_web::main]
@@ -66,6 +68,11 @@ async fn main() -> std::io::Result<()> {
     let sessions = web::Data::new(RwLock::new(openidconnect_configuration::Sessions {
         map: HashMap::new(),
     }));
+
+    log::info!("Running database migrations");
+    let mut connection = pool.get().unwrap();
+    database_migrations::run_migrations(&mut connection).unwrap();
+    log::info!("Database migations finished");
 
     log::info!("starting HTTP server at http://localhost:8080");
 

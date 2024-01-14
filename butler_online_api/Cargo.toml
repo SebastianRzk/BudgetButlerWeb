@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 actix-web = { version = "4.4.1" }
 diesel = { version = "2", features = ["mysql", "r2d2", "numeric", "time"] }
+diesel_migrations = "2.1.0"
 dotenvy = { version = "0.15.7" }
 bigdecimal = { version = "0.4.2", features = ["serde"] }
 time = { version = "0.3.31", features = ["serde"]}

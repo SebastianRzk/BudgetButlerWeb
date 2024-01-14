@@ -177,10 +177,12 @@ BudgetButlerWeb aktualisieren:
 
 
 Entweder:
+
 * npm
 * rust und mysql library (z.B. MariaDB)
 
 oder:
+
 * docker
 
 ### Systemanforderung für den Betrieb:
