@@ -178,7 +178,7 @@ BudgetButlerWeb aktualisieren:
 
 Entweder:
 * npm
-* composer + php 8+
+* rust und mysql library (z.B. MariaDB)
 
 oder:
 * docker
@@ -198,24 +198,10 @@ oder:
 
         cd BudgetButlerWeb
 
-* Für http (und nicht https Betrieb) in der Datei `butler_online_api/api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
-
-* Build in das Verzeichnis `butler_online_distribution` triggern
-
-        sh butler_online_install/build_images.sh
-
-
-* Folgenden Befehl ausführen `docker-compose up` in `butler_online_distribution/budget_butler`
-
-* Login auf `/`. Initiale Anmeldedaten:
-  * User: admin@admin.de
-  * Password: adminadminadmin
-
 
 ## Ideen für die Zukunft / bekannte Limitierungen
 
 * Aktuell werden die Daten nur für eine retrospektive Visualisierung verwendet. Dabei könnte man die Daten auch für eine Projektion in die Zukunft verwenden. Dies konnte bei den Einnachmen/ Ausgaben sowie auch bei den Spar-Plänen nützlich sein.
-* Das Backend der Begleiter Web-App ist alt und unterstützt nicht moderne Anmeldeverfahren wie OpenID. Ggf Reimplementierung auf neuem Tech-Stack.
 * Implementierung von Tags an Einzelbuchung, um neben den der "Kategorie" noch weitere sortier- und durchsuchbare Marker zur Verfügung zu stellen. (Zum Beispiel Marker wie "steuerlich Absetzbar" oder "Weihnachtsgeschenke" oder "Sommerurlaub")
 * BudgetButlerWeb Anwendung im AUR verfügbar machen, damit Aktualisierungen automatisch über yay durchgeführt werden.
 * Codequalität und Testabdeckung automatisiert und langfristig tracken (z.B. durch SonarCloud)

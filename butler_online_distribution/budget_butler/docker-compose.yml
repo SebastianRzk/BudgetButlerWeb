@@ -4,13 +4,11 @@ services:
     image: sebastianrzk/budgetbutlerweb-companion-static
     ports:
       - "80:80"
-    env_file:
-      - db.env
     restart: unless-stopped
-  budget-butler-fpm:
-    image: sebastianrzk/budgetbutlerweb-companion-fpm
+  budget-butler-api:
+    image: sebastianrzk/budgetbutlerweb-companion-api
     env_file:
-      - db.env
+      - api.env
     restart: unless-stopped
 
   db:
