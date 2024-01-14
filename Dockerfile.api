@@ -8,5 +8,10 @@ RUN ls -la /app/target/release
 
 
 # Assembly
-FROM alpine
-COPY --from=build-step-rust /app/target/release/budgetbutlerweb-companion-backend /
+FROM debian:stable-slim
+RUN mkdir /app
+RUN apt-get update && apt-get install libmariadb-dev openssl ca-certificates --yes && apt-get clean
+COPY --from=build-step-rust /app/target/release/budgetbutlerweb-companion-backend /app/budgetbutlerweb-companion-backend
+WORKDIR /app
+EXPOSE 8080
+ENTRYPOINT ["./budgetbutlerweb-companion-backend"]

@@ -112,7 +112,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
             serverurl = request.values['server']
             serverurl = add_protokoll_if_needed(serverurl)
             serverurl = add_trailing_slash_if_needed(serverurl)
-            _save_server_creds(context.conf(), serverurl, request.values['email'])
+            _save_server_creds(context.conf(), serverurl)
 
             def authenticated_function(auth_container: OnlineAuth) -> PageContext:
                 return load_einzelbuchungen_authenticated(auth_container=auth_container, context=context,
@@ -126,7 +126,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
             serverurl = request.values['server']
             serverurl = add_protokoll_if_needed(serverurl)
             serverurl = add_trailing_slash_if_needed(serverurl)
-            _save_server_creds(context.conf(), serverurl, request.values['email'])
+            _save_server_creds(context.conf(), serverurl)
             logging.info(serverurl)
 
             def authenticated_function(auth_container: OnlineAuth) -> PageContext:
@@ -142,7 +142,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
 
             serverurl = add_protokoll_if_needed(serverurl)
             serverurl = add_trailing_slash_if_needed(serverurl)
-            _save_server_creds(conf=context.conf(), serverurl=serverurl, email=request.values['email'])
+            _save_server_creds(conf=context.conf(), serverurl=serverurl)
 
             def authenticated_function(auth_container: OnlineAuth) -> PageContext:
                 delete_kategorien(serverurl, auth_container=auth_container)
@@ -159,7 +159,7 @@ def handle_request_internally(request: Request, context: ImportDataContext, impo
             serverurl = request.values['server']
             serverurl = add_protokoll_if_needed(serverurl)
             serverurl = add_trailing_slash_if_needed(serverurl)
-            _save_server_creds(conf=context.conf(), serverurl=serverurl, email=request.values['email'])
+            _save_server_creds(conf=context.conf(), serverurl=serverurl)
             logging.info(serverurl)
 
             def authenticated_function(auth_container: OnlineAuth) -> PageContext:
@@ -335,9 +335,8 @@ def add_trailing_slash_if_needed(serverurl: str) -> str:
         return serverurl
     return serverurl + '/'
 
-def _save_server_creds(conf: ConfigurationProvider, serverurl: str, email: str):
+def _save_server_creds(conf: ConfigurationProvider, serverurl: str):
     conf.set_configuration('ONLINE_DEFAULT_SERVER', serverurl)
-    conf.set_configuration('ONLINE_DEFAULT_USER', email)
 
 
 def index(request):

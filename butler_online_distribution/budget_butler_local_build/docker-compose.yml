@@ -1,12 +1,14 @@
 version: '3'
 services:
   budget-butler-static:
-    image: sebastianrzk/budgetbutlerweb-companion-static
+    image: local-budgetbutlerweb-companion-static
     ports:
       - "80:80"
     restart: unless-stopped
+    networks:
+      - butler-internal
   budget-butler-api:
-    image: sebastianrzk/budgetbutlerweb-companion-api
+    image: local-budgetbutlerweb-companion-api
     env_file:
       - api.env
     restart: unless-stopped

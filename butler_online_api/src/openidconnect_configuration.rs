@@ -61,9 +61,6 @@ impl FromRequest for User {
                 .map_err(error::ErrorInternalServerError)?
                 .id()
                 .ok();
-            eprintln!("{}", id.clone().unwrap());
-            eprintln!("all keys {}", sessions.read().unwrap().map.is_empty());
-            //eprintln!("all keys {}", sessions.read().unwrap().map.get(&identity).clone().unwrap().0.email.unwrap());
 
             if let Some(identity) = id {
                 if let Some(user) = sessions
