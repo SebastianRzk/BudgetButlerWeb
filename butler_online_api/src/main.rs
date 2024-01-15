@@ -132,6 +132,6 @@ fn initialize_db_pool() -> DbPool {
     let manager = r2d2::ConnectionManager::<MysqlConnection>::new(conn_spec);
     r2d2::Pool::builder()
         .build(manager)
-        .expect("database URL should be valid path to SQLite DB file")
+        .expect("DATABASE_URL should be valid url to a MySQL / MariaDB database")
 }
 
