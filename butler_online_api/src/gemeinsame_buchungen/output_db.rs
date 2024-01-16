@@ -65,12 +65,12 @@ pub fn find_all_gemeinsame_buchungen(
                 user.eq(user_name.clone())
                     .or(user.eq(partnerstatus.zielperson)),
             )
-            .order(datum.desc())
+            .order(datum.asc())
             .get_results(conn);
     } else {
         alle_gemeinsame_buchungen = gemeinsame_buchungen
             .filter(user.eq(user_name.clone()))
-            .order(datum.desc())
+            .order(datum.asc())
             .get_results(conn);
     }
 

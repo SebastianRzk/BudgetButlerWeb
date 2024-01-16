@@ -54,7 +54,7 @@ pub fn find_all_einzelbuchungen(
 
     let alle_einzelbuchungen = einzelbuchungen
         .filter(user.eq(user_name))
-        .order(datum.desc())
+        .order(datum.asc())
         .get_results(conn);
 
     Ok(alle_einzelbuchungen
