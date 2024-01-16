@@ -21,6 +21,7 @@ services:
       - db:/var/lib/mysql
     env_file:
       - db.env
+    command: --max_allowed_packet=67108864
     restart: unless-stopped
     networks:
       - butler-db
