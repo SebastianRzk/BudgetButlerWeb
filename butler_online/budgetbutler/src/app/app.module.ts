@@ -26,11 +26,13 @@ import {HttpClientModule} from '@angular/common/http';
 import {SidebarComponent} from './pages/sidebar/sidebar/sidebar.component';
 import {AllebuchungenComponent} from './pages/allebuchungen/allebuchungen.component';
 import {SettingsComponent} from './pages/settings/settings.component';
-import {AdduserComponent} from './pages/settings/adduser/adduser.component';
 import {PartnernameComponent} from './pages/settings/partnername/partnername.component';
 import {AllegemeinsamebuchungenComponent} from './pages/allegemeinsamebuchungen/allegemeinsamebuchungen.component';
 import {AddschnelleinstiegComponent} from './pages/addschnelleinstieg/addschnelleinstieg.component';
 import {SidebarToggleComponent} from './pages/sidebar/sidebar-toggle/sidebar-toggle.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { LogoutComponent } from './pages/auth/logout/logout.component';
+import { OfflineLoginComponent } from './pages/offline-login/offline-login.component';
 
 
 @NgModule({
@@ -40,36 +42,38 @@ import {SidebarToggleComponent} from './pages/sidebar/sidebar-toggle/sidebar-tog
     SidebarComponent,
     AllebuchungenComponent,
     SettingsComponent,
-    AdduserComponent,
     PartnernameComponent,
     AllegemeinsamebuchungenComponent,
     AddschnelleinstiegComponent,
     SidebarToggleComponent,
+    LogoutComponent,
+    OfflineLoginComponent,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    MatSlideToggleModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatCardModule,
-    MatSidenavModule,
-    MatSnackBarModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatTableModule,
-    MatSortModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatChipsModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        MatSlideToggleModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatCheckboxModule,
+        MatChipsModule,
+        MatCardModule,
+        MatSidenavModule,
+        MatSnackBarModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTableModule,
+        MatSortModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MatChipsModule,
+        MatProgressSpinnerModule
+    ],
   providers: [
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
   ],

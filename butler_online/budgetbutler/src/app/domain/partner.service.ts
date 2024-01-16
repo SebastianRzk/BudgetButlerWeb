@@ -18,28 +18,28 @@ export class PartnerService {
     if (!this.partnerNameSubject) {
       this.partnerNameSubject = new Subject();
     }
-    this.httpClient.get<PartnerInfo>(this.api.getUrl('partner.php')).toPromise().then(data => this.partnerNameSubject.next(data));
+    this.httpClient.get<PartnerInfo>(this.api.getUrl('partnerstatus')).toPromise().then(data => this.partnerNameSubject.next(data));
     return this.partnerNameSubject.asObservable();
   }
 
   setPartner: (name: string) => Observable<Result> = (name: string) => {
-    const partnerInfo: PartnerInfoRequest = {
-      partnername: name
+    const partnerInfo: PartnerInfoDto = {
+      zielperson: name
     };
-    return this.httpClient.put<Result>(this.api.getUrl('partner.php'), partnerInfo);
+    return this.httpClient.post<Result>(this.api.getUrl('partnerstatus'), partnerInfo);
   }
 
   deletePartner: () => Observable<Result> = () => {
-    return this.httpClient.delete<Result>(this.api.getUrl('partner.php'));
+    return this.httpClient.delete<Result>(this.api.getUrl('partnerstatus'));
   }
 }
 
 
 export interface PartnerInfo {
-  partnername: string;
-  confirmed: boolean;
+  zielperson: string;
+  bestaetigt: boolean;
 }
 
-export interface PartnerInfoRequest {
-  partnername: string;
+export interface PartnerInfoDto {
+  zielperson: string;
 }

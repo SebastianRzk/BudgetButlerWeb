@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Einzelbuchung, EinzelbuchungAnlegen, EinzelbuchungLoeschen, ERROR_LOADING_EINZELBUCHUNGEN, ERROR_RESULT, Result} from './model';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {ApiproviderService} from './apiprovider.service';
 import {NotificationService} from './notification.service';
 import {toEinzelbuchungAnlegenTO} from './mapper';
@@ -18,7 +18,7 @@ export class EinzelbuchungService {
   }
 
   public save(einzelBuchung: EinzelbuchungAnlegen) {
-    this.httpClient.put<Result>(this.api.getUrl('einzelbuchung.php'), toEinzelbuchungAnlegenTO(einzelBuchung)).toPromise().then(
+    this.httpClient.post<Result>(this.api.getUrl('einzelbuchung'), toEinzelbuchungAnlegenTO(einzelBuchung)).toPromise().then(
       data => this.notification.handleServerResult(data, 'Speichern der Ausgabe'),
       error => this.notification.handleServerResult(ERROR_RESULT, 'Speichern der Ausgabe')
     );
@@ -26,16 +26,13 @@ export class EinzelbuchungService {
 
 
   public refresh(): void {
-    this.httpClient.get<Einzelbuchung[]>(this.api.getUrl('einzelbuchung.php')).subscribe(
+    this.httpClient.get<Einzelbuchung[]>(this.api.getUrl('einzelbuchungen')).subscribe(
       x => this.einzelbuchungen.next(x),
       error => this.notification.log(ERROR_LOADING_EINZELBUCHUNGEN, ERROR_LOADING_EINZELBUCHUNGEN.message));
   }
 
   public delete(einzelbuchungLoeschen: EinzelbuchungLoeschen) {
-    const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'}), body: einzelbuchungLoeschen
-    };
-    this.httpClient.delete<Result>(this.api.getUrl('einzelbuchung.php'), httpOptions).toPromise().then(
+    this.httpClient.delete<Result>(this.api.getUrl('einzelbuchung/' + einzelbuchungLoeschen.id)).toPromise().then(
       data => {
         this.notification.handleServerResult(data, 'Löschen der Ausgabe');
         this.refresh();

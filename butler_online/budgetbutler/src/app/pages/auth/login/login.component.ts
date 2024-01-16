@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ADD_SCHNELLEINSTIEG_ROUTE} from '../../../app-routes';
-import {take} from 'rxjs/operators';
+import {debounce, skip, take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -12,32 +12,20 @@ import {take} from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm = new FormGroup({
-    email: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required)
-  });
-
-  hide = true;
-
 
   constructor(public authService: AuthService, public router: Router) {
   }
 
 
   ngOnInit() {
-    this.authService.auth$.pipe(take(2)).subscribe(status => {
-      if (status.isLoggedIn) {
+    this.authService.auth$.pipe(skip(1)).pipe(take(1)).subscribe(status => {
+      if (status.loggedIn) {
         this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
+      } else {
+        window.location.href = "/api/login/oauth2/authorization/oidc";
       }
     });
     this.authService.checkLoginState();
   }
 
-
-  login() {
-    if (!this.loginForm.valid) {
-      return;
-    }
-    this.authService.login(this.loginForm.get('email').value, this.loginForm.get('password').value);
-  }
 }

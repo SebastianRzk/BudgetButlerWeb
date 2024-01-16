@@ -1,26 +1,26 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {ApiproviderService} from '../../domain/apiprovider.service';
-import {NotificationService} from '../../domain/notification.service';
-import {ERROR_LOGIN_RESULT, Result} from '../../domain/model';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {ADD_SCHNELLEINSTIEG_ROUTE} from '../../app-routes';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { ApiproviderService } from '../../domain/apiprovider.service';
+import { NotificationService } from '../../domain/notification.service';
+import { ERROR_LOGIN_RESULT } from '../../domain/model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ADD_SCHNELLEINSTIEG_ROUTE, LOGIN_OFFLINE_ROUTE, LOGIN_ROUTE } from '../../app-routes';
+import { LocalStorageService } from '../../local-storage.service';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  redirectUrl = '';
-
   private auth = new BehaviorSubject<AuthContainer>(LOGGED_OUT);
   public readonly auth$ = this.auth.asObservable();
 
   constructor(private httpClient: HttpClient,
               private router: Router,
               private api: ApiproviderService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private localStorageService: LocalStorageService) {
   }
 
   login(username: string, password: string) {
@@ -28,16 +28,16 @@ export class AuthService {
     body.append('email', username);
     body.append('password', password);
 
-    this.httpClient.post<AuthContainer>(this.api.getUrl('login.php'), body).subscribe(
+    this.httpClient.post<AuthContainer>(this.api.getUrl('login/user'), body).subscribe(
       data => {
-        if (data != null && data.username) {
+        if (data != null && data.userName) {
           this.auth.next(
             {
-              username: data.username,
-              role: 'user',
-              isLoggedIn: true
+              userName: data.userName,
+              loggedIn: true
             }
           );
+
           this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
         } else {
           this.auth.next(LOGGED_OUT);
@@ -51,18 +51,34 @@ export class AuthService {
     );
   }
 
-  checkLoginState() {
-    this.httpClient.get<AuthContainer | null>(this.api.getUrl('login.php')).subscribe(
+  checkLoginState(forLocalLogin?: boolean) {
+    this.httpClient.get<AuthContainer | null>(this.api.getUrl('login/user')).subscribe(
       data => {
-        if (data != null && data.username) {
+        if (data != null && data.loggedIn) {
+          console.log(localStorage);
+          if (this.localStorageService.isOfflineLogin() || forLocalLogin) {
+            this.localStorageService.removeLocalLogin();
+            this.router.navigate([LOGIN_OFFLINE_ROUTE]);
+            if (forLocalLogin) {
+              this.auth.next(
+                {
+                  userName: data.userName,
+                  loggedIn: true
+                }
+              );
+            }
+            return;
+          }
           this.auth.next(
             {
-              username: data.username,
-              role: 'user',
-              isLoggedIn: true
+              userName: data.userName,
+              loggedIn: true
             }
           );
         } else {
+          if (forLocalLogin) {
+            this.localStorageService.setOfflineLogin();
+          }
           this.handleLogOut();
         }
       },
@@ -73,51 +89,28 @@ export class AuthService {
     );
   }
 
-  public getLogin: () => Observable<AuthContainer> = () => this.httpClient.get<AuthContainer>(this.api.getUrl('login.php'));
-
-
-  changePassword(oldPassword: string, newPassword: string) {
-    const body: ChangePasswordContainer = {
-      oldPassword,
-      newPassword
-    };
-    return this.httpClient.post<Result>(this.api.getUrl('changepassword.php'), body).toPromise().then(
-      data => {
-        this.notificationService.handleServerResult(data, 'Passwort ändern');
-      },
-      error => {
-        this.handleLogOut();
-      }
-    );
+  callLogout(): Observable<LogoutState> {
+    return this.httpClient.post<LogoutState>(this.api.getUrl("login/logout"), {});
   }
 
-
-  logout(): void {
-    this.httpClient.get<null>(this.api.getUrl('logout.php')).subscribe(() => {
-      this.handleLogOut();
-    });
-  }
 
   handleLogOut() {
     this.auth.next(LOGGED_OUT);
-    this.router.navigate(['login']);
+    this.router.navigate([LOGIN_ROUTE]);
   }
 }
 
 export class AuthContainer {
-  username: string;
-  role: string;
-  isLoggedIn: boolean;
+  userName: string;
+  loggedIn: boolean;
 }
 
 export const LOGGED_OUT: AuthContainer = {
-  username: '',
-  role: '',
-  isLoggedIn: false,
+  userName: '',
+  loggedIn: false,
 };
 
-
-class ChangePasswordContainer {
-  oldPassword: string;
-  newPassword: string;
+export interface LogoutState {
+  id_token: string,
+  logoutUrl?: string,
 }

@@ -30,7 +30,7 @@
 
 
 * Sparen
-  * Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte (mit Typ : ETF, Fond, Einzelaktie, Crypto oder Robo), Order, Order-Dauerauftraegen sowie Depotauszuege
+  * Erfassen, Ändern und Löschen von Sparkontos, Sparbuchungen, Depots, Depotwerte (mit Typ: ETF, Fond, Einzelaktie, Crypto oder Robo), Order, Order-Daueraufträgen sowie Depotauszüge
   * Sparen Übersicht:
     * Vergleich: Einnahmen, Ausgaben und Sparen über die Zeit
     * Zusammensetzung der Sparanlage
@@ -56,7 +56,7 @@
 
 ### Screenshots BudgetButlerWeb Offline Anwendung
 
-<img src="img/screenshots_desktop/dashboard.png" alt="Dasboard" width="300"/>
+<img src="img/screenshots_desktop/dashboard.png" alt="Dashboard" width="300"/>
 
 #### Einzelbuchungen
 
@@ -82,7 +82,6 @@
 
 ### Screenshots Begleiter Web-App
 
-<a href="img/screenshots_mobile/login.png"><img src="img/screenshots_mobile/login.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_mobile/menu.png"><img src="img/screenshots_mobile/menu.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_mobile/erfassen.png"><img src="img/screenshots_mobile/erfassen.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_mobile/erfassen_desktop.png"><img src="img/screenshots_mobile/erfassen_desktop.png" alt="Dasboard" width="300"/></a>
@@ -97,7 +96,7 @@
 * Python 3.10+
 * Pip
 * Versionierung: git
-* Anwendungs-Icon sowie Startup-Skript: shell und npm (für Electron-Client)
+* Anwendungsicon sowie Startup-Skript: shell und npm (für Electron-Client)
 * Falls nicht der Electron-Client verwendet wird: Webbrowser (z.B. Firefox oder Chromium)
 
 ### Installation
@@ -115,7 +114,7 @@ Optional: Anwendungsicon anlegen:
 
 ### BudgetButlerWeb starten
 
-Die Applikation kann über das Anwendungs-Icon gestartet werden. Der erste Start dauert durch die Installation der benötigten Abhängigkeiten etwas länger. Dies ist nur beim ersten Start der Anwendung nach dem Klonen des Repositories notwendig.
+Die Applikation kann über das Anwendungsicon gestartet werden. Der erste Start dauert durch die Installation der benötigten Abhängigkeiten etwas länger. Dies ist nur beim ersten Start der Anwendung nach dem Klonen des Repositories notwendig.
 
 
 Alternativ kann das Start-Skript manuell aufgerufen werden. Dieses startet das Backend und das Frontend automatisch. Beim ersten Start werden ggf. fehlende Abhängigkeiten nachinstalliert (für Python über `venv` und `pip`, `npm` installiert den Electron-Client):
@@ -142,7 +141,7 @@ Alternativ kann der Server auch manuell gestartet werden:
 
 ### Softwaretests ausführen
 
-Alle Softwaretestsmit pytest starten:
+Alle Softwaretests mit pytest starten:
 
 	pytest butler_offline
 
@@ -173,51 +172,64 @@ BudgetButlerWeb aktualisieren:
 
 ## Begleiter Web-App:
 
-### Systemanfoderungen zum Build
+### Build
 
+#### Anforderungen zum Build
 
-Entweder:
+##### Build in der Entwicklungsumgebung
+
+Systemanforderungen: 
+
 * npm
-* composer + php 8+
+* rust und mysql library (z.B. MariaDB)
+
+Vorgehen:
+
+* Frontend:
+
+  * In das Verzeichnis `butler_online/budgetbutler` wechseln
+  * Mit `npm install` fehlende Abhängigkeiten installieren
+  * Angular-Build anstoßen `npm run build -- --configuration=production`
+
+* Backend:
+
+  * In das Verzeichnis `butler_online_api` wechseln
+  * Rust-Build anstoßen `cargo build --release`
 
 oder:
-* docker
 
-### Systemanforderung für den Betrieb:
+Systemanforderungen:
+
+* docker (und docker-compose)
+
+Vorgehen:
+
+* In das Verzeichnis `butler_online_distribution/budget_butler_local_build` wechseln
+* Build-Skript ausführen: `sh build_and_run_it.sh`
+
+
+
+###  Betrieb:
+
+Systemanforderungen für den Betrieb:
 
 * docker und docker-compose
 
-
-### Installation docker + docker-compose
-
-* Repo clonen
-
-        git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
-
-* Ins Projektverzeichnis wechseln
-
-        cd BudgetButlerWeb
-
-* Für http (und nicht https Betrieb) in der Datei `butler_online_api/api/util/creds.php` in der Methode `online` den Rückgabewert auf `false` ändern
-
-* Build in das Verzeichnis `butler_online_distribution` triggern
-
-        sh butler_online_install/build_images.sh
-
-
-* Folgenden Befehl ausführen `docker-compose up` in `butler_online_distribution/budget_butler`
-
-* Login auf `/`. Initiale Anmeldedaten:
-  * User: admin@admin.de
-  * Password: adminadminadmin
+Ein Beispiel-Docker-Compose-File kann in `butler_online_distribution/budget_butler` eingesehen werden.
+Für den Betrieb müssen in `api.env` sowie in `db.env` Parameter beispielsweise für den OAuth-Flow ergänzt werden.
 
 
 ## Ideen für die Zukunft / bekannte Limitierungen
 
-* Aktuell werden die Daten nur für eine retrospektive Visualisierung verwendet. Dabei könnte man die Daten auch für eine Projektion in die Zukunft verwenden. Dies konnte bei den Einnachmen/ Ausgaben sowie auch bei den Spar-Plänen nützlich sein.
-* Das Backend der Begleiter Web-App ist alt und unterstützt nicht moderne Anmeldeverfahren wie OpenID. Ggf Reimplementierung auf neuem Tech-Stack.
-* Implementierung von Tags an Einzelbuchung, um neben den der "Kategorie" noch weitere sortier- und durchsuchbare Marker zur Verfügung zu stellen. (Zum Beispiel Marker wie "steuerlich Absetzbar" oder "Weihnachtsgeschenke" oder "Sommerurlaub")
+### BudgetButlerWeb Offline
+
+* Aktuell werden die Daten nur für eine retrospektive Visualisierung verwendet. Dabei könnte man die Daten auch für eine Projektion in die Zukunft verwenden. Dies konnte bei den Einnahmen/ Ausgaben sowie auch bei den Spar-Plänen nützlich sein.
+* Implementierung von Tags an Einzelbuchung, um neben den der "Kategorie" noch weitere sortier- und durchsuchbare Marker zur Verfügung zu stellen. (Zum Beispiel Marker wie "steuerlich absetzbar" oder "Weihnachtsgeschenke" oder "Sommerurlaub")
 * BudgetButlerWeb Anwendung im AUR verfügbar machen, damit Aktualisierungen automatisch über yay durchgeführt werden.
 * Codequalität und Testabdeckung automatisiert und langfristig tracken (z.B. durch SonarCloud)
 
+### BudgetButlerWeb Begleiter App
+
+* Daueraufträge in Online-Version realisieren (automatisches Erstellen von Einzelbuchungen anhand eines vordefinierten Rhythmus)
+* Codequalität und Testabdeckung automatisiert und langfristig tracken (z.B. durch SonarCloud)
 

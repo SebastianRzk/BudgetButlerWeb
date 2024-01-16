@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 import {AuthService} from './auth.service';
-import {map, take} from 'rxjs/operators';
+import { map, skip, take } from 'rxjs/operators';
 import {LOGIN_ROUTE} from '../../app-routes';
 import {Observable} from 'rxjs';
 
@@ -16,10 +16,11 @@ export class AuthGuard  {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
-    return this.authService.auth$.pipe(take(1)).pipe(map(
+    this.authService.checkLoginState();
+    return this.authService.auth$.pipe(skip(1)).pipe(take(1)).pipe(map(
       auth => {
         console.log(auth);
-        if (!auth.isLoggedIn) {
+        if (!auth.loggedIn) {
           console.log('routing away');
           this.router.navigate([LOGIN_ROUTE]);
           return false;

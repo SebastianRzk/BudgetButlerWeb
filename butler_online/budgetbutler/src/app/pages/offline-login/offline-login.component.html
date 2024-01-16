@@ -1,0 +1,18 @@
+<div class="login-page">
+  <div class="login-page-content">
+    <div class="logo">
+      <img alt="BudgetButlerWeb" src="../../../../assets/logo.svg">
+    </div>
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title>Lokales Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <button mat-raised-button color="primary" (click)="navigate()" [disabled]="disabled$ | async">Lokale Anwendung
+          authentifizieren
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

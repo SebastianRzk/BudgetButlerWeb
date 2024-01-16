@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+      MYSQL_PASSWORD: butler
+      MYSQL_DATABASE: butler
+      MYSQL_USER: butler
+    expose:
+      - 3306

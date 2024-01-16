@@ -1,32 +1,19 @@
-import numpy as np
 import datetime
 
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.test.request_stubs import GetRequest, PostRequest
+import numpy as np
+
 from butler_offline.core import file_system, configuration_provider
-from butler_offline.views.shared import import_data
-from butler_offline.views.core import configuration
-from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.viewcore import requester
-from butler_offline.test.requester_stub import RequesterStub, MockedResponse
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-
-LOGIN_COOKIES = 'login cookies'
-
-_JSON_DATA_USERNAME = '''
-{
-    "username": "TestUser",
-    "token": "0x00",
-    "role": "User"
-}
-'''
-
-LOGIN_RESPONSE = MockedResponse(_JSON_DATA_USERNAME, LOGIN_COOKIES)
-
-DECODED_LOGIN_DATA = '''{
-    "username": "online user name"
-}'''
+from butler_offline.online_services.butler_online.session import OnlineAuth
+from butler_offline.test.core.file_system_stub import FileSystemStub
+from butler_offline.test.request_stubs import GetRequest, PostRequest
+from butler_offline.test.requester_stub import RequesterStub
+from butler_offline.viewcore import requester
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.viewcore.state.non_persisted_state import NonPersistedContext
+from butler_offline.views.core import configuration
+from butler_offline.views.shared import import_data
 
 
 def test_pad_protocoll_with_no_protocoll_should_add_https():
@@ -198,19 +185,22 @@ def test_einzelbuchung_import_adde_passende_kategorie_should_import_value():
     einzelbuchungen = Einzelbuchungen()
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
 
-    requester.INSTANCE = RequesterStub(
-        {'https://test.test/einzelbuchung.php': _JSON_IMPORT_DATA,
-         'https://test.test/deleteitems.php': '',
-         'https://test.test/login.php': LOGIN_RESPONSE},
-        mocked_decode=DECODED_LOGIN_DATA)
+    requester.INSTANCE = RequesterStub({'https://test.test/api/einzelbuchungen': _JSON_IMPORT_DATA})
 
+    page_context = get_initial_context(einzelbuchungen=einzelbuchungen)
     context = import_data.handle_request(
         request=PostRequest({'action': 'load_online_transactions',
                              'email': '',
-                             'server': 'test.test',
+                             'server': 'test.test/',
                              'password': ''}),
-        context=get_initial_context(einzelbuchungen=einzelbuchungen)
+        context=page_context
     )
+
+    assert context.is_ok()
+    assert context.is_redirect()
+    assert context.redirect_target_url() == 'https://test.test/offlinelogin'
+
+    context = page_context.non_persisted_state().butler_online_function(any_auth())
 
     assert context.is_ok()
     assert context.get_page_context_map()['element_titel'] == 'Export / Import'
@@ -230,8 +220,11 @@ def test_einzelbuchung_import_adde_passende_kategorie_should_import_value():
                                       'Wert': -1.3,
                                       'index': 2}
 
-    assert requester.instance().call_count_of('https://test.test/deleteitems.php') == 1
-    assert requester.instance().complete_call_count() == 3
+    assert requester.instance().complete_call_count() == 2
+
+
+def any_auth():
+    return OnlineAuth(online_name="online user name", cookies="<--cookie-->")
 
 
 def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
@@ -239,21 +232,22 @@ def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
     einzelbuchungen.add(datum('01.01.2017'), 'Essen', 'some name', -1.54)
     gemeinsamebuchungen = Gemeinsamebuchungen()
 
-    requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': _JSON_IMPORT_DATA_GEMEINSAM,
-                                        'https://test.test/deletegemeinsam.php': '',
-                                        'https://test.test/login.php': LOGIN_RESPONSE},
-                                       DECODED_LOGIN_DATA,
-                                       auth_cookies=LOGIN_COOKIES)
+    requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsame_buchungen': _JSON_IMPORT_DATA_GEMEINSAM})
 
+    page_context = get_initial_context(einzelbuchungen=einzelbuchungen, gemeinsamebuchungen=gemeinsamebuchungen,
+                                       name='TestUser')
     context = import_data.handle_request(
         request=PostRequest({'action': 'load_online_gemeinsame_transactions',
                              'email': '',
-                             'server': 'test.test',
+                             'server': 'test.test/',
                              'password': ''}),
-        context=get_initial_context(einzelbuchungen=einzelbuchungen,
-                                    gemeinsamebuchungen=gemeinsamebuchungen,
-                                    name='TestUser')
+        context=page_context
     )
+
+    assert context.is_redirect()
+    assert context.redirect_target_url() == 'https://test.test/offlinelogin'
+
+    context = page_context.non_persisted_state().butler_online_function(any_auth())
 
     assert context.get_page_context_map()['element_titel'] == 'Export / Import'
     assert gemeinsamebuchungen.select().count() == 2
@@ -261,8 +255,8 @@ def test_gemeinsam_import_adde_passende_kategorie_should_import_value():
     assert gemeinsamebuchungen.get(0)['Person'] == 'TestUser'
     assert gemeinsamebuchungen.get(1)['Name'] == 'Testausgabe2'
 
-    assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
-    assert requester.instance().complete_call_count() == 3
+    assert requester.instance().call_count_of('https://test.test/api/gemeinsame_buchungen') == 2
+    assert requester.instance().complete_call_count() == 2
 
 
 _JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER = '''
@@ -279,23 +273,22 @@ def test_gemeinsam_import_with_unpassenden_partnername_should_import_value_and_r
     gemeinsamebuchungen = Gemeinsamebuchungen()
 
     requester.INSTANCE = RequesterStub(
-        {'https://test.test/gemeinsamebuchung.php': _JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER,
-         'https://test.test/deletegemeinsam.php': '',
-         'https://test.test/login.php': LOGIN_RESPONSE},
-        DECODED_LOGIN_DATA,
-        auth_cookies=LOGIN_COOKIES)
+        {'https://test.test/api/gemeinsame_buchungen': _JSON_IMPORT_DATA_GEMEINSAM_WRONG_PARTNER})
 
+    page_context = get_initial_context(einzelbuchungen=einzelbuchungen, gemeinsamebuchungen=gemeinsamebuchungen,
+                                       name='TestUser')
     context = import_data.handle_request(
         request=PostRequest({'action': 'load_online_gemeinsame_transactions',
                              'email': '',
                              'server': 'test.test',
                              'password': ''}),
-        context=get_initial_context(
-            einzelbuchungen=einzelbuchungen,
-            gemeinsamebuchungen=gemeinsamebuchungen,
-            name='TestUser')
+        context=page_context
     )
 
+    assert context.is_redirect()
+    assert context.redirect_target_url() == 'https://test.test/offlinelogin'
+
+    context = page_context.non_persisted_state().butler_online_function(any_auth())
     assert context.get_page_context_map()['element_titel'] == 'Export / Import'
     assert gemeinsamebuchungen.select().count() == 2
     assert gemeinsamebuchungen.get(0) == {
@@ -316,8 +309,8 @@ def test_gemeinsam_import_with_unpassenden_partnername_should_import_value_and_r
         'Wert': -1.3,
         'index': 1}
 
-    assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
-    assert requester.instance().complete_call_count() == 3
+    assert requester.instance().call_count_of('https://test.test/api/gemeinsame_buchungen') == 2
+    assert requester.instance().complete_call_count() == 2
 
 
 def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_requestmapping():
@@ -325,22 +318,22 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
     einzelbuchungen.add(datum('01.01.2017'), 'KeinEssen', 'some name', -1.54)
     gemeinsamebuchungen = Gemeinsamebuchungen()
 
-    requester.INSTANCE = RequesterStub({'https://test.test/gemeinsamebuchung.php': _JSON_IMPORT_DATA_GEMEINSAM,
-                                        'https://test.test/deletegemeinsam.php': '',
-                                        'https://test.test/login.php': LOGIN_RESPONSE},
-                                       DECODED_LOGIN_DATA,
-                                       auth_cookies=LOGIN_COOKIES)
+    requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsame_buchungen': _JSON_IMPORT_DATA_GEMEINSAM})
 
+    page_context = get_initial_context(einzelbuchungen=einzelbuchungen, gemeinsamebuchungen=gemeinsamebuchungen,
+                                       name='TestUser')
     context = import_data.handle_request(
         request=PostRequest({'action': 'load_online_gemeinsame_transactions',
                              'email': '',
                              'server': 'test.test',
                              'password': ''}),
-        context=get_initial_context(
-            einzelbuchungen=einzelbuchungen,
-            gemeinsamebuchungen=gemeinsamebuchungen,
-            name='TestUser')
+        context=page_context
     )
+
+    assert context.is_redirect()
+    assert context.redirect_target_url() == 'https://test.test/offlinelogin'
+
+    context = page_context.non_persisted_state().butler_online_function(any_auth())
 
     assert context.get_page_context_map()['element_titel'] == 'Kategorien zuweisen'
     assert context.get('import') == _IMPORT_DATA_GEMEINSAM
@@ -365,8 +358,7 @@ def test_gemeinsam_import_with_unpassenden_kategorie_should_import_value_and_req
     assert gemeinsamebuchungen.content.Kategorie[0] == 'Essen'
     assert gemeinsamebuchungen.content.Kategorie[1] == 'Essen'
 
-    assert requester.instance().call_count_of('https://test.test/deletegemeinsam.php') == 1
-    assert requester.instance().complete_call_count() == 3
+    assert requester.instance().complete_call_count() == 2
 
 
 def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlossene_kategorien():
@@ -386,26 +378,28 @@ def test_set_kategorien_with_ausgeschlossene_kategoerien_should_hide_ausgeschlos
     )
 
     requester.INSTANCE = RequesterStub({
-        'https://test.test/setkategorien.php': '',
-        'https://test.test/login.php': LOGIN_RESPONSE},
-        DECODED_LOGIN_DATA,
-        auth_cookies=LOGIN_COOKIES)
+        'https://test.test/api/kategorien': '',
+        'https://test.test/api/kategorien/batch': ''})
 
-    result = import_data.handle_request(
+    page_context = get_initial_context(einzelbuchungen=einzelbuchungen, gemeinsamebuchungen=gemeinsamebuchungen,
+                                       name='TestUser')
+    context = import_data.handle_request(
         request=PostRequest({'action': 'set_kategorien',
                              'email': '',
                              'server': 'test.test',
                              'password': ''}),
-        context=get_initial_context(einzelbuchungen=einzelbuchungen,
-                                    gemeinsamebuchungen=gemeinsamebuchungen,
-                                    name='TestUser'
-                                    )
+        context=page_context
     )
 
-    assert result.user_success_message()
-    assert result.user_success_message().content() == 'Kategorien erfolgreich in die Online-Version übertragen.'
-    assert requester.instance().data_of_request('https://test.test/setkategorien.php')[0][
-               'kategorien'] == 'JaEins,JaZwei'
+    assert context.is_redirect()
+    assert context.redirect_target_url() == 'https://test.test/offlinelogin'
+
+    context = page_context.non_persisted_state().butler_online_function(any_auth())
+
+    assert context.user_success_message()
+    assert context.user_success_message().content() == 'Kategorien erfolgreich in die Online-Version übertragen.'
+    assert requester.instance().data_of_request('https://test.test/api/kategorien/batch')[0] == ['JaEins', 'JaZwei']
+    assert requester.instance().complete_call_count() == 2
 
 
 def test_upload_data():
@@ -414,39 +408,40 @@ def test_upload_data():
     gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
     gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'conf.partnername')
 
-    requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "OK"}',
-                                        'https://test.test/api/partner.php': _JSON_DATA_PARTNER,
-                                        'https://test.test/api/login.php': LOGIN_RESPONSE},
-                                       DECODED_LOGIN_DATA,
-                                       auth_cookies=LOGIN_COOKIES
-                                       )
+    requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsame_buchung/batch': '{"result": "OK"}'})
 
-    result = import_data.handle_request(
+    page_context = get_initial_context(gemeinsamebuchungen=gemeinsamebuchungen, name='TestUser')
+    context = import_data.handle_request(
         request=PostRequest({'action': 'upload_gemeinsame_transactions',
                              'email': '',
-                             'server': 'test.test/api',
+                             'server': 'test.test',
                              'password': ''}),
-        context=get_initial_context(gemeinsamebuchungen=gemeinsamebuchungen, name='TestUser')
+        context=page_context
     )
 
-    assert gemeinsamebuchungen.select().count() == 0
-    assert result.user_success_message()
-    assert result.user_success_message().content() == '2 Buchungen wurden erfolgreich hochgeladen.'
+    assert context.is_redirect()
+    assert context.redirect_target_url() == 'https://test.test/offlinelogin'
 
-    assert requester.INSTANCE.data_of_request('https://test.test/api/gemeinsamebuchung.php') == [
+    context = page_context.non_persisted_state().butler_online_function(any_auth())
+
+    assert gemeinsamebuchungen.select().count() == 0
+    assert context.user_success_message()
+    assert context.user_success_message().content() == '2 Buchungen wurden erfolgreich hochgeladen.'
+
+    assert requester.INSTANCE.data_of_request('https://test.test/api/gemeinsame_buchung/batch') == [
         [
             {
                 'datum': '2020-01-01',
                 'kategorie': 'kategorie1',
                 'name': 'name1',
-                'zielperson': 'online user name',
+                'eigeneBuchung': True,
                 'wert': 1.11
             },
             {
                 'datum': '2020-02-02',
                 'kategorie': 'kategorie2',
                 'name': 'name2',
-                'zielperson': 'OnlinePartner',
+                'eigeneBuchung': False,
                 'wert': 2.22
             }
         ]
@@ -459,37 +454,39 @@ def test_upload_data_fehler():
     gemeinsamebuchungen.add(datum('1.1.2020'), 'kategorie1', 'name1', 1.11, 'TestUser')
     gemeinsamebuchungen.add(datum('2.2.2020'), 'kategorie2', 'name2', 2.22, 'conf.partnername')
 
-    requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsamebuchung.php': '{"result": "error"}',
-                                        'https://test.test/api/partner.php': _JSON_DATA_PARTNER,
-                                        'https://test.test/api/login.php': LOGIN_RESPONSE},
-                                       DECODED_LOGIN_DATA,
-                                       auth_cookies=LOGIN_COOKIES)
+    requester.INSTANCE = RequesterStub({'https://test.test/api/gemeinsame_buchung/batch': '{"result": "error"}'})
 
-    result = import_data.handle_request(
+    page_context = get_initial_context(gemeinsamebuchungen=gemeinsamebuchungen, name='TestUser')
+    context = import_data.handle_request(
         request=PostRequest({'action': 'upload_gemeinsame_transactions',
                              'email': '',
-                             'server': 'test.test/api',
+                             'server': 'test.test',
                              'password': ''}),
-        context=get_initial_context(gemeinsamebuchungen=gemeinsamebuchungen, name='TestUser')
+        context=page_context
     )
 
-    assert result.user_error_message()
-    assert result.user_error_message().content() == 'Fehler beim Hochladen der gemeinsamen Buchungen.'
+    assert context.is_redirect()
+    assert context.redirect_target_url() == 'https://test.test/offlinelogin'
+
+    context = page_context.non_persisted_state().butler_online_function(any_auth())
+
+    assert context.user_error_message()
+    assert context.user_error_message().content() == 'Fehler beim Hochladen der gemeinsamen Buchungen.'
     assert gemeinsamebuchungen.select().count() == 2
-    assert requester.INSTANCE.data_of_request('https://test.test/api/gemeinsamebuchung.php') == [
+    assert requester.INSTANCE.data_of_request('https://test.test/api/gemeinsame_buchung/batch') == [
         [
             {
                 'datum': '2020-01-01',
                 'kategorie': 'kategorie1',
                 'name': 'name1',
-                'zielperson': 'online user name',
+                'eigeneBuchung': True,
                 'wert': 1.11
             },
             {
                 'datum': '2020-02-02',
                 'kategorie': 'kategorie2',
                 'name': 'name2',
-                'zielperson': 'OnlinePartner',
+                'eigeneBuchung': False,
                 'wert': 2.22
             }
         ]
@@ -512,5 +509,6 @@ def get_initial_context(
         einzelbuchungen=einzelbuchungen,
         gemeinsamebuchungen=gemeinsamebuchungen,
         filesystem=filesystem,
-        conf=conf
+        conf=conf,
+        non_persisted_state=NonPersistedContext()
     )

@@ -33,3 +33,5 @@ CORE_RENAME = '/rename_kategorie/'
 CORE_CONFIGURATION_PARAM_SUCCESS_MESSAGE = 'success_message'
 CORE_CONFIGURATION_BACKUP = '/configuration/backup/'
 CORE_IMPORT = '/import/'
+
+ONLINE_CALLBACK = '/butler-online-callback'

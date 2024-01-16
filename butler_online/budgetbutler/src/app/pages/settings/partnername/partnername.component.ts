@@ -26,10 +26,10 @@ export class PartnernameComponent implements OnInit {
   }
 
   setData: (data: PartnerInfo) => void = (data: PartnerInfo) => {
-    this.partnerName.setValue(data.partnername);
+    this.partnerName.setValue(data.zielperson);
     this.status = [];
 
-    if (data.partnername !== '') {
+    if (data.zielperson !== '') {
       this.verknuepfungAktiv = true;
       this.partnerName.disable();
     } else {
@@ -38,10 +38,10 @@ export class PartnernameComponent implements OnInit {
       return;
     }
 
-    if (data.confirmed) {
-      this.status.push(`${data.partnername} hat die Verknüpfung bestätigt.`);
+    if (data.bestaetigt) {
+      this.status.push(`${data.zielperson} hat die Verknüpfung bestätigt.`);
     } else {
-      this.status.push(`${data.partnername} muss die Verknüpfung noch bestätigen.`);
+      this.status.push(`${data.zielperson} muss die Verknüpfung noch bestätigen.`);
     }
   }
 

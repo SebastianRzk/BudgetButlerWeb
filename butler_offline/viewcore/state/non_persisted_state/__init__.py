@@ -1,3 +1,5 @@
+from typing import Callable
+
 from butler_offline.viewcore.state.non_persisted_state.einzelbuchungen import EinzelbuchungsChange
 from butler_offline.viewcore.state.non_persisted_state.dauerauftraege import DauerauftraegeChange
 
@@ -13,6 +15,7 @@ class NonPersistedContext:
         self.order_changed: list = []
         self.order_dauerauftrag_changed: list = []
         self.depotauszuege_changed: list = []
+        self.butler_online_function: Callable = None
 
 
 CONTEXT: NonPersistedContext = NonPersistedContext()

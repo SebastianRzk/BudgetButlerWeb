@@ -23,17 +23,10 @@ RUN npm install
 RUN npm run test --watch=false
 
 
-FROM composer as build-step-php
-RUN mkdir -p /api
-WORKDIR /api
-COPY butler_online_api/api /api
-RUN composer install
+FROM rust as build-step-rust
+RUN mkdir -p /app
+WORKDIR /app
+COPY butler_online_api /app
+RUN cargo build --release
+RUN ls -la /app/target/release
 
-# Assembly
-FROM php:8-fpm-alpine
-RUN docker-php-ext-install pdo mysqli pdo_mysql
-RUN mkdir -p /www/api
-COPY butler_online_api/site.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-step-angular /app/dist /www
-COPY --from=build-step-php /api /www/api
-COPY --from=build-step-php /api/robots.txt /www/

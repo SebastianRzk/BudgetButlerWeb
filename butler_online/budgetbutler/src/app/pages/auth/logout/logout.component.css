@@ -1,0 +1,32 @@
+.login-card {
+  max-width: 30rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+button {
+  width: 100%;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+.logo {
+  width: 50%;
+  max-width: 15ex;
+  height: 50%;
+  max-height: 15ex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5ex;
+}
+
+.login-page {
+  width: 100vw;
+  padding-top: 3ex;
+  display: block;
+}
+

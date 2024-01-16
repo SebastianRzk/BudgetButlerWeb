@@ -45,16 +45,16 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
-        name: Build and push fpm
-        id: docker_build_bb_fpm
+        name: Build and push api
+        id: docker_build_bb_api
         uses: docker/build-push-action@v2
         with:
           context: ./
-          file: ./Dockerfile.fpm
+          file: ./Dockerfile.api
           platforms: linux/amd64
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-fpm:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-companion-api:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -

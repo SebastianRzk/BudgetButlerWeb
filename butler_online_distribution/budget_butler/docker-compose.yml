@@ -4,15 +4,15 @@ services:
     image: sebastianrzk/budgetbutlerweb-companion-static
     ports:
       - "80:80"
-    env_file:
-      - db.env
     restart: unless-stopped
-  budget-butler-fpm:
-    image: sebastianrzk/budgetbutlerweb-companion-fpm
+  budget-butler-api:
+    image: sebastianrzk/budgetbutlerweb-companion-api
     env_file:
-      - db.env
+      - api.env
     restart: unless-stopped
-
+    networks:
+      - butler-internal
+      - butler-db
   db:
     image: mariadb
     volumes:
@@ -20,8 +20,11 @@ services:
     env_file:
       - db.env
     restart: unless-stopped
-
+    networks:
+      - butler-db
 
 volumes:
   db:
-
+networks:
+  butler-internal:
+  butler-db:
