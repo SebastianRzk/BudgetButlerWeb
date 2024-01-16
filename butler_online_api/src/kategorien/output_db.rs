@@ -41,12 +41,12 @@ pub fn find_all_kategorien(
 ) -> Result<Vec<Kategorie>, DbError> {
     use crate::schema::kategorien::dsl::*;
 
-    let alle_gemeinsame_buchungen = kategorien
+    let alle_kategorien = kategorien
         .filter(user.eq(user_name))
-        .order(name.desc())
+        .order(name.asc())
         .get_results(conn);
 
-    Ok(alle_gemeinsame_buchungen
+    Ok(alle_kategorien
         .unwrap()
         .iter()
         .map(KategorieEntity::to_domain)
@@ -55,11 +55,11 @@ pub fn find_all_kategorien(
 
 pub fn insert_new_kategorie(
     conn: &mut MysqlConnection,
-    neue_gemeinsame_buchung: NeueKategorie,
+    neue_kategorie: NeueKategorie,
 ) -> Result<Kategorie, DbError> {
     use crate::schema::kategorien::dsl::*;
 
-    let kategorie_entity = neue_gemeinsame_buchung.to_entity(Uuid::new_v4().to_string());
+    let kategorie_entity = neue_kategorie.to_entity(Uuid::new_v4().to_string());
 
     diesel::insert_into(kategorien)
         .values(&kategorie_entity)
