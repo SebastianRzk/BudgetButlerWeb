@@ -1,5 +1,5 @@
 export class EinzelbuchungTO {
-  public id: number;
+  public id: string;
   public name: string;
   public datum: string;
   public kategorie: string;
@@ -38,9 +38,50 @@ export interface AddUserDataTo {
   readonly password: string;
 }
 
+export class DauerauftragAnlegenTO {
+  public name: string;
+  public startDatum: string;
+  public endeDatum: string;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+}
+
+export class DauerauftragTO {
+  public id: string;
+  public name: string;
+  public startDatum: string;
+  public endeDatum: string;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+}
+
+export class GemeinsamerDauerauftragAnlegenTO {
+  public name: string;
+  public startDatum: string;
+  public endeDatum: string;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+  public eigeneBuchung: boolean;
+}
 
 export interface KategorieTo {
   readonly id: string;
   readonly name: string;
   readonly user: string;
 }
+
+export class GemeinsamerDauerauftragTO {
+  public id: string;
+  public name: string;
+  public startDatum: string;
+  public endeDatum: string;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+  public user: string;
+  public zielperson: string;
+}
+

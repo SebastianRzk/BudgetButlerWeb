@@ -15,6 +15,14 @@ services:
     networks:
       - butler-internal
       - butler-db
+
+  budget-butler-cron:
+    image: local-budgetbutlerweb-companion-cron
+    env_file:
+      - api.env
+    restart: unless-stopped
+    networks:
+      - butler-db
   db:
     image: mariadb
     volumes:

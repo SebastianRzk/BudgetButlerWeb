@@ -14,21 +14,8 @@ use std::future::Future;
 use std::{collections::HashMap, pin::Pin, sync::RwLock};
 use url::form_urlencoded;
 use url::Url;
+use crate::user::model::User;
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct User {
-    id: String,
-    login: Option<String>,
-    first_name: Option<String>,
-    last_name: Option<String>,
-    pub sub: String,
-    email: Option<String>,
-    image_url: Option<String>,
-    activated: bool,
-    lang_key: Option<String>,
-    authorities: Vec<String>,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]

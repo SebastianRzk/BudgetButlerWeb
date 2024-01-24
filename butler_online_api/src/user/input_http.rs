@@ -1,7 +1,6 @@
 use actix_web::{get, HttpResponse, Responder};
-use crate::openidconnect_configuration::User;
 use serde::{Serialize};
-
+use crate::user::model::User;
 
 
 #[derive(Serialize)]

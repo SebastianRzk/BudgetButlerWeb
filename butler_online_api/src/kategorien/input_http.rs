@@ -6,7 +6,7 @@ use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use uuid::Uuid;
 
 use crate::kategorien::model::{Kategorie, NeueKategorie};
-use crate::openidconnect_configuration::User;
+use crate::user::model::User;
 
 type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 

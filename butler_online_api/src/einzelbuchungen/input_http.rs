@@ -1,6 +1,5 @@
 use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};
 use crate::einzelbuchungen::output_db;
-use crate::openidconnect_configuration::User;
 use crate::result_dto::result_success;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use bigdecimal::BigDecimal;
@@ -9,6 +8,7 @@ use serde::{Deserialize, Serialize};
 use time::macros::format_description;
 use time::Date;
 use uuid::Uuid;
+use crate::user::model::User;
 
 type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 

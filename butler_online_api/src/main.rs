@@ -29,26 +29,33 @@ use crate::kategorien::input_http::delete_kategorie;
 use crate::kategorien::input_http::delete_kategorien;
 use crate::kategorien::input_http::get_kategorien;
 
+use crate::dauerauftraege::input_http::delete_dauerauftrag;
+use crate::dauerauftraege::input_http::get_dauerauftraege;
+use crate::dauerauftraege::input_http::add_dauerauftrag;
+
+use crate::gemeinsame_dauerauftraege::input_http::delete_gemeinsamer_dauerauftrag;
+use crate::gemeinsame_dauerauftraege::input_http::get_gemeinsame_dauerauftraege;
+use crate::gemeinsame_dauerauftraege::input_http::add_gemeinsamer_dauerauftrag;
+
 use crate::health::input_http::health_status;
 
 use crate::user::input_http::user_info;
 
 mod schema;
-
 mod einzelbuchungen;
-
 mod gemeinsame_buchungen;
 mod kategorien;
-
 mod partner;
-
 mod health;
 mod openidconnect_configuration;
-
 mod result_dto;
 mod user;
-
+mod dauerauftraege;
+mod gemeinsame_dauerauftraege;
 mod database_migrations;
+mod database;
+mod core;
+mod wiederkehrend;
 
 type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 
@@ -57,7 +64,7 @@ async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().ok();
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
-    let pool = initialize_db_pool();
+    let pool = database::initialize_db_pool();
 
     let secret_key = Key::generate();
     let client: openid::DiscoveredClient = openidconnect_configuration::generate_discovery_client()
@@ -118,7 +125,13 @@ async fn main() -> std::io::Result<()> {
                     .service(add_kategorien)
                     .service(add_kategorie)
                     .service(delete_kategorie)
-                    .service(delete_kategorien),
+                    .service(delete_kategorien)
+                    .service(add_dauerauftrag)
+                    .service(get_dauerauftraege)
+                    .service(delete_dauerauftrag)
+                    .service(add_gemeinsamer_dauerauftrag)
+                    .service(get_gemeinsame_dauerauftraege)
+                    .service(delete_gemeinsamer_dauerauftrag),
             )
             .service(health_status)
     })
@@ -127,11 +140,4 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
-fn initialize_db_pool() -> DbPool {
-    let conn_spec = std::env::var("DATABASE_URL").expect("DATABASE_URL should be set");
-    let manager = r2d2::ConnectionManager::<MysqlConnection>::new(conn_spec);
-    r2d2::Pool::builder()
-        .build(manager)
-        .expect("DATABASE_URL should be valid url to a MySQL / MariaDB database")
-}
 

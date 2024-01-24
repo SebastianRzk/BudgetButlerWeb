@@ -1,0 +1,18 @@
+# Stage 1
+FROM rust as build-step-rust
+RUN mkdir -p /app
+WORKDIR /app
+COPY butler_online_api /app
+RUN cargo build --release --bin cron
+RUN ls -la /app/target/release
+
+
+# Assembly
+FROM debian:stable-slim
+RUN mkdir /app
+RUN apt-get update && apt-get install libmariadb-dev cron --yes && apt-get clean
+COPY --from=build-step-rust /app/target/release/cron /app/cron
+WORKDIR /app
+ADD butler_online_api/cron.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT bash /app/entrypoint.sh

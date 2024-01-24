@@ -3,8 +3,10 @@ import {Einzelbuchung, EinzelbuchungAnlegen, EinzelbuchungLoeschen, ERROR_LOADIN
 import {HttpClient} from '@angular/common/http';
 import {ApiproviderService} from './apiprovider.service';
 import {NotificationService} from './notification.service';
-import {toEinzelbuchungAnlegenTO} from './mapper';
+import {toEinzelbuchung, toEinzelbuchungAnlegenTO} from './mapper';
 import {BehaviorSubject} from 'rxjs';
+import {EinzelbuchungTO} from "./modelTo";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +28,7 @@ export class EinzelbuchungService {
 
 
   public refresh(): void {
-    this.httpClient.get<Einzelbuchung[]>(this.api.getUrl('einzelbuchungen')).subscribe(
+    this.httpClient.get<EinzelbuchungTO[]>(this.api.getUrl('einzelbuchungen')).pipe(map(x => x.map(toEinzelbuchung))).subscribe(
       x => this.einzelbuchungen.next(x),
       error => this.notification.log(ERROR_LOADING_EINZELBUCHUNGEN, ERROR_LOADING_EINZELBUCHUNGEN.message));
   }
