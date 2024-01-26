@@ -1,7 +1,7 @@
 
 CREATE TABLE dauerauftraege (
     `id` VARCHAR(36) NOT NULL,
-    `name` VARCHAR(60) NOT NULL,
+    `name` VARCHAR(90) NOT NULL,
     `start_datum` DATE NOT NULL,
     `ende_datum` DATE NOT NULL,
     `kategorie` VARCHAR(60) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE dauerauftraege (
 
 CREATE TABLE gemeinsame_dauerauftraege (
     `id` VARCHAR(36) NOT NULL,
-    `name` VARCHAR(60) NOT NULL,
+    `name` VARCHAR(90) NOT NULL,
     `start_datum` DATE NOT NULL,
     `ende_datum` DATE NOT NULL,
     `kategorie` VARCHAR(60) NOT NULL,

@@ -30,17 +30,12 @@ impl FromRequest for User {
 
     fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
         let fut = Identity::from_request(req, pl);
-        eprintln!("read useridentity from request");
         let sessions: Option<&web::Data<RwLock<Sessions>>> = req.app_data();
         if sessions.is_none() {
             eprintln!("sessions is none!");
             return Box::pin(async { Err(ErrorUnauthorized("unauthorized")) });
         }
         let sessions = sessions.unwrap().clone();
-        eprintln!(
-            "is session empty? {}",
-            sessions.read().unwrap().map.is_empty()
-        );
 
         Box::pin(async move {
             let id = fut

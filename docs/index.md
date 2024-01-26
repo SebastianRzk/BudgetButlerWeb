@@ -7,8 +7,8 @@
 
 * Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und damit mit einem Textverarbeitungsprogramm oder einem Tabellenverarbeitungsprogramm zugänglich.
 * Unkomplizierte Einnahmen/Ausgaben-Rechnung, keine doppelte Buchführung.
-* Schlanke Begleiter-Web-App für unterwegs (online-Version, mobil-optimiert). Import der Daten in die lokale Anwendung
-* Schlankes Design
+* Schlanke Begleiter-Web-App für unterwegs (online-Version, mobil-optimiert). Automatisierter Import der Daten in die lokale Anwendung
+* Schlankes und minimalistisches Design
 * Hohe Geschwindigkeit, auch bei großen Datenmengen
 * Quelloffen
 * Individualisierbar
@@ -17,16 +17,18 @@
 
 * Einzelbuchungen
   * Einzelbuchungen (erfassen, ändern, löschen)
-  * Daueraufträge (erfassen, ändern, löschen)
+  * Daueraufträge (erfassen, ändern (auch nachträglich), Betrag innerhalb der Ausführung anpassen, löschen)
   * Monatsübersicht
   * Jahresübersicht
-  * Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen
+  * Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht
+  * Import von Einzelbuchungen aus der Begleiter Web-App
 
 
 * Gemeinsame Buchungen
   * Erfassen, Ändern, Löschen
-  * Abrechnung erstellen.
+  * Abrechnung erstellen
   * Abrechnungen exportieren und importieren
+  * Import von gemeinsame Buchungen aus der Begleiter Web-App
 
 
 * Sparen
@@ -43,13 +45,14 @@
   * Verwendung mehrerer Datenbanken
   * Backup der Datenbank-Datei anlegen
   * Kategorien übergreifend umbenennen
+  * Kategorien für Eingabefelder ausschließen
 
 ## Weiterführende Links
 
 * Fehler, Fragen, Anmerkungen oder Ideen gerne als ["ISSUE" hier hinterlassen](https://github.com/SebastianRzk/BudgetButlerWeb/issues)
 * Code-Änderungen (Pull-Requests) immer bitte immer gegen den `dev`-[Branch hier hin](https://github.com/SebastianRzk/BudgetButlerWeb/pulls)
 * [Hier liegt der blanke Code](https://github.com/SebastianRzk/BudgetButlerWeb)
-* [Hier liegen die Docker-Images für die Begleiter Web-App](https://hub.docker.com/u/sebastianrzk)
+* [Hier liegen die Docker-Images für die Begleiter Web-App](https://hub.docker.com/u/sebastianrzk), und [hier sind Deployment Beispiele für die Begleiter Web-App](https://github.com/SebastianRzk/BudgetButlerWeb/tree/master/butler_online_distribution)
 
 
 ## Screenshots
@@ -82,11 +85,13 @@
 
 ### Screenshots Begleiter Web-App
 
-<a href="img/screenshots_mobile/menu.png"><img src="img/screenshots_mobile/menu.png" alt="Dasboard" width="300"/></a>
-<a href="img/screenshots_mobile/erfassen.png"><img src="img/screenshots_mobile/erfassen.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_mobile/menu.png"><img src="img/screenshots_mobile/menu.png" alt="Dasboard" width="250"/></a>
+<a href="img/screenshots_mobile/erfassen.png"><img src="img/screenshots_mobile/erfassen.png" alt="Dasboard" width="250"/></a>
 <a href="img/screenshots_mobile/erfassen_desktop.png"><img src="img/screenshots_mobile/erfassen_desktop.png" alt="Dasboard" width="300"/></a>
-<a href="img/screenshots_mobile/gemeinsam.png"><img src="img/screenshots_mobile/gemeinsam.png" alt="Dasboard" width="300"/></a>
-<a href="img/screenshots_mobile/einzel.png"><img src="img/screenshots_mobile/einzel.png" alt="Dasboard" width="300"/></a>
+<a href="img/screenshots_mobile/gemeinsam.png"><img src="img/screenshots_mobile/gemeinsam.png" alt="Dasboard" width="250"/></a>
+<a href="img/screenshots_mobile/einzel.png"><img src="img/screenshots_mobile/einzel.png" alt="Dasboard" width="250"/></a>
+<a href="img/screenshots_mobile/einzel.png"><img src="img/screenshots_mobile/erfassen_dauerauftrag.png" alt="Dasboard" width="250"/></a>
+<a href="img/screenshots_mobile/einzel.png"><img src="img/screenshots_mobile/uebersicht_dauerauftrag.png" alt="Dasboard" width="250"/></a>
 
 
 ## Offline Anwendung: BudgetButlerWeb
@@ -100,6 +105,7 @@
 * Falls nicht der Electron-Client verwendet wird: Webbrowser (z.B. Firefox oder Chromium)
 
 ### Installation
+
 Das Git-Repository klonen:
 
 	git clone https://github.com/SebastianRzk/BudgetButlerWeb.git
@@ -230,6 +236,5 @@ Für den Betrieb müssen in `api.env` sowie in `db.env` Parameter beispielsweise
 
 ### BudgetButlerWeb Begleiter App
 
-* Daueraufträge in Online-Version realisieren (automatisches Erstellen von Einzelbuchungen anhand eines vordefinierten Rhythmus)
 * Codequalität und Testabdeckung automatisiert und langfristig tracken (z.B. durch SonarCloud)
 
