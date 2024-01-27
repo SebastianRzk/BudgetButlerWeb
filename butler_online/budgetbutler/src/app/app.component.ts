@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {MenuitemService} from './domain/menuitem.service';
+import { Component, inject, OnInit } from '@angular/core';
+import {MenuItemService} from './domain/menu-item.service';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatDrawerMode} from '@angular/material/sidenav';
 import {AuthContainer, AuthService} from './pages/auth/auth.service';
@@ -11,20 +11,16 @@ import {Observable} from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  private authService: AuthService = inject(AuthService);
+  public menuService: MenuItemService = inject(MenuItemService);
+  private breakpointObserver: BreakpointObserver = inject(BreakpointObserver);
+
   mode: MatDrawerMode = 'side';
   isSmallScreen = this.breakpointObserver.isMatched('(max-width: 799px)');
 
-  user$: Observable<AuthContainer>;
+  user$: Observable<AuthContainer> = this.authService.auth$;
 
-  opened$: Observable<boolean>;
-
-  constructor(
-    public menuService: MenuitemService,
-    private breakpointObserver: BreakpointObserver,
-    authService: AuthService) {
-    this.user$ = authService.auth$;
-    this.opened$ = menuService.opened$;
-  }
+  opened$: Observable<boolean> = this.menuService.opened$;
 
   ngOnInit() {
     if (this.isSmallScreen) {
@@ -34,5 +30,4 @@ export class AppComponent implements OnInit {
       this.menuService.open();
     }
   }
-
 }

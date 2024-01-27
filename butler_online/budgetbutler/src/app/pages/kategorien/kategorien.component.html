@@ -1,0 +1,45 @@
+<mat-card class="erfassung">
+  <mat-card-header>
+    <mat-card-title>Neue Kategorie erfassen</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="onFormSubmit()" [formGroup]="kategorienForm">
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Name der Kategorie</mat-label>
+        <input formControlName="name" matInput maxlength="85" required value="">
+      </mat-form-field>
+      <button class="full-size-form-field" color="primary" mat-raised-button type="submit">Ausgabe
+        hinzufügen
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+
+
+<mat-card class="erfassung">
+  <mat-card-header>
+    <mat-card-title>Neue Kategorie anlegen</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table [dataSource]="kategorien$ | async" mat-table>
+      <ng-container matColumnDef="Datum">
+        <th *matHeaderCellDef mat-header-cell>Name</th>
+        <td *matCellDef="let element" mat-cell> {{element.name}}
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="Aktion">
+        <th *matHeaderCellDef mat-header-cell> Aktion</th>
+        <td *matCellDef="let element" mat-cell>
+          <button (click)="delete(element.id)">
+            <mat-icon aria-hidden="false" aria-label="Löschen=">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

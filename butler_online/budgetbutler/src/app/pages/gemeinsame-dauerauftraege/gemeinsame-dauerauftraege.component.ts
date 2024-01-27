@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Dauerauftrag,  GemeinsamerDauerauftrag} from '../../domain/model';
 import { Observable } from 'rxjs';
-import {GemeinsameDauerauftraegeService} from "../../domain/gemeinsame-dauerauftraege.service";
+import {GemeinsameDauerauftraegeService} from '../../domain/gemeinsame-dauerauftraege.service';
 
 @Component({
   selector: 'app-allebuchungen',
@@ -25,6 +25,6 @@ export class GemeinsameDauerauftraegeComponent implements OnInit {
   }
 
   gleichesJahr(left: Date, right: Date){
-    return left.getFullYear() == right.getFullYear();
+    return left.getFullYear() === right.getFullYear();
   }
 }

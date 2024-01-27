@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../auth.service";
+import { Component, inject, OnInit } from '@angular/core';
+import {AuthService} from '../auth.service';
 
 @Component({
   selector: 'app-logout',
@@ -8,15 +8,13 @@ import {AuthService} from "../auth.service";
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private authService: AuthService) {
-
-  }
+  private authService: AuthService = inject(AuthService);
 
   ngOnInit() {
     this.authService.callLogout().subscribe(
       s => {
         if (s.logoutUrl) {
-          window.location.href = s.logoutUrl
+          window.location.href = s.logoutUrl;
         }
       }
     );

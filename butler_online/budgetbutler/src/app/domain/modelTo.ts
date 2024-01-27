@@ -67,12 +67,6 @@ export class GemeinsamerDauerauftragAnlegenTO {
   public eigeneBuchung: boolean;
 }
 
-export interface KategorieTo {
-  readonly id: string;
-  readonly name: string;
-  readonly user: string;
-}
-
 export class GemeinsamerDauerauftragTO {
   public id: string;
   public name: string;

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {Result} from './model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
@@ -7,12 +7,15 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class NotificationService {
 
-  constructor(private snackBar: MatSnackBar) {
-  }
+  private snackBar: MatSnackBar = inject(MatSnackBar);
 
   public handleServerResult(result: Result, actionDescription: string) {
     this.log(result, actionDescription);
     return result;
+  }
+  public handleError(error: unknown, result: Result, actionDescription: string) {
+    console.log(error);
+    return this.handleServerResult(result, actionDescription);
   }
 
   public log(result: Result, actionDescription: string) {

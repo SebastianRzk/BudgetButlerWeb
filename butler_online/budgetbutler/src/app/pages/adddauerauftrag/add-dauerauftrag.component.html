@@ -22,15 +22,16 @@
       </mat-form-field>
       <mat-form-field class="full-size-form-field">
         <mat-label>Kategorie</mat-label>
-        <select formControlName="kategorie" matNativeControl required>
-          <option *ngFor="let kategorie of kategorien | async" value="{{kategorie}}">{{kategorie}}</option>
-        </select>
-      </mat-form-field>      <mat-form-field class="full-size-form-field">
-      <mat-label>Rhythmus</mat-label>
-      <select formControlName="rhythmus" matNativeControl required>
-        <option *ngFor="let rhythm of rhythmus" value="{{rhythm.value}}">{{rhythm.displayName}}</option>
-      </select>
-    </mat-form-field>
+        <mat-select formControlName="kategorie" required>
+          <mat-option *ngFor="let kategorie of kategorien | async" value="{{kategorie.name}}">{{ kategorie.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="full-size-form-field">
+        <mat-label>Rhythmus</mat-label>
+        <mat-select formControlName="rhythmus" required>
+          <mat-option *ngFor="let rhythm of rhythmus" value="{{rhythm.value}}">{{ rhythm.displayName }}</mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-checkbox formControlName="gemeinsameBuchung">Gemeinsame Buchung von mir</mat-checkbox>
       <mat-form-field class="full-size-form-field">
         <mat-label>Wert</mat-label>

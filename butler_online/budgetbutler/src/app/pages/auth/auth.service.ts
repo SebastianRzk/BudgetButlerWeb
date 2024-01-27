@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { ApiproviderService } from '../../domain/apiprovider.service';
+import { ApiProviderService } from '../../domain/api-provider.service';
 import { NotificationService } from '../../domain/notification.service';
 import { ERROR_LOGIN_RESULT } from '../../domain/model';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -16,12 +16,12 @@ export class AuthService {
   private auth = new BehaviorSubject<AuthContainer>(LOGGED_OUT);
   public readonly auth$ = this.auth.asObservable();
 
-  constructor(private httpClient: HttpClient,
-              private router: Router,
-              private api: ApiproviderService,
-              private notificationService: NotificationService,
-              private localStorageService: LocalStorageService) {
-  }
+  private httpClient: HttpClient = inject(HttpClient);
+  private router: Router = inject(Router);
+  private api: ApiProviderService = inject(ApiProviderService);
+  private notificationService: NotificationService = inject(NotificationService);
+  private localStorageService: LocalStorageService = inject(LocalStorageService);
+
 
   login(username: string, password: string) {
     const body = new FormData();
@@ -45,7 +45,7 @@ export class AuthService {
         }
       },
       error => {
-        this.notificationService.log(ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
+        this.notificationService.handleError(error, ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
         this.auth.next(LOGGED_OUT);
       }
     );
@@ -83,7 +83,7 @@ export class AuthService {
         }
       },
       error => {
-        this.notificationService.log(ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
+        this.notificationService.handleError(error, ERROR_LOGIN_RESULT, 'Login fehlgeschlagen');
         this.handleLogOut();
       }
     );

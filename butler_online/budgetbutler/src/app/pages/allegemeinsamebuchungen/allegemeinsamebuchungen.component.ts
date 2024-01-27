@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GemeinsamebuchungService } from '../../domain/gemeinsamebuchung.service';
 import { GemeinsameBuchung } from '../../domain/model';
@@ -9,14 +9,10 @@ import { GemeinsameBuchung } from '../../domain/model';
   styleUrls: ['./allegemeinsamebuchungen.component.css']
 })
 export class AllegemeinsamebuchungenComponent implements OnInit {
-
+  private gemeinsameBuchungenService: GemeinsamebuchungService = inject(GemeinsamebuchungService);
 
   displayedColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
-  gemeinsamebuchungen: Observable<GemeinsameBuchung[]>;
-
-  constructor(private gemeinsameBuchungenService: GemeinsamebuchungService) {
-    this.gemeinsamebuchungen = this.gemeinsameBuchungenService.gemeinsameBuchungen$;
-  }
+  gemeinsamebuchungen: Observable<GemeinsameBuchung[]> = this.gemeinsameBuchungenService.gemeinsameBuchungen$;
 
   ngOnInit(): void {
     this.gemeinsameBuchungenService.refresh();

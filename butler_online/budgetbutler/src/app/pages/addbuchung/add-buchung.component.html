@@ -16,9 +16,9 @@
       </mat-form-field>
       <mat-form-field class="full-size-form-field">
         <mat-label>Kategorie</mat-label>
-        <select formControlName="kategorie" matNativeControl required>
-          <option *ngFor="let kategorie of kategorien | async" value="{{kategorie}}">{{kategorie}}</option>
-        </select>
+        <mat-select formControlName="kategorie" required>
+          <mat-option *ngFor="let kategorie of kategorien | async" value="{{kategorie.name}}">{{kategorie.name}}</mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-checkbox formControlName="gemeinsameBuchung">Gemeinsame Buchung von mir</mat-checkbox>
       <mat-form-field class="full-size-form-field">

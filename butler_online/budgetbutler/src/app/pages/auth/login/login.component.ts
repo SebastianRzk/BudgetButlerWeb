@@ -1,9 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ADD_SCHNELLEINSTIEG_ROUTE} from '../../../app-routes';
-import {debounce, skip, take} from 'rxjs/operators';
+import { skip, take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -12,9 +11,8 @@ import {debounce, skip, take} from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
 
-
-  constructor(public authService: AuthService, public router: Router) {
-  }
+  private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
 
 
   ngOnInit() {
@@ -22,7 +20,7 @@ export class LoginComponent implements OnInit {
       if (status.loggedIn) {
         this.router.navigate([ADD_SCHNELLEINSTIEG_ROUTE]);
       } else {
-        window.location.href = "/api/login/oauth2/authorization/oidc";
+        window.location.href = '/api/login/oauth2/authorization/oidc';
       }
     });
     this.authService.checkLoginState();

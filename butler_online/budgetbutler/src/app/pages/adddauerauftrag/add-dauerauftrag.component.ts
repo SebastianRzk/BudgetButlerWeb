@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
-import {KategorieService} from "../../domain/kategorie.service";
+import { Kategorie, KategorieService } from "../../domain/kategorie.service";
 import {
   DauerauftragAnlegen,
   GemeinsamerDauerauftragAnlegen
@@ -14,7 +14,7 @@ import {GemeinsameDauerauftraegeService} from "../../domain/gemeinsame-dauerauft
   templateUrl: './add-dauerauftrag.component.html',
   styleUrls: ['./add-dauerauftrag.component.css']
 })
-export class AddDauerauftragComponent {
+export class AddDauerauftragComponent implements OnInit {
   buchungForm = new FormGroup({
     startDatum: new FormControl(new Date(), Validators.required),
     endeDatum: new FormControl(null, Validators.required),
@@ -29,7 +29,7 @@ export class AddDauerauftragComponent {
   private dauerauftragService: DauerauftraegeService = inject(DauerauftraegeService);
   private gemeinsamerDauerauftragService: GemeinsameDauerauftraegeService = inject(GemeinsameDauerauftraegeService)
 
-  kategorien: Observable<string[]>;
+  kategorien: Observable<Kategorie[]> = this.kategorieService.kategorien$;
 
   rhythmus = [
     {
@@ -52,7 +52,7 @@ export class AddDauerauftragComponent {
 
 
   ngOnInit() {
-    this.kategorien = this.kategorieService.getAll();
+    this.kategorieService.refresh();
   }
 
   onFormSubmit() {

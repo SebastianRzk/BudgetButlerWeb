@@ -4,7 +4,7 @@ const apiUrl = '/api/';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiproviderService {
+export class ApiProviderService {
 
   constructor() { }
 
