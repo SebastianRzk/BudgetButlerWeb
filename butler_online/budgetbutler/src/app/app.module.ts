@@ -33,6 +33,9 @@ import {SidebarToggleComponent} from './pages/sidebar/sidebar-toggle/sidebar-tog
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { LogoutComponent } from './pages/auth/logout/logout.component';
 import { OfflineLoginComponent } from './pages/offline-login/offline-login.component';
+import { AddDauerauftragComponent } from './pages/adddauerauftrag/add-dauerauftrag.component';
+import {DauerauftraegeComponent} from "./pages/dauerauftraege/dauerauftraege.component";
+import {GemeinsameDauerauftraegeComponent} from "./pages/gemeinsame-dauerauftraege/gemeinsame-dauerauftraege.component";
 
 
 @NgModule({
@@ -48,6 +51,9 @@ import { OfflineLoginComponent } from './pages/offline-login/offline-login.compo
     SidebarToggleComponent,
     LogoutComponent,
     OfflineLoginComponent,
+    AddDauerauftragComponent,
+    DauerauftraegeComponent,
+    GemeinsameDauerauftraegeComponent
   ],
     imports: [
         BrowserModule,

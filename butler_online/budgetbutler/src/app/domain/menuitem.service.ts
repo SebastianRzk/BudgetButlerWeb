@@ -1,5 +1,11 @@
 import {Injectable} from '@angular/core';
-import {ADD_SCHNELLEINSTIEG_ROUTE, ALLE_EINZELBUCHUNGEN_ROUTE, ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, SETTINGS_ROUTE} from '../app-routes';
+import {
+  ADD_DAUERAUFTRAG_ROUTE,
+  ADD_SCHNELLEINSTIEG_ROUTE,
+  ALLE_EINZELBUCHUNGEN_ROUTE,
+  ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, DAUERAUFTRAEGE_ROUTE, GEMEINSAME_DAUERAUFTRAEGE_ROUTE,
+  SETTINGS_ROUTE
+} from '../app-routes';
 import {BehaviorSubject} from 'rxjs';
 
 
@@ -14,6 +20,22 @@ const SCHNELLEINSTIEG = {
   url: ADD_SCHNELLEINSTIEG_ROUTE,
   icon: 'add_circle_outline'
 };
+
+const ADD_DAUERAUFTRAG = {
+  title: 'Dauerauftrag erfassen',
+  url: ADD_DAUERAUFTRAG_ROUTE,
+  icon: 'add_circle_outline'
+}
+const DAUERAUFTRAEGE = {
+  title: 'Dauerauftraege',
+  url: DAUERAUFTRAEGE_ROUTE,
+  icon: 'timer'
+}
+const GEMEINSAME_DAUERAUFTRAEGE = {
+  title: 'Gemeinsame Dauerauftraege',
+  url: GEMEINSAME_DAUERAUFTRAEGE_ROUTE,
+  icon: 'timer'
+}
 
 const ALLE_EINZELBUCHUNGEN = {
   title: 'Persönliche Buchungen',
@@ -35,8 +57,11 @@ const EINSTELLUNGEN = {
 
 export const MENU_ITEMS: MenuItem[] = [
   SCHNELLEINSTIEG,
+  ADD_DAUERAUFTRAG,
   ALLE_EINZELBUCHUNGEN,
   ALLE_GEMEINSAME_BUCHUNGEN,
+  DAUERAUFTRAEGE,
+  GEMEINSAME_DAUERAUFTRAEGE,
   EINSTELLUNGEN
 ];
 

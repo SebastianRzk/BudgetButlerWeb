@@ -3,9 +3,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::partner::output_db;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
-use crate::openidconnect_configuration::User;
 
 use crate::partner::model::{NeuerPartnerStatus, PartnerStatus};
+use crate::user::model::User;
 
 type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 

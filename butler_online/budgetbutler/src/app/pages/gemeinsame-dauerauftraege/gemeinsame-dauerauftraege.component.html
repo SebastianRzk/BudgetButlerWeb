@@ -1,0 +1,46 @@
+<mat-card class="wide">
+  <mat-card-header>
+    <mat-card-title>Gemeinsame Daueraufträge</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table [dataSource]="dauerauftraege" mat-table>
+      <ng-container matColumnDef="Eigenschaften">
+        <th *matHeaderCellDef mat-header-cell> Name</th>
+        <td *matCellDef="let element" mat-cell>
+          <mat-chip-listbox>
+            <mat-chip
+              *ngIf="!gleichesJahr(element.startDatum, element.endeDatum)">{{ element.startDatum | date: 'd.M.yyyy' }}
+              - {{ element.endeDatum | date: 'd.M.yyyy' }}
+            </mat-chip>
+            <mat-chip *ngIf="gleichesJahr(element.startDatum, element.endeDatum)">{{ element.startDatum | date : 'd.M' }}
+              - {{ element.endeDatum | date: 'd.M.yyyy' }}
+            </mat-chip>
+            <mat-chip color="primary" highlighted="true">{{element.name}}</mat-chip>
+            <mat-chip>{{element.kategorie}}</mat-chip>
+            <mat-chip color="primary" highlighted="true">{{element.rhythmus}}</mat-chip>
+            <mat-chip>{{element.wert | number: '1.2-2' }}€</mat-chip>
+            <mat-chip>
+              <mat-icon matChipAvatar>person</mat-icon>
+              {{element.zielperson}}
+            </mat-chip>
+            <mat-chip *ngIf="element.user !== element.zielperson">
+              <mat-icon matChipAvatar>edit</mat-icon>
+              von {{element.user}}
+            </mat-chip>
+          </mat-chip-listbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Aktion">
+        <th *matHeaderCellDef mat-header-cell> Aktion</th>
+        <td *matCellDef="let element" mat-cell>
+          <button (click)="delete(element)">
+            <mat-icon aria-hidden="false" aria-label="Löschen=">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

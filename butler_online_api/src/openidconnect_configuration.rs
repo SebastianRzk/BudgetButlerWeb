@@ -14,21 +14,8 @@ use std::future::Future;
 use std::{collections::HashMap, pin::Pin, sync::RwLock};
 use url::form_urlencoded;
 use url::Url;
+use crate::user::model::User;
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct User {
-    id: String,
-    login: Option<String>,
-    first_name: Option<String>,
-    last_name: Option<String>,
-    pub sub: String,
-    email: Option<String>,
-    image_url: Option<String>,
-    activated: bool,
-    lang_key: Option<String>,
-    authorities: Vec<String>,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -43,17 +30,12 @@ impl FromRequest for User {
 
     fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
         let fut = Identity::from_request(req, pl);
-        eprintln!("read useridentity from request");
         let sessions: Option<&web::Data<RwLock<Sessions>>> = req.app_data();
         if sessions.is_none() {
             eprintln!("sessions is none!");
             return Box::pin(async { Err(ErrorUnauthorized("unauthorized")) });
         }
         let sessions = sessions.unwrap().clone();
-        eprintln!(
-            "is session empty? {}",
-            sessions.read().unwrap().map.is_empty()
-        );
 
         Box::pin(async move {
             let id = fut

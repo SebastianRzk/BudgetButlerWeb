@@ -3,7 +3,7 @@ FROM rust as build-step-rust
 RUN mkdir -p /app
 WORKDIR /app
 COPY butler_online_api /app
-RUN cargo build --release
+RUN cargo build --release --bin api
 RUN ls -la /app/target/release
 
 
@@ -11,7 +11,7 @@ RUN ls -la /app/target/release
 FROM debian:stable-slim
 RUN mkdir /app
 RUN apt-get update && apt-get install libmariadb-dev openssl ca-certificates --yes && apt-get clean
-COPY --from=build-step-rust /app/target/release/budgetbutlerweb-companion-backend /app/budgetbutlerweb-companion-backend
+COPY --from=build-step-rust /app/target/release/api /app/api
 WORKDIR /app
 EXPOSE 8080
-ENTRYPOINT ["./budgetbutlerweb-companion-backend"]
+ENTRYPOINT ["./api"]

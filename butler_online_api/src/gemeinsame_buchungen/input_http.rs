@@ -1,6 +1,5 @@
 use crate::gemeinsame_buchungen::model::{GemeinsameBuchung, NeueGemeinsameBuchung};
 use crate::gemeinsame_buchungen::output_db;
-use crate::openidconnect_configuration::User;
 use crate::partner::output_db::calculate_partnerstatus;
 use crate::result_dto::result_success;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
@@ -10,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use time::macros::format_description;
 use time::Date;
 use uuid::Uuid;
+use crate::user::model::User;
 
 type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 

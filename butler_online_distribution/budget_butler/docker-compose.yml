@@ -13,13 +13,20 @@ services:
     networks:
       - butler-internal
       - butler-db
+  budget-butler-cron:
+    image: sebastianrzk/budgetbutlerweb-companion-cron
+    env_file:
+      - api.env
+    restart: unless-stopped
+    networks:
+      - butler-db
   db:
     image: mariadb
     volumes:
       - db:/var/lib/mysql
     env_file:
       - db.env
-    command: --max_allowed_packet=67108864
+    command: --max_allowed_packet=134217728
     restart: unless-stopped
     networks:
       - butler-db

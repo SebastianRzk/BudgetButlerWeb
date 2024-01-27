@@ -5,8 +5,6 @@ import {Observable} from 'rxjs';
 import {KategorieService} from '../../domain/kategorie.service';
 import {EinzelbuchungAnlegen, GemeinsameBuchungAnlegen} from '../../domain/model';
 import {GemeinsamebuchungService} from '../../domain/gemeinsamebuchung.service';
-import {AuthService} from '../auth/auth.service';
-import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-addschnelleinstieg',
@@ -27,7 +25,6 @@ export class AddschnelleinstiegComponent implements OnInit {
   constructor(
     private einzelbuchungsService: EinzelbuchungService,
     private gemeinsameBuchungenService: GemeinsamebuchungService,
-    private authService: AuthService,
     private kategorieService: KategorieService) {
   }
 

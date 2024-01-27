@@ -17,6 +17,10 @@ export class EinzelbuchungLoeschen {
   public id: string;
 }
 
+export class DauerauftragLoeschen {
+  public id: string;
+}
+
 export interface GemeinsameBuchungAnlegen {
   readonly name: string;
   readonly datum: Date;
@@ -36,6 +40,47 @@ export interface GemeinsameBuchung {
   readonly isCreatedByDifferentPerson: boolean;
 }
 
+export class DauerauftragAnlegen {
+  public name: string;
+  public startDatum: Date;
+  public endeDatum: Date;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+}
+
+export class GemeinsamerDauerauftragAnlegen {
+  public name: string;
+  public startDatum: Date;
+  public endeDatum: Date;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+  public eigeneBuchung: boolean;
+}
+
+export class Dauerauftrag {
+  public id: string;
+  public name: string;
+  public startDatum: Date;
+  public endeDatum: Date;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+}
+
+export class GemeinsamerDauerauftrag {
+  public id: string;
+  public name: string;
+  public startDatum: Date;
+  public endeDatum: Date;
+  public kategorie: string;
+  public wert: number;
+  public rhythmus: string;
+  public user: string;
+  public zielperson: string;
+}
+
 
 export class GemeinsameBuchungLoeschen {
   public id: string;
@@ -50,6 +95,14 @@ export const ERROR_RESULT: Result = {result: 'ERROR', message: 'Fehler beim Erst
 export const ERROR_LOADING_EINZELBUCHUNGEN: Result = {
   result: 'ERROR',
   message: 'Fehler beim Laden der Einzelbuchungen'
+};
+export const ERROR_LOADING_DAUERAUFTRAEGE: Result = {
+  result: 'ERROR',
+  message: 'Fehler beim Laden der Daueraufträge'
+};
+export const ERROR_LOADING_GEMEINSME_DAUERAUFTRAEGE: Result = {
+  result: 'ERROR',
+  message: 'Fehler beim Laden der gemeinsamen Daueraufträge'
 };
 export const ERROR_LOADING_GEMEINSAME_BUCHUNGEN: Result = {
   result: 'ERROR',
