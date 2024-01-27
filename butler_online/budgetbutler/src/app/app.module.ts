@@ -28,7 +28,7 @@ import {AllebuchungenComponent} from './pages/allebuchungen/allebuchungen.compon
 import {SettingsComponent} from './pages/settings/settings.component';
 import {PartnernameComponent} from './pages/settings/partnername/partnername.component';
 import {AllegemeinsamebuchungenComponent} from './pages/allegemeinsamebuchungen/allegemeinsamebuchungen.component';
-import {AddschnelleinstiegComponent} from './pages/addschnelleinstieg/addschnelleinstieg.component';
+import {AddBuchungComponent} from './pages/addbuchung/add-buchung.component';
 import {SidebarToggleComponent} from './pages/sidebar/sidebar-toggle/sidebar-toggle.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { LogoutComponent } from './pages/auth/logout/logout.component';
@@ -36,6 +36,7 @@ import { OfflineLoginComponent } from './pages/offline-login/offline-login.compo
 import { AddDauerauftragComponent } from './pages/adddauerauftrag/add-dauerauftrag.component';
 import {DauerauftraegeComponent} from "./pages/dauerauftraege/dauerauftraege.component";
 import {GemeinsameDauerauftraegeComponent} from "./pages/gemeinsame-dauerauftraege/gemeinsame-dauerauftraege.component";
+import { KategorienComponent } from './pages/kategorien/kategorien.component';
 
 
 @NgModule({
@@ -47,13 +48,14 @@ import {GemeinsameDauerauftraegeComponent} from "./pages/gemeinsame-dauerauftrae
     SettingsComponent,
     PartnernameComponent,
     AllegemeinsamebuchungenComponent,
-    AddschnelleinstiegComponent,
+    AddBuchungComponent,
     SidebarToggleComponent,
     LogoutComponent,
     OfflineLoginComponent,
     AddDauerauftragComponent,
     DauerauftraegeComponent,
-    GemeinsameDauerauftraegeComponent
+    GemeinsameDauerauftraegeComponent,
+    KategorienComponent
   ],
     imports: [
         BrowserModule,

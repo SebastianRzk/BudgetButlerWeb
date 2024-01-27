@@ -1,17 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {EinzelbuchungService} from '../../domain/einzelbuchung.service';
-import {Observable} from 'rxjs';
-import {KategorieService} from '../../domain/kategorie.service';
-import {EinzelbuchungAnlegen, GemeinsameBuchungAnlegen} from '../../domain/model';
-import {GemeinsamebuchungService} from '../../domain/gemeinsamebuchung.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EinzelbuchungService } from '../../domain/einzelbuchung.service';
+import { Observable } from 'rxjs';
+import { Kategorie, KategorieService } from '../../domain/kategorie.service';
+import { EinzelbuchungAnlegen, GemeinsameBuchungAnlegen } from '../../domain/model';
+import { GemeinsamebuchungService } from '../../domain/gemeinsamebuchung.service';
 
 @Component({
   selector: 'app-addschnelleinstieg',
-  templateUrl: './addschnelleinstieg.component.html',
-  styleUrls: ['./addschnelleinstieg.component.css']
+  templateUrl: './add-buchung.component.html',
+  styleUrls: ['./add-buchung.component.css']
 })
-export class AddschnelleinstiegComponent implements OnInit {
+export class AddBuchungComponent implements OnInit {
+  private einzelbuchungsService: EinzelbuchungService = inject(EinzelbuchungService);
+  private gemeinsameBuchungenService: GemeinsamebuchungService = inject(GemeinsamebuchungService);
+  private kategorieService: KategorieService = inject(KategorieService);
+
+
   buchungForm = new FormGroup({
     datum: new FormControl(new Date(), Validators.required),
     name: new FormControl('', Validators.required),
@@ -20,16 +25,11 @@ export class AddschnelleinstiegComponent implements OnInit {
     gemeinsameBuchung: new FormControl(false)
   });
 
-  kategorien: Observable<string[]>;
+  kategorien: Observable<Kategorie[]> = this.kategorieService.kategorien$;
 
-  constructor(
-    private einzelbuchungsService: EinzelbuchungService,
-    private gemeinsameBuchungenService: GemeinsamebuchungService,
-    private kategorieService: KategorieService) {
-  }
 
   ngOnInit() {
-    this.kategorien = this.kategorieService.getAll();
+    this.kategorieService.refresh();
   }
 
   onFormSubmit() {

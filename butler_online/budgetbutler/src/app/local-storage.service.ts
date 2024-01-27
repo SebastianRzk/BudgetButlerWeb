@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class LocalStorageService {
 
-  constructor() { }
 
   private readonly LOCAL_LOGIN_KEY = 'butler.local.login';
 

@@ -11,19 +11,19 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AddschnelleinstiegComponent} from './addschnelleinstieg.component';
+import {AddBuchungComponent} from './add-buchung.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {RouterTestingModule} from '@angular/router/testing';
 
 
 describe('AddSchnelleinstiegComponent', () => {
-  let component: AddschnelleinstiegComponent;
-  let fixture: ComponentFixture<AddschnelleinstiegComponent>;
+  let component: AddBuchungComponent;
+  let fixture: ComponentFixture<AddBuchungComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AddschnelleinstiegComponent,
+        AddBuchungComponent,
       ],
       imports: [
         HttpClientTestingModule,
@@ -48,7 +48,7 @@ describe('AddSchnelleinstiegComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddschnelleinstiegComponent);
+    fixture = TestBed.createComponent(AddBuchungComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

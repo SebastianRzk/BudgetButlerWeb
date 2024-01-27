@@ -1,18 +1,19 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ApiproviderService} from "./apiprovider.service";
-import {NotificationService} from "./notification.service";
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { ApiProviderService } from "./api-provider.service";
+import { NotificationService } from "./notification.service";
 import {
   DauerauftragLoeschen,
   ERROR_LOADING_GEMEINSME_DAUERAUFTRAEGE,
-  ERROR_RESULT, GemeinsamerDauerauftrag,
+  ERROR_RESULT,
+  GemeinsamerDauerauftrag,
   GemeinsamerDauerauftragAnlegen,
   Result
 } from "./model";
-import {GemeinsamerDauerauftragAnlegenTO, GemeinsamerDauerauftragTO} from "./modelTo";
-import {toGemeinsamerDauerauftrag, toGemeinsamerDauerauftragAnlegenTO} from "./mapper";
-import {BehaviorSubject} from "rxjs";
-import {map} from "rxjs/operators";
+import { GemeinsamerDauerauftragAnlegenTO, GemeinsamerDauerauftragTO } from "./modelTo";
+import { toGemeinsamerDauerauftrag, toGemeinsamerDauerauftragAnlegenTO } from "./mapper";
+import { BehaviorSubject } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ import {map} from "rxjs/operators";
 export class GemeinsameDauerauftraegeService {
   private httpClient: HttpClient = inject(HttpClient);
 
-  private apiProvider: ApiproviderService = inject(ApiproviderService);
+  private apiProvider: ApiProviderService = inject(ApiProviderService);
 
   private notification: NotificationService = inject(NotificationService);
 
@@ -33,7 +34,7 @@ export class GemeinsameDauerauftraegeService {
     const dto: GemeinsamerDauerauftragAnlegenTO = toGemeinsamerDauerauftragAnlegenTO(anlegen);
     this.httpClient.post<Result>(this.apiProvider.getUrl('gemeinsamer_dauerauftrag'), dto).toPromise().then(
       data => this.notification.handleServerResult(data, 'Speichern des gemeinsamen Dauerauftrags'),
-      error => this.notification.handleServerResult(ERROR_RESULT, 'Speichern des gemeinsamen Dauerauftrags')
+      error => this.notification.handleError(error, ERROR_RESULT, 'Speichern des gemeinsamen Dauerauftrags')
     );
   }
 
@@ -42,7 +43,8 @@ export class GemeinsameDauerauftraegeService {
     this.httpClient.get<GemeinsamerDauerauftragTO[]>(this.apiProvider.getUrl('gemeinsame_dauerauftraege'))
       .pipe(map(x => x.map(toGemeinsamerDauerauftrag))).subscribe(
       x => this.gemeinsameDauerauftraege.next(x),
-      error => this.notification.log(ERROR_LOADING_GEMEINSME_DAUERAUFTRAEGE, ERROR_LOADING_GEMEINSME_DAUERAUFTRAEGE.message));
+      error => this.notification.handleError(error,
+        ERROR_LOADING_GEMEINSME_DAUERAUFTRAEGE, ERROR_LOADING_GEMEINSME_DAUERAUFTRAEGE.message));
   }
 
   public delete(dauerauftragLoeschen: DauerauftragLoeschen) {
@@ -52,9 +54,9 @@ export class GemeinsameDauerauftraegeService {
         this.refresh();
       },
       error => {
-        this.notification.handleServerResult(ERROR_RESULT, 'Löschen des gemeinsamen Dauerauftrags');
+        this.notification.handleError(error, ERROR_RESULT, 'Löschen des gemeinsamen Dauerauftrags');
         this.refresh();
       }
-    );
+  );
   }
 }

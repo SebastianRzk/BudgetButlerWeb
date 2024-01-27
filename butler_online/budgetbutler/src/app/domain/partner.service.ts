@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { Result } from './model';
 import { HttpClient } from '@angular/common/http';
-import { ApiproviderService } from './apiprovider.service';
+import { ApiProviderService } from './api-provider.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,8 @@ export class PartnerService {
 
   private partnerNameSubject: Subject<PartnerInfo>;
 
-  constructor(private httpClient: HttpClient,
-              private api: ApiproviderService) { }
+  private httpClient: HttpClient = inject(HttpClient);
+  private api: ApiProviderService = inject(ApiProviderService);
 
   getPartnerInfo: () => Observable<PartnerInfo> = () => {
     if (!this.partnerNameSubject) {

@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PartnerService, PartnerInfo } from '../../../domain/partner.service';
 import {Validators, FormControl} from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -10,12 +10,11 @@ import { first } from 'rxjs/operators';
 })
 export class PartnernameComponent implements OnInit {
 
+  private partnerService: PartnerService = inject(PartnerService);
+
   partnerName = new FormControl('', Validators.required);
   status: string[] = [];
   verknuepfungAktiv = true;
-
-  constructor(private partnerService: PartnerService) {
-  }
 
   onClick: () => void = () => {
     if (this.verknuepfungAktiv) {

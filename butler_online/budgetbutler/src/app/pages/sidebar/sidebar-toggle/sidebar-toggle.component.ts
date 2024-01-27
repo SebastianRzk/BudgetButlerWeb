@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {MenuitemService} from '../../../domain/menuitem.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {AuthContainer, AuthService} from '../../auth/auth.service';
+import { Component, inject } from '@angular/core';
+import { MenuItemService } from '../../../domain/menu-item.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AuthContainer, AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-sidebar-toggle',
@@ -11,12 +11,11 @@ import {AuthContainer, AuthService} from '../../auth/auth.service';
 })
 export class SidebarToggleComponent {
 
-  closed$: Observable<boolean>;
-  user$: Observable<AuthContainer>;
+  public menuService: MenuItemService = inject(MenuItemService);
+  private authService: AuthService = inject(AuthService);
 
-  constructor(public menuService: MenuitemService, authService: AuthService) {
-    this.closed$ = menuService.opened$.pipe(map(x => !x));
-    this.user$ = authService.auth$;
-  }
+  closed$: Observable<boolean> = this.menuService.opened$.pipe(map(x => !x));
+  user$: Observable<AuthContainer> = this.authService.auth$;
+
 
 }

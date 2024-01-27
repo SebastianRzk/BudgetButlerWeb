@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ApiproviderService } from './apiprovider.service';
+import { ApiProviderService } from './api-provider.service';
 import { toGemeinsameBuchung, toGemeinsameBuchungAnlegenTO } from './mapper';
 import {
   ERROR_LOADING_GEMEINSAME_BUCHUNGEN,
@@ -20,17 +20,18 @@ import { map } from 'rxjs/operators';
 })
 export class GemeinsamebuchungService {
 
+  private httpClient: HttpClient = inject(HttpClient);
+  private api: ApiProviderService = inject(ApiProviderService);
+  private notification: NotificationService = inject(NotificationService);
+
   private gemeinsamebuchungen = new BehaviorSubject<GemeinsameBuchung[]>([]);
 
   public readonly gemeinsameBuchungen$ = this.gemeinsamebuchungen.asObservable();
 
-  constructor(private httpClient: HttpClient, private api: ApiproviderService, private notification: NotificationService) {
-  }
-
   public save(buchung: GemeinsameBuchungAnlegen) {
     this.httpClient.post<Result>(this.api.getUrl('gemeinsame_buchung'), toGemeinsameBuchungAnlegenTO(buchung)).toPromise().then(
       data => this.notification.handleServerResult(data, 'Speichern der Ausgabe'),
-      error => this.notification.handleServerResult(ERROR_RESULT, 'Speichern der Ausgabe')
+      error => this.notification.handleError(error, ERROR_RESULT, 'Speichern der Ausgabe')
     );
   }
 
@@ -39,7 +40,7 @@ export class GemeinsamebuchungService {
       .pipe(map((dtos: GemeinsameBuchungTO[]) => dtos.map(toGemeinsameBuchung)))
       .subscribe(
         x => this.gemeinsamebuchungen.next(x),
-        error => this.notification.log(ERROR_LOADING_GEMEINSAME_BUCHUNGEN, ERROR_LOADING_GEMEINSAME_BUCHUNGEN.message));
+        error => this.notification.handleError(error, ERROR_LOADING_GEMEINSAME_BUCHUNGEN, ERROR_LOADING_GEMEINSAME_BUCHUNGEN.message));
   }
 
   public delete(buchung: GemeinsameBuchungLoeschen) {
@@ -49,7 +50,7 @@ export class GemeinsamebuchungService {
         this.refresh();
       },
       error => {
-        this.notification.handleServerResult(ERROR_RESULT, 'Löschen der Ausgabe');
+        this.notification.handleError(error, ERROR_RESULT, 'Löschen der Ausgabe');
         this.refresh();
       }
     );

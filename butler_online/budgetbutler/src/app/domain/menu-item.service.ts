@@ -3,7 +3,7 @@ import {
   ADD_DAUERAUFTRAG_ROUTE,
   ADD_SCHNELLEINSTIEG_ROUTE,
   ALLE_EINZELBUCHUNGEN_ROUTE,
-  ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, DAUERAUFTRAEGE_ROUTE, GEMEINSAME_DAUERAUFTRAEGE_ROUTE,
+  ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, DAUERAUFTRAEGE_ROUTE, GEMEINSAME_DAUERAUFTRAEGE_ROUTE, KATEGORIEN_ROUTE,
   SETTINGS_ROUTE
 } from '../app-routes';
 import {BehaviorSubject} from 'rxjs';
@@ -49,6 +49,12 @@ const ALLE_GEMEINSAME_BUCHUNGEN = {
   icon: 'format_list_bulleted'
 };
 
+const KATEGORIEN = {
+  title: 'Kategorien verwalten',
+  url: KATEGORIEN_ROUTE,
+  icon: 'category'
+};
+
 const EINSTELLUNGEN = {
   title: 'Einstellungen',
   url: SETTINGS_ROUTE,
@@ -62,6 +68,7 @@ export const MENU_ITEMS: MenuItem[] = [
   ALLE_GEMEINSAME_BUCHUNGEN,
   DAUERAUFTRAEGE,
   GEMEINSAME_DAUERAUFTRAEGE,
+  KATEGORIEN,
   EINSTELLUNGEN
 ];
 
@@ -69,14 +76,11 @@ export const MENU_ITEMS: MenuItem[] = [
 @Injectable({
   providedIn: 'root'
 })
-export class MenuitemService {
+export class MenuItemService {
 
   private opened = new BehaviorSubject(false);
 
   public readonly opened$ = this.opened.asObservable();
-
-  constructor() {
-  }
 
   public open() {
     this.opened.next(true);
