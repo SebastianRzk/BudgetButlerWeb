@@ -1,6 +1,7 @@
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::database::DbError;
 
 use crate::kategorien::model::{Kategorie, NeueKategorie};
 use crate::schema::kategorien;
@@ -32,8 +33,6 @@ impl KategorieEntity {
         }
     }
 }
-
-type DbError = Box<dyn std::error::Error + Send + Sync>;
 
 pub fn find_all_kategorien(
     conn: &mut MysqlConnection,

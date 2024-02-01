@@ -4,7 +4,6 @@ use actix_identity::IdentityMiddleware;
 use actix_session::{config::PersistentSession, storage::CookieSessionStore, SessionMiddleware};
 use actix_web::cookie::Key;
 use actix_web::{error, middleware, web, App, HttpServer};
-use diesel::{prelude::*, r2d2};
 use std::collections::HashMap;
 use std::sync::RwLock;
 
@@ -57,7 +56,6 @@ mod database;
 mod core;
 mod wiederkehrend;
 
-type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -72,7 +70,7 @@ async fn main() -> std::io::Result<()> {
         .map_err(error::ErrorInternalServerError)
         .unwrap();
 
-    let sessions = web::Data::new(RwLock::new(openidconnect_configuration::Sessions {
+    let sessions = web::Data::new(RwLock::new(user::model::Sessions {
         map: HashMap::new(),
     }));
 

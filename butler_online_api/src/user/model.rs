@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+use openid::{Token, Userinfo};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
@@ -13,4 +15,8 @@ pub struct User {
     pub activated: bool,
     pub lang_key: Option<String>,
     pub authorities: Vec<String>,
+}
+
+pub struct Sessions {
+    pub map: HashMap<String, (User, Token, Userinfo)>,
 }

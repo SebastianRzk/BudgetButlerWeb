@@ -5,16 +5,14 @@ use dotenvy;
 use actix_web::{get, post};
 
 use actix_web::web::Redirect;
-use actix_web::{
-    dev::Payload, error, error::ErrorUnauthorized, http, web, FromRequest, HttpRequest, Responder,
+use actix_web::{error, http, web, HttpRequest, Responder,
 };
 use openid::{DiscoveredClient, Options, Token, Userinfo};
 use serde::{Deserialize, Serialize};
-use std::future::Future;
-use std::{collections::HashMap, pin::Pin, sync::RwLock};
+use std::{sync::RwLock};
 use url::form_urlencoded;
 use url::Url;
-use crate::user::model::User;
+use crate::user::model::{Sessions, User};
 
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -24,46 +22,6 @@ struct Logout {
     logout_url: Option<Url>,
 }
 
-impl FromRequest for User {
-    type Error = error::Error;
-    type Future = Pin<Box<dyn Future<Output = Result<User, error::Error>>>>;
-
-    fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
-        let fut = Identity::from_request(req, pl);
-        let sessions: Option<&web::Data<RwLock<Sessions>>> = req.app_data();
-        if sessions.is_none() {
-            eprintln!("sessions is none!");
-            return Box::pin(async { Err(ErrorUnauthorized("unauthorized")) });
-        }
-        let sessions = sessions.unwrap().clone();
-
-        Box::pin(async move {
-            let id = fut
-                .await
-                .map_err(error::ErrorInternalServerError)?
-                .id()
-                .ok();
-
-            if let Some(identity) = id {
-                if let Some(user) = sessions
-                    .read()
-                    .unwrap()
-                    .map
-                    .get(&identity)
-                    .map(|x| x.0.clone())
-                {
-                    return Ok(user);
-                }
-            };
-
-            Err(ErrorUnauthorized("unauthorized"))
-        })
-    }
-}
-
-pub struct Sessions {
-    pub map: HashMap<String, (User, Token, Userinfo)>,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Failure {

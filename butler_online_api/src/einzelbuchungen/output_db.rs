@@ -3,6 +3,7 @@ use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use time::Date;
 use uuid::Uuid;
+use crate::database::DbError;
 
 use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};
 use crate::schema::einzelbuchungen;
@@ -43,8 +44,6 @@ impl EinzelbuchungEntity {
         }
     }
 }
-
-type DbError = Box<dyn std::error::Error + Send + Sync>;
 
 pub fn find_all_einzelbuchungen(
     conn: &mut MysqlConnection,
