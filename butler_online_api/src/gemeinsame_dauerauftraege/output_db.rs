@@ -35,7 +35,7 @@ impl NeuerGemeinsamerDauerauftrag {
             ende_datum: self.ende_datum,
             rhythmus: self.rhythmus.to_string(),
             user: self.user.clone(),
-            letzte_ausfuehrung: Option::None,
+            letzte_ausfuehrung: None,
             zielperson: self.zielperson.clone()
         }
     }

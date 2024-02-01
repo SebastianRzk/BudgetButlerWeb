@@ -89,7 +89,7 @@ async fn main() -> std::io::Result<()> {
                 SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
                     .cookie_secure(false)
                     .session_lifecycle(
-                        PersistentSession::default().session_ttl(cookie::time::Duration::hours(2)),
+                        PersistentSession::default().session_ttl(time::Duration::hours(2)),
                     )
                     .build(),
             )

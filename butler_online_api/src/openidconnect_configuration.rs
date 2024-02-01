@@ -164,7 +164,7 @@ pub async fn generate_discovery_client() -> Result<openid::Client, error::Error>
     let client_id = dotenvy::var("CLIENT_ID").unwrap();
     let client_secret = dotenvy::var("CLIENT_SECRET").unwrap();
     let redirect = Some(host("/api/login/login/oauth2/code/oidc"));
-    let issuer = reqwest::Url::parse(&dotenvy::var("ISSUER").unwrap().as_str()).unwrap();
+    let issuer = Url::parse(&dotenvy::var("ISSUER").unwrap().as_str()).unwrap();
     let client = DiscoveredClient::discover(client_id, client_secret, redirect, issuer)
         .await
         .map_err(error::ErrorInternalServerError)
