@@ -13,8 +13,8 @@ import { LocalStorageService } from '../../local-storage.service';
   providedIn: 'root',
 })
 export class AuthService {
-  private auth = new BehaviorSubject<AuthContainer>(LOGGED_OUT);
-  public readonly auth$ = this.auth.asObservable();
+  private auth: BehaviorSubject<AuthContainer> = new BehaviorSubject<AuthContainer>(LOGGED_OUT);
+  public readonly auth$: Observable<AuthContainer> = this.auth.asObservable();
 
   private httpClient: HttpClient = inject(HttpClient);
   private router: Router = inject(Router);
@@ -55,7 +55,6 @@ export class AuthService {
     this.httpClient.get<AuthContainer | null>(this.api.getUrl('login/user')).subscribe(
       data => {
         if (data != null && data.loggedIn) {
-          console.log(localStorage);
           if (this.localStorageService.isOfflineLogin() || forLocalLogin) {
             this.localStorageService.removeLocalLogin();
             this.router.navigate([LOGIN_OFFLINE_ROUTE]);

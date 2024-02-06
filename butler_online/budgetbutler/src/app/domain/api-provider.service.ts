@@ -6,8 +6,6 @@ const apiUrl = '/api/';
 })
 export class ApiProviderService {
 
-  constructor() { }
-
   getUrl(relPath: string): string {
     return apiUrl + relPath;
   }

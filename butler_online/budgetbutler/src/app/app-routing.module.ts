@@ -16,7 +16,7 @@ import {
   ROOT_ROUTE,
   SETTINGS_ROUTE
 } from './app-routes';
-import { AuthGuard } from './pages/auth/auth.guard';
+import { canActivateAuthGuard } from './pages/auth/auth.guard';
 import { LogoutComponent } from './pages/auth/logout/logout.component';
 import { OfflineLoginComponent } from './pages/offline-login/offline-login.component';
 import { AddDauerauftragComponent } from "./pages/adddauerauftrag/add-dauerauftrag.component";
@@ -30,15 +30,15 @@ const routes: Routes = [
   {path: LOGOUT_ROUTE, component: LogoutComponent},
   {path: LOGIN_OFFLINE_ROUTE, component: OfflineLoginComponent},
 
-  {path: ADD_SCHNELLEINSTIEG_ROUTE, component: AddBuchungComponent, canActivate: [AuthGuard]},
-  {path: ADD_DAUERAUFTRAG_ROUTE, component: AddDauerauftragComponent, canActivate: [AuthGuard]},
-  {path: DAUERAUFTRAEGE_ROUTE, component: DauerauftraegeComponent, canActivate: [AuthGuard]},
-  {path: GEMEINSAME_DAUERAUFTRAEGE_ROUTE, component: GemeinsameDauerauftraegeComponent, canActivate: [AuthGuard]},
-  {path: ALLE_EINZELBUCHUNGEN_ROUTE, component: AllebuchungenComponent, canActivate: [AuthGuard]},
-  {path: ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, component: AllegemeinsamebuchungenComponent, canActivate: [AuthGuard]},
-  {path: KATEGORIEN_ROUTE, component: KategorienComponent, canActivate: [AuthGuard]},
-  {path: SETTINGS_ROUTE, component: SettingsComponent, canActivate: [AuthGuard]},
-  {path: ROOT_ROUTE, component: AddBuchungComponent, canActivate: [AuthGuard]}
+  {path: ADD_SCHNELLEINSTIEG_ROUTE, component: AddBuchungComponent, canActivate: [canActivateAuthGuard]},
+  {path: ADD_DAUERAUFTRAG_ROUTE, component: AddDauerauftragComponent, canActivate: [canActivateAuthGuard]},
+  {path: DAUERAUFTRAEGE_ROUTE, component: DauerauftraegeComponent, canActivate: [canActivateAuthGuard]},
+  {path: GEMEINSAME_DAUERAUFTRAEGE_ROUTE, component: GemeinsameDauerauftraegeComponent, canActivate: [canActivateAuthGuard]},
+  {path: ALLE_EINZELBUCHUNGEN_ROUTE, component: AllebuchungenComponent, canActivate: [canActivateAuthGuard]},
+  {path: ALLE_GEMEINSAME_BUCHUNGEN_ROUTE, component: AllegemeinsamebuchungenComponent, canActivate: [canActivateAuthGuard]},
+  {path: KATEGORIEN_ROUTE, component: KategorienComponent, canActivate: [canActivateAuthGuard]},
+  {path: SETTINGS_ROUTE, component: SettingsComponent, canActivate: [canActivateAuthGuard]},
+  {path: ROOT_ROUTE, component: AddBuchungComponent, canActivate: [canActivateAuthGuard]}
 ];
 
 @NgModule({
