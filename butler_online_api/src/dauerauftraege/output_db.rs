@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use time::Date;
 use uuid::Uuid;
 use crate::core::rhythmus::rhythmus_from_string;
+use crate::database::DbError;
 
 use crate::dauerauftraege::model::{Dauerauftrag, NeuerDauerauftrag};
 use crate::schema::dauerauftraege;
@@ -33,7 +34,7 @@ impl NeuerDauerauftrag {
             ende_datum: self.ende_datum,
             rhythmus: self.rhythmus.to_string(),
             user: self.user.clone(),
-            letzte_ausfuehrung: Option::None
+            letzte_ausfuehrung: None
         }
     }
 }
@@ -70,8 +71,6 @@ impl Dauerauftrag {
     }
 }
 
-type DbError = Box<dyn std::error::Error + Send + Sync>;
-
 pub fn find_all_dauerauftraege(
     conn: &mut MysqlConnection,
     user_name: String,
@@ -81,21 +80,6 @@ pub fn find_all_dauerauftraege(
     let alle_dauerauftraege = dauerauftraege
         .filter(user.eq(user_name))
         .order(start_datum.asc())
-        .get_results(conn);
-
-    Ok(alle_dauerauftraege
-        .unwrap()
-        .iter()
-        .map(DauerauftragEntity::to_domain)
-        .collect::<Vec<Dauerauftrag>>())
-}
-
-pub fn find_all_dauerauftraege_without_user(
-    conn: &mut MysqlConnection,
-) -> Result<Vec<Dauerauftrag>, DbError> {
-    use crate::schema::dauerauftraege::dsl::*;
-
-    let alle_dauerauftraege = dauerauftraege
         .get_results(conn);
 
     Ok(alle_dauerauftraege

@@ -28,7 +28,7 @@ fn add_one_month(date: Date, months_to_add: u32) -> Date {
         days = max_days_of_month;
     }
 
-    return Date::from_calendar_date(date.year() + additional_years as i32, date.month().nth_next(months_to_add as u8), days as u8).unwrap();
+    return Date::from_calendar_date(date.year() + additional_years, date.month().nth_next(months_to_add as u8), days as u8).unwrap();
 }
 
 pub fn to_date(date_like: NaiveDate) -> Date {

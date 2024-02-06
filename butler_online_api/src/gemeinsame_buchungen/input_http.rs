@@ -4,14 +4,12 @@ use crate::partner::output_db::calculate_partnerstatus;
 use crate::result_dto::result_success;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use bigdecimal::BigDecimal;
-use diesel::{r2d2, MysqlConnection};
 use serde::{Deserialize, Serialize};
 use time::macros::format_description;
 use time::Date;
 use uuid::Uuid;
+use crate::database::DbPool;
 use crate::user::model::User;
-
-type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

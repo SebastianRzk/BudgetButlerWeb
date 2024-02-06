@@ -2,17 +2,16 @@ use crate::dauerauftraege::output_db;
 use crate::result_dto::result_success;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use bigdecimal::BigDecimal;
-use diesel::{r2d2, MysqlConnection};
 use serde::{Deserialize, Serialize};
 use time::macros::format_description;
 use time::Date;
 use uuid::Uuid;
 use crate::core::rhythmus::rhythmus_from_string;
+use crate::database::DbPool;
 use crate::dauerauftraege::model::{Dauerauftrag, NeuerDauerauftrag};
 use crate::user::model::User;
 use crate::wiederkehrend::buchung;
 
-type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

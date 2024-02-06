@@ -13,10 +13,9 @@ export class KategorieService {
 
   private kategorien: Subject<Kategorie[]> = new BehaviorSubject([]);
   private notification: NotificationService = inject(NotificationService);
+  private httpClient: HttpClient = inject(HttpClient);
+  private api: ApiProviderService = inject(ApiProviderService);
   kategorien$: Observable<Kategorie[]> = this.kategorien.asObservable();
-
-  constructor(private httpClient: HttpClient, private api: ApiProviderService) {
-  }
 
   public refresh(): void {
     this.httpClient.get<KategorieTo[]>(this.api.getUrl('kategorien'))

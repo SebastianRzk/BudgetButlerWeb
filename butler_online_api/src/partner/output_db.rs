@@ -1,5 +1,6 @@
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
+use crate::database::DbError;
 
 use crate::partner::model::{NeuerPartnerStatus, PartnerStatus};
 use crate::schema::partner;
@@ -29,8 +30,6 @@ impl PartnerStatusEntity {
         }
     }
 }
-
-type DbError = Box<dyn std::error::Error + Send + Sync>;
 
 pub fn calculate_partnerstatus(
     conn: &mut MysqlConnection,

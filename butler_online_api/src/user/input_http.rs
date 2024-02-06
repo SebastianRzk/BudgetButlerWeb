@@ -1,6 +1,12 @@
-use actix_web::{get, HttpResponse, Responder};
+use std::future::Future;
+use std::pin::Pin;
+use std::sync::RwLock;
+use actix_identity::Identity;
+use actix_web::{error, FromRequest, get, HttpRequest, HttpResponse, Responder, web};
+use actix_web::dev::Payload;
+use actix_web::error::ErrorUnauthorized;
 use serde::{Serialize};
-use crate::user::model::User;
+use crate::user::model::{Sessions, User};
 
 
 #[derive(Serialize)]
@@ -23,4 +29,42 @@ pub async fn user_info(user: Option<User>) -> actix_web::Result<impl Responder> 
         user_name: "".to_string(),
         logged_in: false
     }))
+}
+
+
+impl FromRequest for User {
+    type Error = error::Error;
+    type Future = Pin<Box<dyn Future<Output = Result<User, error::Error>>>>;
+
+    fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
+        let fut = Identity::from_request(req, pl);
+        let sessions: Option<&web::Data<RwLock<Sessions>>> = req.app_data();
+        if sessions.is_none() {
+            eprintln!("sessions is none!");
+            return Box::pin(async { Err(ErrorUnauthorized("unauthorized")) });
+        }
+        let sessions = sessions.unwrap().clone();
+
+        Box::pin(async move {
+            let id = fut
+                .await
+                .map_err(error::ErrorInternalServerError)?
+                .id()
+                .ok();
+
+            if let Some(identity) = id {
+                if let Some(user) = sessions
+                    .read()
+                    .unwrap()
+                    .map
+                    .get(&identity)
+                    .map(|x| x.0.clone())
+                {
+                    return Ok(user);
+                }
+            };
+
+            Err(ErrorUnauthorized("unauthorized"))
+        })
+    }
 }

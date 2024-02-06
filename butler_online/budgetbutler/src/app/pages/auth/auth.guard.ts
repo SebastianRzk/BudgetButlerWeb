@@ -1,33 +1,31 @@
-import {Injectable} from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 
-import {AuthService} from './auth.service';
+import { AuthContainer, AuthService } from './auth.service';
 import { map, skip, take } from 'rxjs/operators';
-import {LOGIN_ROUTE} from '../../app-routes';
-import {Observable} from 'rxjs';
+import { LOGIN_ROUTE } from '../../app-routes';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {
-  }
+export class AuthGuard {
+  private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> {
-    this.authService.checkLoginState();
-    return this.authService.auth$.pipe(skip(1)).pipe(take(1)).pipe(map(
-      auth => {
-        console.log(auth);
+  canActivate(): Observable<boolean> {
+    const result: Observable<boolean> = this.authService.auth$.pipe(skip(1), take(1)).pipe(map(
+      (auth: AuthContainer) => {
         if (!auth.loggedIn) {
-          console.log('routing away');
           this.router.navigate([LOGIN_ROUTE]);
           return false;
         }
         return true;
       })
     );
+    this.authService.checkLoginState();
+    return result
   }
-
 }
+
+export const canActivateAuthGuard: CanActivateFn = () => inject(AuthGuard).canActivate()

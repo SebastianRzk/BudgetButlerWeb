@@ -13,3 +13,4 @@ FROM nginx:alpine
 COPY butler_online/robots.txt /www/
 COPY butler_online/site.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-step-angular /app/dist /www
+HEALTHCHECK --interval=12s --timeout=12s --start-period=7s CMD curl localhost:80/index.html --fail

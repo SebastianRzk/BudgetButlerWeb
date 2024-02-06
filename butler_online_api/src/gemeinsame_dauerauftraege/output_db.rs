@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use time::Date;
 use uuid::Uuid;
 use crate::core::rhythmus::rhythmus_from_string;
+use crate::database::DbError;
 
 use crate::gemeinsame_dauerauftraege::model::{GemeinsamerDauerauftrag, NeuerGemeinsamerDauerauftrag};
 use crate::schema::gemeinsame_dauerauftraege;
@@ -34,7 +35,7 @@ impl NeuerGemeinsamerDauerauftrag {
             ende_datum: self.ende_datum,
             rhythmus: self.rhythmus.to_string(),
             user: self.user.clone(),
-            letzte_ausfuehrung: Option::None,
+            letzte_ausfuehrung: None,
             zielperson: self.zielperson.clone()
         }
     }
@@ -74,8 +75,6 @@ impl GemeinsamerDauerauftrag {
     }
 }
 
-type DbError = Box<dyn std::error::Error + Send + Sync>;
-
 pub fn finde_alle_gemeinsame_dauerauftraege(
     conn: &mut MysqlConnection,
     user_name: String,
@@ -85,21 +84,6 @@ pub fn finde_alle_gemeinsame_dauerauftraege(
     let alle_dauerauftraege = gemeinsame_dauerauftraege
         .filter(user.eq(user_name))
         .order(start_datum.asc())
-        .get_results(conn);
-
-    Ok(alle_dauerauftraege
-        .unwrap()
-        .iter()
-        .map(GemeinsamerDauerauftragEntity::to_domain)
-        .collect::<Vec<GemeinsamerDauerauftrag>>())
-}
-
-pub fn finde_alle_gemeinsame_dauerauftraege_without_user(
-    conn: &mut MysqlConnection,
-) -> Result<Vec<GemeinsamerDauerauftrag>, DbError> {
-    use crate::schema::gemeinsame_dauerauftraege::dsl::*;
-
-    let alle_dauerauftraege = gemeinsame_dauerauftraege
         .get_results(conn);
 
     Ok(alle_dauerauftraege

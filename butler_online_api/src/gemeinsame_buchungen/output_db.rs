@@ -3,6 +3,7 @@ use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use time::Date;
 use uuid::Uuid;
+use crate::database::DbError;
 
 use crate::gemeinsame_buchungen::model::{GemeinsameBuchung, NeueGemeinsameBuchung};
 use crate::partner;
@@ -47,8 +48,6 @@ impl GemeinsameBuchungEntity {
         }
     }
 }
-
-type DbError = Box<dyn std::error::Error + Send + Sync>;
 
 pub fn find_all_gemeinsame_buchungen(
     conn: &mut MysqlConnection,
