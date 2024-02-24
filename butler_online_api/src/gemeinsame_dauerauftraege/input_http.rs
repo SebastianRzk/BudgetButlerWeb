@@ -26,7 +26,7 @@ pub struct NeuerGemeinsamerDauerauftragDto {
 }
 
 impl NeuerGemeinsamerDauerauftragDto {
-    pub fn to_domain(&mut self, user: String, partnerperson: String) -> NeuerGemeinsamerDauerauftrag {
+    pub fn to_domain(&self, user: String, partnerperson: String) -> NeuerGemeinsamerDauerauftrag {
         let mut zielperson: String = user.clone();
         if !self.eigene_buchung.clone() {
             zielperson = partnerperson
@@ -83,7 +83,7 @@ impl GemeinsamerDauerauftrag {
 #[post("/gemeinsamer_dauerauftrag")]
 pub async fn add_gemeinsamer_dauerauftrag(
     pool: web::Data<DbPool>,
-    mut form: web::Json<NeuerGemeinsamerDauerauftragDto>,
+    form: web::Json<NeuerGemeinsamerDauerauftragDto>,
     user: User,
 ) -> actix_web::Result<impl Responder> {
     let user: String = user.sub;
