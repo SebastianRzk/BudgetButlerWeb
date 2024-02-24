@@ -19,7 +19,7 @@ pub struct NeueEinzelbuchungDto {
 }
 
 impl NeueEinzelbuchungDto {
-    pub fn to_domain(&mut self, user: String) -> NeueEinzelbuchung {
+    pub fn to_domain(&self, user: String) -> NeueEinzelbuchung {
         NeueEinzelbuchung {
             kategorie: self.kategorie.clone(),
             name: self.name.clone(),
@@ -47,7 +47,7 @@ pub struct EinzelbuchungDto {
 #[post("/einzelbuchung")]
 pub async fn add_einzelbuchung(
     pool: web::Data<DbPool>,
-    mut form: web::Json<NeueEinzelbuchungDto>,
+    form: web::Json<NeueEinzelbuchungDto>,
     user: User,
 ) -> actix_web::Result<impl Responder> {
     let user: String = user.sub;

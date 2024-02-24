@@ -25,7 +25,7 @@ pub struct NeuerDauerauftragDto {
 }
 
 impl NeuerDauerauftragDto {
-    pub fn to_domain(&mut self, user: String) -> NeuerDauerauftrag {
+    pub fn to_domain(&self, user: String) -> NeuerDauerauftrag {
         NeuerDauerauftrag {
             kategorie: self.kategorie.clone(),
             name: self.name.clone(),
@@ -74,7 +74,7 @@ impl Dauerauftrag {
 #[post("/dauerauftrag")]
 pub async fn add_dauerauftrag(
     pool: web::Data<DbPool>,
-    mut form: web::Json<NeuerDauerauftragDto>,
+    form: web::Json<NeuerDauerauftragDto>,
     user: User,
 ) -> actix_web::Result<impl Responder> {
     let user: String = user.sub;
