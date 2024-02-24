@@ -9,7 +9,7 @@ use crate::einzelbuchungen::model::NeueEinzelbuchung;
 pub fn verarbeite_dauerauftraege(mut connection: &mut PooledConnection<ConnectionManager<MysqlConnection>>) {
     let start = SystemTime::now();
     let mut anzahl_verarbeiteter_buchungen = 0;
-    let auftraege = dauerauftraege::output_db_unsafe::find_all_dauerauftraege_without_user(&mut connection).unwrap();
+    let auftraege = dauerauftraege::output_db_cron::find_all_dauerauftraege_without_user(&mut connection).unwrap();
     for dauerauftrag in auftraege.iter() {
         anzahl_verarbeiteter_buchungen += verarbeite_dauerauftrag(&mut connection, dauerauftrag);
     }
