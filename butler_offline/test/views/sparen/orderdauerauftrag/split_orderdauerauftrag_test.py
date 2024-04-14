@@ -1,25 +1,27 @@
-from butler_offline.core.database import Dauerauftraege
+from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
 from butler_offline.test.request_stubs import PostRequestAction
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.views.einzelbuchungen.split_dauerauftrag import handle_request, SplitDauerauftraegeContext, index
+from butler_offline.views.sparen.orderdauerauftrag.split_orderdauerauftrag import handle_request, \
+    SplitOrderDauerauftraegeContext, index
 
 
 def test_preset_values_should_be_transactional():
-    dauerauftraege = Dauerauftraege()
-    dauerauftraege.add(
+    orderdauerauftraege = OrderDauerauftrag()
+    orderdauerauftraege.add(
         startdatum=datum('01.01.2022'),
         endedatum=datum('02.01.2023'),
         rhythmus=FREQUENCY_MONATLICH_NAME,
-        kategorie='kategorie123',
+        depotwert='depotwert123',
+        konto='konto123',
         name='name123',
         wert=123
     )
-    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege, today=datum('01.01.2023'))
+    context = SplitOrderDauerauftraegeContext(orderdauerauftraege=orderdauerauftraege, today=datum('01.01.2023'))
 
     result = handle_request(request=PostRequestAction(action='preset_values',
-                                                      args={'dauerauftrag_id': 0}),
+                                                      args={'orderdauerauftrag_id': 0}),
                             context=context)
 
     assert result.is_transactional()
@@ -28,28 +30,29 @@ def test_preset_values_should_be_transactional():
 def test_index_should_be_secured_by_requesthandler():
     def handle():
         index(request=PostRequestAction(action='preset_values',
-                                        args={'dauerauftrag_id': 0}))
+                                        args={'orderdauerauftrag_id': 0}))
 
     result = run_in_mocked_handler(handle)
 
     assert result.number_of_calls() == 1
-    assert result.html_pages_requested_to_render() == ['einzelbuchungen/split_dauerauftrag.html']
+    assert result.html_pages_requested_to_render() == ['sparen/split_orderdauerauftrag.html']
 
 
 def test_preset_values_should_be_add_preset_for_date_and_wert():
-    dauerauftraege = Dauerauftraege()
-    dauerauftraege.add(
+    orderdauerauftraege = OrderDauerauftrag()
+    orderdauerauftraege.add(
         startdatum=datum('01.01.2022'),
         endedatum=datum('02.01.2023'),
         rhythmus=FREQUENCY_MONATLICH_NAME,
-        kategorie='kategorie123',
+        depotwert='depotwert123',
+        konto='konto123',
         name='name123',
         wert=123
     )
-    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege, today=datum('01.01.2023'))
+    context = SplitOrderDauerauftraegeContext(orderdauerauftraege=orderdauerauftraege, today=datum('01.01.2023'))
 
     result = handle_request(request=PostRequestAction(action='preset_values',
-                                                      args={'dauerauftrag_id': 0}),
+                                                      args={'orderdauerauftrag_id': 0}),
                             context=context)
 
     assert result.get('datum') == [
@@ -94,39 +97,42 @@ def test_preset_values_should_be_add_preset_for_date_and_wert():
          'datum_german': '01.01.2023'},
     ]
     assert result.get('wert') == 123
-    assert result.get('dauerauftrag_id') == 0
+    assert result.get('orderdauerauftrag_id') == 0
 
 
 def test_split_should_split():
-    dauerauftraege = Dauerauftraege()
-    dauerauftraege.add(
+    orderdauerauftraege = OrderDauerauftrag()
+    orderdauerauftraege.add(
         startdatum=datum('01.01.2022'),
         endedatum=datum('02.01.2023'),
         rhythmus=FREQUENCY_MONATLICH_NAME,
-        kategorie='kategorie123',
+        depotwert='depotwert123',
+        konto='konto123',
         name='name123',
         wert=123
     )
-    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege, today=datum('01.01.2023'))
+    context = SplitOrderDauerauftraegeContext(orderdauerauftraege=orderdauerauftraege, today=datum('01.01.2023'))
 
     handle_request(request=PostRequestAction(action='split',
-                                             args={'dauerauftrag_id': 0,
+                                             args={'orderdauerauftrag_id': 0,
                                                    'datum': '2022-04-01',
                                                    'wert': '234'}),
                    context=context)
 
-    assert dauerauftraege.select().count() == 2
-    assert dauerauftraege.get(0) == {'Endedatum': datum('31.03.2022'),
-                                     'Kategorie': 'kategorie123',
-                                     'Name': 'name123',
-                                     'Rhythmus': 'monatlich',
-                                     'Startdatum': datum('01.01.2022'),
-                                     'Wert': 123.0,
-                                     'index': 0}
-    assert dauerauftraege.get(1) == {'Endedatum': datum('02.01.2023'),
-                                     'Kategorie': 'kategorie123',
-                                     'Name': 'name123',
-                                     'Rhythmus': 'monatlich',
-                                     'Startdatum': datum('01.04.2022'),
-                                     'Wert': 234.0,
-                                     'index': 1}
+    assert orderdauerauftraege.select().count() == 2
+    assert orderdauerauftraege.get(0) == {'Endedatum': datum('31.03.2022'),
+                                          'Depotwert': 'depotwert123',
+                                          'Konto':'konto123',
+                                          'Name': 'name123',
+                                          'Rhythmus': 'monatlich',
+                                          'Startdatum': datum('01.01.2022'),
+                                          'Wert': 123.0,
+                                          'index': 0}
+    assert orderdauerauftraege.get(1) == {'Endedatum': datum('02.01.2023'),
+                                          'Depotwert': 'depotwert123',
+                                          'Konto':'konto123',
+                                          'Name': 'name123',
+                                          'Rhythmus': 'monatlich',
+                                          'Startdatum': datum('01.04.2022'),
+                                          'Wert': 234.0,
+                                          'index': 1}

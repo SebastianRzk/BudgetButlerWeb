@@ -1,6 +1,8 @@
-from butler_offline.viewcore import requester
 import logging
+
 import requests
+
+from butler_offline.viewcore import requester
 
 INSTANCE = None
 
@@ -15,7 +17,7 @@ class Requester:
 
     def get(self, server_url, cookies=None):
         logging.info('requested url %s', server_url)
-        response = requests.get(server_url, cookies=cookies)
+        response = requests.get(server_url, cookies=cookies, timeout=10)
         logging.info("response: %s", response)
         logging.info("decoded reponse %s", self.decode(response))
         response.raise_for_status()
@@ -23,12 +25,11 @@ class Requester:
 
     def delete(self, server_url, cookies=None):
         logging.info('requested url %s', server_url)
-        response = requests.delete(server_url, cookies=cookies)
+        response = requests.delete(server_url, cookies=cookies, timeout=10)
         logging.info("response: %s", response)
         logging.info("decoded reponse %s", self.decode(response))
         response.raise_for_status()
         return self.decode(response)
-
 
     def post(self, server_url, data: dict = None, cookies=None):
         if not data:
@@ -36,7 +37,7 @@ class Requester:
         logging.info('requested url for post %s', server_url)
         logging.info("data %s", data)
         logging.info("cookies %s", cookies)
-        response = requests.post(url=server_url, json=data, cookies=cookies)
+        response = requests.post(url=server_url, json=data, cookies=cookies, timeout=10)
         response.raise_for_status()
         return self.decode(response)
 
@@ -48,6 +49,6 @@ class Requester:
 
     def post_raw(self, server_url, data):
         logging.info('requested url %s', server_url)
-        response = requests.post(server_url, data=data)
+        response = requests.post(server_url, data=data, timeout=10)
         response.raise_for_status()
         return response

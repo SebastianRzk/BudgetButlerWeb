@@ -39,11 +39,11 @@ from butler_offline.views.sparen import uebersicht_sparen, \
     uebersicht_depotwerte, \
     add_order, \
     uebersicht_order, \
-    add_orderdauerauftrag, \
-    uebersicht_orderdauerauftrag, \
     add_depotauszug, \
     uebersicht_depotauszuege, \
     uebersicht_etfs
+from butler_offline.views.sparen.orderdauerauftrag import add_orderdauerauftrag, uebersicht_orderdauerauftrag, \
+    split_orderdauerauftrag
 
 app = Flask(__name__)
 
@@ -180,6 +180,11 @@ def display_add_order():
 @app.route(routes.SPAREN_ORDERDAUERAUFTRAG_ADD, methods=['GET', 'POST'])
 def display_add_orderdauerauftrag():
     return add_orderdauerauftrag.index(request)
+
+
+@app.route(routes.SPAREN_ORDERDAUERAUFTRAG_SPLIT, methods=['GET', 'POST'])
+def display_split_orderdauerauftrag():
+    return split_orderdauerauftrag.index(request)
 
 
 @app.route(routes.SPAREN_DEPOTAUSZUG_ADD, methods=['GET', 'POST'])

@@ -4,7 +4,7 @@ from butler_offline.test.test import assert_info_message_keine_order_dauerauftra
     assert_keine_message_set
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
-from butler_offline.views.sparen import uebersicht_orderdauerauftrag
+from butler_offline.views.sparen.orderdauerauftrag import uebersicht_orderdauerauftrag
 
 
 def generate_basic_context(

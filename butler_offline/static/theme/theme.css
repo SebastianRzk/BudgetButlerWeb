@@ -532,3 +532,9 @@ table, thead, tr, td, th{
 .gap-between > * {
     margin-bottom: 1rem;
 }
+
+.datum-option-label {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}

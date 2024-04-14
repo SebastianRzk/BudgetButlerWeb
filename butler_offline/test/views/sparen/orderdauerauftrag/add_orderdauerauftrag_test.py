@@ -8,7 +8,7 @@ from butler_offline.test.test import assert_info_message_keine_depotwerte_erfass
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.viewcore.converter import german_to_rfc as rfc
-from butler_offline.views.sparen import add_orderdauerauftrag
+from butler_offline.views.sparen.orderdauerauftrag import add_orderdauerauftrag
 
 
 def basic_context_with_demo_data(
