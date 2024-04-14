@@ -58,7 +58,7 @@ def handle_for_context_created(
         redirector: Redirector = Redirector(),
         current_database_version_provider: CurrentDatabaseVersionProvider = CurrentDatabaseVersionProvider(),
         overwrite_taint_mode: bool = False
-    ):
+):
     database = persisted_state.database_instance()
     if context.is_ok():
         if database.is_tainted():
@@ -108,17 +108,15 @@ def __handle_request(
         transaction_id = get_transaction_id(request)
         if transaction_id != persisted_state.current_database_version():
             logging.error(
-                'transaction rejected (requested:' +
-                current_database_version_provider.current_database_version() +
-                ", got:" +
-                transaction_id + ')')
+                'transaction rejected (requested: %s, got: %s )',
+                current_database_version_provider.current_database_version(), transaction_id)
             return handle_transaction_out_of_sync(
                 renderer=renderer,
                 database_name=database.name
             )
         logging.info('transaction allowed')
         persisted_state.increase_database_version()
-        logging.info('new db version: ' + str(persisted_state.current_database_version()))
+        logging.info('new db version: %s', str(persisted_state.current_database_version()))
 
     input_context = context_creator(database)
     context = page_executor.execute(page_handler=request_action, request=request, context=input_context)

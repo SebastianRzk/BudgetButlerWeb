@@ -1,12 +1,11 @@
-from butler_offline.views.einzelbuchungen.dauerauftrag.split import get_ausführungszeitpunkte, split_dauerauftrag
+from butler_offline.views.einzelbuchungen.dauerauftrag.split import (get_ausführungszeitpunkte_fuer_dauerauftrag,
+                                                                     split_dauerauftrag)
 from butler_offline.core.database import Dauerauftraege
 from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
-from butler_offline.core.time import stub_today_with
 
 
 def test_berechne_moegliche_ausfuehrungszeitpunkte_should_cap_on_5_in_der_zukunft():
-    stub_today_with(datum('02.01.2022'))
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(
         startdatum=datum('01.01.2022'),
@@ -17,8 +16,9 @@ def test_berechne_moegliche_ausfuehrungszeitpunkte_should_cap_on_5_in_der_zukunf
         wert=123
     )
 
-    result = get_ausführungszeitpunkte(dauerauftraege=dauerauftraege,
-                                       dauerauftrag_id=0)
+    result = get_ausführungszeitpunkte_fuer_dauerauftrag(dauerauftraege=dauerauftraege,
+                                                         dauerauftrag_id=0,
+                                                         today=datum('02.01.2022'))
 
     assert result == [
         datum('01.01.2022'),
@@ -31,7 +31,6 @@ def test_berechne_moegliche_ausfuehrungszeitpunkte_should_cap_on_5_in_der_zukunf
 
 
 def test_berechne_moegliche_ausfuehrungszeitpunkte_should_cap_at_endedatum():
-    stub_today_with(datum('02.01.2022'))
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(
         startdatum=datum('01.01.2022'),
@@ -42,8 +41,9 @@ def test_berechne_moegliche_ausfuehrungszeitpunkte_should_cap_at_endedatum():
         wert=123
     )
 
-    result = get_ausführungszeitpunkte(dauerauftraege=dauerauftraege,
-                                       dauerauftrag_id=0)
+    result = get_ausführungszeitpunkte_fuer_dauerauftrag(dauerauftraege=dauerauftraege,
+                                                         dauerauftrag_id=0,
+                                                         today=datum('02.01.2022'))
 
     assert result == [
         datum('01.01.2022'),

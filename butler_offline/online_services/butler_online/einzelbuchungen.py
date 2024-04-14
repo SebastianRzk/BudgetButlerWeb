@@ -1,5 +1,4 @@
 import json
-import logging
 
 from butler_offline.online_services.butler_online.online_routes import EINZELBUCHUNGEN_URL
 from butler_offline.viewcore import requester

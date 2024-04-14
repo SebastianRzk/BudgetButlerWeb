@@ -30,3 +30,7 @@ class DauerauftragAdd:
             'endedatum': self.driver.find_element(By.NAME, 'endedatum').get_attribute('value'),
             'wert': self.driver.find_element(By.NAME, 'wert').get_attribute('value')
         }
+
+    def click_split_button(self):
+        split_button = self.driver.find_element(By.ID, 'preset_values')
+        split_button.click()

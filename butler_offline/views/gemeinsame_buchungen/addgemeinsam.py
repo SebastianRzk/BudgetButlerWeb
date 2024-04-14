@@ -1,13 +1,14 @@
-from butler_offline.viewcore import viewcore
-from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.state import non_persisted_state
-from butler_offline.viewcore.context.builder import generate_transactional_page_context
-from butler_offline.viewcore.template import fa
-from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from typing import List
 import logging
+from typing import List
+
+from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
+from butler_offline.viewcore import request_handler
+from butler_offline.viewcore import viewcore
+from butler_offline.viewcore.context.builder import generate_transactional_page_context
+from butler_offline.viewcore.converter import from_double_to_german, datum, datum_to_string, datum_to_german
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.state import non_persisted_state
+from butler_offline.viewcore.template import fa
 
 
 class AddGemeinsameBuchungContext:

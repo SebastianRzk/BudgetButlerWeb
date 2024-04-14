@@ -1,10 +1,10 @@
 <div class="input-theme">
 	<div class="box">
 		<div class="box-header">
-			<h3 class="box-title">Dauerauftrag teilen und mit einem neuen Wert weiterführen</h3>
+			<h3 class="box-title">Order-Dauerauftrag teilen und mit einem neuen Wert weiterführen</h3>
 		</div>
-		<form role="form" action="/splitdauerauftrag/" method="post">
-			<input type="hidden" name="dauerauftrag_id" value="{{dauerauftrag_id}}">
+		<form role="form" action="/split_orderdauerauftrag/" method="post">
+			<input type="hidden" name="orderdauerauftrag_id" value="{{orderdauerauftrag_id}}">
 			<input type="hidden" name="ID" value="{{ID}}">
 			<div class="box-body">
 
@@ -16,21 +16,21 @@
 					<label>Erste Ausführung mit neuem Betrag</label>
 					{% for d in datum %}
 					<br>
-					<div class="datum-option-label">
-						<input name="datum" value="{{d.datum}}" type="radio" required id="id_{{d.datum_german}}"
+					<div>
+						<input name="datum" value="{{d.datum}}" type="radio" required
 							{% if d.can_be_chosen %}
 
 							{% else %}
 							   disabled
 							{% endif%}
 					   />
-						<div name="datum-option">{{d.datum_german}}</div>
+						{{d.datum_german}}
 					</div>
 					{% endfor %}
 				</div>
 			</div>
 			<div class="box-footer">
-				<button type="submit" name="action" value="split" id="split">Dauerauftrag teilen</button>
+				<button type="submit" name="action" value="split" id="split">Order-Dauerauftrag teilen</button>
 			</div>
 		</form>
 	</div>

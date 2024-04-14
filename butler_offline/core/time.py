@@ -1,9 +1,9 @@
 import datetime
-from butler_offline.core import time
-from typing import Callable
 from datetime import date
 from datetime import datetime
+from typing import Callable
 
+from butler_offline.core import time
 
 TODAY: Callable[[], date] = lambda: datetime.now().date()
 NOW: Callable[[], datetime] = lambda: datetime.now()

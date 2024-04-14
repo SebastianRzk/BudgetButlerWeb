@@ -1,21 +1,23 @@
 import datetime
+import logging
 
+from butler_offline.core import file_system
 from butler_offline.core.database.dauerauftraege import Dauerauftraege
 from butler_offline.core.database.einzelbuchungen import Einzelbuchungen
 from butler_offline.core.database.gemeinsamebuchungen import Gemeinsamebuchungen
-from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
-from butler_offline.core.database.sparen.kontos import Kontos
-from butler_offline.core.database.sparen.depotwerte import Depotwerte
-from butler_offline.core.database.sparen.order import Order
-from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
-from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
 from butler_offline.core.database.gemeinsamebuchungen.abrechnen import abrechnen
-from butler_offline.core import file_system
-import logging
+from butler_offline.core.database.sparen.depotauszuege import Depotauszuege
+from butler_offline.core.database.sparen.depotwerte import Depotwerte
+from butler_offline.core.database.sparen.kontos import Kontos
+from butler_offline.core.database.sparen.order import Order
+from butler_offline.core.database.sparen.orderdauerauftrag import OrderDauerauftrag
+from butler_offline.core.database.sparen.sparbuchungen import Sparbuchungen
 
 
 class Database:
-    def __init__(self, name: str = '', ausgeschlossene_kategorien: set = set()):
+    def __init__(self, name: str = '', ausgeschlossene_kategorien: set | None = None):
+        if not ausgeschlossene_kategorien:
+            ausgeschlossene_kategorien = set()
         self.name = name
         self.dauerauftraege = Dauerauftraege()
         self.gemeinsamebuchungen = Gemeinsamebuchungen()

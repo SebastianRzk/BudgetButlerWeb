@@ -94,9 +94,9 @@ def handle_request(request: Request, context: AbrechnenVorschauContext):
                 ergebnis += ergebnis_satz.format(name=name_self, limit_value=limit_value,
                                                  verhaeltnis_alt=verhaeltnis_alt, verhaeltnis_neu=set_verhaeltnis)
 
-    self_soll = (ausgabe_gesamt * (set_verhaeltnis / 100))
+    self_soll = ausgabe_gesamt * (set_verhaeltnis / 100)
     self_diff = self_soll - ausgabe_self
-    partner_soll = (ausgabe_gesamt * ((100 - set_verhaeltnis) / 100))
+    partner_soll = ausgabe_gesamt * ((100 - set_verhaeltnis) / 100)
     partner_diff = partner_soll - ausgabe_partner
 
     ergebnis_satz = 'Die gemeinsamen Ausgaben sind ausgeglichen.'

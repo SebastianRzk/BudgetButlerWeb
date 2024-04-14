@@ -210,7 +210,7 @@ def needed_something_decorator(
     def decorator(fun: Callable[[Request, Any], PageContext]):
         def wrapper(*args, **kwargs):
             result: PageContext = fun(*args, **kwargs)
-            if 'context' in kwargs.keys():
+            if 'context' in kwargs:
                 database = kwargs['context']
             else:
                 database = args[1]

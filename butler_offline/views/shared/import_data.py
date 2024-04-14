@@ -84,7 +84,7 @@ def _map_kategorien(import_data, unpassende_kategorien, post_parameter):
     for unpassende_kategorie in unpassende_kategorien:
         mapping_string = post_parameter[str(unpassende_kategorie) + '_mapping']
         if mapping_string == 'neue Kategorie anlegen':
-            logging.info(unpassende_kategorie + ' muss nicht gemappt werden')
+            logging.info('%s muss nicht gemappt werden', unpassende_kategorie)
             continue
         mapping_kategorie = mapping_string[4:len(' importieren') * -1]
         logging.info('%s wird in %s gemappt', unpassende_kategorie, mapping_kategorie)
