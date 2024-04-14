@@ -1,12 +1,16 @@
-from typing import List
 from datetime import date
-from butler_offline.core.database import Dauerauftraege
-from butler_offline.core.time import today
-from butler_offline.core.frequency import get_function_for_name
 from datetime import timedelta
+from typing import List
+
+from butler_offline.core.database import Dauerauftraege
+from butler_offline.views.shared.wiederkehrend import get_ausfuehrungszeitpunkte
 
 
-def split_dauerauftrag(dauerauftraege: Dauerauftraege, dauerauftrag_id: int, split_date: date, wert) -> None:
+def split_dauerauftrag(
+        dauerauftraege: Dauerauftraege,
+        dauerauftrag_id: int,
+        split_date: date,
+        wert) -> None:
     endedatum_aenderung = split_date - timedelta(days=1)
     dauerauftrag_alt = dauerauftraege.get(db_index=dauerauftrag_id)
     endedatum_alt = dauerauftrag_alt['Endedatum']
@@ -23,19 +27,15 @@ def split_dauerauftrag(dauerauftraege: Dauerauftraege, dauerauftrag_id: int, spl
     )
 
 
-def get_ausführungszeitpunkte(dauerauftraege: Dauerauftraege, dauerauftrag_id: int) -> List[date]:
+def get_ausführungszeitpunkte_fuer_dauerauftrag(
+        dauerauftraege: Dauerauftraege,
+        dauerauftrag_id: int,
+        today: date
+    ) -> List[date]:
     dauerauftrag = dauerauftraege.get(dauerauftrag_id)
-    frequenz = get_function_for_name(dauerauftrag['Rhythmus'])
-    auswahlzeitraum_ende = today() + frequenz(5)
-
-    laufdatum = dauerauftrag['Startdatum']
-    laufindex = 1
-    ergebnis = []
-
-    while laufdatum < auswahlzeitraum_ende and laufdatum < dauerauftrag['Endedatum']:
-        ergebnis.append(laufdatum)
-
-        laufdatum = dauerauftrag['Startdatum'] + frequenz(laufindex)
-        laufindex += 1
-
-    return ergebnis
+    return get_ausfuehrungszeitpunkte(
+        rhythmus=dauerauftrag['Rhythmus'],
+        today=today,
+        start_datum=dauerauftrag['Startdatum'],
+        ende_datum=dauerauftrag['Endedatum']
+    )

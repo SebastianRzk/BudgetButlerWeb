@@ -1,11 +1,12 @@
-from butler_offline.views.core import backup
+import datetime
+
+from butler_offline.core.database import Database
+from butler_offline.core.database_manager import convert_database_to_multipart_csv
+from butler_offline.test.core.file_system_stub import FileSystemStub
 from butler_offline.test.request_stubs import GetRequest
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
-from butler_offline.core.database import Database
-from butler_offline.test.core.file_system_stub import FileSystemStub
-from butler_offline.core.database_manager import convert_database_to_multipart_csv
 from butler_offline.viewcore import routes
-import datetime
+from butler_offline.views.core import backup
 
 
 def test_should_save_a_database():

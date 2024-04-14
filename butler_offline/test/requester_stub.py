@@ -10,19 +10,15 @@ class RequesterStub:
             self.call_count[url] = []
 
     def post(self, url, data: dict | None = None, cookies=None):
-        if not data:
-            data = {}
-        logging.info('-----------------' + url)
-        if url in self.mocked_requests:
-            self.call_count[url].append(data)
-            return self.mocked_requests[url]
-        logging.error('ERROR, NON MATCHING REQUEST: %s %s', url, data)
-        return None
+        return self._handle_data_request(data, url)
 
     def delete(self, url, data: dict | None = None, cookies=None):
+        return self._handle_data_request(data, url)
+
+    def _handle_data_request(self, data, url):
         if not data:
             data = {}
-        logging.info('-----------------' + url)
+        logging.info('----------------- %s', url)
         if url in self.mocked_requests:
             self.call_count[url].append(data)
             return self.mocked_requests[url]
@@ -30,11 +26,11 @@ class RequesterStub:
         return None
 
     def get(self, url, cookies=None):
-        logging.info('-----------------' + url)
+        logging.info('----------------- %s', url)
         if url in self.mocked_requests:
             self.call_count[url].append('')
             return self.mocked_requests[url]
-        logging.error('ERROR, NON MATCHING REQUEST: %s', url)
+        online_services/butler_online/einzelbuchungen.pylogging.error('ERROR, NON MATCHING REQUEST: %s', url)
         return None
 
     def post_raw(self, url, data):

@@ -1,19 +1,26 @@
+from datetime import date
 from butler_offline.core.database import Dauerauftraege
 from butler_offline.viewcore import request_handler
-from butler_offline.views.einzelbuchungen.dauerauftrag.split import split_dauerauftrag, get_ausführungszeitpunkte
+from butler_offline.views.einzelbuchungen.dauerauftrag.split import split_dauerauftrag, get_ausführungszeitpunkte_fuer_dauerauftrag
 from butler_offline.viewcore.converter import datum_to_string, datum_to_german, dezimal_float, datum
 from butler_offline.viewcore.context.builder import generate_transactional_page_context, \
     TransactionalPageContext, generate_redirect_page_context
 from butler_offline.viewcore.http import Request
+from butler_offline.core.time import today
 
 
 class SplitDauerauftraegeContext:
     def __init__(self,
-                 dauerauftraege: Dauerauftraege):
+                 dauerauftraege: Dauerauftraege,
+                 today: date):
         self._dauerauftraege = dauerauftraege
+        self._today = today
 
     def dauerauftraege(self) -> Dauerauftraege:
         return self._dauerauftraege
+
+    def today(self) -> date:
+        return self._today
 
 
 def handle_request(request: Request, context: SplitDauerauftraegeContext):
@@ -23,8 +30,9 @@ def handle_request(request: Request, context: SplitDauerauftraegeContext):
 
         result_context: TransactionalPageContext = generate_transactional_page_context('adddauerauftrag')
 
-        preset_datum = get_ausführungszeitpunkte(dauerauftraege=context.dauerauftraege(),
-                                                 dauerauftrag_id=dauerauftrag_id)
+        preset_datum = get_ausführungszeitpunkte_fuer_dauerauftrag(dauerauftraege=context.dauerauftraege(),
+                                                                   dauerauftrag_id=dauerauftrag_id,
+                                                                   today=context.today())
         preset_datum_formatted = []
 
         if len(preset_datum) <= 2:
@@ -63,6 +71,9 @@ def index(request):
     return request_handler.handle(
         request=request,
         handle_function=handle_request,
-        context_creator=lambda db: SplitDauerauftraegeContext(dauerauftraege=db.dauerauftraege),
+        context_creator=lambda db: SplitDauerauftraegeContext(
+            dauerauftraege=db.dauerauftraege,
+            today=today()
+        ),
         html_base_page='einzelbuchungen/split_dauerauftrag.html'
     )

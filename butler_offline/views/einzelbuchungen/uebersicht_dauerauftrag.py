@@ -1,12 +1,12 @@
-from butler_offline.viewcore import request_handler
-from butler_offline.viewcore.converter import datum_to_german
 import collections
+
+from butler_offline.core.database.dauerauftraege import Dauerauftraege
+from butler_offline.viewcore import request_handler
 from butler_offline.viewcore.context.builder import PageContext, \
     generate_transactional_page_context, generate_redirect_page_context
-import logging
-from butler_offline.core.database.dauerauftraege import Dauerauftraege
-from butler_offline.viewcore.renderhelper import Betrag
+from butler_offline.viewcore.converter import datum_to_german
 from butler_offline.viewcore.http import Request
+from butler_offline.viewcore.renderhelper import Betrag
 from butler_offline.viewcore.requirements import dauerauftrag_needed_decorator
 
 

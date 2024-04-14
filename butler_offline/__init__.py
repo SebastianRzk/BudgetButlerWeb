@@ -47,7 +47,7 @@ from butler_offline.views.sparen import uebersicht_sparen, \
 
 app = Flask(__name__)
 
-if app.debug or "pytest" in sys.modules or 'INTEGRATION_TESTS' in os.environ.keys() or 'DEBUG' in os.environ.keys():
+if app.debug or "pytest" in sys.modules or 'INTEGRATION_TESTS' in os.environ or 'DEBUG' in os.environ:
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 else:
     handler = RotatingFileHandler('logs/flask.log', maxBytes=10_000, backupCount=2)

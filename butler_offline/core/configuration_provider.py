@@ -1,10 +1,10 @@
-from functools import reduce
 import logging
-from butler_offline.core import file_system
-from butler_offline.core import configuration_provider
+from functools import reduce
 from os import getenv
 from typing import Callable
 
+from butler_offline.core import configuration_provider
+from butler_offline.core import file_system
 
 BUDGETBUTLERWEB_DATABASE_PATH = getenv('BUDGETBUTLERWEB_DATABASE_PATH', '.')
 BUDGETBUTLERWEB_DATABASE_BACKUP_PATH = getenv('BUDGETBUTLERWEB_DATABASE_BACKUP_PATH', './Backups')

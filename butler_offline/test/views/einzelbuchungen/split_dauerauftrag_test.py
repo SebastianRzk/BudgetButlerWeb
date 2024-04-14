@@ -1,14 +1,12 @@
-from butler_offline.views.einzelbuchungen.split_dauerauftrag import handle_request, SplitDauerauftraegeContext, index
-from butler_offline.test.request_stubs import PostRequestAction
 from butler_offline.core.database import Dauerauftraege
-from butler_offline.viewcore.converter import datum_from_german as datum
 from butler_offline.core.frequency import FREQUENCY_MONATLICH_NAME
-from butler_offline.core.time import stub_today_with
+from butler_offline.test.request_stubs import PostRequestAction
 from butler_offline.test.viewcore.request_handler import run_in_mocked_handler
+from butler_offline.viewcore.converter import datum_from_german as datum
+from butler_offline.views.einzelbuchungen.split_dauerauftrag import handle_request, SplitDauerauftraegeContext, index
 
 
 def test_preset_values_should_be_transactional():
-    stub_today_with(datum('01.01.2023'))
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(
         startdatum=datum('01.01.2022'),
@@ -18,7 +16,7 @@ def test_preset_values_should_be_transactional():
         name='name123',
         wert=123
     )
-    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege)
+    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege, today=datum('01.01.2023'))
 
     result = handle_request(request=PostRequestAction(action='preset_values',
                                                       args={'dauerauftrag_id': 0}),
@@ -39,7 +37,6 @@ def test_index_should_be_secured_by_requesthandler():
 
 
 def test_preset_values_should_be_add_preset_for_date_and_wert():
-    stub_today_with(datum('01.01.2023'))
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(
         startdatum=datum('01.01.2022'),
@@ -49,7 +46,7 @@ def test_preset_values_should_be_add_preset_for_date_and_wert():
         name='name123',
         wert=123
     )
-    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege)
+    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege, today=datum('01.01.2023'))
 
     result = handle_request(request=PostRequestAction(action='preset_values',
                                                       args={'dauerauftrag_id': 0}),
@@ -101,7 +98,6 @@ def test_preset_values_should_be_add_preset_for_date_and_wert():
 
 
 def test_split_should_split():
-    stub_today_with(datum('01.01.2023'))
     dauerauftraege = Dauerauftraege()
     dauerauftraege.add(
         startdatum=datum('01.01.2022'),
@@ -111,7 +107,7 @@ def test_split_should_split():
         name='name123',
         wert=123
     )
-    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege)
+    context = SplitDauerauftraegeContext(dauerauftraege=dauerauftraege, today=datum('01.01.2023'))
 
     handle_request(request=PostRequestAction(action='split',
                                              args={'dauerauftrag_id': 0,
