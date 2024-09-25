@@ -3,11 +3,15 @@ import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {ADD_SCHNELLEINSTIEG_ROUTE} from '../../../app-routes';
 import { skip, take} from 'rxjs/operators';
+import { MatButton } from '@angular/material/button';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: true,
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatButton]
 })
 export class LoginComponent implements OnInit {
 

@@ -1,24 +1,24 @@
-export class EinzelbuchungTO {
-  public id: string;
-  public name: string;
-  public datum: string;
-  public kategorie: string;
-  public wert: number;
+export interface EinzelbuchungTO {
+  id: string;
+  name: string;
+  datum: string;
+  kategorie: string;
+  wert: number;
 }
 
-export class EinzelbuchungAnlegenTO {
-  public name: string;
-  public datum: string;
-  public kategorie: string;
-  public wert: number;
+export interface EinzelbuchungAnlegenTO {
+  name: string;
+  datum: string;
+  kategorie: string;
+  wert: number;
 }
 
-export class GemeinsameBuchungAnlegenTO {
-  public name: string;
-  public datum: string;
-  public kategorie: string;
-  public wert: number;
-  public eigeneBuchung: boolean;
+export interface GemeinsameBuchungAnlegenTO {
+  name: string;
+  datum: string;
+  kategorie: string;
+  wert: number;
+  eigeneBuchung: boolean;
 }
 
 
@@ -38,44 +38,44 @@ export interface AddUserDataTo {
   readonly password: string;
 }
 
-export class DauerauftragAnlegenTO {
-  public name: string;
-  public startDatum: string;
-  public endeDatum: string;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
+export interface DauerauftragAnlegenTO {
+  name: string;
+  startDatum: string;
+  endeDatum: string;
+  kategorie: string;
+  wert: number;
+  rhythmus: string;
 }
 
-export class DauerauftragTO {
-  public id: string;
-  public name: string;
-  public startDatum: string;
-  public endeDatum: string;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
+export interface DauerauftragTO {
+  id: string;
+  name: string;
+  startDatum: string;
+  endeDatum: string;
+  kategorie: string;
+  wert: number;
+  rhythmus: string;
 }
 
-export class GemeinsamerDauerauftragAnlegenTO {
-  public name: string;
-  public startDatum: string;
-  public endeDatum: string;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
-  public eigeneBuchung: boolean;
+export interface GemeinsamerDauerauftragAnlegenTO {
+  name: string;
+  startDatum: string;
+  endeDatum: string;
+  kategorie: string;
+  wert: number;
+  rhythmus: string;
+  eigeneBuchung: boolean;
 }
 
-export class GemeinsamerDauerauftragTO {
-  public id: string;
-  public name: string;
-  public startDatum: string;
-  public endeDatum: string;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
-  public user: string;
-  public zielperson: string;
+export interface GemeinsamerDauerauftragTO {
+  id: string;
+  name: string;
+  startDatum: string;
+  endeDatum: string;
+  kategorie: string;
+  wert: number;
+  rhythmus: string;
+  user: string;
+  zielperson: string;
 }
 

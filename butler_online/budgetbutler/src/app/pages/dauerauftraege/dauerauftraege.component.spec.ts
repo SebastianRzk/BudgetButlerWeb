@@ -10,9 +10,10 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
 import {LoginComponent} from '../auth/login/login.component';
 import {SidebarComponent} from '../sidebar/sidebar/sidebar.component';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DauerauftraegeComponent', () => {
   let component: DauerauftraegeComponent;
@@ -20,14 +21,7 @@ describe('DauerauftraegeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        LoginComponent,
-        SidebarComponent,
-        DauerauftraegeComponent,
-      ],
-      imports: [
-        HttpClientTestingModule,
-        FormsModule,
+    imports: [FormsModule,
         MatChipsModule,
         MatButtonModule,
         MatCardModule,
@@ -36,9 +30,11 @@ describe('DauerauftraegeComponent', () => {
         MatTableModule,
         MatSnackBarModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
-      ]
-    })
+        BrowserAnimationsModule, LoginComponent,
+        SidebarComponent,
+        DauerauftraegeComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
   }));
 

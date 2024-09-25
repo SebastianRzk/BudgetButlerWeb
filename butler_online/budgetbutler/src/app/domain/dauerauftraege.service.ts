@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {ApiProviderService} from "./api-provider.service";
 import {
   Dauerauftrag,
@@ -30,7 +30,7 @@ export class DauerauftraegeService {
 
   save(anlegen: DauerauftragAnlegen){
     const dto: DauerauftragAnlegenTO = toDauerauftragAnlegenTO(anlegen);
-    this.httpClient.post<Result>(this.apiProvider.getUrl('dauerauftrag'), dto).toPromise().then(
+    this.httpClient.post<Result>(this.apiProvider.getUrl('dauerauftrag'), dto).subscribe(
       data => this.notification.handleServerResult(data, 'Speichern des Dauerauftrags'),
       error => this.notification.handleError(error, ERROR_RESULT, 'Speichern des Dauerauftrags')
     );
@@ -43,7 +43,7 @@ export class DauerauftraegeService {
   }
 
   public delete(dauerauftragLoeschen: DauerauftragLoeschen) {
-    this.httpClient.delete<Result>(this.apiProvider.getUrl('dauerauftrag/' + dauerauftragLoeschen.id)).toPromise().then(
+    this.httpClient.delete<Result>(this.apiProvider.getUrl('dauerauftrag/' + dauerauftragLoeschen.id)).subscribe(
       data => {
         this.notification.handleServerResult(data, 'Löschen der Ausgabe');
         this.refresh();

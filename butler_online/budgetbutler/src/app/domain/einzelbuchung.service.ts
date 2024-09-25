@@ -28,7 +28,7 @@ export class EinzelbuchungService {
 
 
   public save(einzelBuchung: EinzelbuchungAnlegen) {
-    this.httpClient.post<Result>(this.api.getUrl('einzelbuchung'), toEinzelbuchungAnlegenTO(einzelBuchung)).toPromise().then(
+    this.httpClient.post<Result>(this.api.getUrl('einzelbuchung'), toEinzelbuchungAnlegenTO(einzelBuchung)).subscribe(
       data => this.notification.handleServerResult(data, 'Speichern der Ausgabe'),
       error => this.notification.handleError(error, ERROR_RESULT, 'Speichern der Ausgabe')
     );
@@ -42,7 +42,7 @@ export class EinzelbuchungService {
   }
 
   public delete(einzelbuchungLoeschen: EinzelbuchungLoeschen) {
-    this.httpClient.delete<Result>(this.api.getUrl('einzelbuchung/' + einzelbuchungLoeschen.id)).toPromise().then(
+    this.httpClient.delete<Result>(this.api.getUrl('einzelbuchung/' + einzelbuchungLoeschen.id)).subscribe(
       data => {
         this.notification.handleServerResult(data, 'Löschen der Ausgabe');
         this.refresh();

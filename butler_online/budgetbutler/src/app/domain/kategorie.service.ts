@@ -11,7 +11,7 @@ import { NotificationService } from './notification.service';
 })
 export class KategorieService {
 
-  private kategorien: Subject<Kategorie[]> = new BehaviorSubject([]);
+  private kategorien: Subject<Kategorie[]> = new BehaviorSubject<Kategorie[]>([]);
   private notification: NotificationService = inject(NotificationService);
   private httpClient: HttpClient = inject(HttpClient);
   private api: ApiProviderService = inject(ApiProviderService);

@@ -10,10 +10,11 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
 import {LoginComponent} from '../auth/login/login.component';
 import {SidebarComponent} from '../sidebar/sidebar/sidebar.component';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AllebuchungenComponent', () => {
   let component: AllegemeinsamebuchungenComponent;
@@ -21,14 +22,7 @@ describe('AllebuchungenComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        LoginComponent,
-        SidebarComponent,
-        AllegemeinsamebuchungenComponent,
-      ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
+    imports: [RouterTestingModule,
         FormsModule,
         MatChipsModule,
         MatButtonModule,
@@ -38,9 +32,11 @@ describe('AllebuchungenComponent', () => {
         MatTableModule,
         MatSnackBarModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
-      ]
-    })
+        BrowserAnimationsModule, LoginComponent,
+        SidebarComponent,
+        AllegemeinsamebuchungenComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
   }));
 

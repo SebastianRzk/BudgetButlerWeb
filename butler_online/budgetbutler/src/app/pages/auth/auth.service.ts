@@ -99,7 +99,7 @@ export class AuthService {
   }
 }
 
-export class AuthContainer {
+export interface AuthContainer {
   userName: string;
   loggedIn: boolean;
 }

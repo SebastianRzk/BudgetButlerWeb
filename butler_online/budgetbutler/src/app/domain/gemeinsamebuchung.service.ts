@@ -29,7 +29,7 @@ export class GemeinsamebuchungService {
   public readonly gemeinsameBuchungen$ = this.gemeinsamebuchungen.asObservable();
 
   public save(buchung: GemeinsameBuchungAnlegen) {
-    this.httpClient.post<Result>(this.api.getUrl('gemeinsame_buchung'), toGemeinsameBuchungAnlegenTO(buchung)).toPromise().then(
+    this.httpClient.post<Result>(this.api.getUrl('gemeinsame_buchung'), toGemeinsameBuchungAnlegenTO(buchung)).subscribe(
       data => this.notification.handleServerResult(data, 'Speichern der Ausgabe'),
       error => this.notification.handleError(error, ERROR_RESULT, 'Speichern der Ausgabe')
     );
@@ -44,7 +44,7 @@ export class GemeinsamebuchungService {
   }
 
   public delete(buchung: GemeinsameBuchungLoeschen) {
-    this.httpClient.delete<Result>(this.api.getUrl('gemeinsame_buchung/' + buchung.id)).toPromise().then(
+    this.httpClient.delete<Result>(this.api.getUrl('gemeinsame_buchung/' + buchung.id)).subscribe(
       data => {
         this.notification.handleServerResult(data, 'Löschen der Ausgabe');
         this.refresh();

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OfflineLoginComponent } from './offline-login.component';
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 
 describe('OfflineLoginComponent', () => {
   let component: OfflineLoginComponent;
@@ -8,7 +10,8 @@ describe('OfflineLoginComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OfflineLoginComponent]
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+      imports: [OfflineLoginComponent]
     });
     fixture = TestBed.createComponent(OfflineLoginComponent);
     component = fixture.componentInstance;

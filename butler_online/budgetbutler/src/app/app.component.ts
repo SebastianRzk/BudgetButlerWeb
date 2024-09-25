@@ -1,14 +1,19 @@
+
 import { Component, inject, OnInit } from '@angular/core';
 import {MenuItemService} from './domain/menu-item.service';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {MatDrawerMode} from '@angular/material/sidenav';
+import { MatDrawerMode, MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
 import {AuthContainer, AuthService} from './pages/auth/auth.service';
 import {Observable} from 'rxjs';
+import { SidebarComponent } from "./pages/sidebar/sidebar/sidebar.component";
+import { SidebarToggleComponent } from "./pages/sidebar/sidebar-toggle/sidebar-toggle.component";
+import { RouterOutlet } from "@angular/router";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   private authService: AuthService = inject(AuthService);

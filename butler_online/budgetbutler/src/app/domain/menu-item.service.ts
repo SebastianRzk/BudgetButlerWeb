@@ -9,7 +9,7 @@ import {
 import {BehaviorSubject} from 'rxjs';
 
 
-export class MenuItem {
+export interface MenuItem {
   title: string;
   url: string;
   icon: string;

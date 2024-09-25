@@ -8,9 +8,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PartnernameComponent', () => {
   let component: PartnernameComponent;
@@ -18,12 +19,10 @@ describe('PartnernameComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PartnernameComponent],
-      imports: [MatCardModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatSnackBarModule,
-        ReactiveFormsModule, FormsModule, BrowserAnimationsModule, RouterTestingModule,
-        HttpClientTestingModule,
-      ]
-    })
+    imports: [MatCardModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatSnackBarModule,
+        ReactiveFormsModule, FormsModule, BrowserAnimationsModule, RouterTestingModule, PartnernameComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
   }));
 

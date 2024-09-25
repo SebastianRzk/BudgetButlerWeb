@@ -3,7 +3,7 @@
     <mat-card-title>Gemeinsame Buchungen</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <table [dataSource]="gemeinsamebuchungen | async" mat-table>
+    <table [dataSource]="gemeinsamebuchungen$" mat-table>
       <ng-container matColumnDef="Datum">
         <th *matHeaderCellDef mat-header-cell> Datum</th>
         <td *matCellDef="let element" mat-cell> {{element.datum | date: 'dd.MM'}}

@@ -5,11 +5,16 @@ import { MatDrawerMode } from '@angular/material/sidenav';
 import { AuthContainer, AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.css'],
+    standalone: true,
+    imports: [NgIf, MatButton, MatIcon, NgFor, AsyncPipe]
 })
 export class SidebarComponent implements OnInit {
 

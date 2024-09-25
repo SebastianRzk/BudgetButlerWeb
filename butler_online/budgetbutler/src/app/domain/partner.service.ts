@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Result } from './model';
 import { HttpClient } from '@angular/common/http';
 import { ApiProviderService } from './api-provider.service';
@@ -9,16 +9,16 @@ import { ApiProviderService } from './api-provider.service';
 })
 export class PartnerService {
 
-  private partnerNameSubject: Subject<PartnerInfo>;
+  private partnerNameSubject: Subject<PartnerInfo> = new BehaviorSubject<PartnerInfo>({
+    bestaetigt: false,
+    zielperson: ''
+  });
 
   private httpClient: HttpClient = inject(HttpClient);
   private api: ApiProviderService = inject(ApiProviderService);
 
   getPartnerInfo: () => Observable<PartnerInfo> = () => {
-    if (!this.partnerNameSubject) {
-      this.partnerNameSubject = new Subject();
-    }
-    this.httpClient.get<PartnerInfo>(this.api.getUrl('partnerstatus')).toPromise().then(data => this.partnerNameSubject.next(data));
+    this.httpClient.get<PartnerInfo>(this.api.getUrl('partnerstatus')).subscribe(data => this.partnerNameSubject.next(data));
     return this.partnerNameSubject.asObservable();
   }
 

@@ -52,7 +52,7 @@ pub async fn get_partnerstatus(pool: web::Data<DbPool>, user: User) -> actix_web
     })
     .await?
     .map_err(error::ErrorInternalServerError)?;
-    Ok(HttpResponse::Ok().json(status.to_dto()))
+    Ok(web::Json(status.to_dto()))
 }
 
 #[delete("/partnerstatus")]

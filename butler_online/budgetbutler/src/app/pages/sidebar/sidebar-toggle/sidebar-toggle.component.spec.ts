@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {SidebarToggleComponent} from './sidebar-toggle.component';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
@@ -15,6 +15,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SidebarToggleComponent', () => {
   let component: SidebarToggleComponent;
@@ -22,10 +23,7 @@ describe('SidebarToggleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SidebarToggleComponent],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
+    imports: [RouterTestingModule,
         FormsModule,
         MatSelectModule,
         MatButtonModule,
@@ -39,9 +37,9 @@ describe('SidebarToggleComponent', () => {
         MatInputModule,
         MatSnackBarModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
-      ]
-    })
+        BrowserAnimationsModule, SidebarToggleComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(SidebarToggleComponent);

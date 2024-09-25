@@ -1,4 +1,4 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -14,6 +14,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AddBuchungComponent} from './add-buchung.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {RouterTestingModule} from '@angular/router/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('AddSchnelleinstiegComponent', () => {
@@ -22,12 +23,7 @@ describe('AddSchnelleinstiegComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AddBuchungComponent,
-      ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
+    imports: [RouterTestingModule,
         FormsModule,
         MatSelectModule,
         MatButtonModule,
@@ -41,9 +37,9 @@ describe('AddSchnelleinstiegComponent', () => {
         MatInputModule,
         MatSnackBarModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
-      ]
-    })
+        BrowserAnimationsModule, AddBuchungComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
   }));
 

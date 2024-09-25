@@ -73,6 +73,8 @@ async fn main() -> std::io::Result<()> {
     let sessions = web::Data::new(RwLock::new(user::model::Sessions {
         map: HashMap::new(),
     }));
+    let discovery_client = web::Data::new(client);
+
 
     log::info!("Running database migrations");
     let mut connection = pool.get().unwrap();
@@ -80,11 +82,11 @@ async fn main() -> std::io::Result<()> {
     log::info!("Database migations finished");
 
     log::info!("starting HTTP server at http://localhost:8080");
+    let db_pool = web::Data::new(pool);
 
     HttpServer::new(move || {
         App::new()
             .wrap(IdentityMiddleware::default())
-            .app_data(web::Data::new(pool.clone()))
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
                     .cookie_secure(false)
@@ -94,9 +96,9 @@ async fn main() -> std::io::Result<()> {
                     .build(),
             )
             .wrap(middleware::Logger::default())
-            .app_data(web::Data::new(client.clone()))
+            .app_data(discovery_client.clone())
             .app_data(sessions.clone())
-            .app_data(web::Data::new(pool.clone()))
+            .app_data(db_pool.clone())
             .service(
                 web::scope("/api")
                     .service(
