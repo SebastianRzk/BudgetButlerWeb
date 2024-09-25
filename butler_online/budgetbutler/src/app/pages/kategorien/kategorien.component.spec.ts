@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KategorienComponent } from './kategorien.component';
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 describe('KategorienComponent', () => {
   let component: KategorienComponent;
@@ -8,7 +11,8 @@ describe('KategorienComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [KategorienComponent]
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+      imports: [KategorienComponent, NoopAnimationsModule]
     });
     fixture = TestBed.createComponent(KategorienComponent);
     component = fixture.componentInstance;

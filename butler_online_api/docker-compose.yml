@@ -1,3 +1,4 @@
+
 services:
   db:
     image: mariadb
@@ -7,5 +8,5 @@ services:
       MYSQL_PASSWORD: butler
       MYSQL_DATABASE: butler
       MYSQL_USER: butler
-    expose:
-      - 3306
+    ports:
+      - 3306:3306

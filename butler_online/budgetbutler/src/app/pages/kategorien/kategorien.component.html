@@ -22,7 +22,7 @@
     <mat-card-title>Neue Kategorie anlegen</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <table [dataSource]="kategorien$ | async" mat-table>
+    <table [dataSource]="kategorien$" mat-table>
       <ng-container matColumnDef="Datum">
         <th *matHeaderCellDef mat-header-cell>Name</th>
         <td *matCellDef="let element" mat-cell> {{element.name}}

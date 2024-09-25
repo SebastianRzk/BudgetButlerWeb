@@ -32,7 +32,7 @@ export class GemeinsameDauerauftraegeService {
 
   save(anlegen: GemeinsamerDauerauftragAnlegen) {
     const dto: GemeinsamerDauerauftragAnlegenTO = toGemeinsamerDauerauftragAnlegenTO(anlegen);
-    this.httpClient.post<Result>(this.apiProvider.getUrl('gemeinsamer_dauerauftrag'), dto).toPromise().then(
+    this.httpClient.post<Result>(this.apiProvider.getUrl('gemeinsamer_dauerauftrag'), dto).subscribe(
       data => this.notification.handleServerResult(data, 'Speichern des gemeinsamen Dauerauftrags'),
       error => this.notification.handleError(error, ERROR_RESULT, 'Speichern des gemeinsamen Dauerauftrags')
     );
@@ -48,7 +48,7 @@ export class GemeinsameDauerauftraegeService {
   }
 
   public delete(dauerauftragLoeschen: DauerauftragLoeschen) {
-    this.httpClient.delete<Result>(this.apiProvider.getUrl('gemeinsamer_dauerauftrag/' + dauerauftragLoeschen.id)).toPromise().then(
+    this.httpClient.delete<Result>(this.apiProvider.getUrl('gemeinsamer_dauerauftrag/' + dauerauftragLoeschen.id)).subscribe(
       data => {
         this.notification.handleServerResult(data, 'Löschen des gemeinsamen Dauerauftrags');
         this.refresh();

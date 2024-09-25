@@ -1,24 +1,24 @@
-export class Einzelbuchung {
-  public id: string;
-  public name: string;
-  public datum: Date;
-  public kategorie: string;
-  public wert: number;
+export interface Einzelbuchung {
+   id: string;
+   name: string;
+   datum: Date;
+   kategorie: string;
+   wert: number;
 }
 
-export class EinzelbuchungAnlegen {
-  public name: string;
-  public datum: Date;
-  public kategorie: string;
-  public wert: number;
+export interface EinzelbuchungAnlegen {
+   name: string;
+   datum: Date;
+   kategorie: string;
+   wert: number;
 }
 
-export class EinzelbuchungLoeschen {
-  public id: string;
+export interface EinzelbuchungLoeschen {
+   id: string;
 }
 
-export class DauerauftragLoeschen {
-  public id: string;
+export interface DauerauftragLoeschen {
+   id: string;
 }
 
 export interface GemeinsameBuchungAnlegen {
@@ -40,55 +40,55 @@ export interface GemeinsameBuchung {
   readonly isCreatedByDifferentPerson: boolean;
 }
 
-export class DauerauftragAnlegen {
-  public name: string;
-  public startDatum: Date;
-  public endeDatum: Date;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
+export interface DauerauftragAnlegen {
+   name: string;
+   startDatum: Date;
+   endeDatum: Date;
+   kategorie: string;
+   wert: number;
+   rhythmus: string;
 }
 
-export class GemeinsamerDauerauftragAnlegen {
-  public name: string;
-  public startDatum: Date;
-  public endeDatum: Date;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
-  public eigeneBuchung: boolean;
+export interface GemeinsamerDauerauftragAnlegen {
+   name: string;
+   startDatum: Date;
+   endeDatum: Date;
+   kategorie: string;
+   wert: number;
+   rhythmus: string;
+   eigeneBuchung: boolean;
 }
 
-export class Dauerauftrag {
-  public id: string;
-  public name: string;
-  public startDatum: Date;
-  public endeDatum: Date;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
+export interface Dauerauftrag {
+   id: string;
+   name: string;
+   startDatum: Date;
+   endeDatum: Date;
+   kategorie: string;
+   wert: number;
+   rhythmus: string;
 }
 
-export class GemeinsamerDauerauftrag {
-  public id: string;
-  public name: string;
-  public startDatum: Date;
-  public endeDatum: Date;
-  public kategorie: string;
-  public wert: number;
-  public rhythmus: string;
-  public user: string;
-  public zielperson: string;
+export interface GemeinsamerDauerauftrag {
+   id: string;
+   name: string;
+   startDatum: Date;
+   endeDatum: Date;
+   kategorie: string;
+   wert: number;
+   rhythmus: string;
+   user: string;
+   zielperson: string;
 }
 
 
-export class GemeinsameBuchungLoeschen {
-  public id: string;
+export interface GemeinsameBuchungLoeschen {
+   id: string;
 }
 
-export class Result {
-  public result: string;
-  public message: string;
+export interface Result {
+   result: string;
+   message: string;
 }
 
 export const ERROR_RESULT: Result = {result: 'ERROR', message: 'Fehler beim Erstellen der Buchung'};
