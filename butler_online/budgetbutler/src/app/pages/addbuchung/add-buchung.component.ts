@@ -71,6 +71,12 @@ export class AddBuchungComponent implements OnInit {
 
   ngOnInit() {
     this.kategorieService.refresh();
+    this.buchungForm.reset(
+      {
+        datum: new Date(),
+      }
+    );
+    this.buchungForm.markAsUntouched();
   }
 
   onFormSubmit() {
@@ -101,5 +107,6 @@ export class AddBuchungComponent implements OnInit {
         datum: new Date(),
         gemeinsameBuchung: this.buchungForm.get('gemeinsameBuchung')!.value
       });
+    this.buchungForm.markAsUntouched();
   }
 }

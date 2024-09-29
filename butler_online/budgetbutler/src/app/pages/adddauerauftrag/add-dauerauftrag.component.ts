@@ -94,6 +94,10 @@ export class AddDauerauftragComponent implements OnInit {
 
   ngOnInit() {
     this.kategorieService.refresh();
+    this.buchungForm.reset({
+      startDatum: new Date(),
+    });
+    this.buchungForm.markAsUntouched();
   }
 
   onFormSubmit() {
@@ -128,6 +132,7 @@ export class AddDauerauftragComponent implements OnInit {
         startDatum: new Date(),
         gemeinsameBuchung: this.buchungForm.get('gemeinsameBuchung')!.value
       });
+    this.buchungForm.markAsUntouched();
   }
 
 }
