@@ -1,27 +1,26 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
-import { Kategorie, KategorieService } from "../../domain/kategorie.service";
-import {
-  DauerauftragAnlegen,
-  GemeinsamerDauerauftragAnlegen
-} from "../../domain/model";
+import {Kategorie, KategorieService} from "../../domain/kategorie.service";
+import {DauerauftragAnlegen, GemeinsamerDauerauftragAnlegen} from "../../domain/model";
 import {DauerauftraegeService} from "../../domain/dauerauftraege.service";
 import {GemeinsameDauerauftraegeService} from "../../domain/gemeinsame-dauerauftraege.service";
-import { MatButton } from '@angular/material/button';
-import { MatCheckbox } from '@angular/material/checkbox';
-import {MatNativeDateModule, MatOption} from '@angular/material/core';
-import { NgFor, AsyncPipe } from '@angular/common';
-import { MatSelect } from '@angular/material/select';
+import {MatButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {DateAdapter, MatNativeDateModule, MatOption} from '@angular/material/core';
+import {AsyncPipe, NgFor} from '@angular/common';
+import {MatSelect} from '@angular/material/select';
 import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
   MatDatepicker,
-  MatDatepickerModule
+  MatDatepickerInput,
+  MatDatepickerModule,
+  MatDatepickerToggle
 } from '@angular/material/datepicker';
-import { MatInput } from '@angular/material/input';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import {MatInput} from '@angular/material/input';
+import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {EuropeanNativeDateAdapter} from "../../domain/date-format";
+import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
     selector: 'app-adddauerauftrag',
@@ -52,7 +51,7 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
     ],
   providers: [
     MatDatepickerModule,
-    MatNativeDateModule
+    {provide: DateAdapter, useClass: EuropeanNativeDateAdapter}
   ]
 })
 export class AddDauerauftragComponent implements OnInit {
@@ -69,6 +68,10 @@ export class AddDauerauftragComponent implements OnInit {
   private kategorieService: KategorieService = inject(KategorieService);
   private dauerauftragService: DauerauftraegeService = inject(DauerauftraegeService);
   private gemeinsamerDauerauftragService: GemeinsameDauerauftraegeService = inject(GemeinsameDauerauftraegeService)
+
+  private breakpointObserver: BreakpointObserver = inject(BreakpointObserver);
+  isSmallScreen = this.breakpointObserver.isMatched('(max-width: 799px)');
+
 
   kategorien: Observable<Kategorie[]> = this.kategorieService.kategorien$;
 
