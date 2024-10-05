@@ -8,13 +8,13 @@
         <mat-label>Erstes Datum der Ausführung</mat-label>
         <input [matDatepicker]="startpicker" formControlName="startDatum" matInput required>
         <mat-datepicker-toggle [for]="startpicker" matSuffix></mat-datepicker-toggle>
-        <mat-datepicker #startpicker></mat-datepicker>
+        <mat-datepicker #startpicker [touchUi]="isSmallScreen"></mat-datepicker>
       </mat-form-field>
       <mat-form-field class="full-size-form-field">
         <mat-label>Automatisches Laufzeitende</mat-label>
         <input [matDatepicker]="endepicker" formControlName="endeDatum" matInput required>
         <mat-datepicker-toggle [for]="endepicker" matSuffix></mat-datepicker-toggle>
-        <mat-datepicker #endepicker></mat-datepicker>
+        <mat-datepicker #endepicker [touchUi]="isSmallScreen"></mat-datepicker>
       </mat-form-field>
       <mat-form-field class="full-size-form-field">
         <mat-label>Name der Ausgabe</mat-label>

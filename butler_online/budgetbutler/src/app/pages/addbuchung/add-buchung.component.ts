@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {EinzelbuchungService} from '../../domain/einzelbuchung.service';
 import {Observable} from 'rxjs';
 import {Kategorie, KategorieService} from '../../domain/kategorie.service';
@@ -7,18 +7,20 @@ import {EinzelbuchungAnlegen, GemeinsameBuchungAnlegen} from '../../domain/model
 import {GemeinsamebuchungService} from '../../domain/gemeinsamebuchung.service';
 import {MatButton} from '@angular/material/button';
 import {MatCheckbox} from '@angular/material/checkbox';
-import {MAT_DATE_LOCALE, MatNativeDateModule, MatOption} from '@angular/material/core';
-import {NgFor, AsyncPipe} from '@angular/common';
+import {DateAdapter, MatNativeDateModule, MatOption} from '@angular/material/core';
+import {AsyncPipe, NgFor} from '@angular/common';
 import {MatSelect} from '@angular/material/select';
 import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
   MatDatepicker,
-  MatDatepickerModule
+  MatDatepickerInput,
+  MatDatepickerModule,
+  MatDatepickerToggle
 } from '@angular/material/datepicker';
 import {MatInput} from '@angular/material/input';
 import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
-import {MatCard, MatCardHeader, MatCardTitle, MatCardContent} from '@angular/material/card';
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {EuropeanNativeDateAdapter} from "../../domain/date-format";
+import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-addschnelleinstieg',
@@ -49,7 +51,7 @@ import {MatCard, MatCardHeader, MatCardTitle, MatCardContent} from '@angular/mat
   ],
   providers: [
     MatDatepickerModule,
-    MatNativeDateModule,
+    {provide: DateAdapter, useClass: EuropeanNativeDateAdapter}
   ]
 })
 export class AddBuchungComponent implements OnInit {
@@ -57,6 +59,8 @@ export class AddBuchungComponent implements OnInit {
   private gemeinsameBuchungenService: GemeinsamebuchungService = inject(GemeinsamebuchungService);
   private kategorieService: KategorieService = inject(KategorieService);
 
+  private breakpointObserver: BreakpointObserver = inject(BreakpointObserver);
+  isSmallScreen = this.breakpointObserver.isMatched('(max-width: 799px)');
 
   buchungForm = new FormGroup({
     datum: new FormControl(new Date(), Validators.required),
