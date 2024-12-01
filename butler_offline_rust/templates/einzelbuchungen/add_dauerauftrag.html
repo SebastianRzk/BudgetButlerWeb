@@ -1,0 +1,153 @@
+<div class="input-theme">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">{{element_titel}}</h3>
+        </div>
+        {% if bearbeitungsmodus %}
+        <form role="form" action="/splitdauerauftrag/" method="post">
+            <input type="hidden" name="dauerauftrag_id" value="{{default_item.index}}">
+            <input type="hidden" name="database_id" value="{{database_id}}">
+            <div class="box-footer">
+                <button type="submit" name="action" value="preset_values" id="preset_values">
+                    Dauerauftrag teilen und mit neuem Wert weiterführen
+                </button>
+            </div>
+        </form>
+        {% endif %}
+        <form role="form" action="/adddauerauftrag/submit" method="post">
+            {% if bearbeitungsmodus %}
+            <input type="hidden" name="edit_index" value="{{default_item.index}}">
+            {% endif %}
+            <input type="hidden" name="database_id" value="{{database_id}}">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Startdatum:</label>
+                    <input value="{{default_item.start_datum}}" type="date" name="start_datum" id="startdatum"
+                           class="form-control" required="required" min="2000-01-01" max="2080-12-31"
+                           autofocus="autofocus"/>
+                </div>
+                <div class="form-group">
+                    <label>Endedatum:</label>
+                    <input value="{{default_item.ende_datum}}" type="date" name="ende_datum" class="form-control"
+                           id="endedatum" required="required" min="2000-01-01" max="2080-12-31"/>
+                </div>
+                <div class="form-group">
+                    <label>Name des Dauerauftrags</label> <input value="{{default_item.name}}" type="text" name="name"
+                                                                 class="form-control" placeholder=""
+                                                                 required="required"/>
+                </div>
+                <div class="form-group">
+                    <label>Rhythmus</label> <select class="form-control"
+                                                    name="rhythmus" id="rhythmus_auswahl">
+                    {% for rhythmus in rhythmen.items %}
+                    <option
+                            {% if rhythmus.selected %}
+                            selected="true"
+                            {% endif %}
+                    >{{rhythmus.value}}
+                    </option>
+                    {% endfor %}
+                </select>
+                </div>
+                <div class="form-group">
+                    <label>Art</label>
+                    <select class="form-control" name="typ" id="typ_auswahl">
+                        {% for typ in typen.items %}
+                        <option
+                                {% if typ.selected %}
+                                selected="true"
+                                {% endif %}
+                        >{{typ.value}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Wert der einzelnen Buchung</label> <input value="{{default_item.wert}}"
+                                                                     pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                                                                     name="wert" required="required"
+                                                                     class="form-control" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label>Kategorie</label> <select class="form-control" name="kategorie" id="kategorie_auswahl">
+                    {% for kategorie in kategorien.items %}
+                    <option
+                            {% if kategorie.selected %}
+                            selected="true"
+                            {% endif %}
+                    >{{kategorie.value}}
+                    </option>
+                    {% endfor %}
+                </select>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="add" id="add">{{approve_title}}</button>
+            </div>
+        </form>
+    </div>
+    <div class="input-kategorie-box">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Neue Kategorie</h3>
+                <button class="btn-tool pull-right open_button" id="open_add_kategorie"><span class="fa fa-plus"></span>
+                </button>
+                <button class="btn-tool pull-right close_button" id="close_add_kategorie"><span
+                        class="fa fa-minus"></span></button>
+            </div>
+            <div class="boxcontent closed" id="kategoriebox">
+                <form role="form" action="/addkategorie/" method="post">
+                    <div class="form-group">
+                        <label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text"
+                                                                                                             name="neue_kategorie"
+                                                                                                             class="form-control"
+                                                                                                             placeholder="Enter ..."/>
+                    </div>
+                    <div class="box-footer">
+                        <input type="hidden" name="redirect" value="/adddauerauftrag/">
+                        <button type="submit" name="action" value="add_kategorie" id="add_kategorie">Daten
+                            aktualisieren
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div></div>
+    </div>
+    <div class="box last-elements-box">
+        <div class="box-header">
+            <h3 class="box-title">Letzte Erfassungen</h3>
+        </div>
+        <div class="box-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Startdatum</th>
+                    <th>Endedatum</th>
+                    <th>Rhythmus</th>
+                    <th>Name</th>
+                    <th>Kategorie</th>
+                    <th class="table-wert">Wert</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ausgabe in letzte_erfassung %}
+                <tr>
+                    <td><span class="fa {{ausgabe.fa}} pull-right"></span></td>
+                    <td>{{ausgabe.start_datum}}</td>
+                    <td>{{ausgabe.ende_datum}}</td>
+                    <td>{{ausgabe.rhythmus}}</td>
+                    <td>{{ausgabe.name}}</td>
+                    <td>{{ausgabe.kategorie}}</td>
+                    <td class="table-wert">{{ausgabe.wert}} €</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <a href="/uebersicht_dauerauftraege/" class="btn btn-light pull-right">Alle Daueraufträge ansehen</a>
+        </div>
+    </div>
+</div>
