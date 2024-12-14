@@ -1,14 +1,15 @@
 use crate::budgetbutler::view::icons::{Icon, PENCIL, PLUS};
 use crate::budgetbutler::view::request_handler::{ModificationResult, Redirect, RedirectResult};
 use crate::budgetbutler::view::routes::GEMEINSAME_BUCHUNGEN_ADD;
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::person::Person;
 use crate::model::state::non_persistent_application_state::GemeinsameBuchungChange;
-use crate::model::state::persistent_application_state::{Database, GemeinsameBuchungen};
+use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::gemeinsame_buchungen::GemeinsameBuchungen;
 
 pub struct SubmitGemeinsameBuchungContext<'a> {
     pub database: &'a Database,
@@ -69,7 +70,7 @@ pub fn submit_gemeinsame_ausgabe(context: SubmitGemeinsameBuchungContext) -> Red
 mod tests {
     use crate::budgetbutler::pages::gemeinsame_buchungen::action_add_edit_gemeinsame_buchung::{submit_gemeinsame_ausgabe, SubmitGemeinsameBuchungContext};
     use crate::budgetbutler::view::icons::PLUS;
-    use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+    use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
     use crate::model::primitives::betrag::builder::{minus_zwei, zwei};
     use crate::model::primitives::datum::builder::any_datum;
     use crate::model::primitives::kategorie::builder::any_kategorie;

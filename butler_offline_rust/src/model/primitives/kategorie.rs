@@ -1,7 +1,6 @@
-#[derive(Debug, Clone, PartialEq, Hash, Eq)]
-pub struct Kategorie {
-    pub kategorie: String,
-}
+use serde::{Deserialize, Serialize};
+
+pub const SPAREN_KATEGORIE: &str = "Sparen";
 
 impl Kategorie {
     pub fn new(kategorie: String) -> Kategorie {
@@ -25,6 +24,11 @@ impl Kategorie {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
+pub struct Kategorie {
+    pub kategorie: String,
+}
+
 impl PartialOrd for Kategorie {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))
@@ -45,10 +49,18 @@ pub fn kategorie(kategorie: &str) -> Kategorie {
 
 #[cfg(test)]
 pub mod builder {
-    use crate::model::primitives::kategorie::{kategorie, Kategorie};
+    use crate::model::primitives::kategorie::{kategorie, Kategorie, SPAREN_KATEGORIE};
 
     pub fn any_kategorie() -> Kategorie {
         kategorie("Test")
+    }
+
+    pub fn any_kategorie_str() -> String {
+        "Test".to_string()
+    }
+
+    pub fn sparen_kategorie() -> Kategorie {
+        kategorie(SPAREN_KATEGORIE)
     }
 }
 

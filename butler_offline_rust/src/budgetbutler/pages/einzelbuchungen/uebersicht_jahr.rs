@@ -143,7 +143,7 @@ mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::uebersicht_jahr::{
         handle_view, UebersichtJahrContext,
     };
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::builder::{minus_zwei, p_zero, vier, zwei};
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::Datum;

@@ -41,8 +41,8 @@ pub fn delete_dauerauftrag(context: DeleteContext) -> RedirectResult<Dauerauftra
 #[cfg(test)]
 mod tests {
     use super::DELETE;
-    use crate::model::dauerauftrag::builder::any_dauerauftrag;
-    use crate::model::einzelbuchung::builder::any_einzelbuchung;
+    use crate::model::database::dauerauftrag::builder::any_dauerauftrag;
+    use crate::model::database::einzelbuchung::builder::any_einzelbuchung;
     use crate::model::state::persistent_application_state::builder::generate_database_with_dauerauftraege;
 
     #[test]

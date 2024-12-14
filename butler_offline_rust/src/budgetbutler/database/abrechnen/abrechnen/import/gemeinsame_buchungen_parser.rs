@@ -2,7 +2,7 @@ use crate::io::disk::diskrepresentation::line::Line;
 use crate::io::disk::primitive::betrag::read_betrag;
 use crate::io::disk::primitive::datum::read_datum;
 use crate::io::disk::primitive::segment_reader::{read_next_element, Element};
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::person::Person;

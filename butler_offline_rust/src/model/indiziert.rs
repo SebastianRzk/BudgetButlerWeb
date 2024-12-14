@@ -30,4 +30,12 @@ pub mod builder {
             value,
         }
     }
+
+    pub fn dynamisch_indiziert<T: PartialEq + Eq + Ord + PartialOrd>(value: T) -> Indiziert<T> {
+        Indiziert {
+            index: 0,
+            dynamisch: true,
+            value,
+        }
+    }
 }

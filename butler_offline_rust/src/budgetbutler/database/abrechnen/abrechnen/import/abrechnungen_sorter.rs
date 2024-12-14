@@ -1,6 +1,6 @@
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::SortedAbrechnungsFile;
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::{
-    BUCHUNGEN_EINZEL_HEADER, BUCHUNGEN_END, BUCHUNGEN_START, METADATEN_END, METADATEN_START,
+    BUCHUNGEN_EINZEL_HEADER, BUCHUNGEN_END, BUCHUNGEN_START, METADATEN_END, METADATEN_START,BUCHUNGEN_GEMEINSAM_HEADER
 };
 use crate::io::disk::diskrepresentation::line::Line;
 use std::collections::HashMap;
@@ -20,7 +20,15 @@ pub fn sort_abrechnungs_file(file: &Vec<Line>, header_modus: HeaderModus) -> Sor
             current_modus = new_modus;
             continue;
         }
-        if modus_check_result == ModusCheckResult::Header &&  header_modus == HeaderModus::Drop{
+        if let ModusCheckResult::Header(header_modus) = modus_check_result.clone() {
+            current_modus = header_modus;
+        }
+
+        if modus_check_result  == ModusCheckResult::Header(Modus::EinzelBuchungen) &&  header_modus == HeaderModus::Drop{
+            continue;
+        }
+
+        if modus_check_result == ModusCheckResult::Header(Modus::GemeinsameBuchungen) &&  header_modus == HeaderModus::Drop{
             continue;
         }
         let current_list = result.entry(current_modus.clone()).or_insert_with(Vec::new);
@@ -46,8 +54,9 @@ pub fn sort_abrechnungs_file(file: &Vec<Line>, header_modus: HeaderModus) -> Sor
 
 fn check_modus(line: &Line) -> ModusCheckResult {
     match line.line.trim() {
-        BUCHUNGEN_EINZEL_HEADER => ModusCheckResult::Header,
+        BUCHUNGEN_EINZEL_HEADER => ModusCheckResult::Header(Modus::EinzelBuchungen),
         BUCHUNGEN_START => ModusCheckResult::NewModus(Modus::EinzelBuchungen),
+        BUCHUNGEN_GEMEINSAM_HEADER => ModusCheckResult::Header(Modus::GemeinsameBuchungen),
         BUCHUNGEN_END => ModusCheckResult::NewModus(Modus::Nothing),
         METADATEN_START => ModusCheckResult::NewModus(Modus::Metadaten),
         METADATEN_END => ModusCheckResult::NewModus(Modus::Nothing),
@@ -55,10 +64,10 @@ fn check_modus(line: &Line) -> ModusCheckResult {
     }
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 enum ModusCheckResult {
     NewModus(Modus),
-    Header,
+    Header(Modus),
     SameModus,
 }
 
@@ -93,7 +102,7 @@ Datum,Kategorie,Name,Betrag
 ";
 
     #[test]
-    pub fn test_storter() {
+    pub fn test_sorter() {
         let file = File::from_str(DEMO_ABRECHNUNG);
         let sorted_file = sort_abrechnungs_file(&file.lines, HeaderModus::Drop);
         assert_eq!(sorted_file.beschreibung.len(), 1);
@@ -133,6 +142,69 @@ Datum,Kategorie,Name,Betrag
         assert_eq!(
             sorted_file.einzel_buchungen.get(1).unwrap().line,
             "2024-11-21,NeueKategorie,asd,-617.00"
+        );
+    }
+
+
+    const DEMO_ABRECHNUNG_GEMEINSAM: &str = "\
+ergebnis text
+#######MaschinenimportMetadatenStart
+Abrechnungsdatum:2024-11-29
+Abrechnende Person:Sebastian
+Titel:Mein Titel
+Ziel:GemeinsameAbrechnungFuerSelbst
+Ausfuehrungsdatum:2024-11-29
+#######MaschinenimportMetadatenEnd
+#######MaschinenimportStart
+Datum,Kategorie,Name,Betrag,Person
+2024-11-01,NeueKategorie,Name,-117.00,PersonA
+2024-11-21,NeueKategorie,asd,-617.00,PersonB
+#######MaschinenimportEnd
+";
+
+    #[test]
+    pub fn test_sorter_gemeinsam() {
+        let file = File::from_str(DEMO_ABRECHNUNG_GEMEINSAM);
+        let sorted_file = sort_abrechnungs_file(&file.lines, HeaderModus::Drop);
+        assert_eq!(sorted_file.beschreibung.len(), 1);
+        assert_eq!(
+            sorted_file.beschreibung.get(0).unwrap().line,
+            "ergebnis text"
+        );
+
+        assert_eq!(sorted_file.metadaten.len(), 5);
+        assert_eq!(
+            sorted_file.metadaten.get(0).unwrap().line,
+            "Abrechnungsdatum:2024-11-29"
+        );
+        assert_eq!(
+            sorted_file.metadaten.get(1).unwrap().line,
+            "Abrechnende Person:Sebastian"
+        );
+        assert_eq!(
+            sorted_file.metadaten.get(2).unwrap().line,
+            "Titel:Mein Titel"
+        );
+        assert_eq!(
+            sorted_file.metadaten.get(3).unwrap().line,
+            "Ziel:GemeinsameAbrechnungFuerSelbst"
+        );
+
+        assert_eq!(
+            sorted_file.metadaten.get(4).unwrap().line,
+            "Ausfuehrungsdatum:2024-11-29"
+        );
+
+        assert_eq!(sorted_file.einzel_buchungen.len(), 0);
+
+        assert_eq!(sorted_file.gemeinsame_buchungen.len(), 2);
+        assert_eq!(
+            sorted_file.gemeinsame_buchungen.get(0).unwrap().line,
+            "2024-11-01,NeueKategorie,Name,-117.00,PersonA"
+        );
+        assert_eq!(
+            sorted_file.gemeinsame_buchungen.get(1).unwrap().line,
+            "2024-11-21,NeueKategorie,asd,-617.00,PersonB"
         );
     }
 }

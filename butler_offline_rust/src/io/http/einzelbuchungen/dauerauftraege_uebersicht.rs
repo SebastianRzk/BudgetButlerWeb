@@ -6,16 +6,21 @@ use crate::io::time::today;
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::Data;
 use actix_web::{get, HttpResponse, Responder};
+use crate::model::state::config::ConfigurationData;
 
 #[get("dauerauftraguebersicht/")]
-pub async fn get_view(data: Data<ApplicationState>) -> impl Responder {
+pub async fn get_view(data: Data<ApplicationState>, configuration: Data<ConfigurationData>) -> impl Responder {
+    let database = data.database.lock().unwrap();
+    let config = configuration.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Übersicht Daueraufträge",
         EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT,
         UebersichtDauerauftraegeContext {
-            database: &data.database.lock().unwrap(),
+            database: &database,
             today: today(),
         },
         handle_view,
-        render_uebersicht_dauerauftraege_template))
+        render_uebersicht_dauerauftraege_template,
+        config.database_configuration.name.clone()
+    ))
 }

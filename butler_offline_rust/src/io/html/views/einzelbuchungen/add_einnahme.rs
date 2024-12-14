@@ -1,6 +1,7 @@
-use crate::io::html::input::select::Select;
-pub use askama::Template;
 use crate::budgetbutler::pages::einzelbuchungen::add_ausgabe::AddBuchungViewResult;
+use crate::io::html::input::select::Select;
+use crate::io::html::views::templates::kategorie::flatmap_kategorien_option;
+pub use askama::Template;
 
 #[derive(Template)]
 #[template(path = "einzelbuchungen/add_einnahme.html")]
@@ -37,11 +38,9 @@ pub fn render_add_einnahme_template(template: AddBuchungViewResult) -> String {
 
 
 fn map_to_template(view_result: AddBuchungViewResult) -> AddEinnahmeTemplate {
-    let kategorien_liste: Vec<String> = view_result.kategorien.iter().map(|x| x.kategorie.clone()).collect();
-    let kategorien = Select::new(kategorien_liste, Some(view_result.default_item.kategorie.kategorie.clone()));
     AddEinnahmeTemplate {
         id: view_result.database_version.as_string(),
-        kategorien,
+        kategorien: flatmap_kategorien_option(view_result.kategorien, view_result.default_item.kategorie.clone()),
         element_titel: view_result.action_headline.clone(),
         bearbeitungsmodus: view_result.bearbeitungsmodus,
         default_item: DefaultItemTemplate {
@@ -49,7 +48,7 @@ fn map_to_template(view_result: AddBuchungViewResult) -> AddEinnahmeTemplate {
             datum: view_result.default_item.datum.to_iso_string(),
             name: view_result.default_item.name.get_name().clone(),
             kategorie: view_result.default_item.kategorie.kategorie.clone(),
-            wert: view_result.default_item.wert.to_iso_string(),
+            wert: view_result.default_item.wert.to_input_string(),
         },
         approve_title: view_result.action_title.clone(),
         letzte_erfassung: view_result.letzte_erfassungen.iter().map(|x| LetzteErfassungTemplate {
@@ -69,7 +68,7 @@ mod tests {
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::name;
-    use crate::model::state::persistent_application_state::DatabaseVersion;
+    use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
     #[test]
     pub fn test_map_to_template() {
@@ -112,7 +111,7 @@ mod tests {
         assert_eq!(result.default_item.datum, "2020-01-01");
         assert_eq!(result.default_item.name, "Ein Name");
         assert_eq!(result.default_item.kategorie, "Eine Kategorie");
-        assert_eq!(result.default_item.wert, "10.00");
+        assert_eq!(result.default_item.wert, "10,00");
         assert_eq!(result.approve_title, "Ausgabe erfassen");
 
         assert_eq!(result.kategorien.items.len(), 2);

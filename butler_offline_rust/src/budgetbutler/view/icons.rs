@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Icon {
     pub as_fa: Cow<'static, str>,
 }

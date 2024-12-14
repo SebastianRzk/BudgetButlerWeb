@@ -1,10 +1,11 @@
 use crate::budgetbutler::database::select::functions::datatypes::MonatsAggregationsIndex;
 use crate::budgetbutler::database::select::functions::filters::filter_auf_das_jahr;
 use crate::budgetbutler::database::select::functions::keyextractors::{jahresweise_aggregation, monatsweise_aggregation};
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::datum::{Datum, MonatsName};
-use crate::model::state::persistent_application_state::{Database, DatabaseVersion};
+use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
 pub struct UebersichtEinzelbuchungenViewResult {
     pub liste: Vec<MonatsZusammenfassung>,
@@ -68,8 +69,8 @@ pub fn handle_view(context: UebersichtEinzelbuchungenContext) -> UebersichtEinze
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::uebersicht_einzelbuchungen::{handle_view, UebersichtEinzelbuchungenContext};
-    use crate::model::einzelbuchung::builder::any_einzelbuchung;
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::model::database::einzelbuchung::builder::any_einzelbuchung;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;

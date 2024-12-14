@@ -1,5 +1,5 @@
 use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_gemeinsame_buchungen::UebersichtGemeinsameBuchungenViewResult;
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::indiziert::Indiziert;
 pub use askama::Template;
 
@@ -50,19 +50,19 @@ fn map_to_template(view_result: UebersichtGemeinsameBuchungenViewResult) -> Uebe
 mod tests {
     use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_gemeinsame_buchungen::UebersichtGemeinsameBuchungenViewResult;
     use crate::io::html::views::gemeinsame_buchungen::uebersicht_gemeinsame_buchungen::map_to_template;
-    use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+    use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
     use crate::model::indiziert::Indiziert;
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::name;
     use crate::model::primitives::person::builder::person;
-    use crate::model::state::persistent_application_state::builder::empty_database_version;
+    use crate::model::state::persistent_application_state::builder::demo_database_version;
 
     #[test]
     fn test_map_to_template() {
         let view_result = UebersichtGemeinsameBuchungenViewResult {
-            database_version: empty_database_version(),
+            database_version: demo_database_version(),
             liste: vec![
                 Indiziert {
                     index: 0,
@@ -88,6 +88,6 @@ mod tests {
         assert_eq!(template.buchungen[0].person, "Person");
         assert_eq!(template.buchungen[0].wert, "2,00");
         assert_eq!(template.buchungen[0].dynamisch, false);
-        assert_eq!(template.database_id, empty_database_version().as_string());
+        assert_eq!(template.database_id, demo_database_version().as_string());
     }
 }

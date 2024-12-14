@@ -91,6 +91,10 @@ impl<T: Clone> Selector<T> {
         self.internal_state.first().unwrap()
     }
 
+    pub fn last(&self) -> Option<&T> {
+        self.internal_state.last()
+    }
+
     pub fn clone(&self) -> Selector<T> {
         Selector {
             internal_state: self.internal_state.clone()
@@ -117,7 +121,8 @@ pub fn generate_monats_indizes(from: Datum, to: Datum) -> Vec<MonatsAggregations
 mod tests {
     use crate::budgetbutler::database::select::functions::datatypes::MonatsAggregationsIndex;
     use crate::budgetbutler::database::select::selector::{generate_monats_indizes, Selector};
-    use crate::model::einzelbuchung::builder::{any_einzelbuchung, to_einzelbuchung_with_kategorie, to_einzelbuchung_with_kategorie_und_betrag};
+    use crate::model::database::einzelbuchung::builder::{any_einzelbuchung, einzelbuchung_with_kategorie, einzelbuchung_with_kategorie_und_betrag};
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::datum::Datum;
 
@@ -126,7 +131,7 @@ mod tests {
     fn test_selector_should_filter_negative() {
         let selector = Selector::new(vec![any_einzelbuchung()]);
 
-        let result = selector.filter(|x| false);
+        let result = selector.filter(|_x| false);
 
         assert_eq!(result.count(), 0);
     }
@@ -135,7 +140,7 @@ mod tests {
     fn test_selector_should_filter_positive() {
         let selector = Selector::new(vec![any_einzelbuchung()]);
 
-        let result = selector.filter(|x| true);
+        let result = selector.filter(|_x| true);
 
         assert_eq!(result.count(), 1);
     }
@@ -150,9 +155,9 @@ mod tests {
     #[test]
     fn test_group_by() {
         let selector = Selector::new(vec![
-            to_einzelbuchung_with_kategorie_und_betrag("k1", zwei()),
-            to_einzelbuchung_with_kategorie_und_betrag("k1", zwei()),
-            to_einzelbuchung_with_kategorie_und_betrag("k2", zwei()),
+            einzelbuchung_with_kategorie_und_betrag("k1", zwei()),
+            einzelbuchung_with_kategorie_und_betrag("k1", zwei()),
+            einzelbuchung_with_kategorie_und_betrag("k2", zwei()),
         ]);
 
         let result = selector.group_by(|x| x.kategorie.get_kategorie().clone(), |x| x.betrag.euro);
@@ -181,9 +186,9 @@ mod tests {
     #[test]
     fn test_extract_unique_values() {
         let selector = Selector::new(vec![
-            to_einzelbuchung_with_kategorie("k1"),
-            to_einzelbuchung_with_kategorie("k1"),
-            to_einzelbuchung_with_kategorie("k2"),
+            einzelbuchung_with_kategorie("k1"),
+            einzelbuchung_with_kategorie("k1"),
+            einzelbuchung_with_kategorie("k2"),
         ]);
 
         let result = selector.extract_unique_values(|x| x.kategorie.get_kategorie().clone());
@@ -196,12 +201,25 @@ mod tests {
     #[test]
     fn test_first(){
         let selector = Selector::new(vec![
-            to_einzelbuchung_with_kategorie("k1"),
-            to_einzelbuchung_with_kategorie("k2"),
+            einzelbuchung_with_kategorie("k1"),
+            einzelbuchung_with_kategorie("k2"),
         ]);
 
         let result = selector.first();
 
         assert_eq!(result.kategorie.get_kategorie(), "k1");
+    }
+
+    #[test]
+    fn test_last(){
+        let selector = Selector::new(vec![
+            einzelbuchung_with_kategorie("k1"),
+            einzelbuchung_with_kategorie("k2"),
+        ]);
+
+        let result = selector.last();
+
+        assert_eq!(result.unwrap().kategorie.get_kategorie(), "k2");
+        assert_eq!(Selector::<Einzelbuchung>::new(vec![]).last(), None);
     }
 }

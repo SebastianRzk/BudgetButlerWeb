@@ -5,3 +5,9 @@ pub fn redirect_to_optimistic_locking_error() -> Redirect {
         target: "/error-optimistic-locking".to_string(),
     }
 }
+
+pub fn redirect_to_keine_aktion_gefunden() -> Redirect {
+    Redirect {
+        target: "/error-keine-aktion-gefunden".to_string(),
+    }
+}

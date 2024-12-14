@@ -1,9 +1,10 @@
 use crate::budgetbutler::database::util::calc_kategorien;
-use crate::budgetbutler::pages::einzelbuchungen::add_ausgabe::{AddBuchungContext, AddBuchungViewResult, DefaultItem, LetzteErfassung};
+use crate::budgetbutler::pages::einzelbuchungen::add_ausgabe::{
+    AddBuchungContext, AddBuchungViewResult, DefaultItem, LetzteErfassung,
+};
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
-
 
 pub fn handle_view(context: AddBuchungContext) -> AddBuchungViewResult {
     let mut default_item = DefaultItem {
@@ -31,42 +32,54 @@ pub fn handle_view(context: AddBuchungContext) -> AddBuchungViewResult {
         action_title = "Einnahme bearbeiten".to_string();
     }
 
-
     let result = AddBuchungViewResult {
         database_version: context.database.db_version.clone(),
         bearbeitungsmodus,
         action_headline,
         default_item,
-        kategorien: calc_kategorien(&context.database.einzelbuchungen, context.extra_kategorie),
+        kategorien: calc_kategorien(
+            &context.database.einzelbuchungen,
+            context.extra_kategorie,
+            context.ausgeschlossene_kategorien,
+        ),
         action_title,
-        letzte_erfassungen: context.einzelbuchungen_changes.iter().map(|change| LetzteErfassung {
-            fa: change.icon.clone(),
-            datum: change.datum.to_german_string(),
-            name: change.name.to_string(),
-            kategorie: change.kategorie.to_string(),
-            wert: change.betrag.to_german_string(),
-        }).collect(),
+        letzte_erfassungen: context
+            .einzelbuchungen_changes
+            .iter()
+            .map(|change| LetzteErfassung {
+                fa: change.icon.clone(),
+                datum: change.datum.to_german_string(),
+                name: change.name.to_string(),
+                kategorie: change.kategorie.to_string(),
+                wert: change.betrag.to_german_string(),
+            })
+            .collect(),
     };
     result
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::einzelbuchungen::add_einnahme::{handle_view, AddBuchungContext};
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_kategorie;
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::budgetbutler::pages::einzelbuchungen::add_einnahme::{
+        handle_view, AddBuchungContext,
+    };
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_kategorie;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::{kategorie, Kategorie};
     use crate::model::primitives::name::{name, Name};
     use crate::model::state::non_persistent_application_state::EinzelbuchungChange;
-    use crate::model::state::persistent_application_state::builder::{generate_database_with_einzelbuchungen, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        generate_database_with_einzelbuchungen, generate_empty_database,
+    };
 
     #[test]
     pub fn test_handle_view_without_edit_index() {
-        let database = generate_database_with_einzelbuchungen(vec![
-            to_einzelbuchung_with_kategorie("test_kategorie")
-        ]);
+        let database =
+            generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
+                "test_kategorie",
+            )]);
         let einzelbuchungen_changes = vec![];
         let context = AddBuchungContext {
             database: &database,
@@ -74,6 +87,7 @@ mod tests {
             extra_kategorie: &None,
             today: Datum::new(1, 1, 2020),
             einzelbuchungen_changes: &einzelbuchungen_changes,
+            ausgeschlossene_kategorien: &vec![],
         };
 
         let result = handle_view(context);
@@ -95,14 +109,12 @@ mod tests {
 
     #[test]
     pub fn test_handle_view_with_edit_index() {
-        let database = generate_database_with_einzelbuchungen(vec![
-            Einzelbuchung {
-                datum: Datum::new(11, 11, 2011),
-                name: name("test_name"),
-                kategorie: kategorie("test_kategorie"),
-                betrag: Betrag::new(Vorzeichen::Positiv, 10, 0),
-            }
-        ]);
+        let database = generate_database_with_einzelbuchungen(vec![Einzelbuchung {
+            datum: Datum::new(11, 11, 2011),
+            name: name("test_name"),
+            kategorie: kategorie("test_kategorie"),
+            betrag: Betrag::new(Vorzeichen::Positiv, 10, 0),
+        }]);
         let einzelbuchungen_changes = vec![];
         let context = AddBuchungContext {
             database: &database,
@@ -110,6 +122,7 @@ mod tests {
             extra_kategorie: &None,
             today: Datum::new(1, 1, 2020),
             einzelbuchungen_changes: &einzelbuchungen_changes,
+            ausgeschlossene_kategorien: &vec![],
         };
 
         let result = handle_view(context);
@@ -122,7 +135,10 @@ mod tests {
         assert_eq!(result.default_item.datum, Datum::new(11, 11, 2011));
         assert_eq!(result.default_item.name, name("test_name"));
         assert_eq!(result.default_item.kategorie, kategorie("test_kategorie"));
-        assert_eq!(result.default_item.wert, Betrag::new(Vorzeichen::Positiv, 10, 0));
+        assert_eq!(
+            result.default_item.wert,
+            Betrag::new(Vorzeichen::Positiv, 10, 0)
+        );
 
         assert_eq!(result.kategorien, vec![kategorie("test_kategorie")]);
         assert_eq!(result.action_title, "Einnahme bearbeiten");
@@ -132,21 +148,20 @@ mod tests {
     #[test]
     pub fn test_handle_view_should_preset_changes() {
         let database = generate_empty_database();
-        let einzelbuchungen_changes = vec![
-            EinzelbuchungChange {
-                icon: "fa fa-plus".to_string(),
-                datum: Datum::new(11, 11, 2011),
-                name: name("test_name"),
-                kategorie: kategorie("test_kategorie"),
-                betrag: Betrag::new(Vorzeichen::Negativ, 10, 0),
-            }
-        ];
+        let einzelbuchungen_changes = vec![EinzelbuchungChange {
+            icon: "fa fa-plus".to_string(),
+            datum: Datum::new(11, 11, 2011),
+            name: name("test_name"),
+            kategorie: kategorie("test_kategorie"),
+            betrag: Betrag::new(Vorzeichen::Negativ, 10, 0),
+        }];
         let context = AddBuchungContext {
             database: &database,
             extra_kategorie: &None,
             edit_buchung: None,
             today: Datum::new(1, 1, 2020),
             einzelbuchungen_changes: &einzelbuchungen_changes,
+            ausgeschlossene_kategorien: &vec![],
         };
 
         let result = handle_view(context);
@@ -160,7 +175,7 @@ mod tests {
     }
 
     #[test]
-    fn should_append_extra_kategorie(){
+    fn should_append_extra_kategorie() {
         let database = generate_empty_database();
         let extra_kategorie = Some(kategorie("extra_kategorie"));
         let context = AddBuchungContext {
@@ -169,6 +184,7 @@ mod tests {
             extra_kategorie: &extra_kategorie,
             today: Datum::new(1, 1, 2020),
             einzelbuchungen_changes: &vec![],
+            ausgeschlossene_kategorien: &vec![],
         };
 
         let result = handle_view(context);
@@ -176,4 +192,3 @@ mod tests {
         assert_eq!(result.kategorien, vec![kategorie("extra_kategorie")]);
     }
 }
-

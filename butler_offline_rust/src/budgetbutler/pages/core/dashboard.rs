@@ -2,7 +2,7 @@ use crate::budgetbutler::database::select::functions::filters::{filter_den_aktue
 use crate::budgetbutler::database::select::functions::grouper::einnahmen_ausgaben_gruppierung;
 use crate::budgetbutler::database::select::functions::keyextractors::monatsweise_aggregation;
 use crate::budgetbutler::database::select::selector::generate_monats_indizes;
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::{Datum, MonatsName};
@@ -63,7 +63,7 @@ pub fn handle_view(context: DashboardContext) -> DashboardViewResult {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_datum_and_betrag;
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_datum_and_betrag;
     use crate::model::primitives::betrag::builder::{minus_zwei, vier, zwei};
     use crate::model::primitives::datum::monats_name;
     use crate::model::state::persistent_application_state::builder::generate_database_with_einzelbuchungen;
@@ -73,10 +73,10 @@ mod tests {
         let today = Datum::new(01, 01, 2020);
         let database = generate_database_with_einzelbuchungen(
             vec![
-                to_einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), zwei()),
-                to_einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), minus_zwei()),
-                to_einzelbuchung_with_datum_and_betrag(today.clone().substract_months(2), vier()),
-                to_einzelbuchung_with_datum_and_betrag(today.clone().substract_months(3), minus_zwei()),
+                einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), zwei()),
+                einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), minus_zwei()),
+                einzelbuchung_with_datum_and_betrag(today.clone().substract_months(2), vier()),
+                einzelbuchung_with_datum_and_betrag(today.clone().substract_months(3), minus_zwei()),
             ]
         );
         let context = DashboardContext {
@@ -116,10 +116,10 @@ mod tests {
         let today = Datum::new(01, 01, 2020);
         let database = generate_database_with_einzelbuchungen(
             vec![
-                to_einzelbuchung_with_datum_and_betrag(today.clone(), zwei()),
-                to_einzelbuchung_with_datum_and_betrag(today.clone(), minus_zwei()),
-                to_einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), vier()),
-                to_einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), minus_zwei()),
+                einzelbuchung_with_datum_and_betrag(today.clone(), zwei()),
+                einzelbuchung_with_datum_and_betrag(today.clone(), minus_zwei()),
+                einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), vier()),
+                einzelbuchung_with_datum_and_betrag(today.clone().substract_months(1), minus_zwei()),
             ]
         );
         let context = DashboardContext {

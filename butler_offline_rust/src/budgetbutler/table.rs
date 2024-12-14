@@ -2,11 +2,10 @@ use crate::budgetbutler::database::select::functions::grouper::betrag_summe_grup
 use crate::budgetbutler::database::select::functions::keyextractors::kategorie_aggregation;
 use crate::budgetbutler::database::select::selector::Selector;
 use crate::budgetbutler::view::farbe::FarbenSelektor;
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::metamodel::chart::AusgabeAusKategorie;
 use crate::model::primitives::kategorie::Kategorie;
-use crate::model::primitives::name::Name;
 
 pub fn berechne_buchungen_nach_kategorie(slektion: Selector<Indiziert<Einzelbuchung>>, farben_selektor: &FarbenSelektor) -> Vec<AusgabeAusKategorie> {
     let buchungen = slektion

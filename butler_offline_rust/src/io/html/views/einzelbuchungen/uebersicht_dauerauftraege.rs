@@ -1,5 +1,5 @@
 use crate::budgetbutler::pages::einzelbuchungen::uebersicht_dauerauftraege::UebersichtDauerauftraegeViewResult;
-use crate::model::dauerauftrag::Dauerauftrag;
+use crate::model::database::dauerauftrag::Dauerauftrag;
 use crate::model::indiziert::Indiziert;
 pub use askama::Template;
 
@@ -67,10 +67,10 @@ fn map_to_template(view_result: UebersichtDauerauftraegeViewResult) -> Uebersich
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::uebersicht_dauerauftraege::UebersichtDauerauftraegeViewResult;
-    use crate::model::dauerauftrag::builder::dauerauftrag_mit_start_ende_datum;
+    use crate::model::database::dauerauftrag::builder::dauerauftrag_mit_start_ende_datum;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::primitives::datum::Datum;
-    use crate::model::state::persistent_application_state::builder::empty_database_version;
+    use crate::model::state::persistent_application_state::builder::demo_database_version;
 
     #[test]
     fn test_map_to_template() {
@@ -88,7 +88,7 @@ mod tests {
             zukuenftige_dauerauftraege: vec![
                 indiziert(zukuenftiger_dauerauftrag),
             ],
-            database_version: empty_database_version(),
+            database_version: demo_database_version(),
         };
 
         let result = super::map_to_template(view_result);

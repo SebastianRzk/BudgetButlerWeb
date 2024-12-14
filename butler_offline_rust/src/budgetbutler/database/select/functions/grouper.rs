@@ -39,16 +39,16 @@ mod tests {
     use crate::budgetbutler::database::select::functions::grouper::einnahmen_ausgaben_gruppierung;
     use crate::budgetbutler::database::select::functions::keyextractors::monatsweise_aggregation;
     use crate::budgetbutler::database::select::selector::Selector;
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_datum_and_betrag;
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_datum_and_betrag;
     use crate::model::primitives::betrag::builder::{n_zero, vier, zwei};
     use crate::model::primitives::datum::Datum;
 
     #[test]
     fn test_group_monatsweise_by_einnahmen_ausgaben() {
         let selector = Selector::new(vec![
-            to_einzelbuchung_with_datum_and_betrag(Datum::new(1, 1, 2020), zwei()),
-            to_einzelbuchung_with_datum_and_betrag(Datum::new(1, 1, 2020), zwei()),
-            to_einzelbuchung_with_datum_and_betrag(Datum::new(1, 2, 2020), zwei()),
+            einzelbuchung_with_datum_and_betrag(Datum::new(1, 1, 2020), zwei()),
+            einzelbuchung_with_datum_and_betrag(Datum::new(1, 1, 2020), zwei()),
+            einzelbuchung_with_datum_and_betrag(Datum::new(1, 2, 2020), zwei()),
         ]);
 
         let result = selector.group_by(monatsweise_aggregation, einnahmen_ausgaben_gruppierung);

@@ -1,4 +1,6 @@
 use crate::io::disk::diskrepresentation::line::Line;
+use crate::model::database::sparbuchung::KontoReferenz;
+use crate::model::primitives::name::Name;
 
 const COMMA: char = ',';
 
@@ -20,7 +22,6 @@ pub fn read_next_element(zeile: Element) -> ParseErgebnis {
         element.push(char);
     }
     let rest;
-    eprintln!("Element: {}", element);
     if was_quoted {
         rest = zeile.element.strip_prefix(&format!("\"{}\"", element)).unwrap();
     }else {
@@ -40,6 +41,18 @@ pub struct Element {
 impl Into<Element> for &Line {
     fn into(self) -> Element {
         Element { element: self.line.clone() }
+    }
+}
+
+impl From<Name> for Element {
+    fn from(name: Name) -> Self {
+        Element { element: name.get_name().clone() }
+    }
+}
+
+impl From<KontoReferenz> for Element {
+    fn from(konto_referenz: KontoReferenz) -> Self {
+        Element { element: konto_referenz.konto_name.get_name().clone() }
     }
 }
 

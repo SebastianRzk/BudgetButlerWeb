@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
 pub struct Person {
     pub person: String,
 }
@@ -36,5 +38,9 @@ pub mod builder {
 
     pub fn demo_partner() -> Person {
         person("Partner")
+    }
+
+    pub fn demo_partner_str() -> String {
+        "Partner".to_string()
     }
 }

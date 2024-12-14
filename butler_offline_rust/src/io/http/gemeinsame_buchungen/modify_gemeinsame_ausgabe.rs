@@ -23,7 +23,7 @@ use crate::model::primitives::datum::Datum;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::person::Person;
-use crate::model::state::config::Config;
+use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::{
     AdditionalKategorie, GemeinsameBuchungenChanges,
 };
@@ -37,21 +37,27 @@ pub async fn get_view(
     data: Data<ApplicationState>,
     gemeinsame_buchungen_changes: Data<GemeinsameBuchungenChanges>,
     extra_kategorie: Data<AdditionalKategorie>,
-    config: Data<Config>,
+    config: Data<ConfigurationData>,
 ) -> impl Responder {
+    let database_guard = data.database.lock().unwrap();
+    let configuration_guard = config
+        .configuration
+        .lock()
+        .unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchung hinzufügen",
         GEMEINSAME_BUCHUNGEN_ADD,
         AddGemeinsameBuchungContext {
-            database: &data.database.lock().unwrap(),
+            database: &database_guard,
             extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
             gemeinsame_buchungen_changes: &gemeinsame_buchungen_changes.changes.lock().unwrap(),
-            user_configuration: config.user_configuration.clone(),
+            configuration: configuration_guard.clone(),
             today: today(),
             edit_buchung: None,
         },
         handle_view,
         render_add_gemeinsame_buchung_template,
+        configuration_guard.database_configuration.name.clone(),
     ))
 }
 
@@ -61,7 +67,7 @@ pub async fn post_view(
     gemeinsame_buchungen_changes: Data<GemeinsameBuchungenChanges>,
     form: Form<EditFormData>,
     extra_kategorie: Data<AdditionalKategorie>,
-    config: Data<Config>,
+    config: Data<ConfigurationData>,
 ) -> HttpResponse {
     let database_guard = data.database.lock().unwrap();
     let optimistic_locking_result =
@@ -70,12 +76,16 @@ pub async fn post_view(
         return http_redirect(redirect_to_optimistic_locking_error());
     }
 
+    let configurtation_guard = config
+        .configuration
+        .lock()
+        .unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchung editieren",
         GEMEINSAME_BUCHUNGEN_ADD,
         AddGemeinsameBuchungContext {
             database: &database_guard,
-            user_configuration: config.user_configuration.clone(),
+            configuration: configurtation_guard.clone(),
             extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
             gemeinsame_buchungen_changes: &gemeinsame_buchungen_changes.changes.lock().unwrap(),
             today: today(),
@@ -83,6 +93,7 @@ pub async fn post_view(
         },
         handle_view,
         render_add_gemeinsame_buchung_template,
+        configurtation_guard.database_configuration.name.clone(),
     ))
 }
 
@@ -97,7 +108,7 @@ pub async fn post_submit(
     data: Data<ApplicationState>,
     gemeinsame_buchungen_changes: Data<GemeinsameBuchungenChanges>,
     form_data: Form<SubmitFormData>,
-    database_configuration: Data<Config>,
+    configuration: Data<ConfigurationData>,
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
@@ -119,7 +130,11 @@ pub async fn post_submit(
         },
         &gemeinsame_buchungen_changes.changes,
         submit_gemeinsame_ausgabe,
-        &database_configuration.database_configuration,
+        &configuration
+            .configuration
+            .lock()
+            .unwrap()
+            .database_configuration,
     );
     *database = new_state.changed_database;
 
@@ -133,7 +148,7 @@ pub async fn delete(
     data: Data<ApplicationState>,
     gemeinsame_buchungen_changes: Data<GemeinsameBuchungenChanges>,
     form_data: Form<DeleteFormData>,
-    database_configuration: Data<Config>,
+    configuration: Data<ConfigurationData>,
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
@@ -148,7 +163,11 @@ pub async fn delete(
         },
         &gemeinsame_buchungen_changes.changes,
         delete_gemeinsame_buchung,
-        &database_configuration.database_configuration,
+        &configuration
+            .configuration
+            .lock()
+            .unwrap()
+            .database_configuration,
     );
     *database = new_state.changed_database;
 

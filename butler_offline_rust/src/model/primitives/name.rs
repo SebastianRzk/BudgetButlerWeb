@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Name {
-    name: String,
+    pub name: String,
 }
 
 impl Name {

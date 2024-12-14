@@ -12,7 +12,7 @@ use crate::budgetbutler::database::select::functions::sum_by::sum_einzelbuchunge
 use crate::budgetbutler::database::select::selector::Selector;
 use crate::budgetbutler::table::berechne_buchungen_nach_kategorie;
 use crate::budgetbutler::view::farbe::FarbenSelektor;
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::metamodel::chart::{AusgabeAusKategorie, PieChart};
 use crate::model::primitives::betrag::{Betrag, Vorzeichen};
@@ -252,7 +252,7 @@ mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::uebersicht_monat::{
         handle_view, UebersichtMonatContext,
     };
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::farbe::{gray, green, red};

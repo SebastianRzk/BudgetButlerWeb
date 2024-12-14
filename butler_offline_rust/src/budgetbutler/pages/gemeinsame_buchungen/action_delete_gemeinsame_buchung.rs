@@ -39,7 +39,7 @@ pub fn delete_gemeinsame_buchung(context: DeleteContext) -> RedirectResult<Gemei
 #[cfg(test)]
 mod tests {
     use super::DELETE;
-    use crate::model::gemeinsame_buchung::builder::any_gemeinsame_buchung;
+    use crate::model::database::gemeinsame_buchung::builder::any_gemeinsame_buchung;
     use crate::model::state::persistent_application_state::builder::generate_database_with_gemeinsamen_buchungen;
 
     #[test]

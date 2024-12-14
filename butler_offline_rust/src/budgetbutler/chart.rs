@@ -11,7 +11,7 @@ use crate::budgetbutler::database::select::selektion::einnahmen_ausgaben::{
     AUSGABEN_SELEKTION_NAME, EINNAHMEN_SELEKTION_NAME,
 };
 use crate::budgetbutler::view::farbe::{EinnahmenAusgabenFarbenSelektor, FarbenSelektor};
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::metamodel::chart::{BarChart, LineChart, LineChartDataSet, PieChart};
 use crate::model::primitives::betrag::{Betrag, Vorzeichen};
@@ -215,8 +215,8 @@ pub fn make_it_percent(bar_chart: PieChart) -> PieChart {
 mod tests {
     use crate::budgetbutler::chart::{berechne_kategorie_bar_chart, berechne_kategorie_line_chart, make_it_percent, make_it_pro_monat};
     use crate::budgetbutler::view::farbe::FarbenSelektor;
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_kategorie_und_betrag;
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_kategorie_und_betrag;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::metamodel::chart::{BarChart, LineChartDataSet, PieChart};
     use crate::model::primitives::betrag::builder::{vier, zwei};
@@ -225,7 +225,7 @@ mod tests {
     use crate::model::primitives::farbe::builder::farbe;
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::builder::any_name;
-    use crate::model::state::persistent_application_state::Einzelbuchungen;
+    use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
 
     #[test]
     fn test_make_it_percent() {
@@ -250,9 +250,9 @@ mod tests {
     fn test_berechne_kategorie_bar_chart() {
         let einzelbuchungen = Einzelbuchungen {
             einzelbuchungen: vec![
-                indiziert(to_einzelbuchung_with_kategorie_und_betrag("K1", zwei())),
-                indiziert(to_einzelbuchung_with_kategorie_und_betrag("K1", zwei())),
-                indiziert(to_einzelbuchung_with_kategorie_und_betrag("K2", zwei())),
+                indiziert(einzelbuchung_with_kategorie_und_betrag("K1", zwei())),
+                indiziert(einzelbuchung_with_kategorie_und_betrag("K1", zwei())),
+                indiziert(einzelbuchung_with_kategorie_und_betrag("K2", zwei())),
             ],
         };
 

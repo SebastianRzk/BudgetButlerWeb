@@ -36,7 +36,7 @@ fn map_to_template(view_result: DashboardViewResult) -> DashboardTemplate {
 mod tests {
     use crate::budgetbutler::pages::core::dashboard::DashboardViewResult;
     use crate::io::html::views::core::dashboard::map_to_template;
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::indiziert::Indiziert;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::{monats_name, Datum};

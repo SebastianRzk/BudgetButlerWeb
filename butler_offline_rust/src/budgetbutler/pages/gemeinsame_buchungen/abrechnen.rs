@@ -82,12 +82,11 @@ pub fn submit_rechne_ab(context: GemeinsameBuchungenAbrechnenSubmitContext) -> A
     );
     abrechnungen
 }
-
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::gemeinsame_buchungen::abrechnen::GemeinsameBuchungenAbrechnenSubmitContext;
     use crate::io::disk::diskrepresentation::line::builder::as_string;
-    use crate::model::gemeinsame_buchung::builder::gemeinsame_buchung;
+    use crate::model::database::gemeinsame_buchung::builder::gemeinsame_buchung;
     use crate::model::primitives::betrag::builder::minus_fuenfzig;
     use crate::model::primitives::betrag::Betrag;
     use crate::model::primitives::datum::builder::datum;

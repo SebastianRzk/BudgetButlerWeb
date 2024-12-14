@@ -146,6 +146,10 @@ pub mod builder {
         Datum::new(1, 1, 2020)
     }
 
+    pub fn demo_datum() -> Datum {
+        Datum::new(1, 1, 2024)
+    }
+
     pub fn datum(datum_iso: &str) -> Datum {
         Datum::from_iso_string(&datum_iso.to_string())
     }

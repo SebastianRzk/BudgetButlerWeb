@@ -12,8 +12,9 @@ use crate::model::primitives::datum::Datum;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::person::Person;
 use crate::model::primitives::prozent::Prozent;
-use crate::model::state::config::UserConfiguration;
-use crate::model::state::persistent_application_state::{Database, DatabaseVersion};
+use crate::model::state::config::Configuration;
+use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
 pub struct GemeinsamAbrechnenViewResult {
     pub database_version: DatabaseVersion,
@@ -59,7 +60,7 @@ pub struct GemeinsamAbrechnenViewResult {
 pub struct GemeinsameBuchungenAbrechnenContext<'a> {
     pub database: &'a Database,
 
-    pub user_configuration: UserConfiguration,
+    pub configuration: Configuration,
 
     pub set_mindate: Option<Datum>,
     pub set_maxdate: Option<Datum>,
@@ -72,7 +73,6 @@ pub struct GemeinsameBuchungenAbrechnenContext<'a> {
     pub set_other_kategorie: Kategorie,
     pub set_titel: Option<String>,
 
-    //Optionale Felder
     pub set_limit: Option<Limit>,
 }
 
@@ -108,10 +108,14 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
             ));
 
     let buchungen_von_self = filtered_zeitraum.clone().filter(filter_auf_person(
-        context.user_configuration.self_name.clone(),
+        context.configuration.user_configuration.self_name.clone(),
     ));
     let buchungen_von_partner = filtered_zeitraum.clone().filter(filter_auf_person(
-        context.user_configuration.partner_name.clone(),
+        context
+            .configuration
+            .user_configuration
+            .partner_name
+            .clone(),
     ));
 
     let eigene_summe = sum_gemeinsame_buchungen(buchungen_von_self);
@@ -124,7 +128,7 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
     let berechnungs_ergebnis = berechne_abrechnungs_summen(
         set_verhaeltnis.clone(),
         context.set_limit.clone(),
-        context.user_configuration.self_name.clone(),
+        context.configuration.user_configuration.self_name.clone(),
         eigene_summe,
         partner_summe,
         &gesamt_summe,
@@ -141,8 +145,12 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
     let ergebnis_text = berechne_ergebnis_text(
         Prozent::from_int_representation(set_verhaeltnis),
         reales_verhaeltnis.clone(),
-        context.user_configuration.self_name.clone(),
-        context.user_configuration.partner_name.clone(),
+        context.configuration.user_configuration.self_name.clone(),
+        context
+            .configuration
+            .user_configuration
+            .partner_name
+            .clone(),
         set_mindate.clone(),
         set_maxdate.clone(),
         filtered_zeitraum.count() as u32,
@@ -159,10 +167,17 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
         set_verhaeltnis: Prozent::from_int_representation(set_verhaeltnis.clone()),
         gesamt_count: context.database.gemeinsame_buchungen.select().count() as u32,
         set_count: filtered_zeitraum.count() as u32,
-        myname: context.user_configuration.self_name,
-        partnername: context.user_configuration.partner_name,
+        myname: context.configuration.user_configuration.self_name,
+        partnername: context.configuration.user_configuration.partner_name,
         set_self_kategorie: context.set_self_kategorie,
-        kategorien: calc_kategorien(&context.database.einzelbuchungen, &context.extra_kategorie),
+        kategorien: calc_kategorien(
+            &context.database.einzelbuchungen,
+            &context.extra_kategorie,
+            &context
+                .configuration
+                .erfassungs_configuration
+                .ausgeschlossene_kategorien,
+        ),
         set_other_kategorie: context.set_other_kategorie,
         limit: context.set_limit,
         mindate: gesamt_min_datum.clone(),
@@ -183,4 +198,73 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use crate::budgetbutler::pages::gemeinsame_buchungen::gemeinsam_abrechnen::{handle_view, GemeinsameBuchungenAbrechnenContext, Limit};
+    use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
+    use crate::model::primitives::betrag::Betrag;
+    use crate::model::primitives::datum::builder::demo_datum;
+    use crate::model::primitives::datum::Datum;
+    use crate::model::primitives::kategorie::kategorie;
+    use crate::model::primitives::name::builder::any_name;
+    use crate::model::primitives::person::builder::demo_partner;
+    use crate::model::primitives::prozent::Prozent;
+    use crate::model::state::config::builder::demo_configuration;
+    use crate::model::state::persistent_application_state::builder::generate_database_with_gemeinsamen_buchungen;
+
+    #[test]
+    fn test_handle_view() {
+        let database = generate_database_with_gemeinsamen_buchungen(vec![
+            GemeinsameBuchung {
+                kategorie: kategorie("Test Kategorie"),
+                betrag: Betrag::from_user_input(&"-1000,00".to_string()),
+                datum: Datum::from_iso_string(&"2020-01-01".to_string()),
+                person: demo_partner(),
+                name: any_name()
+            },
+        ]);
+
+        let context = GemeinsameBuchungenAbrechnenContext {
+            set_limit: Some(Limit {
+                fuer: demo_partner(),
+                value: Betrag::from_user_input(&"-100,00".to_string()),
+            }),
+            today: demo_datum(),
+            configuration: demo_configuration(),
+            extra_kategorie: &None,
+            set_titel: Some("Test Titel".to_string()),
+            set_self_kategorie: kategorie("Test Kategorie"),
+            set_verhaeltnis: Some(50),
+            set_other_kategorie: kategorie("Test Kategorie Other"),
+            set_mindate: Some(Datum::first()),
+            set_maxdate: Some(Datum::last()),
+            database: &database,
+        };
+
+        let result = handle_view(context);
+
+        assert_eq!(result.set_titel, "Test Titel");
+        assert_eq!(result.set_self_kategorie, kategorie("Test Kategorie"));
+        assert_eq!(result.set_other_kategorie, kategorie("Test Kategorie Other"));
+        assert_eq!(result.set_verhaeltnis_real, Prozent::from_float_representation(90.0));
+        assert_eq!(result.set_verhaeltnis, Prozent::p50_50());
+        assert_eq!(result.gesamt_count, 1);
+        assert_eq!(result.set_count, 1);
+        assert_eq!(result.myname, demo_configuration().user_configuration.self_name);
+        assert_eq!(result.partnername, demo_configuration().user_configuration.partner_name);
+        assert_eq!(result.ausgabe_partner, Betrag::from_user_input(&"-1000,00".to_string()));
+        assert_eq!(result.partner_soll, Betrag::from_user_input(&"-100,00".to_string()));
+        assert_eq!(result.partner_diff, Betrag::from_user_input(&"900,00".to_string()));
+        assert_eq!(result.ausgabe_self, Betrag::from_user_input(&"0,00".to_string()));
+        assert_eq!(result.ausgabe_self_prozent, Prozent::from_float_representation(0.0));
+        assert_eq!(result.ausgabe_partner_prozent, Prozent::from_float_representation(100.0));
+        assert_eq!(result.self_soll, Betrag::from_user_input(&"-900,00".to_string()));
+        assert_eq!(result.self_diff, Betrag::from_user_input(&"-900,00".to_string()));
+        assert_eq!(result.ausgabe_gesamt, Betrag::from_user_input(&"-1000,00".to_string()));
+        assert_eq!(result.ergebnis, "In dieser Abrechnung wurden 1 Buchungen im Zeitraum von 00.00.0 bis 31.12.9999 betrachtet, welche einen Gesamtbetrag von -1000,00€ umfassen.
+Es wurde angenommen, dass diese in einem Verhältnis von 50% (Self) zu 50% (Partner) aufgeteilt werden sollen.
+Für die Abrechnung wurde ein Limit von -100,00€ für Partner definiert
+Das Limit wurde überschritten. Das neue Verhältnis ist wie folgt:.
+Self: 90,00% (-900,00€) , Partner: 10,00% (-100,00€)
+Um die Differenz auszugleichen, sollte Self 900,00€ an Partner überweisen.");
+    }
+}

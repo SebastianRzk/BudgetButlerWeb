@@ -1,6 +1,7 @@
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::indiziert::Indiziert;
-use crate::model::state::persistent_application_state::{Database, DatabaseVersion};
+use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
 pub struct UebersichtGemeinsameBuchungenViewResult {
     pub liste: Vec<Indiziert<GemeinsameBuchung>>,
@@ -25,7 +26,7 @@ pub fn handle_view(context: UebersichtGemeinsameBuchungenContext) -> UebersichtG
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_gemeinsame_buchungen::{handle_view, UebersichtGemeinsameBuchungenContext};
-    use crate::model::gemeinsame_buchung::builder::any_gemeinsame_buchung;
+    use crate::model::database::gemeinsame_buchung::builder::any_gemeinsame_buchung;
     use crate::model::state::persistent_application_state::builder::generate_database_with_gemeinsamen_buchungen;
 
     #[test]

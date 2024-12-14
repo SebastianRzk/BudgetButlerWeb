@@ -1,0 +1,9 @@
+pub mod dauerauftrag;
+pub mod einzelbuchung;
+pub mod gemeinsame_buchung;
+pub mod sparkonto;
+pub mod sparbuchung;
+pub mod depotwert;
+pub mod order;
+pub mod order_dauerauftrag;
+pub mod depotauszug;

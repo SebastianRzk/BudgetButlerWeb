@@ -1,8 +1,9 @@
 use crate::budgetbutler::database::select::functions::keyextractors::{start_ende_aggregation, StartEndeAggregation};
-use crate::model::dauerauftrag::Dauerauftrag;
+use crate::model::database::dauerauftrag::Dauerauftrag;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::datum::Datum;
-use crate::model::state::persistent_application_state::{Database, DatabaseVersion};
+use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
 pub struct UebersichtDauerauftraegeViewResult {
     pub aktuelle_dauerauftraege: Vec<Indiziert<Dauerauftrag>>,
@@ -32,7 +33,7 @@ pub fn handle_view(context: UebersichtDauerauftraegeContext) -> UebersichtDauera
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::uebersicht_dauerauftraege::{handle_view, UebersichtDauerauftraegeContext};
-    use crate::model::dauerauftrag::builder::dauerauftrag_mit_start_ende_datum;
+    use crate::model::database::dauerauftrag::builder::dauerauftrag_mit_start_ende_datum;
     use crate::model::primitives::datum::Datum;
     use crate::model::state::persistent_application_state::builder::generate_database_with_dauerauftraege;
 

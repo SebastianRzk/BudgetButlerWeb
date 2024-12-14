@@ -119,6 +119,10 @@ impl Betrag {
         }
         Betrag::new(Vorzeichen::Positiv, self.euro, self.cent)
     }
+
+    pub fn is_negativ(&self) -> bool {
+        self.vorzeichen == Vorzeichen::Negativ
+    }
 }
 
 fn parse_number(number: String) -> u32 {
@@ -282,6 +286,10 @@ pub mod builder {
 
     pub fn vier() -> Betrag {
         Betrag::new(Vorzeichen::Positiv, 4, 0)
+    }
+
+    pub fn fuenf() -> Betrag {
+        Betrag::new(Vorzeichen::Positiv, 5, 0)
     }
 
     pub fn p_zero() -> Betrag {
@@ -556,5 +564,11 @@ mod tests {
     #[test]
     fn test_invertiere_betrag(){
       assert_eq!(Betrag::new(Vorzeichen::Positiv, 100, 0).invertiere_vorzeichen(), Betrag::new(Vorzeichen::Negativ, 100, 0));
+    }
+
+    #[test]
+    fn test_is_negativ(){
+        assert_eq!(Betrag::new(Vorzeichen::Negativ, 100, 0).is_negativ(), true);
+        assert_eq!(Betrag::new(Vorzeichen::Positiv, 100, 0).is_negativ(), false);
     }
 }

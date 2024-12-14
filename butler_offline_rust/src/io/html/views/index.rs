@@ -49,10 +49,11 @@ pub fn map_to_template(
     element_titel: String,
     content: String,
     menu: Vec<RootMenu>,
-    success_message: Option<SuccessMessage>
+    success_message: Option<SuccessMessage>,
+    name: String
 ) -> IndexTemplate {
     IndexTemplate {
-        nutzername: "Test".to_string(),
+        nutzername: name,
         active_page_url,
         active: active_menu_group,
         element_titel,
@@ -88,10 +89,11 @@ pub fn render_index_template(active_menu_group: String,
                              active_page_url: String,
                              page_title: String,
                              content: String,
-                             success_message: Option<SuccessMessage>
+                             success_message: Option<SuccessMessage>,
+                             name: String,
 ) -> String {
     let as_template: IndexTemplate = map_to_template(active_menu_group, active_page_url, page_title, content, vec![
         einzelbuchungen_menu(), gemeinsame_buchungen_menu(), sparen_menu(), einstellungen_menu()
-    ], success_message);
+    ], success_message, name);
     as_template.render().unwrap()
 }

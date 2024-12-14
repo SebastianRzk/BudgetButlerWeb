@@ -32,6 +32,9 @@ impl Prozent {
     }
 
     pub fn from_betrags_differenz(einzel_betrag: &Betrag, gesamt_betrag: &Betrag) -> Prozent {
+        if gesamt_betrag.as_cent() == 0 {
+            return Prozent::from_int_representation(0);
+        }
         let i = (einzel_betrag.as_cent() * 10000) / gesamt_betrag.as_cent();
         Prozent::from_float_representation(i as f64 / 100.00)
     }
@@ -182,6 +185,16 @@ mod tests {
         assert_eq!(
             Prozent::from_betrags_differenz(&einzel, &gesamt),
             Prozent::from_float_representation(10.0)
+        );
+    }
+
+    #[test]
+    fn test_from_betrags_differenz_with_zero_gesamtbetrag() {
+        let gesamt = Betrag::from_cent(Vorzeichen::Positiv, 0);
+        let einzel = Betrag::from_cent(Vorzeichen::Positiv, 10);
+        assert_eq!(
+            Prozent::from_betrags_differenz(&einzel, &gesamt),
+            Prozent::from_int_representation(0)
         );
     }
 }

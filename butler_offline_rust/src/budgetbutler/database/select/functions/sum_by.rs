@@ -1,7 +1,7 @@
 use crate::budgetbutler::database::select::selector::Selector;
 use crate::model::eigenschaften::besitzt_betrag::BesitztBetrag;
-use crate::model::einzelbuchung::Einzelbuchung;
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
 
@@ -25,8 +25,8 @@ pub fn sum_gemeinsame_buchungen(selector: Selector<Indiziert<GemeinsameBuchung>>
 mod tests {
     use crate::budgetbutler::database::select::functions::sum_by::{sum_einzelbuchungen, sum_gemeinsame_buchungen};
     use crate::budgetbutler::database::select::selector::Selector;
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_betrag;
-    use crate::model::gemeinsame_buchung::builder::gemeinsame_buchung_mit_betrag;
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_betrag;
+    use crate::model::database::gemeinsame_buchung::builder::gemeinsame_buchung_mit_betrag;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::primitives::betrag::builder::{vier, zwei};
     use crate::model::primitives::betrag::Betrag;
@@ -34,8 +34,8 @@ mod tests {
     #[test]
     fn test_sum_should_sum_all() {
         let selector = Selector::new(vec![
-            indiziert(to_einzelbuchung_with_betrag(zwei())),
-            indiziert(to_einzelbuchung_with_betrag(zwei())),
+            indiziert(einzelbuchung_with_betrag(zwei())),
+            indiziert(einzelbuchung_with_betrag(zwei())),
         ]);
 
         let result = sum_einzelbuchungen(selector);

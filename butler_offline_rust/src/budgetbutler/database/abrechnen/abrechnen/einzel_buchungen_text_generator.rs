@@ -1,6 +1,7 @@
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::BuchungenText;
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::BUCHUNGEN_EINZEL_HEADER;
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::io::disk::primitive::segment_reader::Element;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 
 pub fn einzelbuchungen_as_import_text(buchungen: &Vec<Einzelbuchung>) -> BuchungenText {
     let mut result = vec![BUCHUNGEN_EINZEL_HEADER.to_string()];
@@ -9,7 +10,7 @@ pub fn einzelbuchungen_as_import_text(buchungen: &Vec<Einzelbuchung>) -> Buchung
             "{},{},{},{}",
             buchung.datum.to_iso_string(),
             buchung.kategorie.get_kategorie(),
-            buchung.name.get_name(),
+            Element::create_escaped(buchung.name.get_name().clone()).element,
             buchung.betrag.to_iso_string()
         ));
     }
@@ -19,7 +20,7 @@ pub fn einzelbuchungen_as_import_text(buchungen: &Vec<Einzelbuchung>) -> Buchung
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::database::abrechnen::abrechnen::einzel_buchungen_text_generator::einzelbuchungen_as_import_text;
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::builder::minus_zwei;
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;

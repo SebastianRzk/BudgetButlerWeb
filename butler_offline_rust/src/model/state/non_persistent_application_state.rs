@@ -4,7 +4,11 @@ use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::person::Person;
 use crate::model::primitives::rhythmus::Rhythmus;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 use std::sync::Mutex;
+use crate::budgetbutler::view::icons::Icon;
+use crate::model::database::sparbuchung::{KontoReferenz, SparbuchungTyp};
+use crate::model::database::sparkonto::Kontotyp;
 
 pub struct EinzelbuchungenChanges {
     pub changes: Mutex<Vec<EinzelbuchungChange>>,
@@ -28,10 +32,31 @@ pub struct GemeinsameBuchungChange {
     pub name: Name,
     pub kategorie: Kategorie,
     pub betrag: Betrag,
-    pub person: Person
+    pub person: Person,
 }
 
+pub struct OnlineRedirectState {
+    pub redirect_state: Mutex<OnlineRedirectActionWrapper>,
+}
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct OnlineRedirectActionWrapper {
+    pub action: Option<OnlineRedirectAction>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct OnlineRedirectAction {
+    pub typ: OnlineRedirectActionType,
+    pub database_version: DatabaseVersion,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum OnlineRedirectActionType {
+    ImportEinzelbuchungen,
+    UploadKategorien,
+    ImportGemeinsameBuchungen,
+    UploadGemeinsameBuchungen
+}
 
 pub struct DauerauftraegeChanges {
     pub changes: Mutex<Vec<DauerauftragChange>>,
@@ -49,4 +74,34 @@ pub struct DauerauftragChange {
 
 pub struct AdditionalKategorie {
     pub kategorie: Mutex<Option<Kategorie>>,
+}
+
+pub struct RootPath {
+    pub path: String,
+}
+
+
+pub struct KontoChanges {
+    pub changes: Mutex<Vec<KontoChange>>,
+}
+
+pub struct KontoChange {
+    pub icon: String,
+    pub name: Name,
+    pub typ: Kontotyp,
+}
+
+
+
+pub struct SparbuchungenChanges {
+    pub changes: Mutex<Vec<SparbuchungChange>>,
+}
+
+pub struct SparbuchungChange {
+    pub icon: Icon,
+    pub name: Name,
+    pub datum: Datum,
+    pub wert: Betrag,
+    pub typ: SparbuchungTyp,
+    pub konto: KontoReferenz
 }

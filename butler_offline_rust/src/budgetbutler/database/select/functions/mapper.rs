@@ -1,4 +1,4 @@
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 
 pub fn map_positive(value: &Indiziert<Einzelbuchung>) -> Indiziert<Einzelbuchung> {

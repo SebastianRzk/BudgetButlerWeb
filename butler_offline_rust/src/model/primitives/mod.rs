@@ -7,3 +7,4 @@ pub mod rhythmus;
 pub mod farbe;
 pub mod person;
 pub mod prozent;
+pub mod isin;

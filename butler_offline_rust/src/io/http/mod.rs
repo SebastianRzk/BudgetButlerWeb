@@ -5,3 +5,4 @@ pub mod einzelbuchungen;
 mod redirect;
 pub mod gemeinsame_buchungen;
 pub mod shared;
+pub mod sparen;

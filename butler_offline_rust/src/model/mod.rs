@@ -1,9 +1,8 @@
-pub mod einzelbuchung;
 pub mod primitives;
 pub mod state;
 pub mod indiziert;
 pub mod eigenschaften;
-pub mod dauerauftrag;
 pub mod metamodel;
-pub mod gemeinsame_buchung;
 pub mod remote;
+pub mod initial_config;
+pub mod database;

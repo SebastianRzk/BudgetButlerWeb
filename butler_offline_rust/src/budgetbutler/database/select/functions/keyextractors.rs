@@ -59,8 +59,8 @@ pub enum StartEndeAggregation {
 
 #[cfg(test)]
 mod tests {
-    use crate::model::dauerauftrag::builder::dauerauftrag_mit_start_ende_datum;
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_datum;
+    use crate::model::database::dauerauftrag::builder::dauerauftrag_mit_start_ende_datum;
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_datum;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::primitives::datum::Datum;
 
@@ -79,7 +79,7 @@ mod tests {
     #[test]
     pub fn test_tagesweise_aggregation(){
         let heute = Datum::new(1, 1, 2021);
-        let dauerauftrag = to_einzelbuchung_with_datum(heute.clone());
+        let dauerauftrag = einzelbuchung_with_datum(heute.clone());
 
         assert_eq!(super::tagesweise_aggregation(&indiziert(dauerauftrag)), super::TagesAggregationsIndex { tag: 1 });
     }

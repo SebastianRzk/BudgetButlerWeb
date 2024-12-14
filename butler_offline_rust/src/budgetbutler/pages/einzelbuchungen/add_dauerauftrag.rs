@@ -5,7 +5,8 @@ use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::rhythmus::Rhythmus;
 use crate::model::state::non_persistent_application_state::DauerauftragChange;
-use crate::model::state::persistent_application_state::{Database, DatabaseVersion};
+use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
 pub struct AddDauerauftragViewResult {
     pub database_version: DatabaseVersion,
@@ -31,6 +32,7 @@ pub struct AddDauerauftragContext<'a> {
     pub database: &'a Database,
     pub dauerauftraege_changes: &'a Vec<DauerauftragChange>,
     pub extra_kategorie: &'a Option<Kategorie>,
+    pub ausgeschlossene_kategorien: &'a Vec<Kategorie>,
     pub edit_buchung: Option<u32>,
     pub today: Datum,
 }
@@ -83,7 +85,7 @@ pub fn handle_view(context: AddDauerauftragContext) -> AddDauerauftragViewResult
         bearbeitungsmodus,
         action_headline,
         default_item,
-        kategorien: calc_kategorien(&context.database.einzelbuchungen, context.extra_kategorie),
+        kategorien: calc_kategorien(&context.database.einzelbuchungen, context.extra_kategorie, context.ausgeschlossene_kategorien),
         action_title,
         letzte_erfassungen: context.dauerauftraege_changes.iter().map(|change| LetzteErfassung {
             fa: change.icon.clone(),
@@ -101,8 +103,8 @@ pub fn handle_view(context: AddDauerauftragContext) -> AddDauerauftragViewResult
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::add_dauerauftrag::{handle_view, AddDauerauftragContext};
-    use crate::model::dauerauftrag::Dauerauftrag;
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_kategorie;
+    use crate::model::database::dauerauftrag::Dauerauftrag;
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_kategorie;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::{kategorie, Kategorie};
@@ -114,7 +116,7 @@ mod tests {
     #[test]
     pub fn test_handle_view_without_edit_index() {
         let database = generate_database_with_einzelbuchungen(vec![
-            to_einzelbuchung_with_kategorie("test_kategorie")
+            einzelbuchung_with_kategorie("test_kategorie")
         ]);
         let context = AddDauerauftragContext {
             database: &database,
@@ -122,6 +124,7 @@ mod tests {
             extra_kategorie: &None,
             edit_buchung: None,
             today: Datum::new(1, 1, 2020),
+            ausgeschlossene_kategorien: &vec![]
         };
 
         let result = handle_view(context);
@@ -162,6 +165,7 @@ mod tests {
             extra_kategorie: &None,
             today: Datum::new(1, 1, 2020),
             dauerauftraege_changes: &changes,
+            ausgeschlossene_kategorien: &vec![]
         };
 
         let result = handle_view(context);
@@ -203,6 +207,7 @@ mod tests {
             edit_buchung: None,
             today: Datum::new(1, 1, 2020),
             dauerauftraege_changes: &changes,
+            ausgeschlossene_kategorien: &vec![]
         };
 
         let result = handle_view(context);
@@ -227,6 +232,7 @@ mod tests {
             extra_kategorie: &extra_kategorie,
             today: Datum::new(1, 1, 2020),
             dauerauftraege_changes: &vec![],
+            ausgeschlossene_kategorien: &vec![]
         };
 
         let result = handle_view(context);

@@ -8,22 +8,12 @@ pub struct SortedAbrechnungsFile {
 }
 
 
-impl SortedAbrechnungsFile {
-    pub fn with_new_metadaten(self, neue_metadaten: Vec<Line>) -> SortedAbrechnungsFile {
-        SortedAbrechnungsFile {
-            beschreibung: self.beschreibung,
-            metadaten: neue_metadaten,
-            einzel_buchungen: self.einzel_buchungen,
-            gemeinsame_buchungen: self.gemeinsame_buchungen,
-        }
-    }
-}
-
 pub const METADATEN_START: &str = "#######MaschinenimportMetadatenStart";
 pub const METADATEN_END: &str = "#######MaschinenimportMetadatenEnd";
 pub const BUCHUNGEN_START: &str = "#######MaschinenimportStart";
 pub const BUCHUNGEN_END: &str = "#######MaschinenimportEnd";
 pub const BUCHUNGEN_EINZEL_HEADER: &str = "Datum,Kategorie,Name,Betrag";
+pub const BUCHUNGEN_GEMEINSAM_HEADER: &str = "Datum,Kategorie,Name,Betrag,Person";
 
 pub const METADATEN_ABRECHNUNGSDATUM_KEY: &str = "Abrechnungsdatum:";
 pub const METADATEN_ABRECHNENDE_PERSON_KEY: &str = "Abrechnende Person:";

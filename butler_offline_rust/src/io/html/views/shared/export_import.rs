@@ -1,6 +1,6 @@
 pub use askama::Template;
 use crate::model::remote::server::ServerConfiguration;
-use crate::model::state::persistent_application_state::DatabaseVersion;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
 #[derive(Template)]
 #[template(path = "shared/import.html")]
@@ -35,7 +35,7 @@ pub fn map_to_template(view_result: ExportImportViewResult) -> ExportImportTempl
 mod tests {
     use crate::io::html::views::shared::export_import::ExportImportViewResult;
     use crate::model::remote::server::ServerConfiguration;
-    use crate::model::state::persistent_application_state::DatabaseVersion;
+    use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
     #[test]
     fn test_map_to_template(){

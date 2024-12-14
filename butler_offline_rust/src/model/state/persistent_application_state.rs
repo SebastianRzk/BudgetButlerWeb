@@ -1,11 +1,23 @@
-use crate::budgetbutler::database::change::{ChangeSelector, Creates};
-use crate::budgetbutler::database::select::selector::Selector;
-use crate::model::dauerauftrag::Dauerauftrag;
-use crate::model::einzelbuchung::Einzelbuchung;
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
-use crate::model::indiziert::Indiziert;
+use crate::model::database::dauerauftrag::Dauerauftrag;
+use crate::model::database::depotauszug::Depotauszug;
+use crate::model::database::depotwert::Depotwert;
+use crate::model::database::einzelbuchung::Einzelbuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::order::Order;
+use crate::model::database::order_dauerauftrag::OrderDauerauftrag;
+use crate::model::database::sparbuchung::Sparbuchung;
+use crate::model::database::sparkonto::Sparkonto;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
+use crate::model::state::persistent_state::dauerauftraege::Dauerauftraege;
+use crate::model::state::persistent_state::depotauszuege::Depotauszuege;
+use crate::model::state::persistent_state::depotwerte::Depotwerte;
+use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
+use crate::model::state::persistent_state::gemeinsame_buchungen::GemeinsameBuchungen;
+use crate::model::state::persistent_state::order::Orders;
+use crate::model::state::persistent_state::order_dauerauftraege::OrderDauerauftraege;
+use crate::model::state::persistent_state::sparbuchungen::Sparbuchungen;
+use crate::model::state::persistent_state::sparkontos::Sparkontos;
 use std::sync::Mutex;
-use rand::random;
 
 pub struct ApplicationState {
     pub database: Mutex<Database>,
@@ -16,157 +28,24 @@ pub struct Database {
     pub einzelbuchungen: Einzelbuchungen,
     pub dauerauftraege: Dauerauftraege,
     pub gemeinsame_buchungen: GemeinsameBuchungen,
+    pub sparkontos: Sparkontos,
+    pub sparbuchungen: Sparbuchungen,
+    pub depotwerte: Depotwerte,
+    pub order: Orders,
+    pub order_dauerauftraege: OrderDauerauftraege,
+    pub depotauszuege: Depotauszuege,
 }
 
 pub struct DataOnDisk {
     pub einzelbuchungen: Vec<Einzelbuchung>,
     pub dauerauftraege: Vec<Dauerauftrag>,
     pub gemeinsame_buchungen: Vec<GemeinsameBuchung>,
-}
-
-#[derive(Clone)]
-pub struct DatabaseVersion {
-    pub name: String,
-    pub version: u32,
-    pub session_random: u32,
-}
-
-pub fn create_initial_database_version(name: String) -> DatabaseVersion {
-    DatabaseVersion {
-        name,
-        version: 0,
-        session_random: random(),
-    }
-}
-
-impl DatabaseVersion {
-    pub fn as_string(&self) -> String {
-        format!("{}-{}-{}", self.name, self.version, self.session_random)
-    }
-    pub fn increment(&self) -> DatabaseVersion {
-        DatabaseVersion {
-            name: self.name.clone(),
-            version: self.version + 1,
-            session_random: self.session_random,
-        }
-    }
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Einzelbuchungen {
-    pub einzelbuchungen: Vec<Indiziert<Einzelbuchung>>,
-}
-
-impl Einzelbuchungen {
-    pub fn select(&self) -> Selector<Indiziert<Einzelbuchung>> {
-        Selector::new(self.einzelbuchungen.clone())
-    }
-
-    pub fn get(&self, index: u32) -> Indiziert<Einzelbuchung> {
-        self.select().filter(|x| x.index == index).first().clone()
-    }
-
-    pub fn change(&self) -> ChangeSelector<Einzelbuchung, Einzelbuchungen> {
-        ChangeSelector {
-            content: self.einzelbuchungen.clone(),
-            output: None,
-        }
-    }
-
-    pub fn sort(&self) -> Einzelbuchungen {
-        let mut neue_buchungen = self.einzelbuchungen.clone();
-        neue_buchungen.sort();
-
-        Einzelbuchungen {
-            einzelbuchungen: neue_buchungen,
-        }
-    }
-}
-
-impl Creates<Einzelbuchung, Einzelbuchungen> for Einzelbuchungen {
-    fn create(item: Vec<Indiziert<Einzelbuchung>>) -> Einzelbuchungen {
-        Einzelbuchungen {
-            einzelbuchungen: item,
-        }
-    }
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Dauerauftraege {
-    pub dauerauftraege: Vec<Indiziert<Dauerauftrag>>,
-}
-
-impl Creates<Dauerauftrag, Dauerauftraege> for Dauerauftraege {
-    fn create(item: Vec<Indiziert<Dauerauftrag>>) -> Dauerauftraege {
-        Dauerauftraege {
-            dauerauftraege: item,
-        }
-    }
-}
-
-impl Dauerauftraege {
-    pub fn select(&self) -> Selector<Indiziert<Dauerauftrag>> {
-        Selector::new(self.dauerauftraege.clone())
-    }
-
-    pub fn sort(&self) -> Dauerauftraege {
-        let mut neue_buchungen = self.dauerauftraege.clone();
-        neue_buchungen.sort();
-
-        Dauerauftraege {
-            dauerauftraege: neue_buchungen,
-        }
-    }
-
-    pub fn get(&self, index: u32) -> Indiziert<Dauerauftrag> {
-        self.select().filter(|x| x.index == index).first().clone()
-    }
-
-    pub fn change(&self) -> ChangeSelector<Dauerauftrag, Dauerauftraege> {
-        ChangeSelector {
-            content: self.dauerauftraege.clone(),
-            output: None,
-        }
-    }
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct GemeinsameBuchungen {
-    pub gemeinsame_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
-}
-
-impl Creates<GemeinsameBuchung, GemeinsameBuchungen> for GemeinsameBuchungen {
-    fn create(item: Vec<Indiziert<GemeinsameBuchung>>) -> GemeinsameBuchungen {
-        GemeinsameBuchungen {
-            gemeinsame_buchungen: item,
-        }
-    }
-}
-
-impl GemeinsameBuchungen {
-    pub fn sort(&self) -> GemeinsameBuchungen {
-        let mut neue_buchungen = self.gemeinsame_buchungen.clone();
-        neue_buchungen.sort();
-
-        GemeinsameBuchungen {
-            gemeinsame_buchungen: neue_buchungen,
-        }
-    }
-
-    pub fn get(&self, index: u32) -> Indiziert<GemeinsameBuchung> {
-        self.select().filter(|x| x.index == index).first().clone()
-    }
-
-    pub fn select(&self) -> Selector<Indiziert<GemeinsameBuchung>> {
-        Selector::new(self.gemeinsame_buchungen.clone())
-    }
-
-    pub fn change(&self) -> ChangeSelector<GemeinsameBuchung, GemeinsameBuchungen> {
-        ChangeSelector {
-            content: self.gemeinsame_buchungen.clone(),
-            output: None,
-        }
-    }
+    pub sparkontos: Vec<Sparkonto>,
+    pub sparbuchungen: Vec<Sparbuchung>,
+    pub depotwerte: Vec<Depotwert>,
+    pub order: Vec<Order>,
+    pub order_dauerauftraege: Vec<OrderDauerauftrag>,
+    pub depotauszuege: Vec<Depotauszug>
 }
 
 impl Database {
@@ -176,6 +55,12 @@ impl Database {
             einzelbuchungen,
             dauerauftraege: self.dauerauftraege.clone(),
             gemeinsame_buchungen: self.gemeinsame_buchungen.clone(),
+            sparkontos: self.sparkontos.clone(),
+            sparbuchungen: self.sparbuchungen.clone(),
+            depotwerte: self.depotwerte.clone(),
+            order: self.order.clone(),
+            order_dauerauftraege: self.order_dauerauftraege.clone(),
+            depotauszuege: self.depotauszuege.clone()
         }
     }
     pub fn change_dauerauftraege(&self, dauerauftraege: Dauerauftraege) -> Database {
@@ -184,6 +69,12 @@ impl Database {
             einzelbuchungen: self.einzelbuchungen.clone(),
             dauerauftraege,
             gemeinsame_buchungen: self.gemeinsame_buchungen.clone(),
+            sparkontos: self.sparkontos.clone(),
+            sparbuchungen: self.sparbuchungen.clone(),
+            depotwerte: self.depotwerte.clone(),
+            order: self.order.clone(),
+            order_dauerauftraege: self.order_dauerauftraege.clone(),
+            depotauszuege: self.depotauszuege.clone()
         }
     }
     pub fn change_gemeinsame_buchungen(
@@ -195,20 +86,76 @@ impl Database {
             einzelbuchungen: self.einzelbuchungen.clone(),
             dauerauftraege: self.dauerauftraege.clone(),
             gemeinsame_buchungen,
+            sparkontos: self.sparkontos.clone(),
+            sparbuchungen: self.sparbuchungen.clone(),
+            depotwerte: self.depotwerte.clone(),
+            order: self.order.clone(),
+            order_dauerauftraege: self.order_dauerauftraege.clone(),
+            depotauszuege: self.depotauszuege.clone()
+        }
+    }
+    pub fn change_sparkontos(
+        &self,
+        sparkontos: Sparkontos,
+    ) -> Database {
+        Database {
+            db_version: self.db_version.increment(),
+            einzelbuchungen: self.einzelbuchungen.clone(),
+            dauerauftraege: self.dauerauftraege.clone(),
+            gemeinsame_buchungen: self.gemeinsame_buchungen.clone(),
+            sparkontos,
+            sparbuchungen: self.sparbuchungen.clone(),
+            depotwerte: self.depotwerte.clone(),
+            order: self.order.clone(),
+            order_dauerauftraege: self.order_dauerauftraege.clone(),
+            depotauszuege: self.depotauszuege.clone()
+        }
+    }
+
+    pub fn change_sparbuchungen(
+        &self,
+        sparbuchungen: Sparbuchungen,
+    ) -> Database {
+        Database {
+            db_version: self.db_version.increment(),
+            einzelbuchungen: self.einzelbuchungen.clone(),
+            dauerauftraege: self.dauerauftraege.clone(),
+            gemeinsame_buchungen: self.gemeinsame_buchungen.clone(),
+            sparkontos: self.sparkontos.clone(),
+            sparbuchungen,
+            depotwerte: self.depotwerte.clone(),
+            order: self.order.clone(),
+            order_dauerauftraege: self.order_dauerauftraege.clone(),
+            depotauszuege: self.depotauszuege.clone()
         }
     }
 }
 
 #[cfg(test)]
 pub mod builder {
-    use super::{Dauerauftraege, Einzelbuchungen, GemeinsameBuchungen};
     use crate::budgetbutler::database::reader::reader::create_database;
-    use crate::model::dauerauftrag::Dauerauftrag;
-    use crate::model::einzelbuchung::Einzelbuchung;
-    use crate::model::gemeinsame_buchung::GemeinsameBuchung;
-    use crate::model::indiziert::Indiziert;
+    use crate::model::database::dauerauftrag::Dauerauftrag;
+    use crate::model::database::depotauszug::Depotauszug;
+    use crate::model::database::depotwert::Depotwert;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
+    use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
+    use crate::model::database::order::Order;
+    use crate::model::database::order_dauerauftrag::OrderDauerauftrag;
+    use crate::model::database::sparbuchung::Sparbuchung;
+    use crate::model::database::sparkonto::Sparkonto;
+    use crate::model::indiziert::builder::indiziert;
     use crate::model::primitives::datum::Datum;
-    use crate::model::state::persistent_application_state::{DataOnDisk, DatabaseVersion};
+    use crate::model::state::persistent_application_state::DataOnDisk;
+    use crate::model::state::persistent_state::database_version::DatabaseVersion;
+    use crate::model::state::persistent_state::dauerauftraege::Dauerauftraege;
+    use crate::model::state::persistent_state::depotauszuege::Depotauszuege;
+    use crate::model::state::persistent_state::depotwerte::Depotwerte;
+    use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
+    use crate::model::state::persistent_state::gemeinsame_buchungen::GemeinsameBuchungen;
+    use crate::model::state::persistent_state::order::Orders;
+    use crate::model::state::persistent_state::order_dauerauftraege::OrderDauerauftraege;
+    use crate::model::state::persistent_state::sparbuchungen::Sparbuchungen;
+    use crate::model::state::persistent_state::sparkontos::Sparkontos;
 
     pub fn generate_empty_database() -> super::Database {
         create_database(
@@ -216,9 +163,15 @@ pub mod builder {
                 einzelbuchungen: vec![],
                 dauerauftraege: vec![],
                 gemeinsame_buchungen: vec![],
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
             },
             Datum::first(),
-            empty_database_version(),
+            demo_database_version(),
         )
     }
 
@@ -230,9 +183,15 @@ pub mod builder {
                 einzelbuchungen,
                 dauerauftraege: vec![],
                 gemeinsame_buchungen: vec![],
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
             },
             Datum::first(),
-            empty_database_version(),
+            demo_database_version(),
         )
     }
 
@@ -244,9 +203,77 @@ pub mod builder {
                 einzelbuchungen: vec![],
                 dauerauftraege,
                 gemeinsame_buchungen: vec![],
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
             },
             Datum::first(),
-            empty_database_version(),
+            demo_database_version(),
+        )
+    }
+
+    pub fn generate_database_with_sparkontos(
+        sparkontos: Vec<Sparkonto>,
+    ) -> super::Database {
+        create_database(
+            DataOnDisk {
+                einzelbuchungen: vec![],
+                dauerauftraege: vec![],
+                gemeinsame_buchungen: vec![],
+                sparkontos,
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
+            },
+            Datum::first(),
+            demo_database_version(),
+        )
+    }
+
+    pub fn generate_database_with_sparkontos_und_sparbuchungen(
+        sparkontos: Vec<Sparkonto>,
+        sparbuchungen: Vec<Sparbuchung>
+    ) -> super::Database {
+        create_database(
+            DataOnDisk {
+                einzelbuchungen: vec![],
+                dauerauftraege: vec![],
+                gemeinsame_buchungen: vec![],
+                sparkontos,
+                sparbuchungen,
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
+            },
+            Datum::first(),
+            demo_database_version(),
+        )
+    }
+
+
+    pub fn generate_database_with_sparbuchungen(
+        sparbuchungen: Vec<Sparbuchung>,
+    ) -> super::Database {
+        create_database(
+            DataOnDisk {
+                einzelbuchungen: vec![],
+                dauerauftraege: vec![],
+                gemeinsame_buchungen: vec![],
+                sparkontos: vec![],
+                sparbuchungen,
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
+            },
+            Datum::first(),
+            demo_database_version(),
         )
     }
 
@@ -258,11 +285,79 @@ pub mod builder {
                 einzelbuchungen: vec![],
                 dauerauftraege: vec![],
                 gemeinsame_buchungen,
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
             },
             Datum::first(),
-            empty_database_version(),
+            demo_database_version(),
         )
     }
+
+    pub fn generate_database_with_orders(
+        order: Vec<Order>,
+    ) -> super::Database {
+        create_database(
+            DataOnDisk {
+                einzelbuchungen: vec![],
+                dauerauftraege: vec![],
+                gemeinsame_buchungen: vec![],
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order,
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
+            },
+            Datum::first(),
+            demo_database_version(),
+        )
+    }
+
+    pub fn generate_database_with_order_dauerauftraege(
+        order_dauerauftraege: Vec<OrderDauerauftrag>,
+    ) -> super::Database {
+        create_database(
+            DataOnDisk {
+                einzelbuchungen: vec![],
+                dauerauftraege: vec![],
+                gemeinsame_buchungen: vec![],
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege,
+                depotauszuege: vec![]
+            },
+            Datum::first(),
+            demo_database_version(),
+        )
+    }
+
+    pub fn generate_database_with_depotauszuege(
+        depotauszuege: Vec<Depotauszug>,
+    ) -> super::Database {
+        create_database(
+            DataOnDisk {
+                einzelbuchungen: vec![],
+                dauerauftraege: vec![],
+                gemeinsame_buchungen: vec![],
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege
+            },
+            Datum::first(),
+            demo_database_version(),
+        )
+    }
+
+
     pub fn generate_database_with_einzel_und_gemeinsamen_buchungen(
         einzelbuchungen: Vec<Einzelbuchung>,
         gemeinsame_buchungen: Vec<GemeinsameBuchung>,
@@ -272,9 +367,15 @@ pub mod builder {
                 einzelbuchungen,
                 dauerauftraege: vec![],
                 gemeinsame_buchungen,
+                sparkontos: vec![],
+                sparbuchungen: vec![],
+                depotwerte: vec![],
+                order: vec![],
+                order_dauerauftraege: vec![],
+                depotauszuege: vec![]
             },
             Datum::first(),
-            empty_database_version(),
+            demo_database_version(),
         )
     }
 
@@ -283,6 +384,12 @@ pub mod builder {
             einzelbuchungen,
             dauerauftraege: vec![],
             gemeinsame_buchungen: vec![],
+            sparkontos: vec![],
+            sparbuchungen: vec![],
+            depotwerte: vec![],
+            order: vec![],
+            order_dauerauftraege: vec![],
+            depotauszuege: vec![]
         }
     }
 
@@ -291,6 +398,12 @@ pub mod builder {
             einzelbuchungen: vec![],
             dauerauftraege,
             gemeinsame_buchungen: vec![],
+            sparkontos: vec![],
+            sparbuchungen: vec![],
+            depotwerte: vec![],
+            order: vec![],
+            order_dauerauftraege: vec![],
+            depotauszuege: vec![]
         }
     }
 
@@ -301,10 +414,101 @@ pub mod builder {
             einzelbuchungen: vec![],
             dauerauftraege: vec![],
             gemeinsame_buchungen,
+            sparkontos: vec![],
+            sparbuchungen: vec![],
+            depotwerte: vec![],
+            order: vec![],
+            order_dauerauftraege: vec![],
+            depotauszuege: vec![]
         }
     }
 
-    pub fn empty_database_version() -> DatabaseVersion {
+    pub fn data_on_disk_with_sparkontos(sparkontos: Vec<Sparkonto>) -> DataOnDisk {
+        DataOnDisk {
+            einzelbuchungen: vec![],
+            dauerauftraege: vec![],
+            gemeinsame_buchungen: vec![],
+            sparkontos,
+            sparbuchungen: vec![],
+            depotwerte: vec![],
+            order: vec![],
+            order_dauerauftraege: vec![],
+            depotauszuege: vec![]
+        }
+    }
+
+    pub fn data_on_disk_with_sparbuchungen(sparbuchungen: Vec<Sparbuchung>) -> DataOnDisk {
+        DataOnDisk {
+            einzelbuchungen: vec![],
+            dauerauftraege: vec![],
+            gemeinsame_buchungen: vec![],
+            sparkontos: vec![],
+            sparbuchungen,
+            depotwerte: vec![],
+            order: vec![],
+            order_dauerauftraege: vec![],
+            depotauszuege: vec![]
+        }
+    }
+
+    pub fn data_on_disk_with_depotwerte(depotwerte: Vec<Depotwert>) -> DataOnDisk {
+        DataOnDisk {
+            einzelbuchungen: vec![],
+            dauerauftraege: vec![],
+            gemeinsame_buchungen: vec![],
+            sparkontos: vec![],
+            sparbuchungen: vec![],
+            depotwerte,
+            order: vec![],
+            order_dauerauftraege: vec![],
+            depotauszuege: vec![]
+        }
+    }
+
+    pub fn data_on_disk_with_order(order: Vec<Order>) -> DataOnDisk {
+        DataOnDisk {
+            einzelbuchungen: vec![],
+            dauerauftraege: vec![],
+            gemeinsame_buchungen: vec![],
+            sparkontos: vec![],
+            sparbuchungen: vec![],
+            depotwerte: vec![],
+            order,
+            order_dauerauftraege: vec![],
+            depotauszuege: vec![]
+        }
+    }
+
+    pub fn data_on_disk_with_order_dauerauftrag(order_dauerauftrag: Vec<OrderDauerauftrag>) -> DataOnDisk {
+        DataOnDisk {
+            einzelbuchungen: vec![],
+            dauerauftraege: vec![],
+            gemeinsame_buchungen: vec![],
+            sparkontos: vec![],
+            sparbuchungen: vec![],
+            depotwerte: vec![],
+            order: vec![],
+            order_dauerauftraege: order_dauerauftrag,
+            depotauszuege: vec![]
+        }
+    }
+
+    pub fn data_on_disk_with_depotauszug(depotauszuege: Vec<Depotauszug>) -> DataOnDisk {
+        DataOnDisk {
+            einzelbuchungen: vec![],
+            dauerauftraege: vec![],
+            gemeinsame_buchungen: vec![],
+            sparkontos: vec![],
+            sparbuchungen: vec![],
+            depotwerte: vec![],
+            order: vec![],
+            order_dauerauftraege: vec![],
+            depotauszuege
+        }
+    }
+
+
+    pub fn demo_database_version() -> DatabaseVersion {
         DatabaseVersion {
             name: "empty".to_string(),
             version: 0,
@@ -312,13 +516,13 @@ pub mod builder {
         }
     }
 
+    pub fn demo_database_version_str() -> String {
+        "empty-0-0".to_string()
+    }
+
     pub fn einzelbuchungen(einzelbuchung: Einzelbuchung) -> Einzelbuchungen {
         Einzelbuchungen {
-            einzelbuchungen: vec![Indiziert {
-                value: einzelbuchung,
-                dynamisch: false,
-                index: 0,
-            }],
+            einzelbuchungen: vec![indiziert(einzelbuchung)],
         }
     }
 
@@ -340,21 +544,82 @@ pub mod builder {
         }
     }
 
+    pub fn leere_sparkontos() -> Sparkontos {
+        Sparkontos { sparkontos: vec![] }
+    }
+
+    pub fn leere_sparbuchungen() -> Sparbuchungen {
+        Sparbuchungen {
+            sparbuchungen: vec![],
+        }
+    }
+
+    pub fn leere_depotwerte() -> Depotwerte {
+        Depotwerte {
+            depotwerte: vec![],
+        }
+    }
+
+    pub fn leere_order() -> Orders {
+        Orders {
+            orders: vec![],
+        }
+    }
+
+    pub fn leere_order_dauerauftraege() -> OrderDauerauftraege {
+        OrderDauerauftraege {
+            order_dauerauftraege: vec![],
+        }
+    }
+
+    pub fn leere_depotauszuege() -> Depotauszuege {
+        Depotauszuege {
+            depotauszuege: vec![],
+        }
+    }
+
     pub fn dauerauftrage(dauerauftrag: Dauerauftrag) -> Dauerauftraege {
         Dauerauftraege {
-            dauerauftraege: vec![Indiziert {
-                value: dauerauftrag,
-                dynamisch: false,
-                index: 0,
-            }],
+            dauerauftraege: vec![indiziert(dauerauftrag)],
+        }
+    }
+
+    pub fn sparkontos(sparkonto: Sparkonto) -> Sparkontos {
+        Sparkontos {
+            sparkontos: vec![indiziert(sparkonto)],
+        }
+    }
+
+    pub fn depotwerte(depotwert: Depotwert) -> Depotwerte {
+        Depotwerte {
+            depotwerte: vec![indiziert(depotwert)],
+        }
+    }
+
+    pub fn depotauszuege(depotauszug: Depotauszug) -> Depotauszuege{
+        Depotauszuege {
+            depotauszuege: vec![indiziert(depotauszug)],
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::model::einzelbuchung::builder::any_einzelbuchung;
+    use crate::model::database::dauerauftrag::builder::dauerauftrag_mit_kategorie;
+    use crate::model::database::einzelbuchung::builder::{
+        any_einzelbuchung, einzelbuchung_with_kategorie,
+    };
+    use crate::model::database::gemeinsame_buchung::builder::{
+        gemeinsame_buchung_mit_kategorie, gemeinsame_buchung_mit_person,
+    };
+    use crate::model::indiziert::builder::indiziert;
+    use crate::model::primitives::kategorie::builder::any_kategorie;
+    use crate::model::primitives::kategorie::kategorie;
+    use crate::model::primitives::person::builder::person;
     use crate::model::state::persistent_application_state::builder::einzelbuchungen;
+    use crate::model::state::persistent_state::dauerauftraege::Dauerauftraege;
+    use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
+    use crate::model::state::persistent_state::gemeinsame_buchungen::GemeinsameBuchungen;
 
     #[test]
     fn test_as_string() {
@@ -386,5 +651,105 @@ mod tests {
         let result = version.increment();
 
         assert_eq!(result.as_string(), "Test-2-2");
+    }
+
+    #[test]
+    fn test_einzelbuchungen_get_kategorien() {
+        let einzelbuchungen = einzelbuchungen(any_einzelbuchung());
+        let result = einzelbuchungen.get_kategorien();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0], any_kategorie());
+    }
+
+    #[test]
+    fn test_gemeinsame_buchungen_rename_person() {
+        let gemeinsame_buchungen = GemeinsameBuchungen {
+            gemeinsame_buchungen: vec![
+                indiziert(gemeinsame_buchung_mit_person("to rename")),
+                indiziert(gemeinsame_buchung_mit_person("not to rename")),
+            ],
+        };
+
+        let result = gemeinsame_buchungen
+            .change()
+            .rename_person(person("to rename"), person("renamed"));
+
+        assert_eq!(
+            result.gemeinsame_buchungen[0].value.person,
+            person("renamed")
+        );
+        assert_eq!(
+            result.gemeinsame_buchungen[1].value.person,
+            person("not to rename")
+        );
+    }
+
+    #[test]
+    fn test_gemeinsame_buchungen_change_kategorie() {
+        let gemeinsame_buchungen = GemeinsameBuchungen {
+            gemeinsame_buchungen: vec![
+                indiziert(gemeinsame_buchung_mit_kategorie("to rename")),
+                indiziert(gemeinsame_buchung_mit_kategorie("not to rename")),
+            ],
+        };
+
+        let result = gemeinsame_buchungen
+            .change()
+            .rename_kategorie(kategorie("to rename"), kategorie("renamed"));
+
+        assert_eq!(
+            result.gemeinsame_buchungen[0].value.kategorie,
+            kategorie("renamed")
+        );
+        assert_eq!(
+            result.gemeinsame_buchungen[1].value.kategorie,
+            kategorie("not to rename")
+        );
+    }
+
+    #[test]
+    fn test_dauerauftrag_change_kategorie() {
+        let dauerauftraege = Dauerauftraege {
+            dauerauftraege: vec![
+                indiziert(dauerauftrag_mit_kategorie("to rename")),
+                indiziert(dauerauftrag_mit_kategorie("not to rename")),
+            ],
+        };
+
+        let result = dauerauftraege
+            .change()
+            .rename_kategorie(kategorie("to rename"), kategorie("renamed"));
+
+        assert_eq!(
+            result.dauerauftraege[0].value.kategorie,
+            kategorie("renamed")
+        );
+        assert_eq!(
+            result.dauerauftraege[1].value.kategorie,
+            kategorie("not to rename")
+        );
+    }
+
+    #[test]
+    fn test_einzelbuchungen_change_kategorie() {
+        let einzelbuchungen = Einzelbuchungen {
+            einzelbuchungen: vec![
+                indiziert(einzelbuchung_with_kategorie("to rename")),
+                indiziert(einzelbuchung_with_kategorie("not to rename")),
+            ],
+        };
+
+        let result = einzelbuchungen
+            .change()
+            .rename_kategorie(kategorie("to rename"), kategorie("renamed"));
+
+        assert_eq!(
+            result.einzelbuchungen[0].value.kategorie,
+            kategorie("renamed")
+        );
+        assert_eq!(
+            result.einzelbuchungen[1].value.kategorie,
+            kategorie("not to rename")
+        );
     }
 }

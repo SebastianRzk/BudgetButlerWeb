@@ -12,7 +12,7 @@ pub struct SortedFile {
     pub sparkontos: Vec<Line>,
     pub depotwerte: Vec<Line>,
     pub order: Vec<Line>,
-    pub dauerauftrag_order: Vec<Line>,
+    pub order_dauerauftrag: Vec<Line>,
     pub depotauszuege: Vec<Line>
 }
 

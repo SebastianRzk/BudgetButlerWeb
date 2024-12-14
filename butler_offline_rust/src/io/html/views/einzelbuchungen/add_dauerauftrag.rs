@@ -4,6 +4,7 @@ use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::betrag::Vorzeichen::Positiv;
 use crate::model::primitives::rhythmus::Rhythmus;
 pub use askama::Template;
+use crate::io::html::views::templates::kategorie::flatmap_kategorien_option;
 
 #[derive(Template)]
 #[template(path = "einzelbuchungen/add_dauerauftrag.html")]
@@ -44,11 +45,9 @@ pub fn render_add_dauerauftrag_template(template: AddDauerauftragViewResult) -> 
 
 
 pub fn map_to_template(view_result: AddDauerauftragViewResult) -> AddDauerauftragTemplate {
-    let kategorien_liste: Vec<String> = view_result.kategorien.iter().map(|x| x.kategorie.clone()).collect();
-    let kategorien = Select::new(kategorien_liste, Some(view_result.default_item.kategorie.kategorie.clone()));
     AddDauerauftragTemplate {
         database_id: view_result.database_version.as_string(),
-        kategorien,
+        kategorien: flatmap_kategorien_option(view_result.kategorien, view_result.default_item.kategorie.clone()),
         element_titel: view_result.action_headline.clone(),
         bearbeitungsmodus: view_result.bearbeitungsmodus,
         default_item: DefaultItemTemplate {
@@ -56,7 +55,7 @@ pub fn map_to_template(view_result: AddDauerauftragViewResult) -> AddDauerauftra
             start_datum: view_result.default_item.start_datum.to_iso_string(),
             ende_datum: view_result.default_item.ende_datum.to_iso_string(),
             name: view_result.default_item.name.get_name().clone(),
-            wert: view_result.default_item.wert.abs().to_iso_string(),
+            wert: view_result.default_item.wert.abs().to_input_string(),
         },
         approve_title: view_result.action_title.clone(),
         letzte_erfassung: view_result.letzte_erfassungen.iter().map(|x| LetzteErfassungTemplate {
@@ -98,7 +97,7 @@ mod tests {
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::name;
     use crate::model::primitives::rhythmus::Rhythmus;
-    use crate::model::state::persistent_application_state::DatabaseVersion;
+    use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
     #[test]
     pub fn test_map_to_template() {
@@ -145,7 +144,7 @@ mod tests {
         assert_eq!(result.default_item.start_datum, "2020-01-01");
         assert_eq!(result.default_item.ende_datum, "2021-01-01");
         assert_eq!(result.default_item.name, "Ein Name");
-        assert_eq!(result.default_item.wert, "10.00");
+        assert_eq!(result.default_item.wert, "10,00");
         assert_eq!(result.approve_title, "Dauerauftrag erfassen");
 
         assert_eq!(result.kategorien.items.len(), 2);

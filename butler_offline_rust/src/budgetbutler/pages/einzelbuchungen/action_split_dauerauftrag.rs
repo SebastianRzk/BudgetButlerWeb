@@ -1,7 +1,7 @@
 use crate::budgetbutler::view::icons::GEAR;
 use crate::budgetbutler::view::request_handler::{ModificationResult, Redirect, RedirectResult};
 use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT;
-use crate::model::dauerauftrag::Dauerauftrag;
+use crate::model::database::dauerauftrag::Dauerauftrag;
 use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
@@ -66,7 +66,7 @@ pub fn submit_split_dauerauftrag(context: ActionSplitDauerauftragContext) -> Red
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::action_split_dauerauftrag::{submit_split_dauerauftrag, ActionSplitDauerauftragContext};
-    use crate::model::dauerauftrag::Dauerauftrag;
+    use crate::model::database::dauerauftrag::Dauerauftrag;
     use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
     use crate::model::primitives::betrag::builder::{vier, zwei};
     use crate::model::primitives::datum::Datum;

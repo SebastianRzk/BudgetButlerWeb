@@ -55,8 +55,8 @@ pub fn filter_auf_person<T: for<'a> BesitztPerson<'a>>(person: Person) -> impl F
 mod tests {
     use super::{filter_auf_ausgaben, filter_auf_einnahmen, filter_auf_zeitraum};
     use crate::budgetbutler::database::select::functions::filters::{filter_auf_das_jahr, filter_auf_jahr_und_monat, filter_den_aktuellen_monat, filter_die_letzten_6_monate};
-    use crate::model::einzelbuchung::builder::{to_einzelbuchung_with_betrag, to_einzelbuchung_with_datum};
-    use crate::model::gemeinsame_buchung::builder::gemeinsame_buchung_mit_person;
+    use crate::model::database::einzelbuchung::builder::{einzelbuchung_with_betrag, einzelbuchung_with_datum};
+    use crate::model::database::gemeinsame_buchung::builder::gemeinsame_buchung_mit_person;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::primitives::betrag::Betrag;
     use crate::model::primitives::datum::Datum;
@@ -68,9 +68,9 @@ mod tests {
 
         let filter = filter_die_letzten_6_monate(heute);
 
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(1, 7, 2019))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(2, 7, 2019))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(1, 7, 2019))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(2, 7, 2019))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
     }
 
     #[test]
@@ -79,39 +79,39 @@ mod tests {
 
         let filter = filter_den_aktuellen_monat(heute);
 
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(2, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
     }
 
     #[test]
     fn test_filter_auf_das_jahr() {
         let filter = filter_auf_das_jahr(2020);
 
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(2, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
     }
 
     #[test]
     fn test_filter_auf_jahr_und_monat() {
         let filter = filter_auf_jahr_und_monat(2020, 1);
 
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(2, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
     }
 
     #[test]
     fn test_filter_auf_einnahmen() {
-        assert_eq!(filter_auf_einnahmen(&to_einzelbuchung_with_betrag(Betrag::from_user_input(&"-2".to_string()))), false);
-        assert_eq!(filter_auf_einnahmen(&to_einzelbuchung_with_betrag(Betrag::from_user_input(&"2".to_string()))), true);
+        assert_eq!(filter_auf_einnahmen(&einzelbuchung_with_betrag(Betrag::from_user_input(&"-2".to_string()))), false);
+        assert_eq!(filter_auf_einnahmen(&einzelbuchung_with_betrag(Betrag::from_user_input(&"2".to_string()))), true);
     }
 
     #[test]
     fn test_filter_auf_ausgaben() {
-        assert_eq!(filter_auf_ausgaben(&to_einzelbuchung_with_betrag(Betrag::from_user_input(&"-2".to_string()))), true);
-        assert_eq!(filter_auf_ausgaben(&to_einzelbuchung_with_betrag(Betrag::from_user_input(&"2".to_string()))), false);
+        assert_eq!(filter_auf_ausgaben(&einzelbuchung_with_betrag(Betrag::from_user_input(&"-2".to_string()))), true);
+        assert_eq!(filter_auf_ausgaben(&einzelbuchung_with_betrag(Betrag::from_user_input(&"2".to_string()))), false);
     }
     #[test]
     fn test_filter_auf_zeitraum() {
@@ -120,9 +120,9 @@ mod tests {
 
         let filter = filter_auf_zeitraum(start, ende);
 
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(31, 1, 2020))), true);
-        assert_eq!(filter(&to_einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(31, 1, 2020))), true);
+        assert_eq!(filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))), false);
     }
 
     #[test]

@@ -14,7 +14,7 @@ pub const GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN: &str = "/uebersichtabrechnungen/";
 
 pub const SPAREN_UEBERSICHT: &str = "/sparen/";
 pub const SPAREN_SPARBUCHUNG_ADD: &str = "/add_sparbuchung/";
-pub const SPAREN_SPARKONTO_ADD: &str = "/add_sparkonto/";
+pub const SPAREN_SPARKONTO_ADD: &str = "/add_konto/";
 pub const SPAREN_DEPOTWERT_ADD: &str = "/add_depotwert/";
 pub const SPAREN_DEPOTAUSZUG_ADD: &str = "/add_depotauszug/";
 pub const SPAREN_ORDER_ADD: &str = "/add_order/";

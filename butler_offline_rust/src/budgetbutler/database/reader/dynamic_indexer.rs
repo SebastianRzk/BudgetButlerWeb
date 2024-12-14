@@ -1,6 +1,7 @@
+use crate::io::disk::database::types::ElementRequirement;
 use crate::model::indiziert::Indiziert;
 
-pub fn index_dynamic<T: PartialEq+ Eq + PartialOrd + Ord>(items: Vec<T>, current_index: u32) -> DynamicIndexResult<T> {
+pub fn index_dynamic<T: ElementRequirement>(items: Vec<T>, current_index: u32) -> DynamicIndexResult<T> {
     let mut new_index = current_index + 1;
     let values = items.into_iter().map(|item| {
         let indiziert = Indiziert {
@@ -19,14 +20,18 @@ pub fn index_dynamic<T: PartialEq+ Eq + PartialOrd + Ord>(items: Vec<T>, current
 }
 
 
-pub struct DynamicIndexResult<T: PartialEq + Eq + PartialOrd + Ord> {
+pub struct DynamicIndexResult<T: ElementRequirement> {
     pub new_index: u32,
     pub values: Vec<Indiziert<T>>,
 }
 
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    impl ElementRequirement for i32{}
+
 
     #[test]
     fn test_index_dynamic() {

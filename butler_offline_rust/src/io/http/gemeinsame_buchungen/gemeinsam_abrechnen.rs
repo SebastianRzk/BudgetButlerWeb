@@ -9,7 +9,7 @@ use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::person::Person;
-use crate::model::state::config::Config;
+use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::AdditionalKategorie;
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
@@ -20,16 +20,21 @@ use serde::Deserialize;
 pub async fn get_view(
     data: Data<ApplicationState>,
     extra_kategorie: Data<AdditionalKategorie>,
-    config: Data<Config>,
+    config: Data<ConfigurationData>,
 ) -> impl Responder {
+    let database_guard = data.database.lock().unwrap();
+    let configuration_guard = config
+        .configuration
+        .lock()
+        .unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchungen Abrechnen",
         GEMEINSAME_BUCHUNGEN_ABRECHNEN,
         GemeinsameBuchungenAbrechnenContext {
             extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            user_configuration: config.user_configuration.clone(),
+            configuration: configuration_guard.clone(),
             today: today(),
-            database: &data.database.lock().unwrap(),
+            database: &database_guard,
             set_mindate: None,
             set_maxdate: None,
             set_verhaeltnis: None,
@@ -40,6 +45,7 @@ pub async fn get_view(
         },
         handle_view,
         render_gemeinsame_buchungen_abrechnen,
+        configuration_guard.database_configuration.name.clone(),
     ))
 }
 
@@ -47,17 +53,22 @@ pub async fn get_view(
 pub async fn post_view(
     data: Data<ApplicationState>,
     extra_kategorie: Data<AdditionalKategorie>,
-    config: Data<Config>,
+    config: Data<ConfigurationData>,
     form: Form<FormData>,
 ) -> impl Responder {
+    let database_guard = data.database.lock().unwrap();
+    let configuration_guard = config
+        .configuration
+        .lock()
+        .unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchungen Abrechnen",
         GEMEINSAME_BUCHUNGEN_ABRECHNEN,
         GemeinsameBuchungenAbrechnenContext {
             extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            user_configuration: config.user_configuration.clone(),
+            configuration: configuration_guard.clone(),
             today: today(),
-            database: &data.database.lock().unwrap(),
+            database: &database_guard,
             set_mindate: Some(Datum::from_iso_string(&form.set_mindate)),
             set_maxdate: Some(Datum::from_iso_string(&form.set_maxdate)),
             set_titel: Some(form.set_titel.clone()),
@@ -72,6 +83,7 @@ pub async fn post_view(
         },
         handle_view,
         render_gemeinsame_buchungen_abrechnen,
+        configuration_guard.database_configuration.name.clone(),
     ))
 }
 

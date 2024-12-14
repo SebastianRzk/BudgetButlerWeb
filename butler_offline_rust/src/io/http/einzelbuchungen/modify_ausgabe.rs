@@ -1,9 +1,17 @@
-use crate::budgetbutler::pages::einzelbuchungen::action_add_edit_ausgabe::{submit_ausgabe, SubmitContext};
-use crate::budgetbutler::pages::einzelbuchungen::action_delete_ausgabe::{delete_ausgabe, DeleteContext};
+use crate::budgetbutler::pages::einzelbuchungen::action_add_edit_ausgabe::{
+    submit_ausgabe, SubmitContext,
+};
+use crate::budgetbutler::pages::einzelbuchungen::action_delete_ausgabe::{
+    delete_ausgabe, DeleteContext,
+};
 use crate::budgetbutler::pages::einzelbuchungen::add_ausgabe::{handle_view, AddBuchungContext};
-use crate::budgetbutler::view::optimistic_locking::{check_optimistic_locking_error, OptimisticLockingResult};
+use crate::budgetbutler::view::optimistic_locking::{
+    check_optimistic_locking_error, OptimisticLockingResult,
+};
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
-use crate::budgetbutler::view::request_handler::{handle_modification, handle_render_display_view, VersionedContext};
+use crate::budgetbutler::view::request_handler::{
+    handle_modification, handle_render_display_view, VersionedContext,
+};
 use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_AUSGABE_ADD;
 use crate::io::html::views::einzelbuchungen::add_ausgabe::render_add_ausgabe_template;
 use crate::io::http::redirect::http_redirect;
@@ -12,28 +20,45 @@ use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
-use crate::model::state::config::Config;
-use crate::model::state::non_persistent_application_state::{AdditionalKategorie, EinzelbuchungenChanges};
+use crate::model::state::config::ConfigurationData;
+use crate::model::state::non_persistent_application_state::{
+    AdditionalKategorie, EinzelbuchungenChanges,
+};
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{get, post, HttpResponse, Responder};
 use serde::Deserialize;
 
 #[get("addausgabe/")]
-pub async fn get_view(data: Data<ApplicationState>, einzelbuchungen_changes: Data<EinzelbuchungenChanges>,
-                      extra_kategorie: Data<AdditionalKategorie>, ) -> impl Responder {
+pub async fn get_view(
+    data: Data<ApplicationState>,
+    configuration_data: Data<ConfigurationData>,
+    einzelbuchungen_changes: Data<EinzelbuchungenChanges>,
+    extra_kategorie: Data<AdditionalKategorie>,
+) -> impl Responder {
+    let database = data.database.lock().unwrap();
+    let configuration = configuration_data
+        .configuration
+        .lock()
+        .unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Ausgabe hinzufügen",
         EINZELBUCHUNGEN_AUSGABE_ADD,
         AddBuchungContext {
-            database: &data.database.lock().unwrap(),
+            database: &database,
             extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
             einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
             today: today(),
             edit_buchung: None,
+            ausgeschlossene_kategorien: &configuration.erfassungs_configuration.ausgeschlossene_kategorien,
         },
         handle_view,
-        render_add_ausgabe_template))
+        render_add_ausgabe_template,
+        configuration
+            .database_configuration
+            .name
+            .clone(),
+    ))
 }
 
 #[post("addausgabe/")]
@@ -41,27 +66,32 @@ pub async fn post_view(
     data: Data<ApplicationState>,
     einzelbuchungen_changes: Data<EinzelbuchungenChanges>,
     extra_kategorie: Data<AdditionalKategorie>,
+    configuration_data: Data<ConfigurationData>,
     form: Form<EditFormData>,
 ) -> HttpResponse {
     let database_guard = data.database.lock().unwrap();
-    let optimistic_locking_result = check_optimistic_locking_error(&form.db_version, database_guard.db_version.clone());
+    let optimistic_locking_result =
+        check_optimistic_locking_error(&form.db_version, database_guard.db_version.clone());
     if optimistic_locking_result == OptimisticLockingResult::Error {
         return http_redirect(redirect_to_optimistic_locking_error());
     }
+    let config_guard = configuration_data.configuration.lock().unwrap();
 
-    HttpResponse::Ok().body(
-        handle_render_display_view(
-            "Ausgabe editieren",
-            EINZELBUCHUNGEN_AUSGABE_ADD,
-            AddBuchungContext {
-                database: &database_guard,
-                extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-                einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
-                today: today(),
-                edit_buchung: Some(form.edit_index),
-            },
-            handle_view,
-            render_add_ausgabe_template))
+    HttpResponse::Ok().body(handle_render_display_view(
+        "Ausgabe editieren",
+        EINZELBUCHUNGEN_AUSGABE_ADD,
+        AddBuchungContext {
+            database: &database_guard,
+            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+            einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
+            today: today(),
+            edit_buchung: Some(form.edit_index),
+            ausgeschlossene_kategorien: &config_guard.erfassungs_configuration.ausgeschlossene_kategorien,
+        },
+        handle_view,
+        render_add_ausgabe_template,
+        config_guard.database_configuration.name.clone(),
+    ))
 }
 
 #[derive(Deserialize)]
@@ -71,8 +101,17 @@ struct EditFormData {
 }
 
 #[post("addausgabe/submit")]
-pub async fn post_submit(data: Data<ApplicationState>, einzelbuchung_changes: Data<EinzelbuchungenChanges>, form_data: Form<SubmitFormData>, database_configuration: Data<Config>) -> impl Responder {
+pub async fn post_submit(
+    data: Data<ApplicationState>,
+    einzelbuchung_changes: Data<EinzelbuchungenChanges>,
+    form_data: Form<SubmitFormData>,
+    configuration: Data<ConfigurationData>,
+) -> impl Responder {
     let mut database = data.database.lock().unwrap();
+    let configuration = configuration
+        .configuration
+        .lock()
+        .unwrap();
 
     let new_state = handle_modification(
         VersionedContext {
@@ -89,7 +128,7 @@ pub async fn post_submit(data: Data<ApplicationState>, einzelbuchung_changes: Da
         },
         &einzelbuchung_changes.changes,
         submit_ausgabe,
-        &database_configuration.database_configuration,
+        &configuration.database_configuration,
     );
     *database = new_state.changed_database;
 
@@ -99,7 +138,12 @@ pub async fn post_submit(data: Data<ApplicationState>, einzelbuchung_changes: Da
 }
 
 #[post("addausgabe/delete")]
-pub async fn delete(data: Data<ApplicationState>, einzelbuchung_changes: Data<EinzelbuchungenChanges>, form_data: Form<DeleteFormData>, database_configuration: Data<Config>) -> impl Responder {
+pub async fn delete(
+    data: Data<ApplicationState>,
+    einzelbuchung_changes: Data<EinzelbuchungenChanges>,
+    form_data: Form<DeleteFormData>,
+    configuration: Data<ConfigurationData>,
+) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
     let new_state = handle_modification(
@@ -113,7 +157,11 @@ pub async fn delete(data: Data<ApplicationState>, einzelbuchung_changes: Data<Ei
         },
         &einzelbuchung_changes.changes,
         delete_ausgabe,
-        &database_configuration.database_configuration,
+        &configuration
+            .configuration
+            .lock()
+            .unwrap()
+            .database_configuration,
     );
     *database = new_state.changed_database;
 
@@ -121,7 +169,6 @@ pub async fn delete(data: Data<ApplicationState>, einzelbuchung_changes: Data<Ei
 
     http_redirect(new_state.target)
 }
-
 
 #[derive(Deserialize)]
 struct DeleteFormData {

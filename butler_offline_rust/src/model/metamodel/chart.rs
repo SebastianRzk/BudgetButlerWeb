@@ -1,4 +1,4 @@
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::MonatsName;

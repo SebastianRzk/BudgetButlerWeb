@@ -2,7 +2,8 @@ use crate::budgetbutler::database::reader::rhythmus::get_monatsdelta_for_rhythmu
 use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
-use crate::model::state::persistent_application_state::{Database, DatabaseVersion};
+use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
 pub struct SplitDauerauftragViewResult {
     pub database_version: DatabaseVersion,
@@ -49,7 +50,7 @@ pub fn handle_split(context: SplitDauerauftragContext) -> SplitDauerauftragViewR
 
 #[cfg(test)]
 mod tests {
-    use crate::model::dauerauftrag::Dauerauftrag;
+    use crate::model::database::dauerauftrag::Dauerauftrag;
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::builder::any_kategorie;

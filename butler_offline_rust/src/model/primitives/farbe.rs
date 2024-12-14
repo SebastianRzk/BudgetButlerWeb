@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, PartialEq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Farbe {
     pub as_string: String,
 }
@@ -30,6 +32,12 @@ pub mod builder {
     pub fn farbe(farbe: &str) -> Farbe {
         Farbe {
             as_string: farbe.to_string()
+        }
+    }
+
+    pub fn any_farbe() -> Farbe {
+        Farbe {
+            as_string: "any_farbe".to_string()
         }
     }
 }

@@ -1,7 +1,7 @@
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::EinfuehrungsText;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::AbrechnungsWerte;
 use crate::io::disk::diskrepresentation::line::Line;
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
@@ -129,7 +129,7 @@ mod tests {
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::AbrechnungsWerte;
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_text_generator::generiere_einfuehrungs_text;
     use crate::io::disk::diskrepresentation::line::builder::as_string;
-    use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+    use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};

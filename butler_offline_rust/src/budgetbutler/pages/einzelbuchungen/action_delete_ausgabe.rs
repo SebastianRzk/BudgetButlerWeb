@@ -41,7 +41,7 @@ pub fn delete_ausgabe(context: DeleteContext) -> RedirectResult<EinzelbuchungCha
 #[cfg(test)]
 mod tests {
     use super::DELETE;
-    use crate::model::einzelbuchung::builder::any_einzelbuchung;
+    use crate::model::database::einzelbuchung::builder::any_einzelbuchung;
     use crate::model::state::persistent_application_state::builder::generate_database_with_einzelbuchungen;
 
     #[test]

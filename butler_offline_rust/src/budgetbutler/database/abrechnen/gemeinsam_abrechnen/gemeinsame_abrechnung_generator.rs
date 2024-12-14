@@ -2,8 +2,8 @@ use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generat
 use crate::budgetbutler::database::abrechnen::abrechnen::einzel_buchungen_text_generator::einzelbuchungen_as_import_text;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_text_generator::generiere_einfuehrungs_text;
 use crate::io::disk::diskrepresentation::line::Line;
-use crate::model::einzelbuchung::Einzelbuchung;
-use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
+use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
@@ -16,6 +16,25 @@ pub struct Abrechnung {
     pub lines: Vec<Line>,
 }
 
+impl Abrechnung {
+   pub fn new(lines: Vec<Line>) -> Abrechnung {
+       Abrechnung {
+           lines
+       }
+   }
+}
+
+#[cfg(test)]
+pub mod builder {
+    use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
+    use crate::io::disk::diskrepresentation::line::Line;
+
+    pub fn abrechnung_from_str(str: &str ) -> Abrechnung {
+        Abrechnung {
+            lines: Line::from_multiline_str(str.to_string())
+        }
+    }
+}
 
 pub struct AbrechnungsErgebnis {
     pub eigene_abrechnung: Abrechnung,
@@ -209,7 +228,7 @@ fn berechne_neue_einzelbuchungen(
 mod tests {
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::{berechne_neue_einzelbuchungen, rechne_ab, AbrechnungsWerte, AusgleichsGesamtKonfiguration, AusgleichsKonfiguration, Titel};
     use crate::io::disk::diskrepresentation::line::builder::as_string;
-    use crate::model::gemeinsame_buchung::GemeinsameBuchung;
+    use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::indiziert::Indiziert;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};

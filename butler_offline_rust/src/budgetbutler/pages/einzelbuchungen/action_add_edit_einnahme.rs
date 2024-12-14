@@ -2,9 +2,9 @@ use crate::budgetbutler::pages::einzelbuchungen::action_add_edit_ausgabe::Submit
 use crate::budgetbutler::view::icons::{Icon, PENCIL, PLUS};
 use crate::budgetbutler::view::request_handler::{ModificationResult, Redirect, RedirectResult};
 use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_AUSGABE_ADD;
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::state::non_persistent_application_state::EinzelbuchungChange;
-use crate::model::state::persistent_application_state::Einzelbuchungen;
+use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
 
 
 pub fn submit_einnahme(context: SubmitContext) -> RedirectResult<EinzelbuchungChange> {
@@ -56,7 +56,7 @@ pub fn submit_einnahme(context: SubmitContext) -> RedirectResult<EinzelbuchungCh
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::model::einzelbuchung::builder::any_einzelbuchung;
+    use crate::model::database::einzelbuchung::builder::any_einzelbuchung;
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::datum::builder::any_datum;
     use crate::model::primitives::kategorie::builder::any_kategorie;

@@ -1,12 +1,18 @@
 use crate::io::disk::primitive::segment_reader::Element;
 use crate::model::primitives::rhythmus::Rhythmus;
 
+const MONATLICH_STR: &str = "monatlich";
+const VIERTELJAERLICH_STR: &str = "vierteljährlich";
+const HALBJAEHRLICH_STR: &str = "halbjährlich";
+const JAEHRLICH_STR: &str = "jährlich";
+
+
 pub fn read_rhythmus(rhythmus: Element) -> Rhythmus {
     match rhythmus.element.as_str() {
-        "monatlich" => Rhythmus::Monatlich,
-        "vierteljährlich" => Rhythmus::Vierteljaehrlich,
-        "halbjährlich" => Rhythmus::Halbjaehrlich,
-        "jaehrlich" => Rhythmus::Jaehrlich,
+        MONATLICH_STR => Rhythmus::Monatlich,
+        VIERTELJAERLICH_STR => Rhythmus::Vierteljaehrlich,
+        HALBJAEHRLICH_STR => Rhythmus::Halbjaehrlich,
+        JAEHRLICH_STR => Rhythmus::Jaehrlich,
         _ => panic!("Unknown rhythmus {}", rhythmus.element),
     }
 }
@@ -14,10 +20,10 @@ pub fn read_rhythmus(rhythmus: Element) -> Rhythmus {
 pub fn write_rhythmus(rhythmus: Rhythmus) -> Element {
     Element{
      element: match rhythmus {
-         Rhythmus::Monatlich => "monatlich".to_string(),
-         Rhythmus::Vierteljaehrlich => "vierteljährlich".to_string(),
-         Rhythmus::Halbjaehrlich => "halbjährlich".to_string(),
-         Rhythmus::Jaehrlich => "jaehrlich".to_string(),
+         Rhythmus::Monatlich => MONATLICH_STR.to_string(),
+         Rhythmus::Vierteljaehrlich => VIERTELJAERLICH_STR.to_string(),
+         Rhythmus::Halbjaehrlich => HALBJAEHRLICH_STR.to_string(),
+         Rhythmus::Jaehrlich => JAEHRLICH_STR.to_string(),
      }
     }
 }
@@ -38,7 +44,7 @@ mod tests {
         let halbjaehrlich = element("halbjährlich");
         assert_eq!(read_rhythmus(halbjaehrlich), Rhythmus::Halbjaehrlich);
 
-        let jaehrlich = element("jaehrlich");
+        let jaehrlich = element("jährlich");
         assert_eq!(read_rhythmus(jaehrlich), Rhythmus::Jaehrlich);
     }
 
@@ -54,6 +60,6 @@ mod tests {
         assert_eq!(halbjaehrlich.element, "halbjährlich");
 
         let jaehrlich = write_rhythmus(Rhythmus::Jaehrlich);
-        assert_eq!(jaehrlich.element, "jaehrlich");
+        assert_eq!(jaehrlich.element, "jährlich");
     }
 }

@@ -60,21 +60,22 @@ impl<T: PartialEq + Eq + Ord + PartialOrd + Clone, K: Creates<T, K>> ChangeSelec
 
 #[cfg(test)]
 mod tests {
-    use crate::model::dauerauftrag::builder::dauerauftrag_mit_kategorie;
-    use crate::model::einzelbuchung::builder::to_einzelbuchung_with_kategorie;
+    use crate::model::database::dauerauftrag::builder::dauerauftrag_mit_kategorie;
+    use crate::model::database::einzelbuchung::builder::einzelbuchung_with_kategorie;
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::state::persistent_application_state::builder::{
         dauerauftrage, einzelbuchungen,
     };
-    use crate::model::state::persistent_application_state::{Dauerauftraege, Einzelbuchungen};
+    use crate::model::state::persistent_state::dauerauftraege::Dauerauftraege;
+    use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
 
     #[test]
     fn test_einzelbuchungen_edit() {
-        let einzelbuchungen = einzelbuchungen(to_einzelbuchung_with_kategorie("test_kategorie"));
+        let einzelbuchungen = einzelbuchungen(einzelbuchung_with_kategorie("test_kategorie"));
 
         let result = einzelbuchungen
             .change()
-            .edit(0, to_einzelbuchung_with_kategorie("edited_kategorie"));
+            .edit(0, einzelbuchung_with_kategorie("edited_kategorie"));
 
         assert_eq!(result.get(0).value.kategorie, kategorie("edited_kategorie"));
     }
@@ -100,10 +101,10 @@ mod tests {
 
     #[test]
     fn test_einzelbuchungen_add() {
-        let einzelbuchungen = einzelbuchungen(to_einzelbuchung_with_kategorie("test_kategorie"));
+        let einzelbuchungen = einzelbuchungen(einzelbuchung_with_kategorie("test_kategorie"));
         let result = einzelbuchungen
             .change()
-            .insert(to_einzelbuchung_with_kategorie("test_kategorie"));
+            .insert(einzelbuchung_with_kategorie("test_kategorie"));
         assert_eq!(result.select().count(), 2);
     }
 
@@ -112,12 +113,12 @@ mod tests {
         let einzelbuchungen = Einzelbuchungen {
             einzelbuchungen: vec![
                 super::Indiziert {
-                    value: to_einzelbuchung_with_kategorie("to delete"),
+                    value: einzelbuchung_with_kategorie("to delete"),
                     dynamisch: false,
                     index: 0,
                 },
                 super::Indiziert {
-                    value: to_einzelbuchung_with_kategorie("to retain"),
+                    value: einzelbuchung_with_kategorie("to retain"),
                     dynamisch: false,
                     index: 1,
                 },

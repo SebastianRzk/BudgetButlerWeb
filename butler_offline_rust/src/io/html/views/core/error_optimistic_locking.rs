@@ -1,4 +1,3 @@
-use crate::budgetbutler::pages::core::error_optimistic_locking::ErrorOptimisticLockingViewResult;
 pub use askama::Template;
 
 #[derive(Template)]
@@ -6,12 +5,6 @@ pub use askama::Template;
 pub struct ErrorOptimisticLockingTemplate {
 }
 
-pub fn render_error_optimistic_locking_template(template: ErrorOptimisticLockingViewResult) -> String {
-    let as_template: ErrorOptimisticLockingTemplate = map_to_template(template);
-    as_template.render().unwrap()
-}
-
-fn map_to_template(view_result: ErrorOptimisticLockingViewResult) -> ErrorOptimisticLockingTemplate {
-    ErrorOptimisticLockingTemplate {
-    }
+pub fn render_error_optimistic_locking_template(_context: Option<String>) -> String {
+    ErrorOptimisticLockingTemplate{}.render().unwrap()
 }

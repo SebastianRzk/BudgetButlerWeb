@@ -1,18 +1,25 @@
-use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_abrechnungen::{handle_view_abrechnungen, UebersichtAbrechnugnenContext};
+use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_abrechnungen::{
+    handle_view_abrechnungen, UebersichtAbrechnugnenContext,
+};
 use crate::budgetbutler::view::request_handler::handle_render_display_view;
 use crate::budgetbutler::view::routes::GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN;
 use crate::io::disk::abrechnung::history::lade_alle_abrechnungen;
 use crate::io::html::views::gemeinsame_buchungen::uebersicht_abrechnungen::render_uebersicht_gemeinsame_abrechnungen_template;
-use crate::model::state::config::Config;
+use crate::model::state::config::ConfigurationData;
 use actix_web::web::Data;
 use actix_web::{get, HttpResponse, Responder};
 use serde::Deserialize;
 
 #[get("uebersichtabrechnungen/")]
-pub async fn get_view(
-    config: Data<Config>,
-) -> impl Responder {
-    let alle_abrechnung = lade_alle_abrechnungen(&config.abrechnungs_configuration);
+pub async fn get_view(config: Data<ConfigurationData>) -> impl Responder {
+    let configuration_guard = config
+        .configuration
+        .lock()
+        .unwrap();
+    let alle_abrechnung = lade_alle_abrechnungen(
+        &configuration_guard
+            .abrechnungs_configuration,
+    );
     HttpResponse::Ok().body(handle_render_display_view(
         "Übersicht Abrechnungen",
         GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN,
@@ -21,9 +28,9 @@ pub async fn get_view(
         },
         handle_view_abrechnungen,
         render_uebersicht_gemeinsame_abrechnungen_template,
+        configuration_guard.database_configuration.name.clone()
     ))
 }
-
 
 #[derive(Deserialize)]
 pub struct FormData {

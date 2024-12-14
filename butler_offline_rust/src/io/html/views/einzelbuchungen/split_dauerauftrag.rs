@@ -44,12 +44,12 @@ mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::split_dauerauftrag::{DatumSelektion, SplitDauerauftragViewResult};
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::datum::Datum;
-    use crate::model::state::persistent_application_state::builder::empty_database_version;
+    use crate::model::state::persistent_application_state::builder::demo_database_version;
 
     #[test]
     pub fn test_map_to_template() {
         let view_result = SplitDauerauftragViewResult {
-            database_version: empty_database_version(),
+            database_version: demo_database_version(),
             dauerauftrag_id: 1,
             wert: zwei(),
             datum: vec![
@@ -66,7 +66,7 @@ mod tests {
 
         let template = map_to_template(view_result);
 
-        assert_eq!(template.database_id, empty_database_version().as_string());
+        assert_eq!(template.database_id, demo_database_version().as_string());
         assert_eq!(template.dauerauftrag_id, "1");
         assert_eq!(template.wert, "2,00");
         assert_eq!(template.datum.len(), 2);

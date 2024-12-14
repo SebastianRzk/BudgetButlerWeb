@@ -5,3 +5,4 @@ pub mod base_templates;
 pub mod templates;
 pub mod gemeinsame_buchungen;
 pub mod shared;
+pub mod sparen;

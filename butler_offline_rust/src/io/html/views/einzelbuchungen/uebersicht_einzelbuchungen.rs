@@ -1,7 +1,7 @@
 use crate::budgetbutler::pages::einzelbuchungen::uebersicht_einzelbuchungen::{MonatsZusammenfassung, UebersichtEinzelbuchungenViewResult};
 use crate::budgetbutler::view::routes::{EINZELBUCHUNGEN_AUSGABE_ADD, EINZELBUCHUNGEN_EINNAHME_ADD};
 use crate::io::html::input::select::Select;
-use crate::model::einzelbuchung::Einzelbuchung;
+use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::{Betrag, Vorzeichen};
 pub use askama::Template;
@@ -74,13 +74,13 @@ fn map_to_template(view_result: UebersichtEinzelbuchungenViewResult) -> Uebersic
 mod tests {
     use crate::budgetbutler::pages::einzelbuchungen::uebersicht_einzelbuchungen::{MonatsZusammenfassung, UebersichtEinzelbuchungenViewResult};
     use crate::io::html::views::einzelbuchungen::uebersicht_einzelbuchungen::map_to_template;
-    use crate::model::einzelbuchung::Einzelbuchung;
+    use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::indiziert::Indiziert;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::{monats_name, Datum};
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::name;
-    use crate::model::state::persistent_application_state::DatabaseVersion;
+    use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
     #[test]
     fn test_map_to_template() {

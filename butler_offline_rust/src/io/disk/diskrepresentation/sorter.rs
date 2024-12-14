@@ -29,7 +29,7 @@ pub fn sort_file(file: File) -> SortedFile {
         sparkontos: result.get(&Modus::Sparkontos).unwrap_or(&Vec::new()).clone(),
         depotwerte: result.get(&Modus::Depotwerte).unwrap_or(&Vec::new()).clone(),
         order: result.get(&Modus::Order).unwrap_or(&Vec::new()).clone(),
-        dauerauftrag_order: result.get(&Modus::DauerauftragOrder).unwrap_or(&Vec::new()).clone(),
+        order_dauerauftrag: result.get(&Modus::DauerauftragOrder).unwrap_or(&Vec::new()).clone(),
         depotauszuege: result.get(&Modus::Depotauszuege).unwrap_or(&Vec::new()).clone(),
     }
 }
@@ -146,8 +146,8 @@ Datum,Depotwert,Konto,Wert\n\
         assert_eq!(sorted_file.order.len(), 1);
         assert_eq!(sorted_file.order.get(0).unwrap().line, "2024-06-06,EinName,MeinKonto,ETF999,300.0");
 
-        assert_eq!(sorted_file.dauerauftrag_order.len(), 1);
-        assert_eq!(sorted_file.dauerauftrag_order.get(0).unwrap().line, "2023-01-01,2023-04-30,monatlich,Beispiel Sparen,mein depot,123,300.0");
+        assert_eq!(sorted_file.order_dauerauftrag.len(), 1);
+        assert_eq!(sorted_file.order_dauerauftrag.get(0).unwrap().line, "2023-01-01,2023-04-30,monatlich,Beispiel Sparen,mein depot,123,300.0");
 
         assert_eq!(sorted_file.depotauszuege.len(), 1);
         assert_eq!(sorted_file.depotauszuege.get(0).unwrap().line, "2024-07-07,MeinDepot,MeinKonto,300.0");
