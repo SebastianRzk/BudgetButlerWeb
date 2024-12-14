@@ -1,6 +1,6 @@
 [package]
 name = "budgetbutlerweboffline"
-version = "0.1.0"
+version = "4.0.0"
 edition = "2021"
 
 [dependencies]
@@ -11,3 +11,5 @@ chrono = "0.4.38"
 mime = "0.3.17"
 serde = { version = "1.0.214", features = ["derive"] }
 rand = "0.8.5"
+serde_json = "1.0.132"
+reqwest = { version = "0.12.9", features = ["json"] }
