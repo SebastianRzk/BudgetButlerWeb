@@ -1,0 +1,36 @@
+<div class="input-theme">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Order-Dauerauftrag teilen und mit einem neuen Wert weiterführen</h3>
+		</div>
+		<form role="form" action="/split_orderdauerauftrag/submit" method="post">
+			<input type="hidden" name="orderdauerauftrag_id" value="{{orderdauerauftrag_id}}">
+			<input type="hidden" name="database_version" value="{{database_version}}">
+			<div class="box-body">
+
+				<div class="form-group">
+					<label>Neuer Betrag</label> <input value="{{wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert" required="required" class="form-control" placeholder="" />
+				</div>
+
+				<div class="form-group">
+					<label>Erste Ausführung mit neuem Betrag</label>
+					{% for d in datum %}
+					<br>
+					<div>
+						<input name="datum" value="{{d.datum}}" type="radio" required
+							{% if d.can_be_chosen %}
+							{% else %}
+							   disabled
+							{% endif%}
+					   />
+						{{d.datum_german}}
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="split" id="split">Order-Dauerauftrag teilen</button>
+			</div>
+		</form>
+	</div>
+</div>

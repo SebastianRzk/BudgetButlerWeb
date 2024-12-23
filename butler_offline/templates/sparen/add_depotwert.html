@@ -1,0 +1,65 @@
+<div class="input-theme">
+	<div class="box input-box">
+		<div class="box-header">
+			<h3 class="box-title">{{element_titel}}</h3>
+		</div>
+		<form role="form" action="/add_depotwert/submit" method="post">
+			<input type="hidden" name="database_id" value="{{database_id}}">
+			{% if bearbeitungsmodus %}
+			<input type="hidden" name="edit_index" value="{{default_item.index}}">
+			{% endif %}
+			<div class="box-body">
+				<div class="form-group">
+					<label>Name des Depotwerts</label> <input value="{{default_item.name}}" type="text" name="name" class="form-control" placeholder="" required="required" />
+				</div>
+				<div class="form-group">
+					<label>ISIN des Depotwerts</label> <input value="{{default_item.isin}}" type="text" name="isin" class="form-control" placeholder="" required="required" />
+				</div>
+				<div class="form-group">
+					<label>Typ</label>
+					<select class="form-control" name="typ" id="typ_auswahl">
+						 {% for typ in typen.items %}
+						<option
+							{% if typ.selected %}
+							selected="selected"
+							{% endif %}
+							>{{typ.value}}</option>
+						 {% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="add" id="add">{{approve_title}}</button>
+			</div>
+		</form>
+	</div>
+  <div class="box last-elements-box">
+	  <div class="box-header">
+		  <h3 class="box-title">Letzte Erfassungen</h3>
+	  </div>
+	  <div class="box-body">
+		  <table class="table" id="letzte_erfassungen">
+			  <thead>
+				  <tr>
+					  <th></th>
+					  <th>Name</th>
+					  <th>ISIN</th>
+					  <th>Typ</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  {% for depotwert in letzte_erfassung %}
+				  <tr>
+					  <td><span class="{{depotwert.fa}} pull-right"></span></td>
+					  <td>{{depotwert.name}}</td>
+					  <td>{{depotwert.isin}}</td>
+					  <td>{{depotwert.typ}}</td>
+				  </tr>
+				  {% endfor %}
+			  </tbody>
+		  </table>
+	  </div>
+	  <div class="box-footer clearfix">
+	  <a href="/uebersicht_depotwerte/" class="btn btn-light pull-right">Alle erfassten Depotwerte ansehen</a>
+	</div>
+</div>

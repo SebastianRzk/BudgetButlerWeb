@@ -1,0 +1,68 @@
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Depotwerte</h3>
+	</div>
+	<div class="box-body">
+		<table>
+			<thead>
+				<tr>
+					<th>Nummer</th>
+					<th>Name</th>
+					<th>Typ</th>
+					<th>ISIN</th>
+					<th class="table-wert">Gesamte Einzahlungen</th>
+					<th class="table-wert">+/-</th>
+					<th class="table-wert">Summe Auszüge</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for depotwert in depotwerte %}
+				<tr>
+					<td id="item_{{depotwert.index}}_id">{{depotwert.index}}</td>
+					<td id="item_{{depotwert.index}}_name">{{depotwert.name}}</td>
+					<td id="item_{{depotwert.index}}_typ">{{depotwert.typ}}</td>
+					<td id="item_{{depotwert.index}}_isin">{{depotwert.isin}}</td>
+					<td id="item_{{depotwert.index}}_buchung" class="table-wert">{{depotwert.aufbuchungen}} €</td>
+					<td id="item_{{depotwert.index}}_difference"
+								class="table-wert
+								{% if depotwert.difference_is_negativ %}
+								negativ
+								{% endif %}
+								"
+							>{{depotwert.difference}} €</td>
+					<td id="item_{{depotwert.index}}_wert" class="table-wert">{{depotwert.wert}} €</td>
+					<td class="flex end">
+						<form onsubmit="return confirm('Willst du wirklich den Depotwert {{depotwert.name}} löschen?');" role="form" action="/add_depotwert/delete" method="post">
+							<input type="hidden" name="db_version" value="{{database_id}}">
+							<input type="hidden" name="delete_index" value="{{depotwert.index}}">
+							<button name="action" class="btn-icon" value="delete" ><span class="fa fa-trash-o fa-large"></span></button>
+						</form>
+						<form role="form" action="/add_depotwert/" method="post"><input type="hidden" name="database_id" value="{{database_id}}">
+							<input type="hidden" name="db_version" value="{{database_id}}">
+							<input type="hidden" name="edit_index" value="{{depotwert.index}}">
+							<button type="submit" class="btn-icon" id="edit_{{depotwert.index}}" name="action" value="edit" ><span class="fa fa-pencil fa-large"></span></button>
+						</form>
+					</td>
+				</tr>
+				{% endfor %}
+				<tr>
+					<td></td>
+					<td><b>Gesamt</b></td>
+					<td></td>
+					<td></td>
+					<td id="item_gesamt_buchung" class="table-wert"><b>{{gesamt_aufbuchungen}} €</b></td>
+					<td id="item_gesamt_difference"
+								class="table-wert
+								{% if gesamt_difference_is_negativ %}
+								negativ
+								{% endif %}
+								"
+					><b>{{gesamt_difference}} €</b></td>
+					<td id="item_gesamt_wert" class="table-wert"><b>{{gesamt_wert}} €</b></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

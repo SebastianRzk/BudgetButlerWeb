@@ -1,0 +1,4 @@
+pub mod depotauszug_extension;
+mod dauerauftrag_extension;
+mod besitzt_betrag_extension;
+mod gemeinsame_buchung_extension;
