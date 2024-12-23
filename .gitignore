@@ -21,3 +21,5 @@ config
 /BudgetButlerWeb.egg-info/
 .coverage
 /logs/
+/target
+butler_offline/target/
