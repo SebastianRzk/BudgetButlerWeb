@@ -18,8 +18,8 @@ use crate::model::primitives::betrag::{Betrag, Vorzeichen};
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::farbe::Farbe;
 use crate::model::primitives::kategorie::Kategorie;
-use std::collections::{HashMap, HashSet};
 use crate::model::primitives::name::Name;
+use std::collections::{HashMap, HashSet};
 
 pub fn berechne_pie_chart(
     selektion: Selector<Indiziert<Einzelbuchung>>,
@@ -218,7 +218,10 @@ pub fn make_it_percent(bar_chart: PieChart) -> PieChart {
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::chart::{berechne_kategorie_bar_chart, berechne_kategorie_line_chart, make_it_percent, make_it_pro_monat};
+    use crate::budgetbutler::chart::{
+        berechne_kategorie_bar_chart, berechne_kategorie_line_chart, make_it_percent,
+        make_it_pro_monat,
+    };
     use crate::budgetbutler::view::farbe::FarbenSelektor;
     use crate::model::database::einzelbuchung::builder::einzelbuchung_with_kategorie_und_betrag;
     use crate::model::database::einzelbuchung::Einzelbuchung;
@@ -303,10 +306,12 @@ mod tests {
             vec![
                 MonatsName {
                     monat: "01/2020".to_string(),
-                }.to_name(),
+                }
+                .to_name(),
                 MonatsName {
                     monat: "02/2020".to_string(),
-                }.to_name()
+                }
+                .to_name()
             ]
         );
         assert_eq!(

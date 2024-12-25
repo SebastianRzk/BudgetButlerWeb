@@ -46,13 +46,11 @@ impl PartialOrd<Self> for Depotauszug {
     }
 }
 
-
-impl<'a> BesitztKontoReferenz<'a> for Indiziert<Depotauszug>{
+impl<'a> BesitztKontoReferenz<'a> for Indiziert<Depotauszug> {
     fn konto_referenz(&'a self) -> &'a KontoReferenz {
         &self.value.konto
     }
 }
-
 
 impl Ord for Depotauszug {
     fn cmp(&self, other: &Self) -> Ordering {

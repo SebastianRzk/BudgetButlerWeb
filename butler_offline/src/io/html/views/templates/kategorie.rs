@@ -5,8 +5,14 @@ pub fn flatmap_kategorien(kategorien: Vec<Kategorie>) -> Vec<String> {
     kategorien.iter().map(|x| x.kategorie.clone()).collect()
 }
 
-pub fn flatmap_kategorien_option(kategorien: Vec<Kategorie>, selected: Kategorie) ->Select<String>{
-    Select::new(flatmap_kategorien(kategorien), Some(selected.kategorie.clone()))
+pub fn flatmap_kategorien_option(
+    kategorien: Vec<Kategorie>,
+    selected: Kategorie,
+) -> Select<String> {
+    Select::new(
+        flatmap_kategorien(kategorien),
+        Some(selected.kategorie.clone()),
+    )
 }
 
 #[cfg(test)]
@@ -14,10 +20,10 @@ mod tests {
     use crate::model::primitives::kategorie::Kategorie;
 
     #[test]
-    fn test_flatmap_kategorien(){
+    fn test_flatmap_kategorien() {
         let kategorien = vec![
             Kategorie::new("test1".to_string()),
-            Kategorie::new("test2".to_string())
+            Kategorie::new("test2".to_string()),
         ];
 
         let result = super::flatmap_kategorien(kategorien);
@@ -26,10 +32,10 @@ mod tests {
     }
 
     #[test]
-    fn test_flatmap_kategorien_option(){
+    fn test_flatmap_kategorien_option() {
         let kategorien = vec![
             Kategorie::new("test1".to_string()),
-            Kategorie::new("test2".to_string())
+            Kategorie::new("test2".to_string()),
         ];
 
         let selected = Kategorie::new("test2".to_string());

@@ -1,4 +1,3 @@
-use std::path::PathBuf;
 use crate::model::primitives::farbe::Farbe;
 use crate::model::primitives::person::Person;
 use crate::model::remote::server::ServerConfiguration;
@@ -6,6 +5,7 @@ use crate::model::state::config::{
     AbrechnungsConfiguration, BackupConfiguration, Configuration, DatabaseConfiguration,
     DesignConfiguration, ErfassungsConfiguration, UserConfiguration,
 };
+use std::path::PathBuf;
 
 pub fn generate_initial_config(root_path: &PathBuf) -> Configuration {
     let initial_user_name_str = "Test_User";

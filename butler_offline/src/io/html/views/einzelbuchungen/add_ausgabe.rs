@@ -1,7 +1,7 @@
 use crate::budgetbutler::pages::einzelbuchungen::add_ausgabe::AddBuchungViewResult;
 use crate::io::html::input::select::Select;
-pub use askama::Template;
 use crate::io::html::views::templates::kategorie::flatmap_kategorien_option;
+pub use askama::Template;
 
 #[derive(Template)]
 #[template(path = "einzelbuchungen/add_ausgabe.html")]
@@ -36,11 +36,13 @@ pub fn render_add_ausgabe_template(template: AddBuchungViewResult) -> String {
     as_template.render().unwrap()
 }
 
-
 pub fn map_to_template(view_result: AddBuchungViewResult) -> AddAusgabeTemplate {
     AddAusgabeTemplate {
         id: view_result.database_version.as_string(),
-        kategorien: flatmap_kategorien_option(view_result.kategorien, view_result.default_item.kategorie.clone()),
+        kategorien: flatmap_kategorien_option(
+            view_result.kategorien,
+            view_result.default_item.kategorie.clone(),
+        ),
         element_titel: view_result.action_headline.clone(),
         bearbeitungsmodus: view_result.bearbeitungsmodus,
         default_item: DefaultItemTemplate {
@@ -51,19 +53,25 @@ pub fn map_to_template(view_result: AddBuchungViewResult) -> AddAusgabeTemplate 
             wert: view_result.default_item.wert.to_input_string(),
         },
         approve_title: view_result.action_title.clone(),
-        letzte_erfassung: view_result.letzte_erfassungen.iter().map(|x| LetzteErfassungTemplate {
-            fa: x.fa.clone(),
-            datum: x.datum.clone(),
-            name: x.name.clone(),
-            kategorie: x.kategorie.clone(),
-            wert: x.wert.clone(),
-        }).collect(),
+        letzte_erfassung: view_result
+            .letzte_erfassungen
+            .iter()
+            .map(|x| LetzteErfassungTemplate {
+                fa: x.fa.clone(),
+                datum: x.datum.clone(),
+                name: x.name.clone(),
+                kategorie: x.kategorie.clone(),
+                wert: x.wert.clone(),
+            })
+            .collect(),
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::einzelbuchungen::add_ausgabe::{AddBuchungViewResult, DefaultItem, LetzteErfassung};
+    use crate::budgetbutler::pages::einzelbuchungen::add_ausgabe::{
+        AddBuchungViewResult, DefaultItem, LetzteErfassung,
+    };
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;
@@ -89,20 +97,16 @@ mod tests {
             },
             kategorien: vec![kategorie("Eine Kategorie"), kategorie("Weitere Kategorie")],
             action_title: "Ausgabe erfassen".to_string(),
-            letzte_erfassungen: vec![
-                LetzteErfassung{
-                    fa: "FA".to_string(),
-                    datum: "2020-01-01".to_string(),
-                    name: "Ein Name".to_string(),
-                    kategorie: "Eine Kategorie".to_string(),
-                    wert: "10,00".to_string(),
-                }
-            ],
+            letzte_erfassungen: vec![LetzteErfassung {
+                fa: "FA".to_string(),
+                datum: "2020-01-01".to_string(),
+                name: "Ein Name".to_string(),
+                kategorie: "Eine Kategorie".to_string(),
+                wert: "10,00".to_string(),
+            }],
         };
 
-
         let result = super::map_to_template(view_result);
-
 
         assert_eq!(result.id, "test-0-0");
         assert_eq!(result.bearbeitungsmodus, false);
@@ -115,11 +119,10 @@ mod tests {
         assert_eq!(result.approve_title, "Ausgabe erfassen");
 
         assert_eq!(result.kategorien.items.len(), 2);
-        assert_eq!(result.kategorien.items[0].value,"Eine Kategorie");
-        assert_eq!(result.kategorien.items[0].selected,true);
-        assert_eq!(result.kategorien.items[1].value,"Weitere Kategorie");
-        assert_eq!(result.kategorien.items[1].selected,false);
-
+        assert_eq!(result.kategorien.items[0].value, "Eine Kategorie");
+        assert_eq!(result.kategorien.items[0].selected, true);
+        assert_eq!(result.kategorien.items[1].value, "Weitere Kategorie");
+        assert_eq!(result.kategorien.items[1].selected, false);
 
         assert_eq!(result.letzte_erfassung.len(), 1);
         assert_eq!(result.letzte_erfassung[0].fa, "FA");

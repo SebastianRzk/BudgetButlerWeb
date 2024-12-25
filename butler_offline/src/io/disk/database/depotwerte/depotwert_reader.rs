@@ -28,9 +28,9 @@ mod tests {
     #[test]
     fn test_read_depotwert() {
         let line = element("MeinDepotwert,DE000A0D9PT0,ETF");
-         let depotwert = read_depotwert(line);
-         assert_eq!(depotwert.name, name("MeinDepotwert"));
-         assert_eq!(depotwert.isin, isin("DE000A0D9PT0"));
-         assert_eq!(depotwert.typ, DepotwertTyp::ETF);
+        let depotwert = read_depotwert(line);
+        assert_eq!(depotwert.name, name("MeinDepotwert"));
+        assert_eq!(depotwert.isin, isin("DE000A0D9PT0"));
+        assert_eq!(depotwert.typ, DepotwertTyp::ETF);
     }
 }

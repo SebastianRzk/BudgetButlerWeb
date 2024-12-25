@@ -1,8 +1,18 @@
-use crate::budgetbutler::pages::sparen::action_add_edit_order_dauerauftrag::{submit_order_dauerauftrag, SubmitOrderDauerauftragContext};
-use crate::budgetbutler::pages::sparen::action_delete_order_dauerauftrag::{delete_order_dauerauftrag, DeleteContext};
-use crate::budgetbutler::pages::sparen::action_split_order_dauerauftrag::{submit_split_order_dauerauftrag, ActionSplitOrderDauerauftragContext};
-use crate::budgetbutler::pages::sparen::add_order_dauerauftrag::{handle_view, AddOrderDauerauftragContext};
-use crate::budgetbutler::pages::sparen::split_order_dauerauftrag::{handle_split_order_dauerauftrag, SplitOrderDauerauftragContext};
+use crate::budgetbutler::pages::sparen::action_add_edit_order_dauerauftrag::{
+    submit_order_dauerauftrag, SubmitOrderDauerauftragContext,
+};
+use crate::budgetbutler::pages::sparen::action_delete_order_dauerauftrag::{
+    delete_order_dauerauftrag, DeleteContext,
+};
+use crate::budgetbutler::pages::sparen::action_split_order_dauerauftrag::{
+    submit_split_order_dauerauftrag, ActionSplitOrderDauerauftragContext,
+};
+use crate::budgetbutler::pages::sparen::add_order_dauerauftrag::{
+    handle_view, AddOrderDauerauftragContext,
+};
+use crate::budgetbutler::pages::sparen::split_order_dauerauftrag::{
+    handle_split_order_dauerauftrag, SplitOrderDauerauftragContext,
+};
 use crate::budgetbutler::view::optimistic_locking::{
     check_optimistic_locking_error, OptimisticLockingResult,
 };
@@ -114,7 +124,7 @@ pub async fn post_submit(
                 rhythmus: read_rhythmus(Element::new(form_data.rhythmus.clone())),
                 wert: OrderBetrag::new(
                     BetragOhneVorzeichen::from_user_input(&form_data.wert),
-                    read_ordertyp(Element::new(form_data.typ.clone()))
+                    read_ordertyp(Element::new(form_data.typ.clone())),
                 ),
                 depotwert: DepotwertReferenz::new(ISIN::new(form_data.depotwert.clone())),
             },
@@ -184,13 +194,15 @@ struct SubmitFormData {
     depotwert: String,
     wert: String,
     typ: String,
-    rhythmus: String
+    rhythmus: String,
 }
 
-
-
 #[post("/split_orderdauerauftrag/")]
-pub async fn load_split(data: Data<ApplicationState>, form: Form<SplitFormData>, configuration_data: Data<ConfigurationData>) -> impl Responder {
+pub async fn load_split(
+    data: Data<ApplicationState>,
+    form: Form<SplitFormData>,
+    configuration_data: Data<ConfigurationData>,
+) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let optimistic_locking_result =
         check_optimistic_locking_error(&form.database_version, database_guard.db_version.clone());
@@ -235,7 +247,11 @@ pub async fn post_split_submit(
         },
         &order_dauerauftraege_changes.changes,
         submit_split_order_dauerauftrag,
-        &configuration.configuration.lock().unwrap().database_configuration,
+        &configuration
+            .configuration
+            .lock()
+            .unwrap()
+            .database_configuration,
     );
     *database = new_state.changed_database;
 

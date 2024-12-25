@@ -1,7 +1,10 @@
 use crate::budgetbutler::pages::einzelbuchungen::uebersicht_jahr::UebersichtJahrViewResult;
 use crate::io::html::input::select::Select;
 use crate::io::html::json::list::{JSONBetragList, JSONStringList};
-use crate::io::html::views::templates::chart_templates::{map_bar_chart_to_template, map_buchung_kategorie, map_pie_chart, BarChartTemplate, BuchungKategorieTemplate, LineChartDataSetTemplate, LineChartTemplate, PieChartTemplate};
+use crate::io::html::views::templates::chart_templates::{
+    map_bar_chart_to_template, map_buchung_kategorie, map_pie_chart, BarChartTemplate,
+    BuchungKategorieTemplate, LineChartDataSetTemplate, LineChartTemplate, PieChartTemplate,
+};
 use crate::model::metamodel::chart::LineChartDataSet;
 pub use askama::Template;
 

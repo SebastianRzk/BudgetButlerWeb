@@ -1,15 +1,16 @@
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::SortedAbrechnungsFile;
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::{
-    BUCHUNGEN_EINZEL_HEADER, BUCHUNGEN_END, BUCHUNGEN_START, METADATEN_END, METADATEN_START,BUCHUNGEN_GEMEINSAM_HEADER
+    BUCHUNGEN_EINZEL_HEADER, BUCHUNGEN_END, BUCHUNGEN_GEMEINSAM_HEADER, BUCHUNGEN_START,
+    METADATEN_END, METADATEN_START,
 };
 use crate::io::disk::diskrepresentation::line::Line;
 use std::collections::HashMap;
 
 #[derive(Debug, PartialEq)]
 pub enum HeaderModus {
-    Preserve, Drop
+    Preserve,
+    Drop,
 }
-
 
 pub fn sort_abrechnungs_file(file: &Vec<Line>, header_modus: HeaderModus) -> SortedAbrechnungsFile {
     let mut current_modus = Modus::Beschreibung;
@@ -24,11 +25,15 @@ pub fn sort_abrechnungs_file(file: &Vec<Line>, header_modus: HeaderModus) -> Sor
             current_modus = header_modus;
         }
 
-        if modus_check_result  == ModusCheckResult::Header(Modus::EinzelBuchungen) &&  header_modus == HeaderModus::Drop{
+        if modus_check_result == ModusCheckResult::Header(Modus::EinzelBuchungen)
+            && header_modus == HeaderModus::Drop
+        {
             continue;
         }
 
-        if modus_check_result == ModusCheckResult::Header(Modus::GemeinsameBuchungen) &&  header_modus == HeaderModus::Drop{
+        if modus_check_result == ModusCheckResult::Header(Modus::GemeinsameBuchungen)
+            && header_modus == HeaderModus::Drop
+        {
             continue;
         }
         let current_list = result.entry(current_modus.clone()).or_insert_with(Vec::new);
@@ -82,7 +87,9 @@ enum Modus {
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::import::abrechnungen_sorter::{sort_abrechnungs_file, HeaderModus};
+    use crate::budgetbutler::database::abrechnen::abrechnen::import::abrechnungen_sorter::{
+        sort_abrechnungs_file, HeaderModus,
+    };
     use crate::io::disk::diskrepresentation::file::File;
 
     const DEMO_ABRECHNUNG: &str = "\
@@ -144,7 +151,6 @@ Datum,Kategorie,Name,Betrag
             "2024-11-21,NeueKategorie,asd,-617.00"
         );
     }
-
 
     const DEMO_ABRECHNUNG_GEMEINSAM: &str = "\
 ergebnis text

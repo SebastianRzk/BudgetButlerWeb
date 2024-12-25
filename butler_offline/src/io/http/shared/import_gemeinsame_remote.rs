@@ -6,7 +6,10 @@ use crate::io::http::redirect::http_redirect;
 use crate::io::http::shared::server_url_updater::update_server_url;
 use crate::io::online::login::request_login;
 use crate::model::state::config::ConfigurationData;
-use crate::model::state::non_persistent_application_state::{OnlineRedirectAction, OnlineRedirectActionType, OnlineRedirectActionWrapper, OnlineRedirectState, RootPath};
+use crate::model::state::non_persistent_application_state::{
+    OnlineRedirectAction, OnlineRedirectActionType, OnlineRedirectActionWrapper,
+    OnlineRedirectState, RootPath,
+};
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{post, Responder};
@@ -18,7 +21,7 @@ pub async fn import_gemeinsam_request(
     form: Form<ImportFormData>,
     data: Data<ApplicationState>,
     config: Data<ConfigurationData>,
-    root_path: Data<RootPath>
+    root_path: Data<RootPath>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
     let optimistic_locking_result =

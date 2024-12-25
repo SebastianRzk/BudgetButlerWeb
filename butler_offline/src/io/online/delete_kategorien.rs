@@ -8,7 +8,6 @@ pub async fn request_delete_kategorien(
     login_credentials: LoginCredentials,
 ) -> Result<(), ErrorOnRequest> {
     let url = kategorien_route(server_configuration);
-     delete_request(url, login_credentials).await?;
+    delete_request(url, login_credentials).await?;
     Ok(())
 }
-

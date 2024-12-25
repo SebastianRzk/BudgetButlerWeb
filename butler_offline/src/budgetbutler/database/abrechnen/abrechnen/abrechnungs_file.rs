@@ -7,7 +7,6 @@ pub struct SortedAbrechnungsFile {
     pub gemeinsame_buchungen: Vec<Line>,
 }
 
-
 pub const METADATEN_START: &str = "#######MaschinenimportMetadatenStart";
 pub const METADATEN_END: &str = "#######MaschinenimportMetadatenEnd";
 pub const BUCHUNGEN_START: &str = "#######MaschinenimportStart";
@@ -25,5 +24,3 @@ pub const ZIEL_IMPORT_GEMEINSAME_BUCHUNGEN_AUS_APP: &str = "ImportGemeinsamerBuc
 pub const ZIEL_ABRECHNUNG_SELBST: &str = "GemeinsameAbrechnungFuerSelbst";
 pub const ZIEL_ABRECHNUNG_PARTNER: &str = "GemeinsameAbrechnungFuerPartner";
 pub const ZIEL_IMPORT_EINZELBUCHUNGEN: &str = "ImportBuchungenAusApp";
-
-

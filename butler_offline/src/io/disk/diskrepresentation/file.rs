@@ -1,7 +1,7 @@
 use crate::io::disk::diskrepresentation::line::Line;
 
 pub struct File {
-    pub lines: Vec<Line>
+    pub lines: Vec<Line>,
 }
 
 pub struct SortedFile {
@@ -13,9 +13,8 @@ pub struct SortedFile {
     pub depotwerte: Vec<Line>,
     pub order: Vec<Line>,
     pub order_dauerauftrag: Vec<Line>,
-    pub depotauszuege: Vec<Line>
+    pub depotauszuege: Vec<Line>,
 }
-
 
 pub const EINZELBUCHUNGEN_HEADER: &str = "Datum,Kategorie,Name,Wert";
 
@@ -38,7 +37,8 @@ pub const ORDER_START_SIGNAL: &str = "Order";
 pub const ORDER_HEADER: &str = "Datum,Name,Konto,Depotwert,Wert,Typ";
 
 pub const DAUERAUFTRAG_ORDER_START_SIGNAL: &str = "Dauerauftr_Ordr";
-pub const DAUERAUFTRAG_ORDER_HEADER: &str = "Startdatum,Endedatum,Rhythmus,Name,Konto,Depotwert,Wert,Typ";
+pub const DAUERAUFTRAG_ORDER_HEADER: &str =
+    "Startdatum,Endedatum,Rhythmus,Name,Konto,Depotwert,Wert,Typ";
 
 pub const DEPOTAUSZUEGE_START_SIGNAL: &str = "Depotauszuege";
 pub const DEPOTAUSZUEGE_HEADER: &str = "Datum,Depotwert,Konto,Wert";

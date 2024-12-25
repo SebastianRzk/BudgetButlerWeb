@@ -1,5 +1,5 @@
-use crate::io::disk::diskrepresentation::file::SortedFile;
 use crate::io::disk::database::gemeinsame_buchungen::gemeinsame_buchung_reader::read_gemeinsame_buchung;
+use crate::io::disk::diskrepresentation::file::SortedFile;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 
 pub fn read_gemeinsame_buchungen(sorted_file: &SortedFile) -> Vec<GemeinsameBuchung> {
@@ -40,21 +40,29 @@ mod tests {
         let gemeinsame_buchungen = read_gemeinsame_buchungen(&sorted_file);
         assert_eq!(gemeinsame_buchungen[0].datum, Datum::new(1, 1, 2024));
         assert_eq!(gemeinsame_buchungen[0].name, name("Normal"));
-        assert_eq!(gemeinsame_buchungen[0].kategorie, kategorie("NeueKategorie"));
+        assert_eq!(
+            gemeinsame_buchungen[0].kategorie,
+            kategorie("NeueKategorie")
+        );
         assert_eq!(
             gemeinsame_buchungen[0].betrag,
             betrag(Vorzeichen::Negativ, 123, 12)
         );
         assert_eq!(gemeinsame_buchungen[0].person, person("Test_User"));
 
-
         assert_eq!(gemeinsame_buchungen[1].datum, Datum::new(2, 1, 2024));
         assert_eq!(gemeinsame_buchungen[1].name, name("Normal2"));
-        assert_eq!(gemeinsame_buchungen[1].kategorie, kategorie("NeueKategorie2"));
+        assert_eq!(
+            gemeinsame_buchungen[1].kategorie,
+            kategorie("NeueKategorie2")
+        );
         assert_eq!(
             gemeinsame_buchungen[1].betrag,
             betrag(Vorzeichen::Negativ, 123, 13)
         );
-        assert_eq!(gemeinsame_buchungen[1].person, person("kein_Partnername_gesetzt"));
+        assert_eq!(
+            gemeinsame_buchungen[1].person,
+            person("kein_Partnername_gesetzt")
+        );
     }
 }

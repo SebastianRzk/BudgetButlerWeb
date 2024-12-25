@@ -1,13 +1,13 @@
 use crate::io::disk::database::types::ElementRequirement;
 use crate::model::database::depotwert::DepotwertReferenz;
 use crate::model::database::sparbuchung::KontoReferenz;
+use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
+use crate::model::indiziert::Indiziert;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::order_betrag::OrderBetrag;
 use crate::model::primitives::rhythmus::Rhythmus;
 use std::cmp::Ordering;
-use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
-use crate::model::indiziert::Indiziert;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OrderDauerauftrag {
@@ -44,7 +44,7 @@ impl OrderDauerauftrag {
     }
 }
 
-impl <'a> BesitztStartUndEndeDatum<'a> for Indiziert<OrderDauerauftrag>{
+impl<'a> BesitztStartUndEndeDatum<'a> for Indiziert<OrderDauerauftrag> {
     fn start_datum(&'a self) -> &'a Datum {
         &self.value.start_datum
     }
@@ -132,8 +132,11 @@ pub mod builder {
         }
     }
 
-
-    pub fn order_dauerauftrag_with_range(start_datum: Datum, ende_datum: Datum, rhythmus: Rhythmus) -> OrderDauerauftrag {
+    pub fn order_dauerauftrag_with_range(
+        start_datum: Datum,
+        ende_datum: Datum,
+        rhythmus: Rhythmus,
+    ) -> OrderDauerauftrag {
         OrderDauerauftrag {
             start_datum,
             ende_datum,
@@ -144,7 +147,6 @@ pub mod builder {
             wert: demo_order_betrag(),
         }
     }
-
 
     pub fn order_dauerauftrag_with_konto(konto: KontoReferenz) -> OrderDauerauftrag {
         OrderDauerauftrag {

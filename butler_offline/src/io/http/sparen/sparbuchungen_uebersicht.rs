@@ -1,4 +1,6 @@
-use crate::budgetbutler::pages::sparen::uebersicht_sparbuchungen::{handle_view, UebersichtSparbuchungenContext};
+use crate::budgetbutler::pages::sparen::uebersicht_sparbuchungen::{
+    handle_view, UebersichtSparbuchungenContext,
+};
 use crate::budgetbutler::view::request_handler::handle_render_display_view;
 use crate::budgetbutler::view::routes::SPAREN_SPARBUCHUNGEN_UEBERSICHT;
 use crate::io::html::views::sparen::uebersicht_sparbuchungen::render_uebersicht_sparbuchungen_template;

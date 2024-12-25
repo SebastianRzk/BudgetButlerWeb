@@ -3,7 +3,11 @@ use crate::io::disk::diskrepresentation::file::SortedFile;
 use crate::model::database::dauerauftrag::Dauerauftrag;
 
 pub fn read_dauerauftraege(sorted_file: &SortedFile) -> Vec<Dauerauftrag> {
-    sorted_file.dauerauftraege.iter().map(|l| read_dauerauftrag(l.into())).collect()
+    sorted_file
+        .dauerauftraege
+        .iter()
+        .map(|l| read_dauerauftrag(l.into()))
+        .collect()
 }
 
 #[cfg(test)]
@@ -22,7 +26,7 @@ mod tests {
             einzelbuchungen: vec![],
             dauerauftraege: vec![
                 line("2024-01-01,2025-01-01,NeueKategorie,Miete,monatlich,-123.12"),
-                line("2024-01-02,2025-01-02,NeueKategorie2,Miete2,monatlich,-123.13")
+                line("2024-01-02,2025-01-02,NeueKategorie2,Miete2,monatlich,-123.13"),
             ],
             gemeinsame_buchungen: vec![],
             sparbuchungen: vec![],
@@ -40,8 +44,10 @@ mod tests {
         assert_eq!(dauerauftrag_eins.name, name("Miete"));
         assert_eq!(dauerauftrag_eins.kategorie, kategorie("NeueKategorie"));
         assert_eq!(dauerauftrag_eins.rhythmus, Rhythmus::Monatlich);
-        assert_eq!(dauerauftrag_eins.betrag, betrag(Vorzeichen::Negativ, 123, 12));
-
+        assert_eq!(
+            dauerauftrag_eins.betrag,
+            betrag(Vorzeichen::Negativ, 123, 12)
+        );
 
         let dauerauftrag_zwei = &dauerauftraege[1];
         assert_eq!(dauerauftrag_zwei.start_datum, Datum::new(2, 1, 2024));
@@ -49,6 +55,9 @@ mod tests {
         assert_eq!(dauerauftrag_zwei.name, name("Miete2"));
         assert_eq!(dauerauftrag_zwei.kategorie, kategorie("NeueKategorie2"));
         assert_eq!(dauerauftrag_zwei.rhythmus, Rhythmus::Monatlich);
-        assert_eq!(dauerauftrag_zwei.betrag, betrag(Vorzeichen::Negativ, 123, 13));
+        assert_eq!(
+            dauerauftrag_zwei.betrag,
+            betrag(Vorzeichen::Negativ, 123, 13)
+        );
     }
 }

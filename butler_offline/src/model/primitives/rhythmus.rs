@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Rhythmus {
     Monatlich,
@@ -6,7 +5,6 @@ pub enum Rhythmus {
     Halbjaehrlich,
     Jaehrlich,
 }
-
 
 impl Rhythmus {
     pub fn to_german_string(&self) -> String {
@@ -18,13 +16,13 @@ impl Rhythmus {
         }
     }
 
-    pub fn from_german_string(string: &String) -> Rhythmus{
+    pub fn from_german_string(string: &String) -> Rhythmus {
         match string.as_str() {
             "monatlich" => Rhythmus::Monatlich,
             "vierteljährlich" => Rhythmus::Vierteljaehrlich,
             "halbjährlich" => Rhythmus::Halbjaehrlich,
             "jährlich" => Rhythmus::Jaehrlich,
-            _ => panic!("Invalid rhythmus string: {}", string)
+            _ => panic!("Invalid rhythmus string: {}", string),
         }
     }
 }

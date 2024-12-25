@@ -17,7 +17,6 @@ pub struct SplitDauerauftragContext<'a> {
     pub dauerauftrag_id: u32,
 }
 
-
 pub fn handle_split(context: SplitDauerauftragContext) -> SplitDauerauftragViewResult {
     let selected_dauerauftrag = context.database.dauerauftraege.get(context.dauerauftrag_id);
     let mut laufdatum = selected_dauerauftrag.start_datum().clone();
@@ -26,13 +25,21 @@ pub fn handle_split(context: SplitDauerauftragContext) -> SplitDauerauftragViewR
 
     while laufdatum <= selected_dauerauftrag.ende_datum().clone() {
         let can_be_chosen = laufdatum != selected_dauerauftrag.start_datum().clone();
-        datum.push(DatumSelektion { datum: laufdatum.clone(), can_be_chosen });
-        laufdatum = laufdatum.add_months(get_monatsdelta_for_rhythmus(selected_dauerauftrag.value.rhythmus));
+        datum.push(DatumSelektion {
+            datum: laufdatum.clone(),
+            can_be_chosen,
+        });
+        laufdatum = laufdatum.add_months(get_monatsdelta_for_rhythmus(
+            selected_dauerauftrag.value.rhythmus,
+        ));
     }
 
     if datum.len() > 1 {
         let letztes_datum = datum.pop().unwrap();
-        datum.push(DatumSelektion { datum: letztes_datum.datum, can_be_chosen: false });
+        datum.push(DatumSelektion {
+            datum: letztes_datum.datum,
+            can_be_chosen: false,
+        });
     }
 
     SplitDauerauftragViewResult {
@@ -81,4 +88,3 @@ mod tests {
         assert_eq!(result.datum[3].datum, Datum::new(1, 4, 2021));
     }
 }
-

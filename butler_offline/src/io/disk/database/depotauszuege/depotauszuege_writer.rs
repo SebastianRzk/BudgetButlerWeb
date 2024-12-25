@@ -14,8 +14,14 @@ pub fn write_depotauszuege(database: &Database) -> Vec<Line> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::model::database::depotauszug::builder::{demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR};
-    use crate::model::state::persistent_application_state::builder::{demo_database_version, depotauszuege, leere_dauerauftraege, leere_depotwerte, leere_einzelbuchungen, leere_gemeinsame_buchungen, leere_order, leere_order_dauerauftraege, leere_sparbuchungen, leere_sparkontos};
+    use crate::model::database::depotauszug::builder::{
+        demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR,
+    };
+    use crate::model::state::persistent_application_state::builder::{
+        demo_database_version, depotauszuege, leere_dauerauftraege, leere_depotwerte,
+        leere_einzelbuchungen, leere_gemeinsame_buchungen, leere_order, leere_order_dauerauftraege,
+        leere_sparbuchungen, leere_sparkontos,
+    };
 
     #[test]
     fn test_write_depotauszuege() {

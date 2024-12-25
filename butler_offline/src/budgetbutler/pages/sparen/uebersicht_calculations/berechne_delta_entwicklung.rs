@@ -4,7 +4,7 @@ use crate::model::primitives::farbe::aufbuchungen_farbe;
 pub fn make_delta_entwicklung_from_gesamt_entwicklung(gesamt_entwicklung: &LineChart) -> LineChart {
     let mut result = vec![];
 
-    for i in 0..gesamt_entwicklung.datasets[0].data.len()  {
+    for i in 0..gesamt_entwicklung.datasets[0].data.len() {
         result.push(
             gesamt_entwicklung.datasets[1].data[i].clone()
                 - gesamt_entwicklung.datasets[0].data[i].clone(),

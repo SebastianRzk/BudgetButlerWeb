@@ -7,7 +7,10 @@ use actix_web::{post, Responder};
 use serde::Deserialize;
 
 #[post("addkategorie/")]
-pub async fn add_kategorie(data: Data<AdditionalKategorie>, form: Form<AddKategorieForm>) -> impl Responder {
+pub async fn add_kategorie(
+    data: Data<AdditionalKategorie>,
+    form: Form<AddKategorieForm>,
+) -> impl Responder {
     let mut data = data.kategorie.lock().unwrap();
     *data = Some(Kategorie::new(form.neue_kategorie.clone()));
     drop(data);

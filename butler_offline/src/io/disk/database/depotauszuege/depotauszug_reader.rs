@@ -27,7 +27,9 @@ pub fn read_depotauszug(line: Element) -> Depotauszug {
 mod tests {
     use crate::io::disk::database::depotauszuege::depotauszug_reader::read_depotauszug;
     use crate::io::disk::primitive::segment_reader::builder::element;
-    use crate::model::database::depotauszug::builder::{demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR};
+    use crate::model::database::depotauszug::builder::{
+        demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR,
+    };
 
     #[test]
     fn test_read_depotwert() {

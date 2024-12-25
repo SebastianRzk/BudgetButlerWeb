@@ -276,7 +276,6 @@ impl<'a> BesitztBetrag<'a> for Betrag {
     }
 }
 
-
 impl<'a> BesitztBetrag<'a> for Indiziert<Betrag> {
     fn betrag(&'a self) -> &'a Betrag {
         &self.value
@@ -290,8 +289,8 @@ pub fn betrag(vorzeichen: Vorzeichen, euro: u32, cent: u8) -> Betrag {
 
 #[cfg(test)]
 pub mod builder {
-    use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::betrag::Vorzeichen::Positiv;
+    use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::betrag_ohne_vorzeichen::BetragOhneVorzeichen;
 
     pub fn any_betrag() -> Betrag {

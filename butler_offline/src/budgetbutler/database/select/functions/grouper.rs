@@ -1,5 +1,7 @@
-use crate::budgetbutler::database::select::functions::datatypes::{EinnahmenAusgabenAggregation, KategorieAggregation};
-use crate::model::eigenschaften::besitzt_betrag::{BesitztBetrag};
+use crate::budgetbutler::database::select::functions::datatypes::{
+    EinnahmenAusgabenAggregation, KategorieAggregation,
+};
+use crate::model::eigenschaften::besitzt_betrag::BesitztBetrag;
 use crate::model::eigenschaften::besitzt_kategorie::BesitztKategorie;
 use crate::model::primitives::betrag::{Betrag, Vorzeichen};
 

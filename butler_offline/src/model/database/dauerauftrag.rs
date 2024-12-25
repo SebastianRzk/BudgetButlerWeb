@@ -1,3 +1,4 @@
+use crate::io::disk::database::types::ElementRequirement;
 use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
@@ -6,7 +7,6 @@ use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::rhythmus::Rhythmus;
 use std::cmp::Ordering;
-use crate::io::disk::database::types::ElementRequirement;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Dauerauftrag {
@@ -18,12 +18,10 @@ pub struct Dauerauftrag {
     pub rhythmus: Rhythmus,
 }
 
-impl ElementRequirement for Dauerauftrag{
-
-}
+impl ElementRequirement for Dauerauftrag {}
 
 impl Dauerauftrag {
-    pub fn change_kategorie(&self, neue_kategorie: Kategorie)-> Dauerauftrag{
+    pub fn change_kategorie(&self, neue_kategorie: Kategorie) -> Dauerauftrag {
         Dauerauftrag {
             start_datum: self.start_datum.clone(),
             ende_datum: self.ende_datum.clone(),
@@ -73,7 +71,10 @@ pub mod builder {
     use crate::model::primitives::name::builder::demo_name;
     use crate::model::primitives::rhythmus::Rhythmus;
 
-    pub fn dauerauftrag_mit_start_ende_datum(start_datum: Datum, ende_datum: Datum) -> Dauerauftrag {
+    pub fn dauerauftrag_mit_start_ende_datum(
+        start_datum: Datum,
+        ende_datum: Datum,
+    ) -> Dauerauftrag {
         Dauerauftrag {
             start_datum,
             ende_datum,
@@ -107,14 +108,13 @@ pub mod builder {
     }
 }
 
-
 #[cfg(test)]
 mod test {
     use crate::model::database::dauerauftrag::builder::demo_dauerauftrag;
     use crate::model::primitives::kategorie::kategorie;
 
     #[test]
-    fn test_change_kategorie(){
+    fn test_change_kategorie() {
         let dauerauftrag = demo_dauerauftrag();
         let neue_kategorie = kategorie("Neu");
 
@@ -122,5 +122,4 @@ mod test {
 
         assert_eq!(dauerauftrag_neu.kategorie, neue_kategorie);
     }
-
 }

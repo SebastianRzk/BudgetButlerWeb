@@ -5,17 +5,14 @@ pub struct Person {
     pub person: String,
 }
 
-
 impl Person {
     pub fn new(person: String) -> Person {
-        Person {
-            person
-        }
+        Person { person }
     }
 
     pub fn empty() -> Person {
         Person {
-            person: "".to_string()
+            person: "".to_string(),
         }
     }
 }

@@ -17,11 +17,9 @@ pub struct Abrechnung {
 }
 
 impl Abrechnung {
-   pub fn new(lines: Vec<Line>) -> Abrechnung {
-       Abrechnung {
-           lines
-       }
-   }
+    pub fn new(lines: Vec<Line>) -> Abrechnung {
+        Abrechnung { lines }
+    }
 }
 
 #[cfg(test)]
@@ -29,9 +27,9 @@ pub mod builder {
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
     use crate::io::disk::diskrepresentation::line::Line;
 
-    pub fn abrechnung_from_str(str: &str ) -> Abrechnung {
+    pub fn abrechnung_from_str(str: &str) -> Abrechnung {
         Abrechnung {
-            lines: Line::from_multiline_str(str.to_string())
+            lines: Line::from_multiline_str(str.to_string()),
         }
     }
 }
@@ -39,9 +37,8 @@ pub mod builder {
 pub struct AbrechnungsErgebnis {
     pub eigene_abrechnung: Abrechnung,
     pub partner_abrechnung: Abrechnung,
-    pub selected_buchungen: Vec<Indiziert<GemeinsameBuchung>>
+    pub selected_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
 }
-
 
 #[derive(Clone)]
 pub struct AusgleichsKonfiguration {
@@ -125,7 +122,7 @@ pub fn rechne_ab(
             titel,
             Ziel::GemeinsameAbrechnungFuerPartner,
         ),
-        selected_buchungen: gemeinsame_buchungen
+        selected_buchungen: gemeinsame_buchungen,
     }
 }
 
@@ -269,7 +266,6 @@ mod tests {
         assert_eq!(result[1].name.get_name(), "Ausgleichsname");
     }
 
-
     fn gemeinssame_buchung_1_cent() -> Indiziert<GemeinsameBuchung> {
         indiziert(GemeinsameBuchung {
             person: demo_person(),
@@ -287,7 +283,7 @@ mod tests {
                 gemeinssame_buchung_1_cent(),
                 gemeinssame_buchung_1_cent(),
                 gemeinssame_buchung_1_cent(),
-                gemeinssame_buchung_1_cent()
+                gemeinssame_buchung_1_cent(),
             ],
             Betrag::new(Vorzeichen::Negativ, 0, 4),
             Datum::new(2, 1, 2021),

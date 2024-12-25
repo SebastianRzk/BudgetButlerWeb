@@ -61,12 +61,14 @@ pub fn handle_uebersicht_kontos(context: UebersichtKontosContext) -> UebersichtK
 mod tests {
     use crate::model::database::sparbuchung::builder::sparbuchung_with_betrag_typ_und_konto;
     use crate::model::database::sparbuchung::SparbuchungTyp;
-    use crate::model::database::sparkonto::builder::{demo_konto, any_konto_with_typ};
+    use crate::model::database::sparkonto::builder::{any_konto_with_typ, demo_konto};
     use crate::model::database::sparkonto::Kontotyp;
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::betrag::Betrag;
     use crate::model::primitives::betrag_ohne_vorzeichen::builder::u_zwei;
-    use crate::model::state::persistent_application_state::builder::{generate_database_with_sparkontos, generate_database_with_sparkontos_und_sparbuchungen};
+    use crate::model::state::persistent_application_state::builder::{
+        generate_database_with_sparkontos, generate_database_with_sparkontos_und_sparbuchungen,
+    };
 
     #[test]
     fn test_handle_uebersicht_kontos_empty() {
@@ -90,10 +92,14 @@ mod tests {
     }
 
     #[test]
-    fn test_handle_uebersicht(){
+    fn test_handle_uebersicht() {
         let database = generate_database_with_sparkontos_und_sparbuchungen(
             vec![any_konto_with_typ(Kontotyp::Sparkonto)],
-        vec![sparbuchung_with_betrag_typ_und_konto(u_zwei(), SparbuchungTyp::ManuelleEinzahlung, demo_konto().as_reference())]
+            vec![sparbuchung_with_betrag_typ_und_konto(
+                u_zwei(),
+                SparbuchungTyp::ManuelleEinzahlung,
+                demo_konto().as_reference(),
+            )],
         );
         let context = super::UebersichtKontosContext {
             database: &database,

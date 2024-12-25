@@ -13,8 +13,6 @@ pub fn write_einzelbuchungen(database: &Database) -> Vec<Line> {
         .collect()
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -25,7 +23,11 @@ mod tests {
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::name;
-    use crate::model::state::persistent_application_state::builder::{demo_database_version, generate_database_with_einzelbuchungen, leere_dauerauftraege, leere_depotauszuege, leere_depotwerte, leere_gemeinsame_buchungen, leere_order, leere_order_dauerauftraege, leere_sparbuchungen, leere_sparkontos};
+    use crate::model::state::persistent_application_state::builder::{
+        demo_database_version, generate_database_with_einzelbuchungen, leere_dauerauftraege,
+        leere_depotauszuege, leere_depotwerte, leere_gemeinsame_buchungen, leere_order,
+        leere_order_dauerauftraege, leere_sparbuchungen, leere_sparkontos,
+    };
     use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
 
     #[test]
@@ -58,12 +60,11 @@ mod tests {
             depotwerte: leere_depotwerte(),
             order: leere_order(),
             order_dauerauftraege: leere_order_dauerauftraege(),
-            depotauszuege: leere_depotauszuege()
+            depotauszuege: leere_depotauszuege(),
         };
 
         let lines = write_einzelbuchungen(&database);
 
         assert_eq!(lines.len(), 0);
     }
-
 }

@@ -17,8 +17,12 @@ pub async fn upload_kategorien(
     database: &Database,
 ) -> RedirectAuthenticatedResult {
     let kategorien = database.einzelbuchungen.get_kategorien();
-    request_delete_kategorien(&config.server_configuration, login.clone()).await.unwrap();
-    request_set_kategorien(&config.server_configuration, login, kategorien.clone()).await.unwrap();
+    request_delete_kategorien(&config.server_configuration, login.clone())
+        .await
+        .unwrap();
+    request_set_kategorien(&config.server_configuration, login, kategorien.clone())
+        .await
+        .unwrap();
 
     RedirectAuthenticatedResult {
         database_to_save: None,

@@ -13,7 +13,6 @@ pub struct PieChart {
     pub colors: Vec<Farbe>,
 }
 
-
 pub struct MonatsZusammenfassung {
     pub monat: MonatsName,
     pub buchungen: Vec<Indiziert<Einzelbuchung>>,
@@ -24,7 +23,6 @@ pub struct AusgabeAusKategorie {
     pub wert: Betrag,
     pub kategorie: Kategorie,
 }
-
 
 pub struct LineChart {
     pub labels: Vec<Name>,
@@ -37,7 +35,6 @@ pub struct LineChartDataSet {
     pub data: Vec<Betrag>,
     pub farbe: Farbe,
 }
-
 
 pub struct BarChart {
     pub labels: Vec<Name>,

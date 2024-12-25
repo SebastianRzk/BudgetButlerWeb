@@ -26,10 +26,10 @@ mod tests {
 
     #[test]
     fn test_write_sparbuchung() {
-        let sparbuchung = Sparbuchung{
+        let sparbuchung = Sparbuchung {
             datum: Datum::new(1, 1, 2024),
             name: name("DerName"),
-            wert: u_betrag( 123, 12),
+            wert: u_betrag(123, 12),
             typ: SparbuchungTyp::Ausschuettung,
             konto: konto_referenz("DasKonto"),
         };

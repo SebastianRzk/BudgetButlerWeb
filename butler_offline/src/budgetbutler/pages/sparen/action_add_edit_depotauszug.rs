@@ -121,7 +121,9 @@ pub fn submit_depotauszug(context: SubmitDepotauszugContext) -> RedirectResult<D
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::sparen::action_add_edit_depotauszug::{Auszug, Mode, SubmitDepotauszugContext};
+    use crate::budgetbutler::pages::sparen::action_add_edit_depotauszug::{
+        Auszug, Mode, SubmitDepotauszugContext,
+    };
     use crate::model::database::depotauszug::Depotauszug;
     use crate::model::database::depotwert::builder::demo_depotwert_referenz;
     use crate::model::database::sparbuchung::builder::demo_konto_referenz;
@@ -130,25 +132,38 @@ mod tests {
     use crate::model::state::persistent_application_state::builder::generate_empty_database;
 
     #[test]
-    fn test_add_depotauszug(){
+    fn test_add_depotauszug() {
         let database = generate_empty_database();
         let context = SubmitDepotauszugContext {
             database: &database,
             datum: demo_datum(),
             konto: demo_konto_referenz(),
             mode: Mode::Add,
-            auszuege: vec![
-                Auszug {
-                    depotwert_referenz: demo_depotwert_referenz(),
-                    wert: vier(),
-                }
-            ]
+            auszuege: vec![Auszug {
+                depotwert_referenz: demo_depotwert_referenz(),
+                wert: vier(),
+            }],
         };
 
         let result = super::submit_depotauszug(context);
 
-        assert_eq!(result.result.changed_database.depotauszuege.depotauszuege.len(), 1);
-        assert_eq!(result.result.changed_database.depotauszuege.select().first().value,
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .depotauszuege
+                .depotauszuege
+                .len(),
+            1
+        );
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .depotauszuege
+                .select()
+                .first()
+                .value,
             Depotauszug {
                 datum: demo_datum(),
                 konto: demo_konto_referenz(),
@@ -157,7 +172,10 @@ mod tests {
             }
         );
         assert_eq!(result.change.changes.len(), 1);
-        assert_eq!(result.change.changes[0].depotwert_beschreibung, "Unbekannt (TestISIN)");
+        assert_eq!(
+            result.change.changes[0].depotwert_beschreibung,
+            "Unbekannt (TestISIN)"
+        );
         assert_eq!(result.change.changes[0].wert, vier());
     }
 }

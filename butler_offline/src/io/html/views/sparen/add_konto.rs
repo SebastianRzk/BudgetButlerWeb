@@ -64,7 +64,9 @@ pub fn map_to_template(view_result: AddKontoViewResult) -> AddKontoTemplate {
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::sparen::add_konto::{AddKontoViewResult, DefaultItem, LetzteErfassung};
+    use crate::budgetbutler::pages::sparen::add_konto::{
+        AddKontoViewResult, DefaultItem, LetzteErfassung,
+    };
     use crate::model::database::sparkonto::Kontotyp;
     use crate::model::primitives::name::name;
     use crate::model::state::persistent_state::database_version::DatabaseVersion;
@@ -90,7 +92,11 @@ mod tests {
                 name: name("Ein Name"),
                 typ: Kontotyp::Sparkonto,
             }],
-            kontotypen: vec![Kontotyp::Sparkonto, Kontotyp::GenossenschaftsAnteile, Kontotyp::Depot],
+            kontotypen: vec![
+                Kontotyp::Sparkonto,
+                Kontotyp::GenossenschaftsAnteile,
+                Kontotyp::Depot,
+            ],
         };
 
         let result = super::map_to_template(view_result);
@@ -103,11 +109,11 @@ mod tests {
         assert_eq!(result.approve_title, "Konto erfassen");
 
         assert_eq!(result.kontotypen.items.len(), 3);
-        assert_eq!(result.kontotypen.items[0].value,"Sparkonto" );
+        assert_eq!(result.kontotypen.items[0].value, "Sparkonto");
         assert_eq!(result.kontotypen.items[0].selected, true);
-        assert_eq!(result.kontotypen.items[1].value,"Genossenschafts-Anteile" );
+        assert_eq!(result.kontotypen.items[1].value, "Genossenschafts-Anteile");
         assert_eq!(result.kontotypen.items[1].selected, false);
-        assert_eq!(result.kontotypen.items[2].value,"Depot" );
+        assert_eq!(result.kontotypen.items[2].value, "Depot");
         assert_eq!(result.kontotypen.items[2].selected, false);
 
         assert_eq!(result.letzte_erfassung.len(), 1);

@@ -10,7 +10,9 @@ use crate::budgetbutler::pages::sparen::add_depotauszug::{
 use crate::budgetbutler::view::optimistic_locking::{
     check_optimistic_locking_error, OptimisticLockingResult,
 };
-use crate::budgetbutler::view::redirect_targets::{redirect_to_depotauszug_bereits_erfasst, redirect_to_optimistic_locking_error};
+use crate::budgetbutler::view::redirect_targets::{
+    redirect_to_depotauszug_bereits_erfasst, redirect_to_optimistic_locking_error,
+};
 use crate::budgetbutler::view::request_handler::{
     handle_modification, handle_render_display_view, VersionedContext,
 };
@@ -115,8 +117,11 @@ pub async fn post_submit(
         Mode::Add
     };
 
-    if mode == Mode::Add && database
-        .depotauszuege.select().existiert_auszug(konto.clone(), datum.clone())
+    if mode == Mode::Add
+        && database
+            .depotauszuege
+            .select()
+            .existiert_auszug(konto.clone(), datum.clone())
     {
         return http_redirect(redirect_to_depotauszug_bereits_erfasst());
     }
@@ -163,8 +168,7 @@ fn extract_new_depotwerte(mapper: &HashMap<String, String>) -> Vec<Auszug> {
     extract_auszug(mapper, prefix)
 }
 
-
-fn extract_relevante_auszuege(new: Vec<Auszug>,edit: Vec<Auszug>) -> Vec<Auszug> {
+fn extract_relevante_auszuege(new: Vec<Auszug>, edit: Vec<Auszug>) -> Vec<Auszug> {
     let mut result = edit.clone();
 
     for new_auszug in new {
@@ -269,7 +273,6 @@ mod tests {
         assert_eq!(result[0].wert, Betrag::new(Vorzeichen::Positiv, 123, 0));
     }
 
-
     #[test]
     fn test_extract_relevante_auszuege() {
         let mut mapper = HashMap::new();
@@ -278,29 +281,32 @@ mod tests {
 
         let result = super::extract_relevante_auszuege(
             vec![
-                Auszug{
+                Auszug {
                     depotwert_referenz: depotwert_referenz("NEU123"),
-                    wert: Betrag::zero()
+                    wert: Betrag::zero(),
                 },
-                Auszug{
+                Auszug {
                     depotwert_referenz: depotwert_referenz("NEU223"),
-                    wert: vier()
+                    wert: vier(),
                 },
             ],
             vec![
-                Auszug{
+                Auszug {
                     depotwert_referenz: depotwert_referenz("EDIT123"),
-                    wert: Betrag::zero()
+                    wert: Betrag::zero(),
                 },
-                Auszug{
+                Auszug {
                     depotwert_referenz: depotwert_referenz("EDIT223"),
-                    wert: zwei()
+                    wert: zwei(),
                 },
-            ]
+            ],
         );
 
         assert_eq!(result.len(), 3);
-        let isins: HashSet<ISIN> = result.iter().map(|x| x.depotwert_referenz.isin.clone()).collect();
+        let isins: HashSet<ISIN> = result
+            .iter()
+            .map(|x| x.depotwert_referenz.isin.clone())
+            .collect();
         assert!(isins.contains(&isin("NEU223")));
         assert!(isins.contains(&isin("EDIT123")));
         assert!(isins.contains(&isin("EDIT223")));

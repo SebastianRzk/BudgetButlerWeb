@@ -1,4 +1,6 @@
-use crate::budgetbutler::pages::core::action_change_farben::{action_change_farben, ChangeFarbenContext};
+use crate::budgetbutler::pages::core::action_change_farben::{
+    action_change_farben, ChangeFarbenContext,
+};
 use crate::budgetbutler::view::request_handler::Redirect;
 use crate::budgetbutler::view::routes::CORE_CONFIGURATION;
 use crate::io::disk::configuration::updater::update_configuration;

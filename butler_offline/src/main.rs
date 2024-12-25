@@ -10,6 +10,7 @@ pub mod model;
 use crate::io::disk::configuration::reader::{exists_config, load_configuration};
 use crate::io::disk::configuration::updater::update_configuration;
 use crate::io::disk::reader::{exists_database, read_database};
+use crate::io::disk::shares::load_shares;
 use crate::io::disk::writer::write_database;
 use crate::io::http::core::error_keine_aktion_gefunden::error_keine_aktion_gefunden;
 use crate::io::http::core::error_optimistic_locking::error_optimistic_locking;
@@ -28,24 +29,35 @@ use crate::io::http::shared::redirect_authenticated::logged_in_callback;
 use crate::io::http::shared::{export_import, import_mapping};
 use crate::io::http::sparen::error_depotauszug_bereits_erfasst::error_depotauszug_bereits_erfasst;
 use crate::io::http::sparen::error_isin_bereits_erfasst::error_isin_bereits_erfasst;
-use crate::io::http::sparen::{modify_depotauszug, modify_depotwerte, modify_kontos, modify_order, modify_order_dauerauftrag, modify_sparbuchungen, order_dauerauftraege_uebersicht, order_uebersicht, sparbuchungen_uebersicht, uebersicht_depotauszuege, uebersicht_depotwerte, uebersicht_etfs, uebersicht_kontos, uebersicht_sparen};
+use crate::io::http::sparen::{
+    modify_depotauszug, modify_depotwerte, modify_kontos, modify_order, modify_order_dauerauftrag,
+    modify_sparbuchungen, order_dauerauftraege_uebersicht, order_uebersicht,
+    sparbuchungen_uebersicht, uebersicht_depotauszuege, uebersicht_depotwerte, uebersicht_etfs,
+    uebersicht_kontos, uebersicht_sparen,
+};
 use crate::model::initial_config::config::generate_initial_config;
 use crate::model::initial_config::database::generate_initial_database;
 use crate::model::initial_config::path::create_initial_path_if_needed;
 use crate::model::state::config::{app_root, ConfigurationData};
-use crate::model::state::non_persistent_application_state::{AdditionalKategorie, DauerauftraegeChanges, DepotauszuegeChanges, DepotwerteChanges, EinzelbuchungenChanges, GemeinsameBuchungenChanges, KontoChanges, OnlineRedirectActionWrapper, OnlineRedirectState, OrderChanges, OrderDauerauftragChanges, RootPath, SparbuchungenChanges};
+use crate::model::state::non_persistent_application_state::{
+    AdditionalKategorie, DauerauftraegeChanges, DepotauszuegeChanges, DepotwerteChanges,
+    EinzelbuchungenChanges, GemeinsameBuchungenChanges, KontoChanges, OnlineRedirectActionWrapper,
+    OnlineRedirectState, OrderChanges, OrderDauerauftragChanges, RootPath, SparbuchungenChanges,
+};
 use io::http::core::{configuration, dashboard};
 use io::http::einzelbuchungen::{
     dauerauftraege_uebersicht, einzelbuchungen_uebersicht, modify_ausgabe,
 };
 use model::state::persistent_state::database_version::create_initial_database_version;
 use std;
-use crate::io::disk::shares::load_shares;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let initial_path = app_root().join("data");
-    println!("Initial path: {:?}", absolute(initial_path.clone()).unwrap().to_str().unwrap());
+    println!(
+        "Initial path: {:?}",
+        absolute(initial_path.clone()).unwrap().to_str().unwrap()
+    );
     let config;
 
     create_initial_path_if_needed(&initial_path);

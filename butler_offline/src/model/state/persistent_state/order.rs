@@ -10,9 +10,7 @@ pub struct Orders {
 
 impl Creates<Order, Orders> for Orders {
     fn create(item: Vec<Indiziert<Order>>) -> Orders {
-        Orders {
-            orders: item,
-        }
+        Orders { orders: item }
     }
 }
 
@@ -25,9 +23,7 @@ impl Orders {
         let mut neue_order = self.orders.clone();
         neue_order.sort();
 
-        Orders {
-            orders: neue_order,
-        }
+        Orders { orders: neue_order }
     }
 
     pub fn get(&self, index: u32) -> Indiziert<Order> {

@@ -45,8 +45,11 @@ pub fn submit_rechne_ab(context: GemeinsameBuchungenAbrechnenSubmitContext) -> A
     let partner_buchungen = selektierter_zeitraum.clone().filter(filter_auf_person(
         context.user_configuration.partner_name.clone(),
     ));
-    let diff_self = ((sum_gemeinsame_buchungen(eigene_buchungen.clone()) + sum_gemeinsame_buchungen(partner_buchungen.clone())).anteil(&Prozent::p50_50())
-        - context.self_soll.clone()).invertiere_vorzeichen();
+    let diff_self = ((sum_gemeinsame_buchungen(eigene_buchungen.clone())
+        + sum_gemeinsame_buchungen(partner_buchungen.clone()))
+    .anteil(&Prozent::p50_50())
+        - context.self_soll.clone())
+    .invertiere_vorzeichen();
     let titel = Titel {
         titel: context.set_titel.clone(),
     };
@@ -97,11 +100,19 @@ mod tests {
     use crate::model::state::persistent_application_state::builder::generate_database_with_gemeinsamen_buchungen;
 
     #[test]
-    fn test_rechne_ab_einfaches_szenario(){
+    fn test_rechne_ab_einfaches_szenario() {
         let datum_innerhalb_zeitraum = datum("2021-01-01");
         let database = generate_database_with_gemeinsamen_buchungen(vec![
-            gemeinsame_buchung(datum_innerhalb_zeitraum.clone(), demo_self(), minus_fuenfzig()),
-            gemeinsame_buchung(datum_innerhalb_zeitraum.clone(), demo_partner(), minus_fuenfzig()),
+            gemeinsame_buchung(
+                datum_innerhalb_zeitraum.clone(),
+                demo_self(),
+                minus_fuenfzig(),
+            ),
+            gemeinsame_buchung(
+                datum_innerhalb_zeitraum.clone(),
+                demo_partner(),
+                minus_fuenfzig(),
+            ),
         ]);
 
         let context = GemeinsameBuchungenAbrechnenSubmitContext {
@@ -120,18 +131,30 @@ mod tests {
 
         let result = super::submit_rechne_ab(context);
 
-
-        assert_eq!(as_string(&result.eigene_abrechnung.lines), EINFACH_EIGENE_ABRECHNUNG);
-        assert_eq!(as_string(&result.partner_abrechnung.lines), EINFACH_PARTNER_ABRECHNUNG);
+        assert_eq!(
+            as_string(&result.eigene_abrechnung.lines),
+            EINFACH_EIGENE_ABRECHNUNG
+        );
+        assert_eq!(
+            as_string(&result.partner_abrechnung.lines),
+            EINFACH_PARTNER_ABRECHNUNG
+        );
     }
 
-
     #[test]
-    fn test_rechne_ab_komplexes_szenario(){
+    fn test_rechne_ab_komplexes_szenario() {
         let datum_innerhalb_zeitraum = datum("2021-01-01");
         let database = generate_database_with_gemeinsamen_buchungen(vec![
-            gemeinsame_buchung(datum_innerhalb_zeitraum.clone(), demo_self(), minus_fuenfzig()),
-            gemeinsame_buchung(datum_innerhalb_zeitraum.clone(), demo_partner(), minus_fuenfzig()),
+            gemeinsame_buchung(
+                datum_innerhalb_zeitraum.clone(),
+                demo_self(),
+                minus_fuenfzig(),
+            ),
+            gemeinsame_buchung(
+                datum_innerhalb_zeitraum.clone(),
+                demo_partner(),
+                minus_fuenfzig(),
+            ),
         ]);
 
         let context = GemeinsameBuchungenAbrechnenSubmitContext {
@@ -150,9 +173,14 @@ mod tests {
 
         let result = super::submit_rechne_ab(context);
 
-
-        assert_eq!(as_string(&result.eigene_abrechnung.lines), KOMPLEX_EIGENE_ABRECHNUNG);
-        assert_eq!(as_string(&result.partner_abrechnung.lines), KOMPLEX_PARTNER_ABRECHNUNG);
+        assert_eq!(
+            as_string(&result.eigene_abrechnung.lines),
+            KOMPLEX_EIGENE_ABRECHNUNG
+        );
+        assert_eq!(
+            as_string(&result.partner_abrechnung.lines),
+            KOMPLEX_PARTNER_ABRECHNUNG
+        );
     }
 
     const EINFACH_EIGENE_ABRECHNUNG: &str = "Mein Titel
@@ -200,7 +228,7 @@ Datum,Kategorie,Name,Betrag
 2021-01-01,Test,Test,-25.00
 #######MaschinenimportEnd";
 
-    const EINFACH_PARTNER_ABRECHNUNG : &str = "Mein Titel
+    const EINFACH_PARTNER_ABRECHNUNG: &str = "Mein Titel
 Abrechnung vom 01.01.2024 (von 01.01.2021 bis einschließlich 02.02.2022
 ########################################
 
@@ -291,7 +319,7 @@ Datum,Kategorie,Name,Betrag
 2024-01-01,Meine Kategorie,Mein Titel,-20.00
 #######MaschinenimportEnd";
 
-    const KOMPLEX_PARTNER_ABRECHNUNG : &str = "Mein Titel
+    const KOMPLEX_PARTNER_ABRECHNUNG: &str = "Mein Titel
 Abrechnung vom 01.01.2024 (von 01.01.2021 bis einschließlich 02.02.2022
 ########################################
 

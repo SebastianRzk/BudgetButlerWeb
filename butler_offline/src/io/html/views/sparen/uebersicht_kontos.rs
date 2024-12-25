@@ -20,9 +20,8 @@ pub struct SparkontoTemplate {
     pub aufbuchungen: String,
     pub difference: String,
     pub difference_is_negativ: bool,
-    pub wert: String
+    pub wert: String,
 }
-
 
 pub fn render_uebersicht_kontos_template(view_result: UebersichtKontosViewResult) -> String {
     let as_template: UebersichtKontoTemplate = map_to_template(view_result);
@@ -32,21 +31,25 @@ pub fn render_uebersicht_kontos_template(view_result: UebersichtKontosViewResult
 pub fn map_to_template(view_result: UebersichtKontosViewResult) -> UebersichtKontoTemplate {
     UebersichtKontoTemplate {
         database_id: view_result.database_version.as_string(),
-        sparkontos: view_result.konten.iter().map(|sparkonto| {
-            SparkontoTemplate {
+        sparkontos: view_result
+            .konten
+            .iter()
+            .map(|sparkonto| SparkontoTemplate {
                 index: sparkonto.konto.index,
                 kontoname: sparkonto.konto.value.name.name.clone(),
-                kontotyp: write_sparkontotyp(sparkonto.konto.value.kontotyp.clone()).element.clone(),
+                kontotyp: write_sparkontotyp(sparkonto.konto.value.kontotyp.clone())
+                    .element
+                    .clone(),
                 aufbuchungen: sparkonto.aufbuchungen.to_german_string(),
                 difference: sparkonto.differenz.to_german_string(),
                 difference_is_negativ: sparkonto.differenz.is_negativ(),
-                wert: sparkonto.kontostand.to_german_string()
-            }
-        }).collect(),
+                wert: sparkonto.kontostand.to_german_string(),
+            })
+            .collect(),
         gesamt_aufbuchungen: view_result.aufbuchungen.to_german_string(),
         gesamt_difference: view_result.differenz.to_german_string(),
         gesamt_difference_is_negativ: view_result.differenz.is_negativ(),
-        gesamt_wert: view_result.gesamt.to_german_string()
+        gesamt_wert: view_result.gesamt.to_german_string(),
     }
 }
 

@@ -11,20 +11,22 @@ pub struct DeleteContext<'a> {
     pub delete_index: u32,
 }
 
-
 pub fn delete_ausgabe(context: DeleteContext) -> RedirectResult<EinzelbuchungChange> {
     let to_delete = context.database.einzelbuchungen.get(context.delete_index);
 
-    let neue_einzelbuchungen = context.database.einzelbuchungen
+    let neue_einzelbuchungen = context
+        .database
+        .einzelbuchungen
         .change()
         .delete(context.delete_index);
 
-
     RedirectResult {
         result: ModificationResult {
-            changed_database: context.database.change_einzelbuchungen(neue_einzelbuchungen),
+            changed_database: context
+                .database
+                .change_einzelbuchungen(neue_einzelbuchungen),
             target: Redirect {
-                target: EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT.to_string()
+                target: EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT.to_string(),
             },
         },
         change: EinzelbuchungChange {
@@ -36,7 +38,6 @@ pub fn delete_ausgabe(context: DeleteContext) -> RedirectResult<EinzelbuchungCha
         },
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -55,7 +56,15 @@ mod tests {
 
         let result = super::delete_ausgabe(context);
 
-        assert_eq!(result.result.changed_database.einzelbuchungen.select().count(), 0);
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .einzelbuchungen
+                .select()
+                .count(),
+            0
+        );
         assert_eq!(result.change.icon, DELETE.as_fa.to_string());
         assert_eq!(result.change.betrag, demo_einzelbuchung().betrag);
         assert_eq!(result.change.kategorie, demo_einzelbuchung().kategorie);

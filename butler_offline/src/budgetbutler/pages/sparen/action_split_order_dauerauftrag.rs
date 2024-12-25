@@ -15,9 +15,13 @@ pub struct ActionSplitOrderDauerauftragContext<'a> {
     pub erste_neue_buchung: Datum,
 }
 
-
-pub fn submit_split_order_dauerauftrag(context: ActionSplitOrderDauerauftragContext) -> RedirectResult<OrderDauerauftragChange> {
-    let to_change = context.database.order_dauerauftraege.get(context.order_dauerauftrag_id);
+pub fn submit_split_order_dauerauftrag(
+    context: ActionSplitOrderDauerauftragContext,
+) -> RedirectResult<OrderDauerauftragChange> {
+    let to_change = context
+        .database
+        .order_dauerauftraege
+        .get(context.order_dauerauftrag_id);
 
     let letzter_buchungstag = context.erste_neue_buchung.ziehe_einen_tag_ab();
 
@@ -31,7 +35,11 @@ pub fn submit_split_order_dauerauftrag(context: ActionSplitOrderDauerauftragCont
         rhythmus: to_change.value.rhythmus.clone(),
     };
 
-    let mut neue_order_dauerauftraege = context.database.order_dauerauftraege.change().edit(context.order_dauerauftrag_id, geaenderter_dauerauftrag);
+    let mut neue_order_dauerauftraege = context
+        .database
+        .order_dauerauftraege
+        .change()
+        .edit(context.order_dauerauftrag_id, geaenderter_dauerauftrag);
 
     let neuer_order_dauerauftrag = OrderDauerauftrag {
         start_datum: context.erste_neue_buchung.clone(),
@@ -43,13 +51,17 @@ pub fn submit_split_order_dauerauftrag(context: ActionSplitOrderDauerauftragCont
         rhythmus: to_change.value.rhythmus.clone(),
     };
 
-    neue_order_dauerauftraege = neue_order_dauerauftraege.change().insert(neuer_order_dauerauftrag);
+    neue_order_dauerauftraege = neue_order_dauerauftraege
+        .change()
+        .insert(neuer_order_dauerauftrag);
 
     RedirectResult {
         result: ModificationResult {
-            changed_database: context.database.change_order_dauerauftraege(neue_order_dauerauftraege),
+            changed_database: context
+                .database
+                .change_order_dauerauftraege(neue_order_dauerauftraege),
             target: Redirect {
-                target: SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT.to_string()
+                target: SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT.to_string(),
             },
         },
         change: OrderDauerauftragChange {
@@ -65,10 +77,11 @@ pub fn submit_split_order_dauerauftrag(context: ActionSplitOrderDauerauftragCont
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::einzelbuchungen::action_split_dauerauftrag::{submit_split_dauerauftrag, ActionSplitDauerauftragContext};
+    use crate::budgetbutler::pages::einzelbuchungen::action_split_dauerauftrag::{
+        submit_split_dauerauftrag, ActionSplitDauerauftragContext,
+    };
     use crate::model::database::dauerauftrag::Dauerauftrag;
     use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
     use crate::model::primitives::betrag::builder::{vier, zwei};
@@ -98,11 +111,23 @@ mod tests {
 
         let result = submit_split_dauerauftrag(context);
 
-        let alter_auftrag = result.result.changed_database.dauerauftraege.dauerauftraege.get(0).unwrap();
+        let alter_auftrag = result
+            .result
+            .changed_database
+            .dauerauftraege
+            .dauerauftraege
+            .get(0)
+            .unwrap();
         assert_eq!(alter_auftrag.start_datum(), &Datum::new(1, 1, 2021));
         assert_eq!(alter_auftrag.ende_datum(), &Datum::new(31, 12, 2021));
         assert_eq!(alter_auftrag.value.betrag, zwei());
-        let neuer_auftrag = result.result.changed_database.dauerauftraege.dauerauftraege.get(1).unwrap();
+        let neuer_auftrag = result
+            .result
+            .changed_database
+            .dauerauftraege
+            .dauerauftraege
+            .get(1)
+            .unwrap();
         assert_eq!(neuer_auftrag.start_datum(), &Datum::new(1, 1, 2022));
         assert_eq!(neuer_auftrag.ende_datum(), &Datum::new(31, 12, 2022));
         assert_eq!(neuer_auftrag.value.betrag, vier());

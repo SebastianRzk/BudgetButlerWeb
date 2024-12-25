@@ -3,9 +3,13 @@ use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::state::persistent_application_state::Database;
 
 pub fn write_gemeinsame_buchungen(database: &Database) -> Vec<Line> {
-    database.gemeinsame_buchungen.gemeinsame_buchungen.iter()
+    database
+        .gemeinsame_buchungen
+        .gemeinsame_buchungen
+        .iter()
         .map(|e| &e.value)
-        .map(|e| write_gemeinsame_buchung(e)).collect()
+        .map(|e| write_gemeinsame_buchung(e))
+        .collect()
 }
 
 #[cfg(test)]
@@ -33,6 +37,9 @@ mod tests {
         let lines = write_gemeinsame_buchungen(&database);
 
         assert_eq!(lines.len(), 1);
-        assert_eq!(lines[0].line, "2024-01-01,NeueKategorie,Normal,-123.12,Test_User");
+        assert_eq!(
+            lines[0].line,
+            "2024-01-01,NeueKategorie,Normal,-123.12,Test_User"
+        );
     }
 }

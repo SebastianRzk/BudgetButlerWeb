@@ -1,6 +1,6 @@
 use crate::budgetbutler::view::icons::{Icon, PENCIL, PLUS};
 use crate::budgetbutler::view::request_handler::{ModificationResult, Redirect, RedirectResult};
-use crate::budgetbutler::view::routes::{SPAREN_ORDER_ADD};
+use crate::budgetbutler::view::routes::SPAREN_ORDER_ADD;
 use crate::model::database::depotwert::DepotwertReferenz;
 use crate::model::database::order::Order;
 use crate::model::database::sparbuchung::KontoReferenz;
@@ -21,7 +21,6 @@ pub struct SubmitOrderContext<'a> {
     pub wert: OrderBetrag,
 }
 
-
 pub fn submit_order(context: SubmitOrderContext) -> RedirectResult<OrderChange> {
     let buchung = Order {
         name: context.name.clone(),
@@ -35,24 +34,19 @@ pub fn submit_order(context: SubmitOrderContext) -> RedirectResult<OrderChange> 
 
     if let Some(index) = context.edit_index {
         icon = PENCIL;
-        neue_orders = context.database.order
-            .change()
-            .edit(index, buchung.clone())
+        neue_orders = context.database.order.change().edit(index, buchung.clone())
     } else {
         icon = PLUS;
-        neue_orders = context.database.order
-            .change()
-            .insert(buchung.clone())
+        neue_orders = context.database.order.change().insert(buchung.clone())
     }
 
     let new_database = context.database.change_order(neue_orders);
-
 
     RedirectResult {
         result: ModificationResult {
             changed_database: new_database,
             target: Redirect {
-                target: SPAREN_ORDER_ADD.to_string()
+                target: SPAREN_ORDER_ADD.to_string(),
             },
         },
         change: OrderChange {
@@ -65,7 +59,6 @@ pub fn submit_order(context: SubmitOrderContext) -> RedirectResult<OrderChange> 
         },
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -90,17 +83,20 @@ mod tests {
             konto: demo_konto_referenz(),
             depotwert: demo_depotwert_referenz(),
             wert: demo_order_betrag(),
-            datum: demo_datum()
+            datum: demo_datum(),
         });
 
         assert_eq!(result.result.changed_database.order.select().count(), 1);
-        assert_eq!(result.result.changed_database.order.get(0).value, Order{
-            name: demo_name(),
-            konto: demo_konto_referenz(),
-            depotwert: demo_depotwert_referenz(),
-            wert: demo_order_betrag(),
-            datum: demo_datum(),
-        });
+        assert_eq!(
+            result.result.changed_database.order.get(0).value,
+            Order {
+                name: demo_name(),
+                konto: demo_konto_referenz(),
+                depotwert: demo_depotwert_referenz(),
+                wert: demo_order_betrag(),
+                datum: demo_datum(),
+            }
+        );
 
         assert_eq!(result.change.icon, PLUS);
         assert_eq!(result.change.name, demo_name());
@@ -109,5 +105,4 @@ mod tests {
         assert_eq!(result.change.wert, demo_order_betrag());
         assert_eq!(result.change.datum, demo_datum());
     }
-
 }

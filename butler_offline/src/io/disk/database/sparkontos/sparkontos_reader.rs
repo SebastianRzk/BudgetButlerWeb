@@ -3,7 +3,11 @@ use crate::io::disk::diskrepresentation::file::SortedFile;
 use crate::model::database::sparkonto::Sparkonto;
 
 pub fn read_sparkontos(sorted_file: &SortedFile) -> Vec<Sparkonto> {
-    sorted_file.sparkontos.iter().map(|l| read_sparkonto(l.into())).collect()
+    sorted_file
+        .sparkontos
+        .iter()
+        .map(|l| read_sparkonto(l.into()))
+        .collect()
 }
 
 #[cfg(test)]

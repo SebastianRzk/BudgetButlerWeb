@@ -7,4 +7,3 @@ pub fn update_database(config: &DatabaseConfiguration, current_database: Databas
     write_database(&current_database, config);
     read_database(config, current_database.db_version.increment())
 }
-

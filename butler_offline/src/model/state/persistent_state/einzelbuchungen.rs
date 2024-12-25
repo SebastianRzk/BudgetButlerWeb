@@ -47,4 +47,3 @@ impl Creates<Einzelbuchung, Einzelbuchungen> for Einzelbuchungen {
         }
     }
 }
-

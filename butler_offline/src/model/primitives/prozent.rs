@@ -78,7 +78,7 @@ impl Prozent {
         }
     }
 
-    pub fn zero() -> Prozent{
+    pub fn zero() -> Prozent {
         Prozent::from_int_representation(0)
     }
 
@@ -96,7 +96,6 @@ pub mod builder {
         }
     }
 }
-
 
 #[cfg(test)]
 mod tests {

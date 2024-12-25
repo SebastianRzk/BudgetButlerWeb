@@ -1,9 +1,9 @@
-use std::path::PathBuf;
 use crate::budgetbutler::view::icons::Icon;
 use crate::model::database::depotwert::{DepotwertReferenz, DepotwertTyp};
 use crate::model::database::sparbuchung::{KontoReferenz, SparbuchungTyp};
 use crate::model::database::sparkonto::Kontotyp;
 use crate::model::primitives::betrag::Betrag;
+use crate::model::primitives::betrag_ohne_vorzeichen::BetragOhneVorzeichen;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::isin::ISIN;
 use crate::model::primitives::kategorie::Kategorie;
@@ -12,8 +12,8 @@ use crate::model::primitives::order_betrag::OrderBetrag;
 use crate::model::primitives::person::Person;
 use crate::model::primitives::rhythmus::Rhythmus;
 use crate::model::state::persistent_state::database_version::DatabaseVersion;
+use std::path::PathBuf;
 use std::sync::Mutex;
-use crate::model::primitives::betrag_ohne_vorzeichen::BetragOhneVorzeichen;
 
 pub struct EinzelbuchungenChanges {
     pub changes: Mutex<Vec<EinzelbuchungChange>>,
@@ -60,7 +60,7 @@ pub enum OnlineRedirectActionType {
     ImportEinzelbuchungen,
     UploadKategorien,
     ImportGemeinsameBuchungen,
-    UploadGemeinsameBuchungen
+    UploadGemeinsameBuchungen,
 }
 
 pub struct DauerauftraegeChanges {
@@ -85,7 +85,6 @@ pub struct RootPath {
     pub path: PathBuf,
 }
 
-
 pub struct KontoChanges {
     pub changes: Mutex<Vec<KontoChange>>,
 }
@@ -95,8 +94,6 @@ pub struct KontoChange {
     pub name: Name,
     pub typ: Kontotyp,
 }
-
-
 
 pub struct SparbuchungenChanges {
     pub changes: Mutex<Vec<SparbuchungChange>>,
@@ -108,7 +105,7 @@ pub struct SparbuchungChange {
     pub datum: Datum,
     pub wert: BetragOhneVorzeichen,
     pub typ: SparbuchungTyp,
-    pub konto: KontoReferenz
+    pub konto: KontoReferenz,
 }
 
 pub struct DepotwerteChanges {
@@ -147,9 +144,8 @@ pub struct OrderDauerauftragChange {
     pub konto: KontoReferenz,
     pub depotwert: DepotwertReferenz,
     pub wert: OrderBetrag,
-    pub rhythmus: Rhythmus
+    pub rhythmus: Rhythmus,
 }
-
 
 pub struct DepotauszuegeChanges {
     pub changes: Mutex<Vec<DepotauszugChange>>,
@@ -166,4 +162,3 @@ pub struct DepotauszugSingleChange {
     pub depotwert_beschreibung: String,
     pub wert: Betrag,
 }
-

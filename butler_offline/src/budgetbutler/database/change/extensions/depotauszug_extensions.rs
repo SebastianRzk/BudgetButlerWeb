@@ -9,7 +9,10 @@ impl ChangeSelector<Depotauszug, Depotauszuege> {
             .content
             .iter()
             .map(|x| {
-                if x.value.depotwert == depotauszug.depotwert && x.value.konto == depotauszug.konto && x.value.datum == depotauszug.datum {
+                if x.value.depotwert == depotauszug.depotwert
+                    && x.value.konto == depotauszug.konto
+                    && x.value.datum == depotauszug.datum
+                {
                     Indiziert {
                         value: depotauszug.clone(),
                         dynamisch: x.dynamisch,
@@ -38,7 +41,7 @@ mod tests {
     use crate::model::state::persistent_state::depotauszuege::Depotauszuege;
 
     #[test]
-    fn should_update_auszug_with_matching_auszug_should_update_all(){
+    fn should_update_auszug_with_matching_auszug_should_update_all() {
         let depotauszuege = Depotauszuege {
             depotauszuege: vec![
                 indiziert(Depotauszug {
@@ -52,7 +55,7 @@ mod tests {
                     depotwert: demo_depotwert_referenz(),
                     konto: demo_konto_referenz(),
                     wert: vier(),
-                })
+                }),
             ],
         };
         let result = depotauszuege.change().update_auszug(Depotauszug {
@@ -62,23 +65,28 @@ mod tests {
             wert: zwei(),
         });
 
-        assert_eq!(result.depotauszuege[0].value, Depotauszug {
-            datum: demo_datum(),
-            depotwert: demo_depotwert_referenz(),
-            konto: demo_konto_referenz(),
-            wert: zwei(),
-        });
-        assert_eq!(result.depotauszuege[1].value, Depotauszug {
-            datum: demo_datum(),
-            depotwert: demo_depotwert_referenz(),
-            konto: demo_konto_referenz(),
-            wert: zwei(),
-        });
+        assert_eq!(
+            result.depotauszuege[0].value,
+            Depotauszug {
+                datum: demo_datum(),
+                depotwert: demo_depotwert_referenz(),
+                konto: demo_konto_referenz(),
+                wert: zwei(),
+            }
+        );
+        assert_eq!(
+            result.depotauszuege[1].value,
+            Depotauszug {
+                datum: demo_datum(),
+                depotwert: demo_depotwert_referenz(),
+                konto: demo_konto_referenz(),
+                wert: zwei(),
+            }
+        );
     }
 
-
     #[test]
-    fn should_update_auszug_with_non_matching_auszug_should_not_update(){
+    fn should_update_auszug_with_non_matching_auszug_should_not_update() {
         let erster_auszug = Depotauszug {
             datum: Datum::first(),
             depotwert: demo_depotwert_referenz(),
@@ -94,7 +102,7 @@ mod tests {
         let depotauszuege = Depotauszuege {
             depotauszuege: vec![
                 indiziert(erster_auszug.clone()),
-                indiziert(zweiter_auszug.clone())
+                indiziert(zweiter_auszug.clone()),
             ],
         };
         let result = depotauszuege.change().update_auszug(Depotauszug {

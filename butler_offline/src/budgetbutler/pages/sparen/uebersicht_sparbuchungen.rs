@@ -1,6 +1,8 @@
 use crate::budgetbutler::database::select::functions::datatypes::MonatsAggregationsIndex;
 use crate::budgetbutler::database::select::functions::filters::filter_auf_das_jahr;
-use crate::budgetbutler::database::select::functions::keyextractors::{jahresweise_aggregation, monatsweise_aggregation};
+use crate::budgetbutler::database::select::functions::keyextractors::{
+    jahresweise_aggregation, monatsweise_aggregation,
+};
 use crate::model::database::sparbuchung::Sparbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::datum::{Datum, MonatsName};
@@ -11,9 +13,8 @@ pub struct UebersichtSparbuchungenViewResult {
     pub liste: Vec<MonatsZusammenfassung>,
     pub selektiertes_jahr: i32,
     pub verfuegbare_jahre: Vec<i32>,
-    pub database_version: DatabaseVersion
+    pub database_version: DatabaseVersion,
 }
-
 
 pub struct UebersichtSparbuchungenContext<'a> {
     pub database: &'a Database,
@@ -26,26 +27,31 @@ pub struct MonatsZusammenfassung {
     pub buchungen: Vec<Indiziert<Sparbuchung>>,
 }
 
-
 pub fn handle_view(context: UebersichtSparbuchungenContext) -> UebersichtSparbuchungenViewResult {
     let selektiertes_jahr = context.angefordertes_jahr.unwrap_or(context.today.jahr);
 
-    let verfuegbare_jahre = context.database.sparbuchungen
+    let verfuegbare_jahre = context
+        .database
+        .sparbuchungen
         .select()
         .extract_unique_values(jahresweise_aggregation)
         .iter()
         .map(|x| x.jahr)
         .collect();
 
-    let buchungen_des_jahres_selektor = context.database
+    let buchungen_des_jahres_selektor = context
+        .database
         .sparbuchungen
         .select()
         .filter(filter_auf_das_jahr(selektiertes_jahr))
         .group_as_list_by(monatsweise_aggregation);
 
-    let mut alle_monate: Vec<MonatsAggregationsIndex> = buchungen_des_jahres_selektor.keys().into_iter().map(|x| x.to_owned().clone()).collect();
+    let mut alle_monate: Vec<MonatsAggregationsIndex> = buchungen_des_jahres_selektor
+        .keys()
+        .into_iter()
+        .map(|x| x.to_owned().clone())
+        .collect();
     alle_monate.sort();
-
 
     let mut liste = Vec::new();
     for monats_index in alle_monate {
@@ -89,7 +95,6 @@ mod tests {
         assert_eq!(result.selektiertes_jahr, 2020);
     }
 
-
     #[test]
     fn test_handle_view_with_datum_angefordert_should_select_gefordertes_jahr() {
         let database = generate_database_with_sparbuchungen(vec![any_sparbuchung()]);
@@ -108,9 +113,9 @@ mod tests {
         let sparbuchung = Sparbuchung {
             datum: Datum::new(1, 1, 2020),
             name: name("Normal"),
-            wert: BetragOhneVorzeichen::new( 123, 12),
+            wert: BetragOhneVorzeichen::new(123, 12),
             konto: demo_konto_referenz(),
-            typ: SparbuchungTyp::SonstigeKosten
+            typ: SparbuchungTyp::SonstigeKosten,
         };
 
         let database = generate_database_with_sparbuchungen(vec![sparbuchung]);
@@ -126,7 +131,10 @@ mod tests {
         assert_eq!(result.liste[0].buchungen.len(), 1);
 
         let result_einzelbuchung = &result.liste[0].buchungen[0];
-        assert_eq!(result_einzelbuchung.value.datum.to_german_string(), "01.01.2020");
+        assert_eq!(
+            result_einzelbuchung.value.datum.to_german_string(),
+            "01.01.2020"
+        );
         assert_eq!(result_einzelbuchung.value.name.get_name(), "Normal");
         assert_eq!(result_einzelbuchung.value.konto, demo_konto_referenz());
         assert_eq!(result_einzelbuchung.value.wert.to_german_string(), "123,12");

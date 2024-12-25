@@ -4,26 +4,30 @@ use crate::budgetbutler::view::request_handler::{ModificationResult, Redirect, R
 use crate::budgetbutler::view::routes::SPAREN_DEPOTAUSZUEGE_UEBERSICHT;
 use crate::model::database::sparbuchung::KontoReferenz;
 use crate::model::primitives::datum::Datum;
-use crate::model::state::non_persistent_application_state::{DepotauszugChange, DepotauszugSingleChange};
+use crate::model::state::non_persistent_application_state::{
+    DepotauszugChange, DepotauszugSingleChange,
+};
 use crate::model::state::persistent_application_state::Database;
 
 pub struct DeleteContext<'a> {
     pub database: &'a Database,
     pub delete_datum: Datum,
-    pub delete_konto: KontoReferenz
+    pub delete_konto: KontoReferenz,
 }
 
 pub fn delete_depotauszug(context: DeleteContext) -> RedirectResult<DepotauszugChange> {
-    let to_delete = context.database.depotauszuege.select().get_konto(
-        context.delete_konto.clone(),
-        context.delete_datum.clone(),
-    );
-
-    let neue_depotauszuege = context
+    let to_delete = context
         .database
         .depotauszuege
-        .change()
-        .delete_all(to_delete.iter().map(|depotauszug| depotauszug.index).collect());
+        .select()
+        .get_konto(context.delete_konto.clone(), context.delete_datum.clone());
+
+    let neue_depotauszuege = context.database.depotauszuege.change().delete_all(
+        to_delete
+            .iter()
+            .map(|depotauszug| depotauszug.index)
+            .collect(),
+    );
 
     RedirectResult {
         result: ModificationResult {
@@ -36,12 +40,17 @@ pub fn delete_depotauszug(context: DeleteContext) -> RedirectResult<DepotauszugC
             icon: DELETE,
             datum: context.delete_datum,
             konto: context.delete_konto,
-            changes: to_delete.iter().map(
-                |depotauszug| DepotauszugSingleChange{
-                    depotwert_beschreibung: calc_depotwert_beschreibung(&depotauszug.value.depotwert.isin, &context.database).description,
+            changes: to_delete
+                .iter()
+                .map(|depotauszug| DepotauszugSingleChange {
+                    depotwert_beschreibung: calc_depotwert_beschreibung(
+                        &depotauszug.value.depotwert.isin,
+                        &context.database,
+                    )
+                    .description,
                     wert: depotauszug.value.wert.clone(),
-                }
-            ).collect(),
+                })
+                .collect(),
         },
     }
 }
@@ -59,7 +68,7 @@ mod tests {
         let context = super::DeleteContext {
             database: &database,
             delete_datum: demo_depotauszug_aus_str().datum,
-            delete_konto: demo_depotauszug_aus_str().konto
+            delete_konto: demo_depotauszug_aus_str().konto,
         };
 
         let result = super::delete_depotauszug(context);
@@ -75,7 +84,13 @@ mod tests {
         );
         assert_eq!(result.change.icon, DELETE);
         assert_eq!(result.change.changes.len(), 1);
-        assert_eq!(result.change.changes[0].depotwert_beschreibung, "Unbekannt (DE000A0D9PT0)");
-        assert_eq!(result.change.changes[0].wert, demo_depotauszug_aus_str().wert);
+        assert_eq!(
+            result.change.changes[0].depotwert_beschreibung,
+            "Unbekannt (DE000A0D9PT0)"
+        );
+        assert_eq!(
+            result.change.changes[0].wert,
+            demo_depotauszug_aus_str().wert
+        );
     }
 }

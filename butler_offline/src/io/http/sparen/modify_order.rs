@@ -108,7 +108,7 @@ pub async fn post_submit(
                 datum: Datum::from_iso_string(&form_data.datum),
                 wert: OrderBetrag::new(
                     BetragOhneVorzeichen::from_user_input(&form_data.wert),
-                    read_ordertyp(Element::new(form_data.typ.clone()))
+                    read_ordertyp(Element::new(form_data.typ.clone())),
                 ),
                 depotwert: DepotwertReferenz::new(ISIN::new(form_data.depotwert.clone())),
             },

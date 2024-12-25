@@ -6,7 +6,6 @@ use crate::model::metamodel::jahr_range::JahrRange;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::state::persistent_application_state::Database;
 
-
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct EinnahmenAusgabenSparen {
     pub einnahmen: Betrag,
@@ -14,7 +13,6 @@ pub struct EinnahmenAusgabenSparen {
     pub sparen: Betrag,
     pub jahr: i32,
 }
-
 
 pub fn berechne_einnahmen_ausgaben_sparen(
     datum_range: &JahrRange,

@@ -61,7 +61,6 @@ pub fn handle_view(context: AddDepotauszugContext) -> AddDepotauszugViewResult {
         approve_titel = "Depotauszug erfassen".to_string();
     }
 
-
     AddDepotauszugViewResult {
         database_version: context.database.db_version.as_string(),
         kontos,
@@ -75,7 +74,13 @@ pub fn handle_view(context: AddDepotauszugContext) -> AddDepotauszugViewResult {
                 value: change
                     .changes
                     .iter()
-                    .map(|x| format!("{}: {}", x.depotwert_beschreibung, x.wert.to_german_string()))
+                    .map(|x| {
+                        format!(
+                            "{}: {}",
+                            x.depotwert_beschreibung,
+                            x.wert.to_german_string()
+                        )
+                    })
                     .reduce(|x, y| format!("{}\n{}", x, y))
                     .unwrap_or("".to_string()),
                 konto: change.konto.konto_name.name.clone(),
@@ -86,8 +91,10 @@ pub fn handle_view(context: AddDepotauszugContext) -> AddDepotauszugViewResult {
     }
 }
 
-
-fn calc_konto_laden(edit: &EditDepotauszug, context: &AddDepotauszugContext) -> Vec<KontoBeschreibung> {
+fn calc_konto_laden(
+    edit: &EditDepotauszug,
+    context: &AddDepotauszugContext,
+) -> Vec<KontoBeschreibung> {
     let mut kontos = vec![];
     for konto in context
         .database
@@ -99,11 +106,11 @@ fn calc_konto_laden(edit: &EditDepotauszug, context: &AddDepotauszugContext) -> 
         let mut filled_items = vec![];
         let empty_items = vec![];
         for depotwert in context.database.depotwerte.select().collect() {
-            let letzter_kontostand = context
-                .database
-                .depotauszuege
-                .select()
-                .lade_kontostand(depotwert.value.as_referenz(), konto.value.as_reference(), edit.datum.clone());
+            let letzter_kontostand = context.database.depotauszuege.select().lade_kontostand(
+                depotwert.value.as_referenz(),
+                konto.value.as_reference(),
+                edit.datum.clone(),
+            );
             if letzter_kontostand != Betrag::zero() {
                 filled_items.push(KontoItem {
                     beschreibung: calc_depotwert_beschreibung(
@@ -124,7 +131,6 @@ fn calc_konto_laden(edit: &EditDepotauszug, context: &AddDepotauszugContext) -> 
     }
     kontos
 }
-
 
 fn calc_all_kontos(context: &AddDepotauszugContext) -> Vec<KontoBeschreibung> {
     let mut kontos = vec![];

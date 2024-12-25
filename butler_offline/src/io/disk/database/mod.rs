@@ -1,10 +1,10 @@
-pub mod einzelbuchungen;
 pub mod dauerauftrag;
-pub mod gemeinsame_buchungen;
-pub mod sparkontos;
-pub mod sparbuchungen;
+pub mod depotauszuege;
 pub mod depotwerte;
-pub mod types;
+pub mod einzelbuchungen;
+pub mod gemeinsame_buchungen;
 pub mod order;
 pub mod order_dauerauftraege;
-pub mod depotauszuege;
+pub mod sparbuchungen;
+pub mod sparkontos;
+pub mod types;

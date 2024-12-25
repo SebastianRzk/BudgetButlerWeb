@@ -1,7 +1,7 @@
 use crate::budgetbutler::database::select::selector::Selector;
-use crate::model::eigenschaften::besitzt_betrag::BesitztBetrag;
 use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
+use crate::model::eigenschaften::besitzt_betrag::BesitztBetrag;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
 
@@ -23,7 +23,9 @@ pub fn sum_gemeinsame_buchungen(selector: Selector<Indiziert<GemeinsameBuchung>>
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::select::functions::sum_by::{sum_einzelbuchungen, sum_gemeinsame_buchungen};
+    use crate::budgetbutler::database::select::functions::sum_by::{
+        sum_einzelbuchungen, sum_gemeinsame_buchungen,
+    };
     use crate::budgetbutler::database::select::selector::Selector;
     use crate::model::database::einzelbuchung::builder::einzelbuchung_with_betrag;
     use crate::model::database::gemeinsame_buchung::builder::gemeinsame_buchung_mit_betrag;
@@ -60,7 +62,6 @@ mod tests {
 
         assert_eq!(result, Betrag::zero());
     }
-
 
     #[test]
     fn test_sum_should_sum_gemeinsame_buchungen_all() {

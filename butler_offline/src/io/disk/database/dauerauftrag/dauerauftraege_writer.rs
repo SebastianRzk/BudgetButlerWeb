@@ -3,7 +3,12 @@ use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::state::persistent_application_state::Database;
 
 pub fn write_dauerauftraege(database: &Database) -> Vec<Line> {
-    database.dauerauftraege.dauerauftraege.iter().map(|l| write_dauerauftrag(&l.value)).collect()
+    database
+        .dauerauftraege
+        .dauerauftraege
+        .iter()
+        .map(|l| write_dauerauftrag(&l.value))
+        .collect()
 }
 
 #[cfg(test)]
@@ -25,14 +30,16 @@ mod tests {
             name: name("Normal"),
             kategorie: kategorie("NeueKategorie"),
             betrag: betrag(Vorzeichen::Negativ, 123, 12),
-            rhythmus: Rhythmus::Monatlich
+            rhythmus: Rhythmus::Monatlich,
         };
         let database = generate_database_with_dauerauftraege(vec![dauerauftrag]);
 
         let lines = write_dauerauftraege(&database);
 
         assert_eq!(lines.len(), 1);
-        assert_eq!(lines[0].line, "2024-01-01,2025-01-01,NeueKategorie,Normal,monatlich,-123.12");
+        assert_eq!(
+            lines[0].line,
+            "2024-01-01,2025-01-01,NeueKategorie,Normal,monatlich,-123.12"
+        );
     }
-
 }

@@ -1,4 +1,6 @@
-use crate::budgetbutler::pages::sparen::action_add_edit_konto::{submit_sparkonto, SubmitKontoContext};
+use crate::budgetbutler::pages::sparen::action_add_edit_konto::{
+    submit_sparkonto, SubmitKontoContext,
+};
 use crate::budgetbutler::pages::sparen::action_delete_sparkonto::delete_sparkonto;
 use crate::budgetbutler::pages::sparen::action_delete_sparkonto::DeleteContext;
 use crate::budgetbutler::pages::sparen::add_konto::{handle_view, AddKontoContext};
@@ -29,10 +31,7 @@ pub async fn get_view(
     config: Data<ConfigurationData>,
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
-    let configuration_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration_guard = config.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Neues Sparkonto hinzufügen",
         SPAREN_SPARKONTO_ADD,
@@ -61,10 +60,7 @@ pub async fn post_view(
         return http_redirect(redirect_to_optimistic_locking_error());
     }
 
-    let configuration_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration_guard = config.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Konto editieren",
         SPAREN_SPARKONTO_ADD,

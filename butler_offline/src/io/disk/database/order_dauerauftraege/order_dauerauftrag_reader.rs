@@ -14,7 +14,6 @@ pub fn read_order_dauerauftrag(line: Element) -> OrderDauerauftrag {
     let start_datum_segment = read_next_element(line);
     let start_datum = read_datum(start_datum_segment.element);
 
-
     let ende_datum_segment = read_next_element(start_datum_segment.rest);
     let ende_datum = read_datum(ende_datum_segment.element);
 
@@ -28,7 +27,7 @@ pub fn read_order_dauerauftrag(line: Element) -> OrderDauerauftrag {
     let depotwert_segment = read_next_element(konto_segment.rest);
 
     let wert_segment = read_next_element(depotwert_segment.rest);
-    let wert =  read_betrag_ohne_vorzeichen(wert_segment.element);
+    let wert = read_betrag_ohne_vorzeichen(wert_segment.element);
     let typ = read_ordertyp(wert_segment.rest);
 
     OrderDauerauftrag {
@@ -46,7 +45,9 @@ pub fn read_order_dauerauftrag(line: Element) -> OrderDauerauftrag {
 mod tests {
     use crate::io::disk::database::order_dauerauftraege::order_dauerauftrag_reader::read_order_dauerauftrag;
     use crate::io::disk::primitive::segment_reader::builder::element;
-    use crate::model::database::order_dauerauftrag::builder::{demo_order_dauerauftrag, DEMO_ORDER_DAUERAUFTRAG_AS_DB_STR};
+    use crate::model::database::order_dauerauftrag::builder::{
+        demo_order_dauerauftrag, DEMO_ORDER_DAUERAUFTRAG_AS_DB_STR,
+    };
 
     #[test]
     fn test_read_order() {

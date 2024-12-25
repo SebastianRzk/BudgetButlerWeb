@@ -7,9 +7,11 @@ use crate::model::indiziert::Indiziert;
 use crate::model::metamodel::chart::AusgabeAusKategorie;
 use crate::model::primitives::kategorie::Kategorie;
 
-pub fn berechne_buchungen_nach_kategorie(slektion: Selector<Indiziert<Einzelbuchung>>, farben_selektor: &FarbenSelektor) -> Vec<AusgabeAusKategorie> {
-    let buchungen = slektion
-        .group_by(kategorie_aggregation, betrag_summe_gruppierung);
+pub fn berechne_buchungen_nach_kategorie(
+    slektion: Selector<Indiziert<Einzelbuchung>>,
+    farben_selektor: &FarbenSelektor,
+) -> Vec<AusgabeAusKategorie> {
+    let buchungen = slektion.group_by(kategorie_aggregation, betrag_summe_gruppierung);
     let mut sortierte_kategorien = buchungen.keys().into_iter().collect::<Vec<&Kategorie>>();
     sortierte_kategorien.sort();
 
@@ -24,4 +26,3 @@ pub fn berechne_buchungen_nach_kategorie(slektion: Selector<Indiziert<Einzelbuch
     }
     result
 }
-

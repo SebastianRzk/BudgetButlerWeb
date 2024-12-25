@@ -24,8 +24,6 @@ pub fn calc_dauerauftrag(dauerauftrag: &Dauerauftrag, heute: Datum) -> Vec<Einze
     buchungen
 }
 
-
-
 pub fn calc_order_dauerauftrag(dauerauftrag: &OrderDauerauftrag, heute: Datum) -> Vec<Order> {
     let mut lauf_datum = dauerauftrag.start_datum.clone();
     let ende_datum = min(dauerauftrag.ende_datum.clone(), heute);
@@ -44,7 +42,6 @@ pub fn calc_order_dauerauftrag(dauerauftrag: &OrderDauerauftrag, heute: Datum) -
     }
     orders
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -97,7 +94,6 @@ mod tests {
         assert_eq!(result[1].datum, Datum::new(1, 4, 2020));
     }
 
-
     #[test]
     fn test_calc_dauerauftrag_should_end_heute_when_endedatum_nach_heute() {
         let dauerauftrag = Dauerauftrag {
@@ -131,7 +127,10 @@ mod tests {
 
         assert_eq!(result.len(), 3);
         assert_eq!(result[0].datum, Datum::new(1, 1, 2020));
-        assert_eq!(result[0].wert, OrderBetrag::new(BetragOhneVorzeichen::new(123, 12), Verkauf));
+        assert_eq!(
+            result[0].wert,
+            OrderBetrag::new(BetragOhneVorzeichen::new(123, 12), Verkauf)
+        );
         assert_eq!(result[0].depotwert, depotwert_referenz("Depotwert"));
         assert_eq!(result[0].name, name("Normal"));
         assert_eq!(result[0].konto, konto_referenz("Konto"));

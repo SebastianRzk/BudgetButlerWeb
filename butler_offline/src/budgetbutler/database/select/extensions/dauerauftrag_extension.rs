@@ -43,15 +43,16 @@ mod tests {
     #[test]
     fn test_rename_kategorie() {
         let dauerauftraege = Dauerauftraege {
-            dauerauftraege: vec![
-                indiziert(demo_dauerauftrag()),
-            ],
+            dauerauftraege: vec![indiziert(demo_dauerauftrag())],
         };
 
         let result = dauerauftraege
             .change()
             .rename_kategorie(demo_kategorie(), kategorie("neue kategorie"));
 
-        assert_eq!(result.dauerauftraege[0].value.kategorie, kategorie("neue kategorie"));
+        assert_eq!(
+            result.dauerauftraege[0].value.kategorie,
+            kategorie("neue kategorie")
+        );
     }
 }

@@ -18,15 +18,13 @@ pub struct ConfigurationViewResult {
 
     pub ausgeschlossene_kategorien: Vec<Kategorie>,
 
-    pub palette: Vec<FarbenZuordnung>
+    pub palette: Vec<FarbenZuordnung>,
 }
 
-
-pub struct FarbenZuordnung{
+pub struct FarbenZuordnung {
     pub farbe: Farbe,
     pub kategorie: Kategorie,
 }
-
 
 pub struct ConfigurationContext<'a> {
     pub database: &'a Database,
@@ -34,42 +32,57 @@ pub struct ConfigurationContext<'a> {
     pub config: &'a Configuration,
 }
 
-
 pub fn handle_view(context: ConfigurationContext) -> ConfigurationViewResult {
     ConfigurationViewResult {
         partner: context.config.user_configuration.partner_name.clone(),
         database_id: context.database.db_version.clone(),
-        kategorien: calc_kategorien(&context.database.einzelbuchungen, &context.extra_kategorie, &context.config.erfassungs_configuration.ausgeschlossene_kategorien),
+        kategorien: calc_kategorien(
+            &context.database.einzelbuchungen,
+            &context.extra_kategorie,
+            &context
+                .config
+                .erfassungs_configuration
+                .ausgeschlossene_kategorien,
+        ),
         database_name: context.config.database_configuration.name.clone(),
         themecolor: context.config.design_configuration.design_farbe.clone(),
-        palette: berechne_farben_zurordnung(context.database.einzelbuchungen.get_kategorien(), context.config.design_configuration.configurierte_farben.clone()),
-        ausgeschlossene_kategorien: context.config.erfassungs_configuration.ausgeschlossene_kategorien.clone()
+        palette: berechne_farben_zurordnung(
+            context.database.einzelbuchungen.get_kategorien(),
+            context
+                .config
+                .design_configuration
+                .configurierte_farben
+                .clone(),
+        ),
+        ausgeschlossene_kategorien: context
+            .config
+            .erfassungs_configuration
+            .ausgeschlossene_kategorien
+            .clone(),
     }
 }
 
-
-fn berechne_farben_zurordnung(kategorien: Vec<Kategorie>, farben: Vec<Farbe>) -> Vec<FarbenZuordnung> {
+fn berechne_farben_zurordnung(
+    kategorien: Vec<Kategorie>,
+    farben: Vec<Farbe>,
+) -> Vec<FarbenZuordnung> {
     let selektor = FarbenSelektor::new(kategorien.clone(), farben.clone());
     let mut result = vec![];
     let mut index = 0;
 
     for kategorie in kategorien {
         let farbe = selektor.get(&kategorie);
-        result.push(FarbenZuordnung {
-            farbe,
-            kategorie
-        });
+        result.push(FarbenZuordnung { farbe, kategorie });
         index += 1;
     }
 
     while index < farben.len() as u32 {
         result.push(FarbenZuordnung {
             farbe: farben[index as usize].clone(),
-            kategorie: Kategorie::new("keine Kategorie gesetzt".to_string())
+            kategorie: Kategorie::new("keine Kategorie gesetzt".to_string()),
         });
         index += 1;
     }
-
 
     result
 }
@@ -80,17 +93,10 @@ mod tests {
     use crate::model::primitives::kategorie::kategorie;
 
     #[test]
-    pub  fn test_berechne_farben_zurordnung(){
-        let kategorien = vec![
-            kategorie("Kategorie 1"),
-            kategorie("Kategorie 2"),
-        ];
+    pub fn test_berechne_farben_zurordnung() {
+        let kategorien = vec![kategorie("Kategorie 1"), kategorie("Kategorie 2")];
 
-        let farben = vec![
-            farbe("farbe1"),
-            farbe("farbe2"),
-            farbe("farbe3"),
-            ];
+        let farben = vec![farbe("farbe1"), farbe("farbe2"), farbe("farbe3")];
 
         let result = super::berechne_farben_zurordnung(kategorien, farben);
 

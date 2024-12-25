@@ -51,12 +51,7 @@ mod tests {
         let result = super::delete_sparkonto(context);
 
         assert_eq!(
-            result
-                .result
-                .changed_database
-                .sparkontos
-                .select()
-                .count(),
+            result.result.changed_database.sparkontos.select().count(),
             0
         );
         assert_eq!(result.change.icon, DELETE.as_fa.to_string());

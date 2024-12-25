@@ -22,7 +22,7 @@ pub struct DefaultItemTemplate {
     pub index: u32,
     pub name: String,
     pub datum: String,
-    pub wert: String
+    pub wert: String,
 }
 
 pub struct LetzteErfassungTemplate {
@@ -49,14 +49,22 @@ pub fn map_to_template(view_result: AddOrderViewResult) -> AddOrderTemplate {
             index: view_result.default_item.index,
             name: view_result.default_item.name.get_name().clone(),
             datum: view_result.default_item.datum.to_iso_string(),
-            wert: view_result.default_item.wert.get_realer_wert().to_input_string(),
+            wert: view_result
+                .default_item
+                .wert
+                .get_realer_wert()
+                .to_input_string(),
         },
         approve_title: view_result.action_title.clone(),
         typen: new_select_with_description(
-            view_result.typen.iter().map(|x| TypeDescription{
-                value: write_ordertyp(x.value.clone()).element,
-                description: x.description.clone()
-            }).collect(),
+            view_result
+                .typen
+                .iter()
+                .map(|x| TypeDescription {
+                    value: write_ordertyp(x.value.clone()).element,
+                    description: x.description.clone(),
+                })
+                .collect(),
             Some(write_ordertyp(view_result.default_item.wert.get_typ()).element),
         ),
         letzte_erfassung: view_result
@@ -73,14 +81,22 @@ pub fn map_to_template(view_result: AddOrderViewResult) -> AddOrderTemplate {
             })
             .collect(),
         kontos: Select::new(
-            view_result.depots.iter().map(|x| x.value.name.get_name().clone()).collect(),
+            view_result
+                .depots
+                .iter()
+                .map(|x| x.value.name.get_name().clone())
+                .collect(),
             Some(view_result.default_item.konto.konto_name.get_name().clone()),
         ),
         depotwerte: new_select_with_description(
-            view_result.depotwerte.iter().map(|x| TypeDescription{
-                value: x.value.clone(),
-                description: x.description.clone()
-            }).collect(),
+            view_result
+                .depotwerte
+                .iter()
+                .map(|x| TypeDescription {
+                    value: x.value.clone(),
+                    description: x.description.clone(),
+                })
+                .collect(),
             Some(view_result.default_item.depotwert.isin.isin.clone()),
         ),
     }

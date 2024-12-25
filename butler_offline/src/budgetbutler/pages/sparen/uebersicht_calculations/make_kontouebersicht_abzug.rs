@@ -36,10 +36,12 @@ mod tests {
     };
     use crate::model::database::sparkonto::builder::demo_konto;
     use crate::model::indiziert::builder::indiziert;
-    use crate::model::primitives::betrag::Betrag;
     use crate::model::primitives::betrag::builder::{fuenf, vier, zwei};
+    use crate::model::primitives::betrag::Betrag;
     use crate::model::primitives::farbe::green;
-    use crate::model::state::persistent_application_state::builder::{demo_database_version, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        demo_database_version, generate_empty_database,
+    };
 
     #[test]
     fn test_make_kontouebersicht_abzug_empty() {

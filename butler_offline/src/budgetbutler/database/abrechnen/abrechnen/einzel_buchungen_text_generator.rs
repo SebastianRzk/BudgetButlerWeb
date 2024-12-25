@@ -14,7 +14,9 @@ pub fn einzelbuchungen_as_import_text(buchungen: &Vec<Einzelbuchung>) -> Buchung
             buchung.betrag.to_iso_string()
         ));
     }
-    BuchungenText { text: result.join("\n") }
+    BuchungenText {
+        text: result.join("\n"),
+    }
 }
 
 #[cfg(test)]

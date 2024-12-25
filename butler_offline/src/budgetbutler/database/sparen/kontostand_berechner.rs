@@ -99,7 +99,8 @@ fn berechne_einzahlungen(konto: Sparkonto, database: &Database) -> Betrag {
         .filter(|order| order.value.konto.konto_name == konto.name)
         .collect()
     {
-        gesamte_einzahlungen = gesamte_einzahlungen + order.value.wert.get_betrag_fuer_geleistete_investition();
+        gesamte_einzahlungen =
+            gesamte_einzahlungen + order.value.wert.get_betrag_fuer_geleistete_investition();
     }
 
     gesamte_einzahlungen
@@ -113,7 +114,7 @@ mod tests_fuer_depot {
     use crate::model::database::order::builder::order_with_konto_und_betrag;
     use crate::model::database::sparbuchung::builder::sparbuchung_with_betrag_typ_und_konto;
     use crate::model::database::sparbuchung::SparbuchungTyp;
-    use crate::model::database::sparkonto::builder::{demo_konto, any_konto_with_typ};
+    use crate::model::database::sparkonto::builder::{any_konto_with_typ, demo_konto};
     use crate::model::database::sparkonto::Kontotyp;
     use crate::model::initial_config::database::generate_initial_database;
     use crate::model::primitives::betrag::builder::{minus_zwei, vier, zwei};
@@ -336,7 +337,7 @@ mod tests_fuer_sparkonto {
     use crate::budgetbutler::database::sparen::kontostand_berechner::berechne_aktuellen_kontostand;
     use crate::model::database::sparbuchung::builder::sparbuchung_with_betrag_typ_und_konto;
     use crate::model::database::sparbuchung::SparbuchungTyp;
-    use crate::model::database::sparkonto::builder::{demo_konto, any_konto_with_typ};
+    use crate::model::database::sparkonto::builder::{any_konto_with_typ, demo_konto};
     use crate::model::database::sparkonto::Kontotyp;
     use crate::model::primitives::betrag::builder::{minus_zwei, zwei};
     use crate::model::primitives::betrag::Betrag;
@@ -452,13 +453,12 @@ mod tests_fuer_sparkonto {
     }
 }
 
-
 #[cfg(test)]
 mod tests_fuer_genossenschaftsanteile {
     use crate::budgetbutler::database::sparen::kontostand_berechner::berechne_aktuellen_kontostand;
     use crate::model::database::sparbuchung::builder::sparbuchung_with_betrag_typ_und_konto;
     use crate::model::database::sparbuchung::SparbuchungTyp;
-    use crate::model::database::sparkonto::builder::{demo_konto, any_konto_with_typ};
+    use crate::model::database::sparkonto::builder::{any_konto_with_typ, demo_konto};
     use crate::model::database::sparkonto::Kontotyp;
     use crate::model::primitives::betrag::builder::{minus_zwei, zwei};
     use crate::model::primitives::betrag::Betrag;
@@ -475,13 +475,19 @@ mod tests_fuer_genossenschaftsanteile {
             )]);
 
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .letzter_kontostand,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .letzter_kontostand,
             Betrag::zero()
         );
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .gesamte_einzahlungen,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .gesamte_einzahlungen,
             minus_zwei()
         );
     }
@@ -496,13 +502,19 @@ mod tests_fuer_genossenschaftsanteile {
             )]);
 
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .letzter_kontostand,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .letzter_kontostand,
             Betrag::zero()
         );
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .gesamte_einzahlungen,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .gesamte_einzahlungen,
             zwei()
         );
     }
@@ -518,13 +530,19 @@ mod tests_fuer_genossenschaftsanteile {
             )]);
 
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .letzter_kontostand,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .letzter_kontostand,
             zwei()
         );
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .gesamte_einzahlungen,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .gesamte_einzahlungen,
             Betrag::zero()
         );
     }
@@ -540,13 +558,19 @@ mod tests_fuer_genossenschaftsanteile {
             )]);
 
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .letzter_kontostand,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .letzter_kontostand,
             zwei()
         );
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .gesamte_einzahlungen,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .gesamte_einzahlungen,
             zwei()
         );
     }
@@ -562,13 +586,19 @@ mod tests_fuer_genossenschaftsanteile {
             )]);
 
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .letzter_kontostand,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .letzter_kontostand,
             minus_zwei()
         );
         assert_eq!(
-            berechne_aktuellen_kontostand(any_konto_with_typ(Kontotyp::GenossenschaftsAnteile), &database)
-                .gesamte_einzahlungen,
+            berechne_aktuellen_kontostand(
+                any_konto_with_typ(Kontotyp::GenossenschaftsAnteile),
+                &database
+            )
+            .gesamte_einzahlungen,
             minus_zwei()
         );
     }

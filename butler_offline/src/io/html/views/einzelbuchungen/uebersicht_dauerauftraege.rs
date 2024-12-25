@@ -10,7 +10,6 @@ pub struct UebersichtDauerauftraegeTemplate {
     pub dauerauftraegegruppen: Vec<DauerauftraegeGruppeTemplate>,
 }
 
-
 pub struct DauerauftraegeGruppeTemplate {
     pub name: String,
     pub dauerauftraege: Vec<DauerauftragTemplate>,
@@ -26,7 +25,9 @@ pub struct DauerauftragTemplate {
     pub rhythmus: String,
 }
 
-pub fn render_uebersicht_dauerauftraege_template(view_result: UebersichtDauerauftraegeViewResult) -> String {
+pub fn render_uebersicht_dauerauftraege_template(
+    view_result: UebersichtDauerauftraegeViewResult,
+) -> String {
     let as_template: UebersichtDauerauftraegeTemplate = map_to_template(view_result);
     as_template.render().unwrap()
 }
@@ -43,22 +44,35 @@ fn map_dauerauftrag(dauerauftrag: &Indiziert<Dauerauftrag>) -> DauerauftragTempl
     }
 }
 
-
-fn map_to_template(view_result: UebersichtDauerauftraegeViewResult) -> UebersichtDauerauftraegeTemplate {
+fn map_to_template(
+    view_result: UebersichtDauerauftraegeViewResult,
+) -> UebersichtDauerauftraegeTemplate {
     UebersichtDauerauftraegeTemplate {
         id: view_result.database_version.as_string(),
         dauerauftraegegruppen: vec![
             DauerauftraegeGruppeTemplate {
                 name: "Aktuelle Daueraufträge".to_string(),
-                dauerauftraege: view_result.aktuelle_dauerauftraege.iter().map(|d| map_dauerauftrag(d)).collect()
+                dauerauftraege: view_result
+                    .aktuelle_dauerauftraege
+                    .iter()
+                    .map(|d| map_dauerauftrag(d))
+                    .collect(),
             },
             DauerauftraegeGruppeTemplate {
                 name: "Zukünftige Daueraufträge".to_string(),
-                dauerauftraege: view_result.zukuenftige_dauerauftraege.iter().map(|d| map_dauerauftrag(d)).collect()
+                dauerauftraege: view_result
+                    .zukuenftige_dauerauftraege
+                    .iter()
+                    .map(|d| map_dauerauftrag(d))
+                    .collect(),
             },
             DauerauftraegeGruppeTemplate {
                 name: "Vergangene Daueraufträge".to_string(),
-                dauerauftraege: view_result.vergangene_dauerauftraege.iter().map(|d| map_dauerauftrag(d)).collect()
+                dauerauftraege: view_result
+                    .vergangene_dauerauftraege
+                    .iter()
+                    .map(|d| map_dauerauftrag(d))
+                    .collect(),
             },
         ],
     }
@@ -74,20 +88,17 @@ mod tests {
 
     #[test]
     fn test_map_to_template() {
-        let aktueller_dauerauftrag = dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2020), Datum::new(31, 12, 2020));
-        let vergangener_dauerauftrag = dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2021), Datum::new(31, 12, 2021));
-        let zukuenftiger_dauerauftrag = dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2022), Datum::new(31, 12, 2022));
+        let aktueller_dauerauftrag =
+            dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2020), Datum::new(31, 12, 2020));
+        let vergangener_dauerauftrag =
+            dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2021), Datum::new(31, 12, 2021));
+        let zukuenftiger_dauerauftrag =
+            dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2022), Datum::new(31, 12, 2022));
 
         let view_result = UebersichtDauerauftraegeViewResult {
-            aktuelle_dauerauftraege: vec![
-                indiziert(aktueller_dauerauftrag),
-            ],
-            vergangene_dauerauftraege: vec![
-                indiziert(vergangener_dauerauftrag),
-            ],
-            zukuenftige_dauerauftraege: vec![
-                indiziert(zukuenftiger_dauerauftrag),
-            ],
+            aktuelle_dauerauftraege: vec![indiziert(aktueller_dauerauftrag)],
+            vergangene_dauerauftraege: vec![indiziert(vergangener_dauerauftrag)],
+            zukuenftige_dauerauftraege: vec![indiziert(zukuenftiger_dauerauftrag)],
             database_version: demo_database_version(),
         };
 
@@ -95,15 +106,33 @@ mod tests {
 
         assert_eq!(result.dauerauftraegegruppen.len(), 3);
         assert_eq!(result.dauerauftraegegruppen[0].dauerauftraege.len(), 1);
-        assert_eq!(result.dauerauftraegegruppen[0].name, "Aktuelle Daueraufträge");
-        assert_eq!(result.dauerauftraegegruppen[0].dauerauftraege[0].start_datum, "01.01.2020");
+        assert_eq!(
+            result.dauerauftraegegruppen[0].name,
+            "Aktuelle Daueraufträge"
+        );
+        assert_eq!(
+            result.dauerauftraegegruppen[0].dauerauftraege[0].start_datum,
+            "01.01.2020"
+        );
 
         assert_eq!(result.dauerauftraegegruppen[1].dauerauftraege.len(), 1);
-        assert_eq!(result.dauerauftraegegruppen[1].name, "Zukünftige Daueraufträge");
-        assert_eq!(result.dauerauftraegegruppen[1].dauerauftraege[0].start_datum, "01.01.2022");
+        assert_eq!(
+            result.dauerauftraegegruppen[1].name,
+            "Zukünftige Daueraufträge"
+        );
+        assert_eq!(
+            result.dauerauftraegegruppen[1].dauerauftraege[0].start_datum,
+            "01.01.2022"
+        );
 
         assert_eq!(result.dauerauftraegegruppen[2].dauerauftraege.len(), 1);
-        assert_eq!(result.dauerauftraegegruppen[2].name, "Vergangene Daueraufträge");
-        assert_eq!(result.dauerauftraegegruppen[2].dauerauftraege[0].start_datum, "01.01.2021");
+        assert_eq!(
+            result.dauerauftraegegruppen[2].name,
+            "Vergangene Daueraufträge"
+        );
+        assert_eq!(
+            result.dauerauftraegegruppen[2].dauerauftraege[0].start_datum,
+            "01.01.2021"
+        );
     }
 }

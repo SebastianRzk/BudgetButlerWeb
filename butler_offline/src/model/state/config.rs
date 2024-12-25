@@ -72,11 +72,7 @@ pub fn get_database_location(database_configuration: &DatabaseConfiguration) -> 
 }
 
 pub fn app_root() -> PathBuf {
-    current_dir()
-        .unwrap()
-        .parent()
-        .unwrap()
-        .to_path_buf()
+    current_dir().unwrap().parent().unwrap().to_path_buf()
 }
 
 #[cfg(test)]

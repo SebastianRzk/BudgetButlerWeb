@@ -76,7 +76,9 @@ fn map_to_template(view_result: UebersichtOrderViewResult) -> UebersichtSparbuch
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::sparen::uebersicht_order::{BeschriebeneOrder, MonatsZusammenfassung, UebersichtOrderViewResult};
+    use crate::budgetbutler::pages::sparen::uebersicht_order::{
+        BeschriebeneOrder, MonatsZusammenfassung, UebersichtOrderViewResult,
+    };
     use crate::model::database::order::OrderTyp::Kauf;
     use crate::model::database::sparbuchung::builder::konto_referenz;
     use crate::model::primitives::betrag_ohne_vorzeichen::BetragOhneVorzeichen;
@@ -95,10 +97,9 @@ mod tests {
                     dynamisch: false,
                     datum: Datum::new(1, 1, 2024),
                     name: name("Normal"),
-                    wert: OrderBetrag::new(BetragOhneVorzeichen::new( 123, 12), Kauf),
+                    wert: OrderBetrag::new(BetragOhneVorzeichen::new(123, 12), Kauf),
                     konto: konto_referenz("Konto"),
                     depotwertbeschreibung: "DepotwertBeschreibung".to_string(),
-
                 }],
             }],
             verfuegbare_jahre: vec![2020],

@@ -13,8 +13,10 @@ pub struct SuccessZurueckZuViewResult {
 }
 
 pub fn render_success_message_template(context: SuccessZurueckZuViewResult) -> String {
-    SuccessZurueckZuTemplate{
+    SuccessZurueckZuTemplate {
         text: context.text,
         link: context.link,
-    }.render().unwrap()
+    }
+    .render()
+    .unwrap()
 }

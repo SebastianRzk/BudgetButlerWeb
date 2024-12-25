@@ -10,7 +10,9 @@ pub struct Depotauszuege {
 
 impl Creates<Depotauszug, Depotauszuege> for Depotauszuege {
     fn create(item: Vec<Indiziert<Depotauszug>>) -> Depotauszuege {
-        Depotauszuege { depotauszuege: item }
+        Depotauszuege {
+            depotauszuege: item,
+        }
     }
 }
 

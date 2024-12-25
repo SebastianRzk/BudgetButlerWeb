@@ -114,10 +114,9 @@ mod tests {
 
     #[test]
     pub fn test_handle_view_without_edit_index() {
-        let database =
-            generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
-                "test_kategorie",
-            )]);
+        let database = generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
+            "test_kategorie",
+        )]);
         let einzelbuchungen_changes = vec![];
         let context = AddBuchungContext {
             database: &database,

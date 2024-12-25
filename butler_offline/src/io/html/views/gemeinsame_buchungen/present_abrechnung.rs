@@ -8,29 +8,37 @@ pub struct PresendAbrechnungTemplate {
     pub database_name: String,
     pub partner_name: String,
     pub partner_abrechnungstext: String,
-    pub self_abrechnungstext: String
+    pub self_abrechnungstext: String,
 }
 
-pub struct PresentAbrechnungContextResult{
+pub struct PresentAbrechnungContextResult {
     pub database_name: String,
     pub partner_name: Person,
     pub partner_abrechnungstext: Vec<Line>,
-    pub self_abrechnungstext: Vec<Line>
+    pub self_abrechnungstext: Vec<Line>,
 }
-
 
 pub fn render_present_abrechnung_template(result: PresentAbrechnungContextResult) -> String {
     let as_template: PresendAbrechnungTemplate = map_to_template(result);
     as_template.render().unwrap()
 }
 
-
 fn map_to_template(view_result: PresentAbrechnungContextResult) -> PresendAbrechnungTemplate {
     PresendAbrechnungTemplate {
         database_name: view_result.database_name,
         partner_name: view_result.partner_name.person,
-        partner_abrechnungstext: view_result.partner_abrechnungstext.iter().map(|line| line.line.clone()).collect::<Vec<String>>().join("\n"),
-        self_abrechnungstext: view_result.self_abrechnungstext.iter().map(|line| line.line.clone()).collect::<Vec<String>>().join("\n")
+        partner_abrechnungstext: view_result
+            .partner_abrechnungstext
+            .iter()
+            .map(|line| line.line.clone())
+            .collect::<Vec<String>>()
+            .join("\n"),
+        self_abrechnungstext: view_result
+            .self_abrechnungstext
+            .iter()
+            .map(|line| line.line.clone())
+            .collect::<Vec<String>>()
+            .join("\n"),
     }
 }
 
@@ -46,7 +54,7 @@ mod tests {
             database_name: "test database name".to_string(),
             partner_name: person("test"),
             partner_abrechnungstext: vec![line("asdf"), line("qwer")],
-            self_abrechnungstext: vec![line("2asdf"), line("2qwer")]
+            self_abrechnungstext: vec![line("2asdf"), line("2qwer")],
         };
 
         let template = super::map_to_template(result);

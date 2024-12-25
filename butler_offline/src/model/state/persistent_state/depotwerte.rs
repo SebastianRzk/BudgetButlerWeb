@@ -41,7 +41,10 @@ impl Depotwerte {
     }
 
     pub fn isin_bereits_vorhanden(&self, isin: ISIN) -> bool {
-        self.select().filter(|x| x.value.isin.isin == isin.isin).count() > 0
+        self.select()
+            .filter(|x| x.value.isin.isin == isin.isin)
+            .count()
+            > 0
     }
 }
 

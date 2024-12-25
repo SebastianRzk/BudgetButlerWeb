@@ -1,5 +1,9 @@
-use crate::budgetbutler::pages::einzelbuchungen::uebersicht_einzelbuchungen::{MonatsZusammenfassung, UebersichtEinzelbuchungenViewResult};
-use crate::budgetbutler::view::routes::{EINZELBUCHUNGEN_AUSGABE_ADD, EINZELBUCHUNGEN_EINNAHME_ADD};
+use crate::budgetbutler::pages::einzelbuchungen::uebersicht_einzelbuchungen::{
+    MonatsZusammenfassung, UebersichtEinzelbuchungenViewResult,
+};
+use crate::budgetbutler::view::routes::{
+    EINZELBUCHUNGEN_AUSGABE_ADD, EINZELBUCHUNGEN_EINNAHME_ADD,
+};
 use crate::io::html::input::select::Select;
 use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
@@ -13,7 +17,6 @@ pub struct UebersichtEinzelbuchungenTemplate {
     pub alles: Vec<MonatsZusammenfassungTemplate>,
     pub id: String,
 }
-
 
 pub struct MonatsZusammenfassungTemplate {
     pub name: String,
@@ -30,7 +33,9 @@ pub struct BuchungMitLinkTemplate {
     pub dynamisch: bool,
 }
 
-pub fn render_uebersicht_einzelbuchungen_template(template: UebersichtEinzelbuchungenViewResult) -> String {
+pub fn render_uebersicht_einzelbuchungen_template(
+    template: UebersichtEinzelbuchungenViewResult,
+) -> String {
     let as_template: UebersichtEinzelbuchungenTemplate = map_to_template(template);
     as_template.render().unwrap()
 }
@@ -38,7 +43,11 @@ pub fn render_uebersicht_einzelbuchungen_template(template: UebersichtEinzelbuch
 fn map_monat_to_template(monat: &MonatsZusammenfassung) -> MonatsZusammenfassungTemplate {
     MonatsZusammenfassungTemplate {
         name: monat.monat.monat.clone(),
-        buchungen: monat.buchungen.iter().map(|x| map_buchung_to_template(x)).collect(),
+        buchungen: monat
+            .buchungen
+            .iter()
+            .map(|x| map_buchung_to_template(x))
+            .collect(),
     }
 }
 
@@ -61,18 +70,29 @@ fn map_betrag_to_link(betrag: &Betrag) -> String {
     EINZELBUCHUNGEN_EINNAHME_ADD.to_string()
 }
 
-fn map_to_template(view_result: UebersichtEinzelbuchungenViewResult) -> UebersichtEinzelbuchungenTemplate {
-    let alles: Vec<MonatsZusammenfassungTemplate> = view_result.liste.iter().map(|x| map_monat_to_template(&x)).collect();
+fn map_to_template(
+    view_result: UebersichtEinzelbuchungenViewResult,
+) -> UebersichtEinzelbuchungenTemplate {
+    let alles: Vec<MonatsZusammenfassungTemplate> = view_result
+        .liste
+        .iter()
+        .map(|x| map_monat_to_template(&x))
+        .collect();
     UebersichtEinzelbuchungenTemplate {
         alles,
         id: view_result.database_version.as_string(),
-        jahre: Select::new(view_result.verfuegbare_jahre.clone(), Some(view_result.selektiertes_jahr)),
+        jahre: Select::new(
+            view_result.verfuegbare_jahre.clone(),
+            Some(view_result.selektiertes_jahr),
+        ),
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::einzelbuchungen::uebersicht_einzelbuchungen::{MonatsZusammenfassung, UebersichtEinzelbuchungenViewResult};
+    use crate::budgetbutler::pages::einzelbuchungen::uebersicht_einzelbuchungen::{
+        MonatsZusammenfassung, UebersichtEinzelbuchungenViewResult,
+    };
     use crate::io::html::views::einzelbuchungen::uebersicht_einzelbuchungen::map_to_template;
     use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::indiziert::Indiziert;
@@ -107,7 +127,8 @@ mod tests {
                             kategorie: kategorie("NeueKategorie"),
                             betrag: Betrag::new(Vorzeichen::Positiv, 123, 12),
                         },
-                    }],
+                    },
+                ],
             }],
             verfuegbare_jahre: vec![2020],
             selektiertes_jahr: 2020,

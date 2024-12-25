@@ -22,7 +22,9 @@ pub struct SubmitDauerauftragContext<'a> {
     pub wert: Betrag,
 }
 
-pub fn submit_dauerauftrag(context: SubmitDauerauftragContext) -> RedirectResult<DauerauftragChange> {
+pub fn submit_dauerauftrag(
+    context: SubmitDauerauftragContext,
+) -> RedirectResult<DauerauftragChange> {
     let dauerauftrag = Dauerauftrag {
         start_datum: context.start_datum.clone(),
         ende_datum: context.ende_datum.clone(),
@@ -36,29 +38,34 @@ pub fn submit_dauerauftrag(context: SubmitDauerauftragContext) -> RedirectResult
 
     if let Some(index) = context.edit_index {
         icon = PENCIL;
-        neue_dauerauftraege = context.database.dauerauftraege.change().edit(index, dauerauftrag);
+        neue_dauerauftraege = context
+            .database
+            .dauerauftraege
+            .change()
+            .edit(index, dauerauftrag);
     } else {
         icon = PLUS;
-        neue_dauerauftraege = context.database.dauerauftraege.change().insert(
-            Dauerauftrag {
+        neue_dauerauftraege = context
+            .database
+            .dauerauftraege
+            .change()
+            .insert(Dauerauftrag {
                 start_datum: context.start_datum.clone(),
                 ende_datum: context.ende_datum.clone(),
                 rhythmus: context.rhythmus.clone(),
                 name: context.name.clone(),
                 kategorie: context.kategorie.clone(),
                 betrag: context.wert.clone(),
-            }
-        );
+            });
     }
 
     let new_database = context.database.change_dauerauftraege(neue_dauerauftraege);
-
 
     RedirectResult {
         result: ModificationResult {
             changed_database: new_database,
             target: Redirect {
-                target: EINZELBUCHUNGEN_DAUERAUFTRAG_ADD.to_string()
+                target: EINZELBUCHUNGEN_DAUERAUFTRAG_ADD.to_string(),
             },
         },
         change: DauerauftragChange {
@@ -73,7 +80,6 @@ pub fn submit_dauerauftrag(context: SubmitDauerauftragContext) -> RedirectResult
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -83,7 +89,9 @@ mod tests {
     use crate::model::primitives::kategorie::builder::demo_kategorie;
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::builder::demo_name;
-    use crate::model::state::persistent_application_state::builder::{generate_database_with_dauerauftraege, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        generate_database_with_dauerauftraege, generate_empty_database,
+    };
 
     #[test]
     fn test_submit_dauerauftrag() {
@@ -100,15 +108,26 @@ mod tests {
         };
         let result = submit_dauerauftrag(context);
 
-        assert_eq!(result.result.changed_database.dauerauftraege.select().count(), 1);
-        assert_eq!(result.result.changed_database.dauerauftraege.get(0).value, Dauerauftrag {
-            start_datum: any_datum(),
-            ende_datum: any_datum(),
-            rhythmus: Rhythmus::Monatlich,
-            name: demo_name(),
-            kategorie: demo_kategorie(),
-            betrag: zwei(),
-        });
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .dauerauftraege
+                .select()
+                .count(),
+            1
+        );
+        assert_eq!(
+            result.result.changed_database.dauerauftraege.get(0).value,
+            Dauerauftrag {
+                start_datum: any_datum(),
+                ende_datum: any_datum(),
+                rhythmus: Rhythmus::Monatlich,
+                name: demo_name(),
+                kategorie: demo_kategorie(),
+                betrag: zwei(),
+            }
+        );
 
         assert_eq!(result.change.icon, "fa fa-plus");
         assert_eq!(result.change.start_datum, any_datum());
@@ -134,16 +153,26 @@ mod tests {
 
         let result = submit_dauerauftrag(context);
 
-
-        assert_eq!(result.result.changed_database.dauerauftraege.select().count(), 1);
-        assert_eq!(result.result.changed_database.dauerauftraege.get(1).value, Dauerauftrag {
-            start_datum: any_datum(),
-            ende_datum: any_datum(),
-            rhythmus: Rhythmus::Monatlich,
-            name: demo_name(),
-            kategorie: kategorie("changed kategorie"),
-            betrag: zwei(),
-        });
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .dauerauftraege
+                .select()
+                .count(),
+            1
+        );
+        assert_eq!(
+            result.result.changed_database.dauerauftraege.get(1).value,
+            Dauerauftrag {
+                start_datum: any_datum(),
+                ende_datum: any_datum(),
+                rhythmus: Rhythmus::Monatlich,
+                name: demo_name(),
+                kategorie: kategorie("changed kategorie"),
+                betrag: zwei(),
+            }
+        );
 
         assert_eq!(result.change.icon, "fa fa-pencil");
         assert_eq!(result.change.start_datum, any_datum());

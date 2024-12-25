@@ -15,14 +15,15 @@ impl Line {
             line: "".to_string(),
         }
     }
-    pub fn from(string: String) -> Line{
-        Line {
-            line: string,
-        }
+    pub fn from(string: String) -> Line {
+        Line { line: string }
     }
 
-    pub fn from_multiline_str(multiline_string: String) -> Vec<Line>{
-        multiline_string.lines().map(|line| Line::new(line)).collect()
+    pub fn from_multiline_str(multiline_string: String) -> Vec<Line> {
+        multiline_string
+            .lines()
+            .map(|line| Line::new(line))
+            .collect()
     }
 }
 
@@ -37,12 +38,20 @@ pub mod builder {
     }
 
     pub fn as_string(lines: &Vec<Line>) -> String {
-        lines.iter().map(|line| line.line.clone()).collect::<Vec<String>>().join("\n")
+        lines
+            .iter()
+            .map(|line| line.line.clone())
+            .collect::<Vec<String>>()
+            .join("\n")
     }
 }
 
 pub fn as_string(lines: &Vec<Line>) -> String {
-    lines.iter().map(|line| line.line.clone()).collect::<Vec<String>>().join("\n")
+    lines
+        .iter()
+        .map(|line| line.line.clone())
+        .collect::<Vec<String>>()
+        .join("\n")
 }
 
 #[cfg(test)]

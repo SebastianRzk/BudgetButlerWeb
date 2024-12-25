@@ -13,7 +13,7 @@ pub struct SubmitDepotwertContext<'a> {
     pub edit_index: Option<u32>,
     pub name: Name,
     pub typ: DepotwertTyp,
-    pub isin: ISIN
+    pub isin: ISIN,
 }
 
 pub fn submit_depotwert(context: SubmitDepotwertContext) -> RedirectResult<DepotwertChange> {
@@ -27,24 +27,27 @@ pub fn submit_depotwert(context: SubmitDepotwertContext) -> RedirectResult<Depot
 
     if let Some(index) = context.edit_index {
         icon = PENCIL;
-        neue_depotwerte = context.database.depotwerte
+        neue_depotwerte = context
+            .database
+            .depotwerte
             .change()
             .edit(index, depotwert.clone())
     } else {
         icon = PLUS;
-        neue_depotwerte = context.database.depotwerte
+        neue_depotwerte = context
+            .database
+            .depotwerte
             .change()
             .insert(depotwert.clone())
     }
 
     let new_database = context.database.change_depotwerte(neue_depotwerte);
 
-
     RedirectResult {
         result: ModificationResult {
             changed_database: new_database,
             target: Redirect {
-                target: SPAREN_DEPOTWERT_ADD.to_string()
+                target: SPAREN_DEPOTWERT_ADD.to_string(),
             },
         },
         change: DepotwertChange {
@@ -55,7 +58,6 @@ pub fn submit_depotwert(context: SubmitDepotwertContext) -> RedirectResult<Depot
         },
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -78,17 +80,22 @@ mod tests {
             isin: isin("DE000A0WMPJ6"),
         });
 
-        assert_eq!(result.result.changed_database.depotwerte.select().count(), 1);
-        assert_eq!(result.result.changed_database.depotwerte.get(0).value, Depotwert{
-            name: demo_name(),
-            isin: isin("DE000A0WMPJ6"),
-            typ: DepotwertTyp::Einzelaktie,
-        });
+        assert_eq!(
+            result.result.changed_database.depotwerte.select().count(),
+            1
+        );
+        assert_eq!(
+            result.result.changed_database.depotwerte.get(0).value,
+            Depotwert {
+                name: demo_name(),
+                isin: isin("DE000A0WMPJ6"),
+                typ: DepotwertTyp::Einzelaktie,
+            }
+        );
 
         assert_eq!(result.change.icon, PLUS);
         assert_eq!(result.change.name, demo_name());
         assert_eq!(result.change.typ, DepotwertTyp::Einzelaktie);
         assert_eq!(result.change.isin, isin("DE000A0WMPJ6"));
     }
-
 }

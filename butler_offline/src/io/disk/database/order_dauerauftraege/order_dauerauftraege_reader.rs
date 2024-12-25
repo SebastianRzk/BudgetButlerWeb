@@ -45,7 +45,10 @@ mod tests {
         assert_eq!(order_dauerauftrag.rhythmus, Rhythmus::Monatlich);
         assert_eq!(order_dauerauftrag.name, name("MeinName"));
         assert_eq!(order_dauerauftrag.konto, konto_referenz("MeinKonto"));
-        assert_eq!(order_dauerauftrag.depotwert, depotwert_referenz("MeinDepotwert"));
+        assert_eq!(
+            order_dauerauftrag.depotwert,
+            depotwert_referenz("MeinDepotwert")
+        );
         assert_eq!(order_dauerauftrag.wert, kauf(u_vier()));
     }
 }

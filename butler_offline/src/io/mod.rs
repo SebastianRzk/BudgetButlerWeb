@@ -1,5 +1,5 @@
 pub mod disk;
-pub mod http;
 pub(crate) mod html;
-pub mod time;
+pub mod http;
 pub mod online;
+pub mod time;

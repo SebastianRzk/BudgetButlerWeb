@@ -159,8 +159,7 @@ fn calc_internal_state(database: Database, heute: Datum, next_free_index: u32) -
         let betrag: Betrag;
 
         match sparbuchung.value.typ {
-            SparbuchungTyp::ManuelleEinzahlung
-            | SparbuchungTyp::SonstigeKosten => {
+            SparbuchungTyp::ManuelleEinzahlung | SparbuchungTyp::SonstigeKosten => {
                 betrag = sparbuchung.value.wert.negativ();
             }
 
@@ -205,7 +204,11 @@ fn calc_internal_state(database: Database, heute: Datum, next_free_index: u32) -
                 datum: order.value.datum.clone(),
                 name: order.value.name.clone(),
                 kategorie: Kategorie::new(SPAREN_KATEGORIE.to_string()),
-                betrag: order.value.wert.get_betrag_fuer_geleistete_investition().invertiere_vorzeichen(),
+                betrag: order
+                    .value
+                    .wert
+                    .get_betrag_fuer_geleistete_investition()
+                    .invertiere_vorzeichen(),
             },
         });
     }
@@ -251,7 +254,13 @@ mod tests {
     use crate::model::primitives::name::name;
     use crate::model::primitives::person::builder::demo_person;
     use crate::model::primitives::rhythmus::Rhythmus;
-    use crate::model::state::persistent_application_state::builder::{data_on_disk_with_dauerauftraege, data_on_disk_with_depotauszug, data_on_disk_with_depotwerte, data_on_disk_with_einzelbuchungen, data_on_disk_with_gemeinsame_buchungen, data_on_disk_with_order, data_on_disk_with_order_dauerauftrag, data_on_disk_with_sparbuchungen, data_on_disk_with_sparkontos, demo_database_version};
+    use crate::model::state::persistent_application_state::builder::{
+        data_on_disk_with_dauerauftraege, data_on_disk_with_depotauszug,
+        data_on_disk_with_depotwerte, data_on_disk_with_einzelbuchungen,
+        data_on_disk_with_gemeinsame_buchungen, data_on_disk_with_order,
+        data_on_disk_with_order_dauerauftrag, data_on_disk_with_sparbuchungen,
+        data_on_disk_with_sparkontos, demo_database_version,
+    };
     use crate::model::state::persistent_application_state::DataOnDisk;
     use crate::model::state::persistent_state::database_version::DatabaseVersion;
 
@@ -522,7 +531,10 @@ mod tests {
                 datum: order.datum,
                 name: order.name,
                 kategorie: sparen_kategorie(),
-                betrag: order.wert.get_betrag_fuer_geleistete_investition().invertiere_vorzeichen(),
+                betrag: order
+                    .wert
+                    .get_betrag_fuer_geleistete_investition()
+                    .invertiere_vorzeichen(),
             }
         );
     }
@@ -566,8 +578,6 @@ mod tests {
             }
         );
 
-
-
         assert_eq!(result.einzelbuchungen.select().count(), 1);
         let selected_einzelbuchung = result.einzelbuchungen.get(5);
         assert_eq!(selected_einzelbuchung.dynamisch, true);
@@ -577,7 +587,10 @@ mod tests {
                 datum: datum("2024-01-01"),
                 name: order_dauerauftrag.name,
                 kategorie: sparen_kategorie(),
-                betrag: order_dauerauftrag.wert.get_betrag_fuer_geleistete_investition().invertiere_vorzeichen(),
+                betrag: order_dauerauftrag
+                    .wert
+                    .get_betrag_fuer_geleistete_investition()
+                    .invertiere_vorzeichen(),
             }
         );
     }

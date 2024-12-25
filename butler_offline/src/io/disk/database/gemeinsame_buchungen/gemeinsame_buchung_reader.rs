@@ -42,7 +42,10 @@ mod tests {
         assert_eq!(gemeinsame_buchung.datum, Datum::new(1, 11, 2024));
         assert_eq!(gemeinsame_buchung.name, name("Name"));
         assert_eq!(gemeinsame_buchung.kategorie, kategorie("NeueKategorie"));
-        assert_eq!(gemeinsame_buchung.betrag, betrag(Vorzeichen::Negativ, 234, 12));
+        assert_eq!(
+            gemeinsame_buchung.betrag,
+            betrag(Vorzeichen::Negativ, 234, 12)
+        );
         assert_eq!(gemeinsame_buchung.person, person("Test_User"));
     }
 }

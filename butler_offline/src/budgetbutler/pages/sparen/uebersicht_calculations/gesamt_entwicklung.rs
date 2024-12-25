@@ -83,7 +83,6 @@ mod tests {
         let heute = demo_datum();
         let database = create_demo_database(heute.clone());
 
-
         let result = super::berechne_gesamt_entwicklung(
             &berechne_einnahmen_ausgaben_sparen(&JahrRange::new(heute.jahr, heute.jahr), &database),
             &database,

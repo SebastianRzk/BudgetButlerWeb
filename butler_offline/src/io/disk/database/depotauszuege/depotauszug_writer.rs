@@ -15,7 +15,9 @@ pub fn write_depotauszug(depotauszug: &Depotauszug) -> Line {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::model::database::depotauszug::builder::{demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR};
+    use crate::model::database::depotauszug::builder::{
+        demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR,
+    };
 
     #[test]
     fn test_write_depotwert() {

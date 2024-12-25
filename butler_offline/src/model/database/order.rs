@@ -1,13 +1,13 @@
 use crate::io::disk::database::types::ElementRequirement;
 use crate::model::database::depotwert::DepotwertReferenz;
 use crate::model::database::sparbuchung::KontoReferenz;
+use crate::model::eigenschaften::besitzt_datum::BesitztDatum;
+use crate::model::eigenschaften::besitzt_konto_referenz::BesitztKontoReferenz;
+use crate::model::indiziert::Indiziert;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::order_betrag::OrderBetrag;
 use std::cmp::Ordering;
-use crate::model::eigenschaften::besitzt_datum::BesitztDatum;
-use crate::model::eigenschaften::besitzt_konto_referenz::BesitztKontoReferenz;
-use crate::model::indiziert::Indiziert;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Order {
@@ -53,20 +53,17 @@ impl PartialOrd<Self> for Order {
     }
 }
 
-impl<'a> BesitztDatum<'a> for Indiziert<Order>{
+impl<'a> BesitztDatum<'a> for Indiziert<Order> {
     fn datum(&'a self) -> &'a Datum {
         &self.value.datum
     }
 }
 
-
-impl<'a> BesitztKontoReferenz<'a> for Indiziert<Order>{
+impl<'a> BesitztKontoReferenz<'a> for Indiziert<Order> {
     fn konto_referenz(&'a self) -> &'a KontoReferenz {
         &self.value.konto
     }
 }
-
-
 
 impl Ord for Order {
     fn cmp(&self, other: &Self) -> Ordering {

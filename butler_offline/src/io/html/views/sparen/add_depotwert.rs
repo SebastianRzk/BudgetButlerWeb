@@ -68,7 +68,9 @@ pub fn map_to_template(view_result: AddDepotwertViewResult) -> AddDepotwertTempl
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::sparen::add_depotwert::{AddDepotwertViewResult, DefaultItem, LetzteErfassung};
+    use crate::budgetbutler::pages::sparen::add_depotwert::{
+        AddDepotwertViewResult, DefaultItem, LetzteErfassung,
+    };
     use crate::model::database::depotwert::DepotwertTyp;
     use crate::model::primitives::isin::builder::{demo_isin, isin};
     use crate::model::primitives::name::name;
@@ -95,12 +97,9 @@ mod tests {
                 icon: "FA".to_string(),
                 name: name("Ein Name"),
                 typ: DepotwertTyp::ETF,
-                isin: demo_isin().isin
-
+                isin: demo_isin().isin,
             }],
-            typen: vec![
-                DepotwertTyp::ETF,
-            ],
+            typen: vec![DepotwertTyp::ETF],
         };
 
         let result = super::map_to_template(view_result);
@@ -113,7 +112,7 @@ mod tests {
         assert_eq!(result.approve_title, "Konto erfassen");
 
         assert_eq!(result.typen.items.len(), 1);
-        assert_eq!(result.typen.items[0].value, "ETF" );
+        assert_eq!(result.typen.items[0].value, "ETF");
         assert_eq!(result.typen.items[0].selected, true);
 
         assert_eq!(result.letzte_erfassung.len(), 1);

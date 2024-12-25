@@ -6,14 +6,18 @@ use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_
 use crate::io::disk::reader::read_database;
 use crate::io::disk::updater::update_database;
 use crate::io::html::views::core::error_optimistic_locking::render_error_optimistic_locking_template;
+use crate::io::html::views::core::zurueck_zu::{
+    render_success_message_template, SuccessZurueckZuViewResult,
+};
 use crate::io::html::views::index::render_index_template;
 use crate::model::state::config::DatabaseConfiguration;
 use crate::model::state::persistent_application_state::Database;
+use crate::model::state::persistent_state::database_version::{
+    create_initial_database_version, DatabaseVersion,
+};
 use std::sync::Mutex;
-use crate::io::html::views::core::zurueck_zu::{render_success_message_template, SuccessZurueckZuViewResult};
-use crate::model::state::persistent_state::database_version::{create_initial_database_version, DatabaseVersion};
 
-pub fn  handle_render_display_view<CONTEXT, ViewResult>(
+pub fn handle_render_display_view<CONTEXT, ViewResult>(
     page_name: &str,
     page_url: &str,
     context: CONTEXT,
@@ -101,8 +105,7 @@ pub fn handle_modification_manual<ViewResult>(
     let valid_next_state: Option<Database>;
     let success_message: Option<SuccessMessage>;
     if optimistic_locking_result == OptimisticLockingResult::Error {
-        page_content =
-            render_error_optimistic_locking_template(None);
+        page_content = render_error_optimistic_locking_template(None);
         valid_next_state = None;
         success_message = None;
     } else {
@@ -166,26 +169,23 @@ pub struct ManualRenderResult {
     pub full_rendered_page: String,
 }
 
-
-pub fn  handle_render_success_display_message(
+pub fn handle_render_success_display_message(
     page_name: &str,
     page_url: &str,
     database_name: String,
-    context: DisplaySuccessMessage
+    context: DisplaySuccessMessage,
 ) -> String {
-    let render_view = render_success_message_template(
-        SuccessZurueckZuViewResult {
-            text: context.link_name,
-            link: context.link_url,
-        }
-    );
+    let render_view = render_success_message_template(SuccessZurueckZuViewResult {
+        text: context.link_name,
+        link: context.link_url,
+    });
     render_index_template(
         resolve_active_group_from_url(page_url),
         page_url.to_string(),
         page_name.to_string(),
         render_view,
-        Some(SuccessMessage{
-            message: context.message
+        Some(SuccessMessage {
+            message: context.message,
         }),
         database_name,
     )

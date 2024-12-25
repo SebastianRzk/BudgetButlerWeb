@@ -6,20 +6,20 @@ pub struct DatumTemplate {
     pub datum_german: String,
 }
 
-pub fn create_datum_select(data: Vec<DatumSelektion>) -> Vec<DatumTemplate>{
-    data.iter().map(|datum| {
-        DatumTemplate {
+pub fn create_datum_select(data: Vec<DatumSelektion>) -> Vec<DatumTemplate> {
+    data.iter()
+        .map(|datum| DatumTemplate {
             can_be_chosen: datum.can_be_chosen,
             datum: datum.datum.to_iso_string(),
             datum_german: datum.datum.to_german_string(),
-        }
-    }).collect()
+        })
+        .collect()
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::model::metamodel::datum_selektion::DatumSelektion;
     use super::create_datum_select;
+    use crate::model::metamodel::datum_selektion::DatumSelektion;
     use crate::model::primitives::datum::Datum;
 
     #[test]

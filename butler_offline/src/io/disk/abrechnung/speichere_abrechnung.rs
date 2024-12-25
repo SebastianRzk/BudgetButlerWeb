@@ -1,9 +1,9 @@
-use std::io::Write;
-use std::path::Path;
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::person::Person;
 use crate::model::state::config::{app_root, AbrechnungsConfiguration};
+use std::io::Write;
+use std::path::Path;
 
 pub fn speichere_abrechnung(
     abrechnung: Vec<Line>,
@@ -18,7 +18,9 @@ pub fn speichere_abrechnung(
         now,
         person.person
     );
-    let file_path = app_root().join(Path::new(&abrechnungs_configuration.location)).join(file_name);
+    let file_path = app_root()
+        .join(Path::new(&abrechnungs_configuration.location))
+        .join(file_name);
 
     let mut file = std::fs::File::create(file_path).unwrap();
     for line in abrechnung {

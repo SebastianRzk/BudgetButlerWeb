@@ -41,7 +41,9 @@ pub struct LetzteErfassungTemplate {
     pub rhythmus: String,
 }
 
-pub fn render_add_order_dauerauftrag_template(view_result: AddOrderDauerauftragViewResult) -> String {
+pub fn render_add_order_dauerauftrag_template(
+    view_result: AddOrderDauerauftragViewResult,
+) -> String {
     let as_template: AddOrderDauerauftragTemplate = map_to_template(view_result);
     as_template.render().unwrap()
 }

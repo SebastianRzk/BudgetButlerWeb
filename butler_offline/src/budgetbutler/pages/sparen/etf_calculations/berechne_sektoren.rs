@@ -1,5 +1,5 @@
 use crate::budgetbutler::pages::sparen::uebersicht_etfs::{
-    DepotwertMitDaten, TabellenZeile, TabellenZelle, Tabelle,
+    DepotwertMitDaten, Tabelle, TabellenZeile, TabellenZelle,
 };
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::prozent::Prozent;
@@ -43,7 +43,6 @@ pub fn berechne_sektoren(
                 .sektoren
                 .contains_key(&sektor)
             {
-
                 let sektor_row = sektoren_map.get(&sektor).unwrap();
                 let mut neue_werte = sektor_row.other_columns.clone();
                 neue_werte.push(TabellenZelle {
@@ -68,7 +67,8 @@ pub fn berechne_sektoren(
                     .data
                     .sektoren
                     .get(&sektor)
-                    .unwrap().clone(),
+                    .unwrap()
+                    .clone(),
             );
             let betrag = depotwert_mit_kontostand
                 .aktueller_kontostand

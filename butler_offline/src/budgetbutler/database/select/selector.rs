@@ -8,17 +8,20 @@ pub struct Selector<T> {
     pub internal_state: Vec<T>,
 }
 
-
 impl<T: Clone> Selector<T> {
     pub fn new(items: Vec<T>) -> Selector<T> {
         Selector {
-            internal_state: items
+            internal_state: items,
         }
     }
 
     pub fn filter(self, filter_function: impl Fn(&T) -> bool) -> Selector<T> {
         Selector {
-            internal_state: self.internal_state.into_iter().filter(filter_function).collect()
+            internal_state: self
+                .internal_state
+                .into_iter()
+                .filter(filter_function)
+                .collect(),
         }
     }
 
@@ -28,11 +31,15 @@ impl<T: Clone> Selector<T> {
             new_state.push(map_function(item));
         }
         Selector {
-            internal_state: new_state
+            internal_state: new_state,
         }
     }
 
-    pub fn group_by<KEYTYPE: Eq + Hash, VALUETYPE: Add<Output=VALUETYPE> + Default + Clone>(self, key_extractor: impl Fn(&T) -> KEYTYPE, result_collector: impl Fn(&T) -> VALUETYPE) -> HashMap<KEYTYPE, VALUETYPE> {
+    pub fn group_by<KEYTYPE: Eq + Hash, VALUETYPE: Add<Output = VALUETYPE> + Default + Clone>(
+        self,
+        key_extractor: impl Fn(&T) -> KEYTYPE,
+        result_collector: impl Fn(&T) -> VALUETYPE,
+    ) -> HashMap<KEYTYPE, VALUETYPE> {
         let mut result: HashMap<KEYTYPE, VALUETYPE> = HashMap::new();
         for item in self.internal_state.iter() {
             let key = key_extractor(item);
@@ -48,7 +55,10 @@ impl<T: Clone> Selector<T> {
         result
     }
 
-    pub fn group_as_list_by<'a, KEYTYPE: Eq + Hash>(self, key_extractor: impl Fn(&T) -> KEYTYPE) -> HashMap<KEYTYPE, Vec<T>> {
+    pub fn group_as_list_by<'a, KEYTYPE: Eq + Hash>(
+        self,
+        key_extractor: impl Fn(&T) -> KEYTYPE,
+    ) -> HashMap<KEYTYPE, Vec<T>> {
         let mut result: HashMap<KEYTYPE, Vec<T>> = HashMap::new();
         for item in self.internal_state.into_iter() {
             let key = key_extractor(&item);
@@ -62,8 +72,10 @@ impl<T: Clone> Selector<T> {
         result
     }
 
-
-    pub fn extract_unique_values<KEYTYPE: Eq + Hash + Ord>(&self, key_extractor: impl Fn(&T) -> KEYTYPE) -> Vec<KEYTYPE> {
+    pub fn extract_unique_values<KEYTYPE: Eq + Hash + Ord>(
+        &self,
+        key_extractor: impl Fn(&T) -> KEYTYPE,
+    ) -> Vec<KEYTYPE> {
         let mut result_set = HashSet::<KEYTYPE>::new();
         for item in self.internal_state.iter() {
             let keytype: KEYTYPE = key_extractor(item);
@@ -78,14 +90,13 @@ impl<T: Clone> Selector<T> {
         self.internal_state
     }
 
-
     pub fn count(&self) -> usize {
         self.internal_state.len()
     }
 
     pub fn as_ref(&self) -> Selector<&T> {
         Selector {
-            internal_state: self.internal_state.iter().collect()
+            internal_state: self.internal_state.iter().collect(),
         }
     }
 
@@ -103,7 +114,7 @@ impl<T: Clone> Selector<T> {
 
     pub fn clone(&self) -> Selector<T> {
         Selector {
-            internal_state: self.internal_state.clone()
+            internal_state: self.internal_state.clone(),
         }
     }
 }
@@ -122,16 +133,16 @@ pub fn generate_monats_indizes(from: Datum, to: Datum) -> Vec<MonatsAggregations
     result
 }
 
-
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::database::select::functions::datatypes::MonatsAggregationsIndex;
     use crate::budgetbutler::database::select::selector::{generate_monats_indizes, Selector};
-    use crate::model::database::einzelbuchung::builder::{demo_einzelbuchung, einzelbuchung_with_kategorie, einzelbuchung_with_kategorie_und_betrag};
+    use crate::model::database::einzelbuchung::builder::{
+        demo_einzelbuchung, einzelbuchung_with_kategorie, einzelbuchung_with_kategorie_und_betrag,
+    };
     use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::builder::zwei;
     use crate::model::primitives::datum::Datum;
-
 
     #[test]
     fn test_selector_should_filter_negative() {
@@ -173,7 +184,6 @@ mod tests {
         assert_eq!(result.get(&"k2".to_string()), Some(&2));
     }
 
-
     #[test]
     fn test_generate_monats_indizes() {
         let from = Datum::new(1, 12, 2019);
@@ -182,12 +192,35 @@ mod tests {
         let result = generate_monats_indizes(from, to);
 
         assert_eq!(result.len(), 4);
-        assert_eq!(result[0], MonatsAggregationsIndex { monat: 12, jahr: 2019 });
-        assert_eq!(result[1], MonatsAggregationsIndex { monat: 1, jahr: 2020 });
-        assert_eq!(result[2], MonatsAggregationsIndex { monat: 2, jahr: 2020 });
-        assert_eq!(result[3], MonatsAggregationsIndex { monat: 3, jahr: 2020 });
+        assert_eq!(
+            result[0],
+            MonatsAggregationsIndex {
+                monat: 12,
+                jahr: 2019
+            }
+        );
+        assert_eq!(
+            result[1],
+            MonatsAggregationsIndex {
+                monat: 1,
+                jahr: 2020
+            }
+        );
+        assert_eq!(
+            result[2],
+            MonatsAggregationsIndex {
+                monat: 2,
+                jahr: 2020
+            }
+        );
+        assert_eq!(
+            result[3],
+            MonatsAggregationsIndex {
+                monat: 3,
+                jahr: 2020
+            }
+        );
     }
-
 
     #[test]
     fn test_extract_unique_values() {
@@ -205,7 +238,7 @@ mod tests {
     }
 
     #[test]
-    fn test_first(){
+    fn test_first() {
         let selector = Selector::new(vec![
             einzelbuchung_with_kategorie("k1"),
             einzelbuchung_with_kategorie("k2"),
@@ -217,7 +250,7 @@ mod tests {
     }
 
     #[test]
-    fn test_last(){
+    fn test_last() {
         let selector = Selector::new(vec![
             einzelbuchung_with_kategorie("k1"),
             einzelbuchung_with_kategorie("k2"),

@@ -9,8 +9,13 @@ pub struct DeleteContext<'a> {
     pub delete_index: u32,
 }
 
-pub fn delete_gemeinsame_buchung(context: DeleteContext) -> RedirectResult<GemeinsameBuchungChange> {
-    let to_delete = context.database.gemeinsame_buchungen.get(context.delete_index);
+pub fn delete_gemeinsame_buchung(
+    context: DeleteContext,
+) -> RedirectResult<GemeinsameBuchungChange> {
+    let to_delete = context
+        .database
+        .gemeinsame_buchungen
+        .get(context.delete_index);
 
     let neue_gemeinsame_buchungen = context
         .database
@@ -20,7 +25,9 @@ pub fn delete_gemeinsame_buchung(context: DeleteContext) -> RedirectResult<Gemei
 
     RedirectResult {
         result: ModificationResult {
-            changed_database: context.database.change_gemeinsame_buchungen(neue_gemeinsame_buchungen),
+            changed_database: context
+                .database
+                .change_gemeinsame_buchungen(neue_gemeinsame_buchungen),
             target: Redirect {
                 target: GEMEINSAME_BUCHUNGEN_UEBERSICHT.to_string(),
             },
@@ -44,7 +51,8 @@ mod tests {
 
     #[test]
     fn test_delete_dauerauftrag() {
-        let database = generate_database_with_gemeinsamen_buchungen(vec![demo_gemeinsame_buchung()]);
+        let database =
+            generate_database_with_gemeinsamen_buchungen(vec![demo_gemeinsame_buchung()]);
 
         let context = super::DeleteContext {
             database: &database,

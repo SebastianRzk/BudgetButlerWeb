@@ -259,7 +259,7 @@ pub fn get_country_name(code: String) -> String {
         "ZAR" => "Zaire (jetzt Demokratische Republik Kongo)".to_string(),
         "CAF" => "Zentralafrikanische Republik".to_string(),
         "CYP" => "Zypern".to_string(),
-        &_ => code.clone()
+        &_ => code.clone(),
     }
 }
 
@@ -267,10 +267,16 @@ pub fn get_country_name(code: String) -> String {
 mod tests {
     #[test]
     fn should_translate_known_name() {
-        assert_eq!(super::get_country_name("DEU".to_string()), "Deutschland".to_string());
+        assert_eq!(
+            super::get_country_name("DEU".to_string()),
+            "Deutschland".to_string()
+        );
     }
     #[test]
-    fn should_translate_unknown_name(){
-        assert_eq!(super::get_country_name("XXX".to_string()), "XXX".to_string());
+    fn should_translate_unknown_name() {
+        assert_eq!(
+            super::get_country_name("XXX".to_string()),
+            "XXX".to_string()
+        );
     }
 }

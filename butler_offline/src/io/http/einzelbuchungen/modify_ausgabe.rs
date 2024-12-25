@@ -37,10 +37,7 @@ pub async fn get_view(
     extra_kategorie: Data<AdditionalKategorie>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
-    let configuration = configuration_data
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration = configuration_data.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Ausgabe hinzufügen",
         EINZELBUCHUNGEN_AUSGABE_ADD,
@@ -50,14 +47,13 @@ pub async fn get_view(
             einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
             today: today(),
             edit_buchung: None,
-            ausgeschlossene_kategorien: &configuration.erfassungs_configuration.ausgeschlossene_kategorien,
+            ausgeschlossene_kategorien: &configuration
+                .erfassungs_configuration
+                .ausgeschlossene_kategorien,
         },
         handle_view,
         render_add_ausgabe_template,
-        configuration
-            .database_configuration
-            .name
-            .clone(),
+        configuration.database_configuration.name.clone(),
     ))
 }
 
@@ -86,7 +82,9 @@ pub async fn post_view(
             einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
             today: today(),
             edit_buchung: Some(form.edit_index),
-            ausgeschlossene_kategorien: &config_guard.erfassungs_configuration.ausgeschlossene_kategorien,
+            ausgeschlossene_kategorien: &config_guard
+                .erfassungs_configuration
+                .ausgeschlossene_kategorien,
         },
         handle_view,
         render_add_ausgabe_template,
@@ -108,10 +106,7 @@ pub async fn post_submit(
     configuration: Data<ConfigurationData>,
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
-    let configuration = configuration
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration = configuration.configuration.lock().unwrap();
 
     let new_state = handle_modification(
         VersionedContext {

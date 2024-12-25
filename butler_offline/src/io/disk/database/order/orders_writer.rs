@@ -3,9 +3,13 @@ use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::state::persistent_application_state::Database;
 
 pub fn write_orders(database: &Database) -> Vec<Line> {
-    database.order.orders.iter()
+    database
+        .order
+        .orders
+        .iter()
         .filter(|l| !l.dynamisch)
-        .map(|l| write_order(&l.value)).collect()
+        .map(|l| write_order(&l.value))
+        .collect()
 }
 
 #[cfg(test)]
@@ -13,7 +17,11 @@ mod tests {
     use super::*;
     use crate::model::database::order::builder::{any_order, demo_order, DEMO_ORDER_AS_DB_STR};
     use crate::model::indiziert::builder::dynamisch_indiziert;
-    use crate::model::state::persistent_application_state::builder::{demo_database_version, generate_database_with_orders, leere_dauerauftraege, leere_depotauszuege, leere_depotwerte, leere_einzelbuchungen, leere_gemeinsame_buchungen, leere_order_dauerauftraege, leere_sparbuchungen, leere_sparkontos};
+    use crate::model::state::persistent_application_state::builder::{
+        demo_database_version, generate_database_with_orders, leere_dauerauftraege,
+        leere_depotauszuege, leere_depotwerte, leere_einzelbuchungen, leere_gemeinsame_buchungen,
+        leere_order_dauerauftraege, leere_sparbuchungen, leere_sparkontos,
+    };
     use crate::model::state::persistent_state::order::Orders;
 
     #[test]
@@ -27,7 +35,7 @@ mod tests {
     }
 
     #[test]
-    fn test_should_filter_dynamic_order(){
+    fn test_should_filter_dynamic_order() {
         let database = Database {
             order: Orders {
                 orders: vec![dynamisch_indiziert(any_order())],
@@ -40,12 +48,11 @@ mod tests {
             depotwerte: leere_depotwerte(),
             order_dauerauftraege: leere_order_dauerauftraege(),
             einzelbuchungen: leere_einzelbuchungen(),
-            depotauszuege: leere_depotauszuege()
+            depotauszuege: leere_depotauszuege(),
         };
 
         let lines = write_orders(&database);
 
         assert_eq!(lines.len(), 0);
     }
-
 }

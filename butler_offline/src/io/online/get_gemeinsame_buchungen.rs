@@ -36,7 +36,7 @@ pub struct GemeinsamebuchungDto {
     pub name: String,
     pub kategorie: String,
     pub wert: String,
-    pub zielperson: String
+    pub zielperson: String,
 }
 
 pub fn map_gemeinsame_buchungen(
@@ -46,7 +46,14 @@ pub fn map_gemeinsame_buchungen(
     partner_name_local: Person,
 ) -> Vec<GemeinsameBuchung> {
     dto.into_iter()
-        .map(|x| map_gemeinsame_buchung(x, self_name_remote.clone(), self_name_local.clone(), partner_name_local.clone()))
+        .map(|x| {
+            map_gemeinsame_buchung(
+                x,
+                self_name_remote.clone(),
+                self_name_local.clone(),
+                partner_name_local.clone(),
+            )
+        })
         .collect()
 }
 
@@ -89,7 +96,7 @@ mod tests {
                 name: "ThisIsRemoteSelf".to_string(),
                 kategorie: "Kategorie".to_string(),
                 wert: "1.23".to_string(),
-                zielperson: "ThisIsRemoteSelf".to_string()
+                zielperson: "ThisIsRemoteSelf".to_string(),
             },
             "ThisIsRemoteSelf".to_string(),
             demo_self(),
@@ -106,7 +113,7 @@ mod tests {
                 name: "this is a partner".to_string(),
                 kategorie: "Kategorie".to_string(),
                 wert: "1.23".to_string(),
-                zielperson: "partner".to_string()
+                zielperson: "partner".to_string(),
             },
             "ThisIsRemoteSelf".to_string(),
             demo_self(),

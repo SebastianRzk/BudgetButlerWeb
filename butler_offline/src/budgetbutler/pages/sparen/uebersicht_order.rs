@@ -36,7 +36,7 @@ pub struct BeschriebeneOrder {
     pub konto: KontoReferenz,
     pub depotwertbeschreibung: String,
     pub wert: OrderBetrag,
-    pub dynamisch: bool
+    pub dynamisch: bool,
 }
 
 pub fn handle_view(context: UebersichtOrderContext) -> UebersichtOrderViewResult {
@@ -162,10 +162,7 @@ mod tests {
         assert_eq!(result.liste[0].buchungen.len(), 1);
 
         let result_einzelbuchung = &result.liste[0].buchungen[0];
-        assert_eq!(
-            result_einzelbuchung.datum.to_german_string(),
-            "01.01.2020"
-        );
+        assert_eq!(result_einzelbuchung.datum.to_german_string(), "01.01.2020");
         assert_eq!(result_einzelbuchung.name.get_name(), "Normal");
         assert_eq!(result_einzelbuchung.konto, demo_konto_referenz());
         assert_eq!(

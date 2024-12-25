@@ -36,6 +36,9 @@ mod tests {
 
         let line = write_gemeinsame_buchung(&gemeinsame_buchung);
 
-        assert_eq!(line.line, "2024-01-01,NeueKategorie,Normal,-123.12,Test_User");
+        assert_eq!(
+            line.line,
+            "2024-01-01,NeueKategorie,Normal,-123.12,Test_User"
+        );
     }
 }

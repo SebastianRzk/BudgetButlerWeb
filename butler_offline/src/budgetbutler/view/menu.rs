@@ -1,7 +1,17 @@
 use crate::budgetbutler::view::icons::{Icon, COGS, DASHBOARD, LINE_CHART, LIST, PLUS, RELOAD};
-use crate::budgetbutler::view::routes::{CORE_CONFIGURATION, CORE_IMPORT, CORE_RELOAD_DATABASE, EINZELBUCHUNGEN_AUSGABE_ADD, EINZELBUCHUNGEN_DAUERAUFTRAG_ADD, EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT, EINZELBUCHUNGEN_EINNAHME_ADD, EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT, EINZELBUCHUNGEN_JAHRESUEBERSICHT, EINZELBUCHUNGEN_MONATSUEBERSICHT, GEMEINSAME_BUCHUNGEN_ABRECHNEN, GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN, GEMEINSAME_BUCHUNGEN_ADD, GEMEINSAME_BUCHUNGEN_UEBERSICHT, SPAREN_DEPOTAUSZUEGE_UEBERSICHT, SPAREN_DEPOTAUSZUG_ADD, SPAREN_DEPOTWERT_ADD, SPAREN_DEPOTWERTE_UEBERSICHT, SPAREN_ORDERDAUERAUFTRAG_ADD, SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT, SPAREN_ORDER_ADD, SPAREN_ORDER_UEBERSICHT, SPAREN_SPARBUCHUNGEN_UEBERSICHT, SPAREN_SPARBUCHUNG_ADD, SPAREN_SPARKONTO_ADD, SPAREN_SPARKONTO_UEBERSICHT, SPAREN_UEBERSICHT, SPAREN_UEBERSICHT_ETFS};
+use crate::budgetbutler::view::routes::{
+    CORE_CONFIGURATION, CORE_IMPORT, CORE_RELOAD_DATABASE, EINZELBUCHUNGEN_AUSGABE_ADD,
+    EINZELBUCHUNGEN_DAUERAUFTRAG_ADD, EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT,
+    EINZELBUCHUNGEN_EINNAHME_ADD, EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT,
+    EINZELBUCHUNGEN_JAHRESUEBERSICHT, EINZELBUCHUNGEN_MONATSUEBERSICHT,
+    GEMEINSAME_BUCHUNGEN_ABRECHNEN, GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN, GEMEINSAME_BUCHUNGEN_ADD,
+    GEMEINSAME_BUCHUNGEN_UEBERSICHT, SPAREN_DEPOTAUSZUEGE_UEBERSICHT, SPAREN_DEPOTAUSZUG_ADD,
+    SPAREN_DEPOTWERTE_UEBERSICHT, SPAREN_DEPOTWERT_ADD, SPAREN_ORDERDAUERAUFTRAG_ADD,
+    SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT, SPAREN_ORDER_ADD, SPAREN_ORDER_UEBERSICHT,
+    SPAREN_SPARBUCHUNGEN_UEBERSICHT, SPAREN_SPARBUCHUNG_ADD, SPAREN_SPARKONTO_ADD,
+    SPAREN_SPARKONTO_UEBERSICHT, SPAREN_UEBERSICHT, SPAREN_UEBERSICHT_ETFS,
+};
 use std::string::ToString;
-
 
 pub const PERSOENLICHE_FINANZEN: &str = "Persönliche Finanzen";
 pub const GEMEINSAME_FINANZEN: &str = "Gemeinsame Finanzen";
@@ -41,18 +51,18 @@ pub fn einzelbuchungen_menu() -> RootMenu {
             MenuEntry {
                 url: EINZELBUCHUNGEN_MONATSUEBERSICHT.to_string(),
                 name: "Monatsübersicht".to_string(),
-                icon: LINE_CHART
+                icon: LINE_CHART,
             },
             MenuEntry {
                 url: EINZELBUCHUNGEN_JAHRESUEBERSICHT.to_string(),
                 name: "Jahresübersicht".to_string(),
-                icon: LINE_CHART
+                icon: LINE_CHART,
             },
             MenuEntry {
                 url: CORE_IMPORT.to_string(),
                 name: "Export / Import".to_string(),
-                icon: COGS
-            }
+                icon: COGS,
+            },
         ],
     }
 }
@@ -80,17 +90,16 @@ pub fn gemeinsame_buchungen_menu() -> RootMenu {
             MenuEntry {
                 url: CORE_IMPORT.to_string(),
                 name: "Export / Import".to_string(),
-                icon: COGS
+                icon: COGS,
             },
             MenuEntry {
                 url: GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN.to_string(),
                 name: "Übersicht Abrechnungen".to_string(),
-                icon: LIST
-            }
+                icon: LIST,
+            },
         ],
     }
 }
-
 
 pub fn einstellungen_menu() -> RootMenu {
     RootMenu {
@@ -105,8 +114,8 @@ pub fn einstellungen_menu() -> RootMenu {
             MenuEntry {
                 url: CORE_RELOAD_DATABASE.to_string(),
                 name: "Datenbank neu laden".to_string(),
-                icon: RELOAD
-            }
+                icon: RELOAD,
+            },
         ],
     }
 }
@@ -119,12 +128,12 @@ pub fn sparen_menu() -> RootMenu {
             MenuEntry {
                 url: SPAREN_UEBERSICHT.to_string(),
                 name: "Sparen Übersicht".to_string(),
-                icon: LINE_CHART
+                icon: LINE_CHART,
             },
             MenuEntry {
                 url: SPAREN_UEBERSICHT_ETFS.to_string(),
                 name: "ETF Übersicht".to_string(),
-                icon: LINE_CHART
+                icon: LINE_CHART,
             },
             MenuEntry {
                 url: SPAREN_SPARBUCHUNG_ADD.to_string(),
@@ -134,62 +143,61 @@ pub fn sparen_menu() -> RootMenu {
             MenuEntry {
                 url: SPAREN_SPARKONTO_ADD.to_string(),
                 name: "Neues Sparkonto".to_string(),
-                icon: PLUS
+                icon: PLUS,
             },
             MenuEntry {
                 url: SPAREN_DEPOTWERT_ADD.to_string(),
                 name: "Neuer Depotwert".to_string(),
-                icon: PLUS
+                icon: PLUS,
             },
             MenuEntry {
                 url: SPAREN_ORDER_ADD.to_string(),
                 name: "Neuer Order".to_string(),
-                icon: PLUS
+                icon: PLUS,
             },
             MenuEntry {
                 url: SPAREN_ORDERDAUERAUFTRAG_ADD.to_string(),
                 name: "Neuer Order-Dauerauftrag".to_string(),
-                icon: PLUS
+                icon: PLUS,
             },
             MenuEntry {
                 url: SPAREN_DEPOTAUSZUG_ADD.to_string(),
                 name: "Neuer Depotauszug".to_string(),
-                icon: PLUS
+                icon: PLUS,
             },
             MenuEntry {
                 url: SPAREN_SPARBUCHUNGEN_UEBERSICHT.to_string(),
                 name: "Übersicht Sparbuchungen".to_string(),
-                icon: LIST
+                icon: LIST,
             },
             MenuEntry {
                 url: SPAREN_SPARKONTO_UEBERSICHT.to_string(),
                 name: "Übersicht Sparkonten".to_string(),
-                icon: LIST
+                icon: LIST,
             },
             MenuEntry {
                 url: SPAREN_DEPOTWERTE_UEBERSICHT.to_string(),
                 name: "Übersicht Depotwerte".to_string(),
-                icon: LIST
+                icon: LIST,
             },
             MenuEntry {
                 url: SPAREN_ORDER_UEBERSICHT.to_string(),
                 name: "Übersicht Orders".to_string(),
-                icon: LIST
+                icon: LIST,
             },
             MenuEntry {
                 url: SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT.to_string(),
                 name: "Übersicht Order-Daueraufträge".to_string(),
-                icon: LIST
+                icon: LIST,
             },
             MenuEntry {
                 url: SPAREN_DEPOTAUSZUEGE_UEBERSICHT.to_string(),
                 name: "Übersicht Depotauszüge".to_string(),
-                icon: LIST
-            }
+                icon: LIST,
+            },
         ],
     }
 }
-
 
 pub struct RootMenu {
     pub name: String,
@@ -232,12 +240,23 @@ mod tests {
 
     #[test]
     fn test_resolve_active_group_from_url() {
-        assert_eq!(resolve_active_group_from_url(EINZELBUCHUNGEN_JAHRESUEBERSICHT), PERSOENLICHE_FINANZEN);
+        assert_eq!(
+            resolve_active_group_from_url(EINZELBUCHUNGEN_JAHRESUEBERSICHT),
+            PERSOENLICHE_FINANZEN
+        );
         assert_eq!(resolve_active_group_from_url(SPAREN_UEBERSICHT), SPAREN);
-        assert_eq!(resolve_active_group_from_url(GEMEINSAME_BUCHUNGEN_UEBERSICHT), GEMEINSAME_FINANZEN);
-        assert_eq!(resolve_active_group_from_url(CORE_CONFIGURATION), EINSTELLUNGEN);
+        assert_eq!(
+            resolve_active_group_from_url(GEMEINSAME_BUCHUNGEN_UEBERSICHT),
+            GEMEINSAME_FINANZEN
+        );
+        assert_eq!(
+            resolve_active_group_from_url(CORE_CONFIGURATION),
+            EINSTELLUNGEN
+        );
 
-        assert_eq!(resolve_active_group_from_url("asdfg"), PERSOENLICHE_FINANZEN);
+        assert_eq!(
+            resolve_active_group_from_url("asdfg"),
+            PERSOENLICHE_FINANZEN
+        );
     }
 }
-

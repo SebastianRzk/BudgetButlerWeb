@@ -20,10 +20,7 @@ pub struct ImportAbrechnungViewResult {
 pub fn handle_import_abrechnung(context: ImportAbrechnungContext) -> ImportAbrechnungViewResult {
     let einzelbuchungen_count_before = context.database.einzelbuchungen.select().count();
     let gemeinsame_buchungen_count_before = context.database.gemeinsame_buchungen.select().count();
-    let neue_datenbank = import_abrechnung(
-        &context.database,
-        &context.abrechnung,
-    );
+    let neue_datenbank = import_abrechnung(&context.database, &context.abrechnung);
     let einzelbuchungen_count_after = neue_datenbank.einzelbuchungen.select().count();
     let gemeinsame_buchungen_count_after = neue_datenbank.gemeinsame_buchungen.select().count();
 
@@ -32,11 +29,8 @@ pub fn handle_import_abrechnung(context: ImportAbrechnungContext) -> ImportAbrec
         diff_einzelbuchungen: einzelbuchungen_count_after - einzelbuchungen_count_before,
         diff_gemeinsame_buchungen: gemeinsame_buchungen_count_after
             - gemeinsame_buchungen_count_before,
-        aktualisierte_abrechnung: update_abrechnung_for_import(
-            context.abrechnung,
-            context.heute,
-        )
-        .lines,
+        aktualisierte_abrechnung: update_abrechnung_for_import(context.abrechnung, context.heute)
+            .lines,
     }
 }
 
@@ -117,11 +111,14 @@ Datum,Kategorie,Name,Betrag
         );
         assert_eq!(result.database.einzelbuchungen.select().count(), 1);
         assert_eq!(result.database.gemeinsame_buchungen.select().count(), 0);
-        assert_eq!(result.database.einzelbuchungen.get(0).value, Einzelbuchung{
-            datum: Datum::new(21, 11, 2024),
-            kategorie: kategorie("NeueKategorie"),
-            name: name("asd"),
-            betrag: Betrag::from_user_input(&"-617,00".to_string()),
-        })
+        assert_eq!(
+            result.database.einzelbuchungen.get(0).value,
+            Einzelbuchung {
+                datum: Datum::new(21, 11, 2024),
+                kategorie: kategorie("NeueKategorie"),
+                name: name("asd"),
+                betrag: Betrag::from_user_input(&"-617,00".to_string()),
+            }
+        )
     }
 }

@@ -22,7 +22,8 @@ pub async fn import_einzelbuchungen_request(
     eigener_name: Person,
     database: &Database,
 ) -> RedirectAuthenticatedResult {
-    let einzelbuchungen = request_einzelbuchungen(&config.server_configuration, login.clone()).await;
+    let einzelbuchungen =
+        request_einzelbuchungen(&config.server_configuration, login.clone()).await;
     match einzelbuchungen {
         Ok(einzelbuchungen) => {
             println!("{:?}", einzelbuchungen);
@@ -53,7 +54,9 @@ pub async fn import_einzelbuchungen_request(
                 today(),
                 now(),
             );
-            delete_einzelbuchungen(&config.server_configuration, login).await.unwrap();
+            delete_einzelbuchungen(&config.server_configuration, login)
+                .await
+                .unwrap();
 
             println!("Abrechnung zu Import:\n{}", abrechnung_str);
 

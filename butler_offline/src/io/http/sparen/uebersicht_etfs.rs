@@ -1,4 +1,6 @@
-use crate::budgetbutler::pages::sparen::uebersicht_etfs::{handle_uebersicht_etf, UebersichtEtfContext};
+use crate::budgetbutler::pages::sparen::uebersicht_etfs::{
+    handle_uebersicht_etf, UebersichtEtfContext,
+};
 use crate::budgetbutler::view::request_handler::handle_render_display_view;
 use crate::budgetbutler::view::routes::SPAREN_UEBERSICHT_ETFS;
 use crate::io::html::views::sparen::uebersicht_etfs::render_uebersicht_etf_template;

@@ -32,18 +32,21 @@ mod tests {
 
     #[test]
     pub fn test_make_uebersicht_kontos_pie() {
-        let anlagetypen = vec![Anlagetyp{
+        let anlagetypen = vec![Anlagetyp {
             kontostand: vier(),
             name: "Test".to_string(),
             gesamte_einzahlungen: p_zero(),
             differenz: p_zero(),
-            farbe: green()
+            farbe: green(),
         }];
 
         let result = super::make_uebersicht_anlagetrypen_pie(&anlagetypen, vec![green(), gray()]);
 
         assert_eq!(result.labels, vec![String::from("Test")]);
-        assert_eq!(result.data, vec![Betrag::from_cent(Vorzeichen::Positiv, 10000)]);
+        assert_eq!(
+            result.data,
+            vec![Betrag::from_cent(Vorzeichen::Positiv, 10000)]
+        );
         assert_eq!(result.colors, vec![green()]);
     }
 }

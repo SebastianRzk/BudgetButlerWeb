@@ -16,22 +16,34 @@ pub struct SplitOrderDauerauftragContext<'a> {
     pub order_dauerauftrag_id: u32,
 }
 
-
-pub fn handle_split_order_dauerauftrag(context: SplitOrderDauerauftragContext) -> SplitOrderDauerauftragViewResult {
-    let selected_dauerauftrag = context.database.order_dauerauftraege.get(context.order_dauerauftrag_id);
+pub fn handle_split_order_dauerauftrag(
+    context: SplitOrderDauerauftragContext,
+) -> SplitOrderDauerauftragViewResult {
+    let selected_dauerauftrag = context
+        .database
+        .order_dauerauftraege
+        .get(context.order_dauerauftrag_id);
     let mut laufdatum = selected_dauerauftrag.value.start_datum.clone();
 
     let mut datum = Vec::new();
 
     while laufdatum <= selected_dauerauftrag.value.ende_datum.clone() {
         let can_be_chosen = laufdatum != selected_dauerauftrag.value.start_datum.clone();
-        datum.push(DatumSelektion { datum: laufdatum.clone(), can_be_chosen });
-        laufdatum = laufdatum.add_months(get_monatsdelta_for_rhythmus(selected_dauerauftrag.value.rhythmus));
+        datum.push(DatumSelektion {
+            datum: laufdatum.clone(),
+            can_be_chosen,
+        });
+        laufdatum = laufdatum.add_months(get_monatsdelta_for_rhythmus(
+            selected_dauerauftrag.value.rhythmus,
+        ));
     }
 
     if datum.len() > 1 {
         let letztes_datum = datum.pop().unwrap();
-        datum.push(DatumSelektion { datum: letztes_datum.datum, can_be_chosen: false });
+        datum.push(DatumSelektion {
+            datum: letztes_datum.datum,
+            can_be_chosen: false,
+        });
     }
 
     SplitOrderDauerauftragViewResult {
@@ -85,4 +97,3 @@ mod tests {
         assert_eq!(result.datum[3].datum, Datum::new(1, 4, 2021));
     }
 }
-

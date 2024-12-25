@@ -8,6 +8,7 @@ use crate::budgetbutler::view::request_handler::Redirect;
 use crate::io::disk::updater::update_database;
 use crate::io::disk::writer::create_database_backup;
 use crate::io::http::redirect::http_redirect;
+use crate::io::http::shared::action_export_gemeinsame_buchungen::export_gemeinsame_buchungen_request;
 use crate::io::http::shared::action_import_einzelbuchungen::import_einzelbuchungen_request;
 use crate::io::http::shared::action_import_gemeinsame_buchungen::import_gemeinsame_buchungen_request;
 use crate::io::http::shared::action_upload_kategorien::upload_kategorien;
@@ -21,7 +22,6 @@ use crate::model::state::persistent_application_state::{ApplicationState, Databa
 use actix_web::web::{Data, Query};
 use actix_web::{get, HttpResponse, Responder};
 use serde::Deserialize;
-use crate::io::http::shared::action_export_gemeinsame_buchungen::export_gemeinsame_buchungen_request;
 
 #[get("/butler-online-callback")]
 pub async fn logged_in_callback(
@@ -76,11 +76,8 @@ pub async fn logged_in_callback(
             .await;
         }
         OnlineRedirectActionType::UploadGemeinsameBuchungen => {
-            action_result = export_gemeinsame_buchungen_request(
-                &configuration,
-                credentials,
-                &database
-            ).await;
+            action_result =
+                export_gemeinsame_buchungen_request(&configuration, credentials, &database).await;
         }
     }
     if let Some(next_state) = action_result.database_to_save {

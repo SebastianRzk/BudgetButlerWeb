@@ -5,7 +5,6 @@ const DEPOT_STR: &str = "Depot";
 const SPARKONTO_STR: &str = "Sparkonto";
 const GENOSSENSCHAFTS_ANTEILE_STR: &str = "Genossenschafts-Anteile";
 
-
 pub fn read_sparkontotyp(kontotyp: Element) -> Kontotyp {
     match kontotyp.element.as_str() {
         DEPOT_STR => Kontotyp::Depot,
@@ -16,12 +15,12 @@ pub fn read_sparkontotyp(kontotyp: Element) -> Kontotyp {
 }
 
 pub fn write_sparkontotyp(kontotyp: Kontotyp) -> Element {
-    Element{
-     element: match kontotyp {
-         Kontotyp::GenossenschaftsAnteile => GENOSSENSCHAFTS_ANTEILE_STR.to_string(),
-         Kontotyp::Depot => DEPOT_STR.to_string(),
-         Kontotyp::Sparkonto => SPARKONTO_STR.to_string(),
-     }
+    Element {
+        element: match kontotyp {
+            Kontotyp::GenossenschaftsAnteile => GENOSSENSCHAFTS_ANTEILE_STR.to_string(),
+            Kontotyp::Depot => DEPOT_STR.to_string(),
+            Kontotyp::Sparkonto => SPARKONTO_STR.to_string(),
+        },
     }
 }
 
@@ -39,7 +38,10 @@ mod tests {
         assert_eq!(read_sparkontotyp(sparkonto), Kontotyp::Sparkonto);
 
         let gemossenschaftsanteile = element("Genossenschafts-Anteile");
-        assert_eq!(read_sparkontotyp(gemossenschaftsanteile), Kontotyp::GenossenschaftsAnteile);
+        assert_eq!(
+            read_sparkontotyp(gemossenschaftsanteile),
+            Kontotyp::GenossenschaftsAnteile
+        );
     }
 
     #[test]

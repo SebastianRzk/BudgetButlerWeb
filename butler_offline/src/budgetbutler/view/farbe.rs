@@ -43,7 +43,6 @@ pub struct RandomFarbenSelektor {
 }
 
 impl RandomFarbenSelektor {
-
     pub fn new(farben: Vec<Farbe>) -> RandomFarbenSelektor {
         RandomFarbenSelektor {
             internal_farben: farben,
@@ -61,7 +60,6 @@ impl RandomFarbenSelektor {
         }
         result
     }
-
 }
 
 #[cfg(test)]

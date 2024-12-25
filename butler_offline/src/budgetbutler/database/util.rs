@@ -5,7 +5,7 @@ use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
 pub fn calc_kategorien(
     einzelbuchungen: &Einzelbuchungen,
     extra_kategorie: &Option<Kategorie>,
-    ausgeschlossene_kategorien: &Vec<Kategorie>
+    ausgeschlossene_kategorien: &Vec<Kategorie>,
 ) -> Vec<Kategorie> {
     let mut kategorien = einzelbuchungen
         .select()
@@ -31,10 +31,9 @@ mod tests {
 
     #[test]
     pub fn test_calc_kategorien() {
-        let database =
-            generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
-                "test_kategorie",
-            )]);
+        let database = generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
+            "test_kategorie",
+        )]);
         let kategorien = calc_kategorien(&database.einzelbuchungen, &None, &vec![]);
 
         assert_eq!(kategorien.len(), 1);
@@ -43,14 +42,13 @@ mod tests {
 
     #[test]
     pub fn test_calc_kategorien_with_extra_kategorie() {
-        let database =
-            generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
-                "test_kategorie",
-            )]);
+        let database = generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
+            "test_kategorie",
+        )]);
         let kategorien = calc_kategorien(
             &database.einzelbuchungen,
             &Some(Kategorie::new("extra_kategorie".to_string())),
-            &vec![]
+            &vec![],
         );
         assert_eq!(kategorien.len(), 2);
         assert_eq!(kategorien[0].get_kategorie(), "extra_kategorie");
@@ -59,14 +57,13 @@ mod tests {
 
     #[test]
     pub fn test_calc_kategorien_should_filter_doppelte() {
-        let database =
-            generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
-                "test_kategorie",
-            )]);
+        let database = generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
+            "test_kategorie",
+        )]);
         let kategorien = calc_kategorien(
             &database.einzelbuchungen,
             &Some(kategorie("test_kategorie")),
-            &vec![]
+            &vec![],
         );
         assert_eq!(kategorien.len(), 1);
         assert_eq!(kategorien[0].get_kategorie(), "test_kategorie");
@@ -74,16 +71,14 @@ mod tests {
 
     #[test]
     pub fn test_should_filter_ausgeschlossene() {
-        let database =
-            generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
-                "test_kategorie",
-            ), einzelbuchung_with_kategorie(
-                "test_kategorie2",
-            )]);
+        let database = generate_database_with_einzelbuchungen(vec![
+            einzelbuchung_with_kategorie("test_kategorie"),
+            einzelbuchung_with_kategorie("test_kategorie2"),
+        ]);
         let kategorien = calc_kategorien(
             &database.einzelbuchungen,
             &None,
-            &vec![kategorie("test_kategorie2")]
+            &vec![kategorie("test_kategorie2")],
         );
         assert_eq!(kategorien.len(), 1);
         assert_eq!(kategorien[0].get_kategorie(), "test_kategorie");

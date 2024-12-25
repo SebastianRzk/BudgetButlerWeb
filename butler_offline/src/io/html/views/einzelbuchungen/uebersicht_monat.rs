@@ -1,6 +1,10 @@
-use crate::budgetbutler::pages::einzelbuchungen::uebersicht_monat::{Buchung, PlusMinusChart, Tag, UebersichtMonatViewResult};
+use crate::budgetbutler::pages::einzelbuchungen::uebersicht_monat::{
+    Buchung, PlusMinusChart, Tag, UebersichtMonatViewResult,
+};
 use crate::io::html::input::select::Select;
-use crate::io::html::views::templates::chart_templates::{map_buchung_kategorie, map_pie_chart, BuchungKategorieTemplate, PieChartTemplate};
+use crate::io::html::views::templates::chart_templates::{
+    map_buchung_kategorie, map_pie_chart, BuchungKategorieTemplate, PieChartTemplate,
+};
 pub use askama::Template;
 
 #[derive(Template)]
@@ -36,8 +40,6 @@ pub struct PlusMinusChartTemplate {
     pub wert_uebersicht_gruppe_2: String,
 }
 
-
-
 pub struct TagTemplate {
     pub name: String,
     pub items: Vec<BuchungTemplate>,
@@ -50,13 +52,12 @@ pub struct BuchungTemplate {
     pub kategorie: String,
 }
 
-
 pub fn render_uebersicht_monat_template(view_result: UebersichtMonatViewResult) -> String {
     let as_template: UebersichtMonatTemplate = map_to_template(view_result);
     as_template.render().unwrap()
 }
 
-fn map_plus_minus_chart(chart: PlusMinusChart) -> PlusMinusChartTemplate{
+fn map_plus_minus_chart(chart: PlusMinusChart) -> PlusMinusChartTemplate {
     PlusMinusChartTemplate {
         name_uebersicht_gruppe_1: chart.name_uebersicht_gruppe_1,
         name_uebersicht_gruppe_2: chart.name_uebersicht_gruppe_2,
@@ -68,7 +69,6 @@ fn map_plus_minus_chart(chart: PlusMinusChart) -> PlusMinusChartTemplate{
         wert_uebersicht_gruppe_2: chart.wert_uebersicht_gruppe_2.to_iso_string(),
     }
 }
-
 
 fn map_to_tag_template(tag: Tag) -> TagTemplate {
     TagTemplate {
@@ -86,8 +86,6 @@ fn map_to_buchung_template(buchung: Buchung) -> BuchungTemplate {
     }
 }
 
-
-
 fn map_to_template(view_result: UebersichtMonatViewResult) -> UebersichtMonatTemplate {
     UebersichtMonatTemplate {
         monate: Select::new(view_result.monate, Some(view_result.selected_date.clone())),
@@ -102,13 +100,25 @@ fn map_to_template(view_result: UebersichtMonatViewResult) -> UebersichtMonatTem
 
         einnahmen_chart: map_pie_chart(view_result.einnahmen_chart),
 
-        ausgaben: view_result.ausgaben.into_iter().map(map_buchung_kategorie).collect(),
-        einnahmen: view_result.einnahmen.into_iter().map(map_buchung_kategorie).collect(),
+        ausgaben: view_result
+            .ausgaben
+            .into_iter()
+            .map(map_buchung_kategorie)
+            .collect(),
+        einnahmen: view_result
+            .einnahmen
+            .into_iter()
+            .map(map_buchung_kategorie)
+            .collect(),
 
         gesamt: view_result.gesamt_ausgaben.to_german_string(),
         gesamt_einnahmen: view_result.gesamt_einnahmen.to_german_string(),
 
-        zusammenfassung: view_result.zusammenfassung.into_iter().map(map_to_tag_template).collect(),
+        zusammenfassung: view_result
+            .zusammenfassung
+            .into_iter()
+            .map(map_to_tag_template)
+            .collect(),
     }
 }
 

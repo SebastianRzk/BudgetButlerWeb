@@ -8,10 +8,18 @@ use crate::io::disk::database::order::orders_writer::write_orders;
 use crate::io::disk::database::order_dauerauftraege::order_dauerauftraege_writer::write_order_dauerauftraege;
 use crate::io::disk::database::sparbuchungen::sparbuchungen_writer::write_sparbuchungen;
 use crate::io::disk::database::sparkontos::sparkontos_writer::write_sparkontos;
-use crate::io::disk::diskrepresentation::file::{File, SortedFile, DAUERAUFTRAEGE_HEADER, DAUERAUFTRAEGE_START_SIGNAL, DAUERAUFTRAG_ORDER_HEADER, DAUERAUFTRAG_ORDER_START_SIGNAL, DEPOTAUSZUEGE_HEADER, DEPOTAUSZUEGE_START_SIGNAL, DEPOTWERTE_HEADER, DEPOTWERTE_START_SIGNAL, EINZELBUCHUNGEN_HEADER, GEMEINSAME_BUCHUGEN_HEADER, GEMEINSAME_BUCHUGEN_START_SIGNAL, ORDER_HEADER, ORDER_START_SIGNAL, SPARBUCHUNGEN_HEADER, SPARBUCHUNGEN_START_SIGNAL, SPARKONTOS_HEADER, SPARKONTOS_START_SIGNAL};
+use crate::io::disk::diskrepresentation::file::{
+    File, SortedFile, DAUERAUFTRAEGE_HEADER, DAUERAUFTRAEGE_START_SIGNAL,
+    DAUERAUFTRAG_ORDER_HEADER, DAUERAUFTRAG_ORDER_START_SIGNAL, DEPOTAUSZUEGE_HEADER,
+    DEPOTAUSZUEGE_START_SIGNAL, DEPOTWERTE_HEADER, DEPOTWERTE_START_SIGNAL, EINZELBUCHUNGEN_HEADER,
+    GEMEINSAME_BUCHUGEN_HEADER, GEMEINSAME_BUCHUGEN_START_SIGNAL, ORDER_HEADER, ORDER_START_SIGNAL,
+    SPARBUCHUNGEN_HEADER, SPARBUCHUNGEN_START_SIGNAL, SPARKONTOS_HEADER, SPARKONTOS_START_SIGNAL,
+};
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::primitives::datum::Datum;
-use crate::model::state::config::{app_root, get_database_location, BackupConfiguration, DatabaseConfiguration};
+use crate::model::state::config::{
+    app_root, get_database_location, BackupConfiguration, DatabaseConfiguration,
+};
 use crate::model::state::persistent_application_state::Database;
 use std::fs;
 use std::io::Write;
@@ -31,7 +39,6 @@ fn map_database_to_file(database: &Database) -> SortedFile {
         depotauszuege: write_depotauszuege(&sorted_database),
     }
 }
-
 
 pub fn map_sorted_to_file(sorted_file: SortedFile) -> File {
     let mut result: Vec<Line> = vec![];
@@ -86,15 +93,27 @@ pub fn write_database(database: &Database, config: &DatabaseConfiguration) {
     let sorted_file = map_database_to_file(database);
     let file = map_sorted_to_file(sorted_file);
 
-    let file_as_string = file.lines.iter().map(|l| l.line.as_str()).collect::<Vec<&str>>().join("\n");
+    let file_as_string = file
+        .lines
+        .iter()
+        .map(|l| l.line.as_str())
+        .collect::<Vec<&str>>()
+        .join("\n");
 
     fs::write(get_database_location(config).as_os_str(), file_as_string).unwrap();
 }
 
-
-pub fn create_database_backup(database: &Database, backup_configuration: &BackupConfiguration, today: Datum, now: String, reason: &str){
+pub fn create_database_backup(
+    database: &Database,
+    backup_configuration: &BackupConfiguration,
+    today: Datum,
+    now: String,
+    reason: &str,
+) {
     let filename = format!("Backup_{}_{}_{}.csv", today.to_iso_string(), now, reason);
-    let path = app_root().join(Path::new(backup_configuration.location.as_str())).join(filename);
+    let path = app_root()
+        .join(Path::new(backup_configuration.location.as_str()))
+        .join(filename);
     println!("Creating backup at: {:?}", path);
     let sorted_file = map_database_to_file(database);
     let db_file = map_sorted_to_file(sorted_file);
@@ -162,9 +181,8 @@ Datum,Depotwert,Konto,Wert
 2024-01-02,MeinDepotwert2,MeinKonto2,5.00
 ";
 
-
     #[test]
-    fn test_read_and_write(){
+    fn test_read_and_write() {
         let file = File::from_str(BEISPIEL_DATENBANK);
         let data = read_data(file);
         let database = create_database(data, any_datum(), demo_database_version());
@@ -174,5 +192,4 @@ Datum,Depotwert,Konto,Wert
 
         assert_eq!(as_string(&result_file.lines), BEISPIEL_DATENBANK);
     }
-
 }

@@ -36,9 +36,7 @@ pub fn calc_depotwert_beschreibung(isin: &ISIN, database: &Database) -> TypeDesc
         .select()
         .filter(|x| x.value.isin.isin == isin.isin);
 
-    let depotwert = filter_for_find
-        .find_first()
-        .unwrap_or(&unknown);
+    let depotwert = filter_for_find.find_first().unwrap_or(&unknown);
     TypeDescription {
         value: depotwert.value.isin.isin.clone(),
         description: format!(
@@ -82,7 +80,6 @@ mod tests {
         assert_eq!(result.value, "ISIN1");
         assert_eq!(result.description, "Name1 (ISIN1)");
     }
-
 
     #[test]
     fn test_calc_depotwert_beschreibung_unknown() {

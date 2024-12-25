@@ -28,7 +28,7 @@ pub struct UebersichtSparenContext<'a> {
     pub database: &'a Database,
     pub aktuelles_jahr: i32,
     pub design_farben: Vec<Farbe>,
-    pub heute: Datum
+    pub heute: Datum,
 }
 
 pub struct UebersichtSparenViewResult {
@@ -44,9 +44,8 @@ pub struct UebersichtSparenViewResult {
     pub order_typen: OrderTypen,
     pub order_typen_pie: PieChart,
     pub aktuelle_dauerauftraege: Vec<DauerauftragAbzug>,
-    pub aktuelle_dauerauftrege_pie : PieChart,
+    pub aktuelle_dauerauftrege_pie: PieChart,
 }
-
 
 pub struct UebersichtKontos {
     pub konten: Vec<KontoMitKontostandUndFarbe>,
@@ -60,19 +59,17 @@ pub struct KontoMitKontostandUndFarbe {
     pub kontostand: Betrag,
     pub aufbuchungen: Betrag,
     pub differenz: Betrag,
-    pub farbe: Farbe
+    pub farbe: Farbe,
 }
 
 pub struct DauerauftragAbzug {
     pub name: Name,
     pub depotwert_beschreibung: String,
     pub wert: OrderBetrag,
-    pub farbe: Farbe
+    pub farbe: Farbe,
 }
 
-pub fn handle_uebersicht_sparen(
-    context: UebersichtSparenContext,
-) -> UebersichtSparenViewResult {
+pub fn handle_uebersicht_sparen(context: UebersichtSparenContext) -> UebersichtSparenViewResult {
     let range = JahrRange {
         ende_jahr: context.aktuelles_jahr,
         start_jahr: context
@@ -86,35 +83,56 @@ pub fn handle_uebersicht_sparen(
 
     let einnahmen_ausgaben_sparen = berechne_einnahmen_ausgaben_sparen(&range, context.database);
     let konto_uebersicht = handle_uebersicht_kontos(UebersichtKontosContext {
-        database: context.database
+        database: context.database,
     });
     let anlagetypen = berechne_anlagetypen(context.database, context.design_farben.clone());
     let order_typen = berechne_order_typen(context.database);
-    let aktuelle_dauerauftraege =  context
+    let aktuelle_dauerauftraege = context
         .database
         .order_dauerauftraege
         .select()
-        .group_as_list_by(start_ende_aggregation(context.heute.clone())) .get(&StartEndeAggregation::Aktuelle)
+        .group_as_list_by(start_ende_aggregation(context.heute.clone()))
+        .get(&StartEndeAggregation::Aktuelle)
         .unwrap_or(&vec![])
         .clone();
 
-    let gesamt_entwicklung = berechne_gesamt_entwicklung(&einnahmen_ausgaben_sparen, context.database);
-    let gesamt_entwicklung_delta = make_delta_entwicklung_from_gesamt_entwicklung(&gesamt_entwicklung);
-    let gesamt_entwicklung_delta_jahr = make_delta_entwicklung_pro_jahr_from_delta_entwicklung(&gesamt_entwicklung_delta);
+    let gesamt_entwicklung =
+        berechne_gesamt_entwicklung(&einnahmen_ausgaben_sparen, context.database);
+    let gesamt_entwicklung_delta =
+        make_delta_entwicklung_from_gesamt_entwicklung(&gesamt_entwicklung);
+    let gesamt_entwicklung_delta_jahr =
+        make_delta_entwicklung_pro_jahr_from_delta_entwicklung(&gesamt_entwicklung_delta);
     UebersichtSparenViewResult {
         einnahmen_ausgaben_sparen: einnahmen_ausgaben_sparen.clone(),
         gesamt_entwicklung_delta,
         gesamt_entwicklung_delta_jahr,
         gesamt_entwicklung,
         depot_metainfos: berechne_depot_meta_infos(context.database),
-        uebersicht_kontos_pie: make_uebersicht_kontos_pie(&konto_uebersicht, context.design_farben.clone()),
-        uebersicht_kontos: make_kontouebersicht_abzug(konto_uebersicht, context.design_farben.clone()),
-        anlagetypen_pie: make_uebersicht_anlagetrypen_pie(&anlagetypen, context.design_farben.clone()),
+        uebersicht_kontos_pie: make_uebersicht_kontos_pie(
+            &konto_uebersicht,
+            context.design_farben.clone(),
+        ),
+        uebersicht_kontos: make_kontouebersicht_abzug(
+            konto_uebersicht,
+            context.design_farben.clone(),
+        ),
+        anlagetypen_pie: make_uebersicht_anlagetrypen_pie(
+            &anlagetypen,
+            context.design_farben.clone(),
+        ),
         anlagetypen,
         order_typen_pie: make_ordertypen_pie(&order_typen, context.design_farben.clone()),
         order_typen,
-        aktuelle_dauerauftrege_pie: make_aktuelle_dauerauftraege_pie(&aktuelle_dauerauftraege, context.database, context.design_farben.clone()),
-        aktuelle_dauerauftraege: make_dauerauftraege_abzuge(aktuelle_dauerauftraege, context.design_farben.clone(), context.database)
+        aktuelle_dauerauftrege_pie: make_aktuelle_dauerauftraege_pie(
+            &aktuelle_dauerauftraege,
+            context.database,
+            context.design_farben.clone(),
+        ),
+        aktuelle_dauerauftraege: make_dauerauftraege_abzuge(
+            aktuelle_dauerauftraege,
+            context.design_farben.clone(),
+            context.database,
+        ),
     }
 }
 

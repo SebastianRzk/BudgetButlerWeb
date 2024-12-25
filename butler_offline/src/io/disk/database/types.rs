@@ -1,1 +1,1 @@
-pub trait ElementRequirement: PartialEq+ Eq + PartialOrd + Ord {}
+pub trait ElementRequirement: PartialEq + Eq + PartialOrd + Ord {}

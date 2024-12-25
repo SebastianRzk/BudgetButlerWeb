@@ -45,7 +45,7 @@ pub struct DataOnDisk {
     pub depotwerte: Vec<Depotwert>,
     pub order: Vec<Order>,
     pub order_dauerauftraege: Vec<OrderDauerauftrag>,
-    pub depotauszuege: Vec<Depotauszug>
+    pub depotauszuege: Vec<Depotauszug>,
 }
 
 impl Database {
@@ -60,7 +60,7 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order: self.order.clone(),
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
     pub fn change_dauerauftraege(&self, dauerauftraege: Dauerauftraege) -> Database {
@@ -74,7 +74,7 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order: self.order.clone(),
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
     pub fn change_gemeinsame_buchungen(
@@ -91,13 +91,10 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order: self.order.clone(),
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
-    pub fn change_sparkontos(
-        &self,
-        sparkontos: Sparkontos,
-    ) -> Database {
+    pub fn change_sparkontos(&self, sparkontos: Sparkontos) -> Database {
         Database {
             db_version: self.db_version.increment(),
             einzelbuchungen: self.einzelbuchungen.clone(),
@@ -108,14 +105,11 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order: self.order.clone(),
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
 
-    pub fn change_depotwerte(
-        &self,
-        depotwerte: Depotwerte,
-    ) -> Database {
+    pub fn change_depotwerte(&self, depotwerte: Depotwerte) -> Database {
         Database {
             db_version: self.db_version.increment(),
             einzelbuchungen: self.einzelbuchungen.clone(),
@@ -126,15 +120,11 @@ impl Database {
             depotwerte,
             order: self.order.clone(),
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
 
-
-    pub fn change_order(
-        &self,
-        order: Orders,
-    ) -> Database {
+    pub fn change_order(&self, order: Orders) -> Database {
         Database {
             db_version: self.db_version.increment(),
             einzelbuchungen: self.einzelbuchungen.clone(),
@@ -145,10 +135,9 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order,
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
-
 
     pub fn change_order_dauerauftraege(
         &self,
@@ -164,14 +153,11 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order: self.order.clone(),
             order_dauerauftraege,
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
 
-    pub fn change_depotauszuege(
-        &self,
-        depotauszuege: Depotauszuege,
-    ) -> Database {
+    pub fn change_depotauszuege(&self, depotauszuege: Depotauszuege) -> Database {
         Database {
             db_version: self.db_version.increment(),
             einzelbuchungen: self.einzelbuchungen.clone(),
@@ -182,14 +168,11 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order: self.order.clone(),
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege
+            depotauszuege,
         }
     }
 
-    pub fn change_sparbuchungen(
-        &self,
-        sparbuchungen: Sparbuchungen,
-    ) -> Database {
+    pub fn change_sparbuchungen(&self, sparbuchungen: Sparbuchungen) -> Database {
         Database {
             db_version: self.db_version.increment(),
             einzelbuchungen: self.einzelbuchungen.clone(),
@@ -200,7 +183,7 @@ impl Database {
             depotwerte: self.depotwerte.clone(),
             order: self.order.clone(),
             order_dauerauftraege: self.order_dauerauftraege.clone(),
-            depotauszuege: self.depotauszuege.clone()
+            depotauszuege: self.depotauszuege.clone(),
         }
     }
 }
@@ -242,7 +225,7 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
@@ -262,7 +245,7 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
@@ -282,16 +265,14 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
         )
     }
 
-    pub fn generate_database_with_sparkontos(
-        sparkontos: Vec<Sparkonto>,
-    ) -> super::Database {
+    pub fn generate_database_with_sparkontos(sparkontos: Vec<Sparkonto>) -> super::Database {
         create_database(
             DataOnDisk {
                 einzelbuchungen: vec![],
@@ -302,7 +283,7 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
@@ -311,7 +292,7 @@ pub mod builder {
 
     pub fn generate_database_with_sparkontos_und_sparbuchungen(
         sparkontos: Vec<Sparkonto>,
-        sparbuchungen: Vec<Sparbuchung>
+        sparbuchungen: Vec<Sparbuchung>,
     ) -> super::Database {
         create_database(
             DataOnDisk {
@@ -323,13 +304,12 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
         )
     }
-
 
     pub fn generate_database_with_sparbuchungen(
         sparbuchungen: Vec<Sparbuchung>,
@@ -344,18 +324,14 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
         )
     }
 
-
-
-    pub fn generate_database_with_depotwerte(
-        depotwerte: Vec<Depotwert>,
-    ) -> super::Database {
+    pub fn generate_database_with_depotwerte(depotwerte: Vec<Depotwert>) -> super::Database {
         create_database(
             DataOnDisk {
                 einzelbuchungen: vec![],
@@ -366,13 +342,12 @@ pub mod builder {
                 depotwerte,
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
         )
     }
-
 
     pub fn generate_database_with_gemeinsamen_buchungen(
         gemeinsame_buchungen: Vec<GemeinsameBuchung>,
@@ -387,16 +362,14 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
         )
     }
 
-    pub fn generate_database_with_orders(
-        order: Vec<Order>,
-    ) -> super::Database {
+    pub fn generate_database_with_orders(order: Vec<Order>) -> super::Database {
         create_database(
             DataOnDisk {
                 einzelbuchungen: vec![],
@@ -407,7 +380,7 @@ pub mod builder {
                 depotwerte: vec![],
                 order,
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
@@ -427,7 +400,7 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege,
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
@@ -447,13 +420,12 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege
+                depotauszuege,
             },
             Datum::first(),
             demo_database_version(),
         )
     }
-
 
     pub fn generate_database_with_einzel_und_gemeinsamen_buchungen(
         einzelbuchungen: Vec<Einzelbuchung>,
@@ -469,7 +441,7 @@ pub mod builder {
                 depotwerte: vec![],
                 order: vec![],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![]
+                depotauszuege: vec![],
             },
             Datum::first(),
             demo_database_version(),
@@ -486,7 +458,7 @@ pub mod builder {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftraege: vec![],
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
@@ -500,7 +472,7 @@ pub mod builder {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftraege: vec![],
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
@@ -516,7 +488,7 @@ pub mod builder {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftraege: vec![],
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
@@ -530,7 +502,7 @@ pub mod builder {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftraege: vec![],
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
@@ -544,7 +516,7 @@ pub mod builder {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftraege: vec![],
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
@@ -558,7 +530,7 @@ pub mod builder {
             depotwerte,
             order: vec![],
             order_dauerauftraege: vec![],
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
@@ -572,11 +544,13 @@ pub mod builder {
             depotwerte: vec![],
             order,
             order_dauerauftraege: vec![],
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
-    pub fn data_on_disk_with_order_dauerauftrag(order_dauerauftrag: Vec<OrderDauerauftrag>) -> DataOnDisk {
+    pub fn data_on_disk_with_order_dauerauftrag(
+        order_dauerauftrag: Vec<OrderDauerauftrag>,
+    ) -> DataOnDisk {
         DataOnDisk {
             einzelbuchungen: vec![],
             dauerauftraege: vec![],
@@ -586,7 +560,7 @@ pub mod builder {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftraege: order_dauerauftrag,
-            depotauszuege: vec![]
+            depotauszuege: vec![],
         }
     }
 
@@ -600,10 +574,9 @@ pub mod builder {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftraege: vec![],
-            depotauszuege
+            depotauszuege,
         }
     }
-
 
     pub fn demo_database_version() -> DatabaseVersion {
         DatabaseVersion {
@@ -652,15 +625,11 @@ pub mod builder {
     }
 
     pub fn leere_depotwerte() -> Depotwerte {
-        Depotwerte {
-            depotwerte: vec![],
-        }
+        Depotwerte { depotwerte: vec![] }
     }
 
     pub fn leere_order() -> Orders {
-        Orders {
-            orders: vec![],
-        }
+        Orders { orders: vec![] }
     }
 
     pub fn leere_order_dauerauftraege() -> OrderDauerauftraege {
@@ -693,7 +662,7 @@ pub mod builder {
         }
     }
 
-    pub fn depotauszuege(depotauszug: Depotauszug) -> Depotauszuege{
+    pub fn depotauszuege(depotauszug: Depotauszug) -> Depotauszuege {
         Depotauszuege {
             depotauszuege: vec![indiziert(depotauszug)],
         }

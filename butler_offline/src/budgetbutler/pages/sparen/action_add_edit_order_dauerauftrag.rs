@@ -21,11 +21,12 @@ pub struct SubmitOrderDauerauftragContext<'a> {
     pub konto: KontoReferenz,
     pub depotwert: DepotwertReferenz,
     pub wert: OrderBetrag,
-    pub rhythmus: Rhythmus
+    pub rhythmus: Rhythmus,
 }
 
-
-pub fn submit_order_dauerauftrag(context: SubmitOrderDauerauftragContext) -> RedirectResult<OrderDauerauftragChange> {
+pub fn submit_order_dauerauftrag(
+    context: SubmitOrderDauerauftragContext,
+) -> RedirectResult<OrderDauerauftragChange> {
     let buchung = OrderDauerauftrag {
         name: context.name.clone(),
         konto: context.konto.clone(),
@@ -40,24 +41,29 @@ pub fn submit_order_dauerauftrag(context: SubmitOrderDauerauftragContext) -> Red
 
     if let Some(index) = context.edit_index {
         icon = PENCIL;
-        neue_order_dauerauftraege = context.database.order_dauerauftraege
+        neue_order_dauerauftraege = context
+            .database
+            .order_dauerauftraege
             .change()
             .edit(index, buchung.clone())
     } else {
         icon = PLUS;
-        neue_order_dauerauftraege = context.database.order_dauerauftraege
+        neue_order_dauerauftraege = context
+            .database
+            .order_dauerauftraege
             .change()
             .insert(buchung.clone())
     }
 
-    let new_database = context.database.change_order_dauerauftraege(neue_order_dauerauftraege);
-
+    let new_database = context
+        .database
+        .change_order_dauerauftraege(neue_order_dauerauftraege);
 
     RedirectResult {
         result: ModificationResult {
             changed_database: new_database,
             target: Redirect {
-                target: SPAREN_ORDERDAUERAUFTRAG_ADD.to_string()
+                target: SPAREN_ORDERDAUERAUFTRAG_ADD.to_string(),
             },
         },
         change: OrderDauerauftragChange {
@@ -72,7 +78,6 @@ pub fn submit_order_dauerauftrag(context: SubmitOrderDauerauftragContext) -> Red
         },
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -103,16 +108,32 @@ mod tests {
             rhythmus: Rhythmus::Monatlich,
         });
 
-        assert_eq!(result.result.changed_database.order_dauerauftraege.select().count(), 1);
-        assert_eq!(result.result.changed_database.order_dauerauftraege.get(0).value, OrderDauerauftrag{
-            name: demo_name(),
-            konto: demo_konto_referenz(),
-            depotwert: demo_depotwert_referenz(),
-            wert: demo_order_betrag(),
-            start_datum: demo_datum(),
-            ende_datum: demo_datum(),
-            rhythmus: Rhythmus::Monatlich,
-        });
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .order_dauerauftraege
+                .select()
+                .count(),
+            1
+        );
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .order_dauerauftraege
+                .get(0)
+                .value,
+            OrderDauerauftrag {
+                name: demo_name(),
+                konto: demo_konto_referenz(),
+                depotwert: demo_depotwert_referenz(),
+                wert: demo_order_betrag(),
+                start_datum: demo_datum(),
+                ende_datum: demo_datum(),
+                rhythmus: Rhythmus::Monatlich,
+            }
+        );
 
         assert_eq!(result.change.icon, PLUS);
         assert_eq!(result.change.name, demo_name());
@@ -123,5 +144,4 @@ mod tests {
         assert_eq!(result.change.ende_datum, demo_datum());
         assert_eq!(result.change.rhythmus, Rhythmus::Monatlich);
     }
-
 }

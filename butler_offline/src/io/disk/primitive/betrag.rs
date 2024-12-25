@@ -1,5 +1,5 @@
 use crate::io::disk::primitive::segment_reader::Element;
-use crate::model::primitives::betrag::{Betrag};
+use crate::model::primitives::betrag::Betrag;
 
 pub fn read_betrag(element: Element) -> Betrag {
     Betrag::from_iso_string(&element.element)
@@ -7,10 +7,9 @@ pub fn read_betrag(element: Element) -> Betrag {
 
 pub fn write_betrag(betrag: &Betrag) -> Element {
     Element {
-        element: betrag.to_iso_string()
+        element: betrag.to_iso_string(),
     }
 }
-
 
 #[cfg(test)]
 mod tests {

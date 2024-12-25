@@ -87,14 +87,19 @@ mod tests {
             database: &database,
             edit_index: None,
             name: demo_name(),
-            datum: Datum::new(1,2,2021),
+            datum: Datum::new(1, 2, 2021),
             wert: u_zwei(),
             typ: SparbuchungTyp::ManuelleEinzahlung,
             konto: demo_konto_referenz(),
         });
 
         assert_eq!(
-            result.result.changed_database.sparbuchungen.select().count(),
+            result
+                .result
+                .changed_database
+                .sparbuchungen
+                .select()
+                .count(),
             1
         );
         assert_eq!(

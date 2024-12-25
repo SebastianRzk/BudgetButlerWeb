@@ -29,20 +29,27 @@ pub fn pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind(
     }
 }
 
-
-pub fn aktualisiere_kategorien(abrechung: Abrechnung, kategorien_mapping: HashMap<Kategorie, Kategorie>) -> Abrechnung {
+pub fn aktualisiere_kategorien(
+    abrechung: Abrechnung,
+    kategorien_mapping: HashMap<Kategorie, Kategorie>,
+) -> Abrechnung {
     let sorted = sort_abrechnungs_file(&abrechung.lines, HeaderModus::Drop);
     let parsed_buchungen = read_einzelbuchungen(sorted.einzel_buchungen.clone());
-    let parsed_gemeinsame_buchungen = read_gemeinsame_buchungen(sorted.gemeinsame_buchungen.clone());
+    let parsed_gemeinsame_buchungen =
+        read_gemeinsame_buchungen(sorted.gemeinsame_buchungen.clone());
 
     let mut neue_buchungen = Vec::new();
     for buchung in parsed_buchungen {
-        let neue_kategorie = kategorien_mapping.get(&buchung.kategorie).unwrap_or(&buchung.kategorie);
+        let neue_kategorie = kategorien_mapping
+            .get(&buchung.kategorie)
+            .unwrap_or(&buchung.kategorie);
         neue_buchungen.push(buchung.change_kategorie(neue_kategorie.clone()));
     }
     let mut neue_gemeinsame_buchungen = Vec::new();
     for buchung in parsed_gemeinsame_buchungen {
-        let neue_kategorie = kategorien_mapping.get(&buchung.kategorie).unwrap_or(&buchung.kategorie);
+        let neue_kategorie = kategorien_mapping
+            .get(&buchung.kategorie)
+            .unwrap_or(&buchung.kategorie);
         neue_gemeinsame_buchungen.push(buchung.change_kategorie(neue_kategorie.clone()));
     }
 
@@ -59,13 +66,11 @@ pub fn aktualisiere_kategorien(abrechung: Abrechnung, kategorien_mapping: HashMa
     new_abrechnung
 }
 
-
 #[derive(Debug, Clone)]
 pub struct KategorieMitBeispiel {
     pub kategorie: Kategorie,
     pub beispiel: Vec<String>,
 }
-
 
 pub struct KategorienPruefungsErgebnis {
     pub kategorien_nicht_in_datenbank: Vec<KategorieMitBeispiel>,
@@ -80,19 +85,29 @@ fn read_kategorien_in_abrechnung(abrechnung: &Abrechnung) -> Vec<KategorieMitBei
     for buchung in parsed_buchungen {
         kategorien.push(KategorieMitBeispiel {
             kategorie: buchung.kategorie,
-            beispiel: vec![format!("{}({}€)", buchung.name.get_name(), buchung.betrag.to_german_string())],
+            beispiel: vec![format!(
+                "{}({}€)",
+                buchung.name.get_name(),
+                buchung.betrag.to_german_string()
+            )],
         });
     }
     for buchung in parsed_gemeinsame_buchungen {
         kategorien.push(KategorieMitBeispiel {
             kategorie: buchung.kategorie,
-            beispiel: vec![format!("{}({}€)", buchung.name.get_name(), buchung.betrag.to_german_string())],
+            beispiel: vec![format!(
+                "{}({}€)",
+                buchung.name.get_name(),
+                buchung.betrag.to_german_string()
+            )],
         })
     }
     unify_kategorien(kategorien)
 }
 
-fn unify_kategorien(kategorien_mit_beispiel: Vec<KategorieMitBeispiel>) -> Vec<KategorieMitBeispiel> {
+fn unify_kategorien(
+    kategorien_mit_beispiel: Vec<KategorieMitBeispiel>,
+) -> Vec<KategorieMitBeispiel> {
     let mut data: HashMap<Kategorie, KategorieMitBeispiel> = HashMap::new();
 
     for kategorie_mit_beispiel in kategorien_mit_beispiel {
@@ -100,7 +115,10 @@ fn unify_kategorien(kategorien_mit_beispiel: Vec<KategorieMitBeispiel>) -> Vec<K
             let existing = data.get_mut(&kategorie_mit_beispiel.kategorie).unwrap();
             existing.beispiel.extend(kategorie_mit_beispiel.beispiel);
         } else {
-            data.insert(kategorie_mit_beispiel.kategorie.clone(), kategorie_mit_beispiel);
+            data.insert(
+                kategorie_mit_beispiel.kategorie.clone(),
+                kategorie_mit_beispiel,
+            );
         }
     }
 
@@ -251,11 +269,13 @@ Datum,Kategorie,Name,Betrag
         let kategorien = super::read_kategorien_in_abrechnung(&abr);
         assert_eq!(kategorien.len(), 2);
         assert_eq!(kategorien[0].kategorie, kategorie("TestKategorie"));
-        assert_eq!(kategorien[0].beispiel, vec!["TestName(10,00€)", "TestName2(11,00€)"]);
+        assert_eq!(
+            kategorien[0].beispiel,
+            vec!["TestName(10,00€)", "TestName2(11,00€)"]
+        );
         assert_eq!(kategorien[1].kategorie, kategorie("TestKategorie3"));
         assert_eq!(kategorien[1].beispiel, vec!["TestName3(10,00€)"]);
     }
-
 
     const DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE: &str = "\
 ergebnis
@@ -276,13 +296,16 @@ Datum,Kategorie,Name,Betrag
 #######MaschinenimportEnd";
 
     #[test]
-    fn test_aktualisiere_kategorien(){
+    fn test_aktualisiere_kategorien() {
         let abr = abrechnung_from_str(DEMO_ABRECHNUNG_MIT_DUPLIKAT_KATEGORIE);
         let mut mapping = HashMap::new();
         mapping.insert(kategorie("TestKategorie"), kategorie("TestKategorie2"));
 
         let result = super::aktualisiere_kategorien(abr, mapping);
 
-        assert_eq!(as_string(&result.lines), DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE);
+        assert_eq!(
+            as_string(&result.lines),
+            DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE
+        );
     }
 }

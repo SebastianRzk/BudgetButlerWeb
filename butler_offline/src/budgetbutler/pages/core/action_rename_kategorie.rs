@@ -59,10 +59,9 @@ mod tests {
 
     #[test]
     fn test_action_rename_kategorie() {
-        let database =
-            generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
-                "alte_kategorie",
-            )]);
+        let database = generate_database_with_einzelbuchungen(vec![einzelbuchung_with_kategorie(
+            "alte_kategorie",
+        )]);
 
         let result = action_rename_kategorie(RenameKategorieContext {
             neue_kategorie: kategorie("neue_kategorie"),

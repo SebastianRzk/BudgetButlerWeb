@@ -26,6 +26,6 @@ pub fn lade_alle_abrechnungen(config: &AbrechnungsConfiguration) -> Vec<Unparsed
             file_content: Line::from_multiline_str(file_content),
         });
     }
-    
+
     result
 }

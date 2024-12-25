@@ -43,15 +43,16 @@ mod tests {
     #[test]
     fn test_rename_kategorie() {
         let einzelbuchungen = Einzelbuchungen {
-            einzelbuchungen: vec![
-                indiziert(demo_einzelbuchung()),
-            ],
+            einzelbuchungen: vec![indiziert(demo_einzelbuchung())],
         };
 
         let result = einzelbuchungen
             .change()
             .rename_kategorie(demo_kategorie(), kategorie("neue kategorie"));
 
-        assert_eq!(result.einzelbuchungen[0].value.kategorie, kategorie("neue kategorie"));
+        assert_eq!(
+            result.einzelbuchungen[0].value.kategorie,
+            kategorie("neue kategorie")
+        );
     }
 }

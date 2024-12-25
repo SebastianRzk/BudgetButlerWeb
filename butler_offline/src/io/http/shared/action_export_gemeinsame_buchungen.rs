@@ -1,6 +1,10 @@
-use crate::budgetbutler::view::request_handler::{handle_render_success_display_message, DisplaySuccessMessage};
+use crate::budgetbutler::view::request_handler::{
+    handle_render_success_display_message, DisplaySuccessMessage,
+};
 use crate::budgetbutler::view::routes::CORE_IMPORT;
-use crate::io::http::shared::redirect_authenticated::{RedirectAuthenticatedRenderPageType, RedirectAuthenticatedResult};
+use crate::io::http::shared::redirect_authenticated::{
+    RedirectAuthenticatedRenderPageType, RedirectAuthenticatedResult,
+};
 use crate::io::online::put_gemeinsame_buchungen::put_gemeinsame_buchungen;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::remote::login::LoginCredentials;

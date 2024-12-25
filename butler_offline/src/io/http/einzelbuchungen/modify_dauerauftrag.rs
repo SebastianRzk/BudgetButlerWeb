@@ -44,13 +44,10 @@ pub async fn get_view(
     data: Data<ApplicationState>,
     dauerauftraege_changes: Data<DauerauftraegeChanges>,
     extra_kategorie: Data<AdditionalKategorie>,
-    configuration_data: Data<ConfigurationData>
+    configuration_data: Data<ConfigurationData>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
-    let config = configuration_data
-        .configuration
-        .lock()
-        .unwrap();
+    let config = configuration_data.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Dauerauftrag hinzufügen",
         EINZELBUCHUNGEN_DAUERAUFTRAG_ADD,
@@ -64,10 +61,7 @@ pub async fn get_view(
         },
         handle_view,
         render_add_dauerauftrag_template,
-        config
-            .database_configuration
-            .name
-            .clone(),
+        config.database_configuration.name.clone(),
     ))
 }
 
@@ -77,7 +71,7 @@ pub async fn post_view(
     dauerauftraege_changes: Data<DauerauftraegeChanges>,
     form: Form<EditFormData>,
     extra_kategorie: Data<AdditionalKategorie>,
-    configuration_data: Data<ConfigurationData>
+    configuration_data: Data<ConfigurationData>,
 ) -> HttpResponse {
     let database_guard = data.database.lock().unwrap();
     let optimistic_locking_result =
@@ -96,7 +90,9 @@ pub async fn post_view(
             dauerauftraege_changes: &dauerauftraege_changes.changes.lock().unwrap(),
             today: today(),
             edit_buchung: Some(form.edit_index),
-            ausgeschlossene_kategorien: &config_guard.erfassungs_configuration.ausgeschlossene_kategorien,
+            ausgeschlossene_kategorien: &config_guard
+                .erfassungs_configuration
+                .ausgeschlossene_kategorien,
         },
         handle_view,
         render_add_dauerauftrag_template,
@@ -190,7 +186,11 @@ pub async fn delete(
 }
 
 #[post("/splitdauerauftrag/")]
-pub async fn load_split(data: Data<ApplicationState>, form: Form<SplitFormData>, configuration_data: Data<ConfigurationData>) -> impl Responder {
+pub async fn load_split(
+    data: Data<ApplicationState>,
+    form: Form<SplitFormData>,
+    configuration_data: Data<ConfigurationData>,
+) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let optimistic_locking_result =
         check_optimistic_locking_error(&form.database_id, database_guard.db_version.clone());
@@ -235,7 +235,11 @@ pub async fn post_split_submit(
         },
         &dauerauftraege_changes.changes,
         submit_split_dauerauftrag,
-        &configuration.configuration.lock().unwrap().database_configuration,
+        &configuration
+            .configuration
+            .lock()
+            .unwrap()
+            .database_configuration,
     );
     *database = new_state.changed_database;
 

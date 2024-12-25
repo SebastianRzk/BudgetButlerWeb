@@ -1,7 +1,7 @@
-use std::path::{Path, PathBuf};
 use actix_files::NamedFile;
-use actix_web::{get, Error};
 use actix_web::http::header::{ContentDisposition, DispositionType};
+use actix_web::{get, Error};
+use std::path::{Path, PathBuf};
 
 const STATIC_PATH: &str = "./static";
 
@@ -26,7 +26,6 @@ async fn static_fonts(file_name: actix_web::web::Path<String>) -> Result<NamedFi
             parameters: vec![],
         }))
 }
-
 
 fn to_static_font_path(static_file_name: &str) -> PathBuf {
     to_static_path("fonts").join(static_file_name)

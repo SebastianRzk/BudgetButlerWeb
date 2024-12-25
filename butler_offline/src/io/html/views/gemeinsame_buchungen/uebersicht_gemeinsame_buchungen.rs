@@ -10,7 +10,6 @@ pub struct UebersichtGemeinsameBuchungenTemplate {
     pub database_id: String,
 }
 
-
 pub struct GemeinsameBuchungTemplate {
     pub index: u32,
     pub datum: String,
@@ -20,7 +19,9 @@ pub struct GemeinsameBuchungTemplate {
     pub person: String,
 }
 
-pub fn render_uebersicht_gemeinsame_buchungen_template(template: UebersichtGemeinsameBuchungenViewResult) -> String {
+pub fn render_uebersicht_gemeinsame_buchungen_template(
+    template: UebersichtGemeinsameBuchungenViewResult,
+) -> String {
     let as_template: UebersichtGemeinsameBuchungenTemplate = map_to_template(template);
     as_template.render().unwrap()
 }
@@ -36,8 +37,14 @@ fn map_buchung_to_template(buchung: &Indiziert<GemeinsameBuchung>) -> Gemeinsame
     }
 }
 
-fn map_to_template(view_result: UebersichtGemeinsameBuchungenViewResult) -> UebersichtGemeinsameBuchungenTemplate {
-    let buchungen: Vec<GemeinsameBuchungTemplate> = view_result.liste.iter().map(|x| map_buchung_to_template(&x)).collect();
+fn map_to_template(
+    view_result: UebersichtGemeinsameBuchungenViewResult,
+) -> UebersichtGemeinsameBuchungenTemplate {
+    let buchungen: Vec<GemeinsameBuchungTemplate> = view_result
+        .liste
+        .iter()
+        .map(|x| map_buchung_to_template(&x))
+        .collect();
     UebersichtGemeinsameBuchungenTemplate {
         buchungen,
         database_id: view_result.database_version.as_string(),
@@ -61,20 +68,17 @@ mod tests {
     fn test_map_to_template() {
         let view_result = UebersichtGemeinsameBuchungenViewResult {
             database_version: demo_database_version(),
-            liste: vec![
-                Indiziert {
-                    index: 0,
-                    value: GemeinsameBuchung {
-                        betrag: zwei(),
-                        datum: Datum::new(1, 1, 2024),
-                        kategorie: kategorie("NeueKategorie"),
-                        name: name("Normal"),
-                        person: person("Person"),
-                    },
-                    dynamisch: false,
+            liste: vec![Indiziert {
+                index: 0,
+                value: GemeinsameBuchung {
+                    betrag: zwei(),
+                    datum: Datum::new(1, 1, 2024),
+                    kategorie: kategorie("NeueKategorie"),
+                    name: name("Normal"),
+                    person: person("Person"),
                 },
-            ],
-
+                dynamisch: false,
+            }],
         };
         let template = map_to_template(view_result);
 

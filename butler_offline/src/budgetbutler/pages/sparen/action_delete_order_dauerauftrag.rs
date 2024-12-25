@@ -9,8 +9,13 @@ pub struct DeleteContext<'a> {
     pub delete_index: u32,
 }
 
-pub fn delete_order_dauerauftrag(context: DeleteContext) -> RedirectResult<OrderDauerauftragChange> {
-    let to_delete = context.database.order_dauerauftraege.get(context.delete_index);
+pub fn delete_order_dauerauftrag(
+    context: DeleteContext,
+) -> RedirectResult<OrderDauerauftragChange> {
+    let to_delete = context
+        .database
+        .order_dauerauftraege
+        .get(context.delete_index);
 
     let neue_order_dauerauftraege = context
         .database
@@ -20,7 +25,9 @@ pub fn delete_order_dauerauftrag(context: DeleteContext) -> RedirectResult<Order
 
     RedirectResult {
         result: ModificationResult {
-            changed_database: context.database.change_order_dauerauftraege(neue_order_dauerauftraege),
+            changed_database: context
+                .database
+                .change_order_dauerauftraege(neue_order_dauerauftraege),
             target: Redirect {
                 target: SPAREN_ORDERDAUERAUFTRAG_UEBERSICHT.to_string(),
             },
@@ -55,19 +62,17 @@ mod tests {
 
         let result = super::delete_order_dauerauftrag(context);
 
-        assert_eq!(
-            result
-                .result
-                .changed_database
-                .order
-                .select()
-                .count(),
-            0
-        );
+        assert_eq!(result.result.changed_database.order.select().count(), 0);
         assert_eq!(result.change.icon, DELETE);
         assert_eq!(result.change.name, any_order_dauerauftrag().name);
-        assert_eq!(result.change.start_datum, any_order_dauerauftrag().start_datum);
-        assert_eq!(result.change.ende_datum, any_order_dauerauftrag().ende_datum);
+        assert_eq!(
+            result.change.start_datum,
+            any_order_dauerauftrag().start_datum
+        );
+        assert_eq!(
+            result.change.ende_datum,
+            any_order_dauerauftrag().ende_datum
+        );
         assert_eq!(result.change.konto, any_order_dauerauftrag().konto);
         assert_eq!(result.change.depotwert, any_order_dauerauftrag().depotwert);
         assert_eq!(result.change.wert, any_order_dauerauftrag().wert);

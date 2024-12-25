@@ -48,9 +48,10 @@ pub fn map_pie_chart(pie_chart: PieChart) -> PieChartTemplate {
     }
 }
 
-pub fn map_bar_chart_to_template(bar_chart: BarChart) -> BarChartTemplate{
+pub fn map_bar_chart_to_template(bar_chart: BarChart) -> BarChartTemplate {
     BarChartTemplate {
-        labels: JSONStringList::new(bar_chart.labels.iter().map(|x| x.name.clone()).collect()).to_string(),
+        labels: JSONStringList::new(bar_chart.labels.iter().map(|x| x.name.clone()).collect())
+            .to_string(),
         datasets: JSONBetragList::new(bar_chart.datasets).to_string(),
     }
 }

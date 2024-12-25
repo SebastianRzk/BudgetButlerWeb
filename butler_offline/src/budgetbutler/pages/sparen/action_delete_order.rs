@@ -12,11 +12,7 @@ pub struct DeleteContext<'a> {
 pub fn delete_order(context: DeleteContext) -> RedirectResult<OrderChange> {
     let to_delete = context.database.order.get(context.delete_index);
 
-    let neue_order = context
-        .database
-        .order
-        .change()
-        .delete(context.delete_index);
+    let neue_order = context.database.order.change().delete(context.delete_index);
 
     RedirectResult {
         result: ModificationResult {
@@ -53,15 +49,7 @@ mod tests {
 
         let result = super::delete_order(context);
 
-        assert_eq!(
-            result
-                .result
-                .changed_database
-                .order
-                .select()
-                .count(),
-            0
-        );
+        assert_eq!(result.result.changed_database.order.select().count(), 0);
         assert_eq!(result.change.icon, DELETE);
         assert_eq!(result.change.name, any_order().name);
         assert_eq!(result.change.datum, any_order().datum);

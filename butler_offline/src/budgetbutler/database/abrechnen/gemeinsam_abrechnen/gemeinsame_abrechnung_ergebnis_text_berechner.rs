@@ -46,7 +46,9 @@ pub fn berechne_ergebnis_text(
                 verhaeltnis_tatsaechlich.als_halbwegs_gerundeter_string(),
                 ergebnis.eigenes.soll.to_german_string(),
                 partner_name.person,
-                verhaeltnis_tatsaechlich.invertiere().als_halbwegs_gerundeter_string(),
+                verhaeltnis_tatsaechlich
+                    .invertiere()
+                    .als_halbwegs_gerundeter_string(),
                 ergebnis.partner.soll.to_german_string()
             ));
         }
@@ -159,7 +161,7 @@ mod tests {
             Datum::from_iso_string(&"2020-12-12".to_string()),
             10,
             Betrag::from_user_input(&"-100".to_string()),
-            Some(Limit{
+            Some(Limit {
                 fuer: person("PartnerName"),
                 value: Betrag::from_user_input(&"200".to_string()),
             }),
@@ -196,7 +198,7 @@ mod tests {
             Datum::from_iso_string(&"2020-12-12".to_string()),
             10,
             Betrag::from_user_input(&"-100".to_string()),
-            Some(Limit{
+            Some(Limit {
                 fuer: person("PartnerName"),
                 value: Betrag::from_user_input(&"40".to_string()),
             }),

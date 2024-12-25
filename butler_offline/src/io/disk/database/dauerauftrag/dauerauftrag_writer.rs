@@ -39,6 +39,9 @@ mod tests {
 
         let line = write_dauerauftrag(&dauerauftrag);
 
-        assert_eq!(line.line, "2024-01-01,2025-01-01,NeueKategorie,Miete,monatlich,-123.12");
+        assert_eq!(
+            line.line,
+            "2024-01-01,2025-01-01,NeueKategorie,Miete,monatlich,-123.12"
+        );
     }
 }

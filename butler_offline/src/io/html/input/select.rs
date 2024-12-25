@@ -12,27 +12,34 @@ pub struct SelectItem<T> {
 impl<T: PartialEq> Select<T> {
     pub fn new(items: Vec<T>, selected: Option<T>) -> Select<T> {
         Select {
-            items: items.into_iter().map(|item| {
-                SelectItem {
+            items: items
+                .into_iter()
+                .map(|item| SelectItem {
                     selected: selected.as_ref().map_or(false, |x: &T| x.eq(&item)),
                     value: item,
-                }
-            }).collect()
+                })
+                .collect(),
         }
     }
 }
 
-pub fn new_select_with_description(items: Vec<TypeDescription<String>>, selected_value: Option<String>) -> Select<DescriptiveSelectItem> {
+pub fn new_select_with_description(
+    items: Vec<TypeDescription<String>>,
+    selected_value: Option<String>,
+) -> Select<DescriptiveSelectItem> {
     Select {
-        items: items.into_iter().map(|item| {
-            SelectItem {
-                selected: selected_value.as_ref().map_or(false, |x: &String| x.eq(&item.value)),
+        items: items
+            .into_iter()
+            .map(|item| SelectItem {
+                selected: selected_value
+                    .as_ref()
+                    .map_or(false, |x: &String| x.eq(&item.value)),
                 value: DescriptiveSelectItem {
                     value: item.value,
                     description: item.description,
                 },
-            }
-        }).collect()
+            })
+            .collect(),
     }
 }
 
@@ -58,7 +65,7 @@ mod tests {
     }
 
     #[test]
-    fn test_select_with_description(){
+    fn test_select_with_description() {
         let select = new_select_with_description(
             vec![
                 TypeDescription {
@@ -70,7 +77,7 @@ mod tests {
                     description: "two".to_string(),
                 },
             ],
-            Some("2".to_string())
+            Some("2".to_string()),
         );
 
         assert_eq!(select.items.len(), 2);

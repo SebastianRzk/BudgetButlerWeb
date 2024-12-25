@@ -37,7 +37,9 @@ impl PartialOrd for Kategorie {
 
 impl Ord for Kategorie {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.kategorie.to_lowercase().cmp(&other.kategorie.to_lowercase())
+        self.kategorie
+            .to_lowercase()
+            .cmp(&other.kategorie.to_lowercase())
     }
 }
 
@@ -69,12 +71,8 @@ mod tests {
     use crate::model::primitives::kategorie::kategorie;
 
     #[test]
-    fn kategorie_should_sort(){
-        let mut liste = vec![
-            kategorie("B"),
-            kategorie("A"),
-            kategorie("C"),
-        ];
+    fn kategorie_should_sort() {
+        let mut liste = vec![kategorie("B"), kategorie("A"), kategorie("C")];
         liste.sort();
 
         assert_eq!(liste[0].get_kategorie(), "A");

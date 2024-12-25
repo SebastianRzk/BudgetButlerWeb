@@ -11,7 +11,9 @@ pub struct SplitOrderDauerauftragTemplate {
     pub wert: String,
 }
 
-pub fn render_split_order_dauerauftrag_template(template: SplitOrderDauerauftragViewResult) -> String {
+pub fn render_split_order_dauerauftrag_template(
+    template: SplitOrderDauerauftragViewResult,
+) -> String {
     let as_template: SplitOrderDauerauftragTemplate = map_to_template(template);
     as_template.render().unwrap()
 }

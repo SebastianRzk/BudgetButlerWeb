@@ -25,14 +25,16 @@ pub fn berechne_depot_meta_infos(database: &Database) -> Vec<DepotMetaInfo> {
             .select()
             .filter(filter_auf_konto(depot.value.as_reference()))
             .last()
-            .map(|depotauszug| depotauszug.value.datum.clone()).clone();
+            .map(|depotauszug| depotauszug.value.datum.clone())
+            .clone();
 
         let letzte_buchung = database
             .order
             .select()
             .filter(filter_auf_konto(depot.value.as_reference()))
             .last()
-            .map(|order| order.value.datum.clone()).clone();
+            .map(|order| order.value.datum.clone())
+            .clone();
 
         result.push(DepotMetaInfo {
             name: depot.value.name.clone(),
@@ -58,7 +60,9 @@ mod tests {
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::name::builder::demo_name;
     use crate::model::primitives::order_betrag::OrderBetrag;
-    use crate::model::state::persistent_application_state::builder::{demo_database_version, generate_database_with_sparkontos, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        demo_database_version, generate_database_with_sparkontos, generate_empty_database,
+    };
     use crate::model::state::persistent_application_state::DataOnDisk;
 
     #[test]
@@ -69,33 +73,34 @@ mod tests {
 
     #[test]
     fn test_berechne_depot_meta_infos_keine_buchung() {
-        let result = berechne_depot_meta_infos(&generate_database_with_sparkontos(vec![Sparkonto {
-            kontotyp: Kontotyp::Depot,
-            name: demo_name(),
-        }]));
+        let result =
+            berechne_depot_meta_infos(&generate_database_with_sparkontos(vec![Sparkonto {
+                kontotyp: Kontotyp::Depot,
+                name: demo_name(),
+            }]));
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].name, demo_name());
         assert_eq!(result[0].letzte_buchung, None);
         assert_eq!(result[0].letzter_depotauszug, None);
     }
-    
+
     #[test]
-    fn test_berechne_depot_meta_infos(){
+    fn test_berechne_depot_meta_infos() {
         let auszug_datum = Datum::new(1, 1, 2020);
         let order_datum = Datum::new(2, 1, 2020);
         let database = &create_database(
-            DataOnDisk{
+            DataOnDisk {
                 einzelbuchungen: vec![],
                 dauerauftraege: vec![],
                 gemeinsame_buchungen: vec![],
-                sparkontos: vec![Sparkonto{
+                sparkontos: vec![Sparkonto {
                     kontotyp: Kontotyp::Depot,
                     name: demo_konto_referenz().konto_name,
                 }],
                 sparbuchungen: vec![],
                 depotwerte: vec![],
-                order: vec![Order{
+                order: vec![Order {
                     datum: order_datum.clone(),
                     name: demo_name(),
                     konto: demo_konto_referenz(),
@@ -103,16 +108,15 @@ mod tests {
                     wert: OrderBetrag::new(u_zwei(), OrderTyp::Kauf),
                 }],
                 order_dauerauftraege: vec![],
-                depotauszuege: vec![Depotauszug{
+                depotauszuege: vec![Depotauszug {
                     konto: demo_konto_referenz(),
                     depotwert: demo_depotwert_referenz(),
                     wert: zwei(),
-                    datum:auszug_datum.clone()
+                    datum: auszug_datum.clone(),
                 }],
-                
             },
             any_datum(),
-            demo_database_version()
+            demo_database_version(),
         );
         let result = berechne_depot_meta_infos(database);
 

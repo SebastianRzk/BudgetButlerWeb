@@ -15,7 +15,7 @@ pub enum SparbuchungTyp {
     SonstigeKosten,
 }
 
-#[derive(Debug,Hash, Clone, PartialEq, Eq)]
+#[derive(Debug, Hash, Clone, PartialEq, Eq)]
 pub struct KontoReferenz {
     pub konto_name: Name,
 }
@@ -130,8 +130,10 @@ pub mod builder {
         }
     }
 
-
-    pub fn sparbuchung_with_betrag_und_typ(betrag: BetragOhneVorzeichen, typ: SparbuchungTyp) -> Sparbuchung {
+    pub fn sparbuchung_with_betrag_und_typ(
+        betrag: BetragOhneVorzeichen,
+        typ: SparbuchungTyp,
+    ) -> Sparbuchung {
         Sparbuchung {
             datum: any_datum(),
             name: demo_name(),
@@ -141,8 +143,11 @@ pub mod builder {
         }
     }
 
-
-    pub fn sparbuchung_with_betrag_typ_und_konto(betrag: BetragOhneVorzeichen, typ: SparbuchungTyp, konto: KontoReferenz) -> Sparbuchung {
+    pub fn sparbuchung_with_betrag_typ_und_konto(
+        betrag: BetragOhneVorzeichen,
+        typ: SparbuchungTyp,
+        konto: KontoReferenz,
+    ) -> Sparbuchung {
         Sparbuchung {
             datum: any_datum(),
             name: demo_name(),

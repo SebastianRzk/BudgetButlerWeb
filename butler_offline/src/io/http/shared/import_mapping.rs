@@ -29,9 +29,10 @@ pub async fn submit_import_mapping(
     let database_id = form.get("database_id").unwrap().to_string();
     let mut mappings: HashMap<Kategorie, Kategorie> = HashMap::new();
 
-    for moegliches_mapping in form.keys(){
+    for moegliches_mapping in form.keys() {
         let value = form.get(moegliches_mapping).unwrap();
-        if moegliches_mapping.ends_with("_mapping") && value != ALS_NEUE_KATEGORIE_IMPORTIEREN_TEXT {
+        if moegliches_mapping.ends_with("_mapping") && value != ALS_NEUE_KATEGORIE_IMPORTIEREN_TEXT
+        {
             let kategorie = moegliches_mapping.replace("_mapping", "");
             let mapping = form.get(moegliches_mapping).unwrap().to_string();
             mappings.insert(Kategorie::new(kategorie), Kategorie::new(mapping));
@@ -55,7 +56,6 @@ pub async fn submit_import_mapping(
         database_version: result.database.db_version.clone(),
         online_default_server: configuration.server_configuration.clone(),
     };
-
 
     let render_result = handle_modification_manual(
         database_id.clone(),

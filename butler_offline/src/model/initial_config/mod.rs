@@ -1,3 +1,3 @@
 pub mod config;
-pub mod path;
 pub mod database;
+pub mod path;

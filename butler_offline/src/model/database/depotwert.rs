@@ -19,8 +19,7 @@ pub struct Depotwert {
     pub typ: DepotwertTyp,
 }
 
-
-impl DepotwertReferenz{
+impl DepotwertReferenz {
     pub fn new(isin: ISIN) -> DepotwertReferenz {
         DepotwertReferenz { isin }
     }
@@ -31,8 +30,7 @@ pub struct DepotwertReferenz {
     pub isin: ISIN,
 }
 
-
-impl ElementRequirement for Depotwert{}
+impl ElementRequirement for Depotwert {}
 
 impl Depotwert {
     pub fn new(name: Name, isin: ISIN, typ: DepotwertTyp) -> Depotwert {
@@ -84,21 +82,16 @@ pub mod builder {
     }
 
     pub fn demo_depotwert_referenz() -> DepotwertReferenz {
-        DepotwertReferenz {
-            isin: demo_isin(),
-        }
+        DepotwertReferenz { isin: demo_isin() }
     }
 
     pub fn depotwert_referenz(isin_: &str) -> DepotwertReferenz {
-        DepotwertReferenz {
-            isin: isin(isin_),
-        }
+        DepotwertReferenz { isin: isin(isin_) }
     }
 
     pub fn depotwert_mit_name(name_str: &str) -> Depotwert {
         Depotwert::new(name(name_str), demo_isin(), DepotwertTyp::ETF)
     }
-
 }
 
 #[cfg(test)]

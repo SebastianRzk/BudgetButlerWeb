@@ -19,7 +19,7 @@ mod tests {
 
     #[test]
     fn test_write_sparkonto() {
-        let sparkonto = Sparkonto{
+        let sparkonto = Sparkonto {
             name: name("MeinSparkonto"),
             kontotyp: Kontotyp::Sparkonto,
         };

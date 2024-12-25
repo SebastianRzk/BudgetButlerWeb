@@ -7,7 +7,6 @@ pub struct ChangeThemeColorContext<'a> {
     pub config: &'a Configuration,
 }
 
-
 pub fn action_change_theme_color(context: ChangeThemeColorContext) -> ChangeConfigViewResult {
     ChangeConfigViewResult {
         new_config: Configuration {
@@ -31,9 +30,15 @@ pub fn action_change_theme_color(context: ChangeThemeColorContext) -> ChangeConf
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::core::action_change_theme_color::{action_change_theme_color, ChangeThemeColorContext};
+    use crate::budgetbutler::pages::core::action_change_theme_color::{
+        action_change_theme_color, ChangeThemeColorContext,
+    };
     use crate::model::primitives::farbe::builder::farbe;
-    use crate::model::state::config::builder::{leere_abrechnungs_configuration, leere_backup_configuration, leere_database_configuration, leere_design_configuration, leere_erfassungs_configuration, leere_server_configuration, leere_user_configuration};
+    use crate::model::state::config::builder::{
+        leere_abrechnungs_configuration, leere_backup_configuration, leere_database_configuration,
+        leere_design_configuration, leere_erfassungs_configuration, leere_server_configuration,
+        leere_user_configuration,
+    };
     use crate::model::state::config::Configuration;
 
     #[test]

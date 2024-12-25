@@ -6,7 +6,6 @@ const VIERTELJAERLICH_STR: &str = "vierteljährlich";
 const HALBJAEHRLICH_STR: &str = "halbjährlich";
 const JAEHRLICH_STR: &str = "jährlich";
 
-
 pub fn read_rhythmus(rhythmus: Element) -> Rhythmus {
     match rhythmus.element.as_str() {
         MONATLICH_STR => Rhythmus::Monatlich,
@@ -18,13 +17,13 @@ pub fn read_rhythmus(rhythmus: Element) -> Rhythmus {
 }
 
 pub fn write_rhythmus(rhythmus: Rhythmus) -> Element {
-    Element{
-     element: match rhythmus {
-         Rhythmus::Monatlich => MONATLICH_STR.to_string(),
-         Rhythmus::Vierteljaehrlich => VIERTELJAERLICH_STR.to_string(),
-         Rhythmus::Halbjaehrlich => HALBJAEHRLICH_STR.to_string(),
-         Rhythmus::Jaehrlich => JAEHRLICH_STR.to_string(),
-     }
+    Element {
+        element: match rhythmus {
+            Rhythmus::Monatlich => MONATLICH_STR.to_string(),
+            Rhythmus::Vierteljaehrlich => VIERTELJAERLICH_STR.to_string(),
+            Rhythmus::Halbjaehrlich => HALBJAEHRLICH_STR.to_string(),
+            Rhythmus::Jaehrlich => JAEHRLICH_STR.to_string(),
+        },
     }
 }
 

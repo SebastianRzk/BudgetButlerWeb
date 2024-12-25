@@ -3,14 +3,20 @@ use crate::io::disk::diskrepresentation::file::SortedFile;
 use crate::model::database::depotauszug::Depotauszug;
 
 pub fn read_depotauszuege(sorted_file: &SortedFile) -> Vec<Depotauszug> {
-    sorted_file.depotauszuege.iter().map(|l| read_depotauszug(l.into())).collect()
+    sorted_file
+        .depotauszuege
+        .iter()
+        .map(|l| read_depotauszug(l.into()))
+        .collect()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::io::disk::diskrepresentation::line::builder::line;
-    use crate::model::database::depotauszug::builder::{demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR};
+    use crate::model::database::depotauszug::builder::{
+        demo_depotauszug_aus_str, DEMO_DEPOTAUSZUG_STR,
+    };
 
     #[test]
     fn test_read_depotwerte() {
@@ -23,9 +29,7 @@ mod tests {
             depotwerte: vec![],
             order: vec![],
             order_dauerauftrag: vec![],
-            depotauszuege: vec![
-                line(DEMO_DEPOTAUSZUG_STR),
-            ],
+            depotauszuege: vec![line(DEMO_DEPOTAUSZUG_STR)],
         };
 
         let depotauszuege = read_depotauszuege(&sorted_file);

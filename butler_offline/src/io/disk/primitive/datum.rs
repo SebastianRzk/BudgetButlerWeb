@@ -7,14 +7,14 @@ pub fn read_datum(datum: Element) -> Datum {
 
 pub fn write_datum(datum: &Datum) -> Element {
     Element {
-        element: datum.to_iso_string()
+        element: datum.to_iso_string(),
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::io::disk::primitive::segment_reader::builder::element;
     use super::*;
+    use crate::io::disk::primitive::segment_reader::builder::element;
 
     #[test]
     fn test_read_datum() {

@@ -10,9 +10,7 @@ pub struct Sparkontos {
 
 impl Creates<Sparkonto, Sparkontos> for Sparkontos {
     fn create(item: Vec<Indiziert<Sparkonto>>) -> Sparkontos {
-        Sparkontos {
-            sparkontos: item,
-        }
+        Sparkontos { sparkontos: item }
     }
 }
 

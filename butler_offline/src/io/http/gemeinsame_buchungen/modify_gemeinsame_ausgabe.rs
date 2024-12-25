@@ -40,10 +40,7 @@ pub async fn get_view(
     config: Data<ConfigurationData>,
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
-    let configuration_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration_guard = config.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchung hinzufügen",
         GEMEINSAME_BUCHUNGEN_ADD,
@@ -76,10 +73,7 @@ pub async fn post_view(
         return http_redirect(redirect_to_optimistic_locking_error());
     }
 
-    let configurtation_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configurtation_guard = config.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchung editieren",
         GEMEINSAME_BUCHUNGEN_ADD,

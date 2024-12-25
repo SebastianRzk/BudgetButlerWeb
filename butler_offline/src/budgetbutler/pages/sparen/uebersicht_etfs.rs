@@ -35,13 +35,13 @@ pub struct EtfInfo {
 
 pub struct ETFKostenUebersicht {
     pub gesamt: ETFKosten,
-    pub data: Vec<ETFKosten>
+    pub data: Vec<ETFKosten>,
 }
 
 pub struct ETFKosten {
     pub name: String,
     pub prozent: Prozent,
-    pub euro : Betrag
+    pub euro: Betrag,
 }
 
 pub struct DepotwertMitDaten {

@@ -84,6 +84,4 @@ pub fn map_to_template(view_result: AddSparbuchungenViewResult) -> AddSparbuchun
 }
 
 #[cfg(test)]
-mod tests {
-
-}
+mod tests {}

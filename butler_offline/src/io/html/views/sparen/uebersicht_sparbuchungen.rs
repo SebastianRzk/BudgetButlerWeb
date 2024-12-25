@@ -30,7 +30,9 @@ pub struct SparbuchungTemplate {
     pub dynamisch: bool,
 }
 
-pub fn render_uebersicht_sparbuchungen_template(view_result: UebersichtSparbuchungenViewResult) -> String {
+pub fn render_uebersicht_sparbuchungen_template(
+    view_result: UebersichtSparbuchungenViewResult,
+) -> String {
     let as_template: UebersichtSparbuchungTemplate = map_to_template(view_result);
     as_template.render().unwrap()
 }
@@ -58,7 +60,6 @@ fn map_buchung_to_template(buchung: &Indiziert<Sparbuchung>) -> SparbuchungTempl
     }
 }
 
-
 fn map_to_template(
     view_result: UebersichtSparbuchungenViewResult,
 ) -> UebersichtSparbuchungTemplate {
@@ -79,7 +80,9 @@ fn map_to_template(
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::sparen::uebersicht_sparbuchungen::{MonatsZusammenfassung, UebersichtSparbuchungenViewResult};
+    use crate::budgetbutler::pages::sparen::uebersicht_sparbuchungen::{
+        MonatsZusammenfassung, UebersichtSparbuchungenViewResult,
+    };
     use crate::model::database::sparbuchung::builder::konto_referenz;
     use crate::model::database::sparbuchung::{Sparbuchung, SparbuchungTyp};
     use crate::model::indiziert::Indiziert;
@@ -93,19 +96,17 @@ mod tests {
         let view_result = UebersichtSparbuchungenViewResult {
             liste: vec![MonatsZusammenfassung {
                 monat: monats_name("Januar"),
-                buchungen: vec![
-                    Indiziert {
-                        index: 0,
-                        dynamisch: false,
-                        value: Sparbuchung {
-                            datum: Datum::new(1, 1, 2024),
-                            name: name("Normal"),
-                            wert: u_betrag( 123, 12),
-                            konto: konto_referenz("Konto"),
-                            typ: SparbuchungTyp::SonstigeKosten
-                        },
+                buchungen: vec![Indiziert {
+                    index: 0,
+                    dynamisch: false,
+                    value: Sparbuchung {
+                        datum: Datum::new(1, 1, 2024),
+                        name: name("Normal"),
+                        wert: u_betrag(123, 12),
+                        konto: konto_referenz("Konto"),
+                        typ: SparbuchungTyp::SonstigeKosten,
                     },
-                ],
+                }],
             }],
             verfuegbare_jahre: vec![2020],
             selektiertes_jahr: 2020,

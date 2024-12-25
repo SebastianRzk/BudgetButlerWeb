@@ -20,9 +20,8 @@ pub fn read_order(line: Element) -> Order {
     let depotwert_segment = read_next_element(konto_segment.rest);
 
     let wert_segment = read_next_element(depotwert_segment.rest);
-    let wert =  read_betrag_ohne_vorzeichen(wert_segment.element);
+    let wert = read_betrag_ohne_vorzeichen(wert_segment.element);
     let typ = read_ordertyp(wert_segment.rest);
-
 
     Order {
         datum,

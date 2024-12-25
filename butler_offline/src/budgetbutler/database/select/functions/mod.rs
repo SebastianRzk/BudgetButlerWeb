@@ -1,6 +1,6 @@
-pub mod keyextractors;
 pub mod datatypes;
 pub mod filters;
 pub mod grouper;
-pub mod sum_by;
+pub mod keyextractors;
 pub mod mapper;
+pub mod sum_by;

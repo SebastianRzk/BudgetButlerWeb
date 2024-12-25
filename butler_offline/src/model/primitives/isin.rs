@@ -1,26 +1,22 @@
-use std::cmp::Ordering;
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 
 #[derive(Debug, Clone, PartialEq, Hash, Eq, Serialize, Deserialize)]
 pub struct ISIN {
     pub isin: String,
 }
 
-
 impl ISIN {
     pub fn new(isin: String) -> ISIN {
-        ISIN {
-            isin
-        }
+        ISIN { isin }
     }
 
     pub fn empty() -> ISIN {
         ISIN {
-            isin: "".to_string()
+            isin: "".to_string(),
         }
     }
 }
-
 
 impl PartialOrd for ISIN {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
@@ -28,7 +24,7 @@ impl PartialOrd for ISIN {
     }
 }
 
-impl Ord for ISIN{
+impl Ord for ISIN {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.isin.cmp(&other.isin)
     }
@@ -45,5 +41,4 @@ pub mod builder {
     pub fn demo_isin() -> ISIN {
         isin("TestISIN")
     }
-
 }

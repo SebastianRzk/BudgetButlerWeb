@@ -1,5 +1,9 @@
-use crate::budgetbutler::pages::core::action_rename_kategorie::{action_rename_kategorie, RenameKategorieContext};
-use crate::budgetbutler::view::request_handler::{handle_modification_without_change, VersionedContext};
+use crate::budgetbutler::pages::core::action_rename_kategorie::{
+    action_rename_kategorie, RenameKategorieContext,
+};
+use crate::budgetbutler::view::request_handler::{
+    handle_modification_without_change, VersionedContext,
+};
 use crate::io::http::redirect::http_redirect;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::state::config::ConfigurationData;

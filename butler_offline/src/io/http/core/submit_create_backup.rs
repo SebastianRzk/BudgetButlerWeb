@@ -11,10 +11,10 @@ use actix_web::{post, HttpResponse};
 #[post("configuration/submit/backup")]
 pub async fn submit(
     state: Data<ApplicationState>,
-    config: Data<ConfigurationData>
+    config: Data<ConfigurationData>,
 ) -> HttpResponse {
     let database_guard = state.database.lock().unwrap();
-    let  config_guard = config.configuration.lock().unwrap();
+    let config_guard = config.configuration.lock().unwrap();
     create_database_backup(
         &database_guard,
         &config_guard.backup_configuration,
@@ -25,4 +25,3 @@ pub async fn submit(
 
     http_redirect(Redirect::to(CORE_CONFIGURATION))
 }
-

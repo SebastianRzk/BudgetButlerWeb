@@ -65,16 +65,20 @@ fn map_farbe_to_template(palette: &Vec<FarbenZuordnung>) -> Vec<FarbenZuordnungT
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::core::configuration::{ConfigurationViewResult, FarbenZuordnung};
+    use crate::budgetbutler::pages::core::configuration::{
+        ConfigurationViewResult, FarbenZuordnung,
+    };
     use crate::model::primitives::farbe::builder::farbe;
-    use crate::model::primitives::kategorie::builder::{demo_kategorie, any_kategorie_str};
+    use crate::model::primitives::kategorie::builder::{any_kategorie_str, demo_kategorie};
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::person::builder::{demo_partner, demo_partner_str};
-    use crate::model::state::persistent_application_state::builder::{demo_database_version, demo_database_version_str};
+    use crate::model::state::persistent_application_state::builder::{
+        demo_database_version, demo_database_version_str,
+    };
 
     #[test]
     fn test_map_to_template() {
-        let view_result = ConfigurationViewResult{
+        let view_result = ConfigurationViewResult {
             database_id: demo_database_version(),
             kategorien: vec![demo_kategorie()],
             themecolor: farbe("themecolor"),

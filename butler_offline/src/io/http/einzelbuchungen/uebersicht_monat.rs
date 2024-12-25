@@ -17,10 +17,7 @@ pub async fn get_view(
     config: Data<ConfigurationData>,
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
-    let configuration_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration_guard = config.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Übersicht Monat",
         EINZELBUCHUNGEN_MONATSUEBERSICHT,
@@ -36,7 +33,7 @@ pub async fn get_view(
         },
         handle_view,
         render_uebersicht_monat_template,
-        configuration_guard.database_configuration.name.clone()
+        configuration_guard.database_configuration.name.clone(),
     ))
 }
 
@@ -56,10 +53,7 @@ pub async fn post_view(
     let monat = input[1].parse::<u32>().unwrap();
 
     let database_guard = data.database.lock().unwrap();
-    let configuration_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration_guard = config.configuration.lock().unwrap();
 
     HttpResponse::Ok().body(handle_render_display_view(
         "Übersicht Monat",
@@ -76,6 +70,6 @@ pub async fn post_view(
         },
         handle_view,
         render_uebersicht_monat_template,
-        configuration_guard.database_configuration.name.clone()
+        configuration_guard.database_configuration.name.clone(),
     ))
 }

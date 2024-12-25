@@ -10,7 +10,11 @@ pub fn make_pie(table: &Tabelle) -> PieChart {
 
     for row in &table.rows {
         labels.push(row.row_label.clone());
-        data.push(Betrag::from_iso_string(&row.gesamt_column.prozent.als_halbwegs_gerundeter_iso_string()));
+        data.push(Betrag::from_iso_string(
+            &row.gesamt_column
+                .prozent
+                .als_halbwegs_gerundeter_iso_string(),
+        ));
         colors.push(Farbe {
             as_string: "color(red).alpha(0.5)".to_string(),
         });

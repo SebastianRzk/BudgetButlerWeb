@@ -1,7 +1,6 @@
 use crate::model::state::config::Configuration;
 use std::path::PathBuf;
 
-
 pub fn exists_config(configuration_path: &PathBuf) -> bool {
     let full_path = configuration_path.join("configuration.json");
     full_path.exists()

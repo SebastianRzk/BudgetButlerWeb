@@ -1,11 +1,12 @@
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::io::disk::primitive::segment_reader::Element;
 
-pub fn create_line(elements: Vec<Element>) -> Line{
+pub fn create_line(elements: Vec<Element>) -> Line {
     let elements_unpacked: Vec<String> = elements.iter().map(|x| x.element.clone()).collect();
-    Line { line: elements_unpacked.join(",") }
+    Line {
+        line: elements_unpacked.join(","),
+    }
 }
-
 
 #[cfg(test)]
 mod tests {

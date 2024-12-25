@@ -196,7 +196,10 @@ mod tests {
             Betrag::new(Vorzeichen::Negativ, 150, 0)
         );
         assert_eq!(result.partner.diff, Betrag::new(Vorzeichen::Negativ, 50, 0));
-        assert_eq!(result.modus, super::BerechnungsErgebnisModus::LimitNichtErreicht);
+        assert_eq!(
+            result.modus,
+            super::BerechnungsErgebnisModus::LimitNichtErreicht
+        );
     }
 
     #[test]
@@ -262,7 +265,10 @@ mod tests {
             Betrag::new(Vorzeichen::Negativ, 150, 0)
         );
         assert_eq!(result.partner.diff, Betrag::new(Vorzeichen::Positiv, 50, 0));
-        assert_eq!(result.modus, super::BerechnungsErgebnisModus::LimitNichtErreicht);
+        assert_eq!(
+            result.modus,
+            super::BerechnungsErgebnisModus::LimitNichtErreicht
+        );
     }
 
     #[test]

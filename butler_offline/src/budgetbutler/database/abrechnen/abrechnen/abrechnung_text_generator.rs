@@ -171,7 +171,12 @@ mod tests {
             abrechnungsdatum: Datum::new(1, 1, 2021),
             ziel: Ziel::GemeinsameAbrechnungFuerPartner,
         };
-        let result = generiere_text(einfuehrungs_text, buchungen_text, metadaten, HeaderInsertModus::Insert);
+        let result = generiere_text(
+            einfuehrungs_text,
+            buchungen_text,
+            metadaten,
+            HeaderInsertModus::Insert,
+        );
 
         let result_as_str = as_string(&result);
 

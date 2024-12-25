@@ -69,6 +69,5 @@ mod tests {
         assert_eq!(result.change.konto, any_sparbuchung().konto);
         assert_eq!(result.change.typ, any_sparbuchung().typ);
         assert_eq!(result.change.wert, any_sparbuchung().wert);
-
     }
 }

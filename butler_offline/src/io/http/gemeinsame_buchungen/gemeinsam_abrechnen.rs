@@ -23,10 +23,7 @@ pub async fn get_view(
     config: Data<ConfigurationData>,
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
-    let configuration_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration_guard = config.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchungen Abrechnen",
         GEMEINSAME_BUCHUNGEN_ABRECHNEN,
@@ -57,10 +54,7 @@ pub async fn post_view(
     form: Form<FormData>,
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
-    let configuration_guard = config
-        .configuration
-        .lock()
-        .unwrap();
+    let configuration_guard = config.configuration.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
         "Gemeinsame Buchungen Abrechnen",
         GEMEINSAME_BUCHUNGEN_ABRECHNEN,

@@ -1,5 +1,5 @@
-use std::fmt::{Display, Formatter};
 use crate::model::primitives::betrag::Vorzeichen;
+use std::fmt::{Display, Formatter};
 
 impl Display for Vorzeichen {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

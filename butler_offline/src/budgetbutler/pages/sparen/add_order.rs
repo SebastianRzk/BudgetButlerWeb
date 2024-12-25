@@ -130,7 +130,10 @@ mod tests {
     use crate::model::primitives::name::{name, Name};
     use crate::model::primitives::order_betrag::builder::demo_order_betrag;
     use crate::model::state::non_persistent_application_state::OrderChange;
-    use crate::model::state::persistent_application_state::builder::{generate_database_with_depotwerte, generate_database_with_orders, generate_database_with_sparkontos, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        generate_database_with_depotwerte, generate_database_with_orders,
+        generate_database_with_sparkontos, generate_empty_database,
+    };
 
     #[test]
     pub fn test_handle_view_without_edit_index() {
@@ -252,10 +255,10 @@ mod tests {
 
     #[test]
     fn test_should_have_described_depotwerte() {
-        let database = generate_database_with_depotwerte(vec![Depotwert{
+        let database = generate_database_with_depotwerte(vec![Depotwert {
             name: name("demoname"),
             isin: isin("demoisin"),
-            typ: DepotwertTyp::ETF
+            typ: DepotwertTyp::ETF,
         }]);
 
         let context = AddOrderContext {

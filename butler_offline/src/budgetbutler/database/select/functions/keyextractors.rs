@@ -1,12 +1,14 @@
-use crate::budgetbutler::database::select::functions::datatypes::{JahresAggregationsIndex, MonatsAggregationsIndex, TagesAggregationsIndex};
+use crate::budgetbutler::database::select::functions::datatypes::{
+    JahresAggregationsIndex, MonatsAggregationsIndex, TagesAggregationsIndex,
+};
+use crate::model::eigenschaften::besitzt_betrag::BesitztBetrag;
 use crate::model::eigenschaften::besitzt_datum::BesitztDatum;
 use crate::model::eigenschaften::besitzt_kategorie::BesitztKategorie;
 use crate::model::eigenschaften::besitzt_start_und_ende_datum::BesitztStartUndEndeDatum;
+use crate::model::primitives::betrag::Vorzeichen;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::kategorie::Kategorie;
 use std::hash::Hash;
-use crate::model::eigenschaften::besitzt_betrag::BesitztBetrag;
-use crate::model::primitives::betrag::Vorzeichen;
 
 pub fn monatsweise_aggregation<T: for<'a> BesitztDatum<'a>>(item: &T) -> MonatsAggregationsIndex {
     MonatsAggregationsIndex {
@@ -31,8 +33,9 @@ pub fn kategorie_aggregation<T: for<'a> BesitztKategorie<'a>>(item: &T) -> Kateg
     item.kategorie().clone()
 }
 
-
-pub fn start_ende_aggregation<T: for<'a> BesitztStartUndEndeDatum<'a>>(heute: Datum) -> impl Fn(&T) -> StartEndeAggregation {
+pub fn start_ende_aggregation<T: for<'a> BesitztStartUndEndeDatum<'a>>(
+    heute: Datum,
+) -> impl Fn(&T) -> StartEndeAggregation {
     move |item: &T| {
         if item.ende_datum() < &heute {
             StartEndeAggregation::Vergangene
@@ -44,11 +47,9 @@ pub fn start_ende_aggregation<T: for<'a> BesitztStartUndEndeDatum<'a>>(heute: Da
     }
 }
 
-
 pub fn einnahmen_ausgaben_aggregation<T: for<'a> BesitztBetrag<'a>>(item: &T) -> Vorzeichen {
     item.betrag().vorzeichen.clone()
 }
-
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum StartEndeAggregation {
@@ -67,20 +68,35 @@ mod tests {
     #[test]
     pub fn test_start_ende_aggregation() {
         let heute = Datum::new(1, 1, 2021);
-        let vergangener_dauerauftrag = dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2020), Datum::new(31, 12, 2020));
-        let aktueller_dauerauftrag = dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2020), Datum::new(31, 12, 2024));
-        let zukuenftiger_dauerauftrag = dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2024), Datum::new(31, 12, 2024));
+        let vergangener_dauerauftrag =
+            dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2020), Datum::new(31, 12, 2020));
+        let aktueller_dauerauftrag =
+            dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2020), Datum::new(31, 12, 2024));
+        let zukuenftiger_dauerauftrag =
+            dauerauftrag_mit_start_ende_datum(Datum::new(1, 1, 2024), Datum::new(31, 12, 2024));
 
-        assert_eq!(super::start_ende_aggregation(heute.clone())(&indiziert(vergangener_dauerauftrag)), super::StartEndeAggregation::Vergangene);
-        assert_eq!(super::start_ende_aggregation(heute.clone())(&indiziert(aktueller_dauerauftrag)), super::StartEndeAggregation::Aktuelle);
-        assert_eq!(super::start_ende_aggregation(heute)(&indiziert(zukuenftiger_dauerauftrag)), super::StartEndeAggregation::Zukuenftige);
+        assert_eq!(
+            super::start_ende_aggregation(heute.clone())(&indiziert(vergangener_dauerauftrag)),
+            super::StartEndeAggregation::Vergangene
+        );
+        assert_eq!(
+            super::start_ende_aggregation(heute.clone())(&indiziert(aktueller_dauerauftrag)),
+            super::StartEndeAggregation::Aktuelle
+        );
+        assert_eq!(
+            super::start_ende_aggregation(heute)(&indiziert(zukuenftiger_dauerauftrag)),
+            super::StartEndeAggregation::Zukuenftige
+        );
     }
 
     #[test]
-    pub fn test_tagesweise_aggregation(){
+    pub fn test_tagesweise_aggregation() {
         let heute = Datum::new(1, 1, 2021);
         let dauerauftrag = einzelbuchung_with_datum(heute.clone());
 
-        assert_eq!(super::tagesweise_aggregation(&indiziert(dauerauftrag)), super::TagesAggregationsIndex { tag: 1 });
+        assert_eq!(
+            super::tagesweise_aggregation(&indiziert(dauerauftrag)),
+            super::TagesAggregationsIndex { tag: 1 }
+        );
     }
 }

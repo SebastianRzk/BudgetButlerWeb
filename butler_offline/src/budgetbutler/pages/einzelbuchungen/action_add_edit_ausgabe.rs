@@ -31,27 +31,34 @@ pub fn submit_ausgabe(context: SubmitContext) -> RedirectResult<EinzelbuchungCha
 
     if let Some(index) = context.edit_index {
         icon = PENCIL;
-        neue_einzelbuchungen = context.database.einzelbuchungen.change().edit(index, einzelbuchung);
+        neue_einzelbuchungen = context
+            .database
+            .einzelbuchungen
+            .change()
+            .edit(index, einzelbuchung);
     } else {
         icon = PLUS;
-        neue_einzelbuchungen = context.database.einzelbuchungen.change().insert(
-            Einzelbuchung {
+        neue_einzelbuchungen = context
+            .database
+            .einzelbuchungen
+            .change()
+            .insert(Einzelbuchung {
                 datum: context.datum.clone(),
                 name: context.name.clone(),
                 kategorie: context.kategorie.clone(),
                 betrag: context.wert.negativ(),
-            }
-        );
+            });
     }
 
-    let new_database = context.database.change_einzelbuchungen(neue_einzelbuchungen);
-
+    let new_database = context
+        .database
+        .change_einzelbuchungen(neue_einzelbuchungen);
 
     RedirectResult {
         result: ModificationResult {
             changed_database: new_database,
             target: Redirect {
-                target: EINZELBUCHUNGEN_AUSGABE_ADD.to_string()
+                target: EINZELBUCHUNGEN_AUSGABE_ADD.to_string(),
             },
         },
         change: EinzelbuchungChange {
@@ -64,7 +71,6 @@ pub fn submit_ausgabe(context: SubmitContext) -> RedirectResult<EinzelbuchungCha
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -74,7 +80,9 @@ mod tests {
     use crate::model::primitives::kategorie::builder::demo_kategorie;
     use crate::model::primitives::kategorie::kategorie;
     use crate::model::primitives::name::builder::demo_name;
-    use crate::model::state::persistent_application_state::builder::{generate_database_with_einzelbuchungen, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        generate_database_with_einzelbuchungen, generate_empty_database,
+    };
 
     #[test]
     fn test_submit_ausgabe() {
@@ -89,13 +97,24 @@ mod tests {
         };
         let result = submit_ausgabe(context);
 
-        assert_eq!(result.result.changed_database.einzelbuchungen.select().count(), 1);
-        assert_eq!(result.result.changed_database.einzelbuchungen.get(0).value, Einzelbuchung {
-            datum: any_datum(),
-            name: demo_name(),
-            kategorie: demo_kategorie(),
-            betrag: zwei().negativ(),
-        });
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .einzelbuchungen
+                .select()
+                .count(),
+            1
+        );
+        assert_eq!(
+            result.result.changed_database.einzelbuchungen.get(0).value,
+            Einzelbuchung {
+                datum: any_datum(),
+                name: demo_name(),
+                kategorie: demo_kategorie(),
+                betrag: zwei().negativ(),
+            }
+        );
 
         assert_eq!(result.change.icon, "fa fa-plus");
         assert_eq!(result.change.datum, any_datum());
@@ -118,14 +137,24 @@ mod tests {
 
         let result = submit_ausgabe(context);
 
-
-        assert_eq!(result.result.changed_database.einzelbuchungen.select().count(), 1);
-        assert_eq!(result.result.changed_database.einzelbuchungen.get(1).value, Einzelbuchung {
-            datum: any_datum(),
-            name: demo_name(),
-            kategorie: kategorie("changed kategorie"),
-            betrag: zwei().negativ(),
-        });
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .einzelbuchungen
+                .select()
+                .count(),
+            1
+        );
+        assert_eq!(
+            result.result.changed_database.einzelbuchungen.get(1).value,
+            Einzelbuchung {
+                datum: any_datum(),
+                name: demo_name(),
+                kategorie: kategorie("changed kategorie"),
+                betrag: zwei().negativ(),
+            }
+        );
 
         assert_eq!(result.change.icon, "fa fa-pencil");
         assert_eq!(result.change.datum, any_datum());

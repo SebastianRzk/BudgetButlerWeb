@@ -29,14 +29,14 @@ pub struct AddKontoContext<'a> {
 pub struct DefaultItem {
     pub index: u32,
     pub name: Name,
-    pub typ: Kontotyp
+    pub typ: Kontotyp,
 }
 
 pub fn handle_view(context: AddKontoContext) -> AddKontoViewResult {
     let mut default_item = DefaultItem {
         index: 0,
         name: Name::empty(),
-        typ: Kontotyp::Depot
+        typ: Kontotyp::Depot,
     };
     let mut action_headline = "Konto erfassen".to_string();
     let mut action_title = "Konto erfassen".to_string();
@@ -47,7 +47,7 @@ pub fn handle_view(context: AddKontoContext) -> AddKontoViewResult {
         default_item = DefaultItem {
             index: edit_index,
             name: edit_buchung.value.name,
-            typ: edit_buchung.value.kontotyp
+            typ: edit_buchung.value.kontotyp,
         };
         bearbeitungsmodus = true;
         action_headline = "Konto bearbeiten".to_string();
@@ -59,7 +59,11 @@ pub fn handle_view(context: AddKontoContext) -> AddKontoViewResult {
         bearbeitungsmodus,
         action_headline,
         default_item,
-        kontotypen: vec![Kontotyp::Depot, Kontotyp::GenossenschaftsAnteile, Kontotyp::Sparkonto],
+        kontotypen: vec![
+            Kontotyp::Depot,
+            Kontotyp::GenossenschaftsAnteile,
+            Kontotyp::Sparkonto,
+        ],
         action_title,
         letzte_erfassungen: context
             .konto_changes
@@ -81,13 +85,13 @@ mod tests {
     use crate::model::database::sparkonto::Kontotyp;
     use crate::model::primitives::name::Name;
     use crate::model::state::non_persistent_application_state::KontoChange;
-    use crate::model::state::persistent_application_state::builder::{generate_database_with_sparkontos, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        generate_database_with_sparkontos, generate_empty_database,
+    };
 
     #[test]
     pub fn test_handle_view_without_edit_index() {
-        let database = generate_database_with_sparkontos(
-            vec![demo_konto()],
-        );
+        let database = generate_database_with_sparkontos(vec![demo_konto()]);
         let context = AddKontoContext {
             database: &database,
             konto_changes: &vec![],
@@ -106,7 +110,11 @@ mod tests {
 
         assert_eq!(
             result.kontotypen,
-            vec![Kontotyp::Depot, Kontotyp::GenossenschaftsAnteile, Kontotyp::Sparkonto]
+            vec![
+                Kontotyp::Depot,
+                Kontotyp::GenossenschaftsAnteile,
+                Kontotyp::Sparkonto
+            ]
         );
         assert_eq!(result.action_title, "Konto erfassen");
         assert_eq!(result.letzte_erfassungen.len(), 0);
@@ -132,7 +140,14 @@ mod tests {
         assert_eq!(result.default_item.name, demo_konto().name);
         assert_eq!(result.default_item.typ, demo_konto().kontotyp);
 
-        assert_eq!(result.kontotypen, vec![Kontotyp::Depot, Kontotyp::GenossenschaftsAnteile, Kontotyp::Sparkonto]);
+        assert_eq!(
+            result.kontotypen,
+            vec![
+                Kontotyp::Depot,
+                Kontotyp::GenossenschaftsAnteile,
+                Kontotyp::Sparkonto
+            ]
+        );
         assert_eq!(result.action_title, "Konto bearbeiten");
         assert_eq!(result.letzte_erfassungen.len(), 0);
     }

@@ -15,19 +15,24 @@ use crate::io::time::today;
 use crate::model::state::config::{get_database_location, DatabaseConfiguration};
 use crate::model::state::persistent_application_state::{DataOnDisk, Database};
 use crate::model::state::persistent_state::database_version::DatabaseVersion;
+use std;
 use std::fs;
 use std::path::PathBuf;
-use std;
 
 fn read_file(path: PathBuf) -> File {
-    println!("loading file {}", std::path::absolute(&path).unwrap().to_str().unwrap());
+    println!(
+        "loading file {}",
+        std::path::absolute(&path).unwrap().to_str().unwrap()
+    );
     let file_as_string = fs::read_to_string::<PathBuf>(path).unwrap();
-    let lines = file_as_string.lines().map(|l| Line {
-        line: l.to_string(),
-    }).collect();
+    let lines = file_as_string
+        .lines()
+        .map(|l| Line {
+            line: l.to_string(),
+        })
+        .collect();
     File { lines }
 }
-
 
 pub fn read_data(file: File) -> DataOnDisk {
     let sorted_file = sort_file(file);
@@ -44,14 +49,16 @@ pub fn read_data(file: File) -> DataOnDisk {
     }
 }
 
-
 pub fn exists_database(config: &DatabaseConfiguration) -> bool {
     let full_path = get_database_location(config);
     println!("Checking if database exists at {:?}", full_path);
     full_path.exists()
 }
 
-pub fn read_database(config: &DatabaseConfiguration, current_database_version: DatabaseVersion) -> Database {
+pub fn read_database(
+    config: &DatabaseConfiguration,
+    current_database_version: DatabaseVersion,
+) -> Database {
     let db_location = get_database_location(config);
     println!("Reading database from {:?}", db_location);
     let file = read_file(db_location);
@@ -134,42 +141,68 @@ Datum,Depotwert,Konto,Wert
         assert_eq!(erste_einzelbuchung.datum, Datum::new(1, 1, 2023));
         assert_eq!(erste_einzelbuchung.name, name("Normal"));
         assert_eq!(erste_einzelbuchung.kategorie, kategorie("NeueKategorie"));
-        assert_eq!(erste_einzelbuchung.betrag, Betrag::new(Vorzeichen::Negativ, 123, 12));
+        assert_eq!(
+            erste_einzelbuchung.betrag,
+            Betrag::new(Vorzeichen::Negativ, 123, 12)
+        );
 
         let zweite_einzelbuchung = &data.einzelbuchungen[1];
         assert_eq!(zweite_einzelbuchung.datum, Datum::new(2, 1, 2024));
         assert_eq!(zweite_einzelbuchung.name, name("Mit , Komma"));
         assert_eq!(zweite_einzelbuchung.kategorie, kategorie("NeueKategorie"));
-        assert_eq!(zweite_einzelbuchung.betrag, Betrag::new(Vorzeichen::Negativ, 123, 0));
+        assert_eq!(
+            zweite_einzelbuchung.betrag,
+            Betrag::new(Vorzeichen::Negativ, 123, 0)
+        );
 
         let erster_dauerauftrag = &data.dauerauftraege[0];
         assert_eq!(erster_dauerauftrag.start_datum, Datum::new(22, 12, 2021));
         assert_eq!(erster_dauerauftrag.ende_datum, Datum::new(24, 12, 2023));
         assert_eq!(erster_dauerauftrag.name, name("Name1"));
         assert_eq!(erster_dauerauftrag.kategorie, kategorie("Kategorie1"));
-        assert_eq!(erster_dauerauftrag.betrag, Betrag::new(Vorzeichen::Negativ, 1233, 0));
+        assert_eq!(
+            erster_dauerauftrag.betrag,
+            Betrag::new(Vorzeichen::Negativ, 1233, 0)
+        );
 
         let zweiter_dauerauftrag = &data.dauerauftraege[1];
         assert_eq!(zweiter_dauerauftrag.start_datum, Datum::new(24, 12, 2021));
         assert_eq!(zweiter_dauerauftrag.ende_datum, Datum::new(24, 12, 2025));
         assert_eq!(zweiter_dauerauftrag.name, name("Name2 als ausgabe"));
         assert_eq!(zweiter_dauerauftrag.kategorie, kategorie("Kategorie2"));
-        assert_eq!(zweiter_dauerauftrag.betrag, Betrag::new(Vorzeichen::Negativ, 1233, 0));
+        assert_eq!(
+            zweiter_dauerauftrag.betrag,
+            Betrag::new(Vorzeichen::Negativ, 1233, 0)
+        );
 
         let erste_gemeinsame_buchung = &data.gemeinsame_buchungen[0];
         assert_eq!(erste_gemeinsame_buchung.datum, Datum::new(1, 11, 2024));
         assert_eq!(erste_gemeinsame_buchung.name, name("Name"));
-        assert_eq!(erste_gemeinsame_buchung.kategorie, kategorie("MeineBuchung"));
-        assert_eq!(erste_gemeinsame_buchung.betrag, Betrag::new(Vorzeichen::Negativ, 234, 0));
+        assert_eq!(
+            erste_gemeinsame_buchung.kategorie,
+            kategorie("MeineBuchung")
+        );
+        assert_eq!(
+            erste_gemeinsame_buchung.betrag,
+            Betrag::new(Vorzeichen::Negativ, 234, 0)
+        );
         assert_eq!(erste_gemeinsame_buchung.person, person("Test_User"));
 
         let zweite_gemeinsame_buchung = &data.gemeinsame_buchungen[1];
         assert_eq!(zweite_gemeinsame_buchung.datum, Datum::new(21, 11, 2024));
         assert_eq!(zweite_gemeinsame_buchung.name, name("asd"));
-        assert_eq!(zweite_gemeinsame_buchung.kategorie, kategorie("PartnerBuchung"));
-        assert_eq!(zweite_gemeinsame_buchung.betrag, Betrag::new(Vorzeichen::Negativ, 1234, 0));
-        assert_eq!(zweite_gemeinsame_buchung.person, person("kein_Partnername_gesetzt"));
-
+        assert_eq!(
+            zweite_gemeinsame_buchung.kategorie,
+            kategorie("PartnerBuchung")
+        );
+        assert_eq!(
+            zweite_gemeinsame_buchung.betrag,
+            Betrag::new(Vorzeichen::Negativ, 1234, 0)
+        );
+        assert_eq!(
+            zweite_gemeinsame_buchung.person,
+            person("kein_Partnername_gesetzt")
+        );
 
         let erstes_sparkonto = &data.sparkontos[0];
         assert_eq!(erstes_sparkonto.name, name("SparkontoName"));
@@ -178,7 +211,6 @@ Datum,Depotwert,Konto,Wert
         let zweites_sparkonto = &data.sparkontos[1];
         assert_eq!(zweites_sparkonto.name, name("DepotName"));
         assert_eq!(zweites_sparkonto.kontotyp, Kontotyp::Depot);
-
 
         let erste_sparbuchung = &data.sparbuchungen[0];
         assert_eq!(erste_sparbuchung.datum, Datum::new(1, 1, 2024));
@@ -190,7 +222,7 @@ Datum,Depotwert,Konto,Wert
         let zweite_sparbuchung = &data.sparbuchungen[1];
         assert_eq!(zweite_sparbuchung.datum, Datum::new(2, 1, 2024));
         assert_eq!(zweite_sparbuchung.name, name("DerName2"));
-        assert_eq!(zweite_sparbuchung.wert, BetragOhneVorzeichen::new( 123, 13));
+        assert_eq!(zweite_sparbuchung.wert, BetragOhneVorzeichen::new(123, 13));
         assert_eq!(zweite_sparbuchung.typ, SparbuchungTyp::Ausschuettung);
         assert_eq!(zweite_sparbuchung.konto, konto_referenz("DasKonto2"));
 
@@ -204,20 +236,25 @@ Datum,Depotwert,Konto,Wert
         assert_eq!(zweiter_depotwert.isin, isin("ISIN2"));
         assert_eq!(zweiter_depotwert.typ, DepotwertTyp::Crypto);
 
-
         let erste_order = &data.order[0];
         assert_eq!(erste_order.datum, Datum::new(1, 1, 2020));
         assert_eq!(erste_order.name, name("MeinName"));
         assert_eq!(erste_order.konto, konto_referenz("MeinKonto"));
         assert_eq!(erste_order.depotwert, depotwert_referenz("MeinDepotwert"));
-        assert_eq!(erste_order.wert, OrderBetrag::new(BetragOhneVorzeichen::new( 4, 0), Kauf));
+        assert_eq!(
+            erste_order.wert,
+            OrderBetrag::new(BetragOhneVorzeichen::new(4, 0), Kauf)
+        );
 
         let zweite_order = &data.order[1];
         assert_eq!(zweite_order.datum, Datum::new(2, 1, 2020));
         assert_eq!(zweite_order.name, name("MeinName2"));
         assert_eq!(zweite_order.konto, konto_referenz("MeinKonto2"));
         assert_eq!(zweite_order.depotwert, depotwert_referenz("MeinDepotwert2"));
-        assert_eq!(zweite_order.wert, OrderBetrag::new(BetragOhneVorzeichen::new( 5, 0), Kauf));
+        assert_eq!(
+            zweite_order.wert,
+            OrderBetrag::new(BetragOhneVorzeichen::new(5, 0), Kauf)
+        );
 
         let erste_order_dauerauftrag = &data.order_dauerauftraege[0];
         assert_eq!(erste_order_dauerauftrag.start_datum, Datum::new(1, 1, 2020));
@@ -225,28 +262,58 @@ Datum,Depotwert,Konto,Wert
         assert_eq!(erste_order_dauerauftrag.rhythmus, Rhythmus::Monatlich);
         assert_eq!(erste_order_dauerauftrag.name, name("MeinName"));
         assert_eq!(erste_order_dauerauftrag.konto, konto_referenz("MeinKonto"));
-        assert_eq!(erste_order_dauerauftrag.depotwert, depotwert_referenz("MeinDepotwert"));
-        assert_eq!(erste_order_dauerauftrag.wert, OrderBetrag::new(BetragOhneVorzeichen::new( 4, 0), Kauf));
+        assert_eq!(
+            erste_order_dauerauftrag.depotwert,
+            depotwert_referenz("MeinDepotwert")
+        );
+        assert_eq!(
+            erste_order_dauerauftrag.wert,
+            OrderBetrag::new(BetragOhneVorzeichen::new(4, 0), Kauf)
+        );
 
         let zweite_order_dauerauftrag = &data.order_dauerauftraege[1];
-        assert_eq!(zweite_order_dauerauftrag.start_datum, Datum::new(2, 1, 2020));
+        assert_eq!(
+            zweite_order_dauerauftrag.start_datum,
+            Datum::new(2, 1, 2020)
+        );
         assert_eq!(zweite_order_dauerauftrag.ende_datum, Datum::new(3, 1, 2021));
         assert_eq!(zweite_order_dauerauftrag.rhythmus, Rhythmus::Monatlich);
         assert_eq!(zweite_order_dauerauftrag.name, name("MeinName2"));
-        assert_eq!(zweite_order_dauerauftrag.konto, konto_referenz("MeinKonto2"));
-        assert_eq!(zweite_order_dauerauftrag.depotwert, depotwert_referenz("MeinDepotwert2"));
-        assert_eq!(zweite_order_dauerauftrag.wert, OrderBetrag::new(BetragOhneVorzeichen::new( 5, 0), Kauf));
+        assert_eq!(
+            zweite_order_dauerauftrag.konto,
+            konto_referenz("MeinKonto2")
+        );
+        assert_eq!(
+            zweite_order_dauerauftrag.depotwert,
+            depotwert_referenz("MeinDepotwert2")
+        );
+        assert_eq!(
+            zweite_order_dauerauftrag.wert,
+            OrderBetrag::new(BetragOhneVorzeichen::new(5, 0), Kauf)
+        );
 
         let erster_depotauszug = &data.depotauszuege[0];
         assert_eq!(erster_depotauszug.datum, Datum::new(1, 1, 2020));
-        assert_eq!(erster_depotauszug.depotwert, depotwert_referenz("DE000A0D9PT0"));
+        assert_eq!(
+            erster_depotauszug.depotwert,
+            depotwert_referenz("DE000A0D9PT0")
+        );
         assert_eq!(erster_depotauszug.konto, konto_referenz("MeinKonto"));
-        assert_eq!(erster_depotauszug.wert, Betrag::new(Vorzeichen::Positiv, 1000, 0));
+        assert_eq!(
+            erster_depotauszug.wert,
+            Betrag::new(Vorzeichen::Positiv, 1000, 0)
+        );
 
         let zweiter_depotauszug = &data.depotauszuege[1];
         assert_eq!(zweiter_depotauszug.datum, Datum::new(2, 1, 2020));
-        assert_eq!(zweiter_depotauszug.depotwert, depotwert_referenz("DE000A0D9PT1"));
+        assert_eq!(
+            zweiter_depotauszug.depotwert,
+            depotwert_referenz("DE000A0D9PT1")
+        );
         assert_eq!(zweiter_depotauszug.konto, konto_referenz("MeinKonto2"));
-        assert_eq!(zweiter_depotauszug.wert, Betrag::new(Vorzeichen::Positiv, 1000, 0));
+        assert_eq!(
+            zweiter_depotauszug.wert,
+            Betrag::new(Vorzeichen::Positiv, 1000, 0)
+        );
     }
 }

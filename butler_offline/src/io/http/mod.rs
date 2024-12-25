@@ -1,8 +1,8 @@
-pub mod statics;
-pub mod theme;
 pub mod core;
 pub mod einzelbuchungen;
-mod redirect;
 pub mod gemeinsame_buchungen;
+mod redirect;
 pub mod shared;
 pub mod sparen;
+pub mod statics;
+pub mod theme;

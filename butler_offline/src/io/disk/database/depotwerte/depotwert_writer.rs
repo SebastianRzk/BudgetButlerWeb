@@ -8,7 +8,7 @@ pub fn write_depotwert(depotwert: &Depotwert) -> Line {
     create_line(vec![
         Element::create_escaped(depotwert.name.get_name().clone()),
         Element::new(depotwert.isin.isin.clone()),
-        write_depotwerttyp(depotwert.typ.clone())
+        write_depotwerttyp(depotwert.typ.clone()),
     ])
 }
 

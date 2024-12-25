@@ -104,6 +104,9 @@ Datum,Kategorie,Name,Betrag
         });
 
         assert_eq!(result.file_name_original, "demo_abrechnung");
-        assert_eq!(result.abrechnung_title, "Abrechnung vom 29.11.2024, Mein Titel (importiert am 29.11.2024)");
+        assert_eq!(
+            result.abrechnung_title,
+            "Abrechnung vom 29.11.2024, Mein Titel (importiert am 29.11.2024)"
+        );
     }
 }

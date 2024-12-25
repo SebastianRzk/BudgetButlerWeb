@@ -17,7 +17,11 @@ mod tests {
     use crate::model::database::depotwert::{Depotwert, DepotwertTyp};
     use crate::model::primitives::isin::builder::isin;
     use crate::model::primitives::name::name;
-    use crate::model::state::persistent_application_state::builder::{demo_database_version, depotwerte, leere_dauerauftraege, leere_depotauszuege, leere_einzelbuchungen, leere_gemeinsame_buchungen, leere_order, leere_order_dauerauftraege, leere_sparbuchungen, leere_sparkontos};
+    use crate::model::state::persistent_application_state::builder::{
+        demo_database_version, depotwerte, leere_dauerauftraege, leere_depotauszuege,
+        leere_einzelbuchungen, leere_gemeinsame_buchungen, leere_order, leere_order_dauerauftraege,
+        leere_sparbuchungen, leere_sparkontos,
+    };
 
     #[test]
     fn test_write_depotwerte() {
@@ -36,7 +40,7 @@ mod tests {
             depotwerte: depotwerte(depotwert),
             order: leere_order(),
             order_dauerauftraege: leere_order_dauerauftraege(),
-            depotauszuege: leere_depotauszuege()
+            depotauszuege: leere_depotauszuege(),
         };
 
         let lines = write_depotwerte(&database);

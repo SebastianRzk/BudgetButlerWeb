@@ -5,7 +5,9 @@ use actix_web::web::Data;
 use actix_web::{get, HttpResponse, Responder};
 
 #[get("/error-depotauszug-bereits-erfasst")]
-pub async fn error_depotauszug_bereits_erfasst(configuration: Data<ConfigurationData>) -> impl Responder {
+pub async fn error_depotauszug_bereits_erfasst(
+    configuration: Data<ConfigurationData>,
+) -> impl Responder {
     HttpResponse::Ok().body(handle_render_display_view(
         "Error Depotauszug bereits erfasst",
         "/",

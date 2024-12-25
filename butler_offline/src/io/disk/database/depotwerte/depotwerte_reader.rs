@@ -3,7 +3,11 @@ use crate::io::disk::diskrepresentation::file::SortedFile;
 use crate::model::database::depotwert::Depotwert;
 
 pub fn read_depotwerte(sorted_file: &SortedFile) -> Vec<Depotwert> {
-    sorted_file.depotwerte.iter().map(|l| read_depotwert(l.into())).collect()
+    sorted_file
+        .depotwerte
+        .iter()
+        .map(|l| read_depotwert(l.into()))
+        .collect()
 }
 
 #[cfg(test)]

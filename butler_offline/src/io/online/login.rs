@@ -12,9 +12,9 @@ mod tests {
     use crate::model::remote::server::ServerConfiguration;
 
     #[test]
-    fn test_should_generate_offline_login_url(){
-        let server_config = ServerConfiguration{
-            server_url: "MyServerUrl".to_string()
+    fn test_should_generate_offline_login_url() {
+        let server_config = ServerConfiguration {
+            server_url: "MyServerUrl".to_string(),
         };
 
         let result = request_login(&server_config);

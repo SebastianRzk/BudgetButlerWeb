@@ -15,7 +15,9 @@ pub fn gemeinsame_buchung_as_import_text(buchungen: &Vec<GemeinsameBuchung>) -> 
             buchung.person.person
         ));
     }
-    BuchungenText { text: result.join("\n") }
+    BuchungenText {
+        text: result.join("\n"),
+    }
 }
 
 #[cfg(test)]

@@ -36,14 +36,17 @@ impl Selector<Indiziert<Depotauszug>> {
             .unwrap_or(Betrag::zero())
     }
 
-    pub fn get_kombinierter_kontostand(&self) -> Betrag{
+    pub fn get_kombinierter_kontostand(&self) -> Betrag {
         let mut depot_map = HashMap::new();
         for auszug in self.internal_state.iter() {
             let depotwert = &auszug.value.depotwert;
-            depot_map.insert(KontoWertIndex{
-                konto: auszug.value.konto.clone(),
-                depotwert_referenz: depotwert.clone()
-            }, auszug.value.wert.clone());
+            depot_map.insert(
+                KontoWertIndex {
+                    konto: auszug.value.konto.clone(),
+                    depotwert_referenz: depotwert.clone(),
+                },
+                auszug.value.wert.clone(),
+            );
         }
         depot_map
             .values()
@@ -302,7 +305,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_kombinierter_kontostand(){
+    fn test_get_kombinierter_kontostand() {
         let depotauszuege = Depotauszuege {
             depotauszuege: vec![
                 indiziert(Depotauszug {
@@ -330,7 +333,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_kombinierter_kontostand_leer(){
+    fn test_get_kombinierter_kontostand_leer() {
         let depotauszuege = leere_depotauszuege();
         let result = depotauszuege.select().get_kombinierter_kontostand();
         assert_eq!(result, Betrag::zero());

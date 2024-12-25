@@ -21,7 +21,9 @@ pub struct SubmitGemeinsameBuchungContext<'a> {
     pub person: Person,
 }
 
-pub fn submit_gemeinsame_ausgabe(context: SubmitGemeinsameBuchungContext) -> RedirectResult<GemeinsameBuchungChange> {
+pub fn submit_gemeinsame_ausgabe(
+    context: SubmitGemeinsameBuchungContext,
+) -> RedirectResult<GemeinsameBuchungChange> {
     let buchung = GemeinsameBuchung {
         datum: context.datum.clone(),
         name: context.name.clone(),
@@ -34,24 +36,27 @@ pub fn submit_gemeinsame_ausgabe(context: SubmitGemeinsameBuchungContext) -> Red
 
     if let Some(index) = context.edit_index {
         icon = PENCIL;
-        neue_buchung = context.database.gemeinsame_buchungen
+        neue_buchung = context
+            .database
+            .gemeinsame_buchungen
             .change()
             .edit(index, buchung.clone())
     } else {
         icon = PLUS;
-        neue_buchung = context.database.gemeinsame_buchungen
+        neue_buchung = context
+            .database
+            .gemeinsame_buchungen
             .change()
             .insert(buchung.clone())
     }
 
     let new_database = context.database.change_gemeinsame_buchungen(neue_buchung);
 
-
     RedirectResult {
         result: ModificationResult {
             changed_database: new_database,
             target: Redirect {
-                target: GEMEINSAME_BUCHUNGEN_ADD.to_string()
+                target: GEMEINSAME_BUCHUNGEN_ADD.to_string(),
             },
         },
         change: GemeinsameBuchungChange {
@@ -65,10 +70,11 @@ pub fn submit_gemeinsame_ausgabe(context: SubmitGemeinsameBuchungContext) -> Red
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::pages::gemeinsame_buchungen::action_add_edit_gemeinsame_buchung::{submit_gemeinsame_ausgabe, SubmitGemeinsameBuchungContext};
+    use crate::budgetbutler::pages::gemeinsame_buchungen::action_add_edit_gemeinsame_buchung::{
+        submit_gemeinsame_ausgabe, SubmitGemeinsameBuchungContext,
+    };
     use crate::budgetbutler::view::icons::PLUS;
     use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
     use crate::model::primitives::betrag::builder::{minus_zwei, zwei};
@@ -92,14 +98,30 @@ mod tests {
             person: demo_person(),
         });
 
-        assert_eq!(result.result.changed_database.gemeinsame_buchungen.select().count(), 1);
-        assert_eq!(result.result.changed_database.gemeinsame_buchungen.get(0).value, GemeinsameBuchung{
-            datum: any_datum(),
-            name: demo_name(),
-            kategorie: demo_kategorie(),
-            betrag: minus_zwei(),
-            person: demo_person(),
-        });
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .gemeinsame_buchungen
+                .select()
+                .count(),
+            1
+        );
+        assert_eq!(
+            result
+                .result
+                .changed_database
+                .gemeinsame_buchungen
+                .get(0)
+                .value,
+            GemeinsameBuchung {
+                datum: any_datum(),
+                name: demo_name(),
+                kategorie: demo_kategorie(),
+                betrag: minus_zwei(),
+                person: demo_person(),
+            }
+        );
 
         assert_eq!(result.change.icon, PLUS.as_fa.to_string());
         assert_eq!(result.change.betrag, minus_zwei());
@@ -107,5 +129,4 @@ mod tests {
         assert_eq!(result.change.name, demo_name());
         assert_eq!(result.change.kategorie, demo_kategorie());
     }
-
 }

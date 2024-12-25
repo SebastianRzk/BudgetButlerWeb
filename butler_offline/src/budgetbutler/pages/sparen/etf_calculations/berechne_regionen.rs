@@ -68,7 +68,8 @@ pub fn berechne_regionen(
                     .data
                     .regionen
                     .get(&region)
-                    .unwrap().clone(),
+                    .unwrap()
+                    .clone(),
             );
             let betrag = depotwert_mit_kontostand
                 .aktueller_kontostand

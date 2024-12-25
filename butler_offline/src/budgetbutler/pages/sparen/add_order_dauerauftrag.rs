@@ -26,7 +26,7 @@ pub struct AddOrderDauerauftragViewResult {
     pub typen: Vec<TypeDescription<OrderTyp>>,
     pub depotwerte: Vec<TypeDescription<String>>,
     pub depots: Vec<Indiziert<Sparkonto>>,
-    pub rhythmen: Vec<Rhythmus>
+    pub rhythmen: Vec<Rhythmus>,
 }
 
 pub struct LetzteErfassung {
@@ -37,7 +37,7 @@ pub struct LetzteErfassung {
     pub konto: KontoReferenz,
     pub depotwert: DepotwertReferenz,
     pub wert: OrderBetrag,
-    pub rhythmus: Rhythmus
+    pub rhythmus: Rhythmus,
 }
 
 pub struct AddOrderDauerauftragContext<'a> {
@@ -55,7 +55,7 @@ pub struct DefaultItem {
     pub konto: KontoReferenz,
     pub depotwert: DepotwertReferenz,
     pub wert: OrderBetrag,
-    pub rhythmus: Rhythmus
+    pub rhythmus: Rhythmus,
 }
 
 pub fn handle_view(context: AddOrderDauerauftragContext) -> AddOrderDauerauftragViewResult {
@@ -67,7 +67,7 @@ pub fn handle_view(context: AddOrderDauerauftragContext) -> AddOrderDauerauftrag
         depotwert: DepotwertReferenz::new(ISIN::empty()),
         start_datum: context.heute.clone(),
         ende_datum: context.heute.clone(),
-        rhythmus: Rhythmus::Monatlich
+        rhythmus: Rhythmus::Monatlich,
     };
     let mut action_headline = "Order-Dauerauftrag erfassen".to_string();
     let mut action_title = "Order-Dauerauftrag erfassen".to_string();
@@ -83,7 +83,7 @@ pub fn handle_view(context: AddOrderDauerauftragContext) -> AddOrderDauerauftrag
             depotwert: edit_buchung.value.depotwert.clone(),
             start_datum: edit_buchung.value.start_datum.clone(),
             ende_datum: edit_buchung.value.ende_datum.clone(),
-            rhythmus: edit_buchung.value.rhythmus.clone()
+            rhythmus: edit_buchung.value.rhythmus.clone(),
         };
         bearbeitungsmodus = true;
         action_headline = "Order-Dauerauftrag bearbeiten".to_string();
@@ -114,11 +114,16 @@ pub fn handle_view(context: AddOrderDauerauftragContext) -> AddOrderDauerauftrag
                 wert: change.wert.clone(),
                 start_datum: change.start_datum.clone(),
                 ende_datum: change.ende_datum.clone(),
-                rhythmus: change.rhythmus.clone()
+                rhythmus: change.rhythmus.clone(),
             })
             .collect(),
         typen: get_all_order_typ_descriptions(),
-        rhythmen: vec![Rhythmus::Monatlich, Rhythmus::Vierteljaehrlich, Rhythmus::Halbjaehrlich, Rhythmus::Jaehrlich]
+        rhythmen: vec![
+            Rhythmus::Monatlich,
+            Rhythmus::Vierteljaehrlich,
+            Rhythmus::Halbjaehrlich,
+            Rhythmus::Jaehrlich,
+        ],
     };
     result
 }
@@ -143,7 +148,10 @@ mod tests {
     use crate::model::primitives::order_betrag::builder::demo_order_betrag;
     use crate::model::primitives::rhythmus::Rhythmus;
     use crate::model::state::non_persistent_application_state::OrderDauerauftragChange;
-    use crate::model::state::persistent_application_state::builder::{generate_database_with_depotwerte, generate_database_with_order_dauerauftraege, generate_database_with_sparkontos, generate_empty_database};
+    use crate::model::state::persistent_application_state::builder::{
+        generate_database_with_depotwerte, generate_database_with_order_dauerauftraege,
+        generate_database_with_sparkontos, generate_empty_database,
+    };
 
     #[test]
     pub fn test_handle_view_without_edit_index() {
@@ -202,10 +210,22 @@ mod tests {
         assert_eq!(result.default_item.name, any_order_dauerauftrag().name);
         assert_eq!(result.default_item.wert, any_order_dauerauftrag().wert);
         assert_eq!(result.default_item.konto, any_order_dauerauftrag().konto);
-        assert_eq!(result.default_item.depotwert, any_order_dauerauftrag().depotwert);
-        assert_eq!(result.default_item.start_datum, any_order_dauerauftrag().start_datum);
-        assert_eq!(result.default_item.ende_datum, any_order_dauerauftrag().ende_datum);
-        assert_eq!(result.default_item.rhythmus, any_order_dauerauftrag().rhythmus);
+        assert_eq!(
+            result.default_item.depotwert,
+            any_order_dauerauftrag().depotwert
+        );
+        assert_eq!(
+            result.default_item.start_datum,
+            any_order_dauerauftrag().start_datum
+        );
+        assert_eq!(
+            result.default_item.ende_datum,
+            any_order_dauerauftrag().ende_datum
+        );
+        assert_eq!(
+            result.default_item.rhythmus,
+            any_order_dauerauftrag().rhythmus
+        );
 
         assert_eq!(result.action_title, "Order-Dauerauftrag bearbeiten");
         assert_eq!(result.letzte_erfassungen.len(), 0);
@@ -271,10 +291,10 @@ mod tests {
 
     #[test]
     fn test_should_have_described_depotwerte() {
-        let database = generate_database_with_depotwerte(vec![Depotwert{
+        let database = generate_database_with_depotwerte(vec![Depotwert {
             name: name("demoname"),
             isin: isin("demoisin"),
-            typ: DepotwertTyp::ETF
+            typ: DepotwertTyp::ETF,
         }]);
 
         let context = AddOrderDauerauftragContext {

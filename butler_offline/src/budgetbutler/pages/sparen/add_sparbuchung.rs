@@ -153,11 +153,14 @@ mod tests {
         );
 
         assert_eq!(result.kontos.len(), 1);
-        assert_eq!(result.kontos[0], Indiziert{
-            index: 1,
-            dynamisch: false,
-            value: demo_konto(),
-        });
+        assert_eq!(
+            result.kontos[0],
+            Indiziert {
+                index: 1,
+                dynamisch: false,
+                value: demo_konto(),
+            }
+        );
 
         assert_eq!(result.action_title, "Sparbuchung erfassen");
         assert_eq!(result.letzte_erfassungen.len(), 0);
@@ -201,11 +204,14 @@ mod tests {
         );
 
         assert_eq!(result.kontos.len(), 1);
-        assert_eq!(result.kontos[0], Indiziert{
-            index: 1,
-            dynamisch: false,
-            value: demo_konto(),
-        });
+        assert_eq!(
+            result.kontos[0],
+            Indiziert {
+                index: 1,
+                dynamisch: false,
+                value: demo_konto(),
+            }
+        );
 
         assert_eq!(result.action_title, "Sparbuchung bearbeiten");
         assert_eq!(result.letzte_erfassungen.len(), 0);
@@ -235,8 +241,17 @@ mod tests {
         assert_eq!(result.letzte_erfassungen[0].icon, "fa fa-plus");
         assert_eq!(result.letzte_erfassungen[0].name, demo_konto().name);
         assert_eq!(result.letzte_erfassungen[0].datum, Datum::new(1, 1, 2021));
-        assert_eq!(result.letzte_erfassungen[0].wert, BetragOhneVorzeichen::zero());
-        assert_eq!(result.letzte_erfassungen[0].typ, SparbuchungTyp::ManuelleEinzahlung);
-        assert_eq!(result.letzte_erfassungen[0].konto, konto_referenz("kontoreferenz"));
+        assert_eq!(
+            result.letzte_erfassungen[0].wert,
+            BetragOhneVorzeichen::zero()
+        );
+        assert_eq!(
+            result.letzte_erfassungen[0].typ,
+            SparbuchungTyp::ManuelleEinzahlung
+        );
+        assert_eq!(
+            result.letzte_erfassungen[0].konto,
+            konto_referenz("kontoreferenz")
+        );
     }
 }

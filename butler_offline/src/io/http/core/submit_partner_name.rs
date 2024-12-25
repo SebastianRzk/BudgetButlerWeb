@@ -1,5 +1,9 @@
-use crate::budgetbutler::pages::core::action_rename_partner::{action_rename_partner, RenamePartnerContext};
-use crate::budgetbutler::view::optimistic_locking::{check_optimistic_locking_error, OptimisticLockingResult};
+use crate::budgetbutler::pages::core::action_rename_partner::{
+    action_rename_partner, RenamePartnerContext,
+};
+use crate::budgetbutler::view::optimistic_locking::{
+    check_optimistic_locking_error, OptimisticLockingResult,
+};
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::Redirect;
 use crate::budgetbutler::view::routes::CORE_CONFIGURATION;
@@ -24,22 +28,38 @@ pub async fn submit(
     form: Form<SubmitDatabaseNameFormData>,
 ) -> HttpResponse {
     let mut database_guard = data.database.lock().unwrap();
-    let optimistic_locking_result = check_optimistic_locking_error(&form.database_id, database_guard.db_version.clone());
+    let optimistic_locking_result =
+        check_optimistic_locking_error(&form.database_id, database_guard.db_version.clone());
     if optimistic_locking_result == OptimisticLockingResult::Error {
         return http_redirect(redirect_to_optimistic_locking_error());
     }
     let mut config = configuration.configuration.lock().unwrap();
 
-    let result =action_rename_partner(RenamePartnerContext {
+    let result = action_rename_partner(RenamePartnerContext {
         new_partner_name: Person::new(form.partner_name.clone()),
         database: &database_guard,
         config: &config,
     });
 
-    create_database_backup(&database_guard, &config.backup_configuration, today(), now(), "before_rename_partner");
-    let refreshed_database = update_database(&result.new_config.database_configuration, result.new_database);
+    create_database_backup(
+        &database_guard,
+        &config.backup_configuration,
+        today(),
+        now(),
+        "before_rename_partner",
+    );
+    let refreshed_database = update_database(
+        &result.new_config.database_configuration,
+        result.new_database,
+    );
     *database_guard = refreshed_database;
-    create_database_backup(&database_guard, &result.new_config.backup_configuration, today(), now(), "after_rename_partner");
+    create_database_backup(
+        &database_guard,
+        &result.new_config.backup_configuration,
+        today(),
+        now(),
+        "after_rename_partner",
+    );
 
     let refreshed_config = update_configuration(&root_path.path, result.new_config);
     *config = refreshed_config;

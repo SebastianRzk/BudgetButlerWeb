@@ -73,8 +73,7 @@ mod tests {
     use crate::model::primitives::name::builder::demo_name;
     use crate::model::primitives::order_betrag::OrderBetrag;
     use crate::model::state::persistent_application_state::builder::{
-        generate_database_with_depotwerte
-        , generate_empty_database,
+        generate_database_with_depotwerte, generate_empty_database,
     };
 
     #[test]

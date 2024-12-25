@@ -94,9 +94,10 @@ pub async fn post_submit(
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
-    if form_data.edit_index == None && database
-        .depotwerte
-        .isin_bereits_vorhanden(ISIN::new(form_data.isin.clone()))
+    if form_data.edit_index == None
+        && database
+            .depotwerte
+            .isin_bereits_vorhanden(ISIN::new(form_data.isin.clone()))
     {
         return http_redirect(redirect_to_isin_bereits_erfasst());
     }

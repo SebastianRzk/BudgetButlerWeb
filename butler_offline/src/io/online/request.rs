@@ -17,9 +17,9 @@ pub async fn get_request(
         .get(route)
         .header("Cookie", formatted_cookie)
         .header("Accept", "application/json");
-    let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest{})?;
+    let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     println!("HTTP Status{:?}", r_raw.status());
-    let test = r_raw.text().await.map_err(|_| ErrorOnRequest{})?;
+    let test = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
     println!("Result text {:?}", test);
     Ok(test)
 }
@@ -42,10 +42,10 @@ pub async fn post_request(
         .header("Accept", "application/json")
         .header("Content-Type", "application/json")
         .body(body);
-    let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest{})?;
+    let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     let status = r_raw.status();
     println!("HTTP Status{:?}", status);
-    let test = r_raw.text().await.map_err(|_| ErrorOnRequest{})?;
+    let test = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
     println!("Result text {:?}", test);
     if status.is_success() {
         Ok(())
@@ -53,7 +53,6 @@ pub async fn post_request(
         Err(ErrorOnRequest {})
     }
 }
-
 
 pub async fn delete_request(
     route: String,
@@ -70,10 +69,10 @@ pub async fn delete_request(
         .delete(route)
         .header("Cookie", formatted_cookie)
         .header("Accept", "application/json");
-    let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest{})?;
+    let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     let status = r_raw.status();
     println!("HTTP Status{:?}", status);
-    let test = r_raw.text().await.map_err(|_| ErrorOnRequest{})?;
+    let test = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
     println!("Result text {:?}", test);
     if status.is_success() {
         Ok(())
