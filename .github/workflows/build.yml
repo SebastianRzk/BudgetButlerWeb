@@ -29,8 +29,9 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt
-      - name: Rustfmt Check
+      - name:  Check
         uses: actions-rust-lang/rustfmt@v1
+        working-directory: ./butler_offline
   butler_online_frontend:
     runs-on: ubuntu-latest
     steps:
