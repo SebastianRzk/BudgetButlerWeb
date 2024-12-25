@@ -28,12 +28,7 @@ use crate::io::http::shared::redirect_authenticated::logged_in_callback;
 use crate::io::http::shared::{export_import, import_mapping};
 use crate::io::http::sparen::error_depotauszug_bereits_erfasst::error_depotauszug_bereits_erfasst;
 use crate::io::http::sparen::error_isin_bereits_erfasst::error_isin_bereits_erfasst;
-use crate::io::http::sparen::{
-    modify_depotauszug, modify_depotwerte, modify_kontos, modify_order,
-    modify_order_dauerauftrag, modify_sparbuchungen, order_dauerauftraege_uebersicht, order_uebersicht,
-    sparbuchungen_uebersicht, uebersicht_depotauszuege, uebersicht_depotwerte, uebersicht_kontos,
-    uebersicht_sparen
-};
+use crate::io::http::sparen::{modify_depotauszug, modify_depotwerte, modify_kontos, modify_order, modify_order_dauerauftrag, modify_sparbuchungen, order_dauerauftraege_uebersicht, order_uebersicht, sparbuchungen_uebersicht, uebersicht_depotauszuege, uebersicht_depotwerte, uebersicht_etfs, uebersicht_kontos, uebersicht_sparen};
 use crate::model::initial_config::config::generate_initial_config;
 use crate::model::initial_config::database::generate_initial_database;
 use crate::model::initial_config::path::create_initial_path_if_needed;
@@ -45,6 +40,7 @@ use io::http::einzelbuchungen::{
 };
 use model::state::persistent_state::database_version::create_initial_database_version;
 use std;
+use crate::io::disk::shares::load_shares;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -121,6 +117,8 @@ async fn main() -> std::io::Result<()> {
         redirect_state: Mutex::new(OnlineRedirectActionWrapper { action: None }),
     });
 
+    let shares_state = Data::new(load_shares(&initial_path));
+
     let root_path = Data::new(RootPath { path: initial_path });
 
     let port = 5000;
@@ -142,6 +140,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(order_changes.clone())
             .app_data(order_dauerauftrag_changes.clone())
             .app_data(depotauszuge_changes.clone())
+            .app_data(shares_state.clone())
             .service(dashboard::view)
             .service(einzelbuchungen_uebersicht::get_view)
             .service(einzelbuchungen_uebersicht::post_view)
@@ -232,6 +231,7 @@ async fn main() -> std::io::Result<()> {
             .service(uebersicht_depotauszuege::post_view)
             .service(error_depotauszug_bereits_erfasst)
             .service(uebersicht_sparen::get_view)
+            .service(uebersicht_etfs::get_view)
     })
     .bind((domain, port))?
     .run()

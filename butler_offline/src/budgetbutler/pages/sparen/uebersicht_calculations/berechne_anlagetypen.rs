@@ -75,7 +75,7 @@ pub fn berechne_anlagetypen(database: &Database, farbe: Vec<Farbe>) -> Vec<Anlag
     }
 
     for depotwert in &database.depotwerte.depotwerte {
-        let ergebnis = berechne_aktuellen_depotwert_stand(depotwert.value.clone(), &database);
+        let ergebnis = berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), &database);
 
         match depotwert.value.typ {
             DepotwertTyp::ETF => {

@@ -7,3 +7,4 @@ pub mod remote;
 pub mod initial_config;
 pub mod database;
 pub mod description;
+pub mod shares;

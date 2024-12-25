@@ -77,6 +77,7 @@ pub mod builder {
     use crate::model::database::depotwert::{Depotwert, DepotwertReferenz, DepotwertTyp};
     use crate::model::primitives::isin::builder::{demo_isin, isin};
     use crate::model::primitives::name::builder::demo_name;
+    use crate::model::primitives::name::name;
 
     pub fn any_depotwert() -> Depotwert {
         Depotwert::new(demo_name(), demo_isin(), DepotwertTyp::ETF)
@@ -92,6 +93,10 @@ pub mod builder {
         DepotwertReferenz {
             isin: isin(isin_),
         }
+    }
+
+    pub fn depotwert_mit_name(name_str: &str) -> Depotwert {
+        Depotwert::new(name(name_str), demo_isin(), DepotwertTyp::ETF)
     }
 
 }

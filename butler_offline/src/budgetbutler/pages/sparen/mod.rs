@@ -26,3 +26,5 @@ pub mod action_delete_depotauszug;
 pub mod uebersicht_depotauszuege;
 pub mod uebersicht_sparen;
 pub mod uebersicht_calculations;
+pub mod uebersicht_etfs;
+pub mod etf_calculations;

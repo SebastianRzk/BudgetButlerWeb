@@ -291,6 +291,7 @@ pub fn betrag(vorzeichen: Vorzeichen, euro: u32, cent: u8) -> Betrag {
 #[cfg(test)]
 pub mod builder {
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
+    use crate::model::primitives::betrag::Vorzeichen::Positiv;
     use crate::model::primitives::betrag_ohne_vorzeichen::BetragOhneVorzeichen;
 
     pub fn any_betrag() -> Betrag {
@@ -342,6 +343,9 @@ pub mod builder {
 
     pub fn u_betrag(euro: u32, cent: u8) -> BetragOhneVorzeichen {
         BetragOhneVorzeichen::new(euro, cent)
+    }
+    pub fn betrag(euro: u32) -> Betrag {
+        Betrag::new(Positiv, euro, 0)
     }
 }
 

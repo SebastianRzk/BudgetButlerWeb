@@ -10,40 +10,27 @@ on:
     branches: [ master ]
 
 jobs:
-  butler_offline:
-
+  butler-offline-test:
+    name: cargo test
     runs-on: ubuntu-latest
-    env:
-      INTEGRATION_TESTS: TRUE
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.11
-    - name: Install dependencies
-      run: |
-        sh ./ci/install_requirements.sh
-        pip install flake8 pytest
-        wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz
-        mkdir geckodriver
-        tar -xzf geckodriver-v0.33.0-linux64.tar.gz -C geckodriver
-        firefox --version
-        wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
-        source ~/.nvm/nvm.sh
-        nvm install 12
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Unit test with pytest
-      run: |
-        sh ci/run_unit_tests.sh
-    - name: Integration test with pytest
-      run: |
-        sh ci/run_integration_tests.sh
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: cargo test --all-features
+        working-directory: ./butler_offline
+
+  # Check formatting with rustfmt
+  butler-offlineformatting:
+    name: cargo fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Ensure rustfmt is installed and setup problem matcher
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: rustfmt
+      - name: Rustfmt Check
+        uses: actions-rust-lang/rustfmt@v1
   butler_online_frontend:
     runs-on: ubuntu-latest
     steps:

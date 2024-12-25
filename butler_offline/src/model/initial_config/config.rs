@@ -15,11 +15,11 @@ pub fn generate_initial_config(root_path: &PathBuf) -> Configuration {
             location: root_path.to_str().unwrap().to_string(),
         },
         abrechnungs_configuration: AbrechnungsConfiguration {
-            location: "demo/abrechnungen".to_string(),
+            location: "data/abrechnungen".to_string(),
         },
         backup_configuration: BackupConfiguration {
-            location: "demo/backups".to_string(),
-            import_backup_location: "demo/backups/import_backup".to_string(),
+            location: "data/backups".to_string(),
+            import_backup_location: "data/backups/import_backup".to_string(),
         },
         design_configuration: DesignConfiguration {
             design_farbe: Farbe {

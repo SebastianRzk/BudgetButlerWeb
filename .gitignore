@@ -24,3 +24,8 @@ config
 /target
 butler_offline/target/
 /data
+butler_offline/target
+/database_migrator/venv
+data/Database_Test_User.csv
+database_migrator/Database_Test_User.csv
+/target

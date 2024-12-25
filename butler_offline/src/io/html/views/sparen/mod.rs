@@ -14,3 +14,4 @@ pub mod add_depotauszug;
 pub mod uebersicht_depotauszuege;
 pub mod error_depotauszug_bereits_erfasst;
 pub mod uebersicht_sparen;
+pub mod uebersicht_etfs;

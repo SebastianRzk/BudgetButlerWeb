@@ -5,6 +5,7 @@ use crate::model::state::config::{app_root, AbrechnungsConfiguration};
 pub fn lade_alle_abrechnungen(config: &AbrechnungsConfiguration) -> Vec<UnparsedAbrechnungsFile> {
     let mut result = vec![];
     let path = app_root().join(std::path::Path::new(&config.location));
+    eprintln!("Lade Abrechnungen aus: {:?}", path);
 
     for file in std::fs::read_dir(path).unwrap() {
         let file = file.unwrap();

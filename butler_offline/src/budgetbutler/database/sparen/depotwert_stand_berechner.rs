@@ -1,4 +1,4 @@
-use crate::model::database::depotwert::Depotwert;
+use crate::model::database::depotwert::DepotwertReferenz;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::state::persistent_application_state::Database;
 use std::collections::HashMap;
@@ -8,14 +8,14 @@ pub struct Kontostand {
     pub gesamte_einzahlungen: Betrag,
 }
 
-pub fn berechne_aktuellen_depotwert_stand(depotwert: Depotwert, database: &Database) -> Kontostand {
+pub fn berechne_aktuellen_depotwert_stand(depotwert: DepotwertReferenz, database: &Database) -> Kontostand {
     Kontostand {
         letzter_kontostand: berechne_kontostand(depotwert.clone(), database),
         gesamte_einzahlungen: berechne_einzahlungen(depotwert, database),
     }
 }
 
-fn berechne_kontostand(depotwert: Depotwert, database: &Database) -> Betrag {
+fn berechne_kontostand(depotwert: DepotwertReferenz, database: &Database) -> Betrag {
     let mut konto_map = HashMap::new();
     let auszuege = database
         .depotauszuege
@@ -33,7 +33,7 @@ fn berechne_kontostand(depotwert: Depotwert, database: &Database) -> Betrag {
         .unwrap_or_else(Betrag::zero)
 }
 
-fn berechne_einzahlungen(depotwert: Depotwert, database: &Database) -> Betrag {
+fn berechne_einzahlungen(depotwert: DepotwertReferenz, database: &Database) -> Betrag {
     let mut gesamte_einzahlungen = Betrag::zero();
 
     for order in database
@@ -69,7 +69,7 @@ mod tests_fuer_depot {
     #[test]
     fn test_berechne_kontostand_fuer_leere_db() {
         let result =
-            super::berechne_aktuellen_depotwert_stand(any_depotwert(), &generate_empty_database());
+            super::berechne_aktuellen_depotwert_stand(any_depotwert().as_referenz(), &generate_empty_database());
 
         assert_eq!(result.letzter_kontostand, Betrag::zero());
         assert_eq!(result.gesamte_einzahlungen, Betrag::zero());
@@ -88,7 +88,7 @@ mod tests_fuer_depot {
 
         let database = generate_database_with_orders(vec![order.clone()]);
 
-        let result = super::berechne_aktuellen_depotwert_stand(depotwert, &database);
+        let result = super::berechne_aktuellen_depotwert_stand(depotwert.as_referenz(), &database);
         assert_eq!(result.gesamte_einzahlungen, vier());
         assert_eq!(result.letzter_kontostand, Betrag::zero());
     }
@@ -108,7 +108,7 @@ mod tests_fuer_depot {
 
         let database = generate_database_with_depotauszuege(vec![depotauszug1, depotauszug2]);
 
-        let result = super::berechne_aktuellen_depotwert_stand(any_depotwert(), &database);
+        let result = super::berechne_aktuellen_depotwert_stand(any_depotwert().as_referenz(), &database);
 
         assert_eq!(result.gesamte_einzahlungen, Betrag::zero());
         assert_eq!(

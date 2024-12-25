@@ -33,7 +33,7 @@ mod tests {
     fn test_make_delta_entwicklung_pro_jahr_from_delta_entwicklung() {
         let labels = vec![Name::new("2020".to_string())];
         let gesamt_entwicklung = LineChart {
-            labels: labels,
+            labels: labels.clone(),
             datasets: vec![LineChartDataSet {
                 label: "Delta".to_string(),
                 data: vec![zwei(), vier()],

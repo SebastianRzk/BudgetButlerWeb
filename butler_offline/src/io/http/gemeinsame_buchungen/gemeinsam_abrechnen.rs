@@ -96,7 +96,7 @@ fn map_get_limit(
         if filter == "on".to_string() {
             return Some(Limit {
                 fuer: Person::new(filter_person.unwrap()),
-                value: Betrag::from_iso_string(&filter_value.unwrap()).negativ(),
+                value: Betrag::from_user_input(&filter_value.unwrap()).negativ(),
             });
         }
     }

@@ -92,7 +92,6 @@ Auf dem Branch `dev_rust` kann der aktuelle Stand der Entwicklung eingesehen wer
 
 #### Einzelbuchungen
 
-<a href="img/screenshots_desktop/einzelbuchungen_add.png"><img src="img/screenshots_desktop/einzelbuchungen_add.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/uebersicht_einzelbuchungen.png"><img src="img/screenshots_desktop/uebersicht_einzelbuchungen.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/dauerauftraege_add.png"><img src="img/screenshots_desktop/dauerauftraege_add.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/uebersicht_dauerauftraege.png"><img src="img/screenshots_desktop/uebersicht_dauerauftraege.png" alt="Dasboard" width="300"/></a>
@@ -109,8 +108,6 @@ Auf dem Branch `dev_rust` kann der aktuelle Stand der Entwicklung eingesehen wer
 <a href="img/screenshots_desktop/sparen_uebersicht.png"><img src="img/screenshots_desktop/sparen_uebersicht.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/sparen_uebersicht_depotwerte.png"><img src="img/screenshots_desktop/sparen_uebersicht_depotwerte.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/sparen_uebersicht_etfs.png"><img src="img/screenshots_desktop/sparen_uebersicht_etfs.png" alt="Dasboard" width="300"/></a>
-<a href="img/screenshots_desktop/sparen_uebersicht_sparkontos.png"><img src="img/screenshots_desktop/sparen_uebersicht_sparkontos.png" alt="Dasboard" width="300"/></a>
-<a href="img/screenshots_desktop/sparen_add_depotauszug.png"><img src="img/screenshots_desktop/sparen_add_depotauszug.png" alt="Dasboard" width="300"/></a>
 
 ### Screenshots Begleiter Web-App
 

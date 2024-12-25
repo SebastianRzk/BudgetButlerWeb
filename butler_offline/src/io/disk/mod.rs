@@ -6,3 +6,4 @@ pub mod abrechnung;
 pub mod configuration;
 pub mod updater;
 pub mod database;
+pub mod shares;

@@ -78,6 +78,10 @@ impl Prozent {
         }
     }
 
+    pub fn zero() -> Prozent{
+        Prozent::from_int_representation(0)
+    }
+
     pub fn p50_50() -> Prozent {
         Prozent::from_int_representation(50)
     }

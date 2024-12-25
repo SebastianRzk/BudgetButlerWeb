@@ -45,7 +45,7 @@ pub async fn post_view(
         user_configuration: configuration.user_configuration.clone(),
         set_mindate: Datum::from_iso_string(&form.set_mindate),
         set_maxdate: Datum::from_iso_string(&form.set_maxdate),
-        self_soll: Betrag::from_iso_string(&form.set_self_ausgabe),
+        self_soll: Betrag::from_user_input(&form.set_self_ausgabe),
         ergebnis: form.set_ergebnis.clone(),
         set_titel: form.set_titel.clone(),
         verhaeltnis: Prozent::from_str_representation(&form.set_verhaeltnis),

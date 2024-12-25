@@ -121,9 +121,9 @@ pub async fn post_submit(
 
     let betrag: Betrag;
     if form_data.typ == "Ausgabe" {
-        betrag = Betrag::from_iso_string(&form_data.wert).negativ();
+        betrag = Betrag::from_user_input(&form_data.wert).negativ();
     } else {
-        betrag = Betrag::from_iso_string(&form_data.wert);
+        betrag = Betrag::from_user_input(&form_data.wert);
     }
 
     let new_state = handle_modification(

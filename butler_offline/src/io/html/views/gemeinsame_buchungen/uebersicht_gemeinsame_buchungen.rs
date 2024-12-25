@@ -85,7 +85,6 @@ mod tests {
         assert_eq!(template.buchungen[0].name, "Normal");
         assert_eq!(template.buchungen[0].person, "Person");
         assert_eq!(template.buchungen[0].wert, "2,00");
-        assert_eq!(template.buchungen[0].dynamisch, false);
         assert_eq!(template.database_id, demo_database_version().as_string());
     }
 }

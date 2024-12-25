@@ -98,6 +98,18 @@ impl Datum {
             jahr.parse().unwrap(),
         )
     }
+
+    pub fn from_german_string(german_string: &String) -> Datum {
+        let mut splitted = german_string.split('.');
+        let tag = splitted.next().unwrap();
+        let monat = splitted.next().unwrap();
+        let jahr = splitted.next().unwrap();
+        Datum::new(
+            tag.parse().unwrap(),
+            monat.parse().unwrap(),
+            jahr.parse().unwrap(),
+        )
+    }
 }
 
 impl PartialOrd<Self> for Datum {
@@ -272,5 +284,11 @@ mod tests {
             Datum::new(1, 1, 2020).ziehe_einen_tag_ab(),
             Datum::new(31, 12, 2019)
         );
+    }
+
+    #[test]
+    fn test_from_german_string() {
+        let ergebnis = Datum::from_german_string(&"01.01.2020".to_string());
+        assert_eq!(ergebnis, Datum::new(1, 1, 2020));
     }
 }
