@@ -30,7 +30,7 @@ jobs:
         with:
           components: rustfmt
       - name:  Check
-        uses: actions-rust-lang/rustfmt@v1
+        run: cargo fmt --all -- --check
         working-directory: ./butler_offline
   butler_online_frontend:
     runs-on: ubuntu-latest
