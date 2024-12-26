@@ -1,4 +1,4 @@
-name: CI to Docker Hub 
+name: Publish Companion App to DockerHub
 
 on:
   push:

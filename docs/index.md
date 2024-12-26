@@ -1,4 +1,6 @@
 # BudgetButlerWeb
+![GithubCI](https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/build.yml/badge.svg?branch=master)
+![GithubCI](https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/docker-to-docker-hub.yml/badge.svg?branch=master)
 
 Ein einfaches haushaltsbuch für eine schlanke und individuelle Finanzverwaltung.
 
@@ -85,7 +87,6 @@ Ein einfaches haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 #### Einzelbuchungen
 
-<a href="img/screenshots_desktop/einzelbuchungen_add.png"><img src="img/screenshots_desktop/einzelbuchungen_add.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/uebersicht_einzelbuchungen.png"><img src="img/screenshots_desktop/uebersicht_einzelbuchungen.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/dauerauftraege_add.png"><img src="img/screenshots_desktop/dauerauftraege_add.png" alt="Dasboard" width="300"/></a>
 <a href="img/screenshots_desktop/uebersicht_dauerauftraege.png"><img src="img/screenshots_desktop/uebersicht_dauerauftraege.png" alt="Dasboard" width="300"/></a>
