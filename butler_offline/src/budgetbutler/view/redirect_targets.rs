@@ -23,3 +23,9 @@ pub fn redirect_to_depotauszug_bereits_erfasst() -> Redirect {
         target: "/error-depotauszug-bereits-erfasst".to_string(),
     }
 }
+
+pub fn redirect_to_dashboard() -> Redirect {
+    Redirect {
+        target: "/".to_string(),
+    }
+}
