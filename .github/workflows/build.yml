@@ -11,7 +11,7 @@ on:
 
 jobs:
   butler-offline-test:
-    name: cargo test
+    name: offline cargo test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,8 +20,8 @@ jobs:
         working-directory: ./butler_offline
 
   # Check formatting with rustfmt
-  butler-offlineformatting:
-    name: cargo fmt
+  butler-offline-formatting:
+    name: offline cargo fmt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,6 +33,7 @@ jobs:
         run: cargo fmt --all -- --check
         working-directory: ./butler_offline
   butler_online_frontend:
+    name: online api frontend build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,6 +48,7 @@ jobs:
         run: |
           docker build -f Dockerfile.test .
   butler_online_api:
+    name: online api build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -60,7 +62,21 @@ jobs:
         name: execute tests
         run: |
           docker build -f Dockerfile.api .
+  # Check formatting with rustfmt
+  butler_online_api_formatting:
+    name: online api cargo fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Ensure rustfmt is installed and setup problem matcher
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: rustfmt
+      - name: Check
+        run: cargo fmt --all -- --check
+        working-directory: ./butler_online_api
   butler_online_cron:
+    name: online api cron build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
