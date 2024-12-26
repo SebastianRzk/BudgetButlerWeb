@@ -1,6 +1,6 @@
+use crate::database::DbError;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use crate::database::DbError;
 
 use crate::partner::model::{NeuerPartnerStatus, PartnerStatus};
 use crate::schema::partner;

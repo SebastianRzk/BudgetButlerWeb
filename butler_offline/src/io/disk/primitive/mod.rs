@@ -1,0 +1,10 @@
+pub mod betrag;
+pub mod betrag_ohne_vorzeichen;
+pub mod datum;
+pub mod depotwerttyp;
+pub mod line;
+pub mod order_typ;
+pub mod rhythmus;
+pub mod segment_reader;
+pub mod sparbuchungtyp;
+pub mod sparkontotyp;

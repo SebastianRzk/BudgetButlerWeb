@@ -1,0 +1,9 @@
+pub mod action_change_ausgeschlossene_kategorien;
+pub mod action_change_farben;
+pub mod action_change_theme_color;
+pub mod action_rename_database;
+pub mod action_rename_kategorie;
+pub mod action_rename_partner;
+pub mod change_config;
+pub mod configuration;
+pub mod dashboard;

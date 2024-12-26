@@ -1,0 +1,233 @@
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Daten</h3>
+        </div>
+        <div class="box-body">
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Isin</th>
+                    <th>Letzte Aktualisierung</th>
+                    <th>Offizieller Name</th>
+                    <th>Aktion</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for etf in etfs %}
+                    <tr>
+                        <td>{{ etf.name_lokal }}</td>
+                        <td>{{ etf.isin}}</td>
+                        <td>{{ etf.name_global}}</td>
+                        <td>{{ etf.letzte_aktualisierung }}</td>
+                        <td>
+                            <form role="form" action="/uebersicht_etfs/" method="post">
+                                <input type="hidden" name="isin" value="{{ etf.isin }}">
+                                <input type="hidden" name="action" value="update_data">
+                                <button type="submit" disabled name="action" value="update_etf_data" id="edit_{{ etf.isin }}">
+                                    Daten aktualisieren
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Aktueller Stand zu ETF-Daten</h3>
+        </div>
+        <div class="box-body">
+            Aktuell können keine Daten automatisiert abgerufen werden, weil bisher genutzte API nicht mehr frei verfügbar ist.<br>
+            Bestehende Daten können weiter verwendet werden, und es können auch manuell Daten eingepflegt werden.<br>
+            Hierzu müss die "shares.json" im Data Ordner erstellt und / oder angepasst werden.<br>
+            Mehr in der <a href="https://sebastianrzk.github.io/BudgetButlerWeb/" target="_blank">Doku</a>.
+        </div>
+    </div>
+</div>
+
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Kosten</h3>
+        </div>
+        <div class="box-body">
+            <table class="table">
+                <tbody>
+                {% for cost in kosten.data %}
+                    <tr>
+                        <td>{{ cost.name }}</td>
+                        <td class="table-wert">{{ cost.prozent }} %</td>
+                        <td class="table-wert">{{ cost.euro }} €</td>
+                    </tr>
+                {% endfor %}
+                <tfooter>
+                    <tr>
+                        <td>Gesamt</td>
+                        <td class="table-wert">{{ kosten.gesamt.prozent }} %</td>
+                        <td class="table-wert">{{ kosten.gesamt.euro }} €</td>
+                    </tr>
+                </tfooter>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="box theme-row">
+    <div class="box-header">
+        <h3 class="box-title">Regionen</h3>
+    </div>
+    <div class="box-body">
+        <canvas id="region-canvas" class="diagramm-canvas"></canvas>
+    </div>
+        <script>
+            var color = Chart.helpers.color;
+            var regionData = {
+                labels: {{ regions_pie.labels|safe}},
+                datasets: [{
+                    label: 'Wert',
+                    backgroundColor: color('red').alpha(0.5).rgbString(),
+                    borderColor: 'red',
+                    borderWidth: 1,
+                    data: {{regions_pie.data|safe}}
+                }]
+            };
+            var ctx = document.getElementById("region-canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'pie',
+                data: regionData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false,
+                    }
+                }
+            });
+
+        </script>
+</div>
+
+
+<div class="box theme-row">
+    <div class="box-header">
+        <h3 class="box-title">Regionen</h3>
+    </div>
+    <div class="box-body">
+        <table>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="2" class="table-border-left table-gap">Gesamt</th>
+                    {% for region in regionen.header %}
+                        <th colspan="2" class="table-border-left table-gap">{{ region }}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Land</th>
+                    <th class="table-border-left table-gap table-wert">Euro</th>
+                    <th class="table-gap-left table-wert">Anteil</th>
+                    {% for _ in regionen.header %}
+                        <th class="table-border-left table-gap table-wert">Euro</th>
+                        <th class="table-gap-left table-wert">Anteil</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for region in regionen.rows %}
+                    <tr>
+                        <td>{{ region.row_label }}</td>
+                        <td class="table-border-left table-gap table-wert">{{ region.gesamt_column.euro }} €</td>
+                        <td class="table-gap table-wert">{{ region.gesamt_column.prozent }} %</td>
+
+                        {% for etf in region.other_columns %}
+                            <td class="table-border-left table-gap table-wert">{{ etf.euro }} €</td>
+                            <td class="table-gap table-wert">{{ etf.prozent }} %</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="box theme-row">
+    <div class="box-header">
+        <h3 class="box-title">Sektoren</h3>
+    </div>
+    <div class="box-body">
+        <canvas id="sectors-canvas" class="diagramm-canvas"></canvas>
+    </div>
+        <script>
+            var color = Chart.helpers.color;
+            var sectorsData = {
+                labels: {{sectors_pie.labels|safe}},
+                datasets: [{
+                    label: 'Wert',
+                    backgroundColor: color('red').alpha(0.5).rgbString(),
+                    borderColor: 'red',
+                    borderWidth: 1,
+                    data: {{sectors_pie.data|safe}}
+                }]
+            };
+            var ctx = document.getElementById("sectors-canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'pie',
+                data: sectorsData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false,
+                    }
+                }
+            });
+        </script>
+</div>
+
+
+<div class="box theme-row">
+    <div class="box-header">
+        <h3 class="box-title">Sektoren</h3>
+    </div>
+    <div class="box-body">
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th colspan="2" class="table-border-left table-gap">Gesamt</th>
+                {% for sektor in sektoren.header %}
+                    <th colspan="2" class="table-border-left table-gap">{{ sektor }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Land</th>
+                <th class="table-border-left table-gap table-wert">Euro</th>
+                <th class="table-gap-left table-wert">Anteil</th>
+                {% for _ in sektoren.header %}
+                <th class="table-border-left table-gap table-wert">Euro</th>
+                <th class="table-gap-left table-wert">Anteil</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for sector in sektoren.rows %}
+                <tr>
+                    <td>{{ sector.row_label }}</td>
+                    <td class="table-border-left table-gap table-wert">{{ sector.gesamt_column.euro }} €</td>
+                    <td class="table-gap table-wert">{{ sector.gesamt_column.prozent }} %</td>
+                    {% for etf in sector.other_columns %}
+                        <td class="table-border-left table-gap table-wert">{{ etf.euro }} €</td>
+                        <td class="table-gap table-wert">{{ etf.prozent }} %</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

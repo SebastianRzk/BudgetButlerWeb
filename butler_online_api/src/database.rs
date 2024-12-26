@@ -1,5 +1,4 @@
-use diesel::{MysqlConnection, r2d2};
-
+use diesel::{r2d2, MysqlConnection};
 
 pub type DbPool = r2d2::Pool<r2d2::ConnectionManager<MysqlConnection>>;
 pub type DbError = Box<dyn std::error::Error + Send + Sync>;

@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
+use crate::database::DbPool;
 use crate::partner::output_db;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
-use crate::database::DbPool;
 
 use crate::partner::model::{NeuerPartnerStatus, PartnerStatus};
 use crate::user::model::User;
@@ -31,7 +31,7 @@ pub struct PartnerStatusDto {
 pub async fn set_partnerstatus(
     pool: web::Data<DbPool>,
     form: web::Json<NeuerPartnerStatusDto>,
-    user: User
+    user: User,
 ) -> actix_web::Result<impl Responder> {
     let username: String = user.sub;
     let aktualisierter_partner_status = web::block(move || {
@@ -44,7 +44,10 @@ pub async fn set_partnerstatus(
 }
 
 #[get("/partnerstatus")]
-pub async fn get_partnerstatus(pool: web::Data<DbPool>, user: User) -> actix_web::Result<impl Responder> {
+pub async fn get_partnerstatus(
+    pool: web::Data<DbPool>,
+    user: User,
+) -> actix_web::Result<impl Responder> {
     let username: String = user.sub;
     let status = web::block(move || {
         let mut conn = pool.get()?;
@@ -56,7 +59,10 @@ pub async fn get_partnerstatus(pool: web::Data<DbPool>, user: User) -> actix_web
 }
 
 #[delete("/partnerstatus")]
-pub async fn delete_partnerstatus(pool: web::Data<DbPool>, user: User) -> actix_web::Result<impl Responder> {
+pub async fn delete_partnerstatus(
+    pool: web::Data<DbPool>,
+    user: User,
+) -> actix_web::Result<impl Responder> {
     let username: String = user.sub;
     let _ = web::block(move || {
         let mut conn = pool.get()?;

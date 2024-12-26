@@ -1,10 +1,10 @@
+use crate::core::rhythmus::rhythmus_from_string;
+use crate::database::DbError;
 use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use time::Date;
 use uuid::Uuid;
-use crate::core::rhythmus::rhythmus_from_string;
-use crate::database::DbError;
 
 use crate::dauerauftraege::model::{Dauerauftrag, NeuerDauerauftrag};
 use crate::schema::dauerauftraege;
@@ -34,7 +34,7 @@ impl NeuerDauerauftrag {
             ende_datum: self.ende_datum,
             rhythmus: self.rhythmus.to_string(),
             user: self.user.clone(),
-            letzte_ausfuehrung: None
+            letzte_ausfuehrung: None,
         }
     }
 }
@@ -57,7 +57,7 @@ impl DauerauftragEntity {
 
 impl Dauerauftrag {
     pub fn to_entity(&self) -> DauerauftragEntity {
-        DauerauftragEntity{
+        DauerauftragEntity {
             id: self.id.clone(),
             ende_datum: self.ende_datum.clone(),
             start_datum: self.start_datum.clone(),
@@ -66,7 +66,7 @@ impl Dauerauftrag {
             kategorie: self.kategorie.clone(),
             wert: self.wert.clone(),
             name: self.name.clone(),
-            letzte_ausfuehrung: self.letzte_ausfuehrung
+            letzte_ausfuehrung: self.letzte_ausfuehrung,
         }
     }
 }
@@ -107,7 +107,7 @@ pub fn insert_new_dauerauftrag(
 pub fn update_letzte_ausfuehrung(
     conn: &mut MysqlConnection,
     uid: String,
-    letzte_ausfuehrung_value: Date
+    letzte_ausfuehrung_value: Date,
 ) -> Result<String, DbError> {
     use crate::schema::dauerauftraege::dsl::*;
 

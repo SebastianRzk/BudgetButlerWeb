@@ -1,0 +1,440 @@
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Übersicht</h3>
+	</div>
+  <div class="box-body">
+	  <canvas id="gesamt_balken_canvas" class="diagramm-canvas"></canvas>
+  </div>
+  <script>
+
+		var barChartData = {
+			labels: {{einnahmen_ausgaben_sparen.labels|safe}},
+			datasets: [
+			{
+				label: 'Einnahmen',
+				data: {{einnahmen_ausgaben_sparen.einnahmen|safe}},
+				backgroundColor: 'rgb(210, 214, 222)'
+			},
+			{
+				label: 'Ausgaben',
+				data: {{einnahmen_ausgaben_sparen.ausgaben|safe}},
+				backgroundColor: 'rgba(60, 141, 188, 0.8)'
+			},
+			{
+				label: 'Sparen',
+				data: {{einnahmen_ausgaben_sparen.sparen|safe}},
+				backgroundColor: 'rgb(0, 166, 90)'
+			}
+			]
+
+		};
+		window.onload = function() {
+			var ctx = document.getElementById('gesamt_balken_canvas').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+				}
+			});
+		};
+
+
+  </script>
+</div>
+
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Entwicklung</h3>
+	</div>
+  <div class="box-body">
+	  <canvas id="kontowert" class="diagramm-canvas"></canvas>
+  </div>
+  <script>
+
+  var salesChartData = {
+		labels: {{gesamt_entwicklung.labels|safe}},
+		datasets: [
+			{% for dataset in gesamt_entwicklung.datasets %}
+			  {
+				      label: '{{dataset.label}}',
+					  pointBorderColor: "{{dataset.farbe}}",
+					  borderColor: "{{dataset.farbe}}",
+					  pointStrokeColor: "{{dataset.farbe}}",
+					  data: {{dataset.data|safe}}
+			  },
+			  {%endfor%}
+		]
+	  };
+  var canvas = document.getElementById("kontowert");
+  var myLineChart = new Chart(canvas, {
+	type: 'line',
+  data: salesChartData,
+  options: {
+	responsive: true,
+	maintainAspectRatio: false,
+  }});
+
+  </script>
+</div>
+
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Entwicklung Delta</h3>
+	</div>
+	<div class="box-body">
+		<canvas id="entwicklung_delta" class="diagramm-canvas"></canvas>
+	</div>
+	<script>
+
+		var salesChartData = {
+			labels: {{gesamt_entwicklung_delta.labels|safe}},
+		datasets: [
+			{% for dataset in gesamt_entwicklung_delta.datasets %}
+		{
+			label: '{{dataset.label}}',
+					pointBorderColor: "{{dataset.farbe}}",
+				borderColor: "{{dataset.farbe}}",
+				pointStrokeColor: "{{dataset.farbe}}",
+				data: {{dataset.data|safe}}
+		},
+		{%endfor%}
+		]
+		};
+		var canvas = document.getElementById("entwicklung_delta");
+		var myLineChart = new Chart(canvas, {
+			type: 'line',
+			data: salesChartData,
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+			}});
+
+	</script>
+</div>
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Entwicklung Delta pro Jahr</h3>
+	</div>
+	<div class="box-body">
+		<canvas id="pro-jahr-canvas" class="diagramm-canvas"></canvas>
+	</div>
+	<script>
+		var color = Chart.helpers.color;
+		var barChartData2 = {
+			labels: {{gesamt_entwicklung_delta_jahr.labels|safe}},
+		datasets: [{
+			label: 'Wert',
+			backgroundColor: color('rgb(60, 141, 188)').alpha(0.5).rgbString(),
+			borderColor: 'rgb(60, 141, 188)',
+			borderWidth: 1,
+			data: {{gesamt_entwicklung_delta_jahr.datasets|safe}}
+		}]
+		};
+
+		var ctx2 = document.getElementById("pro-jahr-canvas").getContext("2d");
+		window.myBar2 = new Chart(ctx2, {
+			type: 'bar',
+			data: barChartData2,
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					display: false,
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+				}
+			}
+		});
+	</script>
+</div>
+
+<div class="box theme-row">
+		<div class="box-header">
+			<h3 class="box-title">Depotinformation</h3>
+		</div>
+		<div class="box-body">
+			<table>
+					<thead>
+						<tr>
+							<th>Kontoname</th>
+							<th>Letzte Buchung</th>
+							<th>Letzer Kontoauszug</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for konto in depot_metainfos %}
+						<tr>
+							<td>{{konto.name}}</td>
+							<td>{{konto.letzte_buchung}}</td>
+							<td
+							{% if konto.warning %}
+								class="negativ"
+							{% endif %}
+							>{{konto.letzter_depotauszug}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+			</table>
+		</div>
+</div>
+
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Sparkontos</h3>
+		</div>
+		<div class="box-body">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Kontotyp</th>
+						<th class="table-wert">Gesamte Einzahlungen</th>
+						<th class="table-wert">+/-</th>
+						<th class="table-wert">Letzter Kontostand</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for sparkonto in uebersicht_kontos.konten %}
+					<tr>
+						<td id="item_{{sparkonto.kontoname}}_kontoname"><span class="fa fa-circle" style="color: {{sparkonto.color}};"></span>{{sparkonto.kontoname}}</td>
+						<td id="item_{{sparkonto.kontoname}}_kontotyp">{{sparkonto.kontotyp}}</td>
+						<td id="item_{{sparkonto.kontoname}}_aufbuchungen" class="table-wert">{{sparkonto.aufbuchungen}} €</td>
+						<td id="item_{{sparkonto.kontoname}}_difference"
+									class="table-wert
+									{% if sparkonto.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+								>{{sparkonto.difference}} €</td>
+						<td id="item_{{sparkonto.kontoname}}_wert" class="table-wert">{{sparkonto.wert}} €</td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td><b>Gesamt</b></td>
+						<td></td>
+						<td class="table-wert"><b id="item_gesamt_aufbuchungen">{{uebersicht_kontos.aufbuchungen}} €</b></td>
+						<td
+									class="table-wert
+									{% if uebersicht_kontos.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+						><b id="item_gesamt_difference">{{uebersicht_kontos.difference}} €</b></td>
+						<td class="table-wert"><b id="item_gesamt_wert">{{uebersicht_kontos.gesamt}} €</b></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="konto_prozent" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels:{{uebersicht_kontos_pie.labels|safe}},
+			datasets: [{
+			data: {{uebersicht_kontos_pie.data|safe}},
+			backgroundColor: {{uebersicht_kontos_pie.colors|safe}},
+			}],
+			};
+			var canvas = document.getElementById("konto_prozent");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+</div>
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Anlagetypen</h3>
+		</div>
+		<div class="box-body">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th class="table-wert">Gesamte Einzahlungen</th>
+						<th class="table-wert">+/-</th>
+						<th class="table-wert">Letzer Kontostand</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for typ in anlagetypen %}
+					<tr>
+						<td id="item_{{typ.name}}_kontoname"><span class="fa fa-circle" style="color: {{typ.color}};"></span>{{typ.name}}</td>
+						<td id="item_{{typ.name}}_aufbuchungen" class="table-wert">{{typ.gesamte_einzahlungen}} €</td>
+						<td id="item_{{typ.name}}_difference"
+									class="table-wert
+									{% if typ.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+								>{{typ.difference}} €</td>
+						<td id="item_{{typ.name}}_wert" class="table-wert">{{typ.kontostand}} €</td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td><b>Gesamt</b></td>
+						<td class="table-wert"><b>{{anlagetypen_gesamt.gesamte_einzahlungen}} €</b></td>
+						<td
+									class="table-wert
+									{% if anlagetypen_gesamt.difference_is_negativ %}
+									negativ
+									{% endif %}
+									"
+						><b>{{anlagetypen_gesamt.difference}} €</b></td>
+						<td class="table-wert"><b>{{anlagetypen_gesamt.kontostand}} €</b></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="typen_diagramm" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels:{{anlagetypen_pie.labels|safe}},
+			datasets: [{
+			data: {{anlagetypen_pie.data|safe}},
+			backgroundColor: {{anlagetypen_pie.colors|safe}},
+			}],
+			};
+			var canvas = document.getElementById("typen_diagramm");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+</div>
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Depot Order-Typen im Vergleich</h3>
+		</div>
+		<div class="box-body">
+			<table>
+				<thead>
+					<tr>
+						<th>Order-Typ</th>
+						<th class="table-wert">Gesamtmenge</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><span class="fa fa-circle" style="color: #26a269;"></span>Manuelle Order</td>
+						<td class="table-wert">{{order_typen.gesamt_statisch}} €</td>
+					</tr>
+					<tr>
+						<td><span class="fa fa-circle" style="color: #1a5fb4;"></span>Order durch Daueraufträge</td>
+						<td class="table-wert">{{order_typen.gesamt_dynamisch}} €</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="spartyp" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels: {{order_typen_pie.labels|safe}},
+			datasets: [{
+			data: {{order_typen_pie.data|safe}},
+			backgroundColor: ['#1a5fb4', '#26a269'],
+			}],
+			};
+			var canvas = document.getElementById("spartyp");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+</div>
+
+
+
+
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Aktuelle Daueraufträge</h3>
+		</div>
+		<div class="box-body">
+			<table>
+				<thead>
+					<tr>
+						<th>Depotwert</th>
+						<th>ISIN</th>
+						<th class="table-wert">Monatlicher Betrag</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for depotwert in aktuelle_dauerauftraege %}
+					<tr>
+						<td><span class="fa fa-circle" style="color: {{depotwert.color}};"></span>{{depotwert.name}}</td>
+						<td>{{depotwert.depotwert}}</td>
+						<td class="table-wert">{{depotwert.wert}} €</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="dauerauftrag_typen_diagramm" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels:{{aktuelle_dauerauftrege_pie.labels|safe}},
+			datasets: [{
+			data: {{aktuelle_dauerauftrege_pie.data|safe}},
+			backgroundColor: {{aktuelle_dauerauftrege_pie.colors|safe}},
+			}],
+			};
+			var canvas = document.getElementById("dauerauftrag_typen_diagramm");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+</div>

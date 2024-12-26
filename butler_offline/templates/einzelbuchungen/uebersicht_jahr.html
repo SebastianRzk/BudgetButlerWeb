@@ -1,0 +1,300 @@
+<div class="box theme-row">
+  <form role="form" action="/jahresuebersicht/" method="post">
+    <div class="box-body">
+      <input type="hidden" name="mode" value="change_month"/>
+	    <div class="form-group">
+		    <label>Wähle Jahr</label>
+	      <select class="form-control" name="jahr" id="date">
+	        {% for jahr in jahre.items %}
+			  <option value="{{jahr.value}}"
+				{% if jahr.selected %}
+				selected="selected"
+				{% endif %}
+			  >{{jahr.value}}</option>
+			  {% endfor %}
+		    </select>
+	    </div>
+	    <button type="submit" value="OK">Filtern!</button>
+    </div>
+  </form>
+</div>
+
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Durchschnittliche Ausgaben pro Monat</h3>
+	</div>
+  <div class="box-body">
+	  <canvas id="averagecanvas" class="diagramm-canvas"></canvas>
+  </div>
+  <script>
+    var color = Chart.helpers.color;
+    var barChartData = {
+        labels: {{durchschnittlich_monat.labels|safe}},
+        datasets: [{
+            label: 'Wert',
+            backgroundColor: color('red').alpha(0.5).rgbString(),
+            borderColor: 'red',
+            borderWidth: 1,
+            data: {{durchschnittlich_monat.datasets|safe}}
+        }]
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById("averagecanvas").getContext("2d");
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    };
+  </script>
+</div>
+
+<div class="box theme-row">
+	<div class="box-header">
+			<h3 class="box-title">Buchungen {{selected_jahr}}</h3>
+	</div>
+  <div class="box-body">
+		<canvas id="buchungenCanvas" class="diagramm-canvas"></canvas>
+		<script>
+			var salesChartData = {
+					labels: {{einnahmen_ausgaben.labels|safe}},
+					datasets: [
+						{% for dataset in einnahmen_ausgaben.datasets %}
+						{
+							label: '{{dataset.label}}',
+							pointBorderColor: "{{dataset.farbe}}",
+							borderColor: "{{dataset.farbe}}",
+							pointStrokeColor: "{{dataset.farbe}}",
+							data: {{dataset.data|safe}}
+						},
+						{%endfor%}
+					]
+				};
+				var canvas = document.getElementById("buchungenCanvas");
+                canvas.style.height = canvas.scrollHeight + "px";
+				canvas.style.width = canvas.scrollWidth + "px";
+				new Chart(canvas, {
+					type: 'line',
+                    maintainAspectRatio: false,
+					data: salesChartData,
+					options: {
+					responsive: true,
+				}});
+		</script>
+	</div>
+</div>
+
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Einnahmen</h3>
+	</div>
+  <div class="box-body">
+		<canvas id="lineChartCanvasEinnahmen" class="diagramm-canvas"></canvas>
+		<script>
+			var salesChartData = {
+					labels: {{einnahmen.labels|safe}},
+					datasets: [
+						{% for einnahme in einnahmen.datasets %}
+						{
+							label: '{{einnahme.label}}',
+							pointBorderColor: "{{einnahme.farbe}}",
+							borderColor: "{{einnahme.farbe}}",
+							pointStrokeColor: "{{einnahme.farbe}}",
+							data: {{einnahme.data|safe}}
+						},
+						{% endfor %}
+					]
+				};
+				var canvas = document.getElementById("lineChartCanvasEinnahmen");
+                canvas.style.height = canvas.scrollHeight + "px";
+				canvas.style.width = canvas.scrollWidth + "px";
+                function beforePrintHandler () {
+                  for (var id in Chart.instances) {
+                    Chart.instances[id].resize()
+                  }
+                }
+				new Chart(canvas, {
+					type: 'line',
+                    maintainAspectRatio: false,
+					data: salesChartData,
+					options: {
+					responsive: true,
+                        onResize: beforePrintHandler
+				}});
+
+		</script>
+	</div>
+</div>
+
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">Ausgaben</h3>
+	</div>
+  <div class="box-body">
+		<canvas id="lineChartCanvas" class="diagramm-canvas"></canvas>
+		<script>
+			var salesChartData = {
+					labels: {{ausgaben.labels|safe}},
+					datasets: [
+						{% for dataset in ausgaben.datasets %}
+						{
+							label: '{{dataset.label}}',
+							pointBorderColor: "{{dataset.farbe}}",
+							borderColor: "{{dataset.farbe}}",
+							pointStrokeColor: "{{dataset.farbe}}",
+							data: {{dataset.data|safe}}
+						},
+						{%endfor%}
+					]
+				};
+				var canvas = document.getElementById("lineChartCanvas");
+				canvas.style.height = canvas.scrollHeight + "px";
+				canvas.style.width = canvas.scrollWidth + "px";
+				new Chart(canvas, {
+					type: 'line',
+                    maintainAspectRatio: false,
+					data: salesChartData,
+					options: {
+					responsive: true,
+				}});
+        </script>
+	</div>
+</div>
+
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Ausgaben</h3>
+		</div>
+		<div class="box-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Kategorie</th>
+						<th class="table-wert">Wert</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for ausgabe in zusammenfassung_ausgaben %}
+					<tr>
+						<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.color}};"></span> {{ausgabe.kategorie}}</td>
+						<td style="vertical-align: middle" class="table-wert">{{ausgabe.wert}} €</td>
+					</tr>
+					{% endfor %}
+					<tfooter>
+					<tr>
+						<td style="vertical-align: middle">Summe</td>
+						<td style="vertical-align: middle" class="table-wert">{{gesamt_ausgaben}} €</td>
+						<td/>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+					</tr>
+					</tfooter>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Einnahmen</h3>
+		</div>
+		<div class="box-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Kategorie</th>
+							<th class="table-wert">Wert</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for ausgabe in zusammenfassung_einnahmen %}
+						<tr>
+							<td style="vertical-align: middle"><span class="fa fa-circle" style="color: {{ausgabe.color}};"></span> {{ausgabe.kategorie}}</td>
+							<td style="vertical-align: middle" class="table-wert">{{ausgabe.wert}} €</td>
+						</tr>
+						{% endfor %}
+						<tfooter>
+						<tr>
+							<td style="vertical-align: middle">Summe</td>
+							<td style="vertical-align: middle" class="table-wert">{{gesamt_einnahmen}} €</td>
+						</tr>
+						</tfooter>
+					</tbody>
+				</table>
+		</div>
+	</div>
+</div>
+
+<div class="theme-double-columns">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Ausgaben {{selected_jahr}} Prozentual</h3>
+		</div>
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="zusammenfassungPieProzentualAusgaben" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels:{{pie_ausgaben.labels|safe}},
+			datasets: [{
+			data: {{pie_ausgaben.data|safe}},
+			backgroundColor: {{pie_ausgaben.colors|safe}},
+			}],
+			};
+			var canvas = document.getElementById("zusammenfassungPieProzentualAusgaben");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">Einnahmen {{selected_jahr}} Prozentual</h3>
+		</div>
+		<div class="box-body">
+			<div class="chart-responsive">
+				<canvas id="zusammenfassungPieProzentualEinnahmen" class="diagramm-canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			var pieData = {
+			labels:{{pie_einnahmen.labels|safe}},
+			datasets: [{
+			data: {{pie_einnahmen.data|safe}},
+			backgroundColor: {{pie_einnahmen.colors|safe}},
+			}],
+			};
+			var canvas = document.getElementById("zusammenfassungPieProzentualEinnahmen");
+			new Chart(canvas, {
+			type: 'pie',
+			data: pieData,
+			options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			}});
+		</script>
+	</div>
+</div>
+

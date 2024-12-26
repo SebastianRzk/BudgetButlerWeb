@@ -1,0 +1,13 @@
+pub mod betrag;
+pub mod betrag_ohne_vorzeichen;
+pub mod datum;
+pub mod farbe;
+pub mod isin;
+pub mod kategorie;
+pub mod name;
+pub mod order_betrag;
+pub mod person;
+pub mod prozent;
+pub mod rhythmus;
+pub mod status;
+pub mod type_description;

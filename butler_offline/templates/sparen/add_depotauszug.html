@@ -1,0 +1,81 @@
+{% for konto in kontos %}
+<div class="input-theme">
+	<div class="box input-box">
+		<div class="box-header">
+			<h3 class="box-title">{{element_titel}} für {{konto.kontoname}}</h3>
+		</div>
+		<form role="form" action="/add_depotauszug/submit" method="post">
+			<input type="hidden" name="database_version" value="{{database_version}}">
+			<input type="hidden" name="edit_konto_name" value="{{konto.kontoname}}">
+			<div class="box-body">
+				<div class="form-group">
+					<label>Datum:</label>
+					<input value="{{konto.datum}}"
+						   {% if bearbeitungsmodus %}
+						   disabled
+						   {% endif %}
+						   type="date" min="2000-01-01" max="2030-12-31" name="edit_datum" class="form-control" required="required" autofocus="autofocus"/>
+						   {% if bearbeitungsmodus %}
+							<input type="hidden" name="edit_datum" value="{{konto.datum}}">
+							<input type="hidden" name="edit" value="yes">
+						   {% endif %}
+							{% if !bearbeitungsmodus %}
+							<input type="hidden" name="edit" value="no">
+							{% endif %}
+				</div>
+				{% for item in konto.filled_items%}
+				<div class="form-group">
+					<label>{{item.beschreibung}}</label> <input value="{{item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert_changed_{{item.isin}}" class="form-control" placeholder="" required="required" />
+				</div>
+				{% endfor %}
+				<div class="box input-box">
+					<div class="box-header">
+						<h3 class="box-title">Weitere Depotwerte</h3>
+						<button class="btn-tool pull-right open_button" type="button" id="open_add_depotauszug_{{konto.kontoname}}"><span class="fa fa-plus"></span></button>
+						<button class="btn-tool pull-right close_button" type="button" id="close_add_depotauszug_{{konto.kontoname}}"><span class="fa fa-minus"></span></button>
+					</div>
+					<div class="boxcontent closed" id="box_add_depotauszug_{{konto.kontoname}}">
+						{% for item in konto.empty_items%}
+						<div class="form-group">
+							<label>{{item.beschreibung}}</label> <input value="{{item.wert}}" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" name="wert_new_{{item.isin}}" class="form-control" placeholder="" required="required" />
+						</div>
+						{% endfor %}
+					</div>
+			  </div>
+			</div>
+			<div class="box-footer">
+				<button type="submit" name="action" value="add" id="add_{{konto.kontoname}}">{{approve_titel}}</button>
+			</div>
+		</form>
+	</div>
+</div>
+{% endfor %}
+	<div class="box last-elements-box">
+	  <div class="box-header">
+		  <h3 class="box-title">Letzte Erfassungen</h3>
+	  </div>
+	  <div class="box-body">
+		  <table class="table" id="letzte_erfassungen">
+			  <thead>
+				  <tr>
+					  <th></th>
+					  <th>Datum</th>
+					  <th>Depot</th>
+					  <th>Depotwert</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  {% for order in letzte_erfassung %}
+				  <tr>
+					  <td><span class="{{order.fa}} pull-right"></span></td>
+					  <td>{{order.datum}}</td>
+					  <td>{{order.konto}}</td>
+					  <td class="preserve-breaks">{{order.value}}</td>
+				  </tr>
+				  {% endfor %}
+			  </tbody>
+		  </table>
+	</div>
+	<div class="box-footer clearfix">
+	  <a href="/uebersicht_depotauszuege/" class="btn btn-light pull-right">Alle Buchungen ansehen</a>
+	</div>

@@ -1,0 +1,98 @@
+<div class='box theme-row'>
+    <div class='box-header'>
+        <h3 class='box-title'> Datensatz hier einfügen (z.B. gemeinsame Abrechnung):</h3>
+    </div>
+    <div class='box-body pad'>
+        <form id="form1" action="/import/submit/" method="post">
+            <div class="box-body">
+                <label>Textuelle Abrechnung:</label>
+                <textarea name='import' class="textarea" required="required"></textarea>
+            </div>
+            <div class="box-footer">
+                <button type="submit" value="OK" name="btn_import">Daten aus Abrechnung importieren</button>
+                <input type="hidden" name="database_id" value="{{database_id}}">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Online Einzelbuchungen importieren</h3>
+        </div>
+        <form role="form" action="/import/einzelbuchungen" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Server</label>
+                    <input type="text" name="server_url" class="form-control"
+                           value="{{online_default_server}}" required="required"/>
+                    <input type="hidden" name="database_id" value="{{database_id}}">
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="load_online_transactions" id="load_online_transactions">Daten
+                    importieren
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Online gemeinsame Buchungen importieren</h3>
+        </div>
+        <form role="form" action="/import/gemeinsam" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Server</label> <input type="text" name="server_url" class="form-control"
+                                                 value="{{online_default_server}}" required="required"/>
+                    <input type="checkbox" required="required"> Mir ist bewusst, dass die Einträge ggf. auch von meiner
+                    Partnerperson abgerufen und gelöscht werden können.</input>
+                    <input type="hidden" name="database_id" value="{{database_id}}">
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="load_online_gemeinsame_transactions"
+                        id="load_online_gemeinsame_transactions">Daten aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Nicht abgerechnete Buchungen hochladen</h3>
+        </div>
+        <form role="form" action="/import/export/gemeinsame_buchungen" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Server</label> <input type="text" name="server_url" class="form-control"
+                                                 value="{{online_default_server}}" required="required"/>
+                    <input type="hidden" name="database_id" value="{{database_id}}">
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="upload_gemeinsame_transactions"
+                        id="upload_gemeinsame_transactions">Daten hochladen
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Online Kategorien installieren</h3>
+        </div>
+        <form role="form" action="/import/kategorien" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Server</label> <input type="text" name="server_url" class="form-control"
+                                                 value="{{online_default_server}}" required="required"/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="set_kategorien" id="set_kategorien">Daten aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

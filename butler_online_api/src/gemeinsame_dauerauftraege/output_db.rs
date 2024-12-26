@@ -1,12 +1,14 @@
+use crate::core::rhythmus::rhythmus_from_string;
+use crate::database::DbError;
 use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use time::Date;
 use uuid::Uuid;
-use crate::core::rhythmus::rhythmus_from_string;
-use crate::database::DbError;
 
-use crate::gemeinsame_dauerauftraege::model::{GemeinsamerDauerauftrag, NeuerGemeinsamerDauerauftrag};
+use crate::gemeinsame_dauerauftraege::model::{
+    GemeinsamerDauerauftrag, NeuerGemeinsamerDauerauftrag,
+};
 use crate::schema::gemeinsame_dauerauftraege;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Queryable, Insertable)]
@@ -21,7 +23,7 @@ pub struct GemeinsamerDauerauftragEntity {
     pub user: String,
     pub rhythmus: String,
     pub letzte_ausfuehrung: Option<Date>,
-    pub zielperson: String
+    pub zielperson: String,
 }
 
 impl NeuerGemeinsamerDauerauftrag {
@@ -36,7 +38,7 @@ impl NeuerGemeinsamerDauerauftrag {
             rhythmus: self.rhythmus.to_string(),
             user: self.user.clone(),
             letzte_ausfuehrung: None,
-            zielperson: self.zielperson.clone()
+            zielperson: self.zielperson.clone(),
         }
     }
 }
@@ -53,7 +55,7 @@ impl GemeinsamerDauerauftragEntity {
             rhythmus: rhythmus_from_string(self.rhythmus.clone()).unwrap(),
             letzte_ausfuehrung: self.letzte_ausfuehrung,
             user: self.user.clone(),
-            zielperson: self.zielperson.clone()
+            zielperson: self.zielperson.clone(),
         }
     }
 }
@@ -70,7 +72,7 @@ impl GemeinsamerDauerauftrag {
             wert: self.wert.clone(),
             name: self.name.clone(),
             letzte_ausfuehrung: self.letzte_ausfuehrung,
-            zielperson: self.zielperson.clone()
+            zielperson: self.zielperson.clone(),
         }
     }
 }
@@ -111,7 +113,7 @@ pub fn insert_neuer_gemeinsamer_dauerauftrag(
 pub fn aktualisiere_letzte_ausfuehrung(
     conn: &mut MysqlConnection,
     uid: String,
-    letzte_ausfuehrung_value: Date
+    letzte_ausfuehrung_value: Date,
 ) -> Result<String, DbError> {
     use crate::schema::gemeinsame_dauerauftraege::dsl::*;
 

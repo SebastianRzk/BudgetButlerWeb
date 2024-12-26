@@ -1,7 +1,7 @@
+use crate::database::DbError;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::database::DbError;
 
 use crate::kategorien::model::{Kategorie, NeueKategorie};
 use crate::schema::kategorien;

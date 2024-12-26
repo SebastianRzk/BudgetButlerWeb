@@ -1,0 +1,106 @@
+<div class="input-theme">
+    <div class="box input-box">
+        <div class="box-header">
+            <h3 class="box-title">{{element_titel}}</h3>
+        </div>
+        <form role="form" action="/addeinnahme/submit" method="post">
+            <input type="hidden" name="db_version" value="{{id}}">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Datum:</label>
+                    <input value="{{default_item.datum}}" type="date" min="2000-01-01" max="2030-12-31" name="date"
+                           class="form-control" required="required" autofocus="autofocus"/>
+                </div>
+                <div class="form-group">
+                    <label>Name der Einnahme</label> <input value="{{default_item.name}}" type="text" name="name"
+                                                            class="form-control" placeholder="" required="required"/>
+                </div>
+                <div class="form-group">
+                    <label>Wert der Einnahme</label> <input value="{{default_item.wert}}" pattern="[0-9]+([\.,][0-9]+)?"
+                                                            step="0.01" name="wert" class="form-control" placeholder=""
+                                                            required="required"/>
+                </div>
+                {% if bearbeitungsmodus %}
+                <input type="hidden" name="edit_index" value="{{default_item.index}}">
+                {% endif %}
+                <div class="form-group">
+                    <label>Kategorie</label>
+                    <select value="{{default_item.kategorie}}" class="form-control" id="kategorie_auswahl"
+                            name="kategorie">
+                        {% for kategorie in kategorien.items %}
+                        <option
+                                {% if kategorie.selected %}
+                                selected="true"
+                                {% endif %}
+                        >{{kategorie.value}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="add" id="add">{{approve_title}}</button>
+            </div>
+        </form>
+    </div>
+    <div class="input-kategorie-box">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Neue Kategorie</h3>
+                <button class="btn-tool pull-right open_button" id="open_add_kategorie"><span class="fa fa-plus"></span>
+                </button>
+                <button class="btn-tool pull-right close_button" id="close_add_kategorie"><span
+                        class="fa fa-minus"></span></button>
+            </div>
+            <div class="boxcontent closed" id="addkategorie">
+                <form role="form" action="/addkategorie/" method="post">
+                    <div class="form-group">
+                        <label>Für den nächsten Eintrag eine zusätzliche Kategorie hinzufügen</label> <input type="text"
+                                                                                                             name="neue_kategorie"
+                                                                                                             class="form-control"
+                                                                                                             placeholder="Enter ..."/>
+                    </div>
+                    <div class="box-footer">
+                        <input type="hidden" name="redirect" value="/addeinnahme/">
+                        <button type="submit" name="action" value="add_kategorie" id="add_kategorie">Daten
+                            aktualisieren
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div></div>
+    </div>
+    <div class="box last-elements-box">
+        <div class="box-header">
+            <h3 class="box-title">Letzte Erfassungen</h3>
+        </div>
+        <div class="box-body">
+            <table class="table" id="letzte_erfassungen">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Datum</th>
+                    <th>Name</th>
+                    <th>Kategorie</th>
+                    <th class="table-wert">Wert</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ausgabe in letzte_erfassung %}
+                <tr>
+                    <td><span class="fa {{ausgabe.fa}} pull-right"></span></td>
+                    <td>{{ausgabe.datum}}</td>
+                    <td>{{ausgabe.name}}</td>
+                    <td>{{ausgabe.kategorie}}</td>
+                    <td class="table-wert">{{ausgabe.wert}} €</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <a href="/uebersicht/" class="btn btn-light pull-right">Alle Buchungen ansehen</a>
+        </div>
+    </div>
+</div>

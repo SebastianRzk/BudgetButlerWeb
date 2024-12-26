@@ -1,0 +1,262 @@
+<div class="box theme-row">
+  <form role="form" action="/monatsuebersicht/" method="post">
+    <div class="box-body">
+      <div class="form-group">
+        <label>Wähle Monat</label>
+        <select class="form-control" name="monat" id="date">
+          {% for monat in monate.items %}
+          <option value="{{monat.value}}"
+            {% if monat.selected %}
+              selected="selected"
+            {% endif %}
+          >{{monat.value}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" value="OK">Filtern!</button>
+    </div>
+    </form>
+</div>
+
+<div class="theme-row">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">Balance {{selected_date}}</h3>
+    </div>
+    <div class="box-body">
+      <canvas id="balance_canvas" style="width:100%; height:20ex;"></canvas>
+      <script>
+        var barChartData = {
+          labels: ["{{selected_date}}"],
+          datasets: [{
+            label: '{{monat_chart.name_uebersicht_gruppe_1}}',
+            backgroundColor: "{{monat_chart.color_uebersicht_gruppe_1}}",
+            data: [{{monat_chart.wert_uebersicht_gruppe_1}}]
+          },
+          {
+            label: '{{monat_chart.name_uebersicht_gruppe_2}}',
+            backgroundColor: "{{monat_chart.color_uebersicht_gruppe_2}}",
+            data: [{{monat_chart.wert_uebersicht_gruppe_2}}]
+          }]
+        };
+        window.onload = function() {
+          var ctx1 = document.getElementById("balance_canvas").getContext("2d");
+          window.myBar = new Chart(ctx1, {
+            type: 'horizontalBar',
+            data: barChartData,
+            options: {
+              tooltips: {
+                mode: 'index',
+                intersect: false
+              },
+              responsive: true,
+              scales: {
+                xAxes: [{
+                  stacked: true,
+                }],
+                yAxes: [{
+                  stacked: true
+                }]
+              }
+            }
+          });
+        };
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="box theme-row">
+  <div class="box-header">
+    <h3 class="box-title">Gesamtbalance {{selected_year}}</h3>
+  </div>
+  <div class="box-body">
+    <canvas id="balance_jahr_canvas" style="width: 100%; height: 20ex;"></canvas>
+    <script>
+      var barChartDataJahr = {
+        labels: ["{{selected_year}}"],
+        datasets: [{
+          label: '{{jahr_chart.name_uebersicht_gruppe_1}}',
+          backgroundColor: "{{jahr_chart.color_uebersicht_gruppe_1}}",
+          data: [{{jahr_chart.wert_uebersicht_gruppe_1}}]
+        },
+        {
+          label: '{{jahr_chart.name_uebersicht_gruppe_2}}',
+          backgroundColor: "{{jahr_chart.color_uebersicht_gruppe_2}}",
+          data: [{{jahr_chart.wert_uebersicht_gruppe_2}}]
+        }]
+      };
+      var ctx2 = document.getElementById("balance_jahr_canvas").getContext("2d");
+      window.myBarJahr = new Chart(ctx2, {
+        type: 'horizontalBar',
+        data: barChartDataJahr,
+        options: {
+          tooltips: {
+            mode: 'index',
+            intersect: false
+          },
+          responsive: true,
+          scales: {
+            xAxes: [{
+              stacked: true,
+            }],
+            yAxes: [{
+              stacked: true
+            }]
+          }
+        }
+      });
+    </script>
+  </div>
+</div>
+
+<div class="theme-double-columns">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">Ausgaben</h3>
+    </div>
+    <div class="box-body">
+      <div class="chart-responsive">
+        <canvas id="zusammenfassungPie" height="400"></canvas>
+      </div>
+    </div>
+    <script>
+      var pieData = {
+        labels:{{ausgaben_chart.labels|safe}},
+        datasets: [{
+          data: {{ausgaben_chart.data|safe}},
+          backgroundColor: {{ausgaben_chart.colors|safe}},
+        }],
+      };
+      var canvas = document.getElementById("zusammenfassungPie");
+      var myLineChart = new Chart(canvas, {
+        type: 'pie',
+        data: pieData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+       }});
+    </script>
+  </div>
+
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">Einnahmen</h3>
+    </div>
+    <div class="box-body">
+      <div class="chart-responsive">
+        <canvas id="zusammenfassungEinnahmenPie" height="400"></canvas>
+      </div>
+    </div>
+    <script> 
+      var pieData = {
+        labels:{{einnahmen_chart.labels|safe}},
+        datasets: [{
+          data: {{einnahmen_chart.data|safe}},
+          backgroundColor: {{einnahmen_chart.colors|safe}},
+        }],
+      };
+      var canvas = document.getElementById("zusammenfassungEinnahmenPie");
+      var myLineChart = new Chart(canvas, {
+        type: 'pie',
+        data: pieData,
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+       }});
+    </script>
+  </div>
+</div>
+
+<div class="theme-double-columns">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">Ausgaben</h3>
+    </div>
+    <div class="box-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th class="table-wert">Wert</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ausgabe in ausgaben %}
+          <tr>
+            <td> <span class="fa fa-circle" style="color: {{ausgabe.color}};"></span> {{ausgabe.kategorie}}</td>
+            <td class="table-wert">{{ausgabe.wert}} €</td>
+          </tr>
+          {% endfor %}
+          <tfooter>
+          <tr>
+            <td>Summe</td>
+            <td class="table-wert">{{gesamt}} €</td>
+          </tr>
+          </tfooter>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">Einnahmen</h3>
+    </div>
+    <div class="box-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th class="table-wert">Wert</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for einnahme in einnahmen %}
+          <tr>
+            <td><span class="fa fa-circle" style="color: {{einnahme.color}};"></span> {{einnahme.kategorie}}</td>
+            <td class="table-wert">{{einnahme.wert}} €</td>
+          </tr>
+          {% endfor %}
+          <tfooter>
+            <tr>
+              <td>Summe</td>
+              <td class="table-wert">{{gesamt_einnahmen}} €</td>
+            </tr>
+          </tfooter>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% for tag in zusammenfassung %}
+<div class="box theme-row">
+  <div class="box-header">
+    <h3 class="box-title">{{tag.name}}</h3>
+    <button class="btn-tool pull-right open_button" id="open_{{tag.name}}"><span class="fa fa-plus"></span></button>
+    <button class="btn-tool pull-right close_button" id="close_{{tag.name}}"><span class="fa fa-minus"></span></button>
+  </div>
+  <div class="box-body boxcontent border-top" id="boxcontent_{{tag.name}}">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Kategorie</th>
+          <th>Name</th>
+          <th class="table-wert">Wert</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in tag.items %}
+        <tr>
+          <td class="table-kategorie"><span class="fa fa-circle" style="color: {{item.color}};"></span> {{item.kategorie}}</td>
+          <td>{{item.name}}</td>
+          <td class="table-wert">{{item.wert}} €</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endfor %}
+

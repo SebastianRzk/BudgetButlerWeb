@@ -1,0 +1,74 @@
+<div class="grid-theme-double-rows">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Rückblick der letzten Monate</h3>
+        </div>
+        <div class="box-body">
+            <div class="chart-responsive">
+                <canvas id="einnahmenAusgaben6monate" style="height:400px; width: 100%;"></canvas>
+                <script>
+                    var salesChartData = {
+                        labels: {{zusammenfassung_monatsliste|safe}},
+                    datasets: [
+                        {
+                            label: "Einnahmen",
+                            pointBorderColor: "rgb(210, 214, 222)",
+                            borderColor: "rgb(210, 214, 222)",
+                            pointStrokeColor: "#c1c7d1",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgb(220,220,220)",
+                            data: {{zusammenfassung_einnahmenliste|safe}}
+                    },
+                    {
+                        label: "Ausgaben",
+                            pointBorderColor: "rgba(60,141,188,0.8)",
+                        borderColor: "#3b8bba",
+                        pointStrokeColor: "rgba(60,141,188,1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(60,141,188,1)",
+                        data: {{zusammenfassung_ausgabenliste|safe}}
+                    }
+                    ]
+                    };
+                    var canvas = document.getElementById("einnahmenAusgaben6monate");
+                    var myLineChart = new Chart(canvas, {
+                        type: 'line',
+                        data: salesChartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                        }});
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Aktueller Monat</h3>
+        </div>
+        <div class="box-body border-top">
+            <table>
+                <thead>
+                <tr>
+                    <th>Nummer</th>
+                    <th>Datum</th>
+                    <th>Name</th>
+                    <th>Kategorie</th>
+                    <th class="table-wert">Wert</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for buchung in ausgaben_des_aktuellen_monats %}
+                <tr>
+                    <td>{{buchung.index}}</td>
+                    <td>{{buchung.datum}}</td>
+                    <td>{{buchung.name}}</td>
+                    <td>{{buchung.kategorie}}</td>
+                    <td class="table-wert">{{buchung.wert}} €</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

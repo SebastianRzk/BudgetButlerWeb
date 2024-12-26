@@ -1,8 +1,6 @@
-
+use crate::core::rhythmus::Rhythmus;
 use bigdecimal::BigDecimal;
 use time::Date;
-use crate::core::rhythmus::Rhythmus;
-
 
 pub struct NeuerDauerauftrag {
     pub name: String,
