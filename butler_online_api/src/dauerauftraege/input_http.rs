@@ -1,17 +1,16 @@
+use crate::core::rhythmus::rhythmus_from_string;
+use crate::database::DbPool;
+use crate::dauerauftraege::model::{Dauerauftrag, NeuerDauerauftrag};
 use crate::dauerauftraege::output_db;
 use crate::result_dto::result_success;
+use crate::user::model::User;
+use crate::wiederkehrend::buchung;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use bigdecimal::BigDecimal;
 use serde::{Deserialize, Serialize};
 use time::macros::format_description;
 use time::Date;
 use uuid::Uuid;
-use crate::core::rhythmus::rhythmus_from_string;
-use crate::database::DbPool;
-use crate::dauerauftraege::model::{Dauerauftrag, NeuerDauerauftrag};
-use crate::user::model::User;
-use crate::wiederkehrend::buchung;
-
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -32,10 +31,14 @@ impl NeuerDauerauftragDto {
             wert: self.wert.clone(),
             start_datum: Date::parse(
                 self.start_datum.as_str(),
-                format_description!("[year]-[month]-[day]")).unwrap(),
+                format_description!("[year]-[month]-[day]"),
+            )
+            .unwrap(),
             ende_datum: Date::parse(
                 self.ende_datum.as_str(),
-                format_description!("[year]-[month]-[day]")).unwrap(),
+                format_description!("[year]-[month]-[day]"),
+            )
+            .unwrap(),
             rhythmus: rhythmus_from_string(self.rhythmus.to_string()).unwrap(),
             user,
         }
@@ -69,7 +72,6 @@ impl Dauerauftrag {
         }
     }
 }
-
 
 #[post("/dauerauftrag")]
 pub async fn add_dauerauftrag(
@@ -126,4 +128,3 @@ pub async fn delete_dauerauftrag(
     .map_err(error::ErrorInternalServerError);
     Ok(HttpResponse::Ok().json(result_success("Dauerauftrag erfolgreich gelöscht")))
 }
-

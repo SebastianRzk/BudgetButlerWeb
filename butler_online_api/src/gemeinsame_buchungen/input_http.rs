@@ -1,15 +1,15 @@
+use crate::database::DbPool;
 use crate::gemeinsame_buchungen::model::{GemeinsameBuchung, NeueGemeinsameBuchung};
 use crate::gemeinsame_buchungen::output_db;
 use crate::partner::output_db::calculate_partnerstatus;
 use crate::result_dto::result_success;
+use crate::user::model::User;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use bigdecimal::BigDecimal;
 use serde::{Deserialize, Serialize};
 use time::macros::format_description;
 use time::Date;
 use uuid::Uuid;
-use crate::database::DbPool;
-use crate::user::model::User;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

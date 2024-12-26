@@ -1,13 +1,12 @@
 use serde::Serialize;
 
+use crate::database::DbPool;
 use crate::kategorien::output_db;
 use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use uuid::Uuid;
-use crate::database::DbPool;
 
 use crate::kategorien::model::{Kategorie, NeueKategorie};
 use crate::user::model::User;
-
 
 #[derive(Debug, Clone, Serialize)]
 pub struct KategorieDto {

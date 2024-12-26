@@ -1,13 +1,15 @@
-use actix_web::{delete, error, get, HttpResponse, post, Responder, web};
+use actix_web::{delete, error, get, post, web, HttpResponse, Responder};
 use bigdecimal::BigDecimal;
 use serde::{Deserialize, Serialize};
-use time::Date;
 use time::macros::format_description;
+use time::Date;
 use uuid::Uuid;
 
 use crate::core::rhythmus::rhythmus_from_string;
 use crate::database::DbPool;
-use crate::gemeinsame_dauerauftraege::model::{GemeinsamerDauerauftrag, NeuerGemeinsamerDauerauftrag};
+use crate::gemeinsame_dauerauftraege::model::{
+    GemeinsamerDauerauftrag, NeuerGemeinsamerDauerauftrag,
+};
 use crate::gemeinsame_dauerauftraege::output_db;
 use crate::result_dto::result_success;
 use crate::user::model::User;
@@ -38,10 +40,14 @@ impl NeuerGemeinsamerDauerauftragDto {
             wert: self.wert.clone(),
             start_datum: Date::parse(
                 self.start_datum.as_str(),
-                format_description!("[year]-[month]-[day]")).unwrap(),
+                format_description!("[year]-[month]-[day]"),
+            )
+            .unwrap(),
             ende_datum: Date::parse(
                 self.ende_datum.as_str(),
-                format_description!("[year]-[month]-[day]")).unwrap(),
+                format_description!("[year]-[month]-[day]"),
+            )
+            .unwrap(),
             rhythmus: rhythmus_from_string(self.rhythmus.to_string()).unwrap(),
             zielperson,
             user,
@@ -60,7 +66,7 @@ pub struct GemeinsamerDauerauftragDto {
     pub ende_datum: String,
     pub rhythmus: String,
     pub user: String,
-    pub zielperson: String
+    pub zielperson: String,
 }
 
 impl GemeinsamerDauerauftrag {
@@ -74,11 +80,10 @@ impl GemeinsamerDauerauftrag {
             ende_datum: self.ende_datum.to_string(),
             rhythmus: self.rhythmus.to_string(),
             user: self.user.clone(),
-            zielperson: self.zielperson.clone()
+            zielperson: self.zielperson.clone(),
         }
     }
 }
-
 
 #[post("/gemeinsamer_dauerauftrag")]
 pub async fn add_gemeinsamer_dauerauftrag(
@@ -88,18 +93,26 @@ pub async fn add_gemeinsamer_dauerauftrag(
 ) -> actix_web::Result<impl Responder> {
     let user: String = user.sub;
 
-
     web::block(move || {
         let mut conn = pool.get()?;
-        let partner_configuration = crate::partner::output_db::calculate_partnerstatus(&mut conn, user.clone()).unwrap();
-        let dauerauftrag = output_db::insert_neuer_gemeinsamer_dauerauftrag(&mut conn, form.to_domain(user, partner_configuration.zielperson));
-        gemeinsame_buchung::verarbeite_gemeinsame_buchung_dauerauftrag(&mut conn, &dauerauftrag.as_ref().unwrap());
+        let partner_configuration =
+            crate::partner::output_db::calculate_partnerstatus(&mut conn, user.clone()).unwrap();
+        let dauerauftrag = output_db::insert_neuer_gemeinsamer_dauerauftrag(
+            &mut conn,
+            form.to_domain(user, partner_configuration.zielperson),
+        );
+        gemeinsame_buchung::verarbeite_gemeinsame_buchung_dauerauftrag(
+            &mut conn,
+            &dauerauftrag.as_ref().unwrap(),
+        );
         dauerauftrag
     })
-        .await?
-        .map_err(error::ErrorInternalServerError)?;
+    .await?
+    .map_err(error::ErrorInternalServerError)?;
 
-    Ok(HttpResponse::Created().json(result_success("Gemeinsamer Dauerauftrag erfolgreich gespeichert")))
+    Ok(HttpResponse::Created().json(result_success(
+        "Gemeinsamer Dauerauftrag erfolgreich gespeichert",
+    )))
 }
 
 #[get("/gemeinsame_dauerauftraege")]
@@ -113,8 +126,8 @@ pub async fn get_gemeinsame_dauerauftraege(
         let mut conn = pool.get()?;
         output_db::finde_alle_gemeinsame_dauerauftraege(&mut conn, user)
     })
-        .await?
-        .map_err(error::ErrorInternalServerError)?;
+    .await?
+    .map_err(error::ErrorInternalServerError)?;
     let dtos = users
         .iter()
         .map(GemeinsamerDauerauftrag::to_dto)
@@ -134,8 +147,9 @@ pub async fn delete_gemeinsamer_dauerauftrag(
         let mut conn = pool.get()?;
         output_db::delete_dauerauftrag(&mut conn, user, dauerauftrag_uid)
     })
-        .await?
-        .map_err(error::ErrorInternalServerError);
-    Ok(HttpResponse::Ok().json(result_success("Gemeinsamer Dauerauftrag erfolgreich gelöscht")))
+    .await?
+    .map_err(error::ErrorInternalServerError);
+    Ok(HttpResponse::Ok().json(result_success(
+        "Gemeinsamer Dauerauftrag erfolgreich gelöscht",
+    )))
 }
-

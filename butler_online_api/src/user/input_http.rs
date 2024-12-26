@@ -1,36 +1,34 @@
+use crate::user::model::{Sessions, User};
+use actix_identity::Identity;
+use actix_web::dev::Payload;
+use actix_web::error::ErrorUnauthorized;
+use actix_web::{error, get, web, FromRequest, HttpRequest, HttpResponse, Responder};
+use serde::Serialize;
 use std::future::Future;
 use std::pin::Pin;
 use std::sync::RwLock;
-use actix_identity::Identity;
-use actix_web::{error, FromRequest, get, HttpRequest, HttpResponse, Responder, web};
-use actix_web::dev::Payload;
-use actix_web::error::ErrorUnauthorized;
-use serde::{Serialize};
-use crate::user::model::{Sessions, User};
-
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 struct UserInfoDto {
     logged_in: bool,
-    user_name: String
+    user_name: String,
 }
 
 #[get("/user")]
 pub async fn user_info(user: Option<User>) -> actix_web::Result<impl Responder> {
-    if user.is_some(){
+    if user.is_some() {
         let user_: User = user.unwrap();
-        return Ok(HttpResponse::Ok().json(UserInfoDto{
+        return Ok(HttpResponse::Ok().json(UserInfoDto {
             user_name: user_.sub,
-            logged_in: true
-        }))
+            logged_in: true,
+        }));
     }
-    Ok(HttpResponse::Ok().json(UserInfoDto{
+    Ok(HttpResponse::Ok().json(UserInfoDto {
         user_name: "".to_string(),
-        logged_in: false
+        logged_in: false,
     }))
 }
-
 
 impl FromRequest for User {
     type Error = error::Error;

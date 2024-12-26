@@ -1,22 +1,21 @@
 extern crate diesel;
 use crate::database::initialize_db_pool;
-use crate::wiederkehrend::gemeinsame_buchung;
 use crate::wiederkehrend::buchung;
+use crate::wiederkehrend::gemeinsame_buchung;
 
-mod schema;
-mod einzelbuchungen;
-mod gemeinsame_buchungen;
-mod kategorien;
-mod partner;
-mod health;
-mod gemeinsame_dauerauftraege;
-mod result_dto;
-mod user;
-mod dauerauftraege;
 mod core;
 mod database;
+mod dauerauftraege;
+mod einzelbuchungen;
+mod gemeinsame_buchungen;
+mod gemeinsame_dauerauftraege;
+mod health;
+mod kategorien;
+mod partner;
+mod result_dto;
+mod schema;
+mod user;
 mod wiederkehrend;
-
 
 fn main() {
     dotenvy::dotenv().ok();
@@ -29,4 +28,3 @@ fn main() {
     buchung::verarbeite_dauerauftraege(&mut connection);
     gemeinsame_buchung::verarbeite_gemeinsame_dauerauftraege(&mut connection);
 }
-
