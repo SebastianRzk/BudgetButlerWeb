@@ -14,6 +14,12 @@ def copy_all_files(src, dest):
     for file in os.listdir(src):
         shutil.copy2(os.path.join(src, file), dest)
 
+def copy_file(src, dest):
+    shutil.copyfile(src, dest)
+
+def move_file(src, dest):
+    shutil.move(src, dest)
+
 def move_folder(src, dest):
     if not os.path.exists(src):
         print("Directory does not exist")
@@ -65,8 +71,8 @@ if __name__ == '__main__':
     print("Abrechnungen copied")
     print()
     print("Copy shares info cache")
-    copy_all_files('./shares_info_cache.json', './data/backups/import_backup/shares_info_cache.json')
-    copy_all_files('./shares_info_cache.json', './data/shares_data.cache.json')
+    copy_file('./shares_info_cache.json', './data/backups/import_backup/shares_info_cache.json')
+    move_file('./shares_info_cache.json', './data/shares_data.cache.json')
     print("Abrechnungen copied")
     print()
     print("Move Abrechnungen")
