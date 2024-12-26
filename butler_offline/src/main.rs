@@ -14,6 +14,7 @@ use crate::io::disk::shares::load_shares;
 use crate::io::disk::writer::write_database;
 use crate::io::http::core::error_keine_aktion_gefunden::error_keine_aktion_gefunden;
 use crate::io::http::core::error_optimistic_locking::error_optimistic_locking;
+use crate::io::http::core::submit_reload_database::submit_reload_database;
 use crate::io::http::einzelbuchungen::{
     add_kategorie, modify_dauerauftrag, modify_einnahme, uebersicht_jahr, uebersicht_monat,
 };
@@ -244,6 +245,7 @@ async fn main() -> std::io::Result<()> {
             .service(error_depotauszug_bereits_erfasst)
             .service(uebersicht_sparen::get_view)
             .service(uebersicht_etfs::get_view)
+            .service(submit_reload_database)
     })
     .bind((domain, port))?
     .run()

@@ -7,5 +7,6 @@ pub mod submit_change_farben;
 pub mod submit_create_backup;
 pub mod submit_database_name;
 pub mod submit_partner_name;
+pub mod submit_reload_database;
 pub mod submit_rename_kategorie;
 pub mod submit_theme_color;
