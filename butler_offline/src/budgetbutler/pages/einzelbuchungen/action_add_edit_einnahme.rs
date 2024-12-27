@@ -1,7 +1,7 @@
 use crate::budgetbutler::pages::einzelbuchungen::action_add_edit_ausgabe::SubmitContext;
 use crate::budgetbutler::view::icons::{Icon, PENCIL, PLUS};
 use crate::budgetbutler::view::request_handler::{ModificationResult, Redirect, RedirectResult};
-use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_AUSGABE_ADD;
+use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_EINNAHME_ADD;
 use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::state::non_persistent_application_state::EinzelbuchungChange;
 use crate::model::state::persistent_state::einzelbuchungen::Einzelbuchungen;
@@ -45,7 +45,7 @@ pub fn submit_einnahme(context: SubmitContext) -> RedirectResult<EinzelbuchungCh
         result: ModificationResult {
             changed_database: new_database,
             target: Redirect {
-                target: EINZELBUCHUNGEN_AUSGABE_ADD.to_string(),
+                target: EINZELBUCHUNGEN_EINNAHME_ADD.to_string(),
             },
         },
         change: EinzelbuchungChange {
