@@ -111,9 +111,11 @@ mod tests_betrag_ohne_vorzeichen {
     }
 
     #[test]
-    fn test_from_input_string(){
-        assert_eq!(BetragOhneVorzeichen::from_user_input(&"10,11".to_string()),
-        BetragOhneVorzeichen { euro: 10, cent: 11})
+    fn test_from_input_string() {
+        assert_eq!(
+            BetragOhneVorzeichen::from_user_input(&"10,11".to_string()),
+            BetragOhneVorzeichen { euro: 10, cent: 11 }
+        )
     }
 
     #[test]
