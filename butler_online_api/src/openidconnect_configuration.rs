@@ -4,16 +4,14 @@ use dotenvy;
 
 use actix_web::{get, post};
 
+use crate::user::model::{Sessions, User};
 use actix_web::web::Redirect;
-use actix_web::{error, http, web, HttpRequest, Responder,
-};
+use actix_web::{error, http, web, HttpRequest, Responder};
 use openid::{DiscoveredClient, Options, Token, Userinfo};
 use serde::{Deserialize, Serialize};
-use std::{sync::RwLock};
+use std::sync::RwLock;
 use url::form_urlencoded;
 use url::Url;
-use crate::user::model::{Sessions, User};
-
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -21,7 +19,6 @@ struct Logout {
     id_token: String,
     logout_url: Option<Url>,
 }
-
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Failure {

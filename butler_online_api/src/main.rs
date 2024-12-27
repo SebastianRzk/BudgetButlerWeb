@@ -28,34 +28,33 @@ use crate::kategorien::input_http::delete_kategorie;
 use crate::kategorien::input_http::delete_kategorien;
 use crate::kategorien::input_http::get_kategorien;
 
+use crate::dauerauftraege::input_http::add_dauerauftrag;
 use crate::dauerauftraege::input_http::delete_dauerauftrag;
 use crate::dauerauftraege::input_http::get_dauerauftraege;
-use crate::dauerauftraege::input_http::add_dauerauftrag;
 
+use crate::gemeinsame_dauerauftraege::input_http::add_gemeinsamer_dauerauftrag;
 use crate::gemeinsame_dauerauftraege::input_http::delete_gemeinsamer_dauerauftrag;
 use crate::gemeinsame_dauerauftraege::input_http::get_gemeinsame_dauerauftraege;
-use crate::gemeinsame_dauerauftraege::input_http::add_gemeinsamer_dauerauftrag;
 
 use crate::health::input_http::health_status;
 
 use crate::user::input_http::user_info;
 
-mod schema;
+mod core;
+mod database;
+mod database_migrations;
+mod dauerauftraege;
 mod einzelbuchungen;
 mod gemeinsame_buchungen;
-mod kategorien;
-mod partner;
-mod health;
-mod openidconnect_configuration;
-mod result_dto;
-mod user;
-mod dauerauftraege;
 mod gemeinsame_dauerauftraege;
-mod database_migrations;
-mod database;
-mod core;
+mod health;
+mod kategorien;
+mod openidconnect_configuration;
+mod partner;
+mod result_dto;
+mod schema;
+mod user;
 mod wiederkehrend;
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -74,7 +73,6 @@ async fn main() -> std::io::Result<()> {
         map: HashMap::new(),
     }));
     let discovery_client = web::Data::new(client);
-
 
     log::info!("Running database migrations");
     let mut connection = pool.get().unwrap();
@@ -139,5 +137,3 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-
-

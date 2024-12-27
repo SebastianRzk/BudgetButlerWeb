@@ -1,0 +1,175 @@
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Datenbank / Nutzer umbenennen</h3>
+        </div>
+        <form role="form" action="/configuration/submit/database_name" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Neuer Name</label>
+                    <input value="{{database_name}}"
+                           type="text" name="database_name"
+                           class="form-control"
+                           placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="database_id" value="{{database_id}}">
+                <button type="submit" name="action" value="edit_databases">Umbenennen</button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Neue Kategorie hinzufügen</h3>
+        </div>
+        <form role="form" action="/addkategorie/" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Eine neue Kategorie in den Formularen bereitstellen</label>
+                    <input type="text"
+                           name="neue_kategorie"
+                           class="form-control"
+                           placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="redirect" value="/configuration/">
+                <button type="submit" name="action" value="add_kategorie" id="add_kategorie">bereit stellen
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Partnername ändern</h3>
+        </div>
+        <form role="form" action="/configuration/submit/partner_name" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Neuer Name des Partners</label> <input type="text" name="partner_name" class="form-control"
+                                                                  value="{{partnername}}" placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="database_id" value="{{database_id}}">
+                <button type="submit" name="action" value="set_partnername" id="set_partnername">Daten aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Farbe des Hauptdesigns ändern</h3>
+        </div>
+        <form role="form" action="/configuration/submit/themecolor" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Neue Farbe</label>
+                    <input id="themecolor" class="form-control" name="themecolor" type="color" value="{{themecolor}}"/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="change_themecolor" id="change_themecolor">Anwenden
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Backup der aktuellen Datenbank anlegen</h3>
+        </div>
+        <form role="form" action="/configuration/submit/backup" method="post">
+            <div class="box-footer">
+                <button type="submit" name="action" value="change_colorpalette" id="create_backup">Backup jetzt
+                    anlegen
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Kategorien in Formularen ausschließen</h3>
+        </div>
+        <form role="form" action="/configuration/submit/ausgeschlossenekategorien" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Ausgeschlossene Kategorien (mit einem Komma getrennt, ohne Leerzeichen)</label>
+                    <input type="text"
+                           name="ausgeschlossene_kategorien"
+                           class="form-control"
+                           value="{{ausgeschlossene_kategorien}}"
+                           placeholder="Enter ..."/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="set_ausgeschlossene_kategorien"
+                        id="set_ausgeschlossene_kategorien">Daten aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="theme-double-columns">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Bestehende Kategorie umbenennen</h3>
+        </div>
+        <form role="form" action="/configuration/submit/renamekategorie/" method="post">
+            <input type="hidden" name="database_id" value="{{database_id}}">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Bestehende Kategorie, welche umbenannt werden soll</label>
+                    <select class="form-control" id="kategorie_rename_alt" name="alte_kategorie">
+                        {% for kategorie in kategorien %}
+                        <option>{{kategorie}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Neuer Name für die Kategorie</label>
+                    <input type="text" name="neue_kategorie" id="neue_kategorie" class="form-control"
+                           placeholder="" required="required"/>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" id="rename_kategorie">
+                    Kategorie umbenennen
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Farbpalette für Kategorien ändern</h3>
+        </div>
+        <form role="form" action="/configuration/submit/farben" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <table class="table">
+                        <tbody>
+                        {% for farbe in palette %}
+                        <tr>
+                            <td><input id="{{farbe.nummer}}_farbe" name="{{farbe.nummer}}_farbe" type="color"
+                                       value="{{farbe.farbe}}"/></td>
+                            <td>Entspricht momentan : {{farbe.kategorie}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" id="change_colorpalette">Farbpalette
+                    aktualisieren
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

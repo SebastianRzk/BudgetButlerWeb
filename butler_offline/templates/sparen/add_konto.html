@@ -1,0 +1,89 @@
+<div class="input-theme">
+    <div class="box input-box">
+        <div class="box-header">
+            <h3 class="box-title">{{element_titel}}</h3>
+        </div>
+        <form role="form" action="/add_konto/submit" method="post">
+            <input type="hidden" name="database_id" value="{{database_id}}">
+            {% if bearbeitungsmodus %}
+            <input type="hidden" name="edit_index" value="{{default_item.index}}">
+            {% endif %}
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Name des Sparkontos</label> <input value="{{default_item.name}}" type="text" name="name"
+                                                              class="form-control" placeholder="" required="required"/>
+                </div>
+                <div class="form-group">
+                    <label>Kontotyp</label>
+                    <select class="form-control" name="typ" id="typ_auswahl">
+                        {% for kontotyp in kontotypen.items %}
+                        <option
+                                {% if kontotyp.selected %}
+                                selected="selected"
+                                {% endif %}
+                        >{{kontotyp.value}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="action" value="add" id="add">{{approve_title}}</button>
+            </div>
+        </form>
+    </div>
+    <div class="input-kagegorie-box">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Konto-Typen im Detail</h3>
+            </div>
+            <div class="box-body">
+                <dl>
+                    <dt>Sparkontos</dt>
+                    <dd>Einfache Input-Output-Rechnung aus den <i>Sparbuchungen</i> Einzahlungen und Auszahlungen,
+                        Zinsen
+                        und Sonstigen Kosten
+                    </dd>
+                    <dt>Depots</dt>
+                    <dd>Für die Input-Output-Rechnung des Depots werden vorwiegend <i>Order</i> und
+                        <i>Order-Daueraufträge</i>, <i>Depotauszuege</i> sowie <i>Sparbuchungen</i> vom Typ
+                        <i>Ausschüttung</i>, <i>Vorabpauschale</i> sowie <i>Sonstige Kosten</i> verwendet.
+                    </dd>
+                    <dt>Genossenschafts-Anteile</dt>
+                    <dd>Wird wie ein Sparkonto berechnet, außer dass noch <i>Sparbuchungen</i> vom Typ
+                        <i>Ausschüttung</i>
+                        berücksichtigt werden.
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div></div>
+    </div>
+    <div class="box last-elements-box">
+        <div class="box-header">
+            <h3 class="box-title">Letzte Erfassungen</h3>
+        </div>
+        <div class="box-body">
+            <table class="table" id="letzte_erfassungen">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Kontoname</th>
+                    <th>Kontotyp</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sparkonto in letzte_erfassung %}
+                <tr>
+                    <td><span class="{{sparkonto.fa}} pull-right"></span></td>
+                    <td>{{sparkonto.name}}</td>
+                    <td>{{sparkonto.kontotyp}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <a href="/uebersicht_sparkontos/" class="btn btn-light pull-right">Alle Sparkontos ansehen</a>
+        </div>
+    </div>

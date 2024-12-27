@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> BudgetButlerWeb | Übersicht</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link href="/static/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/theme.css" rel="stylesheet" type="text/css"/>
+    <link rel="shortcut icon" type="image/png" href="/static/BBFav.png"/>
+    <script src="/static/Chart.min.js" type="text/javascript"></script>
+</head>
+<body class="content-area">
+
+<header class="main-header has-shadow">
+    <a href="/" class="logo"><strong>BudgetButler</strong>WEB</a>
+</header>
+
+<div class="sub-title has-shadow">
+    <p style="text-align:center" class="info"><strong>~~~{{ nutzername }}~~~</strong></p>
+</div>
+<section class="sidebar has-shadow">
+    <ul class="sidebar-menu">
+        <li class="main_menu_uebersicht">
+            <a href="/">
+                {% if "/" == active_page_url %}<span class="fa fa-th active"></span>{% else %}
+                <span class="fa fa-th"></span>{% endif %}<span>Übersicht</span>
+            </a>
+        </li>
+        {% for root_menu in menu %}
+        <li>
+            <a class="main_menu_item" id="main_menu{{ root_menu.name }}">
+                <span class="{{root_menu.icon}}"></span><span>{{ root_menu.name }}</span>
+            </a>
+            {% if root_menu.name == active %}
+            <ul class="sub_menu" id="sub_menu_{{ root_menu.name }}">
+                {% else %}
+                <ul class="sub_menu closed" id="sub_menu_{{ root_menu.name }}">
+                    {% endif %}
+                    {% for menuitem in root_menu.sub_menu %}
+                    {% if menuitem.url == active_page_url %}
+                    <li class="active sub_menu_item">
+                        <a href="{{ menuitem.url }}">
+                            <span class="{{ menuitem.icon }} active"></span><span>{{ menuitem.name }}</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="sub_menu_item">
+                        <a href="{{ menuitem.url }}">
+                            <span class="{{ menuitem.icon }}"></span><span>{{ menuitem.name }}</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+<div class="content">
+    <header class="content-header">
+        <h1 id="pagetitle">{{ element_titel }}</h1>
+    </header>
+    {% match message %}
+    {% when Some with (m) %}
+    <div class="box theme-row {{ m.message_type }}">
+        <div class="box-body">
+            <strong id="message-box-content">{{ m.content|safe }}</strong>
+        </div>
+    </div>
+    {% when None %}
+    {% endmatch %}
+    {% for info_message in info_messages %}
+    <div class="box theme-row">
+        <div class="box-body">
+            <strong id="message-box-content">{{ info_message.content }}</strong>
+        </div>
+        <div class="gap-between">
+            {% for problembehebung in info_message.vorgeschlagene_problembehebungen %}
+            <form method="GET" action="{{ problembehebung.link }}">
+                <button type="submit" class="btn">
+                    {{ problembehebung.link_beschreibung }}
+                </button>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {{ content|safe}}
+</div>
+</body>
+<script src="/static/butler_box.js" type="text/javascript"></script>
+<script src="/static/butler_menu.js" type="text/javascript"></script>
+</html>

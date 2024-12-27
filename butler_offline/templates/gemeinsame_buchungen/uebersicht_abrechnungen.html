@@ -1,0 +1,13 @@
+{% for abrechnung in abrechnungen%}
+<div class="box theme-row">
+	<div class="box-header">
+		<h3 class="box-title">{{abrechnung.title}}</h3>
+        <button class="btn-tool pull-right open_button plusminusbutton" id="open_abrechung_{{abrechnung.title}}"><span class="fa fa-plus"></span></button>
+        <button class="btn-tool pull-right close_button plusminusbutton" id="close_abrechung_{{abrechnung.title}}"><span class="fa fa-minus"></span></button>
+	</div>
+	<div class="box-body boxcontent closed" id="boxcontent_abrechung_{{abrechnung.title}}">
+		Dateiname: {{abrechnung.original_name}}
+        <textarea name='import' class="textarea abrechnung" required="required" disabled>{{abrechnung.content}}</textarea>
+	</div>
+</div>
+{% endfor %}

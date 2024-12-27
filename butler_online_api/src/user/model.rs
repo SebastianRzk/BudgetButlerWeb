@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use openid::{Token, Userinfo};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 #[serde(rename_all = "camelCase")]

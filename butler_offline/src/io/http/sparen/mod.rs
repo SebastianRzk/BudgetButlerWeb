@@ -1,0 +1,16 @@
+pub mod error_depotauszug_bereits_erfasst;
+pub mod error_isin_bereits_erfasst;
+pub mod modify_depotauszug;
+pub mod modify_depotwerte;
+pub mod modify_kontos;
+pub mod modify_order;
+pub mod modify_order_dauerauftrag;
+pub mod modify_sparbuchungen;
+pub mod order_dauerauftraege_uebersicht;
+pub mod order_uebersicht;
+pub mod sparbuchungen_uebersicht;
+pub mod uebersicht_depotauszuege;
+pub mod uebersicht_depotwerte;
+pub mod uebersicht_etfs;
+pub mod uebersicht_kontos;
+pub mod uebersicht_sparen;

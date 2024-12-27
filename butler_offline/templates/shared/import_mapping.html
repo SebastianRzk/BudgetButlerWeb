@@ -1,0 +1,47 @@
+<div class="box">
+	<form  id="form1" action="/import/mapping" method="post">
+		<input type="hidden" name="database_id" value="{{database_id}}">
+		<input type="hidden" name="abrechnung" value="{{abrechnung}}">
+		<div class="box-header">
+			<h3 class="box-title">Daten importieren</h3>
+		</div>
+		<div class="box-body">
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Importierte Kategorie</th>
+							<th>Aktion</th>
+							<th>Buchungen</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for unpassende_kategorie in unpassende_kategorien %}
+						<tr>
+							<td>{{unpassende_kategorie.name}}</td>
+							<td>
+								<div class="form-group">
+								<select  class="form-control" name="{{unpassende_kategorie.name}}_mapping" id="{{unpassende_kategorie.name}}_mapping">
+								{% for kategorie in alle_kategorie_optionen.items %}
+								<option
+									{% if kategorie.selected %}
+									selected
+									{% endif %}
+									value="{{kategorie.value}}"
+								>{{kategorie.value}}</option>
+								{% endfor %}
+								</select>
+								</div>
+							</td>
+							<td class="preserve-breaks">{{unpassende_kategorie.beispiel}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="box-footer">
+			<button type="submit" name="action" value="map_and_push">Absenden</button>
+		</div>
+	</form>
+</div>
