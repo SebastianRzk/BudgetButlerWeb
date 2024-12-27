@@ -33,7 +33,7 @@ impl BetragOhneVorzeichen {
     }
 
     pub fn from_user_input(user_input_string: &String) -> BetragOhneVorzeichen {
-        BetragOhneVorzeichen::from_iso_string(&user_input_string.replace(".", "."))
+        BetragOhneVorzeichen::from_iso_string(&user_input_string.replace(",", "."))
     }
 
     pub fn to_input_string(&self) -> String {
@@ -108,6 +108,12 @@ mod tests_betrag_ohne_vorzeichen {
             BetragOhneVorzeichen::from_iso_string(&"100".to_string()),
             BetragOhneVorzeichen { euro: 100, cent: 0 }
         );
+    }
+
+    #[test]
+    fn test_from_input_string(){
+        assert_eq!(BetragOhneVorzeichen::from_user_input(&"10,11".to_string()),
+        BetragOhneVorzeichen { euro: 10, cent: 11})
     }
 
     #[test]
