@@ -32,6 +32,26 @@ jobs:
       - name:  Check
         run: cargo fmt --all -- --check
         working-directory: ./butler_offline
+  butler-offline-application-wrapper:
+    name: offline application-wrapper build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install and npm run CI commands
+        run: |
+          npm i
+          npm run publish
+        working-directory: ./application-wrapper/BudgetButlerWeb
+  butler-offline-application-wrapper-lint:
+    name: offline application-wrapper lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install and npm run CI commands
+        run: |
+          npm i
+          npm run lint
+        working-directory: ./application-wrapper/BudgetButlerWeb
   butler_online_frontend:
     name: online api frontend build
     runs-on: ubuntu-latest
