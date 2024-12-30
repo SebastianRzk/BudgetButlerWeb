@@ -7,9 +7,7 @@ import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
 // whether you're running in development or production).
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-
-const port: number = 5000;
-
+const port = 5000;
 
 const apiServerCmd = './budgetbutlerweb';
 const pwd = process.env["PWD"];
