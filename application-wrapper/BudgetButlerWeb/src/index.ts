@@ -17,6 +17,10 @@ const pwd = process.env["PWD"];
 console.log("pwd", pwd)
 
 function pollServer() {
+    if (serverProcess.exitCode !== null) {
+        console.log("server process exited")
+        return
+    }
     console.log("poll")
     const request = new Request(
         `http://localhost:${port}/`,
