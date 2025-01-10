@@ -5,7 +5,6 @@ import {BehaviorSubject, firstValueFrom, Observable, Subject} from 'rxjs';
 import {AsyncPipe, NgOptimizedImage} from '@angular/common';
 import {MatButton} from '@angular/material/button';
 import {MatCard, MatCardHeader, MatCardTitle, MatCardContent} from '@angular/material/card';
-import {ActivatedRoute} from "@angular/router";
 import {LocalStorageService} from "../../local-storage.service";
 import {map} from "rxjs/operators";
 import {MatDivider} from "@angular/material/divider";

@@ -1,5 +1,5 @@
 use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::{generiere_text, BuchungenText, EinfuehrungsText, HeaderInsertModus, Metadaten};
-use crate::budgetbutler::database::abrechnen::abrechnen::einzel_buchungen_text_generator::einzelbuchungen_as_import_text;
+use crate::budgetbutler::database::abrechnen::abrechnen::einzel_buchungen_text_generator::{einzelbuchungen_as_import_text, gemeinsame_buchungen_as_import_text};
 use crate::budgetbutler::database::abrechnen::abrechnen::import::abrechnungen_sorter::{sort_abrechnungs_file, HeaderModus};
 use crate::budgetbutler::database::abrechnen::abrechnen::import::einzelbuchungen_parser::read_einzelbuchungen;
 use crate::budgetbutler::database::abrechnen::abrechnen::import::gemeinsame_buchungen_parser::read_gemeinsame_buchungen;
@@ -53,12 +53,19 @@ pub fn aktualisiere_kategorien(
         neue_gemeinsame_buchungen.push(buchung.change_kategorie(neue_kategorie.clone()));
     }
 
+    let import_text;
+    if neue_buchungen.len() > 0 {
+        import_text = einzelbuchungen_as_import_text(&neue_buchungen);
+    } else {
+        import_text = gemeinsame_buchungen_as_import_text(&neue_gemeinsame_buchungen);
+    }
+
     let new_abrechnung = Abrechnung {
         lines: generiere_text(
             EinfuehrungsText {
                 lines: sorted.beschreibung.clone(),
             },
-            einzelbuchungen_as_import_text(&neue_buchungen),
+            import_text,
             parse_metadaten(&sorted),
             HeaderInsertModus::AlreadyInserted,
         ),
@@ -296,7 +303,7 @@ Datum,Kategorie,Name,Betrag
 #######MaschinenimportEnd";
 
     #[test]
-    fn test_aktualisiere_kategorien() {
+    fn test_aktualisiere_kategorien_einzelbuchungen() {
         let abr = abrechnung_from_str(DEMO_ABRECHNUNG_MIT_DUPLIKAT_KATEGORIE);
         let mut mapping = HashMap::new();
         mapping.insert(kategorie("TestKategorie"), kategorie("TestKategorie2"));
@@ -306,6 +313,57 @@ Datum,Kategorie,Name,Betrag
         assert_eq!(
             as_string(&result.lines),
             DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE
+        );
+    }
+
+    const DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE_GEMEINSAM: &str = "\
+ergebnis
+
+text
+#######MaschinenimportMetadatenStart
+Abrechnungsdatum:2024-11-29
+Abrechnende Person:Sebastian
+Titel:Mein Titel
+Ziel:GemeinsameAbrechnungFuerSelbst
+Ausfuehrungsdatum:2025-01-01
+#######MaschinenimportMetadatenEnd
+#######MaschinenimportStart
+Datum,Kategorie,Name,Betrag,Person
+2024-11-29,TestKategorie2,TestName,10.00,TestPerson
+2024-11-29,TestKategorie2,TestName2,11.00,TestPerson
+2024-11-29,TestKategorie3,TestName3,10.00,TestPerson
+#######MaschinenimportEnd";
+
+    const DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE_GEMEINSAM_ERGEBNIS: &str = "\
+ergebnis
+
+text
+#######MaschinenimportMetadatenStart
+Abrechnungsdatum:2024-11-29
+Abrechnende Person:Sebastian
+Titel:Mein Titel
+Ziel:GemeinsameAbrechnungFuerSelbst
+Ausfuehrungsdatum:2025-01-01
+#######MaschinenimportMetadatenEnd
+#######MaschinenimportStart
+Datum,Kategorie,Name,Betrag,Person
+2024-11-29,TestKategorieXOX,TestName,10.00,TestPerson
+2024-11-29,TestKategorieXOX,TestName2,11.00,TestPerson
+2024-11-29,TestKategorie3,TestName3,10.00,TestPerson
+#######MaschinenimportEnd";
+
+    #[test]
+    fn test_aktualisiere_kategorien_gemeinsame_buchungen() {
+        let abr =
+            abrechnung_from_str(DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE_GEMEINSAM);
+        let mut mapping = HashMap::new();
+        mapping.insert(kategorie("TestKategorie2"), kategorie("TestKategorieXOX"));
+
+        let result = super::aktualisiere_kategorien(abr, mapping);
+
+        assert_eq!(
+            as_string(&result.lines),
+            DEMO_ABRECHNUNG_MIT_DUPLIKAT_AKTUALISIERTE_KATEGORIE_GEMEINSAM_ERGEBNIS
         );
     }
 }

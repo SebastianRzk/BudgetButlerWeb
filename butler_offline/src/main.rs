@@ -1,5 +1,5 @@
 use actix_web::web::Data;
-use actix_web::{App, HttpServer};
+use actix_web::{error, web, App, HttpResponse, HttpServer};
 use std::path::absolute;
 use std::sync::Mutex;
 
@@ -159,6 +159,11 @@ async fn main() -> std::io::Result<()> {
         app_protocol, app_domain, app_port
     );
     HttpServer::new(move || {
+        let json_cfg = web::FormConfig::default()
+            .limit(40000 * 1000 * 1000)
+            .error_handler(|err, _req| {
+                error::InternalError::from_response(err, HttpResponse::Conflict().into()).into()
+            });
         App::new()
             .app_data(app_state.clone())
             .app_data(einzelbuchungen_changes.clone())
@@ -176,6 +181,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(depotauszuge_changes.clone())
             .app_data(shares_state.clone())
             .app_data(app_location_state.clone())
+            .app_data(json_cfg)
             .service(dashboard::view)
             .service(einzelbuchungen_uebersicht::get_view)
             .service(einzelbuchungen_uebersicht::post_view)
