@@ -1,6 +1,6 @@
 # BudgetButlerWeb
-![GithubCI](https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/build.yml/badge.svg?branch=master)
-![GithubCI](https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/docker-to-docker-hub.yml/badge.svg?branch=master)
+![GithubCI Build and Test](https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/build.yml/badge.svg?branch=master)
+![GithubCI Publish](https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/docker-to-docker-hub.yml/badge.svg?branch=master)
 
 Ein einfaches haushaltsbuch für eine schlanke und individuelle Finanzverwaltung.
 
@@ -12,8 +12,9 @@ Ein einfaches haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 * [Screenshots](#screenshots)
 	* [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
 	* [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
-* [Desktop Client](butler-offline.md)
-* [Begleiter Web-App](butler-companion.md)
+* [ :link: Desktop Client](butler-offline.md)
+* [ :link: Begleiter Web-App](butler-companion.md)
+* [ :link: Changelog](changelog.md)
 
 ## Idee
 
