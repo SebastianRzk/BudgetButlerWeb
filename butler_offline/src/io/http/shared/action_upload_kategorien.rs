@@ -19,10 +19,10 @@ pub async fn upload_kategorien(
     let kategorien = database.einzelbuchungen.get_kategorien();
     request_delete_kategorien(&config.server_configuration, login.clone())
         .await
-        .unwrap();
+        .expect("Failed to delete Kategorien");
     request_set_kategorien(&config.server_configuration, login, kategorien.clone())
         .await
-        .unwrap();
+        .expect("Failed to set Kategorien");
 
     RedirectAuthenticatedResult {
         database_to_save: None,

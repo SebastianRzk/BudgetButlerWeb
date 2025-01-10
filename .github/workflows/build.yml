@@ -67,6 +67,16 @@ jobs:
         name: execute tests
         run: |
           docker build -f Dockerfile.test .
+  butker_online_frontend_lint:
+    name: online api frontend lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install and npm run CI commands
+        run: |
+          npm i
+          npm run lint
+        working-directory: ./butler_online/budgetbutler
   butler_online_api:
     name: online api build
     runs-on: ubuntu-latest

@@ -1,7 +1,17 @@
+use crate::model::local::LocalServerName;
 use crate::model::remote::server::ServerConfiguration;
 
-pub fn offline_login_route(server_configuration: &ServerConfiguration) -> String {
-    format!("{}/offlinelogin", server_configuration.server_url)
+pub fn offline_login_route(
+    server_configuration: &ServerConfiguration,
+    local_server_name: &LocalServerName,
+) -> String {
+    format!(
+        "{}/offlinelogin?redirect={}://{}:{}",
+        server_configuration.server_url,
+        local_server_name.protocol,
+        local_server_name.app_domain,
+        local_server_name.app_port
+    )
 }
 
 pub fn einzelbuchungen_route(server_configuration: &ServerConfiguration) -> String {

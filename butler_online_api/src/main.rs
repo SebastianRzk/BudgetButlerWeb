@@ -1,16 +1,16 @@
 extern crate diesel;
 
-use actix_identity::IdentityMiddleware;
-use actix_session::{config::PersistentSession, storage::CookieSessionStore, SessionMiddleware};
-use actix_web::cookie::Key;
-use actix_web::{error, middleware, web, App, HttpServer};
-use std::collections::HashMap;
-use std::sync::RwLock;
-
 use crate::einzelbuchungen::input_http::add_einzelbuchung;
 use crate::einzelbuchungen::input_http::delete_einzelbuchung;
 use crate::einzelbuchungen::input_http::delete_einzelbuchungen;
 use crate::einzelbuchungen::input_http::get_einzelbuchungen;
+use actix_identity::IdentityMiddleware;
+use actix_session::{config::PersistentSession, storage::CookieSessionStore, SessionMiddleware};
+use actix_web::cookie::Key;
+use actix_web::web::Data;
+use actix_web::{error, middleware, web, App, HttpServer};
+use std::collections::HashMap;
+use std::sync::RwLock;
 
 use crate::gemeinsame_buchungen::input_http::add_gemeinsame_buchung;
 use crate::gemeinsame_buchungen::input_http::add_gemeinsame_buchungen;
@@ -37,7 +37,7 @@ use crate::gemeinsame_dauerauftraege::input_http::delete_gemeinsamer_dauerauftra
 use crate::gemeinsame_dauerauftraege::input_http::get_gemeinsame_dauerauftraege;
 
 use crate::health::input_http::health_status;
-
+use crate::openidconnect_configuration::compute_allowed_redirects;
 use crate::user::input_http::user_info;
 
 mod core;
@@ -79,8 +79,10 @@ async fn main() -> std::io::Result<()> {
     database_migrations::run_migrations(&mut connection).unwrap();
     log::info!("Database migations finished");
 
-    log::info!("starting HTTP server at http://localhost:8080");
+    log::info!("starting HTTP server at http://0.0.0.0:8080");
     let db_pool = web::Data::new(pool);
+
+    let allowed_redirects = Data::new(compute_allowed_redirects());
 
     HttpServer::new(move || {
         App::new()
@@ -97,6 +99,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(discovery_client.clone())
             .app_data(sessions.clone())
             .app_data(db_pool.clone())
+            .app_data(allowed_redirects.clone())
             .service(
                 web::scope("/api")
                     .service(

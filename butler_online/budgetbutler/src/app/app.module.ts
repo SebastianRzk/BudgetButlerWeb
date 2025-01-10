@@ -10,7 +10,7 @@ import { SidebarComponent } from "./pages/sidebar/sidebar/sidebar.component";
 import { SidebarToggleComponent } from "./pages/sidebar/sidebar-toggle/sidebar-toggle.component";
 import { RouterOutlet } from "@angular/router";
 import { AsyncPipe } from "@angular/common";
-import {DateAdapter, MAT_DATE_LOCALE} from "@angular/material/core";
+import {MAT_DATE_LOCALE} from "@angular/material/core";
 
 @NgModule({
   declarations: [

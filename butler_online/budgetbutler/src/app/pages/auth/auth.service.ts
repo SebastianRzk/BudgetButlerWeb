@@ -1,12 +1,12 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { ApiProviderService } from '../../domain/api-provider.service';
-import { NotificationService } from '../../domain/notification.service';
-import { ERROR_LOGIN_RESULT } from '../../domain/model';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { ADD_SCHNELLEINSTIEG_ROUTE, LOGIN_OFFLINE_ROUTE, LOGIN_ROUTE } from '../../app-routes';
-import { LocalStorageService } from '../../local-storage.service';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {ApiProviderService} from '../../domain/api-provider.service';
+import {NotificationService} from '../../domain/notification.service';
+import {ERROR_LOGIN_RESULT} from '../../domain/model';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {ADD_SCHNELLEINSTIEG_ROUTE, LOGIN_OFFLINE_ROUTE, LOGIN_ROUTE} from '../../app-routes';
+import {LocalStorageService} from '../../local-storage.service';
 
 
 @Injectable({
@@ -21,7 +21,6 @@ export class AuthService {
   private api: ApiProviderService = inject(ApiProviderService);
   private notificationService: NotificationService = inject(NotificationService);
   private localStorageService: LocalStorageService = inject(LocalStorageService);
-
 
   login(username: string, password: string) {
     const body = new FormData();
@@ -51,22 +50,12 @@ export class AuthService {
     );
   }
 
-  checkLoginState(forLocalLogin?: boolean) {
+  checkLoginState(localLogin?: LocalLoginConfiguration) {
     this.httpClient.get<AuthContainer | null>(this.api.getUrl('login/user')).subscribe(
       data => {
         if (data != null && data.loggedIn) {
-          if (this.localStorageService.isOfflineLogin() || forLocalLogin) {
-            this.localStorageService.removeLocalLogin();
+          if (this.localStorageService.isOfflineLogin() || localLogin) {
             this.router.navigate([LOGIN_OFFLINE_ROUTE]);
-            if (forLocalLogin) {
-              this.auth.next(
-                {
-                  userName: data.userName,
-                  loggedIn: true
-                }
-              );
-            }
-            return;
           }
           this.auth.next(
             {
@@ -75,8 +64,8 @@ export class AuthService {
             }
           );
         } else {
-          if (forLocalLogin) {
-            this.localStorageService.setOfflineLogin();
+          if (localLogin) {
+            this.localStorageService.setOfflineLogin(localLogin.redirect);
           }
           this.handleLogOut();
         }
@@ -112,4 +101,8 @@ export const LOGGED_OUT: AuthContainer = {
 export interface LogoutState {
   id_token: string,
   logoutUrl?: string,
+}
+
+export interface LocalLoginConfiguration {
+  redirect: string;
 }

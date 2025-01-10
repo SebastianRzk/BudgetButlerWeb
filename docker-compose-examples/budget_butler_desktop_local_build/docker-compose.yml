@@ -1,0 +1,22 @@
+version: '3'
+services:
+  budget-butler-desktopapp:
+    image: local-budgetbutler-desktopapp
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      # Die Domain, unter der die Anwendung erreichbar ist
+      - BUDGETBUTLER_APP_ROOT=0.0.0.0
+      #- BUDGETBUTLER_APP_ROOT=my.fancy.internal.domain
+      # Der Port, unter dem die Anwendung erreichbar ist (wenn nichts anderes konfiguriert ist, läuft die Anwendung immer auf Port 5000)
+      - BUDGETBUTLER_APP_PORT=5000
+      # Das Protokoll, unter dem die Anwendung erreichbar ist (wenn nichts anderes konfiguriert ist, läuft die Anwendung immer auf http)
+      # Für https, verwenden Sie einen Reverse-Proxy vor der Anwendung
+      - BUDGETBUTLER_APP_PROTOCOL=http
+    volumes:
+      - data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+volumes:
+  data:
