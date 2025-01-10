@@ -5,7 +5,7 @@
 ### Weitere Seiten
 
 * [Hauptseite](index.md)
-* [Companion-App](buler-companion.md)
+* [Companion-App](butler-companion)
 
 ### Inhaltsverzeichnis
 
