@@ -150,10 +150,20 @@ async fn offline_access(
         .unwrap_or("http://localhost:5000".to_string());
 
     eprintln!("offline_access: {:?}", redirect_location);
-    if !allowed_redirects.allowed.iter().any(|e| e == &redirect_location) {
+    if !allowed_redirects
+        .allowed
+        .iter()
+        .any(|e| e == &redirect_location)
+    {
         eprintln!("offline_access: redirect not allowed");
-        eprintln!("redirect is not in allowed list: {:?}", allowed_redirects.allowed);
-        eprintln!("offline_access: redirect to {} without token", redirect_location);
+        eprintln!(
+            "redirect is not in allowed list: {:?}",
+            allowed_redirects.allowed
+        );
+        eprintln!(
+            "offline_access: redirect to {} without token",
+            redirect_location
+        );
         return Redirect::to(redirect_location.to_string());
     }
     eprintln!("offline_access: redirect allowed");

@@ -67,7 +67,7 @@ async fn main() -> std::io::Result<()> {
     let client: openid::DiscoveredClient = openidconnect_configuration::generate_discovery_client()
         .await
         .map_err(error::ErrorInternalServerError)
-        .unwrap();
+        .expect("Can not create openid client");
 
     let sessions = web::Data::new(RwLock::new(user::model::Sessions {
         map: HashMap::new(),
@@ -75,8 +75,8 @@ async fn main() -> std::io::Result<()> {
     let discovery_client = web::Data::new(client);
 
     log::info!("Running database migrations");
-    let mut connection = pool.get().unwrap();
-    database_migrations::run_migrations(&mut connection).unwrap();
+    let mut connection = pool.get().expect("Can not get connection from pool");
+    database_migrations::run_migrations(&mut connection).expect("Can not run database migrations");
     log::info!("Database migations finished");
 
     log::info!("starting HTTP server at http://0.0.0.0:8080");
