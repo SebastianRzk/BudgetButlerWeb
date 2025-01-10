@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ue
 
 pushd butler_offline
 cargo build --release
