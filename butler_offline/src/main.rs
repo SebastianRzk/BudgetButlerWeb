@@ -1,5 +1,5 @@
 use actix_web::web::Data;
-use actix_web::{App, HttpServer};
+use actix_web::{error, web, App, HttpResponse, HttpServer};
 use std::path::absolute;
 use std::sync::Mutex;
 
@@ -39,6 +39,9 @@ use crate::io::http::sparen::{
 use crate::model::initial_config::config::generate_initial_config;
 use crate::model::initial_config::database::generate_initial_database;
 use crate::model::initial_config::path::create_initial_path_if_needed;
+use crate::model::local::{
+    get_port_binding_domain, LocalServerName, DEFAULT_APP_NAME, DEFAULT_APP_PORT, DEFAULT_PROTOCOL,
+};
 use crate::model::state::config::{app_root, ConfigurationData};
 use crate::model::state::non_persistent_application_state::{
     AdditionalKategorie, DauerauftraegeChanges, DepotauszuegeChanges, DepotwerteChanges,
@@ -57,8 +60,19 @@ async fn main() -> std::io::Result<()> {
     let initial_path = app_root().join("data");
     println!(
         "Initial path: {:?}",
-        absolute(initial_path.clone()).unwrap().to_str().unwrap()
+        absolute(initial_path.clone())?.to_str().unwrap()
     );
+
+    let app_domain = std::env::var("BUDGETBUTLER_APP_ROOT").unwrap_or(DEFAULT_APP_NAME.to_string());
+    let app_port: u16 = std::env::var("BUDGETBUTLER_APP_PORT")
+        .map(|x| {
+            x.parse()
+                .expect("Could not parse port. Port should be a number")
+        })
+        .unwrap_or(DEFAULT_APP_PORT);
+    let app_protocol: String =
+        std::env::var("BUDGETBUTLER_APP_PROTOCOL").unwrap_or(DEFAULT_PROTOCOL.to_string());
+
     let config;
 
     create_initial_path_if_needed(&initial_path);
@@ -130,14 +144,26 @@ async fn main() -> std::io::Result<()> {
         redirect_state: Mutex::new(OnlineRedirectActionWrapper { action: None }),
     });
 
+    let app_location_state = Data::new(LocalServerName {
+        app_domain: app_domain.clone(),
+        protocol: app_protocol.clone(),
+        app_port,
+    });
+
     let shares_state = Data::new(load_shares(&initial_path));
 
     let root_path = Data::new(RootPath { path: initial_path });
 
-    let port = 5000;
-    let domain = "127.0.0.1";
-    println!("Server started at http://{}:{}", domain, port);
+    println!(
+        "Server started at {}://{}:{}",
+        app_protocol, app_domain, app_port
+    );
     HttpServer::new(move || {
+        let json_cfg = web::FormConfig::default()
+            .limit(40000 * 1000 * 1000)
+            .error_handler(|err, _req| {
+                error::InternalError::from_response(err, HttpResponse::Conflict().into()).into()
+            });
         App::new()
             .app_data(app_state.clone())
             .app_data(einzelbuchungen_changes.clone())
@@ -154,6 +180,8 @@ async fn main() -> std::io::Result<()> {
             .app_data(order_dauerauftrag_changes.clone())
             .app_data(depotauszuge_changes.clone())
             .app_data(shares_state.clone())
+            .app_data(app_location_state.clone())
+            .app_data(json_cfg)
             .service(dashboard::view)
             .service(einzelbuchungen_uebersicht::get_view)
             .service(einzelbuchungen_uebersicht::post_view)
@@ -247,7 +275,7 @@ async fn main() -> std::io::Result<()> {
             .service(uebersicht_etfs::get_view)
             .service(submit_reload_database)
     })
-    .bind((domain, port))?
+    .bind((get_port_binding_domain(app_domain), app_port))?
     .run()
     .await
 }

@@ -23,7 +23,9 @@ fn main() {
 
     let pool = initialize_db_pool();
 
-    let mut connection = pool.get().unwrap();
+    let mut connection = pool
+        .get()
+        .expect("Cannot get database connection from pool");
 
     buchung::verarbeite_dauerauftraege(&mut connection);
     gemeinsame_buchung::verarbeite_gemeinsame_dauerauftraege(&mut connection);

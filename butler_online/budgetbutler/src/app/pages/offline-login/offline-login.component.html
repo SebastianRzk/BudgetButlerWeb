@@ -1,7 +1,7 @@
 <div class="login-page">
   <div class="login-page-content">
     <div class="logo">
-      <img alt="BudgetButlerWeb" src="../../../../assets/logo.svg">
+      <img alt="BudgetButlerWeb" ngSrc="/assets/logo.svg" height="1333" width="1333">
     </div>
     <mat-card class="login-card">
       <mat-card-header>
@@ -9,7 +9,12 @@
       </mat-card-header>
       <mat-card-content>
         <button mat-raised-button color="primary" (click)="navigate()" [disabled]="disabled$ | async">Lokale Anwendung
-          authentifizieren
+          authentifizieren<br>
+          {{visibleLocalLoginUrl$ | async}}
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-raised-button color="warn" (click)="navigate()" [disabled]="disabled$ | async">Authentifizierung ablehnen<br>
+          {{visibleLocalLoginUrl$ | async}}
         </button>
       </mat-card-content>
     </mat-card>

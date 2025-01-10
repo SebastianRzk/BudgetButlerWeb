@@ -3,6 +3,7 @@ pub mod description;
 pub mod eigenschaften;
 pub mod indiziert;
 pub mod initial_config;
+pub mod local;
 pub mod metamodel;
 pub mod primitives;
 pub mod remote;

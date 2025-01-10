@@ -1,6 +1,7 @@
 use crate::io::http::redirect::http_redirect;
 use crate::io::http::shared::server_url_updater::update_server_url;
 use crate::io::online::login::request_login;
+use crate::model::local::LocalServerName;
 use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::{
     OnlineRedirectAction, OnlineRedirectActionType, OnlineRedirectActionWrapper,
@@ -18,6 +19,7 @@ pub async fn export_kategorien_request(
     data: Data<ApplicationState>,
     config: Data<ConfigurationData>,
     root_path: Data<RootPath>,
+    local_server_name: Data<LocalServerName>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
 
@@ -32,7 +34,7 @@ pub async fn export_kategorien_request(
 
     let server_config = update_server_url(form.server_url.clone(), config, &root_path);
 
-    http_redirect(request_login(&server_config))
+    http_redirect(request_login(&server_config, &local_server_name))
 }
 
 #[derive(Deserialize)]

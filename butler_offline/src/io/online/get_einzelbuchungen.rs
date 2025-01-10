@@ -46,6 +46,7 @@ pub fn map_einzelbuchung(dto: EinzelbuchungDto) -> Einzelbuchung {
 #[cfg(test)]
 mod tests {
     use crate::io::online::login::request_login;
+    use crate::model::local::LocalServerName;
     use crate::model::remote::server::ServerConfiguration;
 
     #[test]
@@ -54,8 +55,17 @@ mod tests {
             server_url: "MyServerUrl".to_string(),
         };
 
-        let result = request_login(&server_config);
+        let local_server_name = LocalServerName {
+            protocol: "http".to_string(),
+            app_domain: "localhost".to_string(),
+            app_port: 8080,
+        };
 
-        assert_eq!(result.target, "MyServerUrl/offlinelogin")
+        let result = request_login(&server_config, &local_server_name);
+
+        assert_eq!(
+            result.target,
+            "MyServerUrl/offlinelogin?redirect=http://localhost:8080"
+        )
     }
 }

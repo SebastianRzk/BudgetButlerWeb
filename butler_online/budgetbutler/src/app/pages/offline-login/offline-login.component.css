@@ -31,3 +31,8 @@ img {
   padding-top: 3ex;
   display: block;
 }
+
+
+mat-divider {
+  padding: inherit;
+}

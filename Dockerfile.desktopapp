@@ -1,0 +1,19 @@
+# Stage 1
+FROM rust as build-step-rust
+RUN mkdir -p /app
+WORKDIR /app
+COPY butler_offline /app
+RUN cargo build --release
+RUN ls -la /app/target/release
+
+
+# Assembly
+FROM debian:stable-slim
+RUN apt-get update && apt-get install openssl ca-certificates curl --yes && apt-get clean
+
+COPY --from=build-step-rust /app/target/release /app
+COPY --from=build-step-rust /app/static /app/static
+WORKDIR /app
+EXPOSE 5000
+
+ENTRYPOINT ["./budgetbutlerweboffline"]

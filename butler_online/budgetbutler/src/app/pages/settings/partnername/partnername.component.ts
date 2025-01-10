@@ -7,6 +7,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import {firstValueFrom} from "rxjs";
 
 @Component({
     selector: 'app-partnername',
@@ -25,9 +26,9 @@ export class PartnernameComponent implements OnInit {
 
   onClick: () => void = () => {
     if (this.verknuepfungAktiv) {
-      this.partnerService.deletePartner().toPromise().then(data => this.ngOnInit());
+      firstValueFrom(this.partnerService.deletePartner()).then(() => this.ngOnInit());
     } else {
-      this.partnerService.setPartner(this.partnerName.value!).toPromise().then(data => this.ngOnInit());
+      firstValueFrom(this.partnerService.setPartner(this.partnerName.value!)).then(() => this.ngOnInit());
     }
   }
 
