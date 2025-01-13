@@ -1,6 +1,6 @@
 {
   "name": "butler_offline_client",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "",
   "main": "main.js",
   "scripts": {
