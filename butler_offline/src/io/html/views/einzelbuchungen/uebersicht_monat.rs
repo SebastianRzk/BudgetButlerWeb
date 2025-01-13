@@ -81,7 +81,7 @@ fn map_to_buchung_template(buchung: Buchung) -> BuchungTemplate {
     BuchungTemplate {
         color: buchung.color.as_string,
         name: buchung.name.to_string(),
-        wert: buchung.wert.to_iso_string(),
+        wert: buchung.wert.to_german_string(),
         kategorie: buchung.kategorie.kategorie,
     }
 }
