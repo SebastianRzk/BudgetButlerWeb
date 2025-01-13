@@ -19,6 +19,15 @@
 	</div>
 </div>
 
+{% if leer %}
+<div class="box theme-row">
+    <div class="box-header">
+        <h3 class="box-title">Keine Einträge für {{ selektiertes_jahr }} vorhanden</h3>
+    </div>
+</div>
+{% endif %}
+
+
 {% for monatszusammenfassung in alles %}
 <div class="box theme-row">
 	<div class="box-header">

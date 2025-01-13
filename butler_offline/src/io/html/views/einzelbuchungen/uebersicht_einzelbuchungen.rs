@@ -15,6 +15,8 @@ pub use askama::Template;
 pub struct UebersichtEinzelbuchungenTemplate {
     pub jahre: Select<i32>,
     pub alles: Vec<MonatsZusammenfassungTemplate>,
+    pub leer: bool,
+    pub selektiertes_jahr: i32,
     pub id: String,
 }
 
@@ -79,12 +81,14 @@ fn map_to_template(
         .map(|x| map_monat_to_template(&x))
         .collect();
     UebersichtEinzelbuchungenTemplate {
+        leer: alles.is_empty(),
         alles,
         id: view_result.database_version.as_string(),
         jahre: Select::new(
             view_result.verfuegbare_jahre.clone(),
             Some(view_result.selektiertes_jahr),
         ),
+        selektiertes_jahr: view_result.selektiertes_jahr,
     }
 }
 
@@ -144,6 +148,8 @@ mod tests {
         assert_eq!(template.jahre.items[0].value, 2020);
         assert_eq!(template.jahre.items[0].selected, true);
         assert_eq!(template.id, "asdf-0-0");
+        assert_eq!(template.leer, false);
+        assert_eq!(template.selektiertes_jahr, 2020);
 
         let erster_monat = &template.alles[0];
         assert_eq!(erster_monat.name, "Januar");
@@ -155,5 +161,24 @@ mod tests {
         assert_eq!(erster_monat.buchungen[0].dynamisch, false);
 
         assert_eq!(erster_monat.buchungen[1].link, "/addeinnahme/");
+    }
+
+    #[test]
+    fn test_map_to_template_with_empty_should_enable_leer() {
+        let view_result = UebersichtEinzelbuchungenViewResult {
+            liste: vec![],
+            verfuegbare_jahre: vec![2020],
+            selektiertes_jahr: 2020,
+            database_version: DatabaseVersion {
+                name: "asdf".to_string(),
+                version: 0,
+                session_random: 0,
+            },
+        };
+
+        let template = map_to_template(view_result);
+
+        assert_eq!(template.leer, true);
+        assert_eq!(template.selektiertes_jahr, 2020);
     }
 }
