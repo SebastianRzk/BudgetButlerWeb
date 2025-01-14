@@ -88,43 +88,23 @@ pub fn handle_modification_without_change<CONTEXT>(
     }
 }
 
-pub fn handle_modification_manual<ViewResult>(
+pub fn handle_modification_manual(
     requested_db_version: String,
     current_db_version: DatabaseVersion,
-    page_url: &str,
-    page_name: &str,
-    result: ViewResult,
-    render_function: impl Fn(ViewResult) -> String,
     database_configuration: &DatabaseConfiguration,
     new_database: Database,
-    message: SuccessMessage,
 ) -> ManualRenderResult {
     let optimistic_locking_result =
         check_optimistic_locking_error(&requested_db_version, current_db_version);
-    let page_content: String;
-    let valid_next_state: Option<Database>;
-    let success_message: Option<SuccessMessage>;
     if optimistic_locking_result == OptimisticLockingResult::Error {
-        page_content = render_error_optimistic_locking_template(None);
-        valid_next_state = None;
-        success_message = None;
-    } else {
-        let new_database = update_database(&database_configuration, new_database);
-        page_content = render_function(result);
-        valid_next_state = Some(new_database);
-        success_message = Some(message);
+        return ManualRenderResult {
+            valid_next_state: Err(render_error_optimistic_locking_template(None)),
+        };
     }
+    let new_database = update_database(&database_configuration, new_database);
 
     ManualRenderResult {
-        valid_next_state,
-        full_rendered_page: render_index_template(
-            resolve_active_group_from_url(page_url),
-            page_url.to_string(),
-            page_name.to_string(),
-            page_content,
-            success_message,
-            database_configuration.name.clone(),
-        ),
+        valid_next_state: Ok(new_database),
     }
 }
 
@@ -165,8 +145,7 @@ pub struct SuccessMessage {
 }
 
 pub struct ManualRenderResult {
-    pub valid_next_state: Option<Database>,
-    pub full_rendered_page: String,
+    pub valid_next_state: Result<Database, String>,
 }
 
 pub fn handle_render_success_display_message(
