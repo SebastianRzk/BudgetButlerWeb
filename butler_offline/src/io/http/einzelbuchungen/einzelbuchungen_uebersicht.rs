@@ -7,14 +7,20 @@ use crate::io::html::views::einzelbuchungen::uebersicht_einzelbuchungen::render_
 use crate::io::time::today;
 use crate::model::state::config::ConfigurationData;
 use crate::model::state::persistent_application_state::ApplicationState;
-use actix_web::web::{Data, Form};
+use actix_web::web::{Data, Form, Query};
 use actix_web::{get, post, HttpResponse, Responder};
 use serde::Deserialize;
+
+#[derive(Deserialize)]
+pub struct GetUebersichtEinzelbuchungenQuery {
+    pub jahr: Option<i32>,
+}
 
 #[get("uebersicht/")]
 pub async fn get_view(
     data: Data<ApplicationState>,
     configuration_data: Data<ConfigurationData>,
+    param: Query<GetUebersichtEinzelbuchungenQuery>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
     HttpResponse::Ok().body(handle_render_display_view(
@@ -23,7 +29,7 @@ pub async fn get_view(
         UebersichtEinzelbuchungenContext {
             database: &database,
             today: today(),
-            angefordertes_jahr: None,
+            angefordertes_jahr: param.jahr,
         },
         handle_view,
         render_uebersicht_einzelbuchungen_template,

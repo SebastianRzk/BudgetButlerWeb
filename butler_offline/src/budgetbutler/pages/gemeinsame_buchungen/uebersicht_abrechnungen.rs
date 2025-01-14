@@ -13,7 +13,9 @@ pub struct UebersichtAbrechnungenViewResult {
 pub fn handle_view_abrechnungen(
     context: UebersichtAbrechnugnenContext,
 ) -> UebersichtAbrechnungenViewResult {
+    let mut alle_abrechnungen = read_and_sort_abrechnungen(context.abrechnungen);
+    alle_abrechnungen.reverse();
     UebersichtAbrechnungenViewResult {
-        abrechnugnen: read_and_sort_abrechnungen(context.abrechnungen),
+        abrechnugnen: alle_abrechnungen,
     }
 }

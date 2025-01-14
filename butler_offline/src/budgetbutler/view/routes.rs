@@ -1,4 +1,5 @@
 pub const EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT: &str = "/uebersicht/";
+pub const EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT_JAHR_PARAM: &str = "/uebersicht/?jahr=";
 pub const EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT: &str = "/dauerauftraguebersicht/";
 pub const EINZELBUCHUNGEN_AUSGABE_ADD: &str = "/addausgabe/";
 pub const EINZELBUCHUNGEN_EINNAHME_ADD: &str = "/addeinnahme/";

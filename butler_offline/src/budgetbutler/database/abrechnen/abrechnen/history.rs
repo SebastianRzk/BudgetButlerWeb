@@ -48,9 +48,9 @@ fn read_abrechnung(unparsed_abrechnungs_file: UnparsedAbrechnungsFile) -> Prepar
 
 fn generate_abrechnungs_title_from_metadaten(metadaten: Metadaten) -> String {
     format!(
-        "Abrechnung vom {}, {} (importiert am {})",
-        metadaten.abrechnungsdatum.to_german_string(),
+        "{} vom {}, (importiert am {})",
         metadaten.titel.titel,
+        metadaten.abrechnungsdatum.to_german_string(),
         metadaten.ausfuehrungsdatum.to_german_string()
     )
 }
@@ -75,10 +75,28 @@ mod tests {
             abrechnungsdatum: Datum::from_iso_string(&"2021-01-01".to_string()),
         });
 
-        assert_eq!(
-            result,
-            "Abrechnung vom 01.01.2021, Test (importiert am 01.01.2022)"
-        );
+        assert_eq!(result, "Test vom 01.01.2021, (importiert am 01.01.2022)");
+    }
+
+    const DEMO_ABRECHNUNG_INPUT_WITHOUT_METADATA: &str = "\
+ergebnis
+
+text
+#######MaschinenimportMetadatenEnd
+#######MaschinenimportStart
+Datum,Kategorie,Name,Betrag
+#######MaschinenimportEnd";
+
+    #[test]
+    fn test_generate_abrechnungs_title_from_filename() {
+        let result = super::read_abrechnung(super::UnparsedAbrechnungsFile {
+            file_content: Line::from_multiline_str(
+                DEMO_ABRECHNUNG_INPUT_WITHOUT_METADATA.to_string(),
+            ),
+            file_name: "demo_abrechnung".to_string(),
+        });
+
+        assert_eq!(result.abrechnung_title, "demo_abrechnung");
     }
 
     const DEMO_ABRECHNUNG_INPUT: &str = "\
@@ -106,7 +124,7 @@ Datum,Kategorie,Name,Betrag
         assert_eq!(result.file_name_original, "demo_abrechnung");
         assert_eq!(
             result.abrechnung_title,
-            "Abrechnung vom 29.11.2024, Mein Titel (importiert am 29.11.2024)"
+            "Mein Titel vom 29.11.2024, (importiert am 29.11.2024)"
         );
     }
 }

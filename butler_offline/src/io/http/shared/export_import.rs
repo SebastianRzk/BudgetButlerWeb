@@ -1,25 +1,25 @@
 use crate::budgetbutler::database::abrechnen::abrechnen::importer::pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
-use crate::budgetbutler::pages::shared::import::{
-    handle_import_abrechnung, ImportAbrechnungContext,
-};
-use crate::budgetbutler::view::request_handler::{
-    handle_modification_manual, handle_render_display_view, no_page_middleware, SuccessMessage,
-};
+use crate::budgetbutler::pages::shared::import::{handle_import_abrechnung, ImportAbrechnungContext};
+use crate::budgetbutler::view::menu::resolve_active_group_from_url;
+use crate::budgetbutler::view::request_handler::{handle_modification_manual, handle_render_display_view, no_page_middleware, ManualRenderResult};
 use crate::budgetbutler::view::routes::CORE_IMPORT;
 use crate::io::disk::abrechnung::speichere_abrechnung::speichere_abrechnung;
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::io::disk::writer::create_database_backup;
+use crate::io::html::views::core::zurueck_zu::{render_success_message_template, SuccessZurueckZuViewResult};
+use crate::io::html::views::index::render_index_template;
 use crate::io::html::views::shared::export_import::{
     render_import_template, ExportImportViewResult,
 };
 use crate::io::html::views::shared::import_mapping::{render_import_mapping_template, ImportMappingViewResult};
 use crate::io::time::{now, today};
-use crate::model::state::config::ConfigurationData;
+use crate::model::state::config::{Configuration, ConfigurationData};
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{get, post, HttpResponse, Responder};
 use serde::Deserialize;
+use std::sync::MutexGuard;
 
 #[get("import/")]
 pub async fn get_view(
@@ -81,29 +81,15 @@ pub async fn submit_import_manuell(
     };
 
     let result = handle_import_abrechnung(context);
-    let view_result = ExportImportViewResult {
-        database_version: result.database.db_version.clone(),
-        online_default_server: configuration.server_configuration.clone(),
-    };
 
     let render_result = handle_modification_manual(
         form.database_id.clone(),
         original_database_version,
-        CORE_IMPORT,
-        "Gemeinsame Buchungen Importieren",
-        view_result,
-        render_import_template,
         &configuration.database_configuration,
         result.database,
-        SuccessMessage {
-            message: format!(
-                "Erfolgreich {} Einzelbuchungen und {} Gemeinsame Buchungen importiert",
-                result.diff_einzelbuchungen, result.diff_gemeinsame_buchungen
-            ),
-        },
     );
 
-    if let Some(next_state) = render_result.valid_next_state {
+    if let Ok(next_state) = render_result.valid_next_state {
         create_database_backup(
             &database,
             &configuration.backup_configuration,
@@ -128,9 +114,48 @@ pub async fn submit_import_manuell(
             today(),
             now(),
         );
+        return erfolgreich_importiert(
+            &configuration,
+            result.diff_einzelbuchungen,
+            result.diff_gemeinsame_buchungen,
+        );
     }
+    render_as_locking_error(&configuration, render_result)
+}
 
-    HttpResponse::Ok().body(render_result.full_rendered_page)
+pub fn render_as_locking_error(
+    configuration: &Configuration,
+    render_result: ManualRenderResult,
+) -> HttpResponse {
+    HttpResponse::Ok().body(render_index_template(
+        resolve_active_group_from_url(CORE_IMPORT),
+        CORE_IMPORT.to_string(),
+        "Export / Import".to_string(),
+        render_result.valid_next_state.err().unwrap(),
+        None,
+        configuration.database_configuration.name.clone(),
+    ))
+}
+
+pub fn erfolgreich_importiert(
+    configuration: &MutexGuard<Configuration>,
+    diff_einzelbuchungen: usize,
+    diff_gemeinsame_buchungen: usize,
+) -> HttpResponse {
+    HttpResponse::Ok().body(render_index_template(
+        resolve_active_group_from_url(CORE_IMPORT),
+        CORE_IMPORT.to_string(),
+        "Export / Import".to_string(),
+        render_success_message_template(SuccessZurueckZuViewResult {
+            text: format!(
+                "Erfolgreich {} Einzelbuchungen und {} Gemeinsame Buchungen importiert. Zurück zu Export / Import",
+                diff_einzelbuchungen, diff_gemeinsame_buchungen
+            ),
+            link: CORE_IMPORT.to_string(),
+        }),
+        None,
+        configuration.database_configuration.name.clone(),
+    ))
 }
 
 #[derive(Deserialize)]
