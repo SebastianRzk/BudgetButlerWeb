@@ -18,7 +18,7 @@
 ## Idee
 
 Die Begleiter Web-App ist eine Web-Anwendung, welche als Begleiter zur Desktop-Anwendung BudgetButlerWeb dient. Sie soll
-ermöglichen, dass Buchungen auch ohne direkten Zugriff auf die Desktop-Anwendung erfasst werden kann.
+ermöglichen, dass Buchungen auch ohne direkten Zugriff auf die Desktop-Anwendung erfasst werden können.
 
 Sie ist nicht für eine dauerhafte Datenhaltung konzipiert, sondern soll lediglich als temporärer Speicher für Buchungen
 dienen. Die Desktop-Anwendung kann die Buchungen aus der Begleiter Web-App importieren und anschließend löschen.
@@ -35,7 +35,7 @@ Systemanforderungen für den Betrieb:
 * docker und docker-compose
 * OpenID-Provider (z.B. [Authentik](https://goauthentik.io) oder [Keycloak](https://www.keycloak.org/))
 
-Ein Beispiel-Docker-Compose-File kann in `docker-compose-examples/budget_butler` eingesehen werden.
+Ein Beispiel-Docker-Compose-File kann in [docker-compose-examples](https://github.com/SebastianRzk/BudgetButlerWeb/tree/master/docker-compose-examples) eingesehen werden.
 Für den Betrieb müssen in `api.env` sowie in `db.env` Parameter beispielsweise für den OAuth-Flow ergänzt werden.
 
 Für SSL wird ein Reverse-Proxy benötigt, welcher die Zertifikate bereitstellt. Hierfür kann
@@ -45,6 +45,11 @@ verwendet werden. Ein Beispiel-Docker-Compose-File für nginx-proxy kann
 bei [Nextcloud](https://github.com/nextcloud/docker/tree/master/.examples) eingesehen werden.
 
 ## Build
+
+Aktuell werden automatisiert Docker-Images mit Github-Actions gebaut und auf Docker-Hub deployt. Die Images können
+[hier](https://hub.docker.com/u/sebastianrzk) gefunden werden.
+
+Falls du die Begleiter Web-App selbst bauen möchtest, findest du im Folgenden die Anforderungen und das Vorgehen.
 
 ### Anforderungen zum Build
 
