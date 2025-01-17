@@ -20,11 +20,11 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 ## Idee
 
-* Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und damit mit einem Textverarbeitungsprogramm
+* Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und sind damit mit einem Textverarbeitungsprogramm
   oder einem Tabellenverarbeitungsprogramm zugänglich.
 * Unkomplizierte Einnahmen/Ausgaben-Rechnung, keine doppelte Buchführung.
 * Schlanke Begleiter-Web-App für unterwegs (online-Version, mobil-optimiert). Automatisierter Import der Daten in die
-  lokale Anwendung
+  lokale Anwendung. Single-Sign-On über OpenID-Provider.
 * Schlankes und minimalistisches Design
 * Hohe Geschwindigkeit, auch bei großen Datenmengen
 * Individualisierbar
@@ -33,7 +33,7 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 ## Merkmale
 
 * **Einzelbuchungen**
-	* **Erfassen, Ändern,Löschen**:  Verwalte Einnahmen und Ausgaben einfach und effizient.
+	* **Erfassen, Ändern, Löschen**: Verwalte Einnahmen und Ausgaben einfach und effizient.
 	* **Daueraufträge**: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob
 	  in der Zukunft oder in der Vergangenheit.
 	* **Monats- und Jahresübersicht**: : Behalten deine Finanzen im Blick mit detaillierten Übersichten.
@@ -49,7 +49,7 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 * **Sparen**
 	* **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
 	  einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
-	* **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Perfomance
+	* **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
 	  deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
 	* **ETF-Portfolio**: (aktuell nur durch manuelle Konfiguration möglich) Analysiere dein ETF-Portfolio nach Kosten,
 	  Sektoren und Ländern.

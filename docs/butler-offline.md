@@ -21,20 +21,19 @@
 
 ![Dashboard](img/screenshots_desktop/dashboard.png)
 
-
 ## Fachlicher Ansatz
 
 ### Datenmodell
 
-BudgetButlerWeb unterscheidet im wesentlichen 2 verschiedene Buchungstypen:
+BudgetButlerWeb unterscheidet im Wesentlichen 2 verschiedene Buchungstypen:
 
 * **Statische / nicht-dynamische Buchungen**: Buchungen, welche einzeln erfasst werden und keine Verbindung zu anderen
   Buchungen haben. Alle Entitäten, welche in der CSV-Datei auf der Platte gespeichert sind, gehören dieser Gruppe an.
 * **Dynamsiche Buchungen**: Buchungen, welche nicht direkt angelegt werden, sondern sich aus anderen statischen oder
-  dynamischen Buchungen ergeben. Beispielsweise die einzelnen Buchungen eines Dauerauftrags, oder die eine Ausgabe vom
+  dynamischen Buchungen ergeben. Beispielsweise die einzelnen Buchungen eines Dauerauftrags, oder eine Ausgabe vom
   Typ "Sparen", welche automatisch durch eine Wertpapier-Order angelegt wird. Diese Buchungen werden nicht gespeichert,
   sondern immer wieder zur Laufzeit neu berechnet. Dies ermöglicht, dass kaskadierende Buchungs-Folgen, wie
-  beispielsweise eine Wertpapier-Dauerauftrag, welcher einzelne Order-Buchungen erzeugt, welche ihrerseits wieder
+  beispielsweise ein Wertpapier-Dauerauftrag, welcher einzelne Order-Buchungen erzeugt, welche ihrerseits wieder
   einzelne Ausgaben erzeugen auch nachträglich angepasst werden können.
 
 Folgende Entitäten können erfasst werden:
@@ -48,21 +47,21 @@ Folgende Entitäten können erfasst werden:
 
 **Gemeinsame Buchungen**
 
-| Entität            | Beschreibung                                                                                                                                |
-|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| Gemeinsame Buchung | Gemeinsame Einnahmen oder Ausgaben, jeweils einer Person zugeordnet                                                                         |
-| Abrechnung         | Abrechnung von gemeinsamen Ausgaben, wird erstellt wenn gemeinsame Buchungen abgerechnet, und somit ein Einzelbuchungen umgewandelt werden. |
+| Entität            | Beschreibung                                                                                                                               |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| Gemeinsame Buchung | Gemeinsame Einnahmen oder Ausgaben, jeweils einer Person zugeordnet                                                                        |
+| Abrechnung         | Abrechnung von gemeinsamen Ausgaben, wird erstellt wenn gemeinsame Buchungen abgerechnet, und somit in Einzelbuchungen umgewandelt werden. |
 
 **Sparen**
 
-| Entität            | Beschreibung                                                                                         |
-|--------------------|------------------------------------------------------------------------------------------------------|
-| Konto              | Ein Konto oder Depot, auf welchem gespart wird                                                       |
-| Sparbuchung        | Einzahlung oder Auszahlung auf ein Konto oder Depot, Erfassung von Kosten und Zinsen auf Konto-Ebene |
-| Order              | Kauf oder Verkauf von Wertpapieren, Erfassung von Kosten oder Erträgen auf Wertpapier-Ebene          |
-| Order-Dauerauftrag | Wiederkehrende Order, welche einzelne Order-Buchungen erzeugen                                       |
-| Depotwert          | Etwas, was in einem Depot bespart werden kann. Wertpapiere, ETF, Währungen o.ä.                      |
-| Depotauszug        | Wert von Depotwerten in einem Depot, zu einem bestimmten Zeitpunkt.                                  |
+| Entität            | Beschreibung                                                                                             |
+|--------------------|----------------------------------------------------------------------------------------------------------|
+| Konto              | Ein Konto oder Depot, auf welchem gespart wird                                                           |
+| Sparbuchung        | Einzahlung, Auszahlung, Erfassung von Kosten und Zinsen auf Konto-Ebene.                                 |
+| Order              | Kauf oder Verkauf von Wertpapieren, Erfassung von Kosten oder Erträgen auf Wertpapier-Ebene              |
+| Order-Dauerauftrag | Wiederkehrende Order, welche einzelne Order-Buchungen erzeugen                                           |
+| Depotwert          | Etwas, was in einem Depot bespart werden kann. Wertpapiere, ETF, Kryptowährungen o.ä.                    |
+| Depotauszug        | Wert von Depotwerten in einem Depot, zu einem bestimmten Zeitpunkt.                                      |
 
 Folgende Buchungen führen zu dynamischen Buchungen:
 
@@ -80,7 +79,7 @@ Buchungen unterwegs.
 Sie kann mit der Offline-Anwendung kommunizieren, um Buchungen zu importieren, welche auf dem mobilen Gerät erfasst
 wurden. Importierte Buchungen werden im Anschluss automatisch aus der Begleiter-App gelöscht.
 
-Eine Übertragung von Daten aus der Offline-Anwendung in die Begleiter-App eigentlich nicht vorgesehen. Für gemeinsame
+Eine Übertragung von Daten aus der Offline-Anwendung in die Begleiter-App ist eigentlich nicht vorgesehen. Für gemeinsame
 Buchungen, welche noch nicht abgerechnet wurden, ist dies dennoch möglich. Weiterführend können auch die bestehenden
 Kategorien aus der Desktop-Anwendung die Begleiter-App importiert werden.
 
@@ -120,9 +119,9 @@ dieses, wenn das Fenster geschlossen wird.
 
 Alternativ kann der Server auch manuell gestartet werden:
 
-    de ./target/ && ./budgetbutlerweb
+    cd ./target/ && ./budgetbutlerweb
 
-Über ein Webbrowser kann die Webseite nun lokal erreicht werden:
+Über einen Webbrowser kann die Webseite nun lokal erreicht werden:
 
     http://localhost:5000
 
@@ -157,17 +156,17 @@ Anwendung korrekt mit der Begleiter-App kommunizieren kann:
 | BUDGETBUTLER_APP_PROTOCOL | http      | Protokoll, unter dem die Anwendung erreichbar ist |
 
 Werden hier Werte geändert, muss die Umgebungsvariable `ALLOWED_REDIRECTS` in der Begleiter-App entsprechend angepasst
-werden, damit die lokale App sich bei der Begleiter-App anmelden kann.
+werden, damit sich die lokale App bei der Begleiter-App anmelden kann.
 
 ## Betrieb mit Docker / Docker-Compose
 
-* [Hier liegen gebaute Docker-Images](https://hub.docker.com/u/sebastianrzk),
-  und [hier sind Deployment Beispiele zu finden](https://github.com/SebastianRzk/BudgetButlerWeb/tree/master/docker-compose-examples)
+[Hier liegen gebaute Docker-Images](https://hub.docker.com/u/sebastianrzk)
+und [hier sind Deployment Beispiele zu finden](https://github.com/SebastianRzk/BudgetButlerWeb/tree/master/docker-compose-examples).
 
 ### Migration von Version 3.0.0 auf 4.0.0 (von Python Client auf Rust Client)
 
 1. Cargo installieren
-2. Daten automatisch mit migrieren (bitte #dein Nutzername# durch deinen Nutzername ersetzen)
+2. Daten automatisch mit migrieren (bitte #dein Nutzername# durch deinen Nutzernamen ersetzen)
 
        python database_migrator/main.py ./Database_#dein Nutzername#.csv
 
@@ -194,13 +193,13 @@ Die Anwendung befindet sich in `butler_offline`.
 Hier sind die folgenden Verzeichnisse zu finden:
 
 * `src/`: Rust-Quelltext der Anwendung
-	* `src/main.rs`: Hauptdatei der Anwendung, welche den Webserver startet, die Routen als Methode einhängt und das
-	  initiale Setup durchführt
-	* `src/budgetbutler`: Fachlicher Quelltext
-	* `src/io`: Ein- und Ausgabe der Anwendung, beispielsweise für das Lesen und Schreiben von CSV-Dateien, oder für das
-	  Rendern von HTML-Dateien
-	* `src/model`: Datenmodell der Anwendung
-* `templates/`: HTML-Dateien, welche mittels Askama in die Webseite eingebunden werden
+    * `src/main.rs`: Hauptdatei der Anwendung, welche den Webserver startet, die Routen in Form von Methoden einhängt und das
+      initiale Setup durchführt
+    * `src/budgetbutler`: Fachlicher Quelltext
+    * `src/io`: Ein- und Ausgabe der Anwendung, beispielsweise für das Lesen und Schreiben von CSV-Dateien, oder für das
+      Rendern von HTML-Dateien
+    * `src/model`: Datenmodell der Anwendung
+* `templates/`: HTML-Dateien, welche mittels `askama` in die Webseite eingebunden werden
 * `static/`: Statische Dateien, wie CSS-Dateien, Schriftarten, Bilder und JavaScript-Dateien
 
 Die Anwendung kann mittels `cargo run` gestartet werden. Der Webserver ist dann unter `http://localhost:5000`
