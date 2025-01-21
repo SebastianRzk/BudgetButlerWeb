@@ -5,7 +5,6 @@ import { PartnernameComponent } from './partnername/partnername.component';
     selector: 'app-settings',
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.css'],
-    standalone: true,
     imports: [PartnernameComponent]
 })
 export class SettingsComponent {

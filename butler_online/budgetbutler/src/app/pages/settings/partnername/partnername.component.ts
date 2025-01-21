@@ -13,7 +13,6 @@ import {firstValueFrom} from "rxjs";
     selector: 'app-partnername',
     templateUrl: './partnername.component.html',
     styleUrls: ['./partnername.component.css'],
-    standalone: true,
     imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, FormsModule, MatFormField, MatLabel, MatInput, ReactiveFormsModule, NgFor, NgIf, MatButton]
 })
 export class PartnernameComponent implements OnInit {
