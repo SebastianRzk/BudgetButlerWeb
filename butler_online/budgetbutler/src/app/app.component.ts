@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
 import {SidebarComponent} from "./pages/sidebar/sidebar/sidebar.component";
 import {SidebarToggleComponent} from "./pages/sidebar/sidebar-toggle/sidebar-toggle.component";
 import {RouterModule} from "@angular/router";
-import {AsyncPipe} from "@angular/common";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,7 @@ import {AsyncPipe} from "@angular/common";
     SidebarComponent,
     SidebarToggleComponent,
     RouterModule,
-    AsyncPipe
+    CommonModule
   ]
 })
 export class AppComponent implements OnInit {
