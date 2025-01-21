@@ -1,0 +1,49 @@
+name: Scan for security issues
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  butler-offline-scan:
+    name: offline cargo scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: | 
+          cargo install cargo-audit --locked 
+          cargo audit
+        working-directory: ./butler_offline
+  application-wrapper-scan:
+    name: offline application-wrapper scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install and scan
+        run: |
+          npm i
+          npm audit
+        working-directory: ./application-wrapper/BudgetButlerWeb
+  butler-online-api-scan:
+    name: online api cargo scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: |
+          cargo install cargo-audit --locked 
+          cargo audit
+        working-directory: ./butler_online_api
+  butler-online-frontend-scan:
+    name: butler online frontend scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install and scan
+        run: |
+          npm i
+          npm audit
+        working-directory: ./butler_online/budgetbutler
