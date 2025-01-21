@@ -12,7 +12,6 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
     selector: 'app-allebuchungen',
     templateUrl: './allebuchungen.component.html',
     styleUrls: ['./allebuchungen.component.css'],
-    standalone: true,
     imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatChipListbox, MatChip, MatIcon, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, DecimalPipe, DatePipe]
 })
 export class AllebuchungenComponent implements OnInit {

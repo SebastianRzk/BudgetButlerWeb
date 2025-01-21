@@ -10,11 +10,10 @@ import {map} from "rxjs/operators";
 import {MatDivider} from "@angular/material/divider";
 
 @Component({
-  selector: 'app-offline-login',
-  templateUrl: './offline-login.component.html',
-  styleUrls: ['./offline-login.component.css'],
-  standalone: true,
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatButton, AsyncPipe, NgOptimizedImage, MatDivider]
+    selector: 'app-offline-login',
+    templateUrl: './offline-login.component.html',
+    styleUrls: ['./offline-login.component.css'],
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatButton, AsyncPipe, NgOptimizedImage, MatDivider]
 })
 export class OfflineLoginComponent implements OnInit {
 

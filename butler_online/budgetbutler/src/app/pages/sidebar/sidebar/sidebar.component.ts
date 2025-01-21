@@ -13,7 +13,6 @@ import { NgIf, NgFor, AsyncPipe } from '@angular/common';
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.css'],
-    standalone: true,
     imports: [NgIf, MatButton, MatIcon, NgFor, AsyncPipe]
 })
 export class SidebarComponent implements OnInit {

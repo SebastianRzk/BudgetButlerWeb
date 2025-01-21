@@ -23,36 +23,35 @@ import {EuropeanNativeDateAdapter} from "../../domain/date-format";
 import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
-  selector: 'app-addschnelleinstieg',
-  templateUrl: './add-buchung.component.html',
-  styleUrls: ['./add-buchung.component.css'],
-  standalone: true,
-  imports: [MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
-    MatSelect,
-    NgFor,
-    MatOption,
-    MatCheckbox,
-    MatButton,
-    AsyncPipe,
-    MatDatepickerModule,
-    MatNativeDateModule
-  ],
-  providers: [
-    MatDatepickerModule,
-    {provide: DateAdapter, useClass: EuropeanNativeDateAdapter}
-  ]
+    selector: 'app-addschnelleinstieg',
+    templateUrl: './add-buchung.component.html',
+    styleUrls: ['./add-buchung.component.css'],
+    imports: [MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        MatSelect,
+        NgFor,
+        MatOption,
+        MatCheckbox,
+        MatButton,
+        AsyncPipe,
+        MatDatepickerModule,
+        MatNativeDateModule
+    ],
+    providers: [
+        MatDatepickerModule,
+        { provide: DateAdapter, useClass: EuropeanNativeDateAdapter }
+    ]
 })
 export class AddBuchungComponent implements OnInit {
   private einzelbuchungsService: EinzelbuchungService = inject(EinzelbuchungService);

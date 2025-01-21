@@ -10,7 +10,6 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
-    standalone: true,
     imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatButton]
 })
 export class LoginComponent implements OnInit {

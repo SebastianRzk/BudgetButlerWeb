@@ -11,7 +11,6 @@ import { NgIf, AsyncPipe } from '@angular/common';
     selector: 'app-sidebar-toggle',
     templateUrl: './sidebar-toggle.component.html',
     styleUrls: ['./sidebar-toggle.component.css'],
-    standalone: true,
     imports: [NgIf, MatButton, MatIcon, AsyncPipe]
 })
 export class SidebarToggleComponent {

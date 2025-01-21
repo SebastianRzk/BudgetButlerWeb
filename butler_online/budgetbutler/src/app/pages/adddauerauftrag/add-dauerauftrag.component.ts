@@ -26,33 +26,32 @@ import {BreakpointObserver} from "@angular/cdk/layout";
     selector: 'app-adddauerauftrag',
     templateUrl: './add-dauerauftrag.component.html',
     styleUrls: ['./add-dauerauftrag.component.css'],
-    standalone: true,
     imports: [MatCard,
-      MatCardHeader,
-      MatCardTitle,
-      MatCardContent,
-      FormsModule,
-      ReactiveFormsModule,
-      MatFormField,
-      MatLabel,
-      MatInput,
-      MatDatepickerInput,
-      MatDatepickerToggle,
-      MatSuffix,
-      MatDatepicker,
-      MatSelect,
-      NgFor,
-      MatOption,
-      MatCheckbox,
-      MatButton,
-      AsyncPipe,
-      MatDatepickerModule,
-      MatNativeDateModule
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        MatSelect,
+        NgFor,
+        MatOption,
+        MatCheckbox,
+        MatButton,
+        AsyncPipe,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
-  providers: [
-    MatDatepickerModule,
-    {provide: DateAdapter, useClass: EuropeanNativeDateAdapter}
-  ]
+    providers: [
+        MatDatepickerModule,
+        { provide: DateAdapter, useClass: EuropeanNativeDateAdapter }
+    ]
 })
 export class AddDauerauftragComponent implements OnInit {
   buchungForm = new FormGroup({
