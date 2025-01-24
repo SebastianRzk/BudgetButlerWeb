@@ -4,6 +4,7 @@ use crate::budgetbutler::database::select::functions::keyextractors::{
     jahresweise_aggregation, monatsweise_aggregation,
 };
 use crate::budgetbutler::database::sparen::depotwert_beschreibungen::calc_depotwert_beschreibung;
+use crate::budgetbutler::pages::util::calc_jahres_selektion;
 use crate::model::database::sparbuchung::KontoReferenz;
 use crate::model::primitives::datum::{Datum, MonatsName};
 use crate::model::primitives::name::Name;
@@ -40,9 +41,7 @@ pub struct BeschriebeneOrder {
 }
 
 pub fn handle_view(context: UebersichtOrderContext) -> UebersichtOrderViewResult {
-    let selektiertes_jahr = context.angefordertes_jahr.unwrap_or(context.today.jahr);
-
-    let verfuegbare_jahre = context
+    let verfuegbare_jahre: Vec<i32> = context
         .database
         .order
         .select()
@@ -50,6 +49,12 @@ pub fn handle_view(context: UebersichtOrderContext) -> UebersichtOrderViewResult
         .iter()
         .map(|x| x.jahr)
         .collect();
+
+    let selektiertes_jahr = calc_jahres_selektion(
+        context.angefordertes_jahr,
+        &verfuegbare_jahre,
+        context.today,
+    );
 
     let buchungen_des_jahres_selektor = context
         .database

@@ -3,6 +3,7 @@ use crate::budgetbutler::database::select::functions::filters::filter_auf_das_ja
 use crate::budgetbutler::database::select::functions::keyextractors::{
     jahresweise_aggregation, monatsweise_aggregation,
 };
+use crate::budgetbutler::pages::util::calc_jahres_selektion;
 use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::datum::{Datum, MonatsName};
@@ -39,16 +40,11 @@ pub fn handle_view(
         .map(|x| x.jahr)
         .collect();
 
-    let selektiertes_jahr;
-    if let Some(jahr) = context.angefordertes_jahr {
-        selektiertes_jahr = jahr;
-    } else {
-        if let Some(jahr) = verfuegbare_jahre.last() {
-            selektiertes_jahr = jahr.clone();
-        } else {
-            selektiertes_jahr = context.today.jahr;
-        }
-    }
+    let selektiertes_jahr = calc_jahres_selektion(
+        context.angefordertes_jahr,
+        &verfuegbare_jahre,
+        context.today,
+    );
 
     let buchungen_des_jahres_selektor = context
         .database

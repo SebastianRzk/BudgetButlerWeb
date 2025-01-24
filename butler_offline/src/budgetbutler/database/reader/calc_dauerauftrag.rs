@@ -98,7 +98,6 @@ mod tests {
         assert_eq!(result[4].datum, Datum::new(31, 5, 2020));
     }
 
-
     #[test]
     fn test_calc_dauerauftrag_vierteljährlich() {
         let dauerauftrag = Dauerauftrag {
