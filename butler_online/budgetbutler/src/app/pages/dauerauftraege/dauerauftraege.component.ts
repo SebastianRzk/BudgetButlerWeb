@@ -5,14 +5,22 @@ import { DauerauftraegeService } from "../../domain/dauerauftraege.service";
 import { MatIcon } from '@angular/material/icon';
 import { DatePipe, DecimalPipe, NgIf } from '@angular/common';
 import { MatChip, MatChipListbox } from '@angular/material/chips';
-import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from '@angular/material/table';
+import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef,
+  MatRow, MatRowDef,
+  MatTable
+} from '@angular/material/table';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 
 @Component({
     selector: 'app-allebuchungen',
     templateUrl: './dauerauftraege.component.html',
     styleUrls: ['./dauerauftraege.component.css'],
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, NgIf, MatChip, MatIcon, MatHeaderRow, MatRow, DecimalPipe, DatePipe]
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, NgIf, MatChip, MatIcon, MatHeaderRow, MatRow, DecimalPipe, DatePipe, MatHeaderCellDef, MatCellDef, MatHeaderRowDef, MatRowDef]
 })
 export class DauerauftraegeComponent implements OnInit {
   displayedColumns: string[] = ['Eigenschaften', 'Aktion'];

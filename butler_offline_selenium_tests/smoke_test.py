@@ -7,19 +7,19 @@ class TestHeadlines(SeleniumTestClass):
     def test_add_dauerauftrag(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:5000/adddauerauftrag/')
-        assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == 'Neuer Dauerauftrag'
+        assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == 'Dauerauftrag hinzufügen'
         close_driver(driver)
 
     def test_add_einnahme(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:5000/addeinnahme/')
-        assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == 'Neue Einnahme'
+        assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == 'Einnahme hinzufügen'
         close_driver(driver)
 
     def test_add_ausgabe(self, get_driver, close_driver):
         driver = get_driver()
         driver.get('http://localhost:5000/addausgabe/')
-        assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == 'Neue Ausgabe'
+        assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == 'Ausgabe hinzufügen'
         close_driver(driver)
 
     def test_add_gemeinsam(self, get_driver, close_driver):

@@ -37,8 +37,8 @@ class TestUI(SeleniumTestClass):
         page_dauerauftrag_add.add('2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
         page_dauerauftrag_uebersicht.visit()
-        assert page_dauerauftrag_uebersicht.get_row(row_id=2) == {
-            'id': '2',
+        assert page_dauerauftrag_uebersicht.get_row(row_id=3) == {
+            'id': '3',
             'name': '2name',
             'kategorie': '2test_kategorie',
             'startdatum': '01.01.2012',
@@ -72,18 +72,18 @@ class TestUI(SeleniumTestClass):
 
         page_dauerauftrag_add.visit()
         page_dauerauftrag_add.add('2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe',
-                                  rhythmus='jaehrlich')
+                                  rhythmus='jährlich')
         page_dauerauftrag_add.add('2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
         page_dauerauftrag_uebersicht.visit()
 
-        page_dauerauftrag_uebersicht.click_edit_button(2)
+        page_dauerauftrag_uebersicht.click_edit_button(3)
 
         assert page_dauerauftrag_add.get_vorbelegung() == {
             'name': '2name',
             'kategorie': '2test_kategorie',
             'typ': 'Ausgabe',
-            'rhythmus': 'jaehrlich',
+            'rhythmus': 'jährlich',
             'startdatum': '2012-01-01',
             'endedatum': '2012-02-02',
             'wert': '2,00'
@@ -104,11 +104,11 @@ class TestUI(SeleniumTestClass):
         page_configuration.define_kategorie('0test_kategorie')
 
         page_dauerauftrag_add.visit()
-        page_dauerauftrag_add.add('2010-01-01', '2012-02-02', '0name', '0test_kategorie', '0.5', 'Ausgabe')
+        page_dauerauftrag_add.add('2010-01-01', '2012-02-02', '0name', '0test_kategorie', '0,5', 'Ausgabe')
 
         page_dauerauftrag_uebersicht.visit()
 
-        page_dauerauftrag_uebersicht.click_edit_button(0)
+        page_dauerauftrag_uebersicht.click_edit_button(1)
         page_dauerauftrag_add.click_split_button()
 
         assert page_dauerauftrag_split.get_vorgeschlagene_zeitstempel() == ['01.01.2010',
@@ -142,8 +142,8 @@ class TestUI(SeleniumTestClass):
         page_dauerauftrag_split.click_bestaetigen_button()
 
         page_dauerauftrag_uebersicht.visit()
-        assert page_dauerauftrag_uebersicht.get_row(row_id=0) == {
-            'id': '0',
+        assert page_dauerauftrag_uebersicht.get_row(row_id=1) == {
+            'id': '1',
             'name': '0name',
             'kategorie': '0test_kategorie',
             'startdatum': '01.01.2010',
@@ -151,8 +151,8 @@ class TestUI(SeleniumTestClass):
             'wert': '-0,50 €'
         }
 
-        assert page_dauerauftrag_uebersicht.get_row(row_id=1) == {
-            'id': '1',
+        assert page_dauerauftrag_uebersicht.get_row(row_id=2) == {
+            'id': '2',
             'name': '0name',
             'kategorie': '0test_kategorie',
             'startdatum': '01.01.2011',
@@ -187,12 +187,12 @@ class TestUI(SeleniumTestClass):
 
         page_dauerauftrag_add.visit()
         page_dauerauftrag_add.add('2012-01-01', '2012-02-02', '2name', '2test_kategorie', 2, 'Ausgabe',
-                                  rhythmus='jaehrlich')
+                                  rhythmus='jährlich')
         page_dauerauftrag_add.add('2013-01-01', '2013-02-02', '3name', '1test_kategorie', 3, 'Einnahme')
 
         page_dauerauftrag_uebersicht.visit()
 
-        page_dauerauftrag_uebersicht.click_edit_button(0)
+        page_dauerauftrag_uebersicht.click_edit_button(1)
 
         assert page_dauerauftrag_add.get_vorbelegung() == {
             'name': '0name',
@@ -219,7 +219,7 @@ class TestUI(SeleniumTestClass):
 
         page_dauerauftrag_add.visit()
         page_dauerauftrag_add.add('2010-01-31', '2010-08-02', '2name', '2test_kategorie', 2, 'Ausgabe',
-                                  rhythmus='vierteljaehrlich')
+                                  rhythmus='vierteljährlich')
 
         page_einzelbuchungen.visit()
 

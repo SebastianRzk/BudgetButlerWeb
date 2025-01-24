@@ -1,4 +1,3 @@
--r ../butler_offline/requirements.txt
 pytest-cov==2.5.0
 pyyaml>3.11
 selenium==4.7.2

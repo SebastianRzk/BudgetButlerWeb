@@ -5,16 +5,16 @@ import time
 
 class TestUI(SeleniumTestClass):
     def teste_ausgaben(self, get_driver, close_driver):
-        self._generic_test(get_driver, close_driver, 'addausgabe', 'Neue Ausgabe')
+        self._generic_test(get_driver, close_driver, 'addausgabe', 'Ausgabe hinzufügen')
 
     def teste_einnahmen(self, get_driver, close_driver):
-        self._generic_test(get_driver, close_driver, 'addeinnahme', 'Neue Einnahme')
+        self._generic_test(get_driver, close_driver, 'addeinnahme', 'Einnahme hinzufügen')
 
     def teste_dauerauftrag(self, get_driver, close_driver):
-        self._generic_test(get_driver, close_driver, 'adddauerauftrag', 'Neuer Dauerauftrag')
+        self._generic_test(get_driver, close_driver, 'adddauerauftrag', 'Dauerauftrag hinzufügen')
 
     def teste_gemeinsam(self, get_driver, close_driver):
-        self._generic_test(get_driver, close_driver, 'addgemeinsam', 'Neue gemeinsame Ausgabe')
+        self._generic_test(get_driver, close_driver, 'addgemeinsam', 'Gemeinsame Buchung hinzufügen')
 
     def _generic_test(self, get_driver, close_driver, pagename, pagetitle):
         driver = get_driver()
@@ -25,13 +25,13 @@ class TestUI(SeleniumTestClass):
 
         open_table_button = driver.find_element(By.ID, 'open_add_kategorie')
         open_table_button.click()
-        time.sleep(1)
+        time.sleep(0.1)
 
         fill_element(driver, 'neue_kategorie', 'fancy test')
 
         add_kategorie_button = driver.find_element(By.ID, 'add_kategorie')
         add_kategorie_button.click()
-        time.sleep(1)
+        time.sleep(0.1)
 
         verify_kategorie_defined(driver, 'fancy test')
         assert driver.find_element(By.ID, 'pagetitle').get_attribute('innerHTML') == pagetitle

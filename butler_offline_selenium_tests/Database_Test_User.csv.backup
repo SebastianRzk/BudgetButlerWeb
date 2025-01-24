@@ -1,0 +1,25 @@
+Datum,Kategorie,Name,Wert
+
+Dauerauftraege
+Startdatum,Endedatum,Kategorie,Name,Rhythmus,Wert
+
+Gemeinsame Buchungen
+Datum,Kategorie,Name,Wert,Person
+
+Sparbuchungen
+Datum,Name,Wert,Typ,Konto
+
+Sparkontos
+Kontoname,Kontotyp
+
+Depotwerte
+Name,ISIN,Typ
+
+Order
+Datum,Name,Konto,Depotwert,Wert,Typ
+
+Dauerauftr_Ordr
+Startdatum,Endedatum,Rhythmus,Name,Konto,Depotwert,Wert,Typ
+
+Depotauszuege
+Datum,Depotwert,Konto,Wert

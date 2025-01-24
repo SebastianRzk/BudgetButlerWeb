@@ -7,7 +7,7 @@ import {DauerauftraegeService} from "../../domain/dauerauftraege.service";
 import {GemeinsameDauerauftraegeService} from "../../domain/gemeinsame-dauerauftraege.service";
 import {MatButton} from '@angular/material/button';
 import {MatCheckbox} from '@angular/material/checkbox';
-import {DateAdapter, MatNativeDateModule, MatOption} from '@angular/material/core';
+import {MAT_DATE_LOCALE, MatNativeDateModule, MatOption, provideNativeDateAdapter} from '@angular/material/core';
 import {AsyncPipe, NgFor} from '@angular/common';
 import {MatSelect} from '@angular/material/select';
 import {
@@ -19,7 +19,6 @@ import {
 import {MatInput} from '@angular/material/input';
 import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
-import {EuropeanNativeDateAdapter} from "../../domain/date-format";
 import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
@@ -49,8 +48,11 @@ import {BreakpointObserver} from "@angular/cdk/layout";
         MatNativeDateModule
     ],
     providers: [
-        MatDatepickerModule,
-        { provide: DateAdapter, useClass: EuropeanNativeDateAdapter }
+      provideNativeDateAdapter(),
+      {
+        provide: MAT_DATE_LOCALE,
+        useValue: 'de-DE'
+      }
     ]
 })
 export class AddDauerauftragComponent implements OnInit {

@@ -90,11 +90,12 @@ impl Betrag {
         let euro_as_string = slitted.next().unwrap();
         let cent_as_string = slitted.next().unwrap();
 
-        Betrag::new(
-            vorzeichen,
-            parse_number_str(euro_as_string),
-            parse_number_str(cent_as_string) as u8,
-        )
+        let mut cent = parse_number_str(cent_as_string) as u8;
+        if cent_as_string.len() == 1 {
+            cent *= 10;
+        }
+
+        Betrag::new(vorzeichen, parse_number_str(euro_as_string), cent)
     }
 
     pub fn from_user_input(user_input_string: &String) -> Betrag {
@@ -583,6 +584,14 @@ mod tests {
         assert_eq!(a.cmp(&b), Ordering::Greater);
         assert_eq!(a.cmp(&a), Ordering::Equal);
         assert_eq!(b.cmp(&a), Ordering::Less);
+    }
+
+    #[test]
+    fn test_betrag_from_iso_string() {
+        assert_eq!(Betrag::from_iso_string(&"0.50".to_string()).as_cent(), 50);
+        assert_eq!(Betrag::from_iso_string(&"0.5".to_string()).as_cent(), 50);
+        assert_eq!(Betrag::from_iso_string(&"1.23".to_string()).as_cent(), 123);
+        assert_eq!(Betrag::from_iso_string(&"0.01".to_string()).as_cent(), 1);
     }
 
     #[test]
