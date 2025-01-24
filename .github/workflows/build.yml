@@ -15,14 +15,19 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
       - run: cargo test
         working-directory: ./butler_offline
-
-  # Check formatting with rustfmt
+  butler-offline-assembly:
+    name: offline asselmby
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: sh ./build.sh
+        working-directory: .
   butler-offline-formatting:
     name: offline cargo fmt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # Ensure rustfmt is installed and setup problem matcher
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt
@@ -89,13 +94,11 @@ jobs:
         name: execute tests
         run: |
           docker build -f Dockerfile.api .
-  # Check formatting with rustfmt
   butler_online_api_formatting:
     name: online api cargo fmt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # Ensure rustfmt is installed and setup problem matcher
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt

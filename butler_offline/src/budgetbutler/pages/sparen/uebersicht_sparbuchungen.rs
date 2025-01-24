@@ -3,6 +3,7 @@ use crate::budgetbutler::database::select::functions::filters::filter_auf_das_ja
 use crate::budgetbutler::database::select::functions::keyextractors::{
     jahresweise_aggregation, monatsweise_aggregation,
 };
+use crate::budgetbutler::pages::util::calc_jahres_selektion;
 use crate::model::database::sparbuchung::Sparbuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::datum::{Datum, MonatsName};
@@ -28,8 +29,6 @@ pub struct MonatsZusammenfassung {
 }
 
 pub fn handle_view(context: UebersichtSparbuchungenContext) -> UebersichtSparbuchungenViewResult {
-    let selektiertes_jahr = context.angefordertes_jahr.unwrap_or(context.today.jahr);
-
     let verfuegbare_jahre = context
         .database
         .sparbuchungen
@@ -38,6 +37,12 @@ pub fn handle_view(context: UebersichtSparbuchungenContext) -> UebersichtSparbuc
         .iter()
         .map(|x| x.jahr)
         .collect();
+
+    let selektiertes_jahr = calc_jahres_selektion(
+        context.angefordertes_jahr,
+        &verfuegbare_jahre,
+        context.today.clone(),
+    );
 
     let buchungen_des_jahres_selektor = context
         .database
