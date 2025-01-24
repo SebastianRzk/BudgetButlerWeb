@@ -6,7 +6,6 @@ use chrono::{Datelike, Local};
 #[cfg(feature = "integration_test")]
 use chrono::Local;
 
-
 #[cfg(feature = "default")]
 pub fn today() -> Datum {
     let time = Local::now();
