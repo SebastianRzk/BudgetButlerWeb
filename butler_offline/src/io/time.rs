@@ -1,5 +1,5 @@
 use crate::model::primitives::datum::Datum;
-use chrono::{Local};
+use chrono::Local;
 
 #[cfg(not(feature = "integration_test"))]
 pub fn today() -> Datum {
