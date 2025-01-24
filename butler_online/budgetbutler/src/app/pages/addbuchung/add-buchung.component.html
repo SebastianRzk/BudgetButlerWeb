@@ -7,8 +7,8 @@
       <mat-form-field class="full-size-form-field">
         <mat-label>Datum der Ausgabe</mat-label>
         <input [matDatepicker]="picker" formControlName="datum" matInput required>
-        <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-        <mat-datepicker #picker [touchUi]="isSmallScreen"></mat-datepicker>
+        <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
+        <mat-datepicker #picker [touchUi]="isSmallScreen" (change)="console.log($event)"></mat-datepicker>
       </mat-form-field>
       <mat-form-field class="full-size-form-field">
         <mat-label>Name der Ausgabe</mat-label>

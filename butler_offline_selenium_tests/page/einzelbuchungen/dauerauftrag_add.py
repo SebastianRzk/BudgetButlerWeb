@@ -11,8 +11,8 @@ class DauerauftragAdd:
         self.driver.get('http://localhost:5000/adddauerauftrag/')
 
     def add(self, startdatum, endedatum, name, kategorie, wert, typ, rhythmus='monatlich'):
-        fill_element(self.driver, 'startdatum', startdatum)
-        fill_element(self.driver, 'endedatum', endedatum)
+        fill_element(self.driver, 'start_datum', startdatum)
+        fill_element(self.driver, 'ende_datum', endedatum)
         fill_element(self.driver, 'name', name)
         fill_element(self.driver, 'wert', wert)
         select_option(self.driver, 'kategorie_auswahl', kategorie)
@@ -26,8 +26,8 @@ class DauerauftragAdd:
             'kategorie': get_selected_option(self.driver, 'kategorie_auswahl'),
             'typ': get_selected_option(self.driver, 'typ_auswahl'),
             'rhythmus': get_selected_option(self.driver, 'rhythmus_auswahl'),
-            'startdatum': self.driver.find_element(By.NAME, 'startdatum').get_attribute('value'),
-            'endedatum': self.driver.find_element(By.NAME, 'endedatum').get_attribute('value'),
+            'startdatum': self.driver.find_element(By.NAME, 'start_datum').get_attribute('value'),
+            'endedatum': self.driver.find_element(By.NAME, 'ende_datum').get_attribute('value'),
             'wert': self.driver.find_element(By.NAME, 'wert').get_attribute('value')
         }
 

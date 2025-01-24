@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+import shutil
 
 
 def content_of(driver, element_id):
@@ -7,7 +8,8 @@ def content_of(driver, element_id):
 
 
 def enter_test_mode(driver):
-    driver.get('http://localhost:5000/production/testmode')
+    shutil.copyfile('./Database_Test_User.csv.backup', '../data/Database_Test_User.csv')
+    driver.get('http://localhost:5000/reload_database/')
 
 
 def fill_element(driver, elementname, content):

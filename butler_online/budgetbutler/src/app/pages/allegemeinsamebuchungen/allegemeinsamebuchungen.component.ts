@@ -5,14 +5,22 @@ import { GemeinsameBuchung } from '../../domain/model';
 import { DatePipe, DecimalPipe, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatChip, MatChipAvatar, MatChipListbox } from '@angular/material/chips';
-import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from '@angular/material/table';
+import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef,
+  MatRow, MatRowDef,
+  MatTable
+} from '@angular/material/table';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 
 @Component({
   selector: 'app-allegemeinsamebuchungen',
   templateUrl: './allegemeinsamebuchungen.component.html',
   styleUrls: ['./allegemeinsamebuchungen.component.css'],
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, MatChip, MatIcon, MatChipAvatar, NgIf, MatHeaderRow, MatRow, DecimalPipe, DatePipe]
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, MatChip, MatIcon, MatChipAvatar, NgIf, MatHeaderRow, MatRow, DecimalPipe, DatePipe, MatHeaderCellDef, MatCellDef, MatHeaderRowDef, MatRowDef]
 })
 export class AllegemeinsamebuchungenComponent implements OnInit {
   private gemeinsameBuchungenService: GemeinsamebuchungService = inject(GemeinsamebuchungService);

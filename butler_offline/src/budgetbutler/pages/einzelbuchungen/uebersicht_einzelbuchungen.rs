@@ -30,9 +30,7 @@ pub struct MonatsZusammenfassung {
 pub fn handle_view(
     context: UebersichtEinzelbuchungenContext,
 ) -> UebersichtEinzelbuchungenViewResult {
-    let selektiertes_jahr = context.angefordertes_jahr.unwrap_or(context.today.jahr);
-
-    let verfuegbare_jahre = context
+    let verfuegbare_jahre: Vec<i32> = context
         .database
         .einzelbuchungen
         .select()
@@ -40,6 +38,17 @@ pub fn handle_view(
         .iter()
         .map(|x| x.jahr)
         .collect();
+
+    let selektiertes_jahr;
+    if let Some(jahr) = context.angefordertes_jahr {
+        selektiertes_jahr = jahr;
+    } else {
+        if let Some(jahr) = verfuegbare_jahre.last() {
+            selektiertes_jahr = jahr.clone();
+        } else {
+            selektiertes_jahr = context.today.jahr;
+        }
+    }
 
     let buchungen_des_jahres_selektor = context
         .database
@@ -81,6 +90,7 @@ mod tests {
     };
     use crate::model::database::einzelbuchung::builder::demo_einzelbuchung;
     use crate::model::database::einzelbuchung::Einzelbuchung;
+    use crate::model::initial_config::database::generate_initial_database;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;
@@ -89,7 +99,7 @@ mod tests {
 
     #[test]
     fn test_handle_view_with_no_datum_angefordert_should_select_dieses_jahr() {
-        let database = generate_database_with_einzelbuchungen(vec![demo_einzelbuchung()]);
+        let database = generate_initial_database();
         let context = UebersichtEinzelbuchungenContext {
             database: &database,
             angefordertes_jahr: None,
@@ -98,6 +108,19 @@ mod tests {
         let result = handle_view(context);
 
         assert_eq!(result.selektiertes_jahr, 2020);
+    }
+
+    #[test]
+    fn test_handle_view_with_no_datum_angefordert_should_select_jahr_of_buchung() {
+        let database = generate_database_with_einzelbuchungen(vec![demo_einzelbuchung()]);
+        let context = UebersichtEinzelbuchungenContext {
+            database: &database,
+            angefordertes_jahr: None,
+            today: Datum::new(1, 1, 2099),
+        };
+        let result = handle_view(context);
+
+        assert_eq!(result.selektiertes_jahr, demo_einzelbuchung().datum.jahr);
     }
 
     #[test]
