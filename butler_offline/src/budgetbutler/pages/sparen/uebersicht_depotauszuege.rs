@@ -1,6 +1,7 @@
 use crate::budgetbutler::database::select::extensions::depotauszug_extension::Depotuebersicht;
 use crate::budgetbutler::database::select::functions::filters::filter_auf_das_jahr;
 use crate::budgetbutler::database::select::functions::keyextractors::jahresweise_aggregation;
+use crate::budgetbutler::pages::util::calc_jahres_selektion;
 use crate::model::primitives::datum::Datum;
 use crate::model::state::persistent_application_state::Database;
 use crate::model::state::persistent_state::database_version::DatabaseVersion;
@@ -30,16 +31,19 @@ pub fn handle_uebersicht_depotauszuege(
         .map(|x| x.jahr)
         .collect();
 
+    let selektiertes_jahr = calc_jahres_selektion(
+        context.angefordertes_jahr,
+        &verfuegbare_jahre,
+        context.today.clone(),
+    );
     UebersichtDepotauszuegeViewResult {
-        selektiertes_jahr: context.angefordertes_jahr.unwrap_or(context.today.jahr),
+        selektiertes_jahr,
         verfuegbare_jahre,
         konten: context
             .database
             .depotauszuege
             .select()
-            .filter(filter_auf_das_jahr(
-                context.angefordertes_jahr.unwrap_or(context.today.jahr),
-            ))
+            .filter(filter_auf_das_jahr(selektiertes_jahr))
             .get_kombinierte_depotauszuege(),
         database_version: context.database.db_version.clone(),
     }

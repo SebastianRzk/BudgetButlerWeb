@@ -30,7 +30,7 @@ class TestUI(SeleniumTestClass):
 
         page_order_uebersicht.visit()
 
-        assert page_order_uebersicht.get(0) == {
+        assert page_order_uebersicht.get(3) == {
             'datum': '01.01.2020',
             'name': 'testname',
             'depotwert': 'Testdepotwert (ISINDEMO)',

@@ -6,10 +6,10 @@ class DepotAdd:
         self.driver = driver
 
     def visit(self):
-        self.driver.get('http://localhost:5000/add_sparkonto/')
+        self.driver.get('http://localhost:5000/add_konto/')
 
     def add(self, name, typ='Depot'):
-        fill_element(self.driver, 'kontoname', name)
+        fill_element(self.driver, 'name', name)
         select_option(self.driver, 'typ_auswahl', typ)
 
         click_add_button(self.driver)
