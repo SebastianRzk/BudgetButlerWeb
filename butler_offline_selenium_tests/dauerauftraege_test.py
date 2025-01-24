@@ -225,7 +225,7 @@ class TestUI(SeleniumTestClass):
 
         page_einzelbuchungen.open_module(year=2010, month=1)
 
-        assert page_einzelbuchungen.get_item_in_opened_module(0) == {
+        assert page_einzelbuchungen.get_item_in_opened_module(3) == {
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '31.01.2010',
@@ -234,7 +234,7 @@ class TestUI(SeleniumTestClass):
 
         page_einzelbuchungen.open_module(year=2010, month=4)
 
-        assert page_einzelbuchungen.get_item_in_opened_module(1) == {
+        assert page_einzelbuchungen.get_item_in_opened_module(4) == {
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '30.04.2010',
@@ -242,7 +242,7 @@ class TestUI(SeleniumTestClass):
         }
         page_einzelbuchungen.open_module(year=2010, month=7)
 
-        assert page_einzelbuchungen.get_item_in_opened_module(2) == {
+        assert page_einzelbuchungen.get_item_in_opened_module(5) == {
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '31.07.2010',

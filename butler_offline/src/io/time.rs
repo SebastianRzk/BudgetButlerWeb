@@ -1,12 +1,12 @@
 use crate::model::primitives::datum::Datum;
 
-#[cfg(feature = "default")]
+#[cfg(not(feature = "integration_test"))]
 use chrono::{Datelike, Local};
 
 #[cfg(feature = "integration_test")]
 use chrono::Local;
 
-#[cfg(feature = "default")]
+#[cfg(not(feature = "integration_test"))]
 pub fn today() -> Datum {
     let time = Local::now();
     Datum::new(time.day(), time.month(), time.year())

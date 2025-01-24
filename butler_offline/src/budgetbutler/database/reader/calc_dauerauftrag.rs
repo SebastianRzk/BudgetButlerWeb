@@ -10,6 +10,7 @@ pub fn calc_dauerauftrag(dauerauftrag: &Dauerauftrag, heute: Datum) -> Vec<Einze
     let mut lauf_datum = dauerauftrag.start_datum.clone();
     let ende_datum = min(dauerauftrag.ende_datum.clone(), heute);
     let mut buchungen: Vec<Einzelbuchung> = Vec::new();
+    let mut monatsdelta = 0;
     while lauf_datum < ende_datum {
         let einzelbuchung = Einzelbuchung {
             datum: lauf_datum.clone(),
@@ -18,8 +19,8 @@ pub fn calc_dauerauftrag(dauerauftrag: &Dauerauftrag, heute: Datum) -> Vec<Einze
             betrag: dauerauftrag.betrag.clone(),
         };
         buchungen.push(einzelbuchung);
-
-        lauf_datum = lauf_datum.add_months(get_monatsdelta_for_rhythmus(dauerauftrag.rhythmus));
+        monatsdelta += get_monatsdelta_for_rhythmus(dauerauftrag.rhythmus);
+        lauf_datum = dauerauftrag.start_datum.clone().add_months(monatsdelta);
     }
     buchungen
 }
@@ -75,6 +76,28 @@ mod tests {
         assert_eq!(result[1].datum, Datum::new(1, 2, 2020));
         assert_eq!(result[2].datum, Datum::new(1, 3, 2020));
     }
+
+    #[test]
+    fn test_calc_dauerauftrag_monatlich_should_clamp_last_of_month() {
+        let dauerauftrag = Dauerauftrag {
+            start_datum: Datum::new(31, 1, 2020),
+            ende_datum: Datum::new(1, 6, 2020),
+            name: name("Normal"),
+            kategorie: kategorie("NeueKategorie"),
+            betrag: Betrag::new(Vorzeichen::Negativ, 123, 12),
+            rhythmus: Rhythmus::Monatlich,
+        };
+
+        let result = calc_dauerauftrag(&dauerauftrag, Datum::new(1, 3, 2024));
+
+        assert_eq!(result.len(), 5);
+        assert_eq!(result[0].datum, Datum::new(31, 1, 2020));
+        assert_eq!(result[1].datum, Datum::new(28, 2, 2020));
+        assert_eq!(result[2].datum, Datum::new(31, 3, 2020));
+        assert_eq!(result[3].datum, Datum::new(30, 4, 2020));
+        assert_eq!(result[4].datum, Datum::new(31, 5, 2020));
+    }
+
 
     #[test]
     fn test_calc_dauerauftrag_vierteljährlich() {
