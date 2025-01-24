@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
-      - run: sh build.sh
+      - run: bash build.sh
         working-directory: .
   butler-offline-formatting:
     name: offline cargo fmt
