@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Begleiter Web-App
 
 ## Menu

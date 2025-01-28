@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Offline Anwendung: BudgetButlerWeb
 
 ## Menu

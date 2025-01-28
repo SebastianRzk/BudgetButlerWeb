@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # BudgetButlerWeb
 
 ![GithubCI Build and Test](https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/build.yml/badge.svg?branch=master)
@@ -86,29 +90,59 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 #### Einzelbuchungen
 
+##### Übersicht Einzelbuchungen
 ![Übersicht Einzelbuchungen](img/screenshots_desktop/uebersicht_einzelbuchungen.png)
+
+##### Daueraufträge hinzufügen
 ![Daueraufträge hinzufügen](img/screenshots_desktop/dauerauftraege_add.png)
+
+##### Übersicht Daueraufträge
 ![Übersicht Daueraufträge](img/screenshots_desktop/uebersicht_dauerauftraege.png)
+
+##### Jahresübersicht
 ![Übersicht Jahr](img/screenshots_desktop/uebersicht_jahr.png)
+
+##### Monatsübersicht
 ![Übersicht Monat](img/screenshots_desktop/uebersicht_monat.png)
 
 #### Gemeinsame Buchungen
 
+##### Gemeinsame Buchungen hinzufügen
 ![Gemeinsame Buchungen hinzufügen](img/screenshots_desktop/add_gemeinsam.png)
+
+##### Gemeinsame Buchungen abrechnen
 ![Gemeinsame Buchungen abrechnen](img/screenshots_desktop/gemeinsam_abrechnen.png)
 
 #### Sparen
 
+##### Sparen Übersicht
 ![Sparen Übersicht](img/screenshots_desktop/sparen_uebersicht.png)
+
+##### Depotwerte Übersicht
 ![Depotwerte Übersicht](img/screenshots_desktop/sparen_uebersicht_depotwerte.png)
+
+##### ETF Übersicht
 ![ETFs Übersicht](img/screenshots_desktop/sparen_uebersicht_etfs.png)
 
 ### Screenshots Begleiter Web-App
 
+#### Menu
 ![Menü](img/screenshots_mobile/menu.png)
+
+#### Schnellerfassung
 ![Erfassen](img/screenshots_mobile/erfassen.png)
+
+#### Übersicht gemeinsame Buchungen
 ![Gemeinsam](img/screenshots_mobile/gemeinsam.png)
+
+#### Übersicht gemeinsame Buchungen
 ![Einzel](img/screenshots_mobile/einzel.png)
+
+#### Dauerauftrag erfassen
 ![Erfassen Dauerauftrag](img/screenshots_mobile/erfassen_dauerauftrag.png)
+
+#### Übersicht Daueraufträge
 ![Übersicht Dauerauftrag](img/screenshots_mobile/uebersicht_dauerauftrag.png)
+
+#### Buchungen erfassen in Desktop-Ansicht
 ![Erfassen Desktop](img/screenshots_mobile/erfassen_desktop.png)
