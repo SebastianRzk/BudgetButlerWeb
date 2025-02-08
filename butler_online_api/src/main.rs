@@ -50,9 +50,9 @@ mod openidconnect_configuration;
 mod partner;
 mod result_dto;
 mod schema;
+mod uebersicht;
 mod user;
 mod wiederkehrend;
-mod uebersicht;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -132,7 +132,9 @@ async fn main() -> std::io::Result<()> {
                     .service(get_gemeinsame_dauerauftraege)
                     .service(delete_gemeinsamer_dauerauftrag)
                     .service(uebersicht::input_http::endpoints::get_einzelbuchungen_uebersicht)
-                    .service(uebersicht::input_http::endpoints::get_gemeinsame_buchungen_uebersicht),
+                    .service(
+                        uebersicht::input_http::endpoints::get_gemeinsame_buchungen_uebersicht,
+                    ),
             )
             .service(health_status)
     })

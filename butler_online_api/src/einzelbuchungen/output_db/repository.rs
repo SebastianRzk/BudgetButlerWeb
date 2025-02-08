@@ -9,8 +9,6 @@ use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};
 use crate::einzelbuchungen::output_db::entities::EinzelbuchungEntity;
 use crate::schema::einzelbuchungen;
 
-
-
 pub fn find_all_einzelbuchungen(
     conn: &mut MysqlConnection,
     user_name: String,

@@ -1,8 +1,8 @@
+use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};
 use bigdecimal::BigDecimal;
 use serde::{Deserialize, Serialize};
-use time::Date;
 use time::macros::format_description;
-use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};
+use time::Date;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NeueEinzelbuchungDto {
@@ -11,7 +11,6 @@ pub struct NeueEinzelbuchungDto {
     pub datum: String,
     pub wert: BigDecimal,
 }
-
 
 impl NeueEinzelbuchungDto {
     pub fn to_domain(&self, user: String) -> NeueEinzelbuchung {
@@ -23,12 +22,11 @@ impl NeueEinzelbuchungDto {
                 self.datum.as_str(),
                 format_description!("[year]-[month]-[day]"),
             )
-                .unwrap(),
+            .unwrap(),
             user,
         }
     }
 }
-
 
 #[derive(Debug, Clone, Serialize)]
 pub struct EinzelbuchungDto {
@@ -39,8 +37,6 @@ pub struct EinzelbuchungDto {
     pub datum: String,
     pub user: String,
 }
-
-
 
 impl Einzelbuchung {
     pub fn to_dto(&self) -> EinzelbuchungDto {

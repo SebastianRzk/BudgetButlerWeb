@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {
   Einzelbuchung,
   EinzelbuchungAnlegen,
@@ -7,13 +7,13 @@ import {
   ERROR_RESULT,
   Result
 } from './model';
-import { HttpClient } from '@angular/common/http';
-import { ApiProviderService } from './api-provider.service';
-import { NotificationService } from './notification.service';
-import { toEinzelbuchung, toEinzelbuchungAnlegenTO } from './mapper';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { EinzelbuchungTO } from './modelTo';
-import { map } from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {ApiProviderService} from './api-provider.service';
+import {NotificationService} from './notification.service';
+import {toEinzelbuchung, toEinzelbuchungAnlegenTO} from './mapper';
+import {BehaviorSubject} from 'rxjs';
+import {EinzelbuchungTO} from './modelTo';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

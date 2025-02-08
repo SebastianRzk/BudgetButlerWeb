@@ -18,4 +18,3 @@ pub struct Einzelbuchung {
     pub datum: Date,
     pub user: String,
 }
-

@@ -24,8 +24,6 @@ pub async fn get_einzelbuchungen_uebersicht(
     Ok(HttpResponse::Ok().json(uebersicht.to_dto()))
 }
 
-
-
 #[get("/gemeinsame_buchungen_uebersicht")]
 pub async fn get_gemeinsame_buchungen_uebersicht(
     pool: web::Data<DbPool>,
@@ -36,8 +34,8 @@ pub async fn get_gemeinsame_buchungen_uebersicht(
         let mut conn = pool.get()?;
         output_db::find_all_gemeinsame_buchungen(&mut conn, user)
     })
-        .await?
-        .map_err(error::ErrorInternalServerError)?;
+    .await?
+    .map_err(error::ErrorInternalServerError)?;
 
     let uebersicht = berechne_uebersicht(&buchungen);
 

@@ -1,9 +1,9 @@
+use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};
+use crate::schema::einzelbuchungen;
 use bigdecimal::BigDecimal;
 use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 use time::Date;
-use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};
-use crate::schema::einzelbuchungen;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Queryable, Insertable)]
 #[diesel(table_name = einzelbuchungen)]
