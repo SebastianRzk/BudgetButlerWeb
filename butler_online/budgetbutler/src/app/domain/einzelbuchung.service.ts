@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiProviderService } from './api-provider.service';
 import { NotificationService } from './notification.service';
 import { toEinzelbuchung, toEinzelbuchungAnlegenTO } from './mapper';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { EinzelbuchungTO } from './modelTo';
 import { map } from 'rxjs/operators';
 

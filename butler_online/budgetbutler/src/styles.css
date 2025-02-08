@@ -40,6 +40,11 @@ app-root {
   background-color: #f1f1f1;
 }
 
+.wide {
+  width: 100%;
+  max-width: 80rem;
+}
+
 mat-sidenav-container {
   background-color: #f1f1f1 !important;
   width: 100vw;
@@ -50,14 +55,8 @@ mat-sidenav-container {
     display: none;
   }
 
-  .erfassung {
+  .content-wrapper {
     max-width: 40rem;
-    margin: 2ex;
-  }
-
-  .wide {
-    width: 100%;
-    max-width: 80rem;
     margin: 2ex;
   }
 }
@@ -67,11 +66,7 @@ mat-sidenav-container {
     display: none;
   }
 
-  .erfassung {
-    margin: 2ex;
-  }
-
-  .wide {
+  .content-wrapper {
     margin: 1ex;
   }
 
@@ -94,3 +89,12 @@ mat-sidenav-container {
 mat-card-header {
   margin-bottom: 2ex;
 }
+
+dl { width: 100%; }
+dt, dd {
+  display: inline-block;
+  width: 50%;
+  margin: 0;
+}
+dt { float: left; }
+dd { float: right; }

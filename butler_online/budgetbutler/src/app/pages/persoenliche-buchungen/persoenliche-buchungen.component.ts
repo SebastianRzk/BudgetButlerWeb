@@ -17,12 +17,12 @@ import {
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 
 @Component({
-  selector: 'app-allebuchungen',
-  templateUrl: './allebuchungen.component.html',
-  styleUrls: ['./allebuchungen.component.css'],
+  selector: 'app-persoenliche-buchungen',
+  templateUrl: './persoenliche-buchungen.component.html',
+  styleUrls: ['./persoenliche-buchungen.component.css'],
   imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, MatChip, MatIcon, MatHeaderRow, MatRow, DecimalPipe, DatePipe, MatHeaderCellDef, MatCellDef, MatHeaderRowDef, MatRowDef]
 })
-export class AllebuchungenComponent implements OnInit {
+export class PersoenlicheBuchungenComponent implements OnInit {
   private einzelbuchungService: EinzelbuchungService = inject(EinzelbuchungService);
   displayedColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];
   einzelbuchungen$: Observable<Einzelbuchung[]> = this.einzelbuchungService.einzelbuchungen$;

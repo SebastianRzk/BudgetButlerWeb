@@ -132,6 +132,10 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 #### Schnellerfassung
 ![Erfassen](img/screenshots_mobile/erfassen.png)
 
+#### Ausgabe in kleinere Buchungen aufteilen
+
+![Aufteilen](img/screenshots_mobile/erfassen_teilen.png)
+
 #### Übersicht gemeinsame Buchungen
 ![Gemeinsam](img/screenshots_mobile/gemeinsam.png)
 

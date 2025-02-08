@@ -1,3 +1,13 @@
+export interface BuchungsUebersichtTO {
+  monate: BuchungsUebersichtMonatTO[];
+}
+
+export interface BuchungsUebersichtMonatTO {
+  name: string;
+  werte: Record<string, number>
+}
+
+
 export interface EinzelbuchungTO {
   id: string;
   name: string;

@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {EinzelbuchungService} from '../../domain/einzelbuchung.service';
-import {Observable} from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {Kategorie, KategorieService} from '../../domain/kategorie.service';
 import {EinzelbuchungAnlegen, GemeinsameBuchungAnlegen} from '../../domain/model';
 import {GemeinsamebuchungService} from '../../domain/gemeinsamebuchung.service';
@@ -15,6 +15,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {BreakpointObserver} from "@angular/cdk/layout";
+import { BuchungEvent, ErweiterteBuchungComponent } from "./erweiterte-buchung/erweiterte-buchung.component";
 
 @Component({
   selector: 'app-addschnelleinstieg',
@@ -30,7 +31,8 @@ import {BreakpointObserver} from "@angular/cdk/layout";
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    ErweiterteBuchungComponent
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -47,6 +49,9 @@ export class AddBuchungComponent implements OnInit {
 
   isSmallScreen = inject(BreakpointObserver).isMatched('(max-width: 799px)');
 
+  private istErweiterteBuchung: Subject<boolean> = new BehaviorSubject(false);
+  public istErweiterteBuchung$: Observable<boolean> = this.istErweiterteBuchung.asObservable();
+
   buchungForm = new FormGroup({
     datum: new FormControl(new Date(), Validators.required),
     name: new FormControl('', Validators.required),
@@ -59,6 +64,7 @@ export class AddBuchungComponent implements OnInit {
 
 
   ngOnInit() {
+    this.istErweiterteBuchung.next(false);
     this.kategorieService.refresh();
     this.buchungForm.reset(
       {
@@ -73,31 +79,58 @@ export class AddBuchungComponent implements OnInit {
       return;
     }
 
-    if (this.buchungForm.get('gemeinsameBuchung')!.value) {
+    const isGemeinsam = this.buchungForm.get('gemeinsameBuchung')!.value;
+    const name = this.buchungForm.get('name')!.value!;
+    const datum = this.buchungForm.get('datum')!.value!;
+    const kategorie = this.buchungForm.get('kategorie')!.value!;
+    const rawValue = this.buchungForm.get('wert')!.value!;
+    this.saveBuchung(isGemeinsam!, name, datum, kategorie, rawValue);
+    this.resetForm();
+  }
+
+
+  private saveBuchung(isGemeinsam: boolean, name: string, datum: Date, kategorie: string, rawValue: number) {
+    if (isGemeinsam) {
       const neueBuchung: GemeinsameBuchungAnlegen = {
-        name: this.buchungForm.get('name')!.value!,
-        datum: this.buchungForm.get('datum')!.value!,
-        kategorie: this.buchungForm.get('kategorie')!.value!,
-        wert: this.buchungForm.get('wert')!.value! * -1,
+        name: name,
+        datum: datum,
+        kategorie: kategorie,
+        wert: rawValue * -1,
         eigeneBuchung: true
       };
       this.gemeinsameBuchungenService.save(neueBuchung);
     } else {
       const neueBuchung: EinzelbuchungAnlegen = {
-        name: this.buchungForm.get('name')!.value!,
-        datum: this.buchungForm.get('datum')!.value!,
-        kategorie: this.buchungForm.get('kategorie')!.value!,
-        wert: this.buchungForm.get('wert')!.value! * -1
+        name: name,
+        datum: datum,
+        kategorie: kategorie,
+        wert: rawValue * -1
       };
       this.einzelbuchungsService.save(neueBuchung);
     }
+  }
+
+  private resetForm() {
     this.buchungForm.reset(
       {
         datum: new Date(),
         gemeinsameBuchung: this.buchungForm.get('gemeinsameBuchung')!.value
       });
     this.buchungForm.markAsUntouched();
+    this.istErweiterteBuchung.next(false)
   }
 
-  protected readonly console = console;
+  onConsumeSubBuchung(buchungen: BuchungEvent[]){
+    for (const buchung of buchungen) {
+      this.saveBuchung(buchung.gemeinsam, buchung.name, buchung.datum, buchung.kategorie, buchung.betrag);
+    }
+    this.resetForm();
+  }
+
+  onTeilenClick(){
+    if (!this.buchungForm.valid) {
+      return;
+    }
+    this.istErweiterteBuchung.next(true);
+  }
 }

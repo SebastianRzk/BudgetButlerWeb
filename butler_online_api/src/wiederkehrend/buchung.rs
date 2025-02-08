@@ -1,10 +1,11 @@
 use crate::dauerauftraege::model::Dauerauftrag;
 use crate::einzelbuchungen::model::NeueEinzelbuchung;
-use crate::{dauerauftraege, einzelbuchungen};
+use crate::dauerauftraege;
 use chrono::Local;
 use diesel::r2d2::{ConnectionManager, PooledConnection};
 use diesel::MysqlConnection;
 use std::time::SystemTime;
+use crate::einzelbuchungen::output_db;
 
 pub fn verarbeite_dauerauftraege(
     mut connection: &mut PooledConnection<ConnectionManager<MysqlConnection>>,
@@ -47,7 +48,7 @@ pub fn verarbeite_dauerauftrag(
             wert: dauerauftrag.wert.clone(),
             kategorie: dauerauftrag.kategorie.clone(),
         };
-        einzelbuchungen::output_db::insert_new_einzelbuchung(&mut connection, neue_buchung)
+        output_db::repository::insert_new_einzelbuchung(&mut connection, neue_buchung)
             .unwrap();
         dauerauftraege::output_db::update_letzte_ausfuehrung(
             &mut connection,

@@ -86,3 +86,19 @@ jobs:
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+      -
+        name: Build and push desktop app arm64
+        id: docker_build_bb_desktopapp-arm64
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile.desktopapp
+          platforms: linux/arm64
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/budgetbutlerweb-desktopapp:latest-arm64
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+      -
+        name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}

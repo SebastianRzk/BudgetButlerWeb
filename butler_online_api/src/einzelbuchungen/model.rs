@@ -1,4 +1,5 @@
 use bigdecimal::BigDecimal;
+use std::collections::HashMap;
 use time::Date;
 
 pub struct NeueEinzelbuchung {
@@ -17,3 +18,4 @@ pub struct Einzelbuchung {
     pub datum: Date,
     pub user: String,
 }
+
