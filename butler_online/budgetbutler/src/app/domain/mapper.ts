@@ -1,16 +1,24 @@
 import {
+  BuchungsUebersicht,
   Dauerauftrag,
-  DauerauftragAnlegen, Einzelbuchung,
+  DauerauftragAnlegen,
+  Einzelbuchung,
   EinzelbuchungAnlegen,
   GemeinsameBuchung,
-  GemeinsameBuchungAnlegen, GemeinsamerDauerauftrag,
+  GemeinsameBuchungAnlegen,
+  GemeinsamerDauerauftrag,
   GemeinsamerDauerauftragAnlegen
 } from './model';
 import {
-  DauerauftragAnlegenTO, DauerauftragTO,
-  EinzelbuchungAnlegenTO, EinzelbuchungTO,
+  BuchungsUebersichtTO,
+  DauerauftragAnlegenTO,
+  DauerauftragTO,
+  EinzelbuchungAnlegenTO,
+  EinzelbuchungTO,
   GemeinsameBuchungAnlegenTO,
-  GemeinsameBuchungTO, GemeinsamerDauerauftragAnlegenTO, GemeinsamerDauerauftragTO
+  GemeinsameBuchungTO,
+  GemeinsamerDauerauftragAnlegenTO,
+  GemeinsamerDauerauftragTO
 } from './modelTo';
 
 const toISOFormat = (datum: Date) => [
@@ -106,5 +114,11 @@ export const toEinzelbuchung = (einzelbuchungTo: EinzelbuchungTO): Einzelbuchung
     name: einzelbuchungTo.name,
     kategorie: einzelbuchungTo.kategorie,
     wert: einzelbuchungTo.wert,
+  }
+}
+
+export const toBuchungsUebersicht = (buchungsUebersichtTO: BuchungsUebersichtTO): BuchungsUebersicht => {
+  return {
+    monate: buchungsUebersichtTO.monate
   }
 }

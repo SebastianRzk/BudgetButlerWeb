@@ -17,12 +17,12 @@ import {
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 
 @Component({
-  selector: 'app-allegemeinsamebuchungen',
-  templateUrl: './allegemeinsamebuchungen.component.html',
-  styleUrls: ['./allegemeinsamebuchungen.component.css'],
+  selector: 'app-gemeinsame-buchungen',
+  templateUrl: './gemeinsame-buchungen.component.html',
+  styleUrls: ['./gemeinsame-buchungen.component.css'],
   imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, MatChip, MatIcon, MatChipAvatar, NgIf, MatHeaderRow, MatRow, DecimalPipe, DatePipe, MatHeaderCellDef, MatCellDef, MatHeaderRowDef, MatRowDef]
 })
-export class AllegemeinsamebuchungenComponent implements OnInit {
+export class GemeinsameBuchungenComponent implements OnInit {
   private gemeinsameBuchungenService: GemeinsamebuchungService = inject(GemeinsamebuchungService);
 
   displayedColumns: string[] = ['Datum', 'Eigenschaften', 'Aktion'];

@@ -1,9 +1,6 @@
 extern crate diesel;
 
-use crate::einzelbuchungen::input_http::add_einzelbuchung;
-use crate::einzelbuchungen::input_http::delete_einzelbuchung;
-use crate::einzelbuchungen::input_http::delete_einzelbuchungen;
-use crate::einzelbuchungen::input_http::get_einzelbuchungen;
+use crate::einzelbuchungen::input_http;
 use actix_identity::IdentityMiddleware;
 use actix_session::{config::PersistentSession, storage::CookieSessionStore, SessionMiddleware};
 use actix_web::cookie::Key;
@@ -53,6 +50,7 @@ mod openidconnect_configuration;
 mod partner;
 mod result_dto;
 mod schema;
+mod uebersicht;
 mod user;
 mod wiederkehrend;
 
@@ -110,10 +108,10 @@ async fn main() -> std::io::Result<()> {
                             .service(openidconnect_configuration::offline_access)
                             .service(user_info),
                     )
-                    .service(get_einzelbuchungen)
-                    .service(add_einzelbuchung)
-                    .service(delete_einzelbuchungen)
-                    .service(delete_einzelbuchung)
+                    .service(input_http::endpoints::get_einzelbuchungen)
+                    .service(input_http::endpoints::add_einzelbuchung)
+                    .service(input_http::endpoints::delete_einzelbuchungen)
+                    .service(input_http::endpoints::delete_einzelbuchung)
                     .service(add_gemeinsame_buchung)
                     .service(add_gemeinsame_buchungen)
                     .service(delete_gemeinsame_buchung)
@@ -132,7 +130,11 @@ async fn main() -> std::io::Result<()> {
                     .service(delete_dauerauftrag)
                     .service(add_gemeinsamer_dauerauftrag)
                     .service(get_gemeinsame_dauerauftraege)
-                    .service(delete_gemeinsamer_dauerauftrag),
+                    .service(delete_gemeinsamer_dauerauftrag)
+                    .service(uebersicht::input_http::endpoints::get_einzelbuchungen_uebersicht)
+                    .service(
+                        uebersicht::input_http::endpoints::get_gemeinsame_buchungen_uebersicht,
+                    ),
             )
             .service(health_status)
     })

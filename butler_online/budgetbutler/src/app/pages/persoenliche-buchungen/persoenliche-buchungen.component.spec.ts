@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import {AllebuchungenComponent} from './allebuchungen.component';
+import {PersoenlicheBuchungenComponent} from './persoenliche-buchungen.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
@@ -16,8 +16,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AllebuchungenComponent', () => {
-  let component: AllebuchungenComponent;
-  let fixture: ComponentFixture<AllebuchungenComponent>;
+  let component: PersoenlicheBuchungenComponent;
+  let fixture: ComponentFixture<PersoenlicheBuchungenComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -32,14 +32,14 @@ describe('AllebuchungenComponent', () => {
         ReactiveFormsModule,
         BrowserAnimationsModule, LoginComponent,
         SidebarComponent,
-        AllebuchungenComponent],
+        PersoenlicheBuchungenComponent],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AllebuchungenComponent);
+    fixture = TestBed.createComponent(PersoenlicheBuchungenComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

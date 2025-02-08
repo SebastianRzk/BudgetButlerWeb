@@ -1,0 +1,62 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Buchung für Restbetrag</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <dl>
+      <dt>Datum</dt>
+      <dt>{{ datum | date: 'dd.MM.yyyy' }}</dt>
+      <dt>Name</dt>
+      <dd>{{ name }}</dd>
+      <dt>Kategorie</dt>
+      <dd>{{ kategorie }}</dd>
+      <dt>Gemeinsame Buchung?</dt>
+      @if (gemeinsam) {
+        <dd>Ja</dd>
+      } @else {
+        <dd>Nein</dd>
+      }
+      <dt>Verbleibernder Restbetrag</dt>
+      <dd>{{ (restBetrag$ | async) | number: '1.2-2' }}€</dd>
+    </dl>
+  </mat-card-content>
+</mat-card>
+<form [formGroup]="form">
+  <div [formArrayName]="'buchungen'">
+    @for (buchung of form.controls.buchungen.controls; let i = $index; track i) {
+      <mat-card [formGroupName]="i">
+        <mat-card-header>
+          <mat-card-title>Abgespaltene Buchung {{ i + 1 }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-checkbox (change)="disable(i, $event.checked)" [checked]="i===0" class="full-size-form-field">verwenden
+          </mat-checkbox>
+          <mat-form-field class="full-size-form-field">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+          <mat-form-field class="full-size-form-field">
+            <mat-label>Betrag</mat-label>
+            <input matInput type="number" formControlName="betrag" (change)="recalcGesamtsumme()">
+            <mat-error>{{ buchung.errors | json }}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-size-form-field" *ngIf="kategorien| async as k">
+            <mat-label>Kategorie</mat-label>
+            <mat-select formControlName="kategorie" required>
+              <mat-option *ngFor="let kategorie of k" value="{{kategorie.name}}">{{ kategorie.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-checkbox formControlName="gemeinsam" class="full-size-form-field">Gemeinsam
+          </mat-checkbox>
+          @if (status$| async; as s) {
+            @if (s.notOk) {
+              <button mat-raised-button disabled class="full-size-form-field">{{ s.message }}</button>
+            } @else {
+              <button mat-raised-button color="primary" (click)="submit()" class="full-size-form-field">Alle selektierte Buchungen hinzufügen</button>
+            }
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</form>

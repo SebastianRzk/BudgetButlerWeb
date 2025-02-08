@@ -107,13 +107,13 @@ pub async fn get_gemeinsame_buchungen(
     user: User,
 ) -> actix_web::Result<impl Responder> {
     let user: String = user.sub;
-    let users = web::block(move || {
+    let buchungen = web::block(move || {
         let mut conn = pool.get()?;
         output_db::find_all_gemeinsame_buchungen(&mut conn, user)
     })
     .await?
     .map_err(error::ErrorInternalServerError)?;
-    let dtos = users
+    let dtos = buchungen
         .iter()
         .map(GemeinsameBuchung::to_dto)
         .collect::<Vec<GemeinsameBuchungDto>>();

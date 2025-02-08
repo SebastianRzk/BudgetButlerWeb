@@ -1,3 +1,13 @@
+export interface BuchungsUebersicht {
+  monate: BuchungsUebersichtMonat[];
+}
+
+export interface BuchungsUebersichtMonat {
+  name: string;
+  werte: Record<string, number>;
+}
+
+
 export interface Einzelbuchung {
    id: string;
    name: string;
@@ -92,6 +102,10 @@ export interface Result {
 }
 
 export const ERROR_RESULT: Result = {result: 'ERROR', message: 'Fehler beim Erstellen der Buchung'};
+export const ERROR_LOADING_UEBERSICHT: Result = {
+  result: 'ERROR',
+  message: 'Fehler beim Laden der Übersicht'
+};
 export const ERROR_LOADING_EINZELBUCHUNGEN: Result = {
   result: 'ERROR',
   message: 'Fehler beim Laden der Einzelbuchungen'
