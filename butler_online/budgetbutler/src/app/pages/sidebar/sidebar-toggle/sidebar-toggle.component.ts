@@ -18,7 +18,6 @@ export class SidebarToggleComponent {
   public menuService: MenuItemService = inject(MenuItemService);
   private authService: AuthService = inject(AuthService);
 
-  closed$: Observable<boolean> = this.menuService.opened$.pipe(map(x => !x));
   user$: Observable<AuthContainer> = this.authService.auth$;
 
 
