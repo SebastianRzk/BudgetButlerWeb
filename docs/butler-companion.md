@@ -8,7 +8,7 @@ layout: default
 
 ### Weitere Seiten
 
-* [Hauptseite](index.md)
+* [Hauptseite / Idee und Motivation](index.md)
 * [Desktop-Anwendung](butler-offline.md)
 
 ### Inhaltsverzeichnis

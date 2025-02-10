@@ -1,11 +1,7 @@
-<div *ngIf="closed$ | async" class="full-with-on-mobile">
-  <ng-container *ngIf="user$ | async as user">
-    <ng-container *ngIf="user.loggedIn">
-      <button (click)="menuService.open()" class="open-menu-button full-height" mat-button mat-raised-button
-              type="button">
-        <mat-icon>menu</mat-icon>
-        Menu
-      </button>
-    </ng-container>
-  </ng-container>
-</div>
+@if ((user$ | async)?.loggedIn) {
+  <button (click)="menuService.open()" class="open-menu-button full-height full-with-on-mobile"
+          mat-raised-button type="button">
+    <mat-icon>menu</mat-icon>
+    Menu
+  </button>
+}

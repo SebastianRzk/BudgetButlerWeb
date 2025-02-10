@@ -18,13 +18,17 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 * [Screenshots](#screenshots)
 	* [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
 	* [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
-* [ :link: Desktop Client](butler-offline.md)
-* [ :link: Begleiter Web-App](butler-companion.md)
-* [ :link: Changelog](changelog.md)
+
+## Weiterführende Links
+
+* [Desktop Client](butler-offline.md)
+* [Begleiter Web-App](butler-companion.md)
+* [Changelog](changelog.md)
 
 ## Idee
 
-* Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und sind damit mit einem Textverarbeitungsprogramm
+* Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und sind damit mit einem
+  Textverarbeitungsprogramm
   oder einem Tabellenverarbeitungsprogramm zugänglich.
 * Unkomplizierte Einnahmen/Ausgaben-Rechnung, keine doppelte Buchführung.
 * Schlanke Begleiter-Web-App für unterwegs (online-Version, mobil-optimiert). Automatisierter Import der Daten in die
@@ -46,9 +50,9 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 * **Gemeinsame Buchungen**
 	* **Verwalten**: Erfasse, ändere und lösche gemeinsame Buchungen.
-    * **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
-      Abrechnungsmöglichkeiten stehen zur Verfügung.
-    * **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
+	* **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
+	  Abrechnungsmöglichkeiten stehen zur Verfügung.
+	* **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
 
 * **Sparen**
 	* **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
@@ -65,12 +69,12 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 ## Unterstützte Plattformen
 
-| Plattform               | Offline-Anwendung                                                                                                             | Nutzung Mobile Begleiter-App      | Deployment Mobile Begleiter App                                  |
-|-------------------------|-------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|------------------------------------------------------------------|
-| Linux-Desktop           | :white_check_mark: [Installationsanleitung](butler-offline.md)                                                                | :white_check_mark: Über Webrowser | möglich, aktuell keine Dokumentation                             |
-| Docker / docker-compose | :white_check_mark: [Installationsanleitung](butler-offline.md)                                                                |                                   | :white_check_mark: [Installationsanleitung](butler-companion.md) |
-| Windows                 | :black_square_button: nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über WSL oder Docker | :white_check_mark: Über Webrowser | :o: Wahrscheinlich nicht ohne Anpassungen möglich                |
-| MacOS                   | :black_square_button: nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über Docker          | :white_check_mark: Über Webrowser | :o: Wahrscheinlich nicht ohne Anpassungen möglich                |
+| Plattform               | Offline-Anwendung                                                                                                           | Nutzung Mobile Begleiter-App | Deployment Mobile Begleiter App                 |
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------|-------------------------------------------------|
+| Linux-Desktop           | ✓ [Installationsanleitung](butler-offline.md)                                                                               | ✓ Über Webrowser             | möglich, aktuell keine Dokumentation            |
+| Docker / docker-compose | ✓ [Installationsanleitung](butler-offline.md)                                                                               |                              | ✓ [Installationsanleitung](butler-companion.md) |
+| Windows                 | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über WSL oder Docker                     | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
+| MacOS                   | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über Docker         | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
 
 ## Mitmachen
 
@@ -91,45 +95,57 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 #### Einzelbuchungen
 
 ##### Übersicht Einzelbuchungen
+
 ![Übersicht Einzelbuchungen](img/screenshots_desktop/uebersicht_einzelbuchungen.png)
 
 ##### Daueraufträge hinzufügen
+
 ![Daueraufträge hinzufügen](img/screenshots_desktop/dauerauftraege_add.png)
 
 ##### Übersicht Daueraufträge
+
 ![Übersicht Daueraufträge](img/screenshots_desktop/uebersicht_dauerauftraege.png)
 
 ##### Jahresübersicht
+
 ![Übersicht Jahr](img/screenshots_desktop/uebersicht_jahr.png)
 
 ##### Monatsübersicht
+
 ![Übersicht Monat](img/screenshots_desktop/uebersicht_monat.png)
 
 #### Gemeinsame Buchungen
 
 ##### Gemeinsame Buchungen hinzufügen
+
 ![Gemeinsame Buchungen hinzufügen](img/screenshots_desktop/add_gemeinsam.png)
 
 ##### Gemeinsame Buchungen abrechnen
+
 ![Gemeinsame Buchungen abrechnen](img/screenshots_desktop/gemeinsam_abrechnen.png)
 
 #### Sparen
 
 ##### Sparen Übersicht
+
 ![Sparen Übersicht](img/screenshots_desktop/sparen_uebersicht.png)
 
 ##### Depotwerte Übersicht
+
 ![Depotwerte Übersicht](img/screenshots_desktop/sparen_uebersicht_depotwerte.png)
 
 ##### ETF Übersicht
+
 ![ETFs Übersicht](img/screenshots_desktop/sparen_uebersicht_etfs.png)
 
 ### Screenshots Begleiter Web-App
 
 #### Menu
+
 ![Menü](img/screenshots_mobile/menu.png)
 
 #### Schnellerfassung
+
 ![Erfassen](img/screenshots_mobile/erfassen.png)
 
 #### Ausgabe in kleinere Buchungen aufteilen
@@ -137,16 +153,21 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 ![Aufteilen](img/screenshots_mobile/erfassen_teilen.png)
 
 #### Übersicht gemeinsame Buchungen
+
 ![Gemeinsam](img/screenshots_mobile/gemeinsam.png)
 
 #### Übersicht gemeinsame Buchungen
+
 ![Einzel](img/screenshots_mobile/einzel.png)
 
 #### Dauerauftrag erfassen
+
 ![Erfassen Dauerauftrag](img/screenshots_mobile/erfassen_dauerauftrag.png)
 
 #### Übersicht Daueraufträge
+
 ![Übersicht Dauerauftrag](img/screenshots_mobile/uebersicht_dauerauftrag.png)
 
 #### Buchungen erfassen in Desktop-Ansicht
+
 ![Erfassen Desktop](img/screenshots_mobile/erfassen_desktop.png)
