@@ -1,23 +1,8 @@
 <h1 class="mat-h1">Übersicht gemeinsame Buchungen</h1>
 
-@if ((uebersicht$ | async)?.monate?.length === 0) {
-  <mat-card>
-    <mat-card-content>
-      Keine Daten vorhanden.
-    </mat-card-content>
-  </mat-card>
-}
-
-@for (monat of (uebersicht$ | async)?.monate; track monat.name) {
-  <mat-card>
-    <mat-card-header><mat-card-title>{{ monat.name }}</mat-card-title></mat-card-header>
-    <mat-card-content>
-      <dl>
-        @for (element of (monat.werte | keyvalue); track element) {
-          <dt>{{ element.key }}</dt>
-          <dd>{{ element.value | number: '1.2-2'}}€</dd>
-        }
-      </dl>
-    </mat-card-content>
-  </mat-card>
+@if (uebersicht$ | async; as u) {
+  <app-ausgaben-uebersicht
+    [uebersicht]="u"
+  >
+  </app-ausgaben-uebersicht>
 }

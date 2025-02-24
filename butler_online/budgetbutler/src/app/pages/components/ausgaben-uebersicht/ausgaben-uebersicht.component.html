@@ -1,0 +1,38 @@
+@if (uebersicht.monate.length === 0) {
+  <mat-card>
+    <mat-card-content>
+      Keine Daten vorhanden.
+    </mat-card-content>
+  </mat-card>
+}
+
+@for (monat of uebersicht.monate; track monat.name) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ monat.name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-divider></mat-divider>
+      <h3 class="mat-h3">Kategorien</h3>
+      <dl>
+        @for (element of (monat.werte | keyvalue); track element) {
+          <dt>{{ element.key }}</dt>
+          <dd>{{ element.value | number: '1.2-2' }}€</dd>
+        }
+        <dt><strong>Gesamt</strong></dt>
+        <dd>{{ monat.gesamt |  number: '1.2-2' }}€</dd>
+      </dl>
+      @if (monat.personen; as p) {
+        <mat-divider></mat-divider>
+        <h3 class="mat-h3">Personen</h3>
+        <dl>
+          @for (element of (p | keyvalue); track element) {
+            <dt>{{ element.key }}</dt>
+            <dd>{{ element.value | number: '1.2-2' }}€</dd>
+          }
+        </dl>
+      }
+
+    </mat-card-content>
+  </mat-card>
+}
