@@ -5,6 +5,8 @@ export interface BuchungsUebersichtTO {
 export interface BuchungsUebersichtMonatTO {
   name: string;
   werte: Record<string, number>
+  personen?: Record<string, number>
+  gesamt: number,
 }
 
 

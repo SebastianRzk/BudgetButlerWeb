@@ -10,6 +10,7 @@ pub struct NeueGemeinsameBuchung {
     pub zielperson: String,
 }
 
+#[derive(Clone)]
 pub struct GemeinsameBuchung {
     pub id: String,
     pub name: String,

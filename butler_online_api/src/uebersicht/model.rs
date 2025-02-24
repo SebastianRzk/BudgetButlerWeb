@@ -7,9 +7,21 @@ pub struct Uebersicht {
     pub monate: Vec<MonatsUebersicht>,
 }
 
+pub struct GemeinsameUebersicht {
+    pub monate: Vec<GemeinsameMonatsuebersicht>,
+}
+
 pub struct MonatsUebersicht {
     pub name: String,
     pub werte: HashMap<String, BigDecimal>,
+    pub gesamt: BigDecimal,
+}
+
+pub struct GemeinsameMonatsuebersicht {
+    pub name: String,
+    pub werte: HashMap<String, BigDecimal>,
+    pub personen: HashMap<String, BigDecimal>,
+    pub gesamt: BigDecimal,
 }
 
 pub trait BesitztDatumKategorieUndBetrag {
@@ -44,4 +56,8 @@ impl BesitztDatumKategorieUndBetrag for GemeinsameBuchung {
     fn get_kategorie(&self) -> &String {
         &self.kategorie
     }
+}
+
+pub struct PersonenUebersicht {
+    pub monate: Vec<MonatsUebersicht>,
 }

@@ -1,7 +1,9 @@
 use crate::database::DbPool;
 use crate::einzelbuchungen::output_db::repository;
 use crate::gemeinsame_buchungen::output_db;
-use crate::uebersicht::uebersicht_service::berechne_uebersicht;
+use crate::uebersicht::uebersicht_service::{
+    berechne_personen_uebersicht, berechne_uebersicht, combine_to_gemeinsame_uebersicht,
+};
 use crate::user::model::User;
 use actix_web::{error, get, web, HttpResponse, Responder};
 
@@ -38,6 +40,8 @@ pub async fn get_gemeinsame_buchungen_uebersicht(
     .map_err(error::ErrorInternalServerError)?;
 
     let uebersicht = berechne_uebersicht(&buchungen);
+    let personen_uebersicht = berechne_personen_uebersicht(&buchungen);
+    let gemeinsame_uebersicht = combine_to_gemeinsame_uebersicht(uebersicht, personen_uebersicht);
 
-    Ok(HttpResponse::Ok().json(uebersicht.to_dto()))
+    Ok(HttpResponse::Ok().json(gemeinsame_uebersicht.to_dto()))
 }

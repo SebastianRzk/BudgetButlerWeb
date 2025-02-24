@@ -1,0 +1,13 @@
+mat-card + mat-card {
+  margin-top: 2ex;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+
+dl {
+  margin-top: 0;
+}
