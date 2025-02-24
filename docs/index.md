@@ -16,8 +16,8 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 * [Unterstützte Plattformen](#unterstützte-plattformen)
 * [Mitmachen](#mitmachen)
 * [Screenshots](#screenshots)
-	* [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
-	* [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
+    * [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
+    * [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
 
 ## Weiterführende Links
 
@@ -41,40 +41,40 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 ## Merkmale
 
 * **Einzelbuchungen**
-	* **Erfassen, Ändern, Löschen**: Verwalte Einnahmen und Ausgaben einfach und effizient.
-	* **Daueraufträge**: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob
-	  in der Zukunft oder in der Vergangenheit.
-	* **Monats- und Jahresübersicht**: : Behalten deine Finanzen im Blick mit detaillierten Übersichten.
-	* Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht
-	* Importiere Buchungen aus der Begleiter Web-App.
+    * **Erfassen, Ändern, Löschen**: Verwalte Einnahmen und Ausgaben einfach und effizient.
+    * **Daueraufträge**: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob
+      in der Zukunft oder in der Vergangenheit.
+    * **Monats- und Jahresübersicht**: : Behalten deine Finanzen im Blick mit detaillierten Übersichten.
+    * Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht
+    * Importiere Buchungen aus der Begleiter Web-App.
 
 * **Gemeinsame Buchungen**
-	* **Verwalten**: Erfasse, ändere und lösche gemeinsame Buchungen.
-	* **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
-	  Abrechnungsmöglichkeiten stehen zur Verfügung.
-	* **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
+    * **Verwalten**: Erfasse, ändere und lösche gemeinsame Buchungen.
+    * **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
+      Abrechnungsmöglichkeiten stehen zur Verfügung.
+    * **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
 
 * **Sparen**
-	* **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
-	  einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
-	* **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
-	  deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
-	* **ETF-Portfolio**: (aktuell nur durch manuelle Konfiguration möglich) Analysiere dein ETF-Portfolio nach Kosten,
-	  Sektoren und Ländern.
+    * **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
+      einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
+    * **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
+      deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
+    * **ETF-Portfolio**: (aktuell nur durch manuelle Konfiguration möglich) Analysiere dein ETF-Portfolio nach Kosten,
+      Sektoren und Ländern.
 
 * **Konfiguration**
-	* **Anpassung**: Passe das Farbthema und die Kategorien nach deinen Wünschen an.
-	* **Übergreifende Aktionen**: Führe Aktionen wie das Umbenennen von Kategorien oder das Ausschließen von
-	  Kategorien für Eingabefelder durch.
+    * **Anpassung**: Passe das Farbthema und die Kategorien nach deinen Wünschen an.
+    * **Übergreifende Aktionen**: Führe Aktionen wie das Umbenennen von Kategorien oder das Ausschließen von
+      Kategorien für Eingabefelder durch.
 
 ## Unterstützte Plattformen
 
-| Plattform               | Offline-Anwendung                                                                                                           | Nutzung Mobile Begleiter-App | Deployment Mobile Begleiter App                 |
-|-------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------|-------------------------------------------------|
-| Linux-Desktop           | ✓ [Installationsanleitung](butler-offline.md)                                                                               | ✓ Über Webrowser             | möglich, aktuell keine Dokumentation            |
-| Docker / docker-compose | ✓ [Installationsanleitung](butler-offline.md)                                                                               |                              | ✓ [Installationsanleitung](butler-companion.md) |
-| Windows                 | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über WSL oder Docker                     | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
-| MacOS                   | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über Docker         | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
+| Plattform               | Offline-Anwendung                                                                                       | Nutzung Mobile Begleiter-App | Deployment Mobile Begleiter App                 |
+|-------------------------|---------------------------------------------------------------------------------------------------------|------------------------------|-------------------------------------------------|
+| Linux-Desktop           | ✓ [Installationsanleitung](butler-offline.md)                                                           | ✓ Über Webrowser             | möglich, aktuell keine Dokumentation            |
+| Docker / docker-compose | ✓ [Installationsanleitung](butler-offline.md)                                                           |                              | ✓ [Installationsanleitung](butler-companion.md) |
+| Windows                 | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über WSL oder Docker | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
+| MacOS                   | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über Docker          | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
 
 ## Mitmachen
 
@@ -156,9 +156,15 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 ![Gemeinsam](img/screenshots_mobile/gemeinsam.png)
 
-#### Übersicht gemeinsame Buchungen
+#### Zusammenfassung gemeinsame Buchungen
+
+![Uebersicht](img/screenshots_mobile/uebersicht.png)
+
+#### Übersicht persönliche Buchungen
 
 ![Einzel](img/screenshots_mobile/einzel.png)
+
+
 
 #### Dauerauftrag erfassen
 
