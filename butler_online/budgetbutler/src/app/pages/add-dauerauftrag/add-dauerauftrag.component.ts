@@ -1,52 +1,51 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
-import {Kategorie, KategorieService} from "../../domain/kategorie.service";
-import {DauerauftragAnlegen, GemeinsamerDauerauftragAnlegen} from "../../domain/model";
-import {DauerauftraegeService} from "../../domain/dauerauftraege.service";
-import {GemeinsameDauerauftraegeService} from "../../domain/gemeinsame-dauerauftraege.service";
-import {MatButton} from '@angular/material/button';
-import {MatCheckbox} from '@angular/material/checkbox';
-import {MAT_DATE_LOCALE, MatNativeDateModule, MatOption, provideNativeDateAdapter} from '@angular/material/core';
-import {AsyncPipe, NgFor} from '@angular/common';
-import {MatSelect} from '@angular/material/select';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
+import { Kategorie, KategorieService } from "../../domain/kategorie.service";
+import { DauerauftragAnlegen, GemeinsamerDauerauftragAnlegen } from "../../domain/model";
+import { DauerauftraegeService } from "../../domain/dauerauftraege.service";
+import { GemeinsameDauerauftraegeService } from "../../domain/gemeinsame-dauerauftraege.service";
+import { MatButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MAT_DATE_LOCALE, MatNativeDateModule, MatOption, provideNativeDateAdapter } from '@angular/material/core';
+import { AsyncPipe } from '@angular/common';
+import { MatSelect } from '@angular/material/select';
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerModule,
   MatDatepickerToggle
 } from '@angular/material/datepicker';
-import {MatInput} from '@angular/material/input';
-import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
-import {BreakpointObserver} from "@angular/cdk/layout";
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
     selector: 'app-adddauerauftrag',
     templateUrl: './add-dauerauftrag.component.html',
     styleUrls: ['./add-dauerauftrag.component.css'],
-    imports: [MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        MatSelect,
-        NgFor,
-        MatOption,
-        MatCheckbox,
-        MatButton,
-        AsyncPipe,
-        MatDatepickerModule,
-        MatNativeDateModule
-    ],
+  imports: [MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    MatButton,
+    AsyncPipe,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
     providers: [
       provideNativeDateAdapter(),
       {

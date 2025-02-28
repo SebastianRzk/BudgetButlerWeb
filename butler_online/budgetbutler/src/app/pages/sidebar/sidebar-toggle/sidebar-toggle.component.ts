@@ -1,10 +1,9 @@
-import {Component, inject} from '@angular/core';
-import {MenuItemService} from '../../../domain/menu-item.service';
-import {Observable} from 'rxjs';
-import {AuthContainer, AuthService} from '../../auth/auth.service';
-import {MatIcon} from '@angular/material/icon';
-import {MatButton} from '@angular/material/button';
-import {AsyncPipe} from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { MenuItemService } from '../../../domain/menu-item.service';
+import { AuthService } from '../../auth/auth.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-sidebar-toggle',
@@ -13,11 +12,6 @@ import {AsyncPipe} from '@angular/common';
   imports: [MatButton, MatIcon, AsyncPipe]
 })
 export class SidebarToggleComponent {
-
   public menuService: MenuItemService = inject(MenuItemService);
-  private authService: AuthService = inject(AuthService);
-
-  user$: Observable<AuthContainer> = this.authService.auth$;
-
-
+  public authService: AuthService = inject(AuthService);
 }

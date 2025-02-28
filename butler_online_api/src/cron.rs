@@ -1,7 +1,7 @@
 extern crate diesel;
 use crate::database::initialize_db_pool;
-use crate::wiederkehrend::buchung;
-use crate::wiederkehrend::gemeinsame_buchung;
+use crate::wiederkehrend::buchung_cron;
+use crate::wiederkehrend::gemeinsame_buchung_cron;
 
 mod core;
 mod database;
@@ -27,6 +27,6 @@ fn main() {
         .get()
         .expect("Cannot get database connection from pool");
 
-    buchung::verarbeite_dauerauftraege(&mut connection);
-    gemeinsame_buchung::verarbeite_gemeinsame_dauerauftraege(&mut connection);
+    buchung_cron::verarbeite_dauerauftraege(&mut connection);
+    gemeinsame_buchung_cron::verarbeite_gemeinsame_dauerauftraege(&mut connection);
 }

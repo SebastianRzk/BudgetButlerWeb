@@ -1,32 +1,34 @@
-<div *ngIf="user$ | async as user">
-  <div *ngIf="user.loggedIn" class="menu-element full-height">
-    <p>
-      <button (click)="menuService.close()" class="navigation-button full-height" mat-button type="button">
-        <mat-icon>arrow_back</mat-icon>
-        Menu ausblenden
-      </button>
-    </p>
-    <div class="desktop-only">
-      <h2>
-        BudgetButlerWEB
-        <br>
-        Companion
-      </h2>
-      <div class="greeter">Hallo, {{user.userName}}</div>
-    </div>
-    <div class="navigation">
-      <button (click)="logout()" class="navigation-button full-height" mat-flat-button>
-        <mat-icon>logout</mat-icon>
-        Logout
-      </button>
-      <div *ngFor="let menuItem of menu">
-        <button (click)="navigateTo(menuItem.url)"
-                class="navigation-button full-height"
-                mat-flat-button>
-          <mat-icon>{{menuItem.icon}}</mat-icon>
-          {{menuItem.title}}
+@if (user$ | async; as user) {
+  @if (user.loggedIn) {
+    <div class="menu-element full-height">
+      <p>
+        <button (click)="menuService.close()" class="navigation-button full-height" mat-button type="button">
+          <mat-icon>arrow_back</mat-icon>
+          Menu ausblenden
         </button>
+      </p>
+      <div class="desktop-only">
+        <h2>
+          BudgetButlerWEB
+          <br>
+          Companion
+        </h2>
+        <div class="greeter">Hallo, {{ user.userName }}</div>
+      </div>
+      <div class="navigation">
+        <button (click)="logout()" class="navigation-button full-height" mat-flat-button>
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+        @for (menuItem of menu; track menuItem.url) {
+          <button (click)="navigateTo(menuItem.url)"
+                  class="navigation-button full-height"
+                  mat-flat-button>
+            <mat-icon>{{ menuItem.icon }}</mat-icon>
+            {{ menuItem.title }}
+          </button>
+        }
       </div>
     </div>
-  </div>
-</div>
+  }
+}

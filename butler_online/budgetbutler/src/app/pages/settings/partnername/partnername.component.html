@@ -9,15 +9,20 @@
         <input [formControl]="partnerName" matInput>
       </mat-form-field>
       <ul>
-        <li *ngFor="let message of status">{{ message }}</li>
+        @for (message of status; track message) {
+          <li>{{ message }}</li>
+        }
       </ul>
-      <button (click)="onClick()" *ngIf="verknuepfungAktiv" class="full-size-form-field"
-              color="primary" mat-raised-button>Verknüpfung löschen
-      </button>
-      <button (click)="onClick()" *ngIf="verknuepfungAktiv===false"
-              class="full-size-form-field"
-              color="primary" mat-raised-button>Partner speichern
-      </button>
+      @if (verknuepfungAktiv) {
+        <button (click)="onClick()" class="full-size-form-field"
+                color="primary" mat-raised-button>Verknüpfung löschen
+        </button>
+      } @else {
+        <button (click)="onClick()"
+                class="full-size-form-field"
+                color="primary" mat-raised-button>Partner speichern
+        </button>
+      }
     </form>
   </mat-card-content>
 </mat-card>

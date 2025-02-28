@@ -12,6 +12,7 @@ import {
   SETTINGS_ROUTE,
 } from '../app-routes';
 import { BehaviorSubject } from 'rxjs';
+import { map } from "rxjs/operators";
 
 export interface MenuItem {
   title: string;
@@ -99,6 +100,8 @@ export class MenuItemService {
   private opened = new BehaviorSubject(false);
 
   public readonly opened$ = this.opened.asObservable();
+
+  public readonly closed$ = this.opened$.pipe(map(opened => !opened));
 
   public open() {
     this.opened.next(true);

@@ -1,8 +1,5 @@
 use crate::database::DbError;
-use bigdecimal::BigDecimal;
 use diesel::prelude::*;
-use serde::{Deserialize, Serialize};
-use time::Date;
 use uuid::Uuid;
 
 use crate::einzelbuchungen::model::{Einzelbuchung, NeueEinzelbuchung};

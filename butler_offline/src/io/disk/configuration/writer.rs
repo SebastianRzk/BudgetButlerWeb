@@ -12,5 +12,5 @@ pub fn write_configuration(configuration_path: &PathBuf, configuration: Configur
     }
     file = File::create(&full_path).unwrap();
 
-    serde_json::to_writer(file, &configuration).unwrap()
+    serde_json::to_writer_pretty(file, &configuration).unwrap()
 }
