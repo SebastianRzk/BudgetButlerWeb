@@ -444,19 +444,19 @@ mod tests {
     #[test]
     fn test_parse() {
         assert_eq!(
-            Betrag::from_iso_string(&"12.34".to_string()),
+            Betrag::from_iso_string("12.34"),
             betrag(Vorzeichen::Positiv, 12, 34)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"-12.34".to_string()),
+            Betrag::from_iso_string("-12.34"),
             betrag(Vorzeichen::Negativ, 12, 34)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"-12.00".to_string()),
+            Betrag::from_iso_string("-12.00"),
             betrag(Vorzeichen::Negativ, 12, 0)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"12.00".to_string()),
+            Betrag::from_iso_string("12.00"),
             betrag(Vorzeichen::Positiv, 12, 0)
         );
     }
@@ -484,11 +484,11 @@ mod tests {
     #[test]
     fn test_parse_with_leading_zero() {
         assert_eq!(
-            Betrag::from_iso_string(&"012.34".to_string()),
+            Betrag::from_iso_string("012.34"),
             betrag(Vorzeichen::Positiv, 12, 34)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"-012.34".to_string()),
+            Betrag::from_iso_string("-012.34"),
             betrag(Vorzeichen::Negativ, 12, 34)
         );
     }
@@ -533,19 +533,19 @@ mod tests {
 
     #[test]
     fn test_read_negativen_betrag() {
-        let ergebnis = Betrag::from_iso_string(&"-123.12".to_string());
+        let ergebnis = Betrag::from_iso_string("-123.12");
         assert_eq!(ergebnis, betrag(Vorzeichen::Negativ, 123, 12));
     }
 
     #[test]
     fn test_read_positiven_betrag() {
-        let ergebnis = Betrag::from_iso_string(&"123.12".to_string());
+        let ergebnis = Betrag::from_iso_string("123.12");
         assert_eq!(ergebnis, betrag(Vorzeichen::Positiv, 123, 12));
     }
 
     #[test]
     fn test_read_positiven_betrag_without_comma() {
-        let ergebnis = Betrag::from_iso_string(&"123".to_string());
+        let ergebnis = Betrag::from_iso_string("123");
         assert_eq!(ergebnis, betrag(Vorzeichen::Positiv, 123, 0));
     }
 
@@ -588,10 +588,10 @@ mod tests {
 
     #[test]
     fn test_betrag_from_iso_string() {
-        assert_eq!(Betrag::from_iso_string(&"0.50".to_string()).as_cent(), 50);
-        assert_eq!(Betrag::from_iso_string(&"0.5".to_string()).as_cent(), 50);
-        assert_eq!(Betrag::from_iso_string(&"1.23".to_string()).as_cent(), 123);
-        assert_eq!(Betrag::from_iso_string(&"0.01".to_string()).as_cent(), 1);
+        assert_eq!(Betrag::from_iso_string("0.50").as_cent(), 50);
+        assert_eq!(Betrag::from_iso_string("0.5").as_cent(), 50);
+        assert_eq!(Betrag::from_iso_string("1.23").as_cent(), 123);
+        assert_eq!(Betrag::from_iso_string("0.01").as_cent(), 1);
     }
 
     #[test]

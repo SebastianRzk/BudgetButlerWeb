@@ -23,19 +23,19 @@ mod tests {
 
     #[test]
     fn test_calc_jahresselektion_mit_keinen_daten_should_selekt_this_year() {
-        let result = calc_jahres_selektion(None, &vec![], Datum::new(1, 1, 2020));
+        let result = calc_jahres_selektion(None, &[], Datum::new(1, 1, 2020));
         assert_eq!(result, 2020);
     }
 
     #[test]
     fn test_calc_jahresselektion_mit_daten_should_selekt_last_year() {
-        let result = calc_jahres_selektion(None, &vec![2019], Datum::new(1, 1, 2020));
+        let result = calc_jahres_selektion(None, &[2019], Datum::new(1, 1, 2020));
         assert_eq!(result, 2019);
     }
 
     #[test]
     fn test_calc_jahresselektion_mit_daten_should_selekt_requested_year() {
-        let result = calc_jahres_selektion(Some(2018), &vec![2019], Datum::new(1, 1, 2020));
+        let result = calc_jahres_selektion(Some(2018), &[2019], Datum::new(1, 1, 2020));
         assert_eq!(result, 2018);
     }
 }

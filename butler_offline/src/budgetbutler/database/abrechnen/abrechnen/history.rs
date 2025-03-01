@@ -65,13 +65,13 @@ mod tests {
     #[test]
     fn test_generate_abrechnungs_title_from_metadaten() {
         let result = generate_abrechnungs_title_from_metadaten(Metadaten {
-            ausfuehrungsdatum: Datum::from_iso_string(&"2022-01-01".to_string()),
+            ausfuehrungsdatum: Datum::from_iso_string("2022-01-01"),
             abrechnende_person: person("Max Mustermann"),
             titel: Titel {
                 titel: "Test".to_string(),
             },
             ziel: Ziel::ImportBuchungenAusApp,
-            abrechnungsdatum: Datum::from_iso_string(&"2021-01-01".to_string()),
+            abrechnungsdatum: Datum::from_iso_string("2021-01-01"),
         });
 
         assert_eq!(result, "Test vom 01.01.2021, (importiert am 01.01.2022)");

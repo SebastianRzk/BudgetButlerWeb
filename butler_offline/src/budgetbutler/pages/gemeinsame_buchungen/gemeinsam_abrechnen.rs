@@ -216,7 +216,7 @@ mod tests {
         let database = generate_database_with_gemeinsamen_buchungen(vec![GemeinsameBuchung {
             kategorie: kategorie("Test Kategorie"),
             betrag: Betrag::from_user_input(&"-1000,00".to_string()),
-            datum: Datum::from_iso_string(&"2020-01-01".to_string()),
+            datum: Datum::from_iso_string("2020-01-01"),
             person: demo_partner(),
             name: demo_name(),
         }]);

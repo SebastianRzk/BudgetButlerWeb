@@ -101,11 +101,11 @@ mod tests_betrag_ohne_vorzeichen {
     #[test]
     fn test_from_iso_string() {
         assert_eq!(
-            BetragOhneVorzeichen::from_iso_string(&"100.1".to_string()),
+            BetragOhneVorzeichen::from_iso_string("100.1"),
             BetragOhneVorzeichen { euro: 100, cent: 1 }
         );
         assert_eq!(
-            BetragOhneVorzeichen::from_iso_string(&"100".to_string()),
+            BetragOhneVorzeichen::from_iso_string("100"),
             BetragOhneVorzeichen { euro: 100, cent: 0 }
         );
     }
@@ -113,7 +113,7 @@ mod tests_betrag_ohne_vorzeichen {
     #[test]
     fn test_from_input_string() {
         assert_eq!(
-            BetragOhneVorzeichen::from_user_input(&"10,11".to_string()),
+            BetragOhneVorzeichen::from_user_input("10,11"),
             BetragOhneVorzeichen { euro: 10, cent: 11 }
         )
     }

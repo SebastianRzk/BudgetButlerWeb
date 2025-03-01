@@ -161,7 +161,7 @@ pub mod builder {
     }
 
     pub fn datum(datum_iso: &str) -> Datum {
-        Datum::from_iso_string(&datum_iso.to_string())
+        Datum::from_iso_string(datum_iso)
     }
 
     pub fn jahres_name(jahr: &str) -> JahresName {
@@ -268,7 +268,7 @@ mod tests {
 
     #[test]
     fn test_read_datum() {
-        let ergebnis = Datum::from_iso_string(&"2020-01-01".to_string());
+        let ergebnis = Datum::from_iso_string("2020-01-01");
         assert_eq!(ergebnis, Datum::new(1, 1, 2020));
     }
 
@@ -286,7 +286,7 @@ mod tests {
 
     #[test]
     fn test_from_german_string() {
-        let ergebnis = Datum::from_german_string(&"01.01.2020".to_string());
+        let ergebnis = Datum::from_german_string("01.01.2020");
         assert_eq!(ergebnis, Datum::new(1, 1, 2020));
     }
 }

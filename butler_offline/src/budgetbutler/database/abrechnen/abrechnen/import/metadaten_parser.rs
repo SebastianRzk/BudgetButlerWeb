@@ -28,13 +28,13 @@ pub fn parse_metadaten(abrechnung: &SortedAbrechnungsFile) -> Metadaten {
         .unwrap();
 
     Metadaten {
-        ausfuehrungsdatum: Datum::from_iso_string(&ausfuehrungsdatum_str.trim()),
+        ausfuehrungsdatum: Datum::from_iso_string(ausfuehrungsdatum_str.trim()),
         abrechnende_person: Person::new(abrechnende_person_str.to_string()),
         titel: Titel {
             titel: titel_str.to_string(),
         },
         ziel: ziel_from_str(ziel_str.to_string()),
-        abrechnungsdatum: Datum::from_iso_string(&abrechnungsdatum.trim()),
+        abrechnungsdatum: Datum::from_iso_string(abrechnungsdatum.trim()),
     }
 }
 
@@ -64,13 +64,13 @@ mod tests {
             gemeinsame_buchungen: vec![],
         };
         let expected_metadaten = Metadaten {
-            ausfuehrungsdatum: Datum::from_iso_string(&"2021-01-01".to_string()),
+            ausfuehrungsdatum: Datum::from_iso_string("2021-01-01"),
             abrechnende_person: person("Max Mustermann"),
             titel: Titel {
                 titel: "Test".to_string(),
             },
             ziel: Ziel::ImportBuchungenAusApp,
-            abrechnungsdatum: Datum::from_iso_string(&"2022-01-01".to_string()),
+            abrechnungsdatum: Datum::from_iso_string("2022-01-01"),
         };
         assert_eq!(
             parse_metadaten(&sorted_abrechnungs_file),
