@@ -7,7 +7,7 @@ use crate::uebersicht::model::{
 use bigdecimal::BigDecimal;
 
 pub fn berechne_uebersicht(
-    einzelbuchungen: &Vec<impl BesitztDatumKategorieUndBetrag>,
+    einzelbuchungen: &[impl BesitztDatumKategorieUndBetrag],
 ) -> Uebersicht {
     let mut monate: Vec<MonatsUebersicht> = vec![];
 
@@ -46,7 +46,7 @@ pub fn berechne_uebersicht(
     Uebersicht { monate }
 }
 
-pub fn berechne_personen_uebersicht(gemeinsame_buchungen: &Vec<GemeinsameBuchung>) -> Uebersicht {
+pub fn berechne_personen_uebersicht(gemeinsame_buchungen: &[GemeinsameBuchung]) -> Uebersicht {
     let als_proxy = gemeinsame_buchungen
         .iter()
         .map(PersonAlsKategorieProxy::from)
@@ -123,7 +123,7 @@ mod tests {
 
     #[test]
     fn test_berechne_uebersicht_mit_datum_sollte_monatsuebersicht_anlegen() {
-        let result = super::berechne_uebersicht(&vec![Einzelbuchung {
+        let result = super::berechne_uebersicht(&[Einzelbuchung {
             id: "1".to_string(),
             name: "Test".to_string(),
             kategorie: "Kategorie".to_string(),

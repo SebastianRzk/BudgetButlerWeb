@@ -61,11 +61,11 @@ pub fn calculate_partnerstatus(
 
 fn load_partnerstatus(
     conn: &mut MysqlConnection,
-    user_name: &String,
+    user_name: &str,
 ) -> Result<Option<PartnerStatusEntity>, DbError> {
     use crate::schema::partner::dsl::*;
     let partnerstatus: Option<PartnerStatusEntity> = partner
-        .filter(user.eq(user_name.clone()))
+        .filter(user.eq(user_name.to_owned()))
         .first::<PartnerStatusEntity>(conn)
         .optional()?;
     Ok(partnerstatus)
