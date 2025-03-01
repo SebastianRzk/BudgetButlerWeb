@@ -477,7 +477,7 @@ dependencies = [
 
 [[package]]
 name = "budgetbutlerweb-companion-backend"
-version = "4.2.0"
+version = "4.2.1"
 dependencies = [
  "actix-identity",
  "actix-session",

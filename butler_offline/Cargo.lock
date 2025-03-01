@@ -399,7 +399,7 @@ dependencies = [
 
 [[package]]
 name = "budgetbutlerweboffline"
-version = "4.2.0"
+version = "4.2.1"
 dependencies = [
  "actix-files",
  "actix-web",
