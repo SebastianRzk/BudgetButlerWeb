@@ -59,8 +59,8 @@ impl Dauerauftrag {
     pub fn to_entity(&self) -> DauerauftragEntity {
         DauerauftragEntity {
             id: self.id.clone(),
-            ende_datum: self.ende_datum.clone(),
-            start_datum: self.start_datum.clone(),
+            ende_datum: self.ende_datum,
+            start_datum: self.start_datum,
             rhythmus: self.rhythmus.to_string(),
             user: self.user.clone(),
             kategorie: self.kategorie.clone(),

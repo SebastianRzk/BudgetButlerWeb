@@ -30,7 +30,7 @@ pub struct NeuerGemeinsamerDauerauftragDto {
 impl NeuerGemeinsamerDauerauftragDto {
     pub fn to_domain(&self, user: String, partnerperson: String) -> NeuerGemeinsamerDauerauftrag {
         let mut zielperson: String = user.clone();
-        if !self.eigene_buchung.clone() {
+        if !self.eigene_buchung {
             zielperson = partnerperson
         }
 
@@ -101,7 +101,7 @@ pub async fn add_gemeinsamer_dauerauftrag(
             &mut conn,
             form.to_domain(user, partner_configuration.zielperson),
         );
-        verarbeite_gemeinsame_buchung_dauerauftrag(&mut conn, &dauerauftrag.as_ref().unwrap());
+        verarbeite_gemeinsame_buchung_dauerauftrag(&mut conn, dauerauftrag.as_ref().unwrap());
         dauerauftrag
     })
     .await?

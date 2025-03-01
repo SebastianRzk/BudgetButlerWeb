@@ -38,7 +38,7 @@ impl NeueGemeinsameBuchung {
 impl GemeinsameBuchungEntity {
     pub fn to_domain(&self) -> GemeinsameBuchung {
         GemeinsameBuchung {
-            datum: self.datum.clone(),
+            datum: self.datum,
             id: self.id.clone(),
             kategorie: self.kategorie.clone(),
             name: self.name.clone(),

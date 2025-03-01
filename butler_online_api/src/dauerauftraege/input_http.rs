@@ -83,7 +83,7 @@ pub async fn add_dauerauftrag(
     let _dauerauftrag = web::block(move || {
         let mut conn = pool.get()?;
         let dauerauftrag = output_db::insert_new_dauerauftrag(&mut conn, form.to_domain(user));
-        buchung::verarbeite_dauerauftrag(&mut conn, &dauerauftrag.as_ref().unwrap());
+        buchung::verarbeite_dauerauftrag(&mut conn, dauerauftrag.as_ref().unwrap());
         dauerauftrag
     })
     .await?

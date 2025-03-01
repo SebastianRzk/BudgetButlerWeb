@@ -77,7 +77,7 @@ impl PartnerStatus {
     pub fn to_dto(&self) -> PartnerStatusDto {
         PartnerStatusDto {
             zielperson: self.zielperson.clone(),
-            bestaetigt: self.bestaetigt.clone(),
+            bestaetigt: self.bestaetigt,
         }
     }
 }

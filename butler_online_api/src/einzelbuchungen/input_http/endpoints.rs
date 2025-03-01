@@ -69,7 +69,7 @@ pub async fn delete_einzelbuchungen(
     let user: String = user.sub;
     let _result = web::block(move || {
         let mut conn = pool.get()?;
-        return repository::delete_all_einzelbuchungen(&mut conn, user);
+        repository::delete_all_einzelbuchungen(&mut conn, user)
     })
     .await?
     .map_err(error::ErrorInternalServerError)?;

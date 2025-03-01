@@ -1,6 +1,5 @@
 use actix_identity::Identity;
 use actix_web::{HttpMessage, HttpResponse};
-use dotenvy;
 
 use actix_web::{get, post};
 
@@ -60,9 +59,9 @@ async fn request_token(
         .map_err(error::ErrorInternalServerError)?
         .into();
 
-    if let Some(mut id_token) = token.id_token.as_mut() {
-        oidc_client.decode_token(&mut id_token).unwrap();
-        oidc_client.validate_token(&id_token, None, None).unwrap();
+    if let Some(id_token) = token.id_token.as_mut() {
+        oidc_client.decode_token(id_token).unwrap();
+        oidc_client.validate_token(id_token, None, None).unwrap();
     } else {
         return Ok(None);
     }
@@ -182,7 +181,7 @@ async fn logout(
     sessions: Data<RwLock<Sessions>>,
     identity: Identity,
 ) -> impl Responder {
-    if let Some(id) = identity.id().ok() {
+    if let Ok(id) = identity.id() {
         if let Some((user, _, _userinfo)) = sessions.write().unwrap().map.remove(&id) {
             eprintln!("logout user: {:?}", user);
 
@@ -211,7 +210,7 @@ pub async fn generate_discovery_client() -> Result<openid::Client, error::Error>
     let client_id = dotenvy::var("CLIENT_ID").unwrap();
     let client_secret = dotenvy::var("CLIENT_SECRET").unwrap();
     let redirect = Some(host("/api/login/login/oauth2/code/oidc"));
-    let issuer = Url::parse(&dotenvy::var("ISSUER").unwrap().as_str()).unwrap();
+    let issuer = Url::parse(dotenvy::var("ISSUER").unwrap().as_str()).unwrap();
     let resolve_discovery_client_request =
         DiscoveredClient::discover(client_id, client_secret, redirect, issuer).await;
 

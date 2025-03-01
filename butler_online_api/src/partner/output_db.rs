@@ -26,7 +26,7 @@ impl PartnerStatusEntity {
         PartnerStatus {
             zielperson: self.zielperson.clone(),
             user: self.user.clone(),
-            bestaetigt: bestaetigt.clone(),
+            bestaetigt,
         }
     }
 }
@@ -76,7 +76,7 @@ pub fn update_partnerstatus(
     neuer_partnerstatus: NeuerPartnerStatus,
 ) -> Result<PartnerStatus, DbError> {
     let username = &neuer_partnerstatus.user;
-    let aktueller_partnerstatus = load_partnerstatus(conn, &username);
+    let aktueller_partnerstatus = load_partnerstatus(conn, username);
     if aktueller_partnerstatus.is_ok() && aktueller_partnerstatus.unwrap().is_some() {
         delete_partnerstatus(conn, username.clone()).unwrap();
     };

@@ -13,7 +13,7 @@ pub fn berechne_uebersicht(
 
     for einzelbuchung in einzelbuchungen {
         let mut found = false;
-        let datum_als_string = monats_name_from_datum(&einzelbuchung.get_datum());
+        let datum_als_string = monats_name_from_datum(einzelbuchung.get_datum());
         for monats_uebersicht in &mut monate {
             if monats_uebersicht.name == datum_als_string {
                 found = true;
@@ -49,7 +49,7 @@ pub fn berechne_uebersicht(
 pub fn berechne_personen_uebersicht(gemeinsame_buchungen: &Vec<GemeinsameBuchung>) -> Uebersicht {
     let als_proxy = gemeinsame_buchungen
         .iter()
-        .map(|b| PersonAlsKategorieProxy::from(b))
+        .map(PersonAlsKategorieProxy::from)
         .collect::<Vec<PersonAlsKategorieProxy>>();
     berechne_uebersicht(&als_proxy)
 }
