@@ -146,7 +146,7 @@ mod tests {
         let result = super::map_to_template(view_result);
 
         assert_eq!(result.database_id, "test-0-0");
-        assert_eq!(result.bearbeitungsmodus, false);
+        assert!(!result.bearbeitungsmodus);
         assert_eq!(result.element_titel, "Dauerauftrag erfassen");
         assert_eq!(result.default_item.index, 0);
         assert_eq!(result.default_item.start_datum, "2020-01-01");
@@ -157,25 +157,25 @@ mod tests {
 
         assert_eq!(result.kategorien.items.len(), 2);
         assert_eq!(result.kategorien.items[0].value, "Eine Kategorie");
-        assert_eq!(result.kategorien.items[0].selected, true);
+        assert!(result.kategorien.items[0].selected);
         assert_eq!(result.kategorien.items[1].value, "Weitere Kategorie");
-        assert_eq!(result.kategorien.items[1].selected, false);
+        assert!(!result.kategorien.items[1].selected);
 
         assert_eq!(result.rhythmen.items.len(), 4);
         assert_eq!(result.rhythmen.items[0].value, "monatlich");
-        assert_eq!(result.rhythmen.items[0].selected, false);
+        assert!(!result.rhythmen.items[0].selected);
         assert_eq!(result.rhythmen.items[1].value, "vierteljährlich");
-        assert_eq!(result.rhythmen.items[1].selected, true);
+        assert!(result.rhythmen.items[1].selected);
         assert_eq!(result.rhythmen.items[2].value, "halbjährlich");
-        assert_eq!(result.rhythmen.items[2].selected, false);
+        assert!(!result.rhythmen.items[2].selected);
         assert_eq!(result.rhythmen.items[3].value, "jährlich");
-        assert_eq!(result.rhythmen.items[3].selected, false);
+        assert!(!result.rhythmen.items[3].selected);
 
         assert_eq!(result.typen.items.len(), 2);
         assert_eq!(result.typen.items[0].value, "Einnahme");
-        assert_eq!(result.typen.items[0].selected, false);
+        assert!(!result.typen.items[0].selected);
         assert_eq!(result.typen.items[1].value, "Ausgabe");
-        assert_eq!(result.typen.items[1].selected, true);
+        assert!(result.typen.items[1].selected);
 
         assert_eq!(result.letzte_erfassung.len(), 1);
         assert_eq!(result.letzte_erfassung[0].fa, "FA");

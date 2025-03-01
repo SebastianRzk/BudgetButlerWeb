@@ -20,7 +20,7 @@ pub async fn submit(
 ) -> HttpResponse {
     let mut config = configuration.configuration.lock().unwrap();
 
-    let mut keys: Vec<&String> = form.keys().into_iter().collect();
+    let mut keys: Vec<&String> = form.keys().collect();
     keys.sort();
     let mut neue_farben = Vec::new();
 

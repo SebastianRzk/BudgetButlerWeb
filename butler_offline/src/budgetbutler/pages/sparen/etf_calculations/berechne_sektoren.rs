@@ -31,8 +31,7 @@ pub fn berechne_sektoren(
     }
 
     let alle_sektoren = sektoren_map
-        .keys()
-        .map(|x| x.clone())
+        .keys().cloned()
         .collect::<Vec<String>>();
 
     for depotwert_mit_kontostand in depotwerte_mit_kontostand {
@@ -62,13 +61,12 @@ pub fn berechne_sektoren(
             }
 
             let betrag_prozent = Prozent::from_float_representation(
-                depotwert_mit_kontostand
+                *depotwert_mit_kontostand
                     .data
                     .data
                     .sektoren
                     .get(&sektor)
-                    .unwrap()
-                    .clone(),
+                    .unwrap(),
             );
             let betrag = depotwert_mit_kontostand
                 .aktueller_kontostand
@@ -98,7 +96,7 @@ pub fn berechne_sektoren(
         }
     }
 
-    let mut sektoren_list: Vec<TabellenZeile> = sektoren_map.values().map(|x| x.clone()).collect();
+    let mut sektoren_list: Vec<TabellenZeile> = sektoren_map.values().cloned().collect();
     sektoren_list.sort_by(|a, b| b.gesamt_column.euro.cmp(&a.gesamt_column.euro));
 
     Tabelle {

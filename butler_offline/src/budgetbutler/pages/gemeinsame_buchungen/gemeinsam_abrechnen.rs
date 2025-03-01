@@ -126,7 +126,7 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
     let partner_summe_prozent = Prozent::from_betrags_differenz(&partner_summe, &gesamt_summe);
 
     let berechnungs_ergebnis = berechne_abrechnungs_summen(
-        set_verhaeltnis.clone(),
+        set_verhaeltnis,
         context.set_limit.clone(),
         context.configuration.user_configuration.self_name.clone(),
         eigene_summe,
@@ -134,13 +134,12 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
         &gesamt_summe,
     );
 
-    let reales_verhaeltnis;
-    if berechnungs_ergebnis.modus == BerechnungsErgebnisModus::LimitErreicht {
-        reales_verhaeltnis =
-            Prozent::from_betrags_differenz(&berechnungs_ergebnis.eigenes.soll, &gesamt_summe);
-    } else {
-        reales_verhaeltnis = Prozent::from_int_representation(set_verhaeltnis);
-    }
+    let reales_verhaeltnis =
+        if berechnungs_ergebnis.modus == BerechnungsErgebnisModus::LimitErreicht {
+            Prozent::from_betrags_differenz(&berechnungs_ergebnis.eigenes.soll, &gesamt_summe)
+        } else {
+            Prozent::from_int_representation(set_verhaeltnis)
+        };
 
     let ergebnis_text = berechne_ergebnis_text(
         Prozent::from_int_representation(set_verhaeltnis),
@@ -159,12 +158,12 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
         &berechnungs_ergebnis,
     );
 
-    let result = GemeinsamAbrechnenViewResult {
+    GemeinsamAbrechnenViewResult {
         database_version: context.database.db_version.clone(),
         ergebnis: ergebnis_text,
         set_titel: context.set_titel.clone().unwrap_or("".to_string()),
         set_verhaeltnis_real: reales_verhaeltnis,
-        set_verhaeltnis: Prozent::from_int_representation(set_verhaeltnis.clone()),
+        set_verhaeltnis: Prozent::from_int_representation(set_verhaeltnis),
         gesamt_count: context.database.gemeinsame_buchungen.select().count() as u32,
         set_count: filtered_zeitraum.count() as u32,
         myname: context.configuration.user_configuration.self_name,
@@ -172,7 +171,7 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
         set_self_kategorie: context.set_self_kategorie,
         kategorien: calc_kategorien(
             &context.database.einzelbuchungen,
-            &context.extra_kategorie,
+            context.extra_kategorie,
             &context
                 .configuration
                 .erfassungs_configuration
@@ -193,8 +192,7 @@ pub fn handle_view(context: GemeinsameBuchungenAbrechnenContext) -> GemeinsamAbr
         self_soll: berechnungs_ergebnis.eigenes.soll,
         self_diff: berechnungs_ergebnis.eigenes.diff,
         ausgabe_gesamt: gesamt_summe,
-    };
-    result
+    }
 }
 
 #[cfg(test)]

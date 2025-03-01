@@ -28,13 +28,13 @@ pub fn parse_metadaten(abrechnung: &SortedAbrechnungsFile) -> Metadaten {
         .unwrap();
 
     Metadaten {
-        ausfuehrungsdatum: Datum::from_iso_string(&ausfuehrungsdatum_str.trim().to_string()),
+        ausfuehrungsdatum: Datum::from_iso_string(&ausfuehrungsdatum_str.trim()),
         abrechnende_person: Person::new(abrechnende_person_str.to_string()),
         titel: Titel {
             titel: titel_str.to_string(),
         },
         ziel: ziel_from_str(ziel_str.to_string()),
-        abrechnungsdatum: Datum::from_iso_string(&abrechnungsdatum.trim().to_string()),
+        abrechnungsdatum: Datum::from_iso_string(&abrechnungsdatum.trim()),
     }
 }
 

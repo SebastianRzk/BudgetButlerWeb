@@ -32,7 +32,7 @@ pub fn handle_uebersicht_kontos(context: UebersichtKontosContext) -> UebersichtK
 
     for konto in &context.database.sparkontos.sparkontos {
         let berechneter_kontostand =
-            berechne_aktuellen_kontostand(konto.value.clone(), &context.database);
+            berechne_aktuellen_kontostand(konto.value.clone(), context.database);
         let einzeldifferenz = berechneter_kontostand.letzter_kontostand.clone()
             - berechneter_kontostand.gesamte_einzahlungen.clone();
 

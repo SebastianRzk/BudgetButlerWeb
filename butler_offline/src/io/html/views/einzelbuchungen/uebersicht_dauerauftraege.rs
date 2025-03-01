@@ -55,7 +55,7 @@ fn map_to_template(
                 dauerauftraege: view_result
                     .aktuelle_dauerauftraege
                     .iter()
-                    .map(|d| map_dauerauftrag(d))
+                    .map(map_dauerauftrag)
                     .collect(),
             },
             DauerauftraegeGruppeTemplate {
@@ -63,7 +63,7 @@ fn map_to_template(
                 dauerauftraege: view_result
                     .zukuenftige_dauerauftraege
                     .iter()
-                    .map(|d| map_dauerauftrag(d))
+                    .map(map_dauerauftrag)
                     .collect(),
             },
             DauerauftraegeGruppeTemplate {
@@ -71,7 +71,7 @@ fn map_to_template(
                 dauerauftraege: view_result
                     .vergangene_dauerauftraege
                     .iter()
-                    .map(|d| map_dauerauftrag(d))
+                    .map(map_dauerauftrag)
                     .collect(),
             },
         ],

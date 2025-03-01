@@ -19,9 +19,9 @@ impl BetragOhneVorzeichen {
         Betrag::new(Vorzeichen::Positiv, self.euro, self.cent)
     }
 
-    pub fn from_iso_string(string_to_parse: &String) -> BetragOhneVorzeichen {
+    pub fn from_iso_string(string_to_parse: &str) -> BetragOhneVorzeichen {
         if !string_to_parse.contains('.') {
-            return BetragOhneVorzeichen::new(parse_number(string_to_parse.clone()), 0);
+            return BetragOhneVorzeichen::new(parse_number(string_to_parse.to_owned()), 0);
         }
         let mut slitted = string_to_parse.split('.');
         let euro_as_string = slitted.next().unwrap();
@@ -32,7 +32,7 @@ impl BetragOhneVorzeichen {
         )
     }
 
-    pub fn from_user_input(user_input_string: &String) -> BetragOhneVorzeichen {
+    pub fn from_user_input(user_input_string: &str) -> BetragOhneVorzeichen {
         BetragOhneVorzeichen::from_iso_string(&user_input_string.replace(",", "."))
     }
 

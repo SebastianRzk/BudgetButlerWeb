@@ -49,9 +49,7 @@ impl Selector<Indiziert<Depotauszug>> {
             );
         }
         depot_map
-            .values()
-            .into_iter()
-            .map(|x| x.clone())
+            .values().cloned()
             .reduce(|a, b| a + b)
             .unwrap_or_else(Betrag::zero)
     }
@@ -74,16 +72,16 @@ impl Selector<Indiziert<Depotauszug>> {
                 depotwert: depotauszug.value.depotwert.clone(),
                 wert: depotauszug.value.wert.clone(),
             };
-            let entry = combined.entry(index).or_insert(vec![]);
+            let entry = combined.entry(index).or_default();
             entry.push(wert);
         }
-        let mut element_list: Vec<&DepotDatumIndex> = combined.keys().into_iter().collect();
+        let mut element_list: Vec<&DepotDatumIndex> = combined.keys().collect();
         element_list.sort();
 
         element_list
             .into_iter()
             .map(|index| {
-                let einzelne_werte = combined.get(&index).unwrap();
+                let einzelne_werte = combined.get(index).unwrap();
                 Depotuebersicht {
                     datum: index.datum.clone(),
                     konto: index.konto.clone(),
@@ -277,7 +275,7 @@ mod tests {
         let result = depotauszuege
             .select()
             .existiert_auszug(demo_depotauszug().konto, demo_depotauszug().datum);
-        assert_eq!(result, true);
+        assert!(result);
     }
 
     #[test]
@@ -288,7 +286,7 @@ mod tests {
         let result = depotauszuege
             .select()
             .existiert_auszug(konto_referenz("kein match"), demo_depotauszug().datum);
-        assert_eq!(result, false);
+        assert!(!result);
     }
 
     #[test]

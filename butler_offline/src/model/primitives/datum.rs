@@ -55,10 +55,8 @@ impl Datum {
             if monat == 2 {
                 return 28;
             }
-            if tag > 30 {
-                if [4, 6, 9, 11].contains(&monat) {
-                    return 30;
-                }
+            if tag > 30 && [4, 6, 9, 11].contains(&monat) {
+                return 30;
             }
         }
         tag
@@ -87,7 +85,7 @@ impl Datum {
         }
     }
 
-    pub fn from_iso_string(iso_string: &String) -> Datum {
+    pub fn from_iso_string(iso_string: &str) -> Datum {
         let mut splitted = iso_string.split('-');
         let jahr = splitted.next().unwrap();
         let monat = splitted.next().unwrap();
@@ -99,7 +97,7 @@ impl Datum {
         )
     }
 
-    pub fn from_german_string(german_string: &String) -> Datum {
+    pub fn from_german_string(german_string: &str) -> Datum {
         let mut splitted = german_string.split('.');
         let tag = splitted.next().unwrap();
         let monat = splitted.next().unwrap();
@@ -219,7 +217,7 @@ mod tests {
     fn test_partial_cmp_year() {
         let greater = Datum::new(1, 1, 2021);
         let smaller = Datum::new(1, 1, 2020);
-        assert_eq!(greater > smaller, true);
+        assert!(greater > smaller);
         assert_eq!(greater.partial_cmp(&smaller), Some(Ordering::Greater));
         assert_eq!(smaller.partial_cmp(&greater), Some(Ordering::Less));
     }

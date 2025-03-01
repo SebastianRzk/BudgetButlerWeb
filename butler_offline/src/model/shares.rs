@@ -7,6 +7,12 @@ pub struct ShareState {
     shares: HashMap<ISIN, Share>,
 }
 
+impl Default for ShareState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ShareState {
     pub fn new() -> ShareState {
         ShareState {
@@ -19,7 +25,7 @@ impl ShareState {
     }
 
     pub fn get_share(&self, isin: ISIN) -> Option<&ShareData> {
-        self.shares.get(&isin).map(|x| x.data.first()).flatten()
+        self.shares.get(&isin).and_then(|x| x.data.first())
     }
 }
 
@@ -82,7 +88,7 @@ mod tests {
     fn should_return_none_on_missing_share() {
         let state = super::ShareState::new();
         let isin = crate::model::primitives::isin::ISIN::new("DE000A0D9PT0".to_string());
-        assert_eq!(state.get_share(isin).is_none(), true);
+        assert!(state.get_share(isin).is_none());
     }
 
     #[test]
@@ -90,6 +96,6 @@ mod tests {
         let mut shares = HashMap::new();
         shares.insert(isin("isin"), Share { data: vec![] });
         let state = super::ShareState { shares };
-        assert_eq!(state.get_share(isin("isin")).is_none(), true);
+        assert!(state.get_share(isin("isin")).is_none());
     }
 }

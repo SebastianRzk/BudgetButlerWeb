@@ -28,7 +28,7 @@ pub fn submit_dauerauftrag(
     let dauerauftrag = Dauerauftrag {
         start_datum: context.start_datum.clone(),
         ende_datum: context.ende_datum.clone(),
-        rhythmus: context.rhythmus.clone(),
+        rhythmus: context.rhythmus,
         name: context.name.clone(),
         kategorie: context.kategorie.clone(),
         betrag: context.wert.clone(),
@@ -52,7 +52,7 @@ pub fn submit_dauerauftrag(
             .insert(Dauerauftrag {
                 start_datum: context.start_datum.clone(),
                 ende_datum: context.ende_datum.clone(),
-                rhythmus: context.rhythmus.clone(),
+                rhythmus: context.rhythmus,
                 name: context.name.clone(),
                 kategorie: context.kategorie.clone(),
                 betrag: context.wert.clone(),
@@ -72,7 +72,7 @@ pub fn submit_dauerauftrag(
             icon: icon.as_fa.to_string(),
             start_datum: context.start_datum.clone(),
             ende_datum: context.ende_datum.clone(),
-            rhythmus: context.rhythmus.clone(),
+            rhythmus: context.rhythmus,
             name: context.name.clone(),
             kategorie: context.kategorie.clone(),
             betrag: context.wert.clone(),

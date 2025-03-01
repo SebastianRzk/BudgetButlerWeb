@@ -34,7 +34,7 @@ pub fn submit_order_dauerauftrag(
         wert: context.wert.clone(),
         start_datum: context.start_datum.clone(),
         ende_datum: context.ende_datum.clone(),
-        rhythmus: context.rhythmus.clone(),
+        rhythmus: context.rhythmus,
     };
     let neue_order_dauerauftraege: OrderDauerauftraege;
     let icon: Icon;
@@ -74,7 +74,7 @@ pub fn submit_order_dauerauftrag(
             wert: buchung.wert.clone(),
             start_datum: buchung.start_datum.clone(),
             ende_datum: buchung.ende_datum.clone(),
-            rhythmus: buchung.rhythmus.clone(),
+            rhythmus: buchung.rhythmus,
         },
     }
 }

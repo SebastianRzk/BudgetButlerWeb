@@ -8,7 +8,7 @@ pub fn write_gemeinsame_buchungen(database: &Database) -> Vec<Line> {
         .gemeinsame_buchungen
         .iter()
         .map(|e| &e.value)
-        .map(|e| write_gemeinsame_buchung(e))
+        .map(write_gemeinsame_buchung)
         .collect()
 }
 

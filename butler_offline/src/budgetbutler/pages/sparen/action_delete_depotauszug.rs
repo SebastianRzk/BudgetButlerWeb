@@ -45,7 +45,7 @@ pub fn delete_depotauszug(context: DeleteContext) -> RedirectResult<DepotauszugC
                 .map(|depotauszug| DepotauszugSingleChange {
                     depotwert_beschreibung: calc_depotwert_beschreibung(
                         &depotauszug.value.depotwert.isin,
-                        &context.database,
+                        context.database,
                     )
                     .description,
                     wert: depotauszug.value.wert.clone(),

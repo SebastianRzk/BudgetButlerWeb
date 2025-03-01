@@ -72,7 +72,7 @@ pub fn map_to_template(view_result: AddDepotauszugViewResult) -> AddDepotauszugT
     }
 }
 
-fn map_item(items: &Vec<KontoItem>) -> Vec<ItemTemplate> {
+fn map_item(items: &[KontoItem]) -> Vec<ItemTemplate> {
     items
         .iter()
         .map(|item| ItemTemplate {

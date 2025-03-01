@@ -15,7 +15,7 @@ impl<T: PartialEq> Select<T> {
             items: items
                 .into_iter()
                 .map(|item| SelectItem {
-                    selected: selected.as_ref().map_or(false, |x: &T| x.eq(&item)),
+                    selected: selected.as_ref().is_some_and(|x: &T| x.eq(&item)),
                     value: item,
                 })
                 .collect(),
@@ -32,8 +32,7 @@ pub fn new_select_with_description(
             .into_iter()
             .map(|item| SelectItem {
                 selected: selected_value
-                    .as_ref()
-                    .map_or(false, |x: &String| x.eq(&item.value)),
+                    .as_ref().is_some_and(|x: &String| x.eq(&item.value)),
                 value: DescriptiveSelectItem {
                     value: item.value,
                     description: item.description,
@@ -59,9 +58,9 @@ mod tests {
         let selected = Some(2);
         let select = Select::new(items, selected);
         assert_eq!(select.items.len(), 3);
-        assert_eq!(select.items[0].selected, false);
-        assert_eq!(select.items[1].selected, true);
-        assert_eq!(select.items[2].selected, false);
+        assert!(!select.items[0].selected);
+        assert!(select.items[1].selected);
+        assert!(!select.items[2].selected);
     }
 
     #[test]
@@ -81,7 +80,7 @@ mod tests {
         );
 
         assert_eq!(select.items.len(), 2);
-        assert_eq!(select.items[0].selected, false);
-        assert_eq!(select.items[1].selected, true);
+        assert!(!select.items[0].selected);
+        assert!(select.items[1].selected);
     }
 }

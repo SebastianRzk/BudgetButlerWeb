@@ -55,7 +55,6 @@ pub fn handle_view(
 
     let mut alle_monate: Vec<MonatsAggregationsIndex> = buchungen_des_jahres_selektor
         .keys()
-        .into_iter()
         .map(|x| x.to_owned().clone())
         .collect();
     alle_monate.sort();
@@ -70,13 +69,13 @@ pub fn handle_view(
         liste.push(monats_zusammenfassung);
     }
 
-    let result = UebersichtEinzelbuchungenViewResult {
+    
+    UebersichtEinzelbuchungenViewResult {
         liste,
         selektiertes_jahr,
         verfuegbare_jahre,
         database_version: context.database.db_version.clone(),
-    };
-    result
+    }
 }
 
 #[cfg(test)]

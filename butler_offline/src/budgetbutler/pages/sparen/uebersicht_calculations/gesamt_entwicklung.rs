@@ -141,7 +141,8 @@ mod tests {
             wert: fuenf(),
         };
 
-        let database = create_database(
+        
+        create_database(
             DataOnDisk {
                 einzelbuchungen: vec![],
                 dauerauftraege: vec![],
@@ -155,7 +156,6 @@ mod tests {
             },
             Datum::first(),
             demo_database_version(),
-        );
-        database
+        )
     }
 }

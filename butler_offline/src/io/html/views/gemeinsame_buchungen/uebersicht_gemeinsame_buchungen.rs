@@ -43,7 +43,7 @@ fn map_to_template(
     let buchungen: Vec<GemeinsameBuchungTemplate> = view_result
         .liste
         .iter()
-        .map(|x| map_buchung_to_template(&x))
+        .map(map_buchung_to_template)
         .collect();
     UebersichtGemeinsameBuchungenTemplate {
         buchungen,

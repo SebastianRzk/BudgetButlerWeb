@@ -67,7 +67,7 @@ pub fn handle_view(context: AddDauerauftragContext) -> AddDauerauftragViewResult
             index: edit_index,
             start_datum: edit_buchung.value.start_datum.clone(),
             ende_datum: edit_buchung.value.ende_datum.clone(),
-            rhythmus: edit_buchung.value.rhythmus.clone(),
+            rhythmus: edit_buchung.value.rhythmus,
             name: edit_buchung.value.name,
             kategorie: edit_buchung.value.kategorie,
             wert: edit_buchung.value.betrag,
@@ -95,7 +95,7 @@ pub fn handle_view(context: AddDauerauftragContext) -> AddDauerauftragViewResult
                 fa: change.icon.clone(),
                 start_datum: change.start_datum.to_german_string(),
                 ende_datum: change.ende_datum.to_german_string(),
-                rhythmus: change.rhythmus.clone(),
+                rhythmus: change.rhythmus,
                 name: change.name.to_string(),
                 kategorie: change.kategorie.to_string(),
                 wert: change.betrag.to_german_string(),
@@ -140,7 +140,7 @@ mod tests {
         let result = handle_view(context);
 
         assert_eq!(result.database_version.name, "empty");
-        assert_eq!(result.bearbeitungsmodus, false);
+        assert!(!result.bearbeitungsmodus);
         assert_eq!(result.action_headline, "Dauerauftrag erfassen");
 
         assert_eq!(result.default_item.index, 0);
@@ -179,7 +179,7 @@ mod tests {
         let result = handle_view(context);
 
         assert_eq!(result.database_version.as_string(), "empty-1-0");
-        assert_eq!(result.bearbeitungsmodus, true);
+        assert!(result.bearbeitungsmodus);
         assert_eq!(result.action_headline, "Dauerauftrag bearbeiten");
 
         assert_eq!(result.default_item.index, 1);

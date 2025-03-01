@@ -2,18 +2,16 @@ use crate::model::primitives::datum::Datum;
 
 pub fn calc_jahres_selektion(
     angefordertes_jahr: Option<i32>,
-    verfuegbare_jahre: &Vec<i32>,
+    verfuegbare_jahre: &[i32],
     today: Datum,
 ) -> i32 {
     let selektiertes_jahr;
     if let Some(jahr) = angefordertes_jahr {
         selektiertes_jahr = jahr;
+    } else if let Some(jahr) = verfuegbare_jahre.last() {
+        selektiertes_jahr = *jahr;
     } else {
-        if let Some(jahr) = verfuegbare_jahre.last() {
-            selektiertes_jahr = jahr.clone();
-        } else {
-            selektiertes_jahr = today.jahr;
-        }
+        selektiertes_jahr = today.jahr;
     }
     selektiertes_jahr
 }

@@ -20,16 +20,16 @@ pub fn read_next_element(zeile: Element) -> ParseErgebnis {
         }
         element.push(char);
     }
-    let rest;
-    if was_quoted {
-        rest = zeile
+    let rest = if was_quoted {
+        zeile
             .element
             .strip_prefix(&format!("\"{}\"", element))
-            .unwrap();
+            .unwrap()
     } else {
-        rest = zeile.element.strip_prefix(&element).unwrap();
-    }
-    let rest = rest.strip_prefix(COMMA).unwrap_or_else(|| rest);
+        zeile.element.strip_prefix(&element).unwrap()
+    };
+
+    let rest = rest.strip_prefix(COMMA).unwrap_or(rest);
     ParseErgebnis {
         element: Element { element },
         rest: Element {
@@ -42,10 +42,10 @@ pub struct Element {
     pub element: String,
 }
 
-impl Into<Element> for &Line {
-    fn into(self) -> Element {
+impl From<&Line> for Element {
+    fn from(val: &Line) -> Self {
         Element {
-            element: self.line.clone(),
+            element: val.line.clone(),
         }
     }
 }

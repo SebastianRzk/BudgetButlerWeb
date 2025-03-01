@@ -53,7 +53,6 @@ use io::http::einzelbuchungen::{
     dauerauftraege_uebersicht, einzelbuchungen_uebersicht, modify_ausgabe,
 };
 use model::state::persistent_state::database_version::create_initial_database_version;
-use std;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -73,14 +72,12 @@ async fn main() -> std::io::Result<()> {
     let app_protocol: String =
         std::env::var("BUDGETBUTLER_APP_PROTOCOL").unwrap_or(DEFAULT_PROTOCOL.to_string());
 
-    let config;
-
     create_initial_path_if_needed(&initial_path);
-    if exists_config(&initial_path) {
-        config = load_configuration(&initial_path);
+    let config = if exists_config(&initial_path) {
+        load_configuration(&initial_path)
     } else {
-        config = update_configuration(&initial_path, generate_initial_config(&initial_path));
-    }
+        update_configuration(&initial_path, generate_initial_config(&initial_path))
+    };
 
     let database;
     if exists_database(&config.database_configuration) {

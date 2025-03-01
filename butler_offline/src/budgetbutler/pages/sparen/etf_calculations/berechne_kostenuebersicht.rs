@@ -5,7 +5,7 @@ use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::prozent::Prozent;
 
 pub fn berechne_kostenuebersicht(
-    depotwerte_mit_kontostand: &Vec<DepotwertMitDaten>,
+    depotwerte_mit_kontostand: &[DepotwertMitDaten],
     gesamt_summe: Betrag,
 ) -> ETFKostenUebersicht {
     let mut gesamtkosten_euro = Betrag::zero();

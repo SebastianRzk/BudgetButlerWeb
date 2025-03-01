@@ -157,7 +157,7 @@ mod tests {
         let result = handle_view(context);
 
         assert_eq!(result.database_version.name, "empty");
-        assert_eq!(result.bearbeitungsmodus, false);
+        assert!(!result.bearbeitungsmodus);
         assert_eq!(result.action_headline, "Gemeinsame Buchung erfassen");
 
         assert_eq!(result.default_item.index, 0);
@@ -197,7 +197,7 @@ mod tests {
         let result = handle_view(context);
 
         assert_eq!(result.database_version.as_string(), "empty-1-0");
-        assert_eq!(result.bearbeitungsmodus, true);
+        assert!(result.bearbeitungsmodus);
         assert_eq!(result.action_headline, "Gemeinsame Buchung bearbeiten");
 
         assert_eq!(result.default_item.index, 1);

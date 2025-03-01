@@ -68,7 +68,7 @@ impl BackupConfiguration {
 pub fn get_database_location(database_configuration: &DatabaseConfiguration) -> PathBuf {
     app_root()
         .join(Path::new(&database_configuration.location))
-        .join(&format!("Database_{}.csv", database_configuration.name))
+        .join(format!("Database_{}.csv", database_configuration.name))
 }
 
 pub fn app_root() -> PathBuf {

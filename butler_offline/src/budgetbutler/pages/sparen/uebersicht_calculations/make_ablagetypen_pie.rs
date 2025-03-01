@@ -5,7 +5,7 @@ use crate::model::metamodel::chart::PieChart;
 use crate::model::primitives::farbe::Farbe;
 
 pub fn make_uebersicht_anlagetrypen_pie(
-    uebersicht_anlagetypen: &Vec<Anlagetyp>,
+    uebersicht_anlagetypen: &[Anlagetyp],
     konfigurierte_farben: Vec<Farbe>,
 ) -> PieChart {
     let farben_selektor = RandomFarbenSelektor::new(konfigurierte_farben);

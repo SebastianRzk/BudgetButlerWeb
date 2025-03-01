@@ -32,8 +32,7 @@ pub fn berechne_regionen(
     }
 
     let alle_regionen = regionen_map
-        .keys()
-        .map(|x| x.clone())
+        .keys().cloned()
         .collect::<Vec<String>>();
 
     for depotwert_mit_kontostand in depotwerte_mit_kontostand {
@@ -63,13 +62,12 @@ pub fn berechne_regionen(
             }
 
             let betrag_prozent = Prozent::from_float_representation(
-                depotwert_mit_kontostand
+                *depotwert_mit_kontostand
                     .data
                     .data
                     .regionen
                     .get(&region)
-                    .unwrap()
-                    .clone(),
+                    .unwrap(),
             );
             let betrag = depotwert_mit_kontostand
                 .aktueller_kontostand
@@ -99,7 +97,7 @@ pub fn berechne_regionen(
         }
     }
 
-    let mut regionen_list: Vec<TabellenZeile> = regionen_map.values().map(|x| x.clone()).collect();
+    let mut regionen_list: Vec<TabellenZeile> = regionen_map.values().cloned().collect();
     regionen_list.sort_by(|a, b| b.gesamt_column.euro.cmp(&a.gesamt_column.euro));
 
     let translated_rows = regionen_list

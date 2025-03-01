@@ -76,7 +76,7 @@ pub fn handle_uebersicht_etf(context: UebersichtEtfContext) -> UebersichtEtfView
         let isin = depotwert.value.isin.clone();
         let share = context.shares.get_share(isin);
         let aktueller_kontostand =
-            berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), &context.database);
+            berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), context.database);
 
         if let Some(data) = share {
             depotwerte_mit_daten.push(DepotwertMitDaten {

@@ -44,8 +44,8 @@ mod tests {
 
         assert_eq!(result.items.len(), 2);
         assert_eq!(result.items[0].value, "test1");
-        assert_eq!(result.items[0].selected, false);
+        assert!(!result.items[0].selected);
         assert_eq!(result.items[1].value, "test2");
-        assert_eq!(result.items[1].selected, true);
+        assert!(result.items[1].selected);
     }
 }

@@ -20,7 +20,7 @@ pub struct ImportAbrechnungViewResult {
 pub fn handle_import_abrechnung(context: ImportAbrechnungContext) -> ImportAbrechnungViewResult {
     let einzelbuchungen_count_before = context.database.einzelbuchungen.select().count();
     let gemeinsame_buchungen_count_before = context.database.gemeinsame_buchungen.select().count();
-    let neue_datenbank = import_abrechnung(&context.database, &context.abrechnung);
+    let neue_datenbank = import_abrechnung(context.database, &context.abrechnung);
     let einzelbuchungen_count_after = neue_datenbank.einzelbuchungen.select().count();
     let gemeinsame_buchungen_count_after = neue_datenbank.gemeinsame_buchungen.select().count();
 
