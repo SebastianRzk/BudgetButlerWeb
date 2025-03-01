@@ -20,10 +20,7 @@ impl Line {
     }
 
     pub fn from_multiline_str(multiline_string: String) -> Vec<Line> {
-        multiline_string
-            .lines()
-            .map(|line| Line::new(line))
-            .collect()
+        multiline_string.lines().map(Line::new).collect()
     }
 }
 
@@ -37,7 +34,7 @@ pub mod builder {
         }
     }
 
-    pub fn as_string(lines: &Vec<Line>) -> String {
+    pub fn as_string(lines: &[Line]) -> String {
         lines
             .iter()
             .map(|line| line.line.clone())

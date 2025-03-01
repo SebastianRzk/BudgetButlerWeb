@@ -115,7 +115,7 @@ fn calc_konto_laden(
                 filled_items.push(KontoItem {
                     beschreibung: calc_depotwert_beschreibung(
                         &depotwert.value.isin,
-                        &context.database,
+                        context.database,
                     ),
                     wert: letzter_kontostand.clone(),
                 });
@@ -153,7 +153,7 @@ fn calc_all_kontos(context: &AddDepotauszugContext) -> Vec<KontoBeschreibung> {
                 empty_items.push(KontoItem {
                     beschreibung: calc_depotwert_beschreibung(
                         &depotwert.value.isin,
-                        &context.database,
+                        context.database,
                     ),
                     wert: Betrag::zero(),
                 });
@@ -161,7 +161,7 @@ fn calc_all_kontos(context: &AddDepotauszugContext) -> Vec<KontoBeschreibung> {
                 filled_items.push(KontoItem {
                     beschreibung: calc_depotwert_beschreibung(
                         &depotwert.value.isin,
-                        &context.database,
+                        context.database,
                     ),
                     wert: letzter_kontostand.clone(),
                 });

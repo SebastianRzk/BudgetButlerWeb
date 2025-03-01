@@ -58,18 +58,14 @@ pub fn render_uebersicht_etf_template(view_result: UebersichtEtfViewResult) -> S
 
 fn map_to_template(view_result: UebersichtEtfViewResult) -> UebersichtEtfsTemplate {
     UebersichtEtfsTemplate {
-        etfs: view_result
-            .etfs
-            .iter()
-            .map(|x| map_etf_to_template(x))
-            .collect(),
+        etfs: view_result.etfs.iter().map(map_etf_to_template).collect(),
         kosten: ETFKostenUebersichtTemplate {
             gesamt: map_etf_kosten_to_template(&view_result.etfkosten.gesamt),
             data: view_result
                 .etfkosten
                 .data
                 .iter()
-                .map(|x| map_etf_kosten_to_template(x))
+                .map(map_etf_kosten_to_template)
                 .collect(),
         },
         regions_pie: map_pie_chart(view_result.regionen_pie),
@@ -85,7 +81,7 @@ fn map_tabelle_to_template(tabelle_template: Tabelle) -> TabelleTemplate {
         rows: tabelle_template
             .rows
             .iter()
-            .map(|x| map_tabellenzeile_to_template(x))
+            .map(map_tabellenzeile_to_template)
             .collect(),
     }
 }
@@ -97,7 +93,7 @@ fn map_tabellenzeile_to_template(tabellen_zeile_template: &TabellenZeile) -> Tab
         other_columns: tabellen_zeile_template
             .other_columns
             .iter()
-            .map(|x| map_tabellenzelle_to_template(x))
+            .map(map_tabellenzelle_to_template)
             .collect(),
     }
 }

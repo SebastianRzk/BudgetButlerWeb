@@ -30,8 +30,7 @@ fn berechne_kontostand(depotwert: DepotwertReferenz, database: &Database) -> Bet
     }
     konto_map
         .values()
-        .into_iter()
-        .map(|x| x.clone())
+        .cloned()
         .reduce(|a, b| a + b)
         .unwrap_or_else(Betrag::zero)
 }

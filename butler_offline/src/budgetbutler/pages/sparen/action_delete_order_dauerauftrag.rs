@@ -40,7 +40,7 @@ pub fn delete_order_dauerauftrag(
             konto: to_delete.value.konto.clone(),
             depotwert: to_delete.value.depotwert.clone(),
             wert: to_delete.value.wert.clone(),
-            rhythmus: to_delete.value.rhythmus.clone(),
+            rhythmus: to_delete.value.rhythmus,
         },
     }
 }

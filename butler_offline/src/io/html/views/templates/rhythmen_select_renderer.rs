@@ -9,7 +9,7 @@ pub fn create_rhythmen_select(
     Select::new(
         alle_rhythmen
             .iter()
-            .map(|x| write_rhythmus(x.clone()).element)
+            .map(|x| write_rhythmus(*x).element)
             .collect(),
         Some(write_rhythmus(selected_rhythmus).element),
     )
@@ -28,8 +28,8 @@ mod tests {
 
         assert_eq!(result.items.len(), 2);
         assert_eq!(result.items[0].value, "monatlich");
-        assert_eq!(result.items[0].selected, true);
+        assert!(result.items[0].selected);
         assert_eq!(result.items[1].value, "vierteljährlich");
-        assert_eq!(result.items[1].selected, false);
+        assert!(!result.items[1].selected);
     }
 }

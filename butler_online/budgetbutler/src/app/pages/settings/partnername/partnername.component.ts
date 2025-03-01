@@ -1,19 +1,17 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { PartnerService, PartnerInfo } from '../../../domain/partner.service';
-import { Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { PartnerInfo, PartnerService } from '../../../domain/partner.service';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { NgFor, NgIf } from '@angular/common';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
-import {firstValueFrom} from "rxjs";
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { firstValueFrom } from "rxjs";
 
 @Component({
     selector: 'app-partnername',
     templateUrl: './partnername.component.html',
     styleUrls: ['./partnername.component.css'],
-    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, FormsModule, MatFormField, MatLabel, MatInput, ReactiveFormsModule, NgFor, NgIf, MatButton]
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, FormsModule, MatFormField, MatLabel, MatInput, ReactiveFormsModule, MatButton]
 })
 export class PartnernameComponent implements OnInit {
 
@@ -25,9 +23,9 @@ export class PartnernameComponent implements OnInit {
 
   onClick: () => void = () => {
     if (this.verknuepfungAktiv) {
-      firstValueFrom(this.partnerService.deletePartner()).then(() => this.ngOnInit());
+      firstValueFrom(this.partnerService.deletePartner()).then(() => this.refreshData());
     } else {
-      firstValueFrom(this.partnerService.setPartner(this.partnerName.value!)).then(() => this.ngOnInit());
+      firstValueFrom(this.partnerService.setPartner(this.partnerName.value!)).then(() => this.refreshData());
     }
   }
 
@@ -52,7 +50,10 @@ export class PartnernameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.partnerService.getPartnerInfo().pipe(first()).toPromise().then(data => this.setData(data!));
+    this.refreshData();
   }
 
+  private refreshData() {
+    firstValueFrom(this.partnerService.getPartnerInfo()).then(data => this.setData(data!));
+  }
 }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { MatCardModule } from "@angular/material/card";
 import { BehaviorSubject, firstValueFrom, Observable, Subject } from "rxjs";
-import { AsyncPipe, DatePipe, DecimalPipe, JsonPipe, NgForOf, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe, DecimalPipe, JsonPipe } from "@angular/common";
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -22,8 +22,6 @@ import { MatButton } from "@angular/material/button";
     MatCheckboxModule,
     MatInputModule,
     MatSelectModule,
-    NgForOf,
-    NgIf,
     JsonPipe,
     MatButton,
   ],

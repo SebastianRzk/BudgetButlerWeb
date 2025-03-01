@@ -50,10 +50,10 @@ mod tests {
         assert_eq!(template.dauerauftrag_id, "1");
         assert_eq!(template.wert, "2,00");
         assert_eq!(template.datum.len(), 2);
-        assert_eq!(template.datum[0].can_be_chosen, true);
+        assert!(template.datum[0].can_be_chosen);
         assert_eq!(template.datum[0].datum, "2021-01-01");
         assert_eq!(template.datum[0].datum_german, "01.01.2021");
-        assert_eq!(template.datum[1].can_be_chosen, false);
+        assert!(!template.datum[1].can_be_chosen);
         assert_eq!(template.datum[1].datum, "2021-02-01");
         assert_eq!(template.datum[1].datum_german, "01.02.2021");
     }

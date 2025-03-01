@@ -38,7 +38,7 @@ impl NeueGemeinsameBuchung {
 impl GemeinsameBuchungEntity {
     pub fn to_domain(&self) -> GemeinsameBuchung {
         GemeinsameBuchung {
-            datum: self.datum.clone(),
+            datum: self.datum,
             id: self.id.clone(),
             kategorie: self.kategorie.clone(),
             name: self.name.clone(),
@@ -54,24 +54,23 @@ pub fn find_all_gemeinsame_buchungen(
     user_name: String,
 ) -> Result<Vec<GemeinsameBuchung>, DbError> {
     use crate::schema::gemeinsame_buchungen::dsl::*;
-    let alle_gemeinsame_buchungen;
     let partnerstatus =
         partner::output_db::calculate_partnerstatus(conn, user_name.clone()).unwrap();
 
-    if partnerstatus.clone().bestaetigt {
-        alle_gemeinsame_buchungen = gemeinsame_buchungen
+    let alle_gemeinsame_buchungen = if partnerstatus.clone().bestaetigt {
+        gemeinsame_buchungen
             .filter(
                 user.eq(user_name.clone())
                     .or(user.eq(partnerstatus.zielperson)),
             )
             .order(datum.asc())
-            .get_results(conn);
+            .get_results(conn)
     } else {
-        alle_gemeinsame_buchungen = gemeinsame_buchungen
+        gemeinsame_buchungen
             .filter(user.eq(user_name.clone()))
             .order(datum.asc())
-            .get_results(conn);
-    }
+            .get_results(conn)
+    };
 
     Ok(alle_gemeinsame_buchungen
         .unwrap()

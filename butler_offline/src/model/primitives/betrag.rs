@@ -75,8 +75,8 @@ impl Betrag {
         self.euro as u64 * 100 + self.cent as u64
     }
 
-    pub fn from_iso_string(iso_string: &String) -> Betrag {
-        let mut string_to_parse = iso_string.clone();
+    pub fn from_iso_string(iso_string: &str) -> Betrag {
+        let mut string_to_parse = iso_string.to_owned();
         let mut vorzeichen = Vorzeichen::Positiv;
         if string_to_parse.starts_with('-') {
             vorzeichen = Vorzeichen::Negativ;
@@ -206,8 +206,8 @@ impl Sub for Betrag {
             }
             let cent = self.cent - rhs.cent;
             return Betrag {
-                euro: euro,
-                cent: cent,
+                euro,
+                cent,
                 vorzeichen: Vorzeichen::Positiv,
             };
         }
@@ -273,7 +273,7 @@ impl PartialOrd for Betrag {
 
 impl<'a> BesitztBetrag<'a> for Betrag {
     fn betrag(&'a self) -> &'a Betrag {
-        &self
+        self
     }
 }
 
@@ -444,19 +444,19 @@ mod tests {
     #[test]
     fn test_parse() {
         assert_eq!(
-            Betrag::from_iso_string(&"12.34".to_string()),
+            Betrag::from_iso_string("12.34"),
             betrag(Vorzeichen::Positiv, 12, 34)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"-12.34".to_string()),
+            Betrag::from_iso_string("-12.34"),
             betrag(Vorzeichen::Negativ, 12, 34)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"-12.00".to_string()),
+            Betrag::from_iso_string("-12.00"),
             betrag(Vorzeichen::Negativ, 12, 0)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"12.00".to_string()),
+            Betrag::from_iso_string("12.00"),
             betrag(Vorzeichen::Positiv, 12, 0)
         );
     }
@@ -484,11 +484,11 @@ mod tests {
     #[test]
     fn test_parse_with_leading_zero() {
         assert_eq!(
-            Betrag::from_iso_string(&"012.34".to_string()),
+            Betrag::from_iso_string("012.34"),
             betrag(Vorzeichen::Positiv, 12, 34)
         );
         assert_eq!(
-            Betrag::from_iso_string(&"-012.34".to_string()),
+            Betrag::from_iso_string("-012.34"),
             betrag(Vorzeichen::Negativ, 12, 34)
         );
     }
@@ -533,19 +533,19 @@ mod tests {
 
     #[test]
     fn test_read_negativen_betrag() {
-        let ergebnis = Betrag::from_iso_string(&"-123.12".to_string());
+        let ergebnis = Betrag::from_iso_string("-123.12");
         assert_eq!(ergebnis, betrag(Vorzeichen::Negativ, 123, 12));
     }
 
     #[test]
     fn test_read_positiven_betrag() {
-        let ergebnis = Betrag::from_iso_string(&"123.12".to_string());
+        let ergebnis = Betrag::from_iso_string("123.12");
         assert_eq!(ergebnis, betrag(Vorzeichen::Positiv, 123, 12));
     }
 
     #[test]
     fn test_read_positiven_betrag_without_comma() {
-        let ergebnis = Betrag::from_iso_string(&"123".to_string());
+        let ergebnis = Betrag::from_iso_string("123");
         assert_eq!(ergebnis, betrag(Vorzeichen::Positiv, 123, 0));
     }
 
@@ -588,10 +588,10 @@ mod tests {
 
     #[test]
     fn test_betrag_from_iso_string() {
-        assert_eq!(Betrag::from_iso_string(&"0.50".to_string()).as_cent(), 50);
-        assert_eq!(Betrag::from_iso_string(&"0.5".to_string()).as_cent(), 50);
-        assert_eq!(Betrag::from_iso_string(&"1.23".to_string()).as_cent(), 123);
-        assert_eq!(Betrag::from_iso_string(&"0.01".to_string()).as_cent(), 1);
+        assert_eq!(Betrag::from_iso_string("0.50").as_cent(), 50);
+        assert_eq!(Betrag::from_iso_string("0.5").as_cent(), 50);
+        assert_eq!(Betrag::from_iso_string("1.23").as_cent(), 123);
+        assert_eq!(Betrag::from_iso_string("0.01").as_cent(), 1);
     }
 
     #[test]
@@ -620,7 +620,7 @@ mod tests {
 
     #[test]
     fn test_is_negativ() {
-        assert_eq!(Betrag::new(Vorzeichen::Negativ, 100, 0).is_negativ(), true);
-        assert_eq!(Betrag::new(Vorzeichen::Positiv, 100, 0).is_negativ(), false);
+        assert!(Betrag::new(Vorzeichen::Negativ, 100, 0).is_negativ());
+        assert!(!Betrag::new(Vorzeichen::Positiv, 100, 0).is_negativ());
     }
 }

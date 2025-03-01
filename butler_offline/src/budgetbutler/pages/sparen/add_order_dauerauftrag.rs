@@ -83,7 +83,7 @@ pub fn handle_view(context: AddOrderDauerauftragContext) -> AddOrderDauerauftrag
             depotwert: edit_buchung.value.depotwert.clone(),
             start_datum: edit_buchung.value.start_datum.clone(),
             ende_datum: edit_buchung.value.ende_datum.clone(),
-            rhythmus: edit_buchung.value.rhythmus.clone(),
+            rhythmus: edit_buchung.value.rhythmus,
         };
         bearbeitungsmodus = true;
         action_headline = "Order-Dauerauftrag bearbeiten".to_string();
@@ -114,7 +114,7 @@ pub fn handle_view(context: AddOrderDauerauftragContext) -> AddOrderDauerauftrag
                 wert: change.wert.clone(),
                 start_datum: change.start_datum.clone(),
                 ende_datum: change.ende_datum.clone(),
-                rhythmus: change.rhythmus.clone(),
+                rhythmus: change.rhythmus,
             })
             .collect(),
         typen: get_all_order_typ_descriptions(),
@@ -166,7 +166,7 @@ mod tests {
         let result = super::handle_view(context);
 
         assert_eq!(result.database_version.name, "empty");
-        assert_eq!(result.bearbeitungsmodus, false);
+        assert!(!result.bearbeitungsmodus);
         assert_eq!(result.action_headline, "Order-Dauerauftrag erfassen");
 
         assert_eq!(result.default_item.index, 0);
@@ -203,7 +203,7 @@ mod tests {
         let result = super::handle_view(context);
 
         assert_eq!(result.database_version.as_string(), "empty-1-0");
-        assert_eq!(result.bearbeitungsmodus, true);
+        assert!(result.bearbeitungsmodus);
         assert_eq!(result.action_headline, "Order-Dauerauftrag bearbeiten");
 
         assert_eq!(result.default_item.index, 1);

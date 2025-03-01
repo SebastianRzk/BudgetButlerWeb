@@ -120,7 +120,7 @@ pub fn create_database_backup(
 
     let mut file = fs::File::create(path).unwrap();
     for line in db_file.lines {
-        file.write_all(&line.line.as_bytes()).unwrap();
+        file.write_all(line.line.as_bytes()).unwrap();
         file.write_all("\n".as_bytes()).unwrap();
     }
 }

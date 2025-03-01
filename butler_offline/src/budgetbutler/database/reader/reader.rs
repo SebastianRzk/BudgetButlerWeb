@@ -156,20 +156,16 @@ fn calc_internal_state(database: Database, heute: Datum, next_free_index: u32) -
     for sparbuchung in &database.sparbuchungen.sparbuchungen {
         current_index += 1;
 
-        let betrag: Betrag;
-
-        match sparbuchung.value.typ {
+        let betrag = match sparbuchung.value.typ {
             SparbuchungTyp::ManuelleEinzahlung | SparbuchungTyp::SonstigeKosten => {
-                betrag = sparbuchung.value.wert.negativ();
+                sparbuchung.value.wert.negativ()
             }
 
             SparbuchungTyp::ManuelleAuszahlung | SparbuchungTyp::Ausschuettung => {
-                betrag = sparbuchung.value.wert.positiv();
+                sparbuchung.value.wert.positiv()
             }
-            SparbuchungTyp::Zinsen => {
-                betrag = Betrag::zero();
-            }
-        }
+            SparbuchungTyp::Zinsen => Betrag::zero(),
+        };
 
         if betrag == Betrag::zero() {
             continue;
@@ -355,7 +351,7 @@ mod tests {
 
         assert_eq!(result.einzelbuchungen.select().count(), 1);
         let einzelbuchung = result.einzelbuchungen.get(3);
-        assert_eq!(einzelbuchung.dynamisch, true);
+        assert!(einzelbuchung.dynamisch);
         assert_eq!(einzelbuchung.value.datum, gemeinsame_buchung.datum);
         assert_eq!(einzelbuchung.value.betrag, zwei());
         assert_eq!(einzelbuchung.value.kategorie, gemeinsame_buchung.kategorie);
@@ -374,7 +370,7 @@ mod tests {
 
         assert_eq!(result.sparkontos.select().count(), 1);
         let selected_sparkonto = result.sparkontos.get(1);
-        assert_eq!(selected_sparkonto.dynamisch, false);
+        assert!(!selected_sparkonto.dynamisch);
         assert_eq!(selected_sparkonto.value.name, sparkonto.name);
         assert_eq!(selected_sparkonto.value.kontotyp, sparkonto.kontotyp);
     }
@@ -388,7 +384,7 @@ mod tests {
 
         assert_eq!(result.sparbuchungen.select().count(), 1);
         let selected_sparbuchung = result.sparbuchungen.get(1);
-        assert_eq!(selected_sparbuchung.dynamisch, false);
+        assert!(!selected_sparbuchung.dynamisch);
         assert_eq!(selected_sparbuchung.value, sparbuchung);
     }
 
@@ -424,7 +420,7 @@ mod tests {
 
         assert_eq!(result.einzelbuchungen.select().count(), 1);
         let selected_einzelbuchung = result.einzelbuchungen.get(3);
-        assert_eq!(selected_einzelbuchung.dynamisch, true);
+        assert!(selected_einzelbuchung.dynamisch);
         assert_eq!(selected_einzelbuchung.value.datum, sparbuchung.datum);
         assert_eq!(selected_einzelbuchung.value.name, sparbuchung.name);
         assert_eq!(selected_einzelbuchung.value.kategorie, sparen_kategorie());
@@ -442,7 +438,7 @@ mod tests {
 
         assert_eq!(result.einzelbuchungen.select().count(), 1);
         let selected_einzelbuchung = result.einzelbuchungen.get(3);
-        assert_eq!(selected_einzelbuchung.dynamisch, true);
+        assert!(selected_einzelbuchung.dynamisch);
         assert_eq!(selected_einzelbuchung.value.datum, sparbuchung.datum);
         assert_eq!(selected_einzelbuchung.value.name, sparbuchung.name);
         assert_eq!(selected_einzelbuchung.value.kategorie, sparen_kategorie());
@@ -482,7 +478,7 @@ mod tests {
 
         assert_eq!(result.einzelbuchungen.select().count(), 1);
         let selected_einzelbuchung = result.einzelbuchungen.get(3);
-        assert_eq!(selected_einzelbuchung.dynamisch, true);
+        assert!(selected_einzelbuchung.dynamisch);
         assert_eq!(selected_einzelbuchung.value.datum, sparbuchung.datum);
         assert_eq!(selected_einzelbuchung.value.name, sparbuchung.name);
         assert_eq!(selected_einzelbuchung.value.kategorie, sparen_kategorie());
@@ -498,7 +494,7 @@ mod tests {
 
         assert_eq!(result.depotwerte.select().count(), 1);
         let selected_depotwert = result.depotwerte.get(1);
-        assert_eq!(selected_depotwert.dynamisch, false);
+        assert!(!selected_depotwert.dynamisch);
         assert_eq!(selected_depotwert.value, depotwert);
     }
 
@@ -511,7 +507,7 @@ mod tests {
 
         assert_eq!(result.order.select().count(), 1);
         let selected_order = result.order.get(1);
-        assert_eq!(selected_order.dynamisch, false);
+        assert!(!selected_order.dynamisch);
         assert_eq!(selected_order.value, order);
     }
 
@@ -524,7 +520,7 @@ mod tests {
 
         assert_eq!(result.einzelbuchungen.select().count(), 1);
         let selected_einzelbuchung = result.einzelbuchungen.get(3);
-        assert_eq!(selected_einzelbuchung.dynamisch, true);
+        assert!(selected_einzelbuchung.dynamisch);
         assert_eq!(
             selected_einzelbuchung.value,
             Einzelbuchung {
@@ -548,7 +544,7 @@ mod tests {
 
         assert_eq!(result.order.select().count(), 1);
         let selected_order = result.order.get(1);
-        assert_eq!(selected_order.dynamisch, false);
+        assert!(!selected_order.dynamisch);
         assert_eq!(selected_order.value, order_dauerauftrag);
     }
 
@@ -566,7 +562,7 @@ mod tests {
         assert_eq!(result.order.select().count(), 1);
         eprintln!("{:?}", result.order);
         let selected_order = result.order.get(3);
-        assert_eq!(selected_order.dynamisch, true);
+        assert!(selected_order.dynamisch);
         assert_eq!(
             selected_order.value,
             Order {
@@ -580,7 +576,7 @@ mod tests {
 
         assert_eq!(result.einzelbuchungen.select().count(), 1);
         let selected_einzelbuchung = result.einzelbuchungen.get(5);
-        assert_eq!(selected_einzelbuchung.dynamisch, true);
+        assert!(selected_einzelbuchung.dynamisch);
         assert_eq!(
             selected_einzelbuchung.value,
             Einzelbuchung {
@@ -604,7 +600,7 @@ mod tests {
 
         assert_eq!(result.depotauszuege.select().count(), 1);
         let selected_order = result.depotauszuege.get(1);
-        assert_eq!(selected_order.dynamisch, false);
+        assert!(!selected_order.dynamisch);
         assert_eq!(selected_order.value, depotauszug);
     }
 }

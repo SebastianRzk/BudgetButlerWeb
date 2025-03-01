@@ -78,7 +78,7 @@ impl Default for EinnahmenAusgabenAggregation {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct KategorieAggregation {
     pub content: HashMap<Kategorie, Betrag>,
 }
@@ -91,19 +91,11 @@ impl Add for KategorieAggregation {
 
         for (kategorie, betrag) in rhs.content.iter() {
             let zero = Betrag::zero();
-            let current = union.get(&kategorie).unwrap_or(&zero);
+            let current = union.get(kategorie).unwrap_or(&zero);
             union.insert(kategorie.clone(), current.clone() + betrag.clone());
         }
 
         KategorieAggregation { content: union }
-    }
-}
-
-impl Default for KategorieAggregation {
-    fn default() -> Self {
-        KategorieAggregation {
-            content: HashMap::new(),
-        }
     }
 }
 

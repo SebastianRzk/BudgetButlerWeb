@@ -29,7 +29,7 @@ pub struct MonatsZusammenfassung {
 }
 
 pub fn handle_view(context: UebersichtSparbuchungenContext) -> UebersichtSparbuchungenViewResult {
-    let verfuegbare_jahre = context
+    let verfuegbare_jahre: Vec<i32> = context
         .database
         .sparbuchungen
         .select()
@@ -53,7 +53,6 @@ pub fn handle_view(context: UebersichtSparbuchungenContext) -> UebersichtSparbuc
 
     let mut alle_monate: Vec<MonatsAggregationsIndex> = buchungen_des_jahres_selektor
         .keys()
-        .into_iter()
         .map(|x| x.to_owned().clone())
         .collect();
     alle_monate.sort();
@@ -68,13 +67,12 @@ pub fn handle_view(context: UebersichtSparbuchungenContext) -> UebersichtSparbuc
         liste.push(monats_zusammenfassung);
     }
 
-    let result = UebersichtSparbuchungenViewResult {
+    UebersichtSparbuchungenViewResult {
         liste,
         selektiertes_jahr,
         verfuegbare_jahre,
         database_version: context.database.db_version.clone(),
-    };
-    result
+    }
 }
 
 #[cfg(test)]

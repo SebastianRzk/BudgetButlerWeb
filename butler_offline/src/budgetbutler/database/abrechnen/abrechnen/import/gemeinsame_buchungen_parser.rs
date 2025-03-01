@@ -52,20 +52,20 @@ mod tests {
 
         assert_eq!(gemeinsame_buchungen.len(), 2);
         assert_eq!(
-            gemeinsame_buchungen.get(0).unwrap().datum,
+            gemeinsame_buchungen.first().unwrap().datum,
             datum("2024-01-01")
         );
         assert_eq!(
-            gemeinsame_buchungen.get(0).unwrap().betrag,
+            gemeinsame_buchungen.first().unwrap().betrag,
             betrag(Vorzeichen::Negativ, 123, 12)
         );
         assert_eq!(
-            gemeinsame_buchungen.get(0).unwrap().kategorie,
+            gemeinsame_buchungen.first().unwrap().kategorie,
             kategorie("NeueKategorie")
         );
-        assert_eq!(gemeinsame_buchungen.get(0).unwrap().name, name("Normal"));
+        assert_eq!(gemeinsame_buchungen.first().unwrap().name, name("Normal"));
         assert_eq!(
-            gemeinsame_buchungen.get(0).unwrap().person,
+            gemeinsame_buchungen.first().unwrap().person,
             person("Person1")
         );
 

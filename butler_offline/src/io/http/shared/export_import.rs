@@ -56,7 +56,7 @@ pub async fn submit_import_manuell(
 
     let pruefe_kategorien =
         pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind(&database, &abrechnung);
-    if pruefe_kategorien.kategorien_nicht_in_datenbank.len() > 0 {
+    if !pruefe_kategorien.kategorien_nicht_in_datenbank.is_empty() {
         let view_result = ImportMappingViewResult {
             database_version: database.db_version.clone(),
             abrechnung,

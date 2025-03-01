@@ -15,11 +15,10 @@ pub struct UebersichtGemeinsameBuchungenContext<'a> {
 pub fn handle_view(
     context: UebersichtGemeinsameBuchungenContext,
 ) -> UebersichtGemeinsameBuchungenViewResult {
-    let result = UebersichtGemeinsameBuchungenViewResult {
+    UebersichtGemeinsameBuchungenViewResult {
         liste: context.database.gemeinsame_buchungen.select().collect(),
         database_version: context.database.db_version.clone(),
-    };
-    result
+    }
 }
 
 #[cfg(test)]

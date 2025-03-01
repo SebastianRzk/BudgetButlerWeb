@@ -26,7 +26,7 @@ impl PartnerStatusEntity {
         PartnerStatus {
             zielperson: self.zielperson.clone(),
             user: self.user.clone(),
-            bestaetigt: bestaetigt.clone(),
+            bestaetigt,
         }
     }
 }
@@ -61,11 +61,11 @@ pub fn calculate_partnerstatus(
 
 fn load_partnerstatus(
     conn: &mut MysqlConnection,
-    user_name: &String,
+    user_name: &str,
 ) -> Result<Option<PartnerStatusEntity>, DbError> {
     use crate::schema::partner::dsl::*;
     let partnerstatus: Option<PartnerStatusEntity> = partner
-        .filter(user.eq(user_name.clone()))
+        .filter(user.eq(user_name.to_owned()))
         .first::<PartnerStatusEntity>(conn)
         .optional()?;
     Ok(partnerstatus)
@@ -76,7 +76,7 @@ pub fn update_partnerstatus(
     neuer_partnerstatus: NeuerPartnerStatus,
 ) -> Result<PartnerStatus, DbError> {
     let username = &neuer_partnerstatus.user;
-    let aktueller_partnerstatus = load_partnerstatus(conn, &username);
+    let aktueller_partnerstatus = load_partnerstatus(conn, username);
     if aktueller_partnerstatus.is_ok() && aktueller_partnerstatus.unwrap().is_some() {
         delete_partnerstatus(conn, username.clone()).unwrap();
     };

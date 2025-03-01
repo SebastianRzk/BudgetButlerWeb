@@ -1,20 +1,20 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {EinzelbuchungService} from '../../domain/einzelbuchung.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EinzelbuchungService } from '../../domain/einzelbuchung.service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import {Kategorie, KategorieService} from '../../domain/kategorie.service';
-import {EinzelbuchungAnlegen, GemeinsameBuchungAnlegen} from '../../domain/model';
-import {GemeinsamebuchungService} from '../../domain/gemeinsamebuchung.service';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
-import {AsyncPipe, CommonModule} from '@angular/common';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatCardModule} from '@angular/material/card';
-import {BreakpointObserver} from "@angular/cdk/layout";
+import { Kategorie, KategorieService } from '../../domain/kategorie.service';
+import { EinzelbuchungAnlegen, GemeinsameBuchungAnlegen } from '../../domain/model';
+import { GemeinsamebuchungService } from '../../domain/gemeinsamebuchung.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { AsyncPipe } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { BreakpointObserver } from "@angular/cdk/layout";
 import { BuchungEvent, ErweiterteBuchungComponent } from "./erweiterte-buchung/erweiterte-buchung.component";
 
 @Component({
@@ -31,7 +31,6 @@ import { BuchungEvent, ErweiterteBuchungComponent } from "./erweiterte-buchung/e
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,
-    CommonModule,
     ErweiterteBuchungComponent
   ],
   providers: [

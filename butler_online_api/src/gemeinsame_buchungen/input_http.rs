@@ -24,7 +24,7 @@ pub struct NeueGemeinsameBuchungDto {
 impl NeueGemeinsameBuchungDto {
     pub fn to_domain(&self, user: String, partnerperson: String) -> NeueGemeinsameBuchung {
         let mut zielperson: String = user.clone();
-        if !self.eigene_buchung.clone() {
+        if !self.eigene_buchung {
             zielperson = partnerperson
         }
 
@@ -145,7 +145,7 @@ pub async fn delete_gemeinsame_buchungen(
     let user: String = user.sub;
     let _result = web::block(move || {
         let mut conn = pool.get()?;
-        return output_db::delete_all_gemeinsame_buchungen(&mut conn, user);
+        output_db::delete_all_gemeinsame_buchungen(&mut conn, user)
     })
     .await?
     .map_err(error::ErrorInternalServerError)?;

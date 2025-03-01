@@ -5,29 +5,9 @@ use crate::einzelbuchungen::output_db;
 use chrono::Local;
 use diesel::r2d2::{ConnectionManager, PooledConnection};
 use diesel::MysqlConnection;
-use std::time::SystemTime;
-
-pub fn verarbeite_dauerauftraege(
-    mut connection: &mut PooledConnection<ConnectionManager<MysqlConnection>>,
-) {
-    let start = SystemTime::now();
-    let mut anzahl_verarbeiteter_buchungen = 0;
-    let auftraege =
-        dauerauftraege::output_db_cron::find_all_dauerauftraege_without_user(&mut connection)
-            .unwrap();
-    for dauerauftrag in auftraege.iter() {
-        anzahl_verarbeiteter_buchungen += verarbeite_dauerauftrag(&mut connection, dauerauftrag);
-    }
-    eprintln!(
-        "{:?} Buchungen von {:?} Dauerauftraegen in {:?} verarbeitet",
-        anzahl_verarbeiteter_buchungen,
-        auftraege.len(),
-        start.elapsed()
-    );
-}
 
 pub fn verarbeite_dauerauftrag(
-    mut connection: &mut PooledConnection<ConnectionManager<MysqlConnection>>,
+    connection: &mut PooledConnection<ConnectionManager<MysqlConnection>>,
     dauerauftrag: &Dauerauftrag,
 ) -> i32 {
     let mut naechste_buchung = crate::wiederkehrend::util::calculate_naechste_buchung(
@@ -37,22 +17,20 @@ pub fn verarbeite_dauerauftrag(
     );
     let today = crate::wiederkehrend::util::to_date(Local::now().date_naive());
     let mut anzahl_verarbeiteter_buchungen = 0;
-    while naechste_buchung.clone() <= today.clone()
-        && naechste_buchung.clone() < dauerauftrag.ende_datum.clone()
-    {
+    while naechste_buchung <= today && naechste_buchung < dauerauftrag.ende_datum {
         anzahl_verarbeiteter_buchungen += 1;
         let neue_buchung = NeueEinzelbuchung {
-            datum: naechste_buchung.clone(),
+            datum: naechste_buchung,
             user: dauerauftrag.user.clone(),
             name: dauerauftrag.name.clone(),
             wert: dauerauftrag.wert.clone(),
             kategorie: dauerauftrag.kategorie.clone(),
         };
-        output_db::repository::insert_new_einzelbuchung(&mut connection, neue_buchung).unwrap();
+        output_db::repository::insert_new_einzelbuchung(connection, neue_buchung).unwrap();
         dauerauftraege::output_db::update_letzte_ausfuehrung(
-            &mut connection,
+            connection,
             dauerauftrag.id.clone(),
-            naechste_buchung.clone(),
+            naechste_buchung,
         )
         .unwrap();
 
@@ -61,5 +39,5 @@ pub fn verarbeite_dauerauftrag(
             dauerauftrag.rhythmus.clone(),
         );
     }
-    return anzahl_verarbeiteter_buchungen;
+    anzahl_verarbeiteter_buchungen
 }

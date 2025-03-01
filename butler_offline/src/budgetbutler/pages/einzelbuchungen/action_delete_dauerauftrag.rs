@@ -33,7 +33,7 @@ pub fn delete_dauerauftrag(context: DeleteContext) -> RedirectResult<Dauerauftra
             name: to_delete.value.name.clone(),
             kategorie: to_delete.value.kategorie.clone(),
             betrag: to_delete.value.betrag,
-            rhythmus: to_delete.value.rhythmus.clone(),
+            rhythmus: to_delete.value.rhythmus,
         },
     }
 }

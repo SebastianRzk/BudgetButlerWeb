@@ -47,16 +47,16 @@ mod tests {
         let einzelbuchungen = read_einzelbuchungen(lines);
 
         assert_eq!(einzelbuchungen.len(), 2);
-        assert_eq!(einzelbuchungen.get(0).unwrap().datum, datum("2024-01-01"));
+        assert_eq!(einzelbuchungen.first().unwrap().datum, datum("2024-01-01"));
         assert_eq!(
-            einzelbuchungen.get(0).unwrap().betrag,
+            einzelbuchungen.first().unwrap().betrag,
             betrag(Vorzeichen::Negativ, 123, 12)
         );
         assert_eq!(
-            einzelbuchungen.get(0).unwrap().kategorie,
+            einzelbuchungen.first().unwrap().kategorie,
             kategorie("NeueKategorie")
         );
-        assert_eq!(einzelbuchungen.get(0).unwrap().name, name("Normal"));
+        assert_eq!(einzelbuchungen.first().unwrap().name, name("Normal"));
 
         assert_eq!(einzelbuchungen.get(1).unwrap().datum, datum("2024-01-02"));
         assert_eq!(

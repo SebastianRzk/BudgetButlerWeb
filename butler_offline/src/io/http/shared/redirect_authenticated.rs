@@ -33,7 +33,7 @@ pub async fn logged_in_callback(
     let mut database = data.database.lock().unwrap();
     let configuration = config.configuration.lock().unwrap();
     let online_redirect = online_redirect_state.redirect_state.lock().unwrap();
-    if online_redirect.action == None {
+    if online_redirect.action.is_none() {
         return http_redirect(redirect_to_keine_aktion_gefunden());
     }
 
@@ -46,40 +46,37 @@ pub async fn logged_in_callback(
         return http_redirect(redirect_to_optimistic_locking_error());
     }
 
-    let action_result: RedirectAuthenticatedResult;
-
     let credentials = LoginCredentials {
         username: query.user.to_string(),
         session_cookie: Cookie::from_session_str(query.session.clone()),
     };
 
-    match action.typ {
+    let action_result: RedirectAuthenticatedResult = match action.typ {
         OnlineRedirectActionType::ImportEinzelbuchungen => {
-            action_result = import_einzelbuchungen_request(
+            import_einzelbuchungen_request(
                 &configuration,
                 credentials,
                 configuration.user_configuration.self_name.clone(),
                 &database,
             )
-            .await;
+            .await
         }
         OnlineRedirectActionType::UploadKategorien => {
-            action_result = upload_kategorien(&configuration, credentials, &database).await;
+            upload_kategorien(&configuration, credentials, &database).await
         }
         OnlineRedirectActionType::ImportGemeinsameBuchungen => {
-            action_result = import_gemeinsame_buchungen_request(
+            import_gemeinsame_buchungen_request(
                 &configuration,
                 credentials,
                 configuration.user_configuration.self_name.clone(),
                 &database,
             )
-            .await;
+            .await
         }
         OnlineRedirectActionType::UploadGemeinsameBuchungen => {
-            action_result =
-                export_gemeinsame_buchungen_request(&configuration, credentials, &database).await;
+            export_gemeinsame_buchungen_request(&configuration, credentials, &database).await
         }
-    }
+    };
     if let Some(next_state) = action_result.database_to_save {
         println!("saving database");
 

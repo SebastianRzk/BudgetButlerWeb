@@ -9,14 +9,12 @@ pub struct FarbenSelektor {
 impl FarbenSelektor {
     pub fn new(kategorien: Vec<Kategorie>, konfigurierte_farben: Vec<Farbe>) -> FarbenSelektor {
         let mut map = HashMap::new();
-        let mut index = 0;
         let farben_count = konfigurierte_farben.len();
 
-        for kategorie in kategorien {
+        for (index, kategorie) in kategorien.iter().enumerate() {
             let farben_index = index % farben_count;
             let farbe = konfigurierte_farben.get(farben_index).unwrap();
             map.insert(kategorie.clone(), farbe.clone());
-            index += 1;
         }
         FarbenSelektor { map }
     }

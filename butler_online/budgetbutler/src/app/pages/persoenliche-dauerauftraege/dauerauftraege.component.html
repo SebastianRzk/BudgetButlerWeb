@@ -8,13 +8,15 @@
         <th *matHeaderCellDef mat-header-cell> Name</th>
         <td *matCellDef="let element" mat-cell>
           <mat-chip-listbox>
-            <mat-chip
-              *ngIf="!gleichesJahr(element.startDatum, element.endeDatum)">{{ element.startDatum | date: 'd.M.yyyy' }}
-              - {{ element.endeDatum | date: 'd.M.yyyy' }}
-            </mat-chip>
-            <mat-chip *ngIf="gleichesJahr(element.startDatum, element.endeDatum)">{{ element.startDatum | date : 'd.M' }}
-              - {{ element.endeDatum | date: 'd.M.yyyy' }}
-            </mat-chip>
+            @if (gleichesJahr(element.endeDatum, element.startDatum)) {
+              <mat-chip>
+                {{ element.startDatum | date : 'd.M' }} - {{ element.endeDatum | date: 'd.M.yyyy' }}
+              </mat-chip>
+            } @else {
+              <mat-chip>
+                {{ element.startDatum | date: 'd.M.yyyy' }} - {{ element.endeDatum | date: 'd.M.yyyy' }}
+              </mat-chip>
+            }
             <mat-chip color="primary" highlighted="true">{{ element.name }}</mat-chip>
             <mat-chip>{{ element.kategorie }}</mat-chip>
             <mat-chip color="primary" highlighted="true">{{ element.rhythmus }}</mat-chip>

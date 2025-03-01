@@ -160,13 +160,12 @@ fn berechne_zusammenfassung(
             selektierter_monat,
         ))
         .group_as_list_by(tagesweise_aggregation);
-    let mut tage: Vec<&TagesAggregationsIndex> =
-        tagesweise_aggregation.keys().into_iter().collect();
+    let mut tage: Vec<&TagesAggregationsIndex> = tagesweise_aggregation.keys().collect();
     tage.sort();
     let mut result = vec![];
 
     for tag in tage {
-        let buchungen = tagesweise_aggregation.get(&tag).unwrap();
+        let buchungen = tagesweise_aggregation.get(tag).unwrap();
         let mut items: Vec<Buchung> = Vec::new();
         for buchung in buchungen {
             items.push(Buchung {

@@ -53,14 +53,13 @@ pub fn aktualisiere_kategorien(
         neue_gemeinsame_buchungen.push(buchung.change_kategorie(neue_kategorie.clone()));
     }
 
-    let import_text;
-    if neue_buchungen.len() > 0 {
-        import_text = einzelbuchungen_as_import_text(&neue_buchungen);
+    let import_text = if !neue_buchungen.is_empty() {
+        einzelbuchungen_as_import_text(&neue_buchungen)
     } else {
-        import_text = gemeinsame_buchungen_as_import_text(&neue_gemeinsame_buchungen);
-    }
+        gemeinsame_buchungen_as_import_text(&neue_gemeinsame_buchungen)
+    };
 
-    let new_abrechnung = Abrechnung {
+    Abrechnung {
         lines: generiere_text(
             EinfuehrungsText {
                 lines: sorted.beschreibung.clone(),
@@ -69,8 +68,7 @@ pub fn aktualisiere_kategorien(
             parse_metadaten(&sorted),
             HeaderInsertModus::AlreadyInserted,
         ),
-    };
-    new_abrechnung
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -181,12 +179,12 @@ pub fn update_abrechnung_for_import(abrechnung: Abrechnung, heute: Datum) -> Abr
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
     use crate::budgetbutler::database::abrechnen::abrechnen::importer::update_abrechnung_for_import;
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::builder::abrechnung_from_str;
     use crate::io::disk::diskrepresentation::line::builder::as_string;
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;
+    use std::collections::HashMap;
 
     const DEMO_ABRECHNUNG_INPUT: &str = "\
 ergebnis

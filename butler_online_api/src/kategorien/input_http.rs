@@ -111,7 +111,7 @@ pub async fn delete_kategorien(
     let user: String = user.sub;
     let _result = web::block(move || {
         let mut conn = pool.get()?;
-        return output_db::delete_all_kategorien(&mut conn, user);
+        output_db::delete_all_kategorien(&mut conn, user)
     })
     .await?
     .map_err(error::ErrorInternalServerError)?;

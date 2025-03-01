@@ -196,7 +196,7 @@ fn map_to_template(view_result: UebersichtSparenViewResult) -> UebersichtSparenT
                 kontostand: a.kontostand.to_german_string(),
             })
             .collect(),
-        anlagetypen_gesamt: anlagetypen_gesamt,
+        anlagetypen_gesamt,
         anlagetypen_pie: map_pie_chart(view_result.anlagetypen_pie.clone()),
         order_typen: OrderTypenTemplate {
             gesamt_dynamisch: view_result.order_typen.gesamt_dynamisch.to_german_string(),

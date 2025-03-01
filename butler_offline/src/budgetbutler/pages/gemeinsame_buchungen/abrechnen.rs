@@ -54,7 +54,7 @@ pub fn submit_rechne_ab(context: GemeinsameBuchungenAbrechnenSubmitContext) -> A
         titel: context.set_titel.clone(),
     };
 
-    let abrechnungen = rechne_ab(
+    rechne_ab(
         selektierter_zeitraum.clone().collect(),
         eigene_buchungen.clone().collect(),
         partner_buchungen.clone().collect(),
@@ -82,8 +82,7 @@ pub fn submit_rechne_ab(context: GemeinsameBuchungenAbrechnenSubmitContext) -> A
             diff_selbst: diff_self,
         },
         titel,
-    );
-    abrechnungen
+    )
 }
 #[cfg(test)]
 mod tests {

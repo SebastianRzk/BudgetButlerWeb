@@ -13,7 +13,7 @@ use crate::gemeinsame_dauerauftraege::model::{
 use crate::gemeinsame_dauerauftraege::output_db;
 use crate::result_dto::result_success;
 use crate::user::model::User;
-use crate::wiederkehrend::gemeinsame_buchung;
+use crate::wiederkehrend::gemeinsame_buchung::verarbeite_gemeinsame_buchung_dauerauftrag;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -30,7 +30,7 @@ pub struct NeuerGemeinsamerDauerauftragDto {
 impl NeuerGemeinsamerDauerauftragDto {
     pub fn to_domain(&self, user: String, partnerperson: String) -> NeuerGemeinsamerDauerauftrag {
         let mut zielperson: String = user.clone();
-        if !self.eigene_buchung.clone() {
+        if !self.eigene_buchung {
             zielperson = partnerperson
         }
 
@@ -101,10 +101,7 @@ pub async fn add_gemeinsamer_dauerauftrag(
             &mut conn,
             form.to_domain(user, partner_configuration.zielperson),
         );
-        gemeinsame_buchung::verarbeite_gemeinsame_buchung_dauerauftrag(
-            &mut conn,
-            &dauerauftrag.as_ref().unwrap(),
-        );
+        verarbeite_gemeinsame_buchung_dauerauftrag(&mut conn, dauerauftrag.as_ref().unwrap());
         dauerauftrag
     })
     .await?

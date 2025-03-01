@@ -55,11 +55,11 @@ impl<T: Clone> Selector<T> {
         result
     }
 
-    pub fn group_as_list_by<'a, KEYTYPE: Eq + Hash>(
+    pub fn group_as_list_by<KeyType: Eq + Hash>(
         self,
-        key_extractor: impl Fn(&T) -> KEYTYPE,
-    ) -> HashMap<KEYTYPE, Vec<T>> {
-        let mut result: HashMap<KEYTYPE, Vec<T>> = HashMap::new();
+        key_extractor: impl Fn(&T) -> KeyType,
+    ) -> HashMap<KeyType, Vec<T>> {
+        let mut result: HashMap<KeyType, Vec<T>> = HashMap::new();
         for item in self.internal_state.into_iter() {
             let key = key_extractor(&item);
 

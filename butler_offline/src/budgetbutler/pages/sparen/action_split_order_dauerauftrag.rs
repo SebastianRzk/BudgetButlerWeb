@@ -32,7 +32,7 @@ pub fn submit_split_order_dauerauftrag(
         ende_datum: letzter_buchungstag,
         name: to_change.value.name.clone(),
         wert: to_change.value.wert.clone(),
-        rhythmus: to_change.value.rhythmus.clone(),
+        rhythmus: to_change.value.rhythmus,
     };
 
     let mut neue_order_dauerauftraege = context
@@ -48,7 +48,7 @@ pub fn submit_split_order_dauerauftrag(
         wert: OrderBetrag::new(context.betrag.clone(), to_change.value.wert.get_typ()),
         konto: to_change.value.konto.clone(),
         depotwert: to_change.value.depotwert.clone(),
-        rhythmus: to_change.value.rhythmus.clone(),
+        rhythmus: to_change.value.rhythmus,
     };
 
     neue_order_dauerauftraege = neue_order_dauerauftraege
@@ -72,7 +72,7 @@ pub fn submit_split_order_dauerauftrag(
             wert: to_change.value.wert.clone(),
             konto: to_change.value.konto.clone(),
             depotwert: to_change.value.depotwert.clone(),
-            rhythmus: to_change.value.rhythmus.clone(),
+            rhythmus: to_change.value.rhythmus,
         },
     }
 }
@@ -116,7 +116,7 @@ mod tests {
             .changed_database
             .dauerauftraege
             .dauerauftraege
-            .get(0)
+            .first()
             .unwrap();
         assert_eq!(alter_auftrag.start_datum(), &Datum::new(1, 1, 2021));
         assert_eq!(alter_auftrag.ende_datum(), &Datum::new(31, 12, 2021));

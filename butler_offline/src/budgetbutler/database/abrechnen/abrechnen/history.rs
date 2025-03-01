@@ -21,7 +21,7 @@ pub fn read_and_sort_abrechnungen(
 ) -> Vec<PreparedAbrechnung> {
     let mut parsed_abrechnungen: Vec<PreparedAbrechnung> = unparsed_abrechnungen
         .into_iter()
-        .map(|unparsed_abrechnung| read_abrechnung(unparsed_abrechnung))
+        .map(read_abrechnung)
         .collect();
     parsed_abrechnungen.sort_by(|a, b| a.file_name_original.cmp(&b.file_name_original));
     parsed_abrechnungen
@@ -32,13 +32,12 @@ fn read_abrechnung(unparsed_abrechnungs_file: UnparsedAbrechnungsFile) -> Prepar
         &unparsed_abrechnungs_file.file_content,
         HeaderModus::Preserve,
     );
-    let title: String;
-    if sorted.metadaten.len() == 0 {
-        title = unparsed_abrechnungs_file.file_name.clone();
+    let title = if sorted.metadaten.is_empty() {
+        unparsed_abrechnungs_file.file_name.clone()
     } else {
         let metadaten = parse_metadaten(&sorted);
-        title = generate_abrechnungs_title_from_metadaten(metadaten);
-    }
+        generate_abrechnungs_title_from_metadaten(metadaten)
+    };
     PreparedAbrechnung {
         file_name_original: unparsed_abrechnungs_file.file_name.clone(),
         file_content: unparsed_abrechnungs_file.file_content,
@@ -66,13 +65,13 @@ mod tests {
     #[test]
     fn test_generate_abrechnungs_title_from_metadaten() {
         let result = generate_abrechnungs_title_from_metadaten(Metadaten {
-            ausfuehrungsdatum: Datum::from_iso_string(&"2022-01-01".to_string()),
+            ausfuehrungsdatum: Datum::from_iso_string("2022-01-01"),
             abrechnende_person: person("Max Mustermann"),
             titel: Titel {
                 titel: "Test".to_string(),
             },
             ziel: Ziel::ImportBuchungenAusApp,
-            abrechnungsdatum: Datum::from_iso_string(&"2021-01-01".to_string()),
+            abrechnungsdatum: Datum::from_iso_string("2021-01-01"),
         });
 
         assert_eq!(result, "Test vom 01.01.2021, (importiert am 01.01.2022)");

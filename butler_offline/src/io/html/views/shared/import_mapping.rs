@@ -87,12 +87,12 @@ mod tests {
         assert_eq!(template.abrechnung, "abrechnung");
         assert_eq!(template.alle_kategorie_optionen.items.len(), 2);
         assert_eq!(template.alle_kategorie_optionen.items[0].value, "kategorie");
-        assert_eq!(template.alle_kategorie_optionen.items[0].selected, false);
+        assert!(!template.alle_kategorie_optionen.items[0].selected);
         assert_eq!(
             template.alle_kategorie_optionen.items[1].value,
             ALS_NEUE_KATEGORIE_IMPORTIEREN_TEXT
         );
-        assert_eq!(template.alle_kategorie_optionen.items[1].selected, true);
+        assert!(template.alle_kategorie_optionen.items[1].selected);
         assert_eq!(template.unpassende_kategorien.len(), 1);
         assert_eq!(
             template.unpassende_kategorien[0].name,

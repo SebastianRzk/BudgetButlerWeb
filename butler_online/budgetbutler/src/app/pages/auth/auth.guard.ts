@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
-import { AuthContainer, AuthService } from './auth.service';
+import { UserSession, AuthService } from './auth.service';
 import { map, skip, take } from 'rxjs/operators';
 import { LOGIN_ROUTE } from '../../app-routes';
 import { Observable } from 'rxjs';
@@ -15,7 +15,7 @@ export class AuthGuard {
 
   canActivate(): Observable<boolean> {
     const result: Observable<boolean> = this.authService.auth$.pipe(skip(1), take(1)).pipe(map(
-      (auth: AuthContainer) => {
+      (auth: UserSession) => {
         if (!auth.loggedIn) {
           this.router.navigate([LOGIN_ROUTE]);
           return false;

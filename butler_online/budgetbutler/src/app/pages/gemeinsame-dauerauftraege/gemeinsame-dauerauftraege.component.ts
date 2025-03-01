@@ -3,15 +3,18 @@ import { Dauerauftrag, GemeinsamerDauerauftrag } from '../../domain/model';
 import { Observable } from 'rxjs';
 import { GemeinsameDauerauftraegeService } from '../../domain/gemeinsame-dauerauftraege.service';
 import { MatIcon } from '@angular/material/icon';
-import { DatePipe, DecimalPipe, NgIf } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatChip, MatChipAvatar, MatChipListbox } from '@angular/material/chips';
 import {
-  MatCell, MatCellDef,
+  MatCell,
+  MatCellDef,
   MatColumnDef,
   MatHeaderCell,
   MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef,
-  MatRow, MatRowDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
   MatTable
 } from '@angular/material/table';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
@@ -20,7 +23,7 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/m
     selector: 'app-allebuchungen',
     templateUrl: './gemeinsame-dauerauftraege.component.html',
     styleUrls: ['./gemeinsame-dauerauftraege.component.css'],
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, NgIf, MatChip, MatIcon, MatChipAvatar, MatHeaderRow, MatRow, DecimalPipe, DatePipe, MatHeaderCellDef, MatCellDef, MatHeaderRowDef, MatRowDef]
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatChipListbox, MatChip, MatIcon, MatChipAvatar, MatHeaderRow, MatRow, DecimalPipe, DatePipe, MatHeaderCellDef, MatCellDef, MatHeaderRowDef, MatRowDef]
 })
 export class GemeinsameDauerauftraegeComponent implements OnInit {
   displayedColumns: string[] = ['Eigenschaften', 'Aktion'];

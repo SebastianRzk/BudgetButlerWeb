@@ -6,14 +6,12 @@ use crate::uebersicht::model::{
 };
 use bigdecimal::BigDecimal;
 
-pub fn berechne_uebersicht(
-    einzelbuchungen: &Vec<impl BesitztDatumKategorieUndBetrag>,
-) -> Uebersicht {
+pub fn berechne_uebersicht(einzelbuchungen: &[impl BesitztDatumKategorieUndBetrag]) -> Uebersicht {
     let mut monate: Vec<MonatsUebersicht> = vec![];
 
     for einzelbuchung in einzelbuchungen {
         let mut found = false;
-        let datum_als_string = monats_name_from_datum(&einzelbuchung.get_datum());
+        let datum_als_string = monats_name_from_datum(einzelbuchung.get_datum());
         for monats_uebersicht in &mut monate {
             if monats_uebersicht.name == datum_als_string {
                 found = true;
@@ -46,10 +44,10 @@ pub fn berechne_uebersicht(
     Uebersicht { monate }
 }
 
-pub fn berechne_personen_uebersicht(gemeinsame_buchungen: &Vec<GemeinsameBuchung>) -> Uebersicht {
+pub fn berechne_personen_uebersicht(gemeinsame_buchungen: &[GemeinsameBuchung]) -> Uebersicht {
     let als_proxy = gemeinsame_buchungen
         .iter()
-        .map(|b| PersonAlsKategorieProxy::from(b))
+        .map(PersonAlsKategorieProxy::from)
         .collect::<Vec<PersonAlsKategorieProxy>>();
     berechne_uebersicht(&als_proxy)
 }
@@ -123,7 +121,7 @@ mod tests {
 
     #[test]
     fn test_berechne_uebersicht_mit_datum_sollte_monatsuebersicht_anlegen() {
-        let result = super::berechne_uebersicht(&vec![Einzelbuchung {
+        let result = super::berechne_uebersicht(&[Einzelbuchung {
             id: "1".to_string(),
             name: "Test".to_string(),
             kategorie: "Kategorie".to_string(),

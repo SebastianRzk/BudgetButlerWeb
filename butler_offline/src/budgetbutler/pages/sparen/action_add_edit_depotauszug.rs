@@ -35,9 +35,8 @@ pub struct Auszug {
 
 pub fn submit_depotauszug(context: SubmitDepotauszugContext) -> RedirectResult<DepotauszugChange> {
     let neue_depotauszuege: Depotauszuege;
-    let change: DepotauszugChange;
 
-    if context.mode == Mode::Add {
+    let change = if context.mode == Mode::Add {
         let depotauszuege = context
             .auszuege
             .iter()
@@ -53,7 +52,7 @@ pub fn submit_depotauszug(context: SubmitDepotauszugContext) -> RedirectResult<D
             .depotauszuege
             .change()
             .insert_all(depotauszuege);
-        change = DepotauszugChange {
+        DepotauszugChange {
             konto: context.konto.clone(),
             datum: context.datum.clone(),
             icon: PLUS,
@@ -87,7 +86,7 @@ pub fn submit_depotauszug(context: SubmitDepotauszugContext) -> RedirectResult<D
         }
         neue_depotauszuege = c;
 
-        change = DepotauszugChange {
+        DepotauszugChange {
             konto: context.konto.clone(),
             datum: context.datum.clone(),
             icon: PENCIL,
@@ -104,7 +103,7 @@ pub fn submit_depotauszug(context: SubmitDepotauszugContext) -> RedirectResult<D
                 })
                 .collect(),
         }
-    }
+    };
 
     let new_database = context.database.change_depotauszuege(neue_depotauszuege);
 

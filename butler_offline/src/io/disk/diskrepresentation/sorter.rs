@@ -10,7 +10,7 @@ pub fn sort_file(file: File) -> SortedFile {
     let mut current_modus = Modus::Einzelbuchungen;
     let mut result = HashMap::<Modus, Vec<Line>>::new();
     for line in file.lines {
-        if line.line.len() == 0 {
+        if line.line.is_empty() {
             continue;
         }
         let modus_check_result = check_modus(&line);
@@ -21,7 +21,7 @@ pub fn sort_file(file: File) -> SortedFile {
         if modus_check_result == ModusCheckResult::Header {
             continue;
         }
-        let current_list = result.entry(current_modus.clone()).or_insert_with(Vec::new);
+        let current_list = result.entry(current_modus.clone()).or_default();
         current_list.push(line);
     }
     let empty_vec = Vec::<Line>::new();
@@ -152,55 +152,55 @@ Datum,Depotwert,Konto,Wert\n\
         let sorted_file = sort_file(file);
         assert_eq!(sorted_file.einzelbuchungen.len(), 1);
         assert_eq!(
-            sorted_file.einzelbuchungen.get(0).unwrap().line,
+            sorted_file.einzelbuchungen.first().unwrap().line,
             "2024-01-01,NeueKategorie,EinName,-123.12"
         );
 
         assert_eq!(sorted_file.dauerauftraege.len(), 1);
         assert_eq!(
-            sorted_file.dauerauftraege.get(0).unwrap().line,
+            sorted_file.dauerauftraege.first().unwrap().line,
             "2024-03-03,2024-02-02,EineKategorie,EinName,monatlich,-123.12"
         );
 
         assert_eq!(sorted_file.gemeinsame_buchungen.len(), 1);
         assert_eq!(
-            sorted_file.gemeinsame_buchungen.get(0).unwrap().line,
+            sorted_file.gemeinsame_buchungen.first().unwrap().line,
             "2024-04-04,EineKategorie,EinName,-123.12,EinePerson"
         );
 
         assert_eq!(sorted_file.sparbuchungen.len(), 1);
         assert_eq!(
-            sorted_file.sparbuchungen.get(0).unwrap().line,
+            sorted_file.sparbuchungen.first().unwrap().line,
             "2024-05-05,EinName,-123.12,Manueller Auftrag,MeinKonto"
         );
 
         assert_eq!(sorted_file.sparkontos.len(), 1);
         assert_eq!(
-            sorted_file.sparkontos.get(0).unwrap().line,
+            sorted_file.sparkontos.first().unwrap().line,
             "MeinDepot,Depot"
         );
 
         assert_eq!(sorted_file.depotwerte.len(), 1);
         assert_eq!(
-            sorted_file.depotwerte.get(0).unwrap().line,
+            sorted_file.depotwerte.first().unwrap().line,
             "MeinBeispielDepotwert,ETF999,ETF"
         );
 
         assert_eq!(sorted_file.order.len(), 1);
         assert_eq!(
-            sorted_file.order.get(0).unwrap().line,
+            sorted_file.order.first().unwrap().line,
             "2024-06-06,EinName,MeinKonto,ETF999,300.0"
         );
 
         assert_eq!(sorted_file.order_dauerauftrag.len(), 1);
         assert_eq!(
-            sorted_file.order_dauerauftrag.get(0).unwrap().line,
+            sorted_file.order_dauerauftrag.first().unwrap().line,
             "2023-01-01,2023-04-30,monatlich,Beispiel Sparen,mein depot,123,300.0"
         );
 
         assert_eq!(sorted_file.depotauszuege.len(), 1);
         assert_eq!(
-            sorted_file.depotauszuege.get(0).unwrap().line,
+            sorted_file.depotauszuege.first().unwrap().line,
             "2024-07-07,MeinDepot,MeinKonto,300.0"
         );
     }

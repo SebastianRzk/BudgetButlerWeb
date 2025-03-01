@@ -105,7 +105,7 @@ mod tests {
         let result = super::map_to_template(view_result);
 
         assert_eq!(result.database_id, "test-0-0");
-        assert_eq!(result.bearbeitungsmodus, false);
+        assert!(!result.bearbeitungsmodus);
         assert_eq!(result.element_titel, "Konto erfassen");
         assert_eq!(result.default_item.index, 0);
         assert_eq!(result.default_item.name, "Ein Name");
@@ -113,7 +113,7 @@ mod tests {
 
         assert_eq!(result.typen.items.len(), 1);
         assert_eq!(result.typen.items[0].value, "ETF");
-        assert_eq!(result.typen.items[0].selected, true);
+        assert!(result.typen.items[0].selected);
 
         assert_eq!(result.letzte_erfassung.len(), 1);
         assert_eq!(result.letzte_erfassung[0].fa, "FA");

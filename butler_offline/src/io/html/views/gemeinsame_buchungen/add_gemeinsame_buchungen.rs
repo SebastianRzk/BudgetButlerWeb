@@ -125,7 +125,7 @@ mod tests {
         let result = super::map_to_template(view_result);
 
         assert_eq!(result.database_id, "test-0-0");
-        assert_eq!(result.bearbeitungsmodus, false);
+        assert!(!result.bearbeitungsmodus);
         assert_eq!(result.element_titel, "Dauerauftrag erfassen");
         assert_eq!(result.default_item.index, 0);
         assert_eq!(result.default_item.datum, "2020-01-01");
@@ -135,13 +135,13 @@ mod tests {
 
         assert_eq!(result.kategorien.items.len(), 2);
         assert_eq!(result.kategorien.items[0].value, "Eine Kategorie");
-        assert_eq!(result.kategorien.items[0].selected, true);
+        assert!(result.kategorien.items[0].selected);
         assert_eq!(result.kategorien.items[1].value, "Weitere Kategorie");
-        assert_eq!(result.kategorien.items[1].selected, false);
+        assert!(!result.kategorien.items[1].selected);
 
         assert_eq!(result.personen.items.len(), 1);
         assert_eq!(result.personen.items[0].value, "Ein Name");
-        assert_eq!(result.personen.items[0].selected, true);
+        assert!(result.personen.items[0].selected);
 
         assert_eq!(result.letzte_erfassung.len(), 1);
         assert_eq!(result.letzte_erfassung[0].fa, "FA");

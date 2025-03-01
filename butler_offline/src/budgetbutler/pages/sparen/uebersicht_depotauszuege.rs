@@ -22,7 +22,7 @@ pub struct UebersichtDepotauszuegeViewResult {
 pub fn handle_uebersicht_depotauszuege(
     context: UebersichtDepotauszuegeContext,
 ) -> UebersichtDepotauszuegeViewResult {
-    let verfuegbare_jahre = context
+    let verfuegbare_jahre: Vec<i32> = context
         .database
         .depotauszuege
         .select()

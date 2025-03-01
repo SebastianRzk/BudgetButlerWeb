@@ -101,7 +101,7 @@ pub fn handle_modification_manual(
             valid_next_state: Err(render_error_optimistic_locking_template(None)),
         };
     }
-    let new_database = update_database(&database_configuration, new_database);
+    let new_database = update_database(database_configuration, new_database);
 
     ManualRenderResult {
         valid_next_state: Ok(new_database),

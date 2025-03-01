@@ -40,7 +40,7 @@ fn map_monat_to_template(monat: &MonatsZusammenfassung) -> MonatTemplate {
         order: monat
             .buchungen
             .iter()
-            .map(|x| map_buchung_to_template(x))
+            .map(map_buchung_to_template)
             .collect(),
     }
 }
@@ -62,7 +62,7 @@ fn map_to_template(view_result: UebersichtOrderViewResult) -> UebersichtSparbuch
     let alles: Vec<MonatTemplate> = view_result
         .liste
         .iter()
-        .map(|x| map_monat_to_template(&x))
+        .map(map_monat_to_template)
         .collect();
     UebersichtSparbuchungTemplate {
         alles,
@@ -114,7 +114,7 @@ mod tests {
         let template = super::map_to_template(view_result);
 
         assert_eq!(template.jahre.items[0].value, 2020);
-        assert_eq!(template.jahre.items[0].selected, true);
+        assert!(template.jahre.items[0].selected);
         assert_eq!(template.database_version, "asdf-0-0");
 
         let erster_monat = &template.alles[0];
@@ -122,7 +122,7 @@ mod tests {
         assert_eq!(erster_monat.order[0].datum, "01.01.2024");
         assert_eq!(erster_monat.order[0].name, "Normal");
         assert_eq!(erster_monat.order[0].wert, "123,12");
-        assert_eq!(erster_monat.order[0].dynamisch, false);
+        assert!(!erster_monat.order[0].dynamisch);
         assert_eq!(erster_monat.order[0].konto, "Konto");
         assert_eq!(erster_monat.order[0].typ, "Kauf");
         assert_eq!(erster_monat.order[0].depotwert, "DepotwertBeschreibung");

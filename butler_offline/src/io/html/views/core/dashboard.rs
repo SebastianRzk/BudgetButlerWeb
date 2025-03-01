@@ -27,18 +27,10 @@ fn map_to_template(view_result: DashboardViewResult) -> DashboardTemplate {
                 .collect(),
         ),
         zusammenfassung_einnahmenliste: JSONBetragList::new(
-            view_result
-                .zusammenfassung_einnahmenliste
-                .iter()
-                .map(|x| x.clone())
-                .collect(),
+            view_result.zusammenfassung_einnahmenliste.to_vec(),
         ),
         zusammenfassung_ausgabenliste: JSONBetragList::new(
-            view_result
-                .zusammenfassung_ausgabenliste
-                .iter()
-                .map(|x| x.clone())
-                .collect(),
+            view_result.zusammenfassung_ausgabenliste.to_vec(),
         ),
         ausgaben_des_aktuellen_monats: view_result
             .ausgaben_des_aktuellen_monats

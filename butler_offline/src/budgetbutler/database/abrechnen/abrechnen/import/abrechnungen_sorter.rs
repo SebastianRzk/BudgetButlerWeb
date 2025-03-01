@@ -16,7 +16,7 @@ pub fn sort_abrechnungs_file(file: &Vec<Line>, header_modus: HeaderModus) -> Sor
     let mut current_modus = Modus::Beschreibung;
     let mut result = HashMap::<Modus, Vec<Line>>::new();
     for line in file {
-        let modus_check_result = check_modus(&line);
+        let modus_check_result = check_modus(line);
         if let ModusCheckResult::NewModus(new_modus) = modus_check_result {
             current_modus = new_modus;
             continue;
@@ -36,7 +36,7 @@ pub fn sort_abrechnungs_file(file: &Vec<Line>, header_modus: HeaderModus) -> Sor
         {
             continue;
         }
-        let current_list = result.entry(current_modus.clone()).or_insert_with(Vec::new);
+        let current_list = result.entry(current_modus.clone()).or_default();
         current_list.push(line.clone());
     }
     let empty_vec = Vec::<Line>::new();
@@ -114,13 +114,13 @@ Datum,Kategorie,Name,Betrag
         let sorted_file = sort_abrechnungs_file(&file.lines, HeaderModus::Drop);
         assert_eq!(sorted_file.beschreibung.len(), 1);
         assert_eq!(
-            sorted_file.beschreibung.get(0).unwrap().line,
+            sorted_file.beschreibung.first().unwrap().line,
             "ergebnis text"
         );
 
         assert_eq!(sorted_file.metadaten.len(), 5);
         assert_eq!(
-            sorted_file.metadaten.get(0).unwrap().line,
+            sorted_file.metadaten.first().unwrap().line,
             "Abrechnungsdatum:2024-11-29"
         );
         assert_eq!(
@@ -143,7 +143,7 @@ Datum,Kategorie,Name,Betrag
 
         assert_eq!(sorted_file.einzel_buchungen.len(), 2);
         assert_eq!(
-            sorted_file.einzel_buchungen.get(0).unwrap().line,
+            sorted_file.einzel_buchungen.first().unwrap().line,
             "2024-11-01,NeueKategorie,Name,-117.00"
         );
         assert_eq!(
@@ -174,13 +174,13 @@ Datum,Kategorie,Name,Betrag,Person
         let sorted_file = sort_abrechnungs_file(&file.lines, HeaderModus::Drop);
         assert_eq!(sorted_file.beschreibung.len(), 1);
         assert_eq!(
-            sorted_file.beschreibung.get(0).unwrap().line,
+            sorted_file.beschreibung.first().unwrap().line,
             "ergebnis text"
         );
 
         assert_eq!(sorted_file.metadaten.len(), 5);
         assert_eq!(
-            sorted_file.metadaten.get(0).unwrap().line,
+            sorted_file.metadaten.first().unwrap().line,
             "Abrechnungsdatum:2024-11-29"
         );
         assert_eq!(
@@ -205,7 +205,7 @@ Datum,Kategorie,Name,Betrag,Person
 
         assert_eq!(sorted_file.gemeinsame_buchungen.len(), 2);
         assert_eq!(
-            sorted_file.gemeinsame_buchungen.get(0).unwrap().line,
+            sorted_file.gemeinsame_buchungen.first().unwrap().line,
             "2024-11-01,NeueKategorie,Name,-117.00,PersonA"
         );
         assert_eq!(

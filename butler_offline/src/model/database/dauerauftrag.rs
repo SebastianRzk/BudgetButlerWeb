@@ -28,7 +28,7 @@ impl Dauerauftrag {
             name: self.name.clone(),
             kategorie: neue_kategorie,
             betrag: self.betrag.clone(),
-            rhythmus: self.rhythmus.clone(),
+            rhythmus: self.rhythmus,
         }
     }
 }
@@ -50,7 +50,7 @@ impl Ord for Dauerauftrag {
     }
 }
 
-impl<'a> BesitztStartUndEndeDatum<'a> for Indiziert<Dauerauftrag> {
+impl BesitztStartUndEndeDatum<'_> for Indiziert<Dauerauftrag> {
     fn start_datum(&self) -> &Datum {
         &self.value.start_datum
     }

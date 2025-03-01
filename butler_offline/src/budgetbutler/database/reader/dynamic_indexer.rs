@@ -43,8 +43,8 @@ mod tests {
         assert_eq!(result.values[0].index, 1);
         assert_eq!(result.values[1].index, 2);
         assert_eq!(result.values[2].index, 3);
-        assert_eq!(result.values[0].dynamisch, true);
-        assert_eq!(result.values[1].dynamisch, true);
-        assert_eq!(result.values[2].dynamisch, true);
+        assert!(result.values[0].dynamisch);
+        assert!(result.values[1].dynamisch);
+        assert!(result.values[2].dynamisch);
     }
 }

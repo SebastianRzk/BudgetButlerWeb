@@ -67,7 +67,7 @@ mod tests {
             person("ThisIsSelf"),
         );
 
-        assert_eq!(result.eigene_buchung, true);
+        assert!(result.eigene_buchung);
     }
     #[test]
     fn test_should_map_for_partner() {
@@ -76,6 +76,6 @@ mod tests {
             person("ThisIsSelf"),
         );
 
-        assert_eq!(result.eigene_buchung, false);
+        assert!(!result.eigene_buchung);
     }
 }

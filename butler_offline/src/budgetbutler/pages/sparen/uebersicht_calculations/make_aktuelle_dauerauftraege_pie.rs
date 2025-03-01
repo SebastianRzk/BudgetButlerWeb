@@ -9,7 +9,7 @@ use crate::model::primitives::farbe::Farbe;
 use crate::model::state::persistent_application_state::Database;
 
 pub fn make_aktuelle_dauerauftraege_pie(
-    dauerauftraege: &Vec<Indiziert<OrderDauerauftrag>>,
+    dauerauftraege: &[Indiziert<OrderDauerauftrag>],
     database: &Database,
     konfigurierte_farben: Vec<Farbe>,
 ) -> PieChart {

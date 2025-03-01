@@ -34,7 +34,7 @@ pub fn handle_uebersicht_depotwerte(
 
     for depotwert in &context.database.depotwerte.depotwerte {
         let berechneter_depotwert_stand =
-            berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), &context.database);
+            berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), context.database);
         let einzeldifferenz = berechneter_depotwert_stand.letzter_kontostand.clone()
             - berechneter_depotwert_stand.gesamte_einzahlungen.clone();
 

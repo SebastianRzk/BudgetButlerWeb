@@ -50,7 +50,7 @@ pub mod builder {
 
     impl File {
         pub fn from_str(file: &str) -> File {
-            let lines = file.lines().map(|l| line(l)).collect();
+            let lines = file.lines().map(line).collect();
             File { lines }
         }
     }

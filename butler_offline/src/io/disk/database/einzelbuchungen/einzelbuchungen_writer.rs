@@ -9,7 +9,7 @@ pub fn write_einzelbuchungen(database: &Database) -> Vec<Line> {
         .iter()
         .filter(|e| !e.dynamisch)
         .map(|e| &e.value)
-        .map(|e| write_einzelbuchung(e))
+        .map(write_einzelbuchung)
         .collect()
 }
 

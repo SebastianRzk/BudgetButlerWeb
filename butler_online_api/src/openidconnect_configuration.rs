@@ -1,6 +1,5 @@
 use actix_identity::Identity;
 use actix_web::{HttpMessage, HttpResponse};
-use dotenvy;
 
 use actix_web::{get, post};
 
@@ -16,7 +15,6 @@ use url::Url;
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct Logout {
-    id_token: String,
     logout_url: Option<Url>,
 }
 
@@ -52,24 +50,27 @@ async fn request_token(
     oidc_client: Data<DiscoveredClient>,
     query: Query<LoginQuery>,
 ) -> Result<Option<(Token, Userinfo)>, error::Error> {
-    let mut token: Token = oidc_client
-        .request_token(&query.code)
-        .await
-        .map_err(error::ErrorInternalServerError)
-        .unwrap()
+    let token_request_result = oidc_client.request_token(&query.code).await;
+    if token_request_result.is_err() {
+        println!("error in token request: {:?}", token_request_result);
+    }
+
+    let mut token: Token = token_request_result
+        .map_err(error::ErrorInternalServerError)?
         .into();
 
-    if let Some(mut id_token) = token.id_token.as_mut() {
-        oidc_client.decode_token(&mut id_token).unwrap();
-        oidc_client.validate_token(&id_token, None, None).unwrap();
+    if let Some(id_token) = token.id_token.as_mut() {
+        oidc_client.decode_token(id_token).unwrap();
+        oidc_client.validate_token(id_token, None, None).unwrap();
     } else {
         return Ok(None);
     }
-    let userinfo = oidc_client
-        .request_userinfo(&token)
-        .await
-        .map_err(error::ErrorInternalServerError)
-        .unwrap();
+    let user_info_request = oidc_client.request_userinfo(&token).await;
+    if user_info_request.is_err() {
+        println!("error in userinfo request: {:?}", user_info_request);
+    }
+
+    let userinfo = user_info_request.map_err(error::ErrorInternalServerError)?;
     Ok(Some((token, userinfo)))
 }
 
@@ -111,7 +112,6 @@ async fn login(
         }
         Ok(None) => {
             eprintln!("login error in call: no id_token found");
-
             Redirect::to("/").temporary()
         }
         Err(err) => {
@@ -139,7 +139,7 @@ async fn offline_access(
         .unwrap()
         .to_str()
         .unwrap();
-    let params = form_urlencoded::Serializer::new(String::new())
+    let auth_params = form_urlencoded::Serializer::new(String::new())
         .append_pair("user", &user.sub)
         .append_pair("session", cookie)
         .finish();
@@ -168,7 +168,10 @@ async fn offline_access(
     }
     eprintln!("offline_access: redirect allowed");
 
-    let url = format!("{}/butler-online-callback?{}", redirect_location, params);
+    let url = format!(
+        "{}/butler-online-callback?{}",
+        redirect_location, auth_params
+    );
     Redirect::to(url)
 }
 
@@ -178,18 +181,14 @@ async fn logout(
     sessions: Data<RwLock<Sessions>>,
     identity: Identity,
 ) -> impl Responder {
-    if let Some(id) = identity.id().ok() {
-        if let Some((user, token, _userinfo)) = sessions.write().unwrap().map.remove(&id) {
+    if let Ok(id) = identity.id() {
+        if let Some((user, _, _userinfo)) = sessions.write().unwrap().map.remove(&id) {
             eprintln!("logout user: {:?}", user);
 
             identity.logout();
-            let id_token = token.bearer.access_token.into();
             let logout_url = oidc_client.config().end_session_endpoint.clone();
 
-            return HttpResponse::Ok().json(Logout {
-                id_token,
-                logout_url,
-            });
+            return HttpResponse::Ok().json(Logout { logout_url });
         }
     }
     HttpResponse::Unauthorized().finish()
@@ -211,13 +210,17 @@ pub async fn generate_discovery_client() -> Result<openid::Client, error::Error>
     let client_id = dotenvy::var("CLIENT_ID").unwrap();
     let client_secret = dotenvy::var("CLIENT_SECRET").unwrap();
     let redirect = Some(host("/api/login/login/oauth2/code/oidc"));
-    let issuer = Url::parse(&dotenvy::var("ISSUER").unwrap().as_str()).unwrap();
-    let client = DiscoveredClient::discover(client_id, client_secret, redirect, issuer)
-        .await
-        .map_err(error::ErrorInternalServerError)
-        .unwrap();
+    let issuer = Url::parse(dotenvy::var("ISSUER").unwrap().as_str()).unwrap();
+    let resolve_discovery_client_request =
+        DiscoveredClient::discover(client_id, client_secret, redirect, issuer).await;
 
-    Ok(client)
+    if resolve_discovery_client_request.is_err() {
+        eprintln!(
+            "error in discovery client request: {:?}",
+            resolve_discovery_client_request
+        );
+    }
+    resolve_discovery_client_request.map_err(error::ErrorInternalServerError)
 }
 
 pub fn host(path: &str) -> String {

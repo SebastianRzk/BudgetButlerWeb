@@ -1,4 +1,3 @@
-use chrono::Datelike;
 use time::{Date, Month};
 
 pub fn monats_name_from_datum(datum: &Date) -> String {

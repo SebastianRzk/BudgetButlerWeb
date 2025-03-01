@@ -55,7 +55,7 @@ pub fn berechne_anlagetypen(database: &Database, farbe: Vec<Farbe>) -> Vec<Anlag
     for konto in &database.sparkontos.sparkontos {
         match konto.value.kontotyp {
             Kontotyp::Sparkonto => {
-                let ergebnis = berechne_aktuellen_kontostand(konto.value.clone(), &database);
+                let ergebnis = berechne_aktuellen_kontostand(konto.value.clone(), database);
                 sparkonto_einzahlungen =
                     sparkonto_einzahlungen + ergebnis.gesamte_einzahlungen.clone();
                 sparkonto_diff = sparkonto_diff + ergebnis.letzter_kontostand.clone()
@@ -64,7 +64,7 @@ pub fn berechne_anlagetypen(database: &Database, farbe: Vec<Farbe>) -> Vec<Anlag
             }
             Kontotyp::Depot => {}
             Kontotyp::GenossenschaftsAnteile => {
-                let ergebnis = berechne_aktuellen_kontostand(konto.value.clone(), &database);
+                let ergebnis = berechne_aktuellen_kontostand(konto.value.clone(), database);
                 genossenschaft_einzahlungen =
                     genossenschaft_einzahlungen + ergebnis.gesamte_einzahlungen.clone();
                 genossenschaft_diff = genossenschaft_diff + ergebnis.letzter_kontostand.clone()
@@ -75,7 +75,7 @@ pub fn berechne_anlagetypen(database: &Database, farbe: Vec<Farbe>) -> Vec<Anlag
     }
 
     for depotwert in &database.depotwerte.depotwerte {
-        let ergebnis = berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), &database);
+        let ergebnis = berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), database);
 
         match depotwert.value.typ {
             DepotwertTyp::ETF => {
@@ -159,7 +159,7 @@ pub fn berechne_anlagetypen(database: &Database, farbe: Vec<Farbe>) -> Vec<Anlag
     let ohne_farbe = anlagetypen
         .iter()
         .filter(|anlagetyp| anlagetyp.gesamte_einzahlungen > Betrag::zero())
-        .map(|anlagetyp| anlagetyp.clone())
+        .cloned()
         .collect();
     add_farbe(ohne_farbe, farbe)
 }
@@ -303,7 +303,7 @@ mod tests {
         let depotwert = Depotwert {
             name: demo_name(),
             isin: demo_isin(),
-            typ: typ,
+            typ,
         };
         let depotauszug = Depotauszug {
             datum: demo_datum(),

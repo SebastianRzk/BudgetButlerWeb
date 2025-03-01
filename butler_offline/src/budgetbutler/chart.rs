@@ -26,7 +26,7 @@ pub fn berechne_pie_chart(
     farben_selektor: &FarbenSelektor,
 ) -> PieChart {
     let buchungen = selektion.group_by(kategorie_aggregation, betrag_summe_gruppierung);
-    let mut sortierte_kategorien = buchungen.keys().into_iter().collect::<Vec<&Kategorie>>();
+    let mut sortierte_kategorien = buchungen.keys().collect::<Vec<&Kategorie>>();
     sortierte_kategorien.sort();
 
     let mut farben: Vec<Farbe> = Vec::new();
@@ -118,12 +118,12 @@ pub fn berechne_kategorie_line_chart(
         for kategorie in &alle_kategorien {
             let betrag = monatsergebnis
                 .content
-                .get(&kategorie)
+                .get(kategorie)
                 .unwrap_or(&Betrag::zero())
                 .clone();
             let values = kategorie_values_hashmap
                 .entry(kategorie.clone())
-                .or_insert(vec![]);
+                .or_default();
             values.push(betrag);
         }
     }
@@ -162,7 +162,7 @@ pub fn berechne_kategorie_bar_chart(selektion: Selector<Indiziert<Einzelbuchung>
 
     for kategorie in &alle_kategorien {
         let betrag = buchungen_nach_kategorie
-            .get(&kategorie)
+            .get(kategorie)
             .unwrap_or(&Betrag::zero())
             .clone();
         kategorie_liste.push(kategorie.clone());

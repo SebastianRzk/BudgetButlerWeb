@@ -87,7 +87,7 @@ fn map_get_limit(
     filter_person: Option<String>,
 ) -> Option<Limit> {
     if let Some(filter) = filter {
-        if filter == "on".to_string() {
+        if filter == *"on" {
             return Some(Limit {
                 fuer: Person::new(filter_person.unwrap()),
                 value: Betrag::from_user_input(&filter_value.unwrap()).negativ(),

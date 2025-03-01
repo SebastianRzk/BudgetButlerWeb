@@ -22,22 +22,22 @@ pub fn get_days_from_month(year: i32, month: u32) -> i64 {
 
 fn add_one_month(date: Date, months_to_add: u32) -> Date {
     let month_number = date.month() as i32;
-    let additional_years = (month_number.clone() - (month_number.clone() % 12)) / 12;
+    let additional_years = (month_number - (month_number % 12)) / 12;
     let max_days_of_month = get_days_from_month(
         date.year() + additional_years,
         date.month().nth_next(months_to_add as u8) as u32,
     );
     let mut days = date.day() as i64;
-    if days > max_days_of_month.clone() {
+    if days > max_days_of_month {
         days = max_days_of_month;
     }
 
-    return Date::from_calendar_date(
+    Date::from_calendar_date(
         date.year() + additional_years,
         date.month().nth_next(months_to_add as u8),
         days as u8,
     )
-    .unwrap();
+    .unwrap()
 }
 
 pub fn to_date(date_like: NaiveDate) -> Date {

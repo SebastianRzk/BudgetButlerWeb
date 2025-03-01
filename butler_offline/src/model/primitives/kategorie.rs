@@ -72,7 +72,7 @@ mod tests {
 
     #[test]
     fn kategorie_should_sort() {
-        let mut liste = vec![kategorie("B"), kategorie("A"), kategorie("C")];
+        let mut liste = [kategorie("B"), kategorie("A"), kategorie("C")];
         liste.sort();
 
         assert_eq!(liste[0].get_kategorie(), "A");

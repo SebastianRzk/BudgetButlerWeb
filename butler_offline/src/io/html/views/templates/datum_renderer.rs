@@ -36,10 +36,10 @@ mod tests {
         ];
         let result = create_datum_select(data);
         assert_eq!(result.len(), 2);
-        assert_eq!(result[0].can_be_chosen, true);
+        assert!(result[0].can_be_chosen);
         assert_eq!(result[0].datum, "2021-01-01");
         assert_eq!(result[0].datum_german, "01.01.2021");
-        assert_eq!(result[1].can_be_chosen, false);
+        assert!(!result[1].can_be_chosen);
         assert_eq!(result[1].datum, "2021-02-01");
         assert_eq!(result[1].datum_german, "01.02.2021");
     }

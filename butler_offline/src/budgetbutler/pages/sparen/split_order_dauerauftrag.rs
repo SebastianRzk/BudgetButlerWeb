@@ -87,13 +87,13 @@ mod tests {
 
         assert_eq!(result.wert, u_zwei());
         assert_eq!(result.datum.len(), 4);
-        assert_eq!(result.datum[0].can_be_chosen, false);
+        assert!(!result.datum[0].can_be_chosen);
         assert_eq!(result.datum[0].datum, Datum::new(1, 1, 2021));
-        assert_eq!(result.datum[1].can_be_chosen, true);
+        assert!(result.datum[1].can_be_chosen);
         assert_eq!(result.datum[1].datum, Datum::new(1, 2, 2021));
-        assert_eq!(result.datum[2].can_be_chosen, true);
+        assert!(result.datum[2].can_be_chosen);
         assert_eq!(result.datum[2].datum, Datum::new(1, 3, 2021));
-        assert_eq!(result.datum[3].can_be_chosen, false);
+        assert!(!result.datum[3].can_be_chosen);
         assert_eq!(result.datum[3].datum, Datum::new(1, 4, 2021));
     }
 }
