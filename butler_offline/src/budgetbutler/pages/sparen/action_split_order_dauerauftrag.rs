@@ -115,7 +115,8 @@ mod tests {
             .result
             .changed_database
             .dauerauftraege
-            .dauerauftraege.first()
+            .dauerauftraege
+            .first()
             .unwrap();
         assert_eq!(alter_auftrag.start_datum(), &Datum::new(1, 1, 2021));
         assert_eq!(alter_auftrag.ende_datum(), &Datum::new(31, 12, 2021));

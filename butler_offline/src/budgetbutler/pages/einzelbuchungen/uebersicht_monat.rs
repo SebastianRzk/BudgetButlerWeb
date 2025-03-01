@@ -160,8 +160,7 @@ fn berechne_zusammenfassung(
             selektierter_monat,
         ))
         .group_as_list_by(tagesweise_aggregation);
-    let mut tage: Vec<&TagesAggregationsIndex> =
-        tagesweise_aggregation.keys().collect();
+    let mut tage: Vec<&TagesAggregationsIndex> = tagesweise_aggregation.keys().collect();
     tage.sort();
     let mut result = vec![];
 

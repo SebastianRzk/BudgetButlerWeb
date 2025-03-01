@@ -94,7 +94,6 @@ pub fn handle_view(context: UebersichtOrderContext) -> UebersichtOrderViewResult
         liste.push(monats_zusammenfassung);
     }
 
-    
     UebersichtOrderViewResult {
         liste,
         selektiertes_jahr,

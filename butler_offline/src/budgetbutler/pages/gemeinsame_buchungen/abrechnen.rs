@@ -54,7 +54,6 @@ pub fn submit_rechne_ab(context: GemeinsameBuchungenAbrechnenSubmitContext) -> A
         titel: context.set_titel.clone(),
     };
 
-    
     rechne_ab(
         selektierter_zeitraum.clone().collect(),
         eigene_buchungen.clone().collect(),

@@ -1,13 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { MenuItemService } from './domain/menu-item.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { MatDrawerMode, MatSidenavModule } from '@angular/material/sidenav';
-import { UserSession, AuthService } from './pages/auth/auth.service';
-import { Observable } from 'rxjs';
-import { SidebarComponent } from "./pages/sidebar/sidebar/sidebar.component";
-import { SidebarToggleComponent } from "./pages/sidebar/sidebar-toggle/sidebar-toggle.component";
-import { RouterModule } from "@angular/router";
-import { AsyncPipe } from "@angular/common";
+import {Component, inject, OnInit} from '@angular/core';
+import {MenuItemService} from './domain/menu-item.service';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {MatDrawerMode, MatSidenavModule} from '@angular/material/sidenav';
+import {AuthService} from './pages/auth/auth.service';
+import {Observable} from 'rxjs';
+import {SidebarComponent} from "./pages/sidebar/sidebar/sidebar.component";
+import {SidebarToggleComponent} from "./pages/sidebar/sidebar-toggle/sidebar-toggle.component";
+import {RouterModule} from "@angular/router";
+import {AsyncPipe} from "@angular/common";
 
 @Component({
   selector: 'app-root',

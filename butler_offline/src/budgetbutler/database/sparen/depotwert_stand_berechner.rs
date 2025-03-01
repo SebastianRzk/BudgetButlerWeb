@@ -29,7 +29,8 @@ fn berechne_kontostand(depotwert: DepotwertReferenz, database: &Database) -> Bet
         konto_map.insert(auszug.value.konto.konto_name.name, auszug.value.wert);
     }
     konto_map
-        .values().cloned()
+        .values()
+        .cloned()
         .reduce(|a, b| a + b)
         .unwrap_or_else(Betrag::zero)
 }

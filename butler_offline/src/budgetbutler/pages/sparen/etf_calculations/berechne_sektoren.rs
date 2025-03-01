@@ -30,9 +30,7 @@ pub fn berechne_sektoren(
         }
     }
 
-    let alle_sektoren = sektoren_map
-        .keys().cloned()
-        .collect::<Vec<String>>();
+    let alle_sektoren = sektoren_map.keys().cloned().collect::<Vec<String>>();
 
     for depotwert_mit_kontostand in depotwerte_mit_kontostand {
         for sektor in alle_sektoren.clone() {

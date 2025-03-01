@@ -78,8 +78,7 @@ impl Default for EinnahmenAusgabenAggregation {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
-#[derive(Default)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct KategorieAggregation {
     pub content: HashMap<Kategorie, Betrag>,
 }
@@ -99,7 +98,6 @@ impl Add for KategorieAggregation {
         KategorieAggregation { content: union }
     }
 }
-
 
 #[cfg(test)]
 mod tests {

@@ -58,11 +58,7 @@ pub fn render_uebersicht_etf_template(view_result: UebersichtEtfViewResult) -> S
 
 fn map_to_template(view_result: UebersichtEtfViewResult) -> UebersichtEtfsTemplate {
     UebersichtEtfsTemplate {
-        etfs: view_result
-            .etfs
-            .iter()
-            .map(map_etf_to_template)
-            .collect(),
+        etfs: view_result.etfs.iter().map(map_etf_to_template).collect(),
         kosten: ETFKostenUebersichtTemplate {
             gesamt: map_etf_kosten_to_template(&view_result.etfkosten.gesamt),
             data: view_result

@@ -16,9 +16,7 @@ pub fn verarbeite_gemeinsame_buchung_dauerauftrag(
         dauerauftrag.rhythmus.clone(),
     );
     let today = crate::wiederkehrend::util::to_date(Local::now().date_naive());
-    while naechste_buchung <= today
-        && naechste_buchung < dauerauftrag.ende_datum
-    {
+    while naechste_buchung <= today && naechste_buchung < dauerauftrag.ende_datum {
         anzahl_verarbeiteter_buchungen += 1;
         let neue_buchung = NeueGemeinsameBuchung {
             datum: naechste_buchung,
@@ -28,11 +26,8 @@ pub fn verarbeite_gemeinsame_buchung_dauerauftrag(
             kategorie: dauerauftrag.kategorie.clone(),
             zielperson: dauerauftrag.zielperson.clone(),
         };
-        gemeinsame_buchungen::output_db::insert_new_gemeinsame_buchung(
-            connection,
-            neue_buchung,
-        )
-        .unwrap();
+        gemeinsame_buchungen::output_db::insert_new_gemeinsame_buchung(connection, neue_buchung)
+            .unwrap();
         gemeinsame_dauerauftraege::output_db::aktualisiere_letzte_ausfuehrung(
             connection,
             dauerauftrag.id.clone(),

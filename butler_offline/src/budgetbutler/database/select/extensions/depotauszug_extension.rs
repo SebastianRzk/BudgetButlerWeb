@@ -49,7 +49,8 @@ impl Selector<Indiziert<Depotauszug>> {
             );
         }
         depot_map
-            .values().cloned()
+            .values()
+            .cloned()
             .reduce(|a, b| a + b)
             .unwrap_or_else(Betrag::zero)
     }

@@ -17,9 +17,7 @@ pub fn verarbeite_dauerauftrag(
     );
     let today = crate::wiederkehrend::util::to_date(Local::now().date_naive());
     let mut anzahl_verarbeiteter_buchungen = 0;
-    while naechste_buchung <= today
-        && naechste_buchung < dauerauftrag.ende_datum
-    {
+    while naechste_buchung <= today && naechste_buchung < dauerauftrag.ende_datum {
         anzahl_verarbeiteter_buchungen += 1;
         let neue_buchung = NeueEinzelbuchung {
             datum: naechste_buchung,

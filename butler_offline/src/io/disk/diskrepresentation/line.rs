@@ -20,10 +20,7 @@ impl Line {
     }
 
     pub fn from_multiline_str(multiline_string: String) -> Vec<Line> {
-        multiline_string
-            .lines()
-            .map(Line::new)
-            .collect()
+        multiline_string.lines().map(Line::new).collect()
     }
 }
 

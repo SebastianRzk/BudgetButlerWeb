@@ -69,7 +69,6 @@ pub fn handle_view(
         liste.push(monats_zusammenfassung);
     }
 
-    
     UebersichtEinzelbuchungenViewResult {
         liste,
         selektiertes_jahr,

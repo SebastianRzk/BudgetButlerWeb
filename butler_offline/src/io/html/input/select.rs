@@ -32,7 +32,8 @@ pub fn new_select_with_description(
             .into_iter()
             .map(|item| SelectItem {
                 selected: selected_value
-                    .as_ref().is_some_and(|x: &String| x.eq(&item.value)),
+                    .as_ref()
+                    .is_some_and(|x: &String| x.eq(&item.value)),
                 value: DescriptiveSelectItem {
                     value: item.value,
                     description: item.description,

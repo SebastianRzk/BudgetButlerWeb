@@ -31,9 +31,7 @@ pub fn berechne_regionen(
         }
     }
 
-    let alle_regionen = regionen_map
-        .keys().cloned()
-        .collect::<Vec<String>>();
+    let alle_regionen = regionen_map.keys().cloned().collect::<Vec<String>>();
 
     for depotwert_mit_kontostand in depotwerte_mit_kontostand {
         for region in alle_regionen.clone() {

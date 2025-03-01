@@ -164,9 +164,7 @@ fn calc_internal_state(database: Database, heute: Datum, next_free_index: u32) -
             SparbuchungTyp::ManuelleAuszahlung | SparbuchungTyp::Ausschuettung => {
                 sparbuchung.value.wert.positiv()
             }
-            SparbuchungTyp::Zinsen => {
-                Betrag::zero()
-            }
+            SparbuchungTyp::Zinsen => Betrag::zero(),
         };
 
         if betrag == Betrag::zero() {

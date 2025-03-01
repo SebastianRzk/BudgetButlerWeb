@@ -141,7 +141,6 @@ mod tests {
             wert: fuenf(),
         };
 
-        
         create_database(
             DataOnDisk {
                 einzelbuchungen: vec![],

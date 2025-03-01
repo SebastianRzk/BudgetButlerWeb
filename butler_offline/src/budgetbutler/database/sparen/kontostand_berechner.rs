@@ -33,7 +33,8 @@ fn berechne_kontostand(konto: Sparkonto, database: &Database) -> Betrag {
                 depotwert_map.insert(depotwert.isin.isin, wert);
             }
             depotwert_map
-                .values().cloned()
+                .values()
+                .cloned()
                 .reduce(|a, b| a + b)
                 .unwrap_or_else(Betrag::zero)
         }

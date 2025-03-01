@@ -158,7 +158,8 @@ pub fn berechne_anlagetypen(database: &Database, farbe: Vec<Farbe>) -> Vec<Anlag
 
     let ohne_farbe = anlagetypen
         .iter()
-        .filter(|anlagetyp| anlagetyp.gesamte_einzahlungen > Betrag::zero()).cloned()
+        .filter(|anlagetyp| anlagetyp.gesamte_einzahlungen > Betrag::zero())
+        .cloned()
         .collect();
     add_farbe(ohne_farbe, farbe)
 }

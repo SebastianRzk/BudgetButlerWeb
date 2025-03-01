@@ -67,7 +67,6 @@ pub fn handle_view(context: UebersichtSparbuchungenContext) -> UebersichtSparbuc
         liste.push(monats_zusammenfassung);
     }
 
-    
     UebersichtSparbuchungenViewResult {
         liste,
         selektiertes_jahr,

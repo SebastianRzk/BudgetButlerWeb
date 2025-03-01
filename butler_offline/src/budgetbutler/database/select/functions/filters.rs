@@ -108,15 +108,9 @@ mod tests {
 
         let filter = filter_die_letzten_6_monate(heute);
 
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(1, 7, 2019)))
-        );
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(2, 7, 2019)))
-        );
-        assert!(
-            !filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019)))
-        );
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(1, 7, 2019))));
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(2, 7, 2019))));
+        assert!(!filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))));
     }
 
     #[test]
@@ -125,73 +119,47 @@ mod tests {
 
         let filter = filter_den_aktuellen_monat(heute);
 
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020)))
-        );
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020)))
-        );
-        assert!(
-            !filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019)))
-        );
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))));
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020))));
+        assert!(!filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))));
     }
 
     #[test]
     fn test_filter_auf_das_jahr() {
         let filter = filter_auf_das_jahr(2020);
 
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020)))
-        );
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020)))
-        );
-        assert!(
-            !filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019)))
-        );
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))));
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020))));
+        assert!(!filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))));
     }
 
     #[test]
     fn test_filter_auf_jahr_und_monat() {
         let filter = filter_auf_jahr_und_monat(2020, 1);
 
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020)))
-        );
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020)))
-        );
-        assert!(
-            !filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019)))
-        );
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))));
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(2, 1, 2020))));
+        assert!(!filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))));
     }
 
     #[test]
     fn test_filter_auf_einnahmen() {
-        assert!(
-            !filter_auf_einnahmen(&einzelbuchung_with_betrag(Betrag::from_user_input(
-                &"-2".to_string()
-            )))
-        );
-        assert!(
-            filter_auf_einnahmen(&einzelbuchung_with_betrag(Betrag::from_user_input(
-                &"2".to_string()
-            )))
-        );
+        assert!(!filter_auf_einnahmen(&einzelbuchung_with_betrag(
+            Betrag::from_user_input(&"-2".to_string())
+        )));
+        assert!(filter_auf_einnahmen(&einzelbuchung_with_betrag(
+            Betrag::from_user_input(&"2".to_string())
+        )));
     }
 
     #[test]
     fn test_filter_auf_ausgaben() {
-        assert!(
-            filter_auf_ausgaben(&einzelbuchung_with_betrag(Betrag::from_user_input(
-                &"-2".to_string()
-            )))
-        );
-        assert!(
-            !filter_auf_ausgaben(&einzelbuchung_with_betrag(Betrag::from_user_input(
-                &"2".to_string()
-            )))
-        );
+        assert!(filter_auf_ausgaben(&einzelbuchung_with_betrag(
+            Betrag::from_user_input(&"-2".to_string())
+        )));
+        assert!(!filter_auf_ausgaben(&einzelbuchung_with_betrag(
+            Betrag::from_user_input(&"2".to_string())
+        )));
     }
     #[test]
     fn test_filter_auf_zeitraum() {
@@ -200,62 +168,44 @@ mod tests {
 
         let filter = filter_auf_zeitraum(start, ende);
 
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020)))
-        );
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(31, 1, 2020)))
-        );
-        assert!(
-            !filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019)))
-        );
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))));
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(31, 1, 2020))));
+        assert!(!filter(&einzelbuchung_with_datum(Datum::new(30, 6, 2019))));
     }
 
     #[test]
     fn test_filter_auf_person() {
         let filter = super::filter_auf_person(Person::new("test_person".to_string()));
-        assert!(
-            !filter(&indiziert(gemeinsame_buchung_mit_person("other person")))
-        );
-        assert!(
-            filter(&indiziert(gemeinsame_buchung_mit_person("test_person")))
-        );
+        assert!(!filter(&indiziert(gemeinsame_buchung_mit_person(
+            "other person"
+        ))));
+        assert!(filter(&indiziert(gemeinsame_buchung_mit_person(
+            "test_person"
+        ))));
     }
 
     #[test]
     fn test_filter_bis_einschliesslich_jahr() {
         let filter = super::filter_bis_einschliesslich_jahr(2020);
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020)))
-        );
-        assert!(
-            filter(&einzelbuchung_with_datum(Datum::new(31, 12, 2020)))
-        );
-        assert!(
-            !filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2021)))
-        );
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2020))));
+        assert!(filter(&einzelbuchung_with_datum(Datum::new(31, 12, 2020))));
+        assert!(!filter(&einzelbuchung_with_datum(Datum::new(1, 1, 2021))));
     }
 
     #[test]
     fn test_filter_auf_depot() {
-        assert!(
-            filter_auf_depot(&indiziert(Sparkonto {
-                name: demo_name(),
-                kontotyp: Kontotyp::Depot
-            }))
-        );
-        assert!(
-            !filter_auf_depot(&indiziert(Sparkonto {
-                name: demo_name(),
-                kontotyp: Kontotyp::Sparkonto
-            }))
-        );
-        assert!(
-            !filter_auf_depot(&indiziert(Sparkonto {
-                name: demo_name(),
-                kontotyp: Kontotyp::GenossenschaftsAnteile
-            }))
-        );
+        assert!(filter_auf_depot(&indiziert(Sparkonto {
+            name: demo_name(),
+            kontotyp: Kontotyp::Depot
+        })));
+        assert!(!filter_auf_depot(&indiziert(Sparkonto {
+            name: demo_name(),
+            kontotyp: Kontotyp::Sparkonto
+        })));
+        assert!(!filter_auf_depot(&indiziert(Sparkonto {
+            name: demo_name(),
+            kontotyp: Kontotyp::GenossenschaftsAnteile
+        })));
     }
 
     #[test]
@@ -263,11 +213,11 @@ mod tests {
         let matching_konto_referenz = KontoReferenz::new(demo_name());
         let filter = filter_auf_konto(matching_konto_referenz.clone());
 
-        assert!(
-            filter(&indiziert(order_with_konto(matching_konto_referenz)))
-        );
-        assert!(
-            !filter(&indiziert(order_with_konto(konto_referenz("as anderes"))))
-        );
+        assert!(filter(&indiziert(order_with_konto(
+            matching_konto_referenz
+        ))));
+        assert!(!filter(&indiziert(order_with_konto(konto_referenz(
+            "as anderes"
+        )))));
     }
 }

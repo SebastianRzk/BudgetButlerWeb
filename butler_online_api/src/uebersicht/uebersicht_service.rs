@@ -6,9 +6,7 @@ use crate::uebersicht::model::{
 };
 use bigdecimal::BigDecimal;
 
-pub fn berechne_uebersicht(
-    einzelbuchungen: &[impl BesitztDatumKategorieUndBetrag],
-) -> Uebersicht {
+pub fn berechne_uebersicht(einzelbuchungen: &[impl BesitztDatumKategorieUndBetrag]) -> Uebersicht {
     let mut monate: Vec<MonatsUebersicht> = vec![];
 
     for einzelbuchung in einzelbuchungen {
