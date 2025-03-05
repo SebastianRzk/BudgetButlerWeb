@@ -72,7 +72,7 @@ async fn main() -> std::io::Result<()> {
     let static_path = cli_args
         .static_path
         .map(|x| PathBuf::new().join(x))
-        .unwrap_or(app_root().join("static"));
+        .unwrap_or(app_root().join("target").join("static"));
 
     let app_domain = std::env::var("BUDGETBUTLER_APP_ROOT").unwrap_or(DEFAULT_APP_NAME.to_string());
     let app_port: u16 = std::env::var("BUDGETBUTLER_APP_PORT")
