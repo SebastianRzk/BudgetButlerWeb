@@ -49,12 +49,10 @@ impl RandomFarbenSelektor {
 
     pub fn get_farben_liste(&self, size: usize) -> Vec<Farbe> {
         let mut result = vec![];
-        let mut index = 0;
-        for _ in 0..size {
+        for (index, _) in (0..size).enumerate() {
             let farben_index = index % self.internal_farben.len();
             let farbe = self.internal_farben.get(farben_index).unwrap();
             result.push(farbe.clone());
-            index += 1;
         }
         result
     }

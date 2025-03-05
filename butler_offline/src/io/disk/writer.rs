@@ -127,7 +127,7 @@ pub fn create_database_backup(
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::reader::reader::create_database;
+    use crate::budgetbutler::database::reader::database_reader::create_database;
     use crate::io::disk::diskrepresentation::file::File;
     use crate::io::disk::diskrepresentation::line::builder::as_string;
     use crate::io::disk::reader::read_data;

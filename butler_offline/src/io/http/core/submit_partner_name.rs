@@ -14,7 +14,7 @@ use crate::io::http::redirect::http_redirect;
 use crate::io::time::{now, today};
 use crate::model::primitives::person::Person;
 use crate::model::state::config::ConfigurationData;
-use crate::model::state::non_persistent_application_state::RootPath;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{post, HttpResponse};
@@ -24,7 +24,7 @@ use serde::Deserialize;
 pub async fn submit(
     data: Data<ApplicationState>,
     configuration: Data<ConfigurationData>,
-    root_path: Data<RootPath>,
+    root_path: Data<UserApplicationDirectory>,
     form: Form<SubmitDatabaseNameFormData>,
 ) -> HttpResponse {
     let mut database_guard = data.database.lock().unwrap();

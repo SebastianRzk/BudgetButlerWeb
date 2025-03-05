@@ -81,7 +81,11 @@ pub struct AdditionalKategorie {
     pub kategorie: Mutex<Option<Kategorie>>,
 }
 
-pub struct RootPath {
+pub struct UserApplicationDirectory {
+    pub path: PathBuf,
+}
+
+pub struct StaticPathDirectory {
     pub path: PathBuf,
 }
 

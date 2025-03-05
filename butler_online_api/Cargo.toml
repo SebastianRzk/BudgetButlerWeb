@@ -8,7 +8,7 @@ path = "src/cron.rs"
 
 [package]
 name = "budgetbutlerweb-companion-backend"
-version = "4.2.1"
+version = "4.2.2"
 edition = "2021"
 
 [dependencies]

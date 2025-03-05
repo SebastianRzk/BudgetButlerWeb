@@ -9,7 +9,7 @@ pub struct Indiziert<T: PartialEq + Eq + Ord + PartialOrd> {
 
 impl<T: Eq + PartialOrd + Ord> PartialOrd for Indiziert<T> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.value.partial_cmp(&other.value).unwrap())
+        Some(self.cmp(other))
     }
 }
 

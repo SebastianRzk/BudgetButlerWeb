@@ -7,7 +7,7 @@ use crate::io::disk::configuration::updater::update_configuration;
 use crate::io::http::redirect::http_redirect;
 use crate::model::primitives::farbe::Farbe;
 use crate::model::state::config::ConfigurationData;
-use crate::model::state::non_persistent_application_state::RootPath;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use actix_web::web::{Data, Form};
 use actix_web::{post, HttpResponse};
 use serde::Deserialize;
@@ -15,7 +15,7 @@ use serde::Deserialize;
 #[post("configuration/submit/themecolor")]
 pub async fn submit(
     configuration: Data<ConfigurationData>,
-    root_path: Data<RootPath>,
+    root_path: Data<UserApplicationDirectory>,
     form: Form<SubmitThemeColorFormData>,
 ) -> HttpResponse {
     let mut config = configuration.configuration.lock().unwrap();

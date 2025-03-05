@@ -9,7 +9,7 @@ use crate::model::local::LocalServerName;
 use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::{
     OnlineRedirectAction, OnlineRedirectActionType, OnlineRedirectActionWrapper,
-    OnlineRedirectState, RootPath,
+    OnlineRedirectState, UserApplicationDirectory,
 };
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
@@ -22,7 +22,7 @@ pub async fn import_gemeinsam_request(
     form: Form<ImportFormData>,
     data: Data<ApplicationState>,
     config: Data<ConfigurationData>,
-    root_path: Data<RootPath>,
+    root_path: Data<UserApplicationDirectory>,
     local_server_name: Data<LocalServerName>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();

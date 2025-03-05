@@ -98,7 +98,7 @@ impl Betrag {
         Betrag::new(vorzeichen, parse_number_str(euro_as_string), cent)
     }
 
-    pub fn from_user_input(user_input_string: &String) -> Betrag {
+    pub fn from_user_input(user_input_string: &str) -> Betrag {
         Betrag::from_iso_string(&user_input_string.replace(",", "."))
     }
 

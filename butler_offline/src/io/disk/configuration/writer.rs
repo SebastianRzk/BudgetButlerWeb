@@ -1,8 +1,8 @@
 use crate::model::state::config::Configuration;
 use std::fs::{remove_file, File};
-use std::path::PathBuf;
+use std::path::Path;
 
-pub fn write_configuration(configuration_path: &PathBuf, configuration: Configuration) {
+pub fn write_configuration(configuration_path: &Path, configuration: Configuration) {
     let full_path = configuration_path.join("configuration.json");
     println!("Writing configuration to {:?}", full_path);
 

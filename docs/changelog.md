@@ -30,6 +30,12 @@ layout: default
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
 
+## v4.2.2 (2025-03-05)
+
+### Änderungen Desktop-Client
+
+- Implementierung von Arch-Linux PKGBUILD
+
 ## v4.2.1 (2025-03-01)
 ### Änderungen Desktop-Client
 - Config-JSON `pretty` speichern

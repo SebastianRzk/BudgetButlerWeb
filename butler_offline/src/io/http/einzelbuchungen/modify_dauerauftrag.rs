@@ -115,12 +115,11 @@ pub async fn post_submit(
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
-    let betrag: Betrag;
-    if form_data.typ == "Ausgabe" {
-        betrag = Betrag::from_user_input(&form_data.wert).negativ();
+    let betrag = if form_data.typ == "Ausgabe" {
+        Betrag::from_user_input(&form_data.wert).negativ()
     } else {
-        betrag = Betrag::from_user_input(&form_data.wert);
-    }
+        Betrag::from_user_input(&form_data.wert)
+    };
 
     let new_state = handle_modification(
         VersionedContext {

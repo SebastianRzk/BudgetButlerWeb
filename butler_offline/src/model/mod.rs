@@ -1,3 +1,4 @@
+pub mod configuration;
 pub mod database;
 pub mod description;
 pub mod eigenschaften;

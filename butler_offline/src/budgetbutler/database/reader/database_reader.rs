@@ -225,7 +225,7 @@ fn calc_internal_state(database: Database, heute: Datum, next_free_index: u32) -
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::reader::reader::create_database;
+    use crate::budgetbutler::database::reader::database_reader::create_database;
     use crate::model::database::dauerauftrag::Dauerauftrag;
     use crate::model::database::depotauszug::builder::demo_depotauszug_aus_str;
     use crate::model::database::depotwert::builder::any_depotwert;

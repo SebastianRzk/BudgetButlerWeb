@@ -59,7 +59,7 @@ pub fn berechne_gesamt_entwicklung(
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::reader::reader::create_database;
+    use crate::budgetbutler::database::reader::database_reader::create_database;
     use crate::budgetbutler::pages::sparen::uebersicht_calculations::einnahmen_ausgaben_sparen::berechne_einnahmen_ausgaben_sparen;
     use crate::model::database::depotauszug::Depotauszug;
     use crate::model::database::depotwert::{Depotwert, DepotwertTyp};

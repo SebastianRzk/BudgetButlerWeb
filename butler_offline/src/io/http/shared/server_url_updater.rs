@@ -1,13 +1,13 @@
 use crate::io::disk::configuration::updater::update_configuration;
 use crate::model::remote::server::ServerConfiguration;
 use crate::model::state::config::ConfigurationData;
-use crate::model::state::non_persistent_application_state::RootPath;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use actix_web::web::Data;
 
 pub fn update_server_url(
     new_server_url: String,
     config: Data<ConfigurationData>,
-    root_path: &Data<RootPath>,
+    root_path: &Data<UserApplicationDirectory>,
 ) -> ServerConfiguration {
     let verarbeitet = verarbeite_server_url(new_server_url);
 
