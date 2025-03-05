@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::change::change::ChangeSelector;
+use crate::budgetbutler::database::change::change_selektor::ChangeSelector;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::kategorie::Kategorie;

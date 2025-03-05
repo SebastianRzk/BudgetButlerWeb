@@ -1,0 +1,3 @@
+#!/bin/sh
+
+electron /usr/share/budgetbutlerweb/app.asar --installed "$@"

@@ -14,9 +14,11 @@ layout: default
 ### Inhaltsverzeichnis
 
 * [Fachlicher Ansatz](#fachlicher-ansatz)
-* [Systemvoraussetzungen](#systemvoraussetzungen)
-* [Installation](#installation)
-* [BudgetButlerWeb starten](#budgetbutlerweb-starten)
+* [Installation in Arch Linux mittels AUR](#installation-in-arch-linux-mittels-aur)
+* [Installation in Arch Linux mittels PKGBUILD](#installation-in-arch-linux-mittels-pkgbuild)
+* [Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)](#manuelle-installation-linux-mit-anpassungen-aber-auch-für-windows-und-macos)
+  * [Systemvoraussetzungen](#systemvoraussetzungen)
+  * [BudgetButlerWeb starten](#budgetbutlerweb-starten)
 * [Updates](#updates)
 * [Umgebungsvariablen](#umgebungsvariablen)
 * [Betrieb mit Docker / Docker-Compose](#betrieb-mit-docker--docker-compose)
@@ -87,14 +89,26 @@ Eine Übertragung von Daten aus der Offline-Anwendung in die Begleiter-App ist e
 Buchungen, welche noch nicht abgerechnet wurden, ist dies dennoch möglich. Weiterführend können auch die bestehenden
 Kategorien aus der Desktop-Anwendung die Begleiter-App importiert werden.
 
-## Systemvoraussetzungen
+## Installation in Arch Linux mittels AUR
+
+Das Paket `budgetbutlerweb-desktop-git` installieren und die Applikation über `budgetbutlerweb` starten.
+
+## Installation in Arch Linux mittels PKGBUILD
+
+1. Das Repository klonen und in das Verzeichnis wechseln: `git clone https://github.com/SebastianRzk/BudgetButlerWeb && cd BudgetButlerWeb`
+2. Das Paket bauen `makepkg`
+3. Das Paket installieren `sudo pacman -U budgetbutlerweb-desktop-git-*.pkg.tar.zst`
+
+## Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)
+
+### Systemvoraussetzungen
 
 * Rust / Cargo
 * Versionierung: git
 * Anwendungsicon sowie Startup-Skript: shell und npm (für Electron-Client)
 * Falls nicht der Electron-Client verwendet wird: Webbrowser (z.B. Firefox oder Chromium)
 
-## Installation
+### Installation
 
 Das Git-Repository klonen:
 
@@ -112,7 +126,7 @@ Optional: Anwendungsicon anlegen:
 
     sh create_desktop_shortcut.sh
 
-## BudgetButlerWeb starten
+### BudgetButlerWeb starten
 
 Die Applikation kann über das Anwendungsicon gestartet werden
 
@@ -129,7 +143,7 @@ Alternativ kann der Server auch manuell gestartet werden:
 
     http://localhost:5000
 
-## Updates
+### Updates
 
 BudgetButlerWeb aktualisieren:
 
@@ -139,14 +153,14 @@ BudgetButlerWeb aktualisieren:
     # Anwendung neu bauen
     build.sh
 
-## Softwaretests ausführen
+### Softwaretests ausführen
 
 Alle Softwaretests mit cargo starten:
 
     cd butler_offline
 	cargo test
 
-## Umgebungsvariablen
+### Umgebungsvariablen
 
 Wenn die Anwendung lokal auf dem Computer betrieben wird, müssen keine Umgebungsvariablen gesetzt werden.
 

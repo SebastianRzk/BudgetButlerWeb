@@ -47,7 +47,7 @@ pub fn berechne_depot_meta_infos(database: &Database) -> Vec<DepotMetaInfo> {
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::reader::reader::create_database;
+    use crate::budgetbutler::database::reader::database_reader::create_database;
     use crate::budgetbutler::database::sparen::berechne_depot_metainfo::berechne_depot_meta_infos;
     use crate::model::database::depotauszug::Depotauszug;
     use crate::model::database::depotwert::builder::demo_depotwert_referenz;

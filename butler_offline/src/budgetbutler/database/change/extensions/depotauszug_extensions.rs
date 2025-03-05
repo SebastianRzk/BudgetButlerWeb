@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::change::change::ChangeSelector;
+use crate::budgetbutler::database::change::change_selektor::ChangeSelector;
 use crate::model::database::depotauszug::Depotauszug;
 use crate::model::indiziert::Indiziert;
 use crate::model::state::persistent_state::depotauszuege::Depotauszuege;

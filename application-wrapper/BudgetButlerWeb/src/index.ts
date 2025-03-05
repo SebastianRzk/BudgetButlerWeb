@@ -9,7 +9,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 const port = 5000;
 
-const apiServerCmd = './budgetbutlerweb';
+const apiServerCmd = process.argv.includes("--installed") ? 'budgetbutlerweb-backend' : './budgetbutlerweb';
 const pwd = process.env["PWD"];
 
 console.log("pwd", pwd)
@@ -42,7 +42,13 @@ function pollServer() {
 
 
 const serverUp: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-const serverProcess = spawn(apiServerCmd, [], {cwd: pwd});
+const params: string[] = [];
+if (process.argv.includes("--installed")) {
+    params.push("--static-path=/usr/share/budgetbutlerweb/static");
+    params.push("--user-data-location=" + process.env["HOME"] + "/Dokumente/BudgetButlerWeb/data");
+}
+
+const serverProcess = spawn(apiServerCmd, params, {cwd: pwd});
 serverProcess.stdout.on('data', (data: unknown) => {
     console.log(`stdout: ${data}`);
 });

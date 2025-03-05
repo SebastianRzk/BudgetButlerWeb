@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=BudgetButlerWeb
+GenericName=Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung.
+Icon=/usr/share/budgetbutlerweb/icon.png
+Terminal=false
+Exec=budgetbutlerweb

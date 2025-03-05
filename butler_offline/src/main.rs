@@ -1,12 +1,13 @@
 use actix_web::web::Data;
 use actix_web::{error, web, App, HttpResponse, HttpServer};
-use std::path::absolute;
+use std::path::{absolute, PathBuf};
 use std::sync::Mutex;
 
 mod budgetbutler;
 pub mod io;
 pub mod model;
 
+use crate::io::cli::endpoints::get_cli_args;
 use crate::io::disk::configuration::reader::{exists_config, load_configuration};
 use crate::io::disk::configuration::updater::update_configuration;
 use crate::io::disk::reader::{exists_database, read_database};
@@ -38,7 +39,7 @@ use crate::io::http::sparen::{
 };
 use crate::model::initial_config::config::generate_initial_config;
 use crate::model::initial_config::database::generate_initial_database;
-use crate::model::initial_config::path::create_initial_path_if_needed;
+use crate::model::initial_config::path::create_path_if_needed;
 use crate::model::local::{
     get_port_binding_domain, LocalServerName, DEFAULT_APP_NAME, DEFAULT_APP_PORT, DEFAULT_PROTOCOL,
 };
@@ -46,7 +47,8 @@ use crate::model::state::config::{app_root, ConfigurationData};
 use crate::model::state::non_persistent_application_state::{
     AdditionalKategorie, DauerauftraegeChanges, DepotauszuegeChanges, DepotwerteChanges,
     EinzelbuchungenChanges, GemeinsameBuchungenChanges, KontoChanges, OnlineRedirectActionWrapper,
-    OnlineRedirectState, OrderChanges, OrderDauerauftragChanges, RootPath, SparbuchungenChanges,
+    OnlineRedirectState, OrderChanges, OrderDauerauftragChanges, SparbuchungenChanges,
+    StaticPathDirectory, UserApplicationDirectory,
 };
 use io::http::core::{configuration, dashboard};
 use io::http::einzelbuchungen::{
@@ -56,11 +58,21 @@ use model::state::persistent_state::database_version::create_initial_database_ve
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let initial_path = app_root().join("data");
+    let cli_args = get_cli_args();
+
+    let user_data_location = cli_args
+        .user_data_location
+        .map(|x| PathBuf::new().join(x))
+        .unwrap_or(app_root().join("data"));
     println!(
-        "Initial path: {:?}",
-        absolute(initial_path.clone())?.to_str().unwrap()
+        "User data location: {:?}",
+        absolute(user_data_location.clone())?.to_str().unwrap()
     );
+
+    let static_path = cli_args
+        .static_path
+        .map(|x| PathBuf::new().join(x))
+        .unwrap_or(app_root().join("static"));
 
     let app_domain = std::env::var("BUDGETBUTLER_APP_ROOT").unwrap_or(DEFAULT_APP_NAME.to_string());
     let app_port: u16 = std::env::var("BUDGETBUTLER_APP_PORT")
@@ -72,11 +84,14 @@ async fn main() -> std::io::Result<()> {
     let app_protocol: String =
         std::env::var("BUDGETBUTLER_APP_PROTOCOL").unwrap_or(DEFAULT_PROTOCOL.to_string());
 
-    create_initial_path_if_needed(&initial_path);
-    let config = if exists_config(&initial_path) {
-        load_configuration(&initial_path)
+    create_path_if_needed(&user_data_location);
+    let config = if exists_config(&user_data_location) {
+        load_configuration(&user_data_location)
     } else {
-        update_configuration(&initial_path, generate_initial_config(&initial_path))
+        update_configuration(
+            &user_data_location,
+            generate_initial_config(&user_data_location),
+        )
     };
 
     let database;
@@ -87,6 +102,8 @@ async fn main() -> std::io::Result<()> {
         );
     } else {
         database = generate_initial_database();
+        create_path_if_needed(&user_data_location.join("abrechnungen"));
+        create_path_if_needed(&user_data_location.join("backups").join("import_backup"));
         write_database(&database, &config.database_configuration);
     }
 
@@ -147,9 +164,12 @@ async fn main() -> std::io::Result<()> {
         app_port,
     });
 
-    let shares_state = Data::new(load_shares(&initial_path));
+    let shares_state = Data::new(load_shares(&user_data_location));
 
-    let root_path = Data::new(RootPath { path: initial_path });
+    let user_application_directory = Data::new(UserApplicationDirectory {
+        path: user_data_location,
+    });
+    let static_path_directory = Data::new(StaticPathDirectory { path: static_path });
 
     println!(
         "Server started at {}://{}:{}",
@@ -163,12 +183,13 @@ async fn main() -> std::io::Result<()> {
             });
         App::new()
             .app_data(app_state.clone())
+            .app_data(static_path_directory.clone())
             .app_data(einzelbuchungen_changes.clone())
             .app_data(dauerauftraege_changes.clone())
             .app_data(gemeinsame_buchungen_changes.clone())
             .app_data(config_state.clone())
             .app_data(additional_kategorie_state.clone())
-            .app_data(root_path.clone())
+            .app_data(user_application_directory.clone())
             .app_data(online_redirect_state.clone())
             .app_data(konto_changes.clone())
             .app_data(sparbuchungen_changes.clone())

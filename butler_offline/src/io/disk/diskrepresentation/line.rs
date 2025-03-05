@@ -43,7 +43,7 @@ pub mod builder {
     }
 }
 
-pub fn as_string(lines: &Vec<Line>) -> String {
+pub fn as_string(lines: &[Line]) -> String {
     lines
         .iter()
         .map(|line| line.line.clone())
