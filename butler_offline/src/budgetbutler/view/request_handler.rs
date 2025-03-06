@@ -115,7 +115,7 @@ pub fn handle_modification_manual(
         };
     }
     let new_database = update_database(
-        &user_application_directory,
+        user_application_directory,
         database_configuration,
         new_database,
     );

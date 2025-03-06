@@ -55,7 +55,7 @@ mod tests {
         let selector = Selector::new(vec![zwei(), vier()]);
         assert_eq!(
             selector.bilde_summe(),
-            Betrag::from_user_input(&"6,00".to_string())
+            Betrag::from_user_input("6,00")
         );
     }
 }

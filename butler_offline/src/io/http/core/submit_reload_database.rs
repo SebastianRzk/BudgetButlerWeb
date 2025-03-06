@@ -2,7 +2,9 @@ use crate::budgetbutler::view::redirect_targets::redirect_to_dashboard;
 use crate::io::disk::reader::read_database;
 use crate::io::http::redirect::http_redirect;
 use crate::model::state::config::ConfigurationData;
-use crate::model::state::non_persistent_application_state::{AdditionalKategorie, UserApplicationDirectory};
+use crate::model::state::non_persistent_application_state::{
+    AdditionalKategorie, UserApplicationDirectory,
+};
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::Data;
 use actix_web::{get, HttpResponse};
@@ -12,7 +14,7 @@ pub async fn submit_reload_database(
     data: Data<ApplicationState>,
     configuration_data: Data<ConfigurationData>,
     additional_kategorie: Data<AdditionalKategorie>,
-    user_application_directory: Data<UserApplicationDirectory>
+    user_application_directory: Data<UserApplicationDirectory>,
 ) -> HttpResponse {
     let mut database = data.database.lock().unwrap();
     let conf = configuration_data.configuration.lock().unwrap();

@@ -11,7 +11,7 @@ pub fn update_database(
 ) -> Database {
     write_database(user_application_directory, &current_database, config);
     read_database(
-        &user_application_directory,
+        user_application_directory,
         config,
         current_database.db_version.increment(),
     )

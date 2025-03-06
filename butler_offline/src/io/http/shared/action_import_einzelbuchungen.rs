@@ -48,7 +48,7 @@ pub async fn import_einzelbuchungen_request(
             let abrechnung_str = as_string(&abrechnung.lines);
 
             speichere_abrechnung(
-                &user_application_directory,
+                user_application_directory,
                 abrechnung.lines.clone(),
                 eigener_name.clone(),
                 AbrechnungsConfiguration {
@@ -88,7 +88,7 @@ pub async fn import_einzelbuchungen_request(
             } else {
                 println!("Keine Kategorien zum zuordnen");
                 speichere_abrechnung(
-                    &user_application_directory,
+                    user_application_directory,
                     abrechnung.lines.clone(),
                     eigener_name,
                     config.abrechnungs_configuration.clone(),
@@ -115,7 +115,7 @@ pub async fn import_einzelbuchungen_request(
                         ),
                     ),
                 }
-            }
+            };
         }
         Err(_) => {
             println!("Error");

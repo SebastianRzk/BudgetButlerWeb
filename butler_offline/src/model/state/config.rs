@@ -68,7 +68,8 @@ pub fn get_database_location(
     user_data_location: &UserApplicationDirectory,
     database_configuration: &DatabaseConfiguration,
 ) -> PathBuf {
-        user_data_location.path
+    user_data_location
+        .path
         .join(format!("Database_{}.csv", database_configuration.name))
 }
 

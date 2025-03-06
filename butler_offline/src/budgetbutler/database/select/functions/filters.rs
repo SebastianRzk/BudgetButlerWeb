@@ -145,20 +145,20 @@ mod tests {
     #[test]
     fn test_filter_auf_einnahmen() {
         assert!(!filter_auf_einnahmen(&einzelbuchung_with_betrag(
-            Betrag::from_user_input(&"-2".to_string())
+            Betrag::from_user_input("-2")
         )));
         assert!(filter_auf_einnahmen(&einzelbuchung_with_betrag(
-            Betrag::from_user_input(&"2".to_string())
+            Betrag::from_user_input("2")
         )));
     }
 
     #[test]
     fn test_filter_auf_ausgaben() {
         assert!(filter_auf_ausgaben(&einzelbuchung_with_betrag(
-            Betrag::from_user_input(&"-2".to_string())
+            Betrag::from_user_input("-2")
         )));
         assert!(!filter_auf_ausgaben(&einzelbuchung_with_betrag(
-            Betrag::from_user_input(&"2".to_string())
+            Betrag::from_user_input("2")
         )));
     }
     #[test]

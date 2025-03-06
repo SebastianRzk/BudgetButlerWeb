@@ -134,7 +134,7 @@ pub mod builder {
             datum: datum("2020-01-01"),
             depotwert: depotwert_referenz("DE000A0D9PT0"),
             konto: konto_referenz("MeinKonto"),
-            wert: Betrag::from_user_input(&"1000,00".to_string()),
+            wert: Betrag::from_user_input("1000,00"),
         }
     }
 }

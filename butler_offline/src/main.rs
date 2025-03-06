@@ -88,10 +88,7 @@ async fn main() -> std::io::Result<()> {
     let config = if exists_config(&user_data_location) {
         load_configuration(&user_data_location)
     } else {
-        update_configuration(
-            &user_data_location,
-            generate_initial_config(),
-        )
+        update_configuration(&user_data_location, generate_initial_config())
     };
 
     let user_application_directory = UserApplicationDirectory {

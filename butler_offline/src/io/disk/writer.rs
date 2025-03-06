@@ -90,7 +90,11 @@ pub fn map_sorted_to_file(sorted_file: SortedFile) -> File {
     File { lines: result }
 }
 
-pub fn write_database(user_application_directory: &UserApplicationDirectory, database: &Database, config: &DatabaseConfiguration) {
+pub fn write_database(
+    user_application_directory: &UserApplicationDirectory,
+    database: &Database,
+    config: &DatabaseConfiguration,
+) {
     let sorted_file = map_database_to_file(database);
     let file = map_sorted_to_file(sorted_file);
 
@@ -101,7 +105,11 @@ pub fn write_database(user_application_directory: &UserApplicationDirectory, dat
         .collect::<Vec<&str>>()
         .join("\n");
 
-    fs::write(get_database_location(user_application_directory, config).as_os_str(), file_as_string).unwrap();
+    fs::write(
+        get_database_location(user_application_directory, config).as_os_str(),
+        file_as_string,
+    )
+    .unwrap();
 }
 
 pub fn create_database_backup(
@@ -113,7 +121,8 @@ pub fn create_database_backup(
     reason: &str,
 ) {
     let filename = format!("Backup_{}_{}_{}.csv", today.to_iso_string(), now, reason);
-    let path = user_application_directory.path
+    let path = user_application_directory
+        .path
         .join(Path::new(backup_configuration.location.as_str()))
         .join(filename);
     println!("Creating backup at: {:?}", path);

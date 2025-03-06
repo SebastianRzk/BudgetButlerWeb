@@ -7,11 +7,11 @@ use crate::budgetbutler::view::request_handler::{
 use crate::io::http::redirect::http_redirect;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::state::config::ConfigurationData;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{post, HttpResponse};
 use serde::Deserialize;
-use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 
 #[post("configuration/submit/renamekategorie/")]
 pub async fn submit(

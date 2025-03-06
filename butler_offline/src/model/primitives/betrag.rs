@@ -464,19 +464,19 @@ mod tests {
     #[test]
     fn test_from_user_input() {
         assert_eq!(
-            Betrag::from_user_input(&"12,34".to_string()),
+            Betrag::from_user_input("12,34"),
             betrag(Vorzeichen::Positiv, 12, 34)
         );
         assert_eq!(
-            Betrag::from_user_input(&"-12,34".to_string()),
+            Betrag::from_user_input("-12,34"),
             betrag(Vorzeichen::Negativ, 12, 34)
         );
         assert_eq!(
-            Betrag::from_user_input(&"-12,00".to_string()),
+            Betrag::from_user_input("-12,00"),
             betrag(Vorzeichen::Negativ, 12, 0)
         );
         assert_eq!(
-            Betrag::from_user_input(&"12,00".to_string()),
+            Betrag::from_user_input("12,00"),
             betrag(Vorzeichen::Positiv, 12, 0)
         );
     }

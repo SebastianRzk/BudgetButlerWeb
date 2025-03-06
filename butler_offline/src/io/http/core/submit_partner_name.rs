@@ -26,7 +26,7 @@ pub async fn submit(
     configuration: Data<ConfigurationData>,
     root_path: Data<UserApplicationDirectory>,
     form: Form<SubmitDatabaseNameFormData>,
-    user_application_directory: Data<UserApplicationDirectory>
+    user_application_directory: Data<UserApplicationDirectory>,
 ) -> HttpResponse {
     let mut database_guard = data.database.lock().unwrap();
     let optimistic_locking_result =
