@@ -14,6 +14,7 @@ use crate::io::time::{now, today};
 use crate::model::primitives::person::Person;
 use crate::model::remote::login::LoginCredentials;
 use crate::model::state::config::{AbrechnungsConfiguration, Configuration};
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::Database;
 
 pub async fn import_einzelbuchungen_request(
@@ -21,6 +22,7 @@ pub async fn import_einzelbuchungen_request(
     login: LoginCredentials,
     eigener_name: Person,
     database: &Database,
+    user_application_directory: &UserApplicationDirectory,
 ) -> RedirectAuthenticatedResult {
     let einzelbuchungen =
         request_einzelbuchungen(&config.server_configuration, login.clone()).await;
@@ -46,6 +48,7 @@ pub async fn import_einzelbuchungen_request(
             let abrechnung_str = as_string(&abrechnung.lines);
 
             speichere_abrechnung(
+                &user_application_directory,
                 abrechnung.lines.clone(),
                 eigener_name.clone(),
                 AbrechnungsConfiguration {
@@ -62,14 +65,14 @@ pub async fn import_einzelbuchungen_request(
 
             let pruefe_kategorien =
                 pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind(database, &abrechnung);
-            if !pruefe_kategorien.kategorien_nicht_in_datenbank.is_empty() {
+            return if !pruefe_kategorien.kategorien_nicht_in_datenbank.is_empty() {
                 let view_result = ImportMappingViewResult {
                     database_version: database.db_version.clone(),
                     abrechnung,
                     alle_kategorien: database.einzelbuchungen.get_kategorien(),
                     unpassende_kategorien: pruefe_kategorien.kategorien_nicht_in_datenbank,
                 };
-                return RedirectAuthenticatedResult {
+                RedirectAuthenticatedResult {
                     database_to_save: None,
                     page_render_type: RedirectAuthenticatedRenderPageType::RenderPage(
                         handle_render_display_view(
@@ -81,10 +84,11 @@ pub async fn import_einzelbuchungen_request(
                             config.database_configuration.name.clone(),
                         ),
                     ),
-                };
+                }
             } else {
                 println!("Keine Kategorien zum zuordnen");
                 speichere_abrechnung(
+                    &user_application_directory,
                     abrechnung.lines.clone(),
                     eigener_name,
                     config.abrechnungs_configuration.clone(),
@@ -93,7 +97,7 @@ pub async fn import_einzelbuchungen_request(
                 );
 
                 let database = import_abrechnung(database, &abrechnung);
-                return RedirectAuthenticatedResult {
+                RedirectAuthenticatedResult {
                     database_to_save: Some(database),
                     page_render_type: RedirectAuthenticatedRenderPageType::RenderPage(
                         handle_render_success_display_message(
@@ -110,7 +114,7 @@ pub async fn import_einzelbuchungen_request(
                             },
                         ),
                     ),
-                };
+                }
             }
         }
         Err(_) => {

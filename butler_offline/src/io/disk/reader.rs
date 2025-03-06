@@ -13,6 +13,7 @@ use crate::io::disk::diskrepresentation::line::Line;
 use crate::io::disk::diskrepresentation::sorter::sort_file;
 use crate::io::time::today;
 use crate::model::state::config::{get_database_location, DatabaseConfiguration};
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::{DataOnDisk, Database};
 use crate::model::state::persistent_state::database_version::DatabaseVersion;
 use std;
@@ -49,17 +50,21 @@ pub fn read_data(file: File) -> DataOnDisk {
     }
 }
 
-pub fn exists_database(config: &DatabaseConfiguration) -> bool {
-    let full_path = get_database_location(config);
+pub fn exists_database(
+    user_data_location: &UserApplicationDirectory,
+    config: &DatabaseConfiguration,
+) -> bool {
+    let full_path = get_database_location(user_data_location, config);
     println!("Checking if database exists at {:?}", full_path);
     full_path.exists()
 }
 
 pub fn read_database(
+    user_application_directory: &UserApplicationDirectory,
     config: &DatabaseConfiguration,
     current_database_version: DatabaseVersion,
 ) -> Database {
-    let db_location = get_database_location(config);
+    let db_location = get_database_location(user_application_directory, config);
     println!("Reading database from {:?}", db_location);
     let file = read_file(db_location);
     let data = read_data(file);

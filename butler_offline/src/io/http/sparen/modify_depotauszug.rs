@@ -27,7 +27,9 @@ use crate::model::primitives::datum::Datum;
 use crate::model::primitives::isin::ISIN;
 use crate::model::primitives::name::Name;
 use crate::model::state::config::ConfigurationData;
-use crate::model::state::non_persistent_application_state::DepotauszuegeChanges;
+use crate::model::state::non_persistent_application_state::{
+    DepotauszuegeChanges, UserApplicationDirectory,
+};
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{get, post, HttpResponse, Responder};
@@ -103,6 +105,7 @@ pub async fn post_submit(
     depotauszuege_changes: Data<DepotauszuegeChanges>,
     form_data: Form<HashMap<String, String>>,
     configuration: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>,
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
     let konto = KontoReferenz::new(Name::new(form_data.get("edit_konto_name").unwrap().clone()));
@@ -150,6 +153,7 @@ pub async fn post_submit(
             .lock()
             .unwrap()
             .database_configuration,
+        &user_application_directory,
     );
     *database = new_state.changed_database;
 
@@ -202,6 +206,7 @@ pub async fn delete(
     depotauszug_changes: Data<DepotauszuegeChanges>,
     form_data: Form<DeleteFormData>,
     configuration: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>,
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
@@ -222,6 +227,7 @@ pub async fn delete(
             .lock()
             .unwrap()
             .database_configuration,
+        &user_application_directory,
     );
     *database = new_state.changed_database;
 

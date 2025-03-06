@@ -24,9 +24,7 @@ use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::name::Name;
 use crate::model::primitives::person::Person;
 use crate::model::state::config::ConfigurationData;
-use crate::model::state::non_persistent_application_state::{
-    AdditionalKategorie, GemeinsameBuchungenChanges,
-};
+use crate::model::state::non_persistent_application_state::{AdditionalKategorie, GemeinsameBuchungenChanges, UserApplicationDirectory};
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{get, post, HttpResponse, Responder};
@@ -103,6 +101,7 @@ pub async fn post_submit(
     gemeinsame_buchungen_changes: Data<GemeinsameBuchungenChanges>,
     form_data: Form<SubmitFormData>,
     configuration: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
@@ -129,6 +128,7 @@ pub async fn post_submit(
             .lock()
             .unwrap()
             .database_configuration,
+        &user_application_directory,
     );
     *database = new_state.changed_database;
 
@@ -143,6 +143,7 @@ pub async fn delete(
     gemeinsame_buchungen_changes: Data<GemeinsameBuchungenChanges>,
     form_data: Form<DeleteFormData>,
     configuration: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
 
@@ -162,6 +163,7 @@ pub async fn delete(
             .lock()
             .unwrap()
             .database_configuration,
+        &user_application_directory,
     );
     *database = new_state.changed_database;
 

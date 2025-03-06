@@ -6,14 +6,21 @@ use crate::budgetbutler::view::routes::GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN;
 use crate::io::disk::abrechnung::history::lade_alle_abrechnungen;
 use crate::io::html::views::gemeinsame_buchungen::uebersicht_abrechnungen::render_uebersicht_gemeinsame_abrechnungen_template;
 use crate::model::state::config::ConfigurationData;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use actix_web::web::Data;
 use actix_web::{get, HttpResponse, Responder};
 use serde::Deserialize;
 
 #[get("uebersichtabrechnungen/")]
-pub async fn get_view(config: Data<ConfigurationData>) -> impl Responder {
+pub async fn get_view(
+    config: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>,
+) -> impl Responder {
     let configuration_guard = config.configuration.lock().unwrap();
-    let alle_abrechnung = lade_alle_abrechnungen(&configuration_guard.abrechnungs_configuration);
+    let alle_abrechnung = lade_alle_abrechnungen(
+        &user_application_directory,
+        &configuration_guard.abrechnungs_configuration,
+    );
     HttpResponse::Ok().body(handle_render_display_view(
         "Übersicht Abrechnungen",
         GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN,

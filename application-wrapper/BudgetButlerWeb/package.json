@@ -1,7 +1,7 @@
 {
   "name": "budgetbutlerweb",
   "productName": "budgetbutlerweb",
-  "version": "4.2.3",
+  "version": "4.2.4",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {

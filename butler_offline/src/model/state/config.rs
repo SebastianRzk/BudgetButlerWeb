@@ -2,9 +2,10 @@ use crate::model::primitives::farbe::Farbe;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::person::Person;
 use crate::model::remote::server::ServerConfiguration;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use serde::{Deserialize, Serialize};
 use std::env::current_dir;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::sync::Mutex;
 
 pub struct ConfigurationData {
@@ -25,7 +26,6 @@ pub struct Configuration {
 #[derive(Clone, Deserialize, Serialize)]
 pub struct DatabaseConfiguration {
     pub name: String,
-    pub location: String,
 }
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -60,18 +60,19 @@ impl BackupConfiguration {
     pub fn to_database_configuration(&self, database_name: String) -> DatabaseConfiguration {
         DatabaseConfiguration {
             name: database_name,
-            location: self.location.clone(),
         }
     }
 }
 
-pub fn get_database_location(database_configuration: &DatabaseConfiguration) -> PathBuf {
-    app_root()
-        .join(Path::new(&database_configuration.location))
+pub fn get_database_location(
+    user_data_location: &UserApplicationDirectory,
+    database_configuration: &DatabaseConfiguration,
+) -> PathBuf {
+        user_data_location.path
         .join(format!("Database_{}.csv", database_configuration.name))
 }
 
-pub fn app_root() -> PathBuf {
+pub fn alternative_app_root() -> PathBuf {
     current_dir().unwrap().parent().unwrap().to_path_buf()
 }
 
@@ -147,7 +148,6 @@ pub mod builder {
     pub fn leere_database_configuration() -> DatabaseConfiguration {
         DatabaseConfiguration {
             name: "".to_string(),
-            location: "".to_string(),
         }
     }
 }
@@ -166,6 +166,5 @@ pub mod tests {
             backup_configuration.to_database_configuration("testname".to_string());
 
         assert_eq!(database_configuration.name, "testname");
-        assert_eq!(database_configuration.location, "demo/backups");
     }
 }

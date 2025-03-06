@@ -5,21 +5,19 @@ use crate::model::state::config::{
     AbrechnungsConfiguration, BackupConfiguration, Configuration, DatabaseConfiguration,
     DesignConfiguration, ErfassungsConfiguration, UserConfiguration,
 };
-use std::path::PathBuf;
 
-pub fn generate_initial_config(root_path: &PathBuf) -> Configuration {
+pub fn generate_initial_config() -> Configuration {
     let initial_user_name_str = "Test_User";
     Configuration {
         database_configuration: DatabaseConfiguration {
             name: initial_user_name_str.to_string(),
-            location: root_path.to_str().unwrap().to_string(),
         },
         abrechnungs_configuration: AbrechnungsConfiguration {
-            location: "data/abrechnungen".to_string(),
+            location: "abrechnungen".to_string(),
         },
         backup_configuration: BackupConfiguration {
-            location: "data/backups".to_string(),
-            import_backup_location: "data/backups/import_backup".to_string(),
+            location: "backups".to_string(),
+            import_backup_location: "backups/import_backup".to_string(),
         },
         design_configuration: DesignConfiguration {
             design_farbe: Farbe {

@@ -1,11 +1,13 @@
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::person::Person;
-use crate::model::state::config::{app_root, AbrechnungsConfiguration};
+use crate::model::state::config::AbrechnungsConfiguration;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use std::io::Write;
 use std::path::Path;
 
 pub fn speichere_abrechnung(
+    user_application_directory: &UserApplicationDirectory,
     abrechnung: Vec<Line>,
     person: Person,
     abrechnungs_configuration: AbrechnungsConfiguration,
@@ -18,7 +20,8 @@ pub fn speichere_abrechnung(
         now,
         person.person
     );
-    let file_path = app_root()
+    let file_path = user_application_directory
+        .path
         .join(Path::new(&abrechnungs_configuration.location))
         .join(file_name);
 

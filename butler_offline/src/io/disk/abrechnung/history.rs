@@ -1,10 +1,16 @@
 use crate::budgetbutler::database::abrechnen::abrechnen::history::UnparsedAbrechnungsFile;
 use crate::io::disk::diskrepresentation::line::Line;
-use crate::model::state::config::{app_root, AbrechnungsConfiguration};
+use crate::model::state::config::AbrechnungsConfiguration;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 
-pub fn lade_alle_abrechnungen(config: &AbrechnungsConfiguration) -> Vec<UnparsedAbrechnungsFile> {
+pub fn lade_alle_abrechnungen(
+    user_application_directory: &UserApplicationDirectory,
+    config: &AbrechnungsConfiguration,
+) -> Vec<UnparsedAbrechnungsFile> {
     let mut result = vec![];
-    let path = app_root().join(std::path::Path::new(&config.location));
+    let path = user_application_directory
+        .path
+        .join(std::path::Path::new(&config.location));
     eprintln!("Lade Abrechnungen aus: {:?}", path);
 
     for file in std::fs::read_dir(path).unwrap() {

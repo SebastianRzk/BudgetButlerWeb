@@ -75,11 +75,11 @@ DEFAULT_CONFIG = {
         }
     },
     "abrechnungs_configuration": {
-        "location": "data/abrechnungen"
+        "location": "abrechnungen"
     },
     "backup_configuration": {
-        "location": "data/backups",
-        "import_backup_location": "data/backups/import_backup"
+        "location": "backups",
+        "import_backup_location": "backups/import_backup"
     },
     "server_configuration": {
         "server_url": "http://localhost"

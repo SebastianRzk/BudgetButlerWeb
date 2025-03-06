@@ -48,6 +48,7 @@ if (process.argv.includes("--installed")) {
     params.push("--user-data-location=" + process.env["HOME"] + "/Dokumente/BudgetButlerWeb/data");
 }
 
+console.log("Starting server with", apiServerCmd, params, "in", pwd);
 const serverProcess = spawn(apiServerCmd, params, {cwd: pwd});
 serverProcess.stdout.on('data', (data: unknown) => {
     console.log(`stdout: ${data}`);

@@ -11,11 +11,13 @@ use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{post, HttpResponse};
 use serde::Deserialize;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 
 #[post("configuration/submit/renamekategorie/")]
 pub async fn submit(
     data: Data<ApplicationState>,
     configuration_data: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>,
     form: Form<SubmitRenameKategorieFormData>,
 ) -> HttpResponse {
     let mut database = data.database.lock().unwrap();
@@ -33,6 +35,7 @@ pub async fn submit(
         },
         action_rename_kategorie,
         &conf.database_configuration,
+        &user_application_directory,
     );
 
     *database = new_state.changed_database;
