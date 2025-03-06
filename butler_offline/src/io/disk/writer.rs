@@ -18,8 +18,9 @@ use crate::io::disk::diskrepresentation::file::{
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::primitives::datum::Datum;
 use crate::model::state::config::{
-    app_root, get_database_location, BackupConfiguration, DatabaseConfiguration,
+    get_database_location, BackupConfiguration, DatabaseConfiguration,
 };
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::Database;
 use std::fs;
 use std::io::Write;
@@ -89,7 +90,11 @@ pub fn map_sorted_to_file(sorted_file: SortedFile) -> File {
     File { lines: result }
 }
 
-pub fn write_database(database: &Database, config: &DatabaseConfiguration) {
+pub fn write_database(
+    user_application_directory: &UserApplicationDirectory,
+    database: &Database,
+    config: &DatabaseConfiguration,
+) {
     let sorted_file = map_database_to_file(database);
     let file = map_sorted_to_file(sorted_file);
 
@@ -100,18 +105,24 @@ pub fn write_database(database: &Database, config: &DatabaseConfiguration) {
         .collect::<Vec<&str>>()
         .join("\n");
 
-    fs::write(get_database_location(config).as_os_str(), file_as_string).unwrap();
+    fs::write(
+        get_database_location(user_application_directory, config).as_os_str(),
+        file_as_string,
+    )
+    .unwrap();
 }
 
 pub fn create_database_backup(
     database: &Database,
     backup_configuration: &BackupConfiguration,
+    user_application_directory: &UserApplicationDirectory,
     today: Datum,
     now: String,
     reason: &str,
 ) {
     let filename = format!("Backup_{}_{}_{}.csv", today.to_iso_string(), now, reason);
-    let path = app_root()
+    let path = user_application_directory
+        .path
         .join(Path::new(backup_configuration.location.as_str()))
         .join(filename);
     println!("Creating backup at: {:?}", path);

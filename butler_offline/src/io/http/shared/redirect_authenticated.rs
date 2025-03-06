@@ -16,7 +16,7 @@ use crate::io::time::{now, today};
 use crate::model::remote::login::{Cookie, LoginCredentials};
 use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::{
-    OnlineRedirectActionType, OnlineRedirectState,
+    OnlineRedirectActionType, OnlineRedirectState, UserApplicationDirectory,
 };
 use crate::model::state::persistent_application_state::{ApplicationState, Database};
 use actix_web::web::{Data, Query};
@@ -27,6 +27,7 @@ use serde::Deserialize;
 pub async fn logged_in_callback(
     query: Query<RedirectAuthenticatedQuery>,
     online_redirect_state: Data<OnlineRedirectState>,
+    user_application_directory: Data<UserApplicationDirectory>,
     data: Data<ApplicationState>,
     config: Data<ConfigurationData>,
 ) -> impl Responder {
@@ -58,6 +59,7 @@ pub async fn logged_in_callback(
                 credentials,
                 configuration.user_configuration.self_name.clone(),
                 &database,
+                &user_application_directory,
             )
             .await
         }
@@ -70,6 +72,7 @@ pub async fn logged_in_callback(
                 credentials,
                 configuration.user_configuration.self_name.clone(),
                 &database,
+                &user_application_directory,
             )
             .await
         }
@@ -83,14 +86,20 @@ pub async fn logged_in_callback(
         create_database_backup(
             &database,
             &configuration.backup_configuration,
+            &user_application_directory,
             today(),
             now(),
             "1_before_import",
         );
-        *database = update_database(&configuration.database_configuration, next_state);
+        *database = update_database(
+            &user_application_directory,
+            &configuration.database_configuration,
+            next_state,
+        );
         create_database_backup(
             &database,
             &configuration.backup_configuration,
+            &user_application_directory,
             today(),
             now(),
             "2_after_import",

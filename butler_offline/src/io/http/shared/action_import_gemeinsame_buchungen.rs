@@ -14,6 +14,7 @@ use crate::io::time::{now, today};
 use crate::model::primitives::person::Person;
 use crate::model::remote::login::LoginCredentials;
 use crate::model::state::config::{AbrechnungsConfiguration, Configuration};
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::Database;
 
 pub async fn import_gemeinsame_buchungen_request(
@@ -21,6 +22,7 @@ pub async fn import_gemeinsame_buchungen_request(
     login: LoginCredentials,
     eigener_name: Person,
     database: &Database,
+    user_application_directory: &UserApplicationDirectory,
 ) -> RedirectAuthenticatedResult {
     let gemeinsame_buchungen = request_gemeinsame_buchungen(
         &config.server_configuration,
@@ -50,6 +52,7 @@ pub async fn import_gemeinsame_buchungen_request(
             let abrechnung_str = as_string(&abrechnung.lines);
 
             speichere_abrechnung(
+                user_application_directory,
                 abrechnung.lines.clone(),
                 eigener_name.clone(),
                 AbrechnungsConfiguration {
@@ -90,6 +93,7 @@ pub async fn import_gemeinsame_buchungen_request(
             } else {
                 println!("Keine Kategorien zum zuordnen");
                 speichere_abrechnung(
+                    user_application_directory,
                     abrechnung.lines.clone(),
                     eigener_name,
                     config.abrechnungs_configuration.clone(),

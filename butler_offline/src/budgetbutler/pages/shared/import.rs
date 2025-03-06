@@ -117,7 +117,7 @@ Datum,Kategorie,Name,Betrag
                 datum: Datum::new(21, 11, 2024),
                 kategorie: kategorie("NeueKategorie"),
                 name: name("asd"),
-                betrag: Betrag::from_user_input(&"-617,00".to_string()),
+                betrag: Betrag::from_user_input("-617,00"),
             }
         )
     }

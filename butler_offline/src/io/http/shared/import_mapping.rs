@@ -15,11 +15,13 @@ use actix_web::web::{Data, Form};
 use actix_web::{post, Responder};
 use std::collections::HashMap;
 use std::string::ToString;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 
 #[post("import/mapping")]
 pub async fn submit_import_mapping(
     data: Data<ApplicationState>,
     config: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>,
     form: Form<HashMap<String, String>>,
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
@@ -57,12 +59,14 @@ pub async fn submit_import_mapping(
         original_database_version,
         &configuration.database_configuration,
         result.database,
+        &user_application_directory,
     );
 
     if let Ok(next_state) = render_result.valid_next_state {
         create_database_backup(
             &database,
             &configuration.backup_configuration,
+            &user_application_directory,
             today(),
             now(),
             "1_before_import",
@@ -71,11 +75,13 @@ pub async fn submit_import_mapping(
         create_database_backup(
             &database,
             &configuration.backup_configuration,
+            &user_application_directory,
             today(),
             now(),
             "2_after_import",
         );
         speichere_abrechnung(
+            &user_application_directory,
             result.aktualisierte_abrechnung.clone(),
             configuration.user_configuration.self_name.clone(),
             configuration.abrechnungs_configuration.clone(),

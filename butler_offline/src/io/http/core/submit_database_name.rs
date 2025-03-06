@@ -25,6 +25,7 @@ pub async fn submit(
     configuration: Data<ConfigurationData>,
     root_path: Data<UserApplicationDirectory>,
     form: Form<SubmitDatabaseNameFormData>,
+    user_application_directory: Data<UserApplicationDirectory>,
 ) -> HttpResponse {
     let mut database_guard = data.database.lock().unwrap();
     let optimistic_locking_result =
@@ -43,11 +44,13 @@ pub async fn submit(
     create_database_backup(
         &database_guard,
         &config.backup_configuration,
+        &user_application_directory,
         today(),
         now(),
         "before_rename",
     );
     let refreshed_database = update_database(
+        &user_application_directory,
         &result.new_config.database_configuration,
         result.new_database,
     );
@@ -55,6 +58,7 @@ pub async fn submit(
     create_database_backup(
         &database_guard,
         &result.new_config.backup_configuration,
+        &user_application_directory,
         today(),
         now(),
         "after_rename",

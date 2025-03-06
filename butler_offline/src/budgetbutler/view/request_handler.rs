@@ -11,6 +11,7 @@ use crate::io::html::views::core::zurueck_zu::{
 };
 use crate::io::html::views::index::render_index_template;
 use crate::model::state::config::DatabaseConfiguration;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::Database;
 use crate::model::state::persistent_state::database_version::{
     create_initial_database_version, DatabaseVersion,
@@ -42,6 +43,7 @@ pub fn handle_modification<CONTEXT, ChangeTracker>(
     change_tracer: &Mutex<Vec<ChangeTracker>>,
     modification_action: impl Fn(CONTEXT) -> RedirectResult<ChangeTracker>,
     database_configuration: &DatabaseConfiguration,
+    user_application_directory: &UserApplicationDirectory,
 ) -> ModificationResult {
     let optimistic_locking_result =
         check_optimistic_locking_error(&context.requested_db_version, context.current_db_version);
@@ -49,6 +51,7 @@ pub fn handle_modification<CONTEXT, ChangeTracker>(
         return ModificationResult {
             target: redirect_to_optimistic_locking_error(),
             changed_database: read_database(
+                user_application_directory,
                 database_configuration,
                 create_initial_database_version(database_configuration.name.clone()),
             ),
@@ -56,8 +59,11 @@ pub fn handle_modification<CONTEXT, ChangeTracker>(
     }
     let render_view = modification_action(context.context);
     change_tracer.lock().unwrap().push(render_view.change);
-    let refreshed_database =
-        update_database(database_configuration, render_view.result.changed_database);
+    let refreshed_database = update_database(
+        user_application_directory,
+        database_configuration,
+        render_view.result.changed_database,
+    );
     ModificationResult {
         target: render_view.result.target,
         changed_database: refreshed_database,
@@ -68,6 +74,7 @@ pub fn handle_modification_without_change<CONTEXT>(
     context: VersionedContext<CONTEXT>,
     modification_action: impl Fn(CONTEXT) -> ModificationResult,
     database_configuration: &DatabaseConfiguration,
+    user_application_directory: &UserApplicationDirectory,
 ) -> ModificationResult {
     let optimistic_locking_result =
         check_optimistic_locking_error(&context.requested_db_version, context.current_db_version);
@@ -75,13 +82,18 @@ pub fn handle_modification_without_change<CONTEXT>(
         return ModificationResult {
             target: redirect_to_optimistic_locking_error(),
             changed_database: read_database(
+                user_application_directory,
                 database_configuration,
                 create_initial_database_version(database_configuration.name.clone()),
             ),
         };
     }
     let render_view = modification_action(context.context);
-    let refreshed_database = update_database(database_configuration, render_view.changed_database);
+    let refreshed_database = update_database(
+        user_application_directory,
+        database_configuration,
+        render_view.changed_database,
+    );
     ModificationResult {
         target: render_view.target,
         changed_database: refreshed_database,
@@ -93,6 +105,7 @@ pub fn handle_modification_manual(
     current_db_version: DatabaseVersion,
     database_configuration: &DatabaseConfiguration,
     new_database: Database,
+    user_application_directory: &UserApplicationDirectory,
 ) -> ManualRenderResult {
     let optimistic_locking_result =
         check_optimistic_locking_error(&requested_db_version, current_db_version);
@@ -101,7 +114,11 @@ pub fn handle_modification_manual(
             valid_next_state: Err(render_error_optimistic_locking_template(None)),
         };
     }
-    let new_database = update_database(database_configuration, new_database);
+    let new_database = update_database(
+        user_application_directory,
+        database_configuration,
+        new_database,
+    );
 
     ManualRenderResult {
         valid_next_state: Ok(new_database),

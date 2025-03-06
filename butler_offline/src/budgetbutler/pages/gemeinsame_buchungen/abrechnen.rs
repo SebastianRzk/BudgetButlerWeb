@@ -161,7 +161,7 @@ mod tests {
             user_configuration: demo_user_configuration(),
             set_mindate: datum_innerhalb_zeitraum,
             set_maxdate: datum("2022-02-02"),
-            self_soll: Betrag::from_user_input(&"-70".to_string()),
+            self_soll: Betrag::from_user_input("-70"),
             ergebnis: "Mein Ergebnis".to_string(),
             set_titel: "Mein Titel".to_string(),
             verhaeltnis: Prozent::from_int_representation(70),

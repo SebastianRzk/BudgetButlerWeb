@@ -21,6 +21,7 @@ use crate::model::primitives::datum::Datum;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::primitives::prozent::Prozent;
 use crate::model::state::config::ConfigurationData;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{post, HttpResponse, Responder};
@@ -30,6 +31,7 @@ use serde::Deserialize;
 pub async fn post_view(
     data: Data<ApplicationState>,
     config: Data<ConfigurationData>,
+    user_application_directory: Data<UserApplicationDirectory>,
     form: Form<FormData>,
 ) -> impl Responder {
     let mut database = data.database.lock().unwrap();
@@ -57,6 +59,7 @@ pub async fn post_view(
     create_database_backup(
         &database,
         &configuration.backup_configuration,
+        &user_application_directory,
         today(),
         now(),
         "1_before_abrechnen",
@@ -64,6 +67,7 @@ pub async fn post_view(
 
     let now_as_str = now();
     speichere_abrechnung(
+        &user_application_directory,
         abrechnungs_ergebnis.eigene_abrechnung.lines.clone(),
         configuration.user_configuration.self_name.clone(),
         configuration.abrechnungs_configuration.clone(),
@@ -71,6 +75,7 @@ pub async fn post_view(
         now_as_str.clone(),
     );
     speichere_abrechnung(
+        &user_application_directory,
         abrechnungs_ergebnis.partner_abrechnung.lines.clone(),
         configuration.user_configuration.partner_name.clone(),
         configuration.abrechnungs_configuration.clone(),
@@ -93,6 +98,7 @@ pub async fn post_view(
         &abrechnungs_ergebnis.eigene_abrechnung,
     );
     let updated_database = update_database(
+        &user_application_directory,
         &configuration.database_configuration,
         new_database_after_import,
     );
@@ -101,6 +107,7 @@ pub async fn post_view(
     create_database_backup(
         &database,
         &configuration.backup_configuration,
+        &user_application_directory,
         today(),
         now(),
         "2_after_abrechnen",

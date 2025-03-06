@@ -215,7 +215,7 @@ mod tests {
     fn test_handle_view() {
         let database = generate_database_with_gemeinsamen_buchungen(vec![GemeinsameBuchung {
             kategorie: kategorie("Test Kategorie"),
-            betrag: Betrag::from_user_input(&"-1000,00".to_string()),
+            betrag: Betrag::from_user_input("-1000,00"),
             datum: Datum::from_iso_string("2020-01-01"),
             person: demo_partner(),
             name: demo_name(),
@@ -224,7 +224,7 @@ mod tests {
         let context = GemeinsameBuchungenAbrechnenContext {
             set_limit: Some(Limit {
                 fuer: demo_partner(),
-                value: Betrag::from_user_input(&"-100,00".to_string()),
+                value: Betrag::from_user_input("-100,00"),
             }),
             today: demo_datum(),
             configuration: demo_configuration(),
@@ -261,22 +261,10 @@ mod tests {
             result.partnername,
             demo_configuration().user_configuration.partner_name
         );
-        assert_eq!(
-            result.ausgabe_partner,
-            Betrag::from_user_input(&"-1000,00".to_string())
-        );
-        assert_eq!(
-            result.partner_soll,
-            Betrag::from_user_input(&"-100,00".to_string())
-        );
-        assert_eq!(
-            result.partner_diff,
-            Betrag::from_user_input(&"900,00".to_string())
-        );
-        assert_eq!(
-            result.ausgabe_self,
-            Betrag::from_user_input(&"0,00".to_string())
-        );
+        assert_eq!(result.ausgabe_partner, Betrag::from_user_input("-1000,00"));
+        assert_eq!(result.partner_soll, Betrag::from_user_input("-100,00"));
+        assert_eq!(result.partner_diff, Betrag::from_user_input("900,00"));
+        assert_eq!(result.ausgabe_self, Betrag::from_user_input("0,00"));
         assert_eq!(
             result.ausgabe_self_prozent,
             Prozent::from_float_representation(0.0)
@@ -285,18 +273,9 @@ mod tests {
             result.ausgabe_partner_prozent,
             Prozent::from_float_representation(100.0)
         );
-        assert_eq!(
-            result.self_soll,
-            Betrag::from_user_input(&"-900,00".to_string())
-        );
-        assert_eq!(
-            result.self_diff,
-            Betrag::from_user_input(&"-900,00".to_string())
-        );
-        assert_eq!(
-            result.ausgabe_gesamt,
-            Betrag::from_user_input(&"-1000,00".to_string())
-        );
+        assert_eq!(result.self_soll, Betrag::from_user_input("-900,00"));
+        assert_eq!(result.self_diff, Betrag::from_user_input("-900,00"));
+        assert_eq!(result.ausgabe_gesamt, Betrag::from_user_input("-1000,00"));
         assert_eq!(result.ergebnis, "In dieser Abrechnung wurden 1 Buchungen im Zeitraum von 00.00.0 bis 31.12.9999 betrachtet, welche einen Gesamtbetrag von -1000,00€ umfassen.
 Es wurde angenommen, dass diese in einem Verhältnis von 50% (Self) zu 50% (Partner) aufgeteilt werden sollen.
 Für die Abrechnung wurde ein Limit von -100,00€ für Partner definiert

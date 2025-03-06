@@ -43,7 +43,7 @@ use crate::model::initial_config::path::create_path_if_needed;
 use crate::model::local::{
     get_port_binding_domain, LocalServerName, DEFAULT_APP_NAME, DEFAULT_APP_PORT, DEFAULT_PROTOCOL,
 };
-use crate::model::state::config::{app_root, ConfigurationData};
+use crate::model::state::config::{alternative_app_root, ConfigurationData};
 use crate::model::state::non_persistent_application_state::{
     AdditionalKategorie, DauerauftraegeChanges, DepotauszuegeChanges, DepotwerteChanges,
     EinzelbuchungenChanges, GemeinsameBuchungenChanges, KontoChanges, OnlineRedirectActionWrapper,
@@ -63,7 +63,7 @@ async fn main() -> std::io::Result<()> {
     let user_data_location = cli_args
         .user_data_location
         .map(|x| PathBuf::new().join(x))
-        .unwrap_or(app_root().join("data"));
+        .unwrap_or(alternative_app_root().join("data"));
     println!(
         "User data location: {:?}",
         absolute(user_data_location.clone())?.to_str().unwrap()
@@ -72,7 +72,7 @@ async fn main() -> std::io::Result<()> {
     let static_path = cli_args
         .static_path
         .map(|x| PathBuf::new().join(x))
-        .unwrap_or(app_root().join("target").join("static"));
+        .unwrap_or(alternative_app_root().join("target").join("static"));
 
     let app_domain = std::env::var("BUDGETBUTLER_APP_ROOT").unwrap_or(DEFAULT_APP_NAME.to_string());
     let app_port: u16 = std::env::var("BUDGETBUTLER_APP_PORT")
@@ -88,24 +88,30 @@ async fn main() -> std::io::Result<()> {
     let config = if exists_config(&user_data_location) {
         load_configuration(&user_data_location)
     } else {
-        update_configuration(
-            &user_data_location,
-            generate_initial_config(&user_data_location),
-        )
+        update_configuration(&user_data_location, generate_initial_config())
     };
 
-    let database;
-    if exists_database(&config.database_configuration) {
-        database = read_database(
+    let user_application_directory = UserApplicationDirectory {
+        path: user_data_location.clone(),
+    };
+
+    let database = if exists_database(&user_application_directory, &config.database_configuration) {
+        read_database(
+            &user_application_directory,
             &config.database_configuration,
             create_initial_database_version(config.database_configuration.name.clone()),
-        );
+        )
     } else {
-        database = generate_initial_database();
+        let d = generate_initial_database();
         create_path_if_needed(&user_data_location.join("abrechnungen"));
         create_path_if_needed(&user_data_location.join("backups").join("import_backup"));
-        write_database(&database, &config.database_configuration);
-    }
+        write_database(
+            &user_application_directory,
+            &d,
+            &config.database_configuration,
+        );
+        d
+    };
 
     let state = model::state::persistent_application_state::ApplicationState {
         database: Mutex::new(database),
@@ -166,9 +172,7 @@ async fn main() -> std::io::Result<()> {
 
     let shares_state = Data::new(load_shares(&user_data_location));
 
-    let user_application_directory = Data::new(UserApplicationDirectory {
-        path: user_data_location,
-    });
+    let user_application_directory = Data::new(user_application_directory);
     let static_path_directory = Data::new(StaticPathDirectory { path: static_path });
 
     println!(

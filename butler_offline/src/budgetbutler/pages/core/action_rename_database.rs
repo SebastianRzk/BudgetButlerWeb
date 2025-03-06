@@ -33,7 +33,6 @@ pub fn action_rename_database(
         new_config: Configuration {
             database_configuration: DatabaseConfiguration {
                 name: context.new_database_name.clone(),
-                location: context.config.database_configuration.location.clone(),
             },
             erfassungs_configuration: context.config.erfassungs_configuration.clone(),
             user_configuration: UserConfiguration {
@@ -72,7 +71,6 @@ mod tests {
         let configuration = Configuration {
             database_configuration: DatabaseConfiguration {
                 name: "to rename".to_string(),
-                location: "demo/".to_string(),
             },
             server_configuration: leere_server_configuration(),
             erfassungs_configuration: leere_erfassungs_configuration(),
@@ -115,7 +113,6 @@ mod tests {
         );
 
         assert_eq!(result.new_config.database_configuration.name, "renamed");
-        assert_eq!(result.new_config.database_configuration.location, "demo/");
 
         assert_eq!(
             result.new_config.user_configuration.self_name.person,
