@@ -17,8 +17,8 @@ layout: default
 * [Installation in Arch Linux mittels AUR](#installation-in-arch-linux-mittels-aur)
 * [Installation in Arch Linux mittels PKGBUILD](#installation-in-arch-linux-mittels-pkgbuild)
 * [Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)](#manuelle-installation-linux-mit-anpassungen-aber-auch-für-windows-und-macos)
-  * [Systemvoraussetzungen](#systemvoraussetzungen)
-  * [BudgetButlerWeb starten](#budgetbutlerweb-starten)
+	* [Systemvoraussetzungen](#systemvoraussetzungen)
+	* [BudgetButlerWeb starten](#budgetbutlerweb-starten)
 * [Updates](#updates)
 * [Umgebungsvariablen](#umgebungsvariablen)
 * [Betrieb mit Docker / Docker-Compose](#betrieb-mit-docker--docker-compose)
@@ -60,14 +60,14 @@ Folgende Entitäten können erfasst werden:
 
 **Sparen**
 
-| Entität            | Beschreibung                                                                                             |
-|--------------------|----------------------------------------------------------------------------------------------------------|
-| Konto              | Ein Konto oder Depot, auf welchem gespart wird                                                           |
-| Sparbuchung        | Einzahlung, Auszahlung, Erfassung von Kosten und Zinsen auf Konto-Ebene.                                 |
-| Order              | Kauf oder Verkauf von Wertpapieren, Erfassung von Kosten oder Erträgen auf Wertpapier-Ebene              |
-| Order-Dauerauftrag | Wiederkehrende Order, welche einzelne Order-Buchungen erzeugen                                           |
-| Depotwert          | Etwas, was in einem Depot bespart werden kann. Wertpapiere, ETF, Kryptowährungen o.ä.                    |
-| Depotauszug        | Wert von Depotwerten in einem Depot, zu einem bestimmten Zeitpunkt.                                      |
+| Entität            | Beschreibung                                                                                |
+|--------------------|---------------------------------------------------------------------------------------------|
+| Konto              | Ein Konto oder Depot, auf welchem gespart wird                                              |
+| Sparbuchung        | Einzahlung, Auszahlung, Erfassung von Kosten und Zinsen auf Konto-Ebene.                    |
+| Order              | Kauf oder Verkauf von Wertpapieren, Erfassung von Kosten oder Erträgen auf Wertpapier-Ebene |
+| Order-Dauerauftrag | Wiederkehrende Order, welche einzelne Order-Buchungen erzeugen                              |
+| Depotwert          | Etwas, was in einem Depot bespart werden kann. Wertpapiere, ETF, Kryptowährungen o.ä.       |
+| Depotauszug        | Wert von Depotwerten in einem Depot, zu einem bestimmten Zeitpunkt.                         |
 
 Folgende Buchungen führen zu dynamischen Buchungen:
 
@@ -85,19 +85,23 @@ Buchungen unterwegs.
 Sie kann mit der Offline-Anwendung kommunizieren, um Buchungen zu importieren, welche auf dem mobilen Gerät erfasst
 wurden. Importierte Buchungen werden im Anschluss automatisch aus der Begleiter-App gelöscht.
 
-Eine Übertragung von Daten aus der Offline-Anwendung in die Begleiter-App ist eigentlich nicht vorgesehen. Für gemeinsame
+Eine Übertragung von Daten aus der Offline-Anwendung in die Begleiter-App ist eigentlich nicht vorgesehen. Für
+gemeinsame
 Buchungen, welche noch nicht abgerechnet wurden, ist dies dennoch möglich. Weiterführend können auch die bestehenden
 Kategorien aus der Desktop-Anwendung die Begleiter-App importiert werden.
 
 ## Installation in Arch Linux mittels AUR
 
-Das Paket `budgetbutlerweb-desktop-git` installieren und die Applikation über `budgetbutlerweb` starten.
+Das Paket `budgetbutlerweb-desktop` installieren und die Applikation über den Befehl`budgetbutlerweb` oder über das
+Anwendungsicon starten.
 
 ## Installation in Arch Linux mittels PKGBUILD
 
-1. Das Repository klonen und in das Verzeichnis wechseln: `git clone https://github.com/SebastianRzk/BudgetButlerWeb && cd BudgetButlerWeb`
+1. Das Repository klonen und in das Verzeichnis wechseln:
+   `git clone https://github.com/SebastianRzk/BudgetButlerWeb && cd BudgetButlerWeb`
 2. Das Paket bauen `makepkg`
 3. Das Paket installieren `sudo pacman -U budgetbutlerweb-desktop-git-*.pkg.tar.zst`
+4. Anwendung über das Anwendungsicon starten oder über den Befehl `budgetbutlerweb`.
 
 ## Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)
 
@@ -211,12 +215,13 @@ Die Anwendung befindet sich in `butler_offline`.
 Hier sind die folgenden Verzeichnisse zu finden:
 
 * `src/`: Rust-Quelltext der Anwendung
-    * `src/main.rs`: Hauptdatei der Anwendung, welche den Webserver startet, die Routen in Form von Methoden einhängt und das
-      initiale Setup durchführt
-    * `src/budgetbutler`: Fachlicher Quelltext
-    * `src/io`: Ein- und Ausgabe der Anwendung, beispielsweise für das Lesen und Schreiben von CSV-Dateien, oder für das
-      Rendern von HTML-Dateien
-    * `src/model`: Datenmodell der Anwendung
+	* `src/main.rs`: Hauptdatei der Anwendung, welche den Webserver startet, die Routen in Form von Methoden einhängt
+	  und das
+	  initiale Setup durchführt
+	* `src/budgetbutler`: Fachlicher Quelltext
+	* `src/io`: Ein- und Ausgabe der Anwendung, beispielsweise für das Lesen und Schreiben von CSV-Dateien, oder für das
+	  Rendern von HTML-Dateien
+	* `src/model`: Datenmodell der Anwendung
 * `templates/`: HTML-Dateien, welche mittels `askama` in die Webseite eingebunden werden
 * `static/`: Statische Dateien, wie CSS-Dateien, Schriftarten, Bilder und JavaScript-Dateien
 
