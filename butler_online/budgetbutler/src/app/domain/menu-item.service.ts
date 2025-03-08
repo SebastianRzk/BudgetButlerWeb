@@ -98,10 +98,13 @@ export const MENU_ITEMS: MenuItem[] = [
 export class MenuItemService {
 
   private opened = new BehaviorSubject(false);
+  private visible = new BehaviorSubject(true);
 
   public readonly opened$ = this.opened.asObservable();
 
   public readonly closed$ = this.opened$.pipe(map(opened => !opened));
+
+  public readonly visible$ = this.visible.asObservable();
 
   public open() {
     this.opened.next(true);
@@ -111,5 +114,9 @@ export class MenuItemService {
     this.opened.next(false);
   }
 
+  public enforceClose() {
+    this.opened.next(false);
+    this.visible.next(false);
+  }
 
 }

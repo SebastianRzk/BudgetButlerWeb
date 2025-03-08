@@ -1,15 +1,16 @@
-<mat-sidenav-container [hasBackdrop]="isSmallScreen" autosize>
-  @if (authService.loggedIn$ | async) {
-    <mat-sidenav (closed)="menuService.close()" [mode]="mode"
-                 [opened]="opened$ | async">
-      <app-sidebar></app-sidebar>
-    </mat-sidenav>
-  }
-  <mat-sidenav-content>
-    <app-sidebar-toggle></app-sidebar-toggle>
-    <div class="content-wrapper">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
-
+@if (menuService.visible$| async) {
+  <mat-sidenav-container [hasBackdrop]="isSmallScreen" autosize>
+    @if (authService.loggedIn$ | async) {
+      <mat-sidenav (closed)="menuService.close()" [mode]="mode"
+                   [opened]="opened$ | async">
+        <app-sidebar></app-sidebar>
+      </mat-sidenav>
+    }
+    <mat-sidenav-content>
+      <app-sidebar-toggle></app-sidebar-toggle>
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+}

@@ -35,7 +35,7 @@ export class OfflineLoginComponent implements OnInit {
   }));
 
   ngOnInit() {
-    this.menuitemService.close();
+    this.menuitemService.enforceClose();
 
     const redirectLocation = this.getRedirect();
     this.localLoginUrl.next(redirectLocation);
@@ -46,6 +46,7 @@ export class OfflineLoginComponent implements OnInit {
     this.authService.auth$.subscribe(
       element => this.disabledSubject.next(!element.loggedIn)
     );
+    this.menuitemService.close();
   }
 
   navigate() {

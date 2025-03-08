@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.2.5 (2025-03-09)](#v425-2025-03-08)
 - [v4.2.4 (2025-03-06)](#v424-2025-03-06)
 - [v4.2.3 (2025-03-06)](#v423-2025-03-06)
 - [v4.2.2 (2025-03-05)](#v422-2025-03-05)
@@ -30,6 +31,17 @@ layout: default
 - [v1.0.0 (2018-01-29)](#v100-2018-01-29)
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
+
+## v4.2.5 (2025-03-08)
+
+### Änderungen Desktop-Client
+
+* Aktualisierung der Abhängigkeiten von Rust-Backend
+* Verbesserung von PKGBUILD
+
+### Änderungen Begleiter-Web-App
+
+* Aktualisierung der Abhängigkeiten im Backend
 
 ## v4.2.4 (2025-03-06)
 

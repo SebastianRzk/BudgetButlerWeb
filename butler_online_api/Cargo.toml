@@ -8,7 +8,7 @@ path = "src/cron.rs"
 
 [package]
 name = "budgetbutlerweb-companion-backend"
-version = "4.2.4"
+version = "4.2.5"
 edition = "2021"
 
 [dependencies]
@@ -17,13 +17,13 @@ diesel = { version = "2", features = ["mysql", "r2d2", "numeric", "time"] }
 diesel_migrations = "2.2.0"
 dotenvy = { version = "0.15.7" }
 bigdecimal = { version = "0.4.7", features = ["serde"] }
-time = { version = "0.3.37", features = ["serde"]}
+time = { version = "0.3.39", features = ["serde"]}
 env_logger = "0.11.6"
 log = "0.4.25"
 serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "1.12.1", features = ["v4", "serde"] }
+uuid = { version = "1.15.1", features = ["v4", "serde"] }
 openid = "0.16.1"
 url = "2.5.4"
 actix-identity = "0.8.0"
 actix-session = { version="0.10.1", features = ["cookie-session"] }
-chrono = "0.4.39"
+chrono = "0.4.40"
