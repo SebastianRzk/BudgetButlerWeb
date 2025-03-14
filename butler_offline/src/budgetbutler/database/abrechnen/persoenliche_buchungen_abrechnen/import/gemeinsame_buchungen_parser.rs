@@ -34,7 +34,7 @@ pub fn read_gemeinsame_buchungen(lines: Vec<Line>) -> Vec<GemeinsameBuchung> {
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::import::gemeinsame_buchungen_parser::read_gemeinsame_buchungen;
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::gemeinsame_buchungen_parser::read_gemeinsame_buchungen;
     use crate::io::disk::diskrepresentation::line::builder::line;
     use crate::model::primitives::betrag::{betrag, Vorzeichen};
     use crate::model::primitives::datum::builder::datum;

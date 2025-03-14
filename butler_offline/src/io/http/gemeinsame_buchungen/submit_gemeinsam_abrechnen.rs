@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::importer::import_abrechnung;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::import_abrechnung;
 use crate::budgetbutler::pages::gemeinsame_buchungen::abrechnen::{
     submit_rechne_ab, GemeinsameBuchungenAbrechnenSubmitContext,
 };

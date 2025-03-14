@@ -1,18 +1,16 @@
 use actix_web::web::Data;
 use actix_web::{error, web, App, HttpResponse, HttpServer};
-use std::path::{absolute, PathBuf};
 use std::sync::Mutex;
 
 mod budgetbutler;
 pub mod io;
 pub mod model;
 
+use crate::budgetbutler::config::{get_domain, get_port, get_protocol, init_and_load_config};
+use crate::budgetbutler::database::init::init_database;
 use crate::io::cli::endpoints::get_cli_args;
-use crate::io::disk::configuration::reader::{exists_config, load_configuration};
-use crate::io::disk::configuration::updater::update_configuration;
-use crate::io::disk::reader::{exists_database, read_database};
+use crate::io::disk::butler::{compute_static_path, user_data_location};
 use crate::io::disk::shares::load_shares;
-use crate::io::disk::writer::write_database;
 use crate::io::http::core::error_keine_aktion_gefunden::error_keine_aktion_gefunden;
 use crate::io::http::core::error_optimistic_locking::error_optimistic_locking;
 use crate::io::http::core::submit_reload_database::submit_reload_database;
@@ -37,13 +35,8 @@ use crate::io::http::sparen::{
     sparbuchungen_uebersicht, uebersicht_depotauszuege, uebersicht_depotwerte, uebersicht_etfs,
     uebersicht_kontos, uebersicht_sparen,
 };
-use crate::model::initial_config::config::generate_initial_config;
-use crate::model::initial_config::database::generate_initial_database;
-use crate::model::initial_config::path::create_path_if_needed;
-use crate::model::local::{
-    get_port_binding_domain, LocalServerName, DEFAULT_APP_NAME, DEFAULT_APP_PORT, DEFAULT_PROTOCOL,
-};
-use crate::model::state::config::{alternative_app_root, ConfigurationData};
+use crate::model::local::{get_port_binding_domain, LocalServerName};
+use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::{
     AdditionalKategorie, DauerauftraegeChanges, DepotauszuegeChanges, DepotwerteChanges,
     EinzelbuchungenChanges, GemeinsameBuchungenChanges, KontoChanges, OnlineRedirectActionWrapper,
@@ -54,64 +47,25 @@ use io::http::core::{configuration, dashboard};
 use io::http::einzelbuchungen::{
     dauerauftraege_uebersicht, einzelbuchungen_uebersicht, modify_ausgabe,
 };
-use model::state::persistent_state::database_version::create_initial_database_version;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let cli_args = get_cli_args();
 
-    let user_data_location = cli_args
-        .user_data_location
-        .map(|x| PathBuf::new().join(x))
-        .unwrap_or(alternative_app_root().join("data"));
-    println!(
-        "User data location: {:?}",
-        absolute(user_data_location.clone())?.to_str().unwrap()
-    );
+    let user_data_location = user_data_location(&cli_args);
+    let static_path = compute_static_path(&cli_args);
 
-    let static_path = cli_args
-        .static_path
-        .map(|x| PathBuf::new().join(x))
-        .unwrap_or(alternative_app_root().join("target").join("static"));
+    let app_domain = get_domain();
+    let app_port: u16 = get_port();
+    let app_protocol: String = get_protocol();
 
-    let app_domain = std::env::var("BUDGETBUTLER_APP_ROOT").unwrap_or(DEFAULT_APP_NAME.to_string());
-    let app_port: u16 = std::env::var("BUDGETBUTLER_APP_PORT")
-        .map(|x| {
-            x.parse()
-                .expect("Could not parse port. Port should be a number")
-        })
-        .unwrap_or(DEFAULT_APP_PORT);
-    let app_protocol: String =
-        std::env::var("BUDGETBUTLER_APP_PROTOCOL").unwrap_or(DEFAULT_PROTOCOL.to_string());
-
-    create_path_if_needed(&user_data_location);
-    let config = if exists_config(&user_data_location) {
-        load_configuration(&user_data_location)
-    } else {
-        update_configuration(&user_data_location, generate_initial_config())
-    };
+    let config = init_and_load_config(&user_data_location);
 
     let user_application_directory = UserApplicationDirectory {
         path: user_data_location.clone(),
     };
 
-    let database = if exists_database(&user_application_directory, &config.database_configuration) {
-        read_database(
-            &user_application_directory,
-            &config.database_configuration,
-            create_initial_database_version(config.database_configuration.name.clone()),
-        )
-    } else {
-        let d = generate_initial_database();
-        create_path_if_needed(&user_data_location.join("abrechnungen"));
-        create_path_if_needed(&user_data_location.join("backups").join("import_backup"));
-        write_database(
-            &user_application_directory,
-            &d,
-            &config.database_configuration,
-        );
-        d
-    };
+    let database = init_database(&user_data_location, &config, &user_application_directory);
 
     let state = model::state::persistent_application_state::ApplicationState {
         database: Mutex::new(database),

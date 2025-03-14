@@ -30,7 +30,7 @@ mod tests {
                 can_be_chosen: true,
             },
             DatumSelektion {
-                datum: Datum::new(01, 02, 2021),
+                datum: Datum::new(1, 2, 2021),
                 can_be_chosen: false,
             },
         ];

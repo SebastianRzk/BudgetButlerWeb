@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::importer::pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
 use crate::budgetbutler::pages::shared::import::{handle_import_abrechnung, ImportAbrechnungContext};
 use crate::budgetbutler::view::menu::resolve_active_group_from_url;

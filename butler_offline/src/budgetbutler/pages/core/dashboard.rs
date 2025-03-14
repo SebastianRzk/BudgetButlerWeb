@@ -75,7 +75,7 @@ mod tests {
 
     #[test]
     fn test_handle_view_should_render_graph() {
-        let today = Datum::new(01, 01, 2020);
+        let today = Datum::new(1, 1, 2020);
         let database = generate_database_with_einzelbuchungen(vec![
             einzelbuchung_with_datum_und_betrag(today.clone().substract_months(1), zwei()),
             einzelbuchung_with_datum_und_betrag(today.clone().substract_months(1), minus_zwei()),
@@ -128,7 +128,7 @@ mod tests {
 
     #[test]
     fn test_handle_view_ausgaben_des_aktuellen_monats() {
-        let today = Datum::new(01, 01, 2020);
+        let today = Datum::new(1, 1, 2020);
         let database = generate_database_with_einzelbuchungen(vec![
             einzelbuchung_with_datum_und_betrag(today.clone(), zwei()),
             einzelbuchung_with_datum_und_betrag(today.clone(), minus_zwei()),

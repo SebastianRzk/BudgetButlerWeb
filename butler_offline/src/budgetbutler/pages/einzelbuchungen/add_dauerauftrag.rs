@@ -96,7 +96,7 @@ pub fn handle_view(context: AddDauerauftragContext) -> AddDauerauftragViewResult
                 start_datum: change.start_datum.to_german_string(),
                 ende_datum: change.ende_datum.to_german_string(),
                 rhythmus: change.rhythmus,
-                name: change.name.to_string(),
+                name: change.name.as_string(),
                 kategorie: change.kategorie.to_string(),
                 wert: change.betrag.to_german_string(),
             })

@@ -1,4 +1,5 @@
 pub mod chart;
+pub mod config;
 pub mod database;
 pub mod pages;
 pub mod shares;

@@ -21,8 +21,9 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 ## Weiterführende Links
 
-* [Desktop Client](butler-offline.md)
-* [Begleiter Web-App](butler-companion.md)
+* [Desktop Anwendung](butler-offline.md)
+* [Idee und fachlicher Ansatz](fachlicher-ansatz.md)
+* [Begleiter App / Webseite](butler-companion.md)
 * [Changelog](changelog.md)
 
 ## Idee

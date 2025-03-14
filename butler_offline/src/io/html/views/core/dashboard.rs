@@ -38,7 +38,7 @@ fn map_to_template(view_result: DashboardViewResult) -> DashboardTemplate {
             .map(|x| BuchungTemplate {
                 index: x.index,
                 datum: x.value.datum.to_german_string(),
-                name: x.value.name.to_string(),
+                name: x.value.name.as_string(),
                 kategorie: x.value.kategorie.to_string(),
                 wert: x.value.betrag.to_german_string(),
             })

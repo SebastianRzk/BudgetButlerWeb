@@ -87,7 +87,7 @@ pub fn handle_view(context: AddBuchungContext) -> AddBuchungViewResult {
             .map(|change| LetzteErfassung {
                 fa: change.icon.clone(),
                 datum: change.datum.to_german_string(),
-                name: change.name.to_string(),
+                name: change.name.as_string(),
                 kategorie: change.kategorie.to_string(),
                 wert: change.betrag.to_german_string(),
             })

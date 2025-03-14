@@ -104,7 +104,7 @@ pub fn handle_view(context: AddGemeinsameBuchungContext) -> AddGemeinsameBuchung
                 fa: change.icon.clone(),
                 datum: change.datum.to_german_string(),
                 person: change.person.person.clone(),
-                name: change.name.to_string(),
+                name: change.name.as_string(),
                 kategorie: change.kategorie.to_string(),
                 wert: change.betrag.to_german_string(),
             })

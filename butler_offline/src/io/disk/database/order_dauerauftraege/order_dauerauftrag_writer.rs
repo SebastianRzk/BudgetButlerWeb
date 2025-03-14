@@ -10,7 +10,7 @@ pub fn write_order_dauerauftrag(order_dauerauftrag: &OrderDauerauftrag) -> Line 
         Element::new(order_dauerauftrag.start_datum.to_iso_string()),
         Element::new(order_dauerauftrag.ende_datum.to_iso_string()),
         write_rhythmus(order_dauerauftrag.rhythmus),
-        Element::new(order_dauerauftrag.name.to_string()),
+        Element::new(order_dauerauftrag.name.as_string()),
         Element::new(order_dauerauftrag.konto.konto_name.get_name().clone()),
         Element::new(order_dauerauftrag.depotwert.isin.isin.clone()),
         Element::new(order_dauerauftrag.wert.get_realer_wert().to_iso_string()),

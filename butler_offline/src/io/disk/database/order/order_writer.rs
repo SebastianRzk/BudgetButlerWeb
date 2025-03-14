@@ -7,7 +7,7 @@ use crate::model::database::order::Order;
 pub fn write_order(order: &Order) -> Line {
     create_line(vec![
         Element::new(order.datum.to_iso_string()),
-        Element::new(order.name.to_string()),
+        Element::new(order.name.as_string()),
         Element::new(order.konto.konto_name.get_name().clone()),
         Element::new(order.depotwert.isin.isin.clone()),
         Element::new(order.wert.get_realer_wert().to_iso_string()),

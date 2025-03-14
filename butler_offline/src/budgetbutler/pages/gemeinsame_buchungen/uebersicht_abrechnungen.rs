@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::history::{
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::history::{
     read_and_sort_abrechnungen, PreparedAbrechnung, UnparsedAbrechnungsFile,
 };
 

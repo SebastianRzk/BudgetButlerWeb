@@ -31,7 +31,7 @@ pub fn read_einzelbuchungen(lines: Vec<Line>) -> Vec<Einzelbuchung> {
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::import::einzelbuchungen_parser::read_einzelbuchungen;
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::einzelbuchungen_parser::read_einzelbuchungen;
     use crate::io::disk::diskrepresentation::line::builder::line;
     use crate::model::primitives::betrag::{betrag, Vorzeichen};
     use crate::model::primitives::datum::builder::datum;

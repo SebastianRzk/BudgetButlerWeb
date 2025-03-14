@@ -40,7 +40,7 @@ fn map_orderdauerauftrag(dauerauftrag: &Indiziert<OrderDauerauftrag>) -> OrderDa
         index: dauerauftrag.index,
         start_datum: dauerauftrag.value.start_datum.to_german_string(),
         ende_datum: dauerauftrag.value.ende_datum.to_german_string(),
-        name: dauerauftrag.value.name.to_string(),
+        name: dauerauftrag.value.name.as_string(),
         wert: dauerauftrag.value.wert.get_realer_wert().to_german_string(),
         typ: write_ordertyp(dauerauftrag.value.wert.get_typ()).element,
         rhythmus: dauerauftrag.value.rhythmus.to_german_string(),
