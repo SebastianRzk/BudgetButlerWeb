@@ -2,14 +2,15 @@
 layout: default
 ---
 
-# Begleiter Web-App
+# Begleiter App / Webseite
 
 ## Menu
 
 ### Weitere Seiten
 
 * [Hauptseite / Idee und Motivation](index.md)
-* [Desktop-Anwendung](butler-offline.md)
+* [Idee und fachlicher Ansatz](fachlicher-ansatz.md)
+* [Desktop Anwendung](butler-offline.md)
 
 ### Inhaltsverzeichnis
 

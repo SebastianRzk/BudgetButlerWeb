@@ -37,7 +37,7 @@ fn map_dauerauftrag(dauerauftrag: &Indiziert<Dauerauftrag>) -> DauerauftragTempl
         index: dauerauftrag.index,
         start_datum: dauerauftrag.value.start_datum.to_german_string(),
         ende_datum: dauerauftrag.value.ende_datum.to_german_string(),
-        name: dauerauftrag.value.name.to_string(),
+        name: dauerauftrag.value.name.as_string(),
         kategorie: dauerauftrag.value.kategorie.to_string(),
         wert: dauerauftrag.value.betrag.to_german_string(),
         rhythmus: dauerauftrag.value.rhythmus.to_german_string(),

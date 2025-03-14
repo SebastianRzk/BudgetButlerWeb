@@ -1,5 +1,5 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::SortedAbrechnungsFile;
-use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::{
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnungs_file::SortedAbrechnungsFile;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnungs_file::{
     BUCHUNGEN_EINZEL_HEADER, BUCHUNGEN_END, BUCHUNGEN_GEMEINSAM_HEADER, BUCHUNGEN_START,
     METADATEN_END, METADATEN_START,
 };
@@ -87,7 +87,7 @@ enum Modus {
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::import::abrechnungen_sorter::{
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::abrechnungen_sorter::{
         sort_abrechnungs_file, HeaderModus,
     };
     use crate::io::disk::diskrepresentation::file::File;

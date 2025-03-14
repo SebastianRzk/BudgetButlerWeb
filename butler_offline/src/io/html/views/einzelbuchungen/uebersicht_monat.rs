@@ -80,7 +80,7 @@ fn map_to_tag_template(tag: Tag) -> TagTemplate {
 fn map_to_buchung_template(buchung: Buchung) -> BuchungTemplate {
     BuchungTemplate {
         color: buchung.color.as_string,
-        name: buchung.name.to_string(),
+        name: buchung.name.as_string(),
         wert: buchung.wert.to_german_string(),
         kategorie: buchung.kategorie.kategorie,
     }

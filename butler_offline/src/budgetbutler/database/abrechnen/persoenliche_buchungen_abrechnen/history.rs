@@ -1,8 +1,8 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::Metadaten;
-use crate::budgetbutler::database::abrechnen::abrechnen::import::abrechnungen_sorter::{
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::Metadaten;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::abrechnungen_sorter::{
     sort_abrechnungs_file, HeaderModus,
 };
-use crate::budgetbutler::database::abrechnen::abrechnen::import::metadaten_parser::parse_metadaten;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::metadaten_parser::parse_metadaten;
 use crate::io::disk::diskrepresentation::line::Line;
 
 pub struct UnparsedAbrechnungsFile {
@@ -55,8 +55,8 @@ fn generate_abrechnungs_title_from_metadaten(metadaten: Metadaten) -> String {
 }
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::{Metadaten, Ziel};
-    use crate::budgetbutler::database::abrechnen::abrechnen::history::generate_abrechnungs_title_from_metadaten;
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{Metadaten, Ziel};
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::history::generate_abrechnungs_title_from_metadaten;
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Titel;
     use crate::io::disk::diskrepresentation::line::Line;
     use crate::model::primitives::datum::Datum;

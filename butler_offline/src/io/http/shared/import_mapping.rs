@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::importer::aktualisiere_kategorien;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::aktualisiere_kategorien;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
 use crate::budgetbutler::pages::shared::import::{handle_import_abrechnung, ImportAbrechnungContext};
 use crate::budgetbutler::view::request_handler::handle_modification_manual;

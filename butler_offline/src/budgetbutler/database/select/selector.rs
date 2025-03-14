@@ -180,8 +180,8 @@ mod tests {
         let result = selector.group_by(|x| x.kategorie.get_kategorie().clone(), |x| x.betrag.euro);
 
         assert_eq!(result.len(), 2);
-        assert_eq!(result.get(&"k1".to_string()), Some(&4));
-        assert_eq!(result.get(&"k2".to_string()), Some(&2));
+        assert_eq!(result.get("k1"), Some(&4));
+        assert_eq!(result.get("k2"), Some(&2));
     }
 
     #[test]

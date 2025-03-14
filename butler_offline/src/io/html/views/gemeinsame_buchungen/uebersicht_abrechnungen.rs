@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::history::PreparedAbrechnung;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::history::PreparedAbrechnung;
 use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_abrechnungen::UebersichtAbrechnungenViewResult;
 use crate::io::disk::diskrepresentation::line::as_string;
 pub use askama::Template;
@@ -40,7 +40,7 @@ fn map_to_template(
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::history::PreparedAbrechnung;
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::history::PreparedAbrechnung;
     use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_abrechnungen::UebersichtAbrechnungenViewResult;
     use crate::io::disk::diskrepresentation::line::builder::line;
 

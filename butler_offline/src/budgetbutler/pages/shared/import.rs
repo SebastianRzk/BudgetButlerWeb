@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::importer::{import_abrechnung, update_abrechnung_for_import};
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::{import_abrechnung, update_abrechnung_for_import};
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::primitives::datum::Datum;

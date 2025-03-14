@@ -19,7 +19,7 @@ pub mod builder {
 
     pub fn demo_datum_selektion_2() -> DatumSelektion {
         DatumSelektion {
-            datum: Datum::new(01, 02, 2021),
+            datum: Datum::new(1, 2, 2021),
             can_be_chosen: false,
         }
     }

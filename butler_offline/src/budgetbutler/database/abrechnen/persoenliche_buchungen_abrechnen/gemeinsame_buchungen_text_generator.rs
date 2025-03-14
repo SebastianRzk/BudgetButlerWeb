@@ -1,5 +1,5 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::BuchungenText;
-use crate::budgetbutler::database::abrechnen::abrechnen::abrechnungs_file::BUCHUNGEN_GEMEINSAM_HEADER;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::BuchungenText;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnungs_file::BUCHUNGEN_GEMEINSAM_HEADER;
 use crate::io::disk::primitive::segment_reader::Element;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 
@@ -22,7 +22,7 @@ pub fn gemeinsame_buchung_as_import_text(buchungen: &Vec<GemeinsameBuchung>) -> 
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::gemeinsame_buchungen_text_generator::gemeinsame_buchung_as_import_text;
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::gemeinsame_buchungen_text_generator::gemeinsame_buchung_as_import_text;
     use crate::model::database::gemeinsame_buchung::builder::demo_gemeinsame_buchung;
 
     #[test]

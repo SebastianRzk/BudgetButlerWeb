@@ -7,7 +7,7 @@ pub fn write_depotauszug(depotauszug: &Depotauszug) -> Line {
     create_line(vec![
         Element::new(depotauszug.datum.to_iso_string()),
         Element::new(depotauszug.depotwert.isin.isin.to_string()),
-        Element::new(depotauszug.konto.konto_name.to_string()),
+        Element::new(depotauszug.konto.konto_name.as_string()),
         Element::new(depotauszug.wert.to_iso_string()),
     ])
 }

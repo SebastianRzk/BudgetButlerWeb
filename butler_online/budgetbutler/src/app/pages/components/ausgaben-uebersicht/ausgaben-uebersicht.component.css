@@ -11,3 +11,8 @@ mat-card-content {
 dl {
   margin-top: 0;
 }
+
+
+dd {
+  text-align: right;
+}

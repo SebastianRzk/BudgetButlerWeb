@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::history::UnparsedAbrechnungsFile;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::history::UnparsedAbrechnungsFile;
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::state::config::AbrechnungsConfiguration;
 use crate::model::state::non_persistent_application_state::UserApplicationDirectory;

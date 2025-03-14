@@ -1,9 +1,9 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::{generiere_text, BuchungenText, EinfuehrungsText, HeaderInsertModus, Metadaten};
-use crate::budgetbutler::database::abrechnen::abrechnen::einzel_buchungen_text_generator::{einzelbuchungen_as_import_text, gemeinsame_buchungen_as_import_text};
-use crate::budgetbutler::database::abrechnen::abrechnen::import::abrechnungen_sorter::{sort_abrechnungs_file, HeaderModus};
-use crate::budgetbutler::database::abrechnen::abrechnen::import::einzelbuchungen_parser::read_einzelbuchungen;
-use crate::budgetbutler::database::abrechnen::abrechnen::import::gemeinsame_buchungen_parser::read_gemeinsame_buchungen;
-use crate::budgetbutler::database::abrechnen::abrechnen::import::metadaten_parser::parse_metadaten;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{generiere_text, BuchungenText, EinfuehrungsText, HeaderInsertModus, Metadaten};
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::einzel_buchungen_text_generator::{einzelbuchungen_as_import_text, gemeinsame_buchungen_as_import_text};
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::abrechnungen_sorter::{sort_abrechnungs_file, HeaderModus};
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::einzelbuchungen_parser::read_einzelbuchungen;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::gemeinsame_buchungen_parser::read_gemeinsame_buchungen;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::metadaten_parser::parse_metadaten;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
 use crate::io::disk::diskrepresentation::line::as_string;
 use crate::model::primitives::datum::Datum;
@@ -179,7 +179,7 @@ pub fn update_abrechnung_for_import(abrechnung: Abrechnung, heute: Datum) -> Abr
 
 #[cfg(test)]
 mod tests {
-    use crate::budgetbutler::database::abrechnen::abrechnen::importer::update_abrechnung_for_import;
+    use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::update_abrechnung_for_import;
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::builder::abrechnung_from_str;
     use crate::io::disk::diskrepresentation::line::builder::as_string;
     use crate::model::primitives::datum::Datum;

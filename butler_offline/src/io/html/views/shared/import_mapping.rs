@@ -1,4 +1,4 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::importer::KategorieMitBeispiel;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::KategorieMitBeispiel;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
 use crate::io::disk::diskrepresentation::line::as_string;
 use crate::model::primitives::kategorie::Kategorie;

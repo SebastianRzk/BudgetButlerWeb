@@ -1,6 +1,6 @@
-use crate::budgetbutler::database::abrechnen::abrechnen::abrechnung_text_generator::{generiere_text, EinfuehrungsText, HeaderInsertModus, Metadaten, Ziel};
-use crate::budgetbutler::database::abrechnen::abrechnen::einzel_buchungen_text_generator::einzelbuchungen_as_import_text;
-use crate::budgetbutler::database::abrechnen::abrechnen::importer::{import_abrechnung, pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind};
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{generiere_text, EinfuehrungsText, HeaderInsertModus, Metadaten, Ziel};
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::einzel_buchungen_text_generator::einzelbuchungen_as_import_text;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::{import_abrechnung, pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind};
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::{Abrechnung, Titel};
 use crate::budgetbutler::view::request_handler::{handle_render_display_view, handle_render_success_display_message, no_page_middleware, DisplaySuccessMessage};
 use crate::budgetbutler::view::routes::CORE_IMPORT;
