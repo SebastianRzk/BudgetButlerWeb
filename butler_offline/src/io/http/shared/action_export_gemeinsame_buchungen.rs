@@ -1,5 +1,5 @@
 use crate::budgetbutler::view::request_handler::{
-    handle_render_success_display_message, DisplaySuccessMessage,
+    handle_render_success_display_message, ActivePage, DisplaySuccessMessage,
 };
 use crate::budgetbutler::view::routes::CORE_IMPORT;
 use crate::io::http::shared::redirect_authenticated::{
@@ -39,21 +39,23 @@ pub async fn export_gemeinsame_buchungen_request(
         gemeinsame_buchungen: vec![],
     });
 
+    let database_name = config.database_configuration.name.clone();
+    let context = DisplaySuccessMessage {
+        message: format!(
+            "Erfolgreich {} gemeinsame Buchungen exportiert",
+            alle_gemeinsamen_buchungen_anzahl
+        ),
+        link_name: "Zurück zu Import / Export".to_string(),
+        link_url: CORE_IMPORT.to_string(),
+    };
     RedirectAuthenticatedResult {
         database_to_save: Some(neue_datenbank),
         page_render_type: RedirectAuthenticatedRenderPageType::RenderPage(
             handle_render_success_display_message(
                 "Export von gemeinsamen Buchungen",
-                CORE_IMPORT,
-                config.database_configuration.name.clone(),
-                DisplaySuccessMessage {
-                    message: format!(
-                        "Erfolgreich {} gemeinsame Buchungen exportiert",
-                        alle_gemeinsamen_buchungen_anzahl
-                    ),
-                    link_name: "Zurück zu Import / Export".to_string(),
-                    link_url: CORE_IMPORT.to_string(),
-                },
+                ActivePage::construct_from_url(CORE_IMPORT),
+                database_name,
+                context,
             ),
         ),
     }

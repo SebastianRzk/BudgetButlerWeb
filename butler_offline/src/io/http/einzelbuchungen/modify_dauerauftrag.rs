@@ -18,11 +18,12 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_DAUERAUFTRAG_ADD;
 use crate::io::html::views::einzelbuchungen::add_dauerauftrag::render_add_dauerauftrag_template;
 use crate::io::html::views::einzelbuchungen::split_dauerauftrag::render_split_dauerauftrag_template;
+use crate::io::html::views::index::PageTitle;
 use crate::io::http::redirect::http_redirect;
 use crate::io::time::today;
 use crate::model::primitives::betrag::Betrag;
@@ -48,20 +49,23 @@ pub async fn get_view(
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
     let config = configuration_data.configuration.lock().unwrap();
+    let context = AddDauerauftragContext {
+        database: &database,
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        dauerauftraege_changes: &dauerauftraege_changes.changes.lock().unwrap(),
+        today: today(),
+        edit_buchung: None,
+        ausgeschlossene_kategorien: &config.erfassungs_configuration.ausgeschlossene_kategorien,
+    };
+    let database_name = config.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(EINZELBUCHUNGEN_DAUERAUFTRAG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_dauerauftrag_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Dauerauftrag hinzufügen",
-        EINZELBUCHUNGEN_DAUERAUFTRAG_ADD,
-        AddDauerauftragContext {
-            database: &database,
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            dauerauftraege_changes: &dauerauftraege_changes.changes.lock().unwrap(),
-            today: today(),
-            edit_buchung: None,
-            ausgeschlossene_kategorien: &config.erfassungs_configuration.ausgeschlossene_kategorien,
-        },
-        handle_view,
-        render_add_dauerauftrag_template,
-        config.database_configuration.name.clone(),
+        PageTitle::new("Dauerauftrag hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -81,22 +85,25 @@ pub async fn post_view(
     }
     let config_guard = configuration_data.configuration.lock().unwrap();
 
+    let context = AddDauerauftragContext {
+        database: &database_guard,
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        dauerauftraege_changes: &dauerauftraege_changes.changes.lock().unwrap(),
+        today: today(),
+        edit_buchung: Some(form.edit_index),
+        ausgeschlossene_kategorien: &config_guard
+            .erfassungs_configuration
+            .ausgeschlossene_kategorien,
+    };
+    let database_name = config_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(EINZELBUCHUNGEN_DAUERAUFTRAG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_dauerauftrag_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Dauerauftrag editieren",
-        EINZELBUCHUNGEN_DAUERAUFTRAG_ADD,
-        AddDauerauftragContext {
-            database: &database_guard,
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            dauerauftraege_changes: &dauerauftraege_changes.changes.lock().unwrap(),
-            today: today(),
-            edit_buchung: Some(form.edit_index),
-            ausgeschlossene_kategorien: &config_guard
-                .erfassungs_configuration
-                .ausgeschlossene_kategorien,
-        },
-        handle_view,
-        render_add_dauerauftrag_template,
-        config_guard.database_configuration.name.clone(),
+        PageTitle::new("Dauerauftrag editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -203,16 +210,19 @@ pub async fn load_split(
 
     let config_guard = configuration_data.configuration.lock().unwrap();
 
+    let context = SplitDauerauftragContext {
+        database: &database_guard,
+        dauerauftrag_id: form.dauerauftrag_id,
+    };
+    let database_name = config_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(EINZELBUCHUNGEN_DAUERAUFTRAG_ADD);
+    let view_result = handle_split(context);
+    let render_view = render_split_dauerauftrag_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Dauerauftrag teilen",
-        EINZELBUCHUNGEN_DAUERAUFTRAG_ADD,
-        SplitDauerauftragContext {
-            database: &database_guard,
-            dauerauftrag_id: form.dauerauftrag_id,
-        },
-        handle_split,
-        render_split_dauerauftrag_template,
-        config_guard.database_configuration.name.clone(),
+        PageTitle::new("Dauerauftrag teilen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

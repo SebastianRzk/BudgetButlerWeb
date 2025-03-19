@@ -1,8 +1,9 @@
 use crate::budgetbutler::pages::sparen::uebersicht_sparbuchungen::{
     handle_view, UebersichtSparbuchungenContext,
 };
-use crate::budgetbutler::view::request_handler::handle_render_display_view;
+use crate::budgetbutler::view::request_handler::{handle_render_display_view, ActivePage};
 use crate::budgetbutler::view::routes::SPAREN_SPARBUCHUNGEN_UEBERSICHT;
+use crate::io::html::views::index::PageTitle;
 use crate::io::html::views::sparen::uebersicht_sparbuchungen::render_uebersicht_sparbuchungen_template;
 use crate::io::time::today;
 use crate::model::state::config::ConfigurationData;
@@ -17,23 +18,26 @@ pub async fn get_view(
     configuration_data: Data<ConfigurationData>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
+    let context = UebersichtSparbuchungenContext {
+        database: &database,
+        today: today(),
+        angefordertes_jahr: None,
+    };
+    let database_name = configuration_data
+        .configuration
+        .lock()
+        .unwrap()
+        .database_configuration
+        .name
+        .clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_SPARBUCHUNGEN_UEBERSICHT);
+    let view_result = handle_view(context);
+    let render_view = render_uebersicht_sparbuchungen_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Übersicht Sparbuchungen",
-        SPAREN_SPARBUCHUNGEN_UEBERSICHT,
-        UebersichtSparbuchungenContext {
-            database: &database,
-            today: today(),
-            angefordertes_jahr: None,
-        },
-        handle_view,
-        render_uebersicht_sparbuchungen_template,
-        configuration_data
-            .configuration
-            .lock()
-            .unwrap()
-            .database_configuration
-            .name
-            .clone(),
+        PageTitle::new("Übersicht Sparbuchungen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -49,22 +53,25 @@ pub async fn post_view(
     configuration_data: Data<ConfigurationData>,
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
+    let context = UebersichtSparbuchungenContext {
+        database: &database,
+        today: today(),
+        angefordertes_jahr: Some(form.date),
+    };
+    let database_name = configuration_data
+        .configuration
+        .lock()
+        .unwrap()
+        .database_configuration
+        .name
+        .clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_SPARBUCHUNGEN_UEBERSICHT);
+    let view_result = handle_view(context);
+    let render_view = render_uebersicht_sparbuchungen_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Übersicht Sparbuchungen",
-        SPAREN_SPARBUCHUNGEN_UEBERSICHT,
-        UebersichtSparbuchungenContext {
-            database: &database,
-            today: today(),
-            angefordertes_jahr: Some(form.date),
-        },
-        handle_view,
-        render_uebersicht_sparbuchungen_template,
-        configuration_data
-            .configuration
-            .lock()
-            .unwrap()
-            .database_configuration
-            .name
-            .clone(),
+        PageTitle::new("Übersicht Sparbuchungen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }

@@ -1,7 +1,7 @@
 use crate::budgetbutler::view::menu::{
     einstellungen_menu, einzelbuchungen_menu, gemeinsame_buchungen_menu, sparen_menu, RootMenu,
 };
-use crate::budgetbutler::view::request_handler::SuccessMessage;
+use crate::budgetbutler::view::request_handler::{ActivePage, SuccessMessage};
 use askama::Template;
 
 #[derive(Template)]
@@ -46,8 +46,8 @@ pub struct VorgeschlageneProblembehebung {
 
 pub fn map_to_template(
     active_menu_group: String,
-    active_page_url: String,
-    element_titel: String,
+    active_page: ActivePage,
+    page_title: PageTitle,
     content: String,
     menu: Vec<RootMenu>,
     success_message: Option<SuccessMessage>,
@@ -55,9 +55,9 @@ pub fn map_to_template(
 ) -> IndexTemplate {
     IndexTemplate {
         nutzername: name,
-        active_page_url,
+        active_page_url: active_page.active_page_url.to_string(),
         active: active_menu_group,
-        element_titel,
+        element_titel: page_title.title.to_string(),
         content,
         menu: map_menu_to_template(menu),
         info_messages: vec![],
@@ -88,15 +88,15 @@ fn map_menu_to_template(menu: Vec<RootMenu>) -> Vec<RootMenuTemplate> {
 
 pub fn render_index_template(
     active_menu_group: String,
-    active_page_url: String,
-    page_title: String,
+    active_page: ActivePage,
+    page_title: PageTitle,
     content: String,
     success_message: Option<SuccessMessage>,
     name: String,
 ) -> String {
     let as_template: IndexTemplate = map_to_template(
         active_menu_group,
-        active_page_url,
+        active_page,
         page_title,
         content,
         vec![
@@ -109,4 +109,14 @@ pub fn render_index_template(
         name,
     );
     as_template.render().unwrap()
+}
+
+pub struct PageTitle {
+    pub title: &'static str,
+}
+
+impl PageTitle {
+    pub fn new(title: &'static str) -> PageTitle {
+        PageTitle { title }
+    }
 }

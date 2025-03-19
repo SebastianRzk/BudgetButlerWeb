@@ -1,10 +1,10 @@
-use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::KategorieMitBeispiel;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::KategorieMitBeispiel;
 use crate::io::disk::diskrepresentation::line::as_string;
+use crate::io::html::input::select::Select;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::state::persistent_state::database_version::DatabaseVersion;
 pub use askama::Template;
-use crate::io::html::input::select::Select;
 
 pub const ALS_NEUE_KATEGORIE_IMPORTIEREN_TEXT: &str = "Als neue Kategorie importieren";
 

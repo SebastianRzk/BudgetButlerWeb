@@ -1,6 +1,6 @@
+use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_text_generator::generiere_einfuehrungs_text;
 use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{generiere_text, HeaderInsertModus, Metadaten, Ziel};
 use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::einzel_buchungen_text_generator::einzelbuchungen_as_import_text;
-use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_text_generator::generiere_einfuehrungs_text;
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;

@@ -10,10 +10,11 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_AUSGABE_ADD;
 use crate::io::html::views::einzelbuchungen::add_ausgabe::render_add_ausgabe_template;
+use crate::io::html::views::index::PageTitle;
 use crate::io::http::redirect::http_redirect;
 use crate::io::time::today;
 use crate::model::primitives::betrag::Betrag;
@@ -38,22 +39,25 @@ pub async fn get_view(
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
     let configuration = configuration_data.configuration.lock().unwrap();
+    let context = AddBuchungContext {
+        database: &database,
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
+        today: today(),
+        edit_buchung: None,
+        ausgeschlossene_kategorien: &configuration
+            .erfassungs_configuration
+            .ausgeschlossene_kategorien,
+    };
+    let database_name = configuration.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(EINZELBUCHUNGEN_AUSGABE_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_ausgabe_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Ausgabe hinzufügen",
-        EINZELBUCHUNGEN_AUSGABE_ADD,
-        AddBuchungContext {
-            database: &database,
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
-            today: today(),
-            edit_buchung: None,
-            ausgeschlossene_kategorien: &configuration
-                .erfassungs_configuration
-                .ausgeschlossene_kategorien,
-        },
-        handle_view,
-        render_add_ausgabe_template,
-        configuration.database_configuration.name.clone(),
+        PageTitle::new("Ausgabe hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -73,22 +77,25 @@ pub async fn post_view(
     }
     let config_guard = configuration_data.configuration.lock().unwrap();
 
+    let context = AddBuchungContext {
+        database: &database_guard,
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
+        today: today(),
+        edit_buchung: Some(form.edit_index),
+        ausgeschlossene_kategorien: &config_guard
+            .erfassungs_configuration
+            .ausgeschlossene_kategorien,
+    };
+    let database_name = config_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(EINZELBUCHUNGEN_AUSGABE_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_ausgabe_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Ausgabe editieren",
-        EINZELBUCHUNGEN_AUSGABE_ADD,
-        AddBuchungContext {
-            database: &database_guard,
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
-            today: today(),
-            edit_buchung: Some(form.edit_index),
-            ausgeschlossene_kategorien: &config_guard
-                .erfassungs_configuration
-                .ausgeschlossene_kategorien,
-        },
-        handle_view,
-        render_add_ausgabe_template,
-        config_guard.database_configuration.name.clone(),
+        PageTitle::new("Ausgabe editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

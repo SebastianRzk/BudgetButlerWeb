@@ -1,10 +1,11 @@
 use crate::budgetbutler::pages::gemeinsame_buchungen::uebersicht_abrechnungen::{
     handle_view_abrechnungen, UebersichtAbrechnugnenContext,
 };
-use crate::budgetbutler::view::request_handler::handle_render_display_view;
+use crate::budgetbutler::view::request_handler::{handle_render_display_view, ActivePage};
 use crate::budgetbutler::view::routes::GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN;
 use crate::io::disk::abrechnung::history::lade_alle_abrechnungen;
 use crate::io::html::views::gemeinsame_buchungen::uebersicht_abrechnungen::render_uebersicht_gemeinsame_abrechnungen_template;
+use crate::io::html::views::index::PageTitle;
 use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use actix_web::web::Data;
@@ -21,15 +22,18 @@ pub async fn get_view(
         &user_application_directory,
         &configuration_guard.abrechnungs_configuration,
     );
+    let context = UebersichtAbrechnugnenContext {
+        abrechnungen: alle_abrechnung,
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN);
+    let view_result = handle_view_abrechnungen(context);
+    let render_view = render_uebersicht_gemeinsame_abrechnungen_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Übersicht Abrechnungen",
-        GEMEINSAME_BUCHUNGEN_ABRECHNUNGEN,
-        UebersichtAbrechnugnenContext {
-            abrechnungen: alle_abrechnung,
-        },
-        handle_view_abrechnungen,
-        render_uebersicht_gemeinsame_abrechnungen_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Übersicht Abrechnungen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

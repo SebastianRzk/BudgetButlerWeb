@@ -7,10 +7,11 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::EINZELBUCHUNGEN_EINNAHME_ADD;
 use crate::io::html::views::einzelbuchungen::add_einnahme::render_add_einnahme_template;
+use crate::io::html::views::index::PageTitle;
 use crate::io::http::redirect::http_redirect;
 use crate::io::time::today;
 use crate::model::primitives::betrag::Betrag;
@@ -35,20 +36,23 @@ pub async fn get_view(
 ) -> impl Responder {
     let database = data.database.lock().unwrap();
     let config = configuration_data.configuration.lock().unwrap();
+    let context = AddBuchungContext {
+        database: &database,
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
+        today: today(),
+        edit_buchung: None,
+        ausgeschlossene_kategorien: &config.erfassungs_configuration.ausgeschlossene_kategorien,
+    };
+    let database_name = config.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(EINZELBUCHUNGEN_EINNAHME_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_einnahme_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Einnahme hinzufügen",
-        EINZELBUCHUNGEN_EINNAHME_ADD,
-        AddBuchungContext {
-            database: &database,
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
-            today: today(),
-            edit_buchung: None,
-            ausgeschlossene_kategorien: &config.erfassungs_configuration.ausgeschlossene_kategorien,
-        },
-        handle_view,
-        render_add_einnahme_template,
-        config.database_configuration.name.clone(),
+        PageTitle::new("Einnahme hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -68,20 +72,23 @@ pub async fn post_view(
     }
     let config = configuration_data.configuration.lock().unwrap();
 
+    let context = AddBuchungContext {
+        database: &database_guard,
+        einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
+        today: today(),
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        edit_buchung: Some(form.edit_index),
+        ausgeschlossene_kategorien: &config.erfassungs_configuration.ausgeschlossene_kategorien,
+    };
+    let database_name = config.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(EINZELBUCHUNGEN_EINNAHME_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_einnahme_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Einnahme editieren",
-        EINZELBUCHUNGEN_EINNAHME_ADD,
-        AddBuchungContext {
-            database: &database_guard,
-            einzelbuchungen_changes: &einzelbuchungen_changes.changes.lock().unwrap(),
-            today: today(),
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            edit_buchung: Some(form.edit_index),
-            ausgeschlossene_kategorien: &config.erfassungs_configuration.ausgeschlossene_kategorien,
-        },
-        handle_view,
-        render_add_einnahme_template,
-        config.database_configuration.name.clone(),
+        PageTitle::new("Einnahme editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

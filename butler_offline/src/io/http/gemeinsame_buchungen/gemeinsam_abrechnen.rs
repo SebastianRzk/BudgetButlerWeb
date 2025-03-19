@@ -1,9 +1,10 @@
 use crate::budgetbutler::pages::gemeinsame_buchungen::gemeinsam_abrechnen::{
     handle_view, GemeinsameBuchungenAbrechnenContext, Limit,
 };
-use crate::budgetbutler::view::request_handler::handle_render_display_view;
+use crate::budgetbutler::view::request_handler::{handle_render_display_view, ActivePage};
 use crate::budgetbutler::view::routes::GEMEINSAME_BUCHUNGEN_ABRECHNEN;
 use crate::io::html::views::gemeinsame_buchungen::gemeinsame_buchungen_abrechnen::render_gemeinsame_buchungen_abrechnen;
+use crate::io::html::views::index::PageTitle;
 use crate::io::time::today;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
@@ -24,25 +25,28 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = GemeinsameBuchungenAbrechnenContext {
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        configuration: configuration_guard.clone(),
+        today: today(),
+        database: &database_guard,
+        set_mindate: None,
+        set_maxdate: None,
+        set_verhaeltnis: None,
+        set_limit: None,
+        set_titel: None,
+        set_other_kategorie: Kategorie::new("Unbekannt".to_string()),
+        set_self_kategorie: Kategorie::new("Unbekannt".to_string()),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(GEMEINSAME_BUCHUNGEN_ABRECHNEN);
+    let view_result = handle_view(context);
+    let render_view = render_gemeinsame_buchungen_abrechnen(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Gemeinsame Buchungen Abrechnen",
-        GEMEINSAME_BUCHUNGEN_ABRECHNEN,
-        GemeinsameBuchungenAbrechnenContext {
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            configuration: configuration_guard.clone(),
-            today: today(),
-            database: &database_guard,
-            set_mindate: None,
-            set_maxdate: None,
-            set_verhaeltnis: None,
-            set_limit: None,
-            set_titel: None,
-            set_other_kategorie: Kategorie::new("Unbekannt".to_string()),
-            set_self_kategorie: Kategorie::new("Unbekannt".to_string()),
-        },
-        handle_view,
-        render_gemeinsame_buchungen_abrechnen,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Gemeinsame Buchungen Abrechnen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -55,29 +59,32 @@ pub async fn post_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = GemeinsameBuchungenAbrechnenContext {
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        configuration: configuration_guard.clone(),
+        today: today(),
+        database: &database_guard,
+        set_mindate: Some(Datum::from_iso_string(&form.set_mindate)),
+        set_maxdate: Some(Datum::from_iso_string(&form.set_maxdate)),
+        set_titel: Some(form.set_titel.clone()),
+        set_verhaeltnis: form.set_verhaeltnis.parse().ok(),
+        set_limit: map_get_limit(
+            form.set_limit.clone(),
+            form.set_limit_value.clone(),
+            form.set_limit_fuer.clone(),
+        ),
+        set_other_kategorie: Kategorie::new(form.set_other_kategorie_value.clone()),
+        set_self_kategorie: Kategorie::new(form.set_self_kategorie_value.clone()),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(GEMEINSAME_BUCHUNGEN_ABRECHNEN);
+    let view_result = handle_view(context);
+    let render_view = render_gemeinsame_buchungen_abrechnen(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Gemeinsame Buchungen Abrechnen",
-        GEMEINSAME_BUCHUNGEN_ABRECHNEN,
-        GemeinsameBuchungenAbrechnenContext {
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            configuration: configuration_guard.clone(),
-            today: today(),
-            database: &database_guard,
-            set_mindate: Some(Datum::from_iso_string(&form.set_mindate)),
-            set_maxdate: Some(Datum::from_iso_string(&form.set_maxdate)),
-            set_titel: Some(form.set_titel.clone()),
-            set_verhaeltnis: form.set_verhaeltnis.parse().ok(),
-            set_limit: map_get_limit(
-                form.set_limit.clone(),
-                form.set_limit_value.clone(),
-                form.set_limit_fuer.clone(),
-            ),
-            set_other_kategorie: Kategorie::new(form.set_other_kategorie_value.clone()),
-            set_self_kategorie: Kategorie::new(form.set_self_kategorie_value.clone()),
-        },
-        handle_view,
-        render_gemeinsame_buchungen_abrechnen,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Gemeinsame Buchungen Abrechnen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

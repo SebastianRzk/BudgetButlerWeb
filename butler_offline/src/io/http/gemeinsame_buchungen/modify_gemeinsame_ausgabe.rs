@@ -12,10 +12,11 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::GEMEINSAME_BUCHUNGEN_ADD;
 use crate::io::html::views::gemeinsame_buchungen::add_gemeinsame_buchungen::render_add_gemeinsame_buchung_template;
+use crate::io::html::views::index::PageTitle;
 use crate::io::http::redirect::http_redirect;
 use crate::io::time::today;
 use crate::model::primitives::betrag::Betrag;
@@ -41,20 +42,23 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddGemeinsameBuchungContext {
+        database: &database_guard,
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        gemeinsame_buchungen_changes: &gemeinsame_buchungen_changes.changes.lock().unwrap(),
+        configuration: configuration_guard.clone(),
+        today: today(),
+        edit_buchung: None,
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(GEMEINSAME_BUCHUNGEN_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_gemeinsame_buchung_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Gemeinsame Buchung hinzufügen",
-        GEMEINSAME_BUCHUNGEN_ADD,
-        AddGemeinsameBuchungContext {
-            database: &database_guard,
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            gemeinsame_buchungen_changes: &gemeinsame_buchungen_changes.changes.lock().unwrap(),
-            configuration: configuration_guard.clone(),
-            today: today(),
-            edit_buchung: None,
-        },
-        handle_view,
-        render_add_gemeinsame_buchung_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Gemeinsame Buchung hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -74,20 +78,23 @@ pub async fn post_view(
     }
 
     let configurtation_guard = config.configuration.lock().unwrap();
+    let context = AddGemeinsameBuchungContext {
+        database: &database_guard,
+        configuration: configurtation_guard.clone(),
+        extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
+        gemeinsame_buchungen_changes: &gemeinsame_buchungen_changes.changes.lock().unwrap(),
+        today: today(),
+        edit_buchung: Some(form.edit_index),
+    };
+    let database_name = configurtation_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(GEMEINSAME_BUCHUNGEN_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_gemeinsame_buchung_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Gemeinsame Buchung editieren",
-        GEMEINSAME_BUCHUNGEN_ADD,
-        AddGemeinsameBuchungContext {
-            database: &database_guard,
-            configuration: configurtation_guard.clone(),
-            extra_kategorie: &extra_kategorie.kategorie.lock().unwrap(),
-            gemeinsame_buchungen_changes: &gemeinsame_buchungen_changes.changes.lock().unwrap(),
-            today: today(),
-            edit_buchung: Some(form.edit_index),
-        },
-        handle_view,
-        render_add_gemeinsame_buchung_template,
-        configurtation_guard.database_configuration.name.clone(),
+        PageTitle::new("Gemeinsame Buchung editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

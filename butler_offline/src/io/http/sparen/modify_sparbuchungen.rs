@@ -10,11 +10,12 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::SPAREN_SPARBUCHUNG_ADD;
 use crate::io::disk::primitive::segment_reader::Element;
 use crate::io::disk::primitive::sparbuchungtyp::read_sparbuchungtyp;
+use crate::io::html::views::index::PageTitle;
 use crate::io::html::views::sparen::add_sparbuchungen::render_add_sparbuchung_template;
 use crate::io::http::redirect::http_redirect;
 use crate::io::time::today;
@@ -39,18 +40,21 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddSparbuchungenContext {
+        database: &database_guard,
+        sparbuchung_changes: &sparbuchungen_changes.changes.lock().unwrap(),
+        edit_buchung: None,
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_SPARBUCHUNG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_sparbuchung_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Neues Sparkonto hinzufügen",
-        SPAREN_SPARBUCHUNG_ADD,
-        AddSparbuchungenContext {
-            database: &database_guard,
-            sparbuchung_changes: &sparbuchungen_changes.changes.lock().unwrap(),
-            edit_buchung: None,
-            heute: today(),
-        },
-        handle_view,
-        render_add_sparbuchung_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Neue Sparbuchung hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -69,18 +73,21 @@ pub async fn post_view(
     }
 
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddSparbuchungenContext {
+        database: &database_guard,
+        sparbuchung_changes: &sparbuchungen_changes.changes.lock().unwrap(),
+        edit_buchung: Some(form.edit_index),
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_SPARBUCHUNG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_sparbuchung_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Konto editieren",
-        SPAREN_SPARBUCHUNG_ADD,
-        AddSparbuchungenContext {
-            database: &database_guard,
-            sparbuchung_changes: &sparbuchungen_changes.changes.lock().unwrap(),
-            edit_buchung: Some(form.edit_index),
-            heute: today(),
-        },
-        handle_view,
-        render_add_sparbuchung_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Sparbuchung editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

@@ -30,3 +30,5 @@ pub const SPAREN_UEBERSICHT_ETFS: &str = "/uebersicht_etfs/";
 pub const CORE_CONFIGURATION: &str = "/configuration/";
 pub const CORE_RELOAD_DATABASE: &str = "/reload_database/";
 pub const CORE_IMPORT: &str = "/import/";
+
+pub const UNKNOWN: &str = "/unknown/";

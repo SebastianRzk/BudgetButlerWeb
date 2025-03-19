@@ -1,5 +1,5 @@
 use crate::budgetbutler::view::request_handler::{
-    handle_render_success_display_message, DisplaySuccessMessage,
+    handle_render_success_display_message, ActivePage, DisplaySuccessMessage,
 };
 use crate::budgetbutler::view::routes::CORE_IMPORT;
 use crate::io::http::shared::redirect_authenticated::{
@@ -24,21 +24,23 @@ pub async fn upload_kategorien(
         .await
         .expect("Failed to set Kategorien");
 
+    let database_name = config.database_configuration.name.clone();
+    let context = DisplaySuccessMessage {
+        message: format!(
+            "Erfolgreich {} Kategorien in die Online-App importiert",
+            kategorien.len()
+        ),
+        link_name: "Zurück zu Import / Export".to_string(),
+        link_url: CORE_IMPORT.to_string(),
+    };
     RedirectAuthenticatedResult {
         database_to_save: None,
         page_render_type: RedirectAuthenticatedRenderPageType::RenderPage(
             handle_render_success_display_message(
                 "Import von Einzelbuchungen",
-                CORE_IMPORT,
-                config.database_configuration.name.clone(),
-                DisplaySuccessMessage {
-                    message: format!(
-                        "Erfolgreich {} Kategorien in die Online-App importiert",
-                        kategorien.len()
-                    ),
-                    link_name: "Zurück zu Import / Export".to_string(),
-                    link_url: CORE_IMPORT.to_string(),
-                },
+                ActivePage::construct_from_url(CORE_IMPORT),
+                database_name,
+                context,
             ),
         ),
     }

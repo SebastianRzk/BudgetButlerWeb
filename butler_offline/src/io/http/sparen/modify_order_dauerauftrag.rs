@@ -18,12 +18,13 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::SPAREN_ORDERDAUERAUFTRAG_ADD;
 use crate::io::disk::primitive::order_typ::read_ordertyp;
 use crate::io::disk::primitive::rhythmus::read_rhythmus;
 use crate::io::disk::primitive::segment_reader::Element;
+use crate::io::html::views::index::PageTitle;
 use crate::io::html::views::sparen::add_order_dauerauftrag::render_add_order_dauerauftrag_template;
 use crate::io::html::views::sparen::split_order_dauerauftrag::render_split_order_dauerauftrag_template;
 use crate::io::http::redirect::http_redirect;
@@ -52,18 +53,21 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddOrderDauerauftragContext {
+        database: &database_guard,
+        order_dauerauftrag_changes: &order_dauerauftrag_changes.changes.lock().unwrap(),
+        edit_buchung: None,
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_ORDERDAUERAUFTRAG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_order_dauerauftrag_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Neuen Depotwert hinzufügen",
-        SPAREN_ORDERDAUERAUFTRAG_ADD,
-        AddOrderDauerauftragContext {
-            database: &database_guard,
-            order_dauerauftrag_changes: &order_dauerauftrag_changes.changes.lock().unwrap(),
-            edit_buchung: None,
-            heute: today(),
-        },
-        handle_view,
-        render_add_order_dauerauftrag_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Neuen Order-Dauerauftrag hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -82,18 +86,21 @@ pub async fn post_view(
     }
 
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddOrderDauerauftragContext {
+        database: &database_guard,
+        order_dauerauftrag_changes: &order_dauerauftrag_changes.changes.lock().unwrap(),
+        edit_buchung: Some(form.edit_index),
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_ORDERDAUERAUFTRAG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_order_dauerauftrag_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Konto editieren",
-        SPAREN_ORDERDAUERAUFTRAG_ADD,
-        AddOrderDauerauftragContext {
-            database: &database_guard,
-            order_dauerauftrag_changes: &order_dauerauftrag_changes.changes.lock().unwrap(),
-            edit_buchung: Some(form.edit_index),
-            heute: today(),
-        },
-        handle_view,
-        render_add_order_dauerauftrag_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Order-Dauerauftrag editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -218,16 +225,19 @@ pub async fn load_split(
 
     let config_guard = configuration_data.configuration.lock().unwrap();
 
+    let context = SplitOrderDauerauftragContext {
+        database: &database_guard,
+        order_dauerauftrag_id: form.orderdauerauftrag_id,
+    };
+    let database_name = config_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_ORDERDAUERAUFTRAG_ADD);
+    let view_result = handle_split_order_dauerauftrag(context);
+    let render_view = render_split_order_dauerauftrag_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Order-Dauerauftrag teilen",
-        SPAREN_ORDERDAUERAUFTRAG_ADD,
-        SplitOrderDauerauftragContext {
-            database: &database_guard,
-            order_dauerauftrag_id: form.orderdauerauftrag_id,
-        },
-        handle_split_order_dauerauftrag,
-        render_split_order_dauerauftrag_template,
-        config_guard.database_configuration.name.clone(),
+        PageTitle::new("Order-Dauerauftrag teilen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

@@ -6,11 +6,12 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::SPAREN_ORDER_ADD;
 use crate::io::disk::primitive::order_typ::read_ordertyp;
 use crate::io::disk::primitive::segment_reader::Element;
+use crate::io::html::views::index::PageTitle;
 use crate::io::html::views::sparen::add_order::render_add_order_template;
 use crate::io::http::redirect::http_redirect;
 use crate::io::time::today;
@@ -38,18 +39,21 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddOrderContext {
+        database: &database_guard,
+        order_changes: &order_changes.changes.lock().unwrap(),
+        edit_buchung: None,
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_ORDER_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_order_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Neuen Depotwert hinzufügen",
-        SPAREN_ORDER_ADD,
-        AddOrderContext {
-            database: &database_guard,
-            order_changes: &order_changes.changes.lock().unwrap(),
-            edit_buchung: None,
-            heute: today(),
-        },
-        handle_view,
-        render_add_order_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Neuen Order hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -68,18 +72,21 @@ pub async fn post_view(
     }
 
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddOrderContext {
+        database: &database_guard,
+        order_changes: &order_changes.changes.lock().unwrap(),
+        edit_buchung: Some(form.edit_index),
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_ORDER_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_order_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Konto editieren",
-        SPAREN_ORDER_ADD,
-        AddOrderContext {
-            database: &database_guard,
-            order_changes: &order_changes.changes.lock().unwrap(),
-            edit_buchung: Some(form.edit_index),
-            heute: today(),
-        },
-        handle_view,
-        render_add_order_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Order editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

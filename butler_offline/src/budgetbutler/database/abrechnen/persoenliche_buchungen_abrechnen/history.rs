@@ -55,9 +55,9 @@ fn generate_abrechnungs_title_from_metadaten(metadaten: Metadaten) -> String {
 }
 #[cfg(test)]
 mod tests {
+    use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Titel;
     use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{Metadaten, Ziel};
     use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::history::generate_abrechnungs_title_from_metadaten;
-    use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Titel;
     use crate::io::disk::diskrepresentation::line::Line;
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::person::builder::person;
