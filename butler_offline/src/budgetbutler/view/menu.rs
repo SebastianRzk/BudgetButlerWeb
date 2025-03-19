@@ -1,4 +1,5 @@
 use crate::budgetbutler::view::icons::{Icon, COGS, DASHBOARD, LINE_CHART, LIST, PLUS, RELOAD};
+use crate::budgetbutler::view::request_handler::ActivePage;
 use crate::budgetbutler::view::routes::{
     CORE_CONFIGURATION, CORE_IMPORT, CORE_RELOAD_DATABASE, EINZELBUCHUNGEN_AUSGABE_ADD,
     EINZELBUCHUNGEN_DAUERAUFTRAG_ADD, EINZELBUCHUNGEN_DAUERAUFTRAG_UEBERSICHT,
@@ -211,22 +212,22 @@ pub struct MenuEntry {
     pub icon: Icon,
 }
 
-pub fn resolve_active_group_from_url(url: &str) -> String {
+pub fn resolve_active_group_from_url(active_page: &ActivePage) -> String {
     let mut found: Option<String> = None;
     for entry in sparen_menu().sub_menu {
-        if entry.url == url {
+        if entry.url == active_page.active_page_url {
             found = Some(SPAREN.to_string());
         }
     }
 
     for entry in gemeinsame_buchungen_menu().sub_menu {
-        if entry.url == url {
+        if entry.url == active_page.active_page_url {
             found = Some(GEMEINSAME_FINANZEN.to_string());
         }
     }
 
     for entry in einstellungen_menu().sub_menu {
-        if entry.url == url {
+        if entry.url == active_page.active_page_url {
             found = Some(EINSTELLUNGEN.to_string());
         }
     }
@@ -239,23 +240,45 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_resolve_active_group_from_url() {
+    fn test_resolve_active_group_from_url_should_resolve_einzelbuchungen() {
         assert_eq!(
-            resolve_active_group_from_url(EINZELBUCHUNGEN_JAHRESUEBERSICHT),
+            resolve_active_group_from_url(&ActivePage::construct_from_url(
+                EINZELBUCHUNGEN_JAHRESUEBERSICHT
+            )),
             PERSOENLICHE_FINANZEN
         );
-        assert_eq!(resolve_active_group_from_url(SPAREN_UEBERSICHT), SPAREN);
+    }
+
+    #[test]
+    fn test_resolve_active_group_from_url_should_resolve_spagen() {
         assert_eq!(
-            resolve_active_group_from_url(GEMEINSAME_BUCHUNGEN_UEBERSICHT),
+            resolve_active_group_from_url(&ActivePage::construct_from_url(SPAREN_UEBERSICHT)),
+            SPAREN
+        );
+    }
+
+    #[test]
+    fn test_resolve_active_group_from_url_should_resolve_gemeinsame_finanzen() {
+        assert_eq!(
+            resolve_active_group_from_url(&ActivePage::construct_from_url(
+                GEMEINSAME_BUCHUNGEN_UEBERSICHT
+            )),
             GEMEINSAME_FINANZEN
         );
+    }
+
+    #[test]
+    fn test_resolve_active_group_from_url_should_resolve_einstellungen() {
         assert_eq!(
-            resolve_active_group_from_url(CORE_CONFIGURATION),
+            resolve_active_group_from_url(&ActivePage::construct_from_url(CORE_CONFIGURATION)),
             EINSTELLUNGEN
         );
+    }
 
+    #[test]
+    fn test_resolve_active_group_from_url_default_to_persoenlich_when_unknown() {
         assert_eq!(
-            resolve_active_group_from_url("asdfg"),
+            resolve_active_group_from_url(&ActivePage::construct_from_url("asdfg")),
             PERSOENLICHE_FINANZEN
         );
     }

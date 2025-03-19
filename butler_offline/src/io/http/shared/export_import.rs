@@ -1,26 +1,26 @@
-use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Abrechnung;
+use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind;
 use crate::budgetbutler::pages::shared::import::{handle_import_abrechnung, ImportAbrechnungContext};
 use crate::budgetbutler::view::menu::resolve_active_group_from_url;
-use crate::budgetbutler::view::request_handler::{handle_modification_manual, handle_render_display_view, no_page_middleware, ManualRenderResult};
-use crate::budgetbutler::view::routes::CORE_IMPORT;
+use crate::budgetbutler::view::request_handler::{handle_modification_manual, handle_render_display_view, no_page_middleware, ActivePage, ManualRenderResult};
+use crate::budgetbutler::view::routes::{CORE_IMPORT, UNKNOWN};
 use crate::io::disk::abrechnung::speichere_abrechnung::speichere_abrechnung;
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::io::disk::writer::create_database_backup;
 use crate::io::html::views::core::zurueck_zu::{render_success_message_template, SuccessZurueckZuViewResult};
-use crate::io::html::views::index::render_index_template;
+use crate::io::html::views::index::{render_index_template, PageTitle};
 use crate::io::html::views::shared::export_import::{
     render_import_template, ExportImportViewResult,
 };
 use crate::io::html::views::shared::import_mapping::{render_import_mapping_template, ImportMappingViewResult};
 use crate::io::time::{now, today};
 use crate::model::state::config::{Configuration, ConfigurationData};
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::ApplicationState;
 use actix_web::web::{Data, Form};
 use actix_web::{get, post, HttpResponse, Responder};
 use serde::Deserialize;
 use std::sync::MutexGuard;
-use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 
 #[get("import/")]
 pub async fn get_view(
@@ -33,13 +33,15 @@ pub async fn get_view(
         database_version: database.db_version.clone(),
         online_default_server: configuration_guard.server_configuration.clone(),
     };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(CORE_IMPORT);
+    let view_result = no_page_middleware(context);
+    let render_view = render_import_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Gemeinsame Buchungen Abrechnen",
-        CORE_IMPORT,
-        context,
-        no_page_middleware,
-        render_import_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Gemeinsame Buchungen Abrechnen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -65,13 +67,15 @@ pub async fn submit_import_manuell(
             alle_kategorien: database.einzelbuchungen.get_kategorien(),
             unpassende_kategorien: pruefe_kategorien.kategorien_nicht_in_datenbank,
         };
+        let database_name = configuration.database_configuration.name.clone();
+        let active_page = ActivePage::construct_from_url(CORE_IMPORT);
+        let view_result1 = no_page_middleware(view_result);
+        let render_view = render_import_mapping_template(view_result1);
         return HttpResponse::Ok().body(handle_render_display_view(
-            "Kategorien zuordnen",
-            CORE_IMPORT,
-            view_result,
-            no_page_middleware,
-            render_import_mapping_template,
-            configuration.database_configuration.name.clone(),
+            PageTitle::new("Kategorien zuordnen"),
+            active_page,
+            database_name,
+            render_view,
         ));
     }
 
@@ -133,10 +137,11 @@ pub fn render_as_locking_error(
     configuration: &Configuration,
     render_result: ManualRenderResult,
 ) -> HttpResponse {
+    let active_page = ActivePage::construct_from_url(UNKNOWN);
     HttpResponse::Ok().body(render_index_template(
-        resolve_active_group_from_url(CORE_IMPORT),
-        CORE_IMPORT.to_string(),
-        "Export / Import".to_string(),
+        resolve_active_group_from_url(&active_page),
+        active_page,
+        PageTitle::new("Error"),
         render_result.valid_next_state.err().unwrap(),
         None,
         configuration.database_configuration.name.clone(),
@@ -148,10 +153,11 @@ pub fn erfolgreich_importiert(
     diff_einzelbuchungen: usize,
     diff_gemeinsame_buchungen: usize,
 ) -> HttpResponse {
+    let active_page = ActivePage::construct_from_url(CORE_IMPORT);
     HttpResponse::Ok().body(render_index_template(
-        resolve_active_group_from_url(CORE_IMPORT),
-        CORE_IMPORT.to_string(),
-        "Export / Import".to_string(),
+        resolve_active_group_from_url(&active_page),
+        active_page,
+        PageTitle::new("Export / Import"),
         render_success_message_template(SuccessZurueckZuViewResult {
             text: format!(
                 "Erfolgreich {} Einzelbuchungen und {} Gemeinsame Buchungen importiert. Zurück zu Export / Import",

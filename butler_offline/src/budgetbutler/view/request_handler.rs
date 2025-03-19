@@ -9,7 +9,7 @@ use crate::io::html::views::core::error_optimistic_locking::render_error_optimis
 use crate::io::html::views::core::zurueck_zu::{
     render_success_message_template, SuccessZurueckZuViewResult,
 };
-use crate::io::html::views::index::render_index_template;
+use crate::io::html::views::index::{render_index_template, PageTitle};
 use crate::model::state::config::DatabaseConfiguration;
 use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::state::persistent_application_state::Database;
@@ -18,20 +18,16 @@ use crate::model::state::persistent_state::database_version::{
 };
 use std::sync::Mutex;
 
-pub fn handle_render_display_view<CONTEXT, ViewResult>(
-    page_name: &str,
-    page_url: &str,
-    context: CONTEXT,
-    display_function: impl Fn(CONTEXT) -> ViewResult,
-    render_function: impl Fn(ViewResult) -> String,
+pub fn handle_render_display_view(
+    page_name: PageTitle,
+    active_page: ActivePage,
     database_name: String,
+    render_view: String,
 ) -> String {
-    let view_result = display_function(context);
-    let render_view = render_function(view_result);
     render_index_template(
-        resolve_active_group_from_url(page_url),
-        page_url.to_string(),
-        page_name.to_string(),
+        resolve_active_group_from_url(&active_page),
+        active_page,
+        page_name,
         render_view,
         None,
         database_name,
@@ -166,8 +162,8 @@ pub struct ManualRenderResult {
 }
 
 pub fn handle_render_success_display_message(
-    page_name: &str,
-    page_url: &str,
+    page_name: &'static str,
+    active_page: ActivePage,
     database_name: String,
     context: DisplaySuccessMessage,
 ) -> String {
@@ -176,9 +172,9 @@ pub fn handle_render_success_display_message(
         link: context.link_url,
     });
     render_index_template(
-        resolve_active_group_from_url(page_url),
-        page_url.to_string(),
-        page_name.to_string(),
+        resolve_active_group_from_url(&active_page),
+        active_page,
+        PageTitle::new(page_name),
         render_view,
         Some(SuccessMessage {
             message: context.message,
@@ -192,3 +188,18 @@ pub struct DisplaySuccessMessage {
     pub link_name: String,
     pub link_url: String,
 }
+
+pub struct ActivePage {
+    pub active_page_url: &'static str,
+}
+
+impl ActivePage {
+    pub fn construct_from_url(url: &'static str) -> ActivePage {
+        ActivePage {
+            active_page_url: url,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {}

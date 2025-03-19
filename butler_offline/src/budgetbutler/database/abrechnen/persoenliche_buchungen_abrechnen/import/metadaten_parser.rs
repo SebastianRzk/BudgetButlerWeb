@@ -1,6 +1,6 @@
+use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Titel;
 use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{ziel_from_str, Metadaten};
 use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnungs_file::{SortedAbrechnungsFile, METADATEN_ABRECHNENDE_PERSON_KEY, METADATEN_ABRECHNUNGSDATUM_KEY, METADATEN_AUSFUEHRUNGSDATUM_KEY, METADATEN_TITEL_KEY, METADATEN_ZIEL_KEY};
-use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Titel;
 use crate::model::primitives::datum::Datum;
 use crate::model::primitives::person::Person;
 
@@ -40,10 +40,10 @@ pub fn parse_metadaten(abrechnung: &SortedAbrechnungsFile) -> Metadaten {
 
 #[cfg(test)]
 mod tests {
+    use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Titel;
     use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{Metadaten, Ziel};
     use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnungs_file::SortedAbrechnungsFile;
     use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::import::metadaten_parser::parse_metadaten;
-    use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::Titel;
     use crate::io::disk::diskrepresentation::line::builder::line;
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::person::builder::person;

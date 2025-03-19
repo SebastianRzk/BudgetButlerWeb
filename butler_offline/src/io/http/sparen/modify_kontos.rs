@@ -9,11 +9,12 @@ use crate::budgetbutler::view::optimistic_locking::{
 };
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::SPAREN_SPARKONTO_ADD;
 use crate::io::disk::primitive::segment_reader::Element;
 use crate::io::disk::primitive::sparkontotyp::read_sparkontotyp;
+use crate::io::html::views::index::PageTitle;
 use crate::io::html::views::sparen::add_konto::render_add_konto_template;
 use crate::io::http::redirect::http_redirect;
 use crate::model::primitives::name::Name;
@@ -34,17 +35,20 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddKontoContext {
+        database: &database_guard,
+        konto_changes: &konto_changes.changes.lock().unwrap(),
+        edit_buchung: None,
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_SPARKONTO_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_konto_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Neues Sparkonto hinzufügen",
-        SPAREN_SPARKONTO_ADD,
-        AddKontoContext {
-            database: &database_guard,
-            konto_changes: &konto_changes.changes.lock().unwrap(),
-            edit_buchung: None,
-        },
-        handle_view,
-        render_add_konto_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Neues Sparkonto hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -63,17 +67,20 @@ pub async fn post_view(
     }
 
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddKontoContext {
+        database: &database_guard,
+        konto_changes: &konto_changes.changes.lock().unwrap(),
+        edit_buchung: Some(form.edit_index),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_SPARKONTO_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_konto_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Konto editieren",
-        SPAREN_SPARKONTO_ADD,
-        AddKontoContext {
-            database: &database_guard,
-            konto_changes: &konto_changes.changes.lock().unwrap(),
-            edit_buchung: Some(form.edit_index),
-        },
-        handle_view,
-        render_add_konto_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Konto editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 

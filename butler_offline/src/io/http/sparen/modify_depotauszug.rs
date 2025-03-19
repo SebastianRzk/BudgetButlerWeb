@@ -14,9 +14,10 @@ use crate::budgetbutler::view::redirect_targets::{
     redirect_to_depotauszug_bereits_erfasst, redirect_to_optimistic_locking_error,
 };
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
 use crate::budgetbutler::view::routes::SPAREN_DEPOTAUSZUG_ADD;
+use crate::io::html::views::index::PageTitle;
 use crate::io::html::views::sparen::add_depotauszug::render_add_depotauszug_template;
 use crate::io::http::redirect::http_redirect;
 use crate::io::time::today;
@@ -44,18 +45,21 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddDepotauszugContext {
+        database: &database_guard,
+        depotwerte_changes: &depotauszuege_changes.changes.lock().unwrap(),
+        edit_buchung: None,
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_DEPOTAUSZUG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_depotauszug_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Neuer Depotauszug hinzufügen",
-        SPAREN_DEPOTAUSZUG_ADD,
-        AddDepotauszugContext {
-            database: &database_guard,
-            depotwerte_changes: &depotauszuege_changes.changes.lock().unwrap(),
-            edit_buchung: None,
-            heute: today(),
-        },
-        handle_view,
-        render_add_depotauszug_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Neuer Depotauszug hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -74,21 +78,24 @@ pub async fn post_view(
     }
 
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddDepotauszugContext {
+        database: &database_guard,
+        depotwerte_changes: &depotauszuege_changes.changes.lock().unwrap(),
+        edit_buchung: Some(EditDepotauszug {
+            datum: Datum::from_iso_string(&form.edit_datum.clone()),
+            konto_referenz: KontoReferenz::new(Name::new(form.edit_konto_name.clone())),
+        }),
+        heute: today(),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_DEPOTAUSZUG_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_depotauszug_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Depotauszug editieren",
-        SPAREN_DEPOTAUSZUG_ADD,
-        AddDepotauszugContext {
-            database: &database_guard,
-            depotwerte_changes: &depotauszuege_changes.changes.lock().unwrap(),
-            edit_buchung: Some(EditDepotauszug {
-                datum: Datum::from_iso_string(&form.edit_datum.clone()),
-                konto_referenz: KontoReferenz::new(Name::new(form.edit_konto_name.clone())),
-            }),
-            heute: today(),
-        },
-        handle_view,
-        render_add_depotauszug_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Depotauszug editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -112,7 +119,6 @@ pub async fn post_submit(
     let datum = Datum::from_iso_string(form_data.get("edit_datum").unwrap());
     let database_version = form_data.get("database_version").unwrap().clone();
 
-    eprintln!("Form data: {:?}", form_data);
     let add = "yes".to_string();
     let mode = if form_data.get("edit").is_some() && form_data.get("edit").unwrap() == &add {
         Mode::Edit

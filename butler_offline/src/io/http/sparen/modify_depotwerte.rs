@@ -12,11 +12,12 @@ use crate::budgetbutler::view::redirect_targets::{
     redirect_to_isin_bereits_erfasst, redirect_to_optimistic_locking_error,
 };
 use crate::budgetbutler::view::request_handler::{
-    handle_modification, handle_render_display_view, VersionedContext,
+    handle_modification, handle_render_display_view, ActivePage, VersionedContext,
 };
-use crate::budgetbutler::view::routes::{SPAREN_DEPOTWERT_ADD, SPAREN_SPARKONTO_ADD};
+use crate::budgetbutler::view::routes::SPAREN_DEPOTWERT_ADD;
 use crate::io::disk::primitive::depotwerttyp::read_depotwerttyp;
 use crate::io::disk::primitive::segment_reader::Element;
+use crate::io::html::views::index::PageTitle;
 use crate::io::html::views::sparen::add_depotwert::render_add_depotwert_template;
 use crate::io::http::redirect::http_redirect;
 use crate::model::primitives::isin::ISIN;
@@ -38,17 +39,20 @@ pub async fn get_view(
 ) -> impl Responder {
     let database_guard = data.database.lock().unwrap();
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddDepotwertContext {
+        database: &database_guard,
+        depotwerte_changes: &depotwerte_changes.changes.lock().unwrap(),
+        edit_buchung: None,
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_DEPOTWERT_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_depotwert_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Neuen Depotwert hinzufügen",
-        SPAREN_DEPOTWERT_ADD,
-        AddDepotwertContext {
-            database: &database_guard,
-            depotwerte_changes: &depotwerte_changes.changes.lock().unwrap(),
-            edit_buchung: None,
-        },
-        handle_view,
-        render_add_depotwert_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Neuen Depotwert hinzufügen"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
@@ -67,17 +71,20 @@ pub async fn post_view(
     }
 
     let configuration_guard = config.configuration.lock().unwrap();
+    let context = AddDepotwertContext {
+        database: &database_guard,
+        depotwerte_changes: &depotwerte_changes.changes.lock().unwrap(),
+        edit_buchung: Some(form.edit_index),
+    };
+    let database_name = configuration_guard.database_configuration.name.clone();
+    let active_page = ActivePage::construct_from_url(SPAREN_DEPOTWERT_ADD);
+    let view_result = handle_view(context);
+    let render_view = render_add_depotwert_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        "Konto editieren",
-        SPAREN_SPARKONTO_ADD,
-        AddDepotwertContext {
-            database: &database_guard,
-            depotwerte_changes: &depotwerte_changes.changes.lock().unwrap(),
-            edit_buchung: Some(form.edit_index),
-        },
-        handle_view,
-        render_add_depotwert_template,
-        configuration_guard.database_configuration.name.clone(),
+        PageTitle::new("Depotwert editieren"),
+        active_page,
+        database_name,
+        render_view,
     ))
 }
 
