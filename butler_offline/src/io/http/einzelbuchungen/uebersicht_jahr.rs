@@ -33,7 +33,7 @@ pub async fn get_view(
     let view_result = handle_view(context);
     let render_view = render_uebersicht_jahr_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        PageTitle::new("Übersicht Monat"),
+        PageTitle::new("Jahresübersicht"),
         active_page,
         database_name,
         render_view,
@@ -69,7 +69,7 @@ pub async fn post_view(
     let view_result = handle_view(context);
     let render_view = render_uebersicht_jahr_template(view_result);
     HttpResponse::Ok().body(handle_render_display_view(
-        PageTitle::new("Übersicht Monat"),
+        PageTitle::new("Jahresübersicht"),
         active_page,
         database_name,
         render_view,

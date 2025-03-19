@@ -39,7 +39,7 @@ layout: default
 
 #### Änderungen Desktop-Client
 
-* Korrigieren von Seiten-Überschriften im Sparen-Modul
+* Korrigieren von Seiten-Überschriften im Sparen-Modul und Einzelbuchungen-Modul
 * Interne Refactorings
 
 ### v4.2.6 (2025-03-14)
