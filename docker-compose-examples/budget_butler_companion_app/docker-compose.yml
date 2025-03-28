@@ -5,6 +5,8 @@ services:
     ports:
       - "80:80"
     restart: unless-stopped
+    networks:
+      - butler-internal
   budget-butler-api:
     image: sebastianrzk/budgetbutlerweb-companion-api
     env_file:

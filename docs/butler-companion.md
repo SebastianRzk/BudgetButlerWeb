@@ -49,6 +49,16 @@ dem [Lets Encrypt ACME Companion](https://github.com/nginx-proxy/acme-companion)
 verwendet werden. Ein Beispiel-Docker-Compose-File für nginx-proxy kann
 bei [Nextcloud](https://github.com/nextcloud/docker/tree/master/.examples) eingesehen werden.
 
+### Besonderheit: Desktop-Client befindet sich im Netzwerk
+
+Dann muss die Adresse des Servers über die Umgebungsvariable `ALLOWED_REDIRECTS` zusätzlich für die lokale
+Authentifizierung freigegeben werden
+
+* Beispiel für Nutzung der Desktop-Applikation ausschließlich im Netzwerk:
+  `ALLOWED_REDIRECTS=http://meinlokale.domain.internal`
+* Beispiel für parallele Nutzung zwischen Desktop-Applikation auf dem Rechner und im Netzwerk:
+  `ALLOWED_REDIRECTS=http://localhost:5000,http://meinlokale.domain.internal`
+
 ## Build
 
 Aktuell werden automatisiert Docker-Images mit Github-Actions gebaut und auf Docker-Hub deployt. Die Images können
@@ -56,7 +66,12 @@ Aktuell werden automatisiert Docker-Images mit Github-Actions gebaut und auf Doc
 
 Falls du die Begleiter Web-App selbst bauen möchtest, findest du im Folgenden die Anforderungen und das Vorgehen.
 
-### Anforderungen zum Build
+
+### Images mit Docker bauen (multistage docker build)
+
+Im Ordner `docker-compose-examples/budget_butler_local_build` befindet sich ein Shell-Skript, welches das Bauen der
+Images übernimmt.
+
 
 ### Build in der Entwicklungsumgebung
 
@@ -77,25 +92,3 @@ Vorgehen:
 
 	* In das Verzeichnis `butler_online_api` wechseln
 	* Rust-Build anstoßen `cargo build --release`
-
-oder:
-
-Systemanforderungen:
-
-* docker (und docker-compose)
-
-Vorgehen:
-
-* In das Verzeichnis `docker-compose-examples/budget_butler_local_build` wechseln
-* Build-Skript ausführen: `sh build_and_run_it.sh`
-
-### Besonderheit: Desktop-Client befindet sich im Netzwerk
-
-Dann muss die Adresse des Servers über die Umgebungsvariable `ALLOWED_REDIRECTS` zusätzlich für die lokale
-Authentifizierung freigegeben werden
-
-* Beispiel für Nutzung der Desktop-Applikation ausschließlich im Netzwerk:
-  `ALLOWED_REDIRECTS=http://meinlokale.domain.internal`
-* Beispiel für parallele Nutzung zwischen Desktop-Applikation auf dem Rechner und im Netzwerk:
-  `ALLOWED_REDIRECTS=http://localhost:5000,http://meinlokale.domain.internal`
-

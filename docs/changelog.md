@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.2.8 (2025-03-28)](#v428-2025-03-28)
 - [v4.2.7 (2025-03-19)](#v427-2025-03-19)
 - [v4.2.6 (2025-03-14)](#v426-2025-03-14)
 - [v4.2.5 (2025-03-09)](#v425-2025-03-08)
@@ -34,6 +35,17 @@ layout: default
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
+
+### v4.2.8 (2025-03-28)
+
+#### Änderungen Desktop-Client
+
+* Bugfix: Setzen von korrekter `StartupWMClass`, damit das Anwendungsfenster in der Taskleiste korrekt erkannt wird
+
+#### Dokumentation
+
+* Bugfix: Docker-compose Beispiel für die Begleiter-Web-App (mit Images aus Docker-Hub) korrigiert.
+* Installations-Anleitungen weiter ausformuliert
 
 ### v4.2.7 (2025-03-19)
 
