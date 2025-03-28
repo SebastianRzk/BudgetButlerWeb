@@ -16,6 +16,9 @@ layout: default
 
 * [Installation in Arch Linux mittels AUR](#installation-in-arch-linux-mittels-aur)
 * [Installation in Arch Linux mittels PKGBUILD](#installation-in-arch-linux-mittels-pkgbuild)
+* [Installation mit docker / docker-compose](#installation-mit-docker--docker-compose)
+	* [Nutzung von fertigem Image aus Docker-Hub](#nutzung-von-fertigem-image-aus-docker-hub)
+	* [Selbst gebautes Docker-Image](#selbst-gebautes-docker-image)
 * [Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)](#manuelle-installation-linux-mit-anpassungen-aber-auch-für-windows-und-macos)
 	* [Systemvoraussetzungen](#systemvoraussetzungen)
 	* [BudgetButlerWeb starten](#budgetbutlerweb-starten)
@@ -27,7 +30,6 @@ layout: default
 
 ![Dashboard](img/screenshots_desktop/dashboard.png)
 
-
 ## Installation in Arch Linux mittels AUR
 
 Das Paket `budgetbutlerweb-desktop` installieren und die Applikation über den Befehl`budgetbutlerweb` oder über das
@@ -38,8 +40,27 @@ Anwendungsicon starten.
 1. Das Repository klonen und in das Verzeichnis wechseln:
    `git clone https://github.com/SebastianRzk/BudgetButlerWeb && cd BudgetButlerWeb`
 2. Das Paket bauen `makepkg`
-3. Das Paket installieren `sudo pacman -U budgetbutlerweb-desktop-git-*.pkg.tar.zst`
+3. Das Paket installieren `sudo pacman -U budgetbutlerweb-desktop-*.pkg.tar.zst`
 4. Anwendung über das Anwendungsicon starten oder über den Befehl `budgetbutlerweb`.
+
+## Installation mit docker / docker-compose
+
+### Nutzung von fertigem Image aus Docker-Hub
+
+Mithilfe von github-actions werden automatisch docker-images gebaut und in docker-hub gepublished.
+
+Wie die Anwendung am besten in Docker konfiguriert wird, kann dem `docker-compose.yml` aus dem Ordner
+`docker-compose-examples/budget_butler_desktop` entnommen werden.
+
+Für `x86_64` kann das tag `latest` verwendet werden, für `arm64` das tag `latest-arm64` (siehe
+auch [Docker-Hub](https://hub.docker.com/r/sebastianrzk/budgetbutlerweb-desktopapp/tags)).
+
+### Selbst gebautes Docker-Image
+
+Neben dem fertigen Image kann die Anwendung auch selbst gebaut werden. 
+
+Im Ordner `docker-compose-examples/budget_butler_desktop_local_build` befindet sich ein shell-script, welches ein 
+Docker-Image baut und das danebenliegende `docker-compose.yml` startet.
 
 ## Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)
 

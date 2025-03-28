@@ -15,7 +15,6 @@ services:
     networks:
       - butler-internal
       - butler-db
-
   budget-butler-cron:
     image: local-budgetbutlerweb-companion-cron
     env_file:
@@ -39,3 +38,4 @@ volumes:
 networks:
   butler-internal:
   butler-db:
+
