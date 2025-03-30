@@ -16,4 +16,4 @@ COPY --from=build-step-rust /app/static /app/static
 WORKDIR /app
 EXPOSE 5000
 
-ENTRYPOINT ["./budgetbutlerweboffline"]
+ENTRYPOINT ["./budgetbutlerweboffline", "--static-path=/app/static", "--user-data-location=/data"]

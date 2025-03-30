@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.2.9 (2025-03-30)](#v429-2025-03-30)
 - [v4.2.8 (2025-03-28)](#v428-2025-03-28)
 - [v4.2.7 (2025-03-19)](#v427-2025-03-19)
 - [v4.2.6 (2025-03-14)](#v426-2025-03-14)
@@ -34,6 +35,12 @@ layout: default
 - [v1.0.0 (2018-01-29)](#v100-2018-01-29)
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
+
+### v4.2.9 (2025-03-30)
+
+#### Änderungen Desktop-Client
+
+* Bugfix: Statische Resourcen werden im Docker-Image der Desktop-App korrekt ausgeliefert
 
 
 ### v4.2.8 (2025-03-28)
