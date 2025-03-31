@@ -45,5 +45,5 @@ jobs:
       - name: npm install and scan
         run: |
           npm i
-          npm audit
+          npm audit --audit-level=high
         working-directory: ./butler_online/budgetbutler
