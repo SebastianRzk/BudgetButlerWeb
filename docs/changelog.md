@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.2.10 (2025-03-31)](#v4210-2025-03-31)
 - [v4.2.9 (2025-03-30)](#v429-2025-03-30)
 - [v4.2.8 (2025-03-28)](#v428-2025-03-28)
 - [v4.2.7 (2025-03-19)](#v427-2025-03-19)
@@ -36,11 +37,17 @@ layout: default
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
+### v4.2.10 (2025-03-31)
+
+#### Änderungen Desktop-Client
+
+* Bugfix: Seitentitel werden korrekt im Browser / Fenster-Titel angezeigt
+
 ### v4.2.9 (2025-03-30)
 
 #### Änderungen Desktop-Client
 
-* Bugfix: Statische Resourcen werden im Docker-Image der Desktop-App korrekt ausgeliefert
+* Bugfix: Statische Ressourcen werden im Docker-Image der Desktop-App korrekt ausgeliefert
 
 
 ### v4.2.8 (2025-03-28)
