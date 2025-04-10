@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.2.11 (2025-04-10)](#v4211-2025-04-10)
 - [v4.2.10 (2025-03-31)](#v4210-2025-03-31)
 - [v4.2.9 (2025-03-30)](#v429-2025-03-30)
 - [v4.2.8 (2025-03-28)](#v428-2025-03-28)
@@ -36,6 +37,18 @@ layout: default
 - [v1.0.0 (2018-01-29)](#v100-2018-01-29)
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
+
+### v4.2.11 (2025-04-10)
+
+#### Änderungen Desktop-Client
+
+* Aktualisierung der Abhängigkeiten im Backend
+* Aktualisierung der Abhängigkeiten im Application-Wrapper
+
+#### Änderungen Begleiter-Web-App
+
+* Aktualisierung der Abhängigkeiten im Backend
+* Aktualisierung der Abhängigkeiten im Frontend
 
 ### v4.2.10 (2025-03-31)
 
