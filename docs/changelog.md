@@ -38,6 +38,11 @@ layout: default
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
+
+### ??
+
+* Fix Country-Codes mit Fußnoten
+
 ### v4.2.11 (2025-04-10)
 
 #### Änderungen Desktop-Client
