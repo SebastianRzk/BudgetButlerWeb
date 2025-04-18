@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct ShareState {
-    shares: HashMap<ISIN, Share>,
+    pub shares: HashMap<ISIN, Share>,
 }
 
 impl Default for ShareState {

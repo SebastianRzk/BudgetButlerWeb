@@ -1,3 +1,4 @@
+pub mod cargo;
 pub mod cli;
 pub mod disk;
 pub mod env;

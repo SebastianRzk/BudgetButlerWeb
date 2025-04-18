@@ -9,6 +9,13 @@ layout: default
 
 Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung.
 
+## Leitsatz: Einfachheit schlägt Perfektion
+
+BudgetButlerWeb ist nach dem Pareto Prinzip gestaltet: Mit 20% des Aufwands 80% erreichen. Es akzeptiert Un-Perfektion, weil Menschen
+nun einmal nicht perfekt sind. Anstelle von aufwändigen Soll/Haben Prozessen wird Einnahmen, Ausgaben und Sparen mittels
+Input/Output Prinzip einfach verständlich und effizient ermittelt und verwaltet. Der Nutzer ist nicht in der Rolle eines
+Finanzbuchhalters, sondern ein Mensch, der seine Finanzen im Griff haben möchte.
+
 ## Inhaltsverzeichnis
 
 * [Idee](#idee)
@@ -16,8 +23,8 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 * [Unterstützte Plattformen](#unterstützte-plattformen)
 * [Mitmachen](#mitmachen)
 * [Screenshots](#screenshots)
-	* [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
-	* [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
+    * [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
+    * [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
 
 ## Weiterführende Links
 
@@ -42,31 +49,31 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 ## Merkmale
 
 * **Einzelbuchungen**
-	* **Erfassen, Ändern, Löschen**: Verwalte Einnahmen und Ausgaben einfach und effizient.
-	* **Daueraufträge**: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob
-	  in der Zukunft oder in der Vergangenheit.
-	* **Monats- und Jahresübersicht**: : Behalten deine Finanzen im Blick mit detaillierten Übersichten.
-	* Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht
-	* Importiere Buchungen aus der Begleiter Web-App.
+    * **Erfassen, Ändern, Löschen**: Verwalte Einnahmen und Ausgaben einfach und effizient.
+    * **Daueraufträge**: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob
+      in der Zukunft oder in der Vergangenheit.
+    * **Monats- und Jahresübersicht**: : Behalten deine Finanzen im Blick mit detaillierten Übersichten.
+    * Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht
+    * Importiere Buchungen aus der Begleiter Web-App.
 
 * **Gemeinsame Buchungen**
-	* **Verwalten**: Erfasse, ändere und lösche gemeinsame Buchungen.
-	* **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
-	  Abrechnungsmöglichkeiten stehen zur Verfügung.
-	* **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
+    * **Verwalten**: Erfasse, ändere und lösche gemeinsame Buchungen.
+    * **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
+      Abrechnungsmöglichkeiten stehen zur Verfügung.
+    * **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
 
 * **Sparen**
-	* **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
-	  einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
-	* **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
-	  deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
-	* **ETF-Portfolio**: (aktuell nur durch manuelle Konfiguration möglich) Analysiere dein ETF-Portfolio nach Kosten,
-	  Sektoren und Ländern.
+    * **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
+      einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
+    * **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
+      deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
+    * **ETF-Portfolio**: (aktuell nur durch manuelle Konfiguration möglich) Analysiere dein ETF-Portfolio nach Kosten,
+      Sektoren und Ländern.
 
 * **Konfiguration**
-	* **Anpassung**: Passe das Farbthema und die Kategorien nach deinen Wünschen an.
-	* **Übergreifende Aktionen**: Führe Aktionen wie das Umbenennen von Kategorien oder das Ausschließen von
-	  Kategorien für Eingabefelder durch.
+    * **Anpassung**: Passe das Farbthema und die Kategorien nach deinen Wünschen an.
+    * **Übergreifende Aktionen**: Führe Aktionen wie das Umbenennen von Kategorien oder das Ausschließen von
+      Kategorien für Eingabefelder durch.
 
 ## Unterstützte Plattformen
 
