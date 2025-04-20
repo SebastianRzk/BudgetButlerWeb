@@ -17,11 +17,11 @@ layout: default
 * [Installation in Arch Linux mittels AUR](#installation-in-arch-linux-mittels-aur)
 * [Installation in Arch Linux mittels PKGBUILD](#installation-in-arch-linux-mittels-pkgbuild)
 * [Installation mit docker / docker-compose](#installation-mit-docker--docker-compose)
-	* [Nutzung von fertigem Image aus Docker-Hub](#nutzung-von-fertigem-image-aus-docker-hub)
-	* [Selbst gebautes Docker-Image](#selbst-gebautes-docker-image)
+    * [Nutzung von fertigem Image aus Docker-Hub](#nutzung-von-fertigem-image-aus-docker-hub)
+    * [Selbst gebautes Docker-Image](#selbst-gebautes-docker-image)
 * [Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)](#manuelle-installation-linux-mit-anpassungen-aber-auch-für-windows-und-macos)
-	* [Systemvoraussetzungen](#systemvoraussetzungen)
-	* [BudgetButlerWeb starten](#budgetbutlerweb-starten)
+    * [Systemvoraussetzungen](#systemvoraussetzungen)
+    * [BudgetButlerWeb starten](#budgetbutlerweb-starten)
 * [Updates](#updates)
 * [Umgebungsvariablen](#umgebungsvariablen)
 * [Betrieb mit Docker / Docker-Compose](#betrieb-mit-docker--docker-compose)
@@ -57,9 +57,9 @@ auch [Docker-Hub](https://hub.docker.com/r/sebastianrzk/budgetbutlerweb-desktopa
 
 ### Selbst gebautes Docker-Image
 
-Neben dem fertigen Image kann die Anwendung auch selbst gebaut werden. 
+Neben dem fertigen Image kann die Anwendung auch selbst gebaut werden.
 
-Im Ordner `docker-compose-examples/budget_butler_desktop_local_build` befindet sich ein shell-script, welches ein 
+Im Ordner `docker-compose-examples/budget_butler_desktop_local_build` befindet sich ein shell-script, welches ein
 Docker-Image baut und das danebenliegende `docker-compose.yml` startet.
 
 ## Manuelle Installation (Linux, mit Anpassungen aber auch für Windows und MacOS)
@@ -174,13 +174,13 @@ Die Anwendung befindet sich in `butler_offline`.
 Hier sind die folgenden Verzeichnisse zu finden:
 
 * `src/`: Rust-Quelltext der Anwendung
-	* `src/main.rs`: Hauptdatei der Anwendung, welche den Webserver startet, die Routen in Form von Methoden einhängt
-	  und das
-	  initiale Setup durchführt
-	* `src/budgetbutler`: Fachlicher Quelltext
-	* `src/io`: Ein- und Ausgabe der Anwendung, beispielsweise für das Lesen und Schreiben von CSV-Dateien, oder für das
-	  Rendern von HTML-Dateien
-	* `src/model`: Datenmodell der Anwendung
+    * `src/main.rs`: Hauptdatei der Anwendung, welche den Webserver startet, die Routen in Form von Methoden einhängt
+      und das
+      initiale Setup durchführt
+    * `src/budgetbutler`: Fachlicher Quelltext
+    * `src/io`: Ein- und Ausgabe der Anwendung, beispielsweise für das Lesen und Schreiben von CSV-Dateien, oder für das
+      Rendern von HTML-Dateien
+    * `src/model`: Datenmodell der Anwendung
 * `templates/`: HTML-Dateien, welche mittels `askama` in die Webseite eingebunden werden
 * `static/`: Statische Dateien, wie CSS-Dateien, Schriftarten, Bilder und JavaScript-Dateien
 
@@ -189,3 +189,9 @@ erreichbar.
 
 In `application-wrapper` befindet sich der Electron-Client. Dieser startet die Rust-Anwendung und öffnet ein Fenster, in
 dem die Webseite angezeigt wird.
+
+### Erweiterung des ISIN-Datensatzes für die Depot-Analyse
+
+Der ISIN-Datensatz wird im
+Projekt [BudgetButlerWeb-ISIN-Data](https://github.com/SebastianRzk/BudgetButlerWeb-ISIN-Data) verwaltet und kann dort
+erweitert werden. 
