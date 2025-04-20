@@ -133,7 +133,7 @@ pub fn sparen_menu() -> RootMenu {
             },
             MenuEntry {
                 url: SPAREN_UEBERSICHT_ETFS.to_string(),
-                name: "ETF Übersicht".to_string(),
+                name: "Depot Analyse".to_string(),
                 icon: LINE_CHART,
             },
             MenuEntry {

@@ -67,8 +67,7 @@ Finanzbuchhalters, sondern ein Mensch, der seine Finanzen im Griff haben möchte
       einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
     * **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
       deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
-    * **ETF-Portfolio**: (aktuell nur durch manuelle Konfiguration möglich) Analysiere dein ETF-Portfolio nach Kosten,
-      Sektoren und Ländern.
+    * **ETF-Portfolio**: Analysiere dein ETF-Portfolio nach Kosten, Sektoren und Ländern.
 
 * **Konfiguration**
     * **Anpassung**: Passe das Farbthema und die Kategorien nach deinen Wünschen an.

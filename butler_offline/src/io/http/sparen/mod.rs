@@ -1,3 +1,4 @@
+pub mod aktualisiere_isin_daten;
 pub mod error_depotauszug_bereits_erfasst;
 pub mod error_isin_bereits_erfasst;
 pub mod modify_depotauszug;

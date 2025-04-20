@@ -5,8 +5,8 @@ use crate::budgetbutler::view::routes::CORE_IMPORT;
 use crate::io::http::shared::redirect_authenticated::{
     RedirectAuthenticatedRenderPageType, RedirectAuthenticatedResult,
 };
-use crate::io::online::delete_kategorien::request_delete_kategorien;
-use crate::io::online::set_kategorien::request_set_kategorien;
+use crate::io::online::begleiterapp::delete_kategorien::request_delete_kategorien;
+use crate::io::online::begleiterapp::set_kategorien::request_set_kategorien;
 use crate::model::remote::login::LoginCredentials;
 use crate::model::state::config::Configuration;
 use crate::model::state::persistent_application_state::Database;

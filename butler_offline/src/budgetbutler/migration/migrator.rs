@@ -1,7 +1,7 @@
 use crate::budgetbutler::migration::model::ApplicationVersion;
 use crate::io::disk::shares::save_shares;
 use crate::io::disk::version::save_user_data_version;
-use crate::model::shares::ShareState;
+use crate::model::shares::shares_state::ShareState;
 use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 use crate::model::user_data::SHARES_FILE_NAME;
 use std::fs;
@@ -39,14 +39,19 @@ pub fn run_migrations(
 }
 
 fn migriere_4_3_0(user_application_directory: &UserApplicationDirectory) {
-    fs::copy(
-        user_application_directory.path.join(SHARES_FILE_NAME),
-        user_application_directory
-            .path
-            .join(format!("{}.4.3.0.migration.backup", SHARES_FILE_NAME)),
-    )
-    .expect("Could not copy shares file");
-    save_shares(user_application_directory, &ShareState::default());
+    let shares_filename = user_application_directory.path.join(SHARES_FILE_NAME);
+    if shares_filename.exists() {
+        fs::copy(
+            shares_filename,
+            user_application_directory
+                .path
+                .join(format!("{}.4.3.0.migration.backup", SHARES_FILE_NAME)),
+        )
+        .expect("Could not copy shares file");
+        save_shares(user_application_directory, &ShareState::default());
+    } else {
+        println!("No shares file found, no migration needed.");
+    }
 }
 
 fn print_running_migration(migration: ApplicationVersion) {

@@ -17,6 +17,7 @@ pub mod add_konto;
 pub mod add_order;
 pub mod add_order_dauerauftrag;
 pub mod add_sparbuchung;
+pub mod alternative_isin;
 pub mod etf_calculations;
 pub mod split_order_dauerauftrag;
 pub mod uebersicht_calculations;

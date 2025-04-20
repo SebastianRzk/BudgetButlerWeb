@@ -1,5 +1,5 @@
-use crate::io::online::request::{get_request, ErrorOnRequest};
-use crate::io::online::routes::gemeinsame_buchungen_route;
+use crate::io::online::begleiterapp::routes::gemeinsame_buchungen_route;
+use crate::io::online::request::{authenticated_get_request, ErrorOnRequest};
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
@@ -17,7 +17,7 @@ pub async fn request_gemeinsame_buchungen(
     login_credentials: LoginCredentials,
 ) -> Result<Vec<GemeinsameBuchung>, ErrorOnRequest> {
     let url = gemeinsame_buchungen_route(server_configuration);
-    let request = get_request(url, login_credentials.clone()).await?;
+    let request = authenticated_get_request(url, login_credentials.clone()).await?;
     let result_dtos = serde_json::from_str::<Vec<GemeinsamebuchungDto>>(&request).unwrap();
     println!("Result dto {:?}", result_dtos);
     let result = map_gemeinsame_buchungen(
@@ -83,7 +83,7 @@ pub fn map_gemeinsame_buchung(
 
 #[cfg(test)]
 mod tests {
-    use crate::io::online::get_gemeinsame_buchungen::{
+    use crate::io::online::begleiterapp::get_gemeinsame_buchungen::{
         map_gemeinsame_buchung, GemeinsamebuchungDto,
     };
     use crate::model::primitives::person::builder::{demo_partner, demo_self};

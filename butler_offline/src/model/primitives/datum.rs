@@ -108,6 +108,14 @@ impl Datum {
             jahr.parse().unwrap(),
         )
     }
+
+    pub fn first() -> Datum {
+        Datum::new(0, 0, 0)
+    }
+
+    pub fn last() -> Datum {
+        Datum::new(31, 12, 9999)
+    }
 }
 
 impl PartialOrd<Self> for Datum {
@@ -167,16 +175,6 @@ pub mod builder {
     pub fn jahres_name(jahr: &str) -> JahresName {
         JahresName {
             jahr: jahr.to_string(),
-        }
-    }
-
-    impl Datum {
-        pub fn first() -> Datum {
-            Datum::new(0, 0, 0)
-        }
-
-        pub fn last() -> Datum {
-            Datum::new(31, 12, 9999)
         }
     }
 }

@@ -39,9 +39,13 @@ layout: default
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
 
-### ??
+### v4.3.0 ??
 
+#### Änderungen Desktop-Client
+
+* Feature: Ünterstützung neuer ETF-API [BudgetButlerWeb-ISIN-Data](https://github.com/SebastianRzk/BudgetButlerWeb-ISIN-Data)
 * Fix Country-Codes mit Fußnoten
+* Fix Gesamtkosten-Berechnung in ETF-Analyse
 
 ### v4.2.11 (2025-04-10)
 

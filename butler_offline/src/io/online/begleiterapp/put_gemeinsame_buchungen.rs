@@ -1,5 +1,5 @@
+use crate::io::online::begleiterapp::routes::gemeinsame_buchungen_batch_route;
 use crate::io::online::request::{post_request, ErrorOnRequest};
-use crate::io::online::routes::gemeinsame_buchungen_batch_route;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::primitives::person::Person;
 use crate::model::remote::login::LoginCredentials;
@@ -56,7 +56,7 @@ pub fn map_gemeinsame_buchung(
 
 #[cfg(test)]
 mod tests {
-    use crate::io::online::put_gemeinsame_buchungen::map_gemeinsame_buchung;
+    use crate::io::online::begleiterapp::put_gemeinsame_buchungen::map_gemeinsame_buchung;
     use crate::model::database::gemeinsame_buchung::builder::gemeinsame_buchung_mit_person;
     use crate::model::primitives::person::builder::person;
 

@@ -1,5 +1,5 @@
-use crate::io::online::request::{get_request, ErrorOnRequest};
-use crate::io::online::routes::einzelbuchungen_route;
+use crate::io::online::begleiterapp::routes::einzelbuchungen_route;
+use crate::io::online::request::{authenticated_get_request, ErrorOnRequest};
 use crate::model::database::einzelbuchung::Einzelbuchung;
 use crate::model::primitives::betrag::Betrag;
 use crate::model::primitives::datum::Datum;
@@ -14,7 +14,7 @@ pub async fn request_einzelbuchungen(
     login_credentials: LoginCredentials,
 ) -> Result<Vec<Einzelbuchung>, ErrorOnRequest> {
     let url = einzelbuchungen_route(server_configuration);
-    let request = get_request(url, login_credentials).await?;
+    let request = authenticated_get_request(url, login_credentials).await?;
     let result_dtos = serde_json::from_str::<Vec<EinzelbuchungDto>>(&request).unwrap();
     println!("Result dto {:?}", result_dtos);
     let result = map_einzelbuchungen(result_dtos);
@@ -45,7 +45,7 @@ pub fn map_einzelbuchung(dto: EinzelbuchungDto) -> Einzelbuchung {
 
 #[cfg(test)]
 mod tests {
-    use crate::io::online::login::request_login;
+    use crate::io::online::begleiterapp::login::request_login;
     use crate::model::local::LocalServerName;
     use crate::model::remote::server::ServerConfiguration;
 

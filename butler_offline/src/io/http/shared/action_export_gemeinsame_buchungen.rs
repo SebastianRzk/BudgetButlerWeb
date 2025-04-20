@@ -5,7 +5,7 @@ use crate::budgetbutler::view::routes::CORE_IMPORT;
 use crate::io::http::shared::redirect_authenticated::{
     RedirectAuthenticatedRenderPageType, RedirectAuthenticatedResult,
 };
-use crate::io::online::put_gemeinsame_buchungen::put_gemeinsame_buchungen;
+use crate::io::online::begleiterapp::put_gemeinsame_buchungen::put_gemeinsame_buchungen;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::remote::login::LoginCredentials;
 use crate::model::state::config::Configuration;

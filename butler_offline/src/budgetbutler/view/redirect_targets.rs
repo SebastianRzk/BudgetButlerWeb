@@ -1,4 +1,5 @@
 use crate::budgetbutler::view::request_handler::Redirect;
+use crate::model::primitives::isin::ISIN;
 
 pub fn redirect_to_optimistic_locking_error() -> Redirect {
     Redirect {
@@ -21,6 +22,18 @@ pub fn redirect_to_isin_bereits_erfasst() -> Redirect {
 pub fn redirect_to_depotauszug_bereits_erfasst() -> Redirect {
     Redirect {
         target: "/error-depotauszug-bereits-erfasst".to_string(),
+    }
+}
+
+pub fn redirect_to_depot_analyse_mit_message(message: String) -> Redirect {
+    Redirect {
+        target: format!("/uebersicht_etfs/?message={}", message),
+    }
+}
+
+pub fn redirect_to_aktualisiere_isin_alternativ(isin: &ISIN) -> Redirect {
+    Redirect {
+        target: format!("/aktualisiere_isin_alternativ/{}", isin.isin),
     }
 }
 

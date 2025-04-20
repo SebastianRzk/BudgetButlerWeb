@@ -6,10 +6,9 @@ use crate::budgetbutler::pages::sparen::etf_calculations::make_pie_from_table::m
 use crate::model::database::depotwert::Depotwert;
 use crate::model::metamodel::chart::PieChart;
 use crate::model::primitives::betrag::Betrag;
-use crate::model::primitives::datum::Datum;
 use crate::model::primitives::isin::ISIN;
 use crate::model::primitives::prozent::Prozent;
-use crate::model::shares::{ShareData, ShareState};
+use crate::model::shares::shares_state::{ShareSnapshot, ShareState};
 use crate::model::state::persistent_application_state::Database;
 
 pub struct UebersichtEtfContext<'a> {
@@ -46,7 +45,7 @@ pub struct ETFKosten {
 
 pub struct DepotwertMitDaten {
     pub depotwert: Depotwert,
-    pub data: ShareData,
+    pub data: ShareSnapshot,
     pub aktueller_kontostand: Betrag,
 }
 
@@ -74,7 +73,7 @@ pub fn handle_uebersicht_etf(context: UebersichtEtfContext) -> UebersichtEtfView
 
     for depotwert in context.database.depotwerte.depotwerte.iter() {
         let isin = depotwert.value.isin.clone();
-        let share = context.shares.get_share(isin);
+        let share = context.shares.get_share(&isin);
         let aktueller_kontostand =
             berechne_aktuellen_depotwert_stand(depotwert.value.as_referenz(), context.database);
 
@@ -88,7 +87,7 @@ pub fn handle_uebersicht_etf(context: UebersichtEtfContext) -> UebersichtEtfView
                 name_lokal: depotwert.value.name.name.clone(),
                 name_global: data.data.name.clone(),
                 isin: depotwert.value.isin.clone(),
-                letzte_aktualisierung: Datum::from_german_string(&data.date).to_german_string(),
+                letzte_aktualisierung: data.datum.to_german_string(),
             });
         } else {
             etfs.push(EtfInfo {

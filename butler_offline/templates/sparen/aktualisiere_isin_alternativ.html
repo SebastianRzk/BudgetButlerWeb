@@ -1,0 +1,28 @@
+<div class="input-theme">
+    <div class="box last-elements-box">
+        <div class="box-header">
+            <h3 class="box-title">ISIN Alternativen Werten zuordnen</h3>
+        </div>
+        <div class="box-body">
+            Leider kann für die ISIN {{ isin }} kein Wert gefunden werden. <br>
+            Der Online-Datensatz kann gerne um weiter Werte ergänzt werden, mehr Informationen gibt es in der <a
+                href="https://github.com/SebastianRzk/BudgetButlerWeb-ISIN-Data" target="_blank">Dokumentation
+            (Link)</a> <br>Alternativ kann ein Wert einer anderen ISIN verwendet werden, wenn dieser sich beispielsweise
+            an einem ähnlichen oder sogar dem gleichen Index orientiert. <br>
+
+            <form action="/aktualisiere_isin_alternativ/{{ isin }}" method="post">
+                <p>Bitte wähle eine der folgenden Optionen:</p>
+                <input type="radio" id="nichts_tun" name="alternative_isin" value="nichts_tun" checked>
+                <label for="html">Nichts tun</label><br>
+                {% for isin_alternative in isin_alternativen %}
+                    <input type="radio" id="{{ isin_alternative.isin }}" name="alternative_isin"
+                           value="{{ isin_alternative.isin }}">
+                    <label for="css">{{ isin_alternative.display_name }}</label><br>
+                {% endfor %}
+                <div class="box-footer">
+                    <button type="submit" name="action" value="Submit" id="add">Auswahl bestätigen</button>
+                </div>
+
+            </form>
+        </div>
+    </div>

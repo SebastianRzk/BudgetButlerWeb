@@ -30,6 +30,7 @@ use crate::io::http::shared::import_gemeinsame_remote::import_gemeinsam_request;
 use crate::io::http::shared::import_remote::import_einzelbuchungen_request;
 use crate::io::http::shared::redirect_authenticated::logged_in_callback;
 use crate::io::http::shared::{export_import, import_mapping};
+use crate::io::http::sparen::aktualisiere_isin_daten;
 use crate::io::http::sparen::error_depotauszug_bereits_erfasst::error_depotauszug_bereits_erfasst;
 use crate::io::http::sparen::error_isin_bereits_erfasst::error_isin_bereits_erfasst;
 use crate::io::http::sparen::{
@@ -46,6 +47,7 @@ use crate::model::state::non_persistent_application_state::{
     OnlineRedirectState, OrderChanges, OrderDauerauftragChanges, SparbuchungenChanges,
     StaticPathDirectory, UserApplicationDirectory,
 };
+use crate::model::state::shares::SharesData;
 use io::http::core::{configuration, dashboard};
 use io::http::einzelbuchungen::{
     dauerauftraege_uebersicht, einzelbuchungen_uebersicht, modify_ausgabe,
@@ -132,7 +134,9 @@ async fn main() -> std::io::Result<()> {
         app_port,
     });
 
-    let shares_state = Data::new(load_shares(&user_application_directory));
+    let shares_state = Data::new(SharesData {
+        data: Mutex::new(load_shares(&user_application_directory)),
+    });
 
     let user_application_directory = Data::new(user_application_directory);
     let static_path_directory = Data::new(StaticPathDirectory { path: static_path });
@@ -258,6 +262,9 @@ async fn main() -> std::io::Result<()> {
             .service(uebersicht_sparen::get_view)
             .service(uebersicht_etfs::get_view)
             .service(submit_reload_database)
+            .service(aktualisiere_isin_daten::aktualisiere)
+            .service(aktualisiere_isin_daten::update_isin_alternativ)
+            .service(aktualisiere_isin_daten::get_view_alternativ)
     })
     .bind((get_port_binding_domain(app_domain), app_port))?
     .run()
