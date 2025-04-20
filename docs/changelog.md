@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.3.0 (2025-04-21)](#v430-2025-04-21)
 - [v4.2.11 (2025-04-10)](#v4211-2025-04-10)
 - [v4.2.10 (2025-03-31)](#v4210-2025-03-31)
 - [v4.2.9 (2025-03-30)](#v429-2025-03-30)
@@ -38,12 +39,12 @@ layout: default
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
-
-### v4.3.0 ??
+### v4.3.0 (2025-04-21)
 
 #### Änderungen Desktop-Client
 
-* Feature: Ünterstützung neuer ETF-API [BudgetButlerWeb-ISIN-Data](https://github.com/SebastianRzk/BudgetButlerWeb-ISIN-Data)
+* Feature: Ünterstützung neuer
+  ETF-API [BudgetButlerWeb-ISIN-Data](https://github.com/SebastianRzk/BudgetButlerWeb-ISIN-Data)
 * Fix Country-Codes mit Fußnoten
 * Fix Gesamtkosten-Berechnung in ETF-Analyse
 
@@ -70,7 +71,6 @@ layout: default
 #### Änderungen Desktop-Client
 
 * Bugfix: Statische Ressourcen werden im Docker-Image der Desktop-App korrekt ausgeliefert
-
 
 ### v4.2.8 (2025-03-28)
 
