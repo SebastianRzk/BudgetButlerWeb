@@ -5,7 +5,7 @@ use crate::io::html::views::templates::chart_templates::{map_pie_chart, PieChart
 use askama::Template;
 
 #[derive(Template)]
-#[template(path = "sparen/uebersicht_etfs.html")]
+#[template(path = "sparen/etf_analyse.html")]
 pub struct UebersichtEtfsTemplate {
     etfs: Vec<EtfInfoTemplate>,
     kosten: ETFKostenUebersichtTemplate,

@@ -1,5 +1,5 @@
 use crate::budgetbutler::view::request_handler::Redirect;
-use crate::io::online::routes::offline_login_route;
+use crate::io::online::begleiterapp::routes::offline_login_route;
 use crate::model::local::LocalServerName;
 use crate::model::remote::server::ServerConfiguration;
 
@@ -12,7 +12,7 @@ pub fn request_login(
 
 #[cfg(test)]
 mod tests {
-    use crate::io::online::login::request_login;
+    use crate::io::online::begleiterapp::login::request_login;
     use crate::model::local::LocalServerName;
     use crate::model::remote::server::ServerConfiguration;
 

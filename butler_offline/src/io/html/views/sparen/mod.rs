@@ -4,6 +4,7 @@ pub mod add_konto;
 pub mod add_order;
 pub mod add_order_dauerauftrag;
 pub mod add_sparbuchungen;
+pub mod alternative_isin;
 pub mod error_depotauszug_bereits_erfasst;
 pub mod error_isin_bereits_erfasst;
 pub mod split_order_dauerauftrag;

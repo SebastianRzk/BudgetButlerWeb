@@ -1,5 +1,5 @@
+use crate::io::online::begleiterapp::routes::kategorien_batch_route;
 use crate::io::online::request::{post_request, ErrorOnRequest};
-use crate::io::online::routes::kategorien_batch_route;
 use crate::model::primitives::kategorie::Kategorie;
 use crate::model::remote::login::LoginCredentials;
 use crate::model::remote::server::ServerConfiguration;

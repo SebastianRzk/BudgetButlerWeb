@@ -30,7 +30,7 @@ pub fn berechne_kostenuebersicht(
         gesamt: ETFKosten {
             name: "Gesamt".to_string(),
             prozent: Prozent::from_betrags_differenz(&gesamtkosten_euro, &gesamt_summe),
-            euro: gesamt_summe,
+            euro: gesamtkosten_euro,
         },
         data: depotwerte,
     }
@@ -41,7 +41,7 @@ mod tests {
     use crate::model::database::depotwert::builder::depotwert_mit_name;
     use crate::model::primitives::betrag::builder::betrag;
     use crate::model::primitives::betrag::Vorzeichen::Positiv;
-    use crate::model::shares::builder::share_data_mit_kosten;
+    use crate::model::shares::shares_state::builder::share_data_mit_kosten;
 
     #[test]
     fn test_berechne_kostenuebersicht() {
@@ -67,7 +67,14 @@ mod tests {
 
         let result = berechne_kostenuebersicht(&depotwerte_mit_kontostand, gesamt_summe);
 
-        assert_eq!(result.gesamt.euro, betrag(3000));
+        assert_eq!(
+            result.gesamt.euro,
+            Betrag {
+                euro: 4,
+                cent: 50,
+                vorzeichen: Positiv,
+            }
+        );
         assert_eq!(
             result.gesamt.prozent,
             Prozent::from_str_representation("0.15")

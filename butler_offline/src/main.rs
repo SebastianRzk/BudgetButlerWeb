@@ -8,9 +8,12 @@ pub mod model;
 
 use crate::budgetbutler::config::{get_domain, get_port, get_protocol, init_and_load_config};
 use crate::budgetbutler::database::init::init_database;
+use crate::budgetbutler::migration::migrator::run_migrations;
+use crate::io::cargo::get_current_application_version;
 use crate::io::cli::endpoints::get_cli_args;
 use crate::io::disk::butler::{compute_static_path, user_data_location};
 use crate::io::disk::shares::load_shares;
+use crate::io::disk::version::load_user_data_version;
 use crate::io::http::core::error_keine_aktion_gefunden::error_keine_aktion_gefunden;
 use crate::io::http::core::error_optimistic_locking::error_optimistic_locking;
 use crate::io::http::core::submit_reload_database::submit_reload_database;
@@ -27,6 +30,7 @@ use crate::io::http::shared::import_gemeinsame_remote::import_gemeinsam_request;
 use crate::io::http::shared::import_remote::import_einzelbuchungen_request;
 use crate::io::http::shared::redirect_authenticated::logged_in_callback;
 use crate::io::http::shared::{export_import, import_mapping};
+use crate::io::http::sparen::aktualisiere_isin_daten;
 use crate::io::http::sparen::error_depotauszug_bereits_erfasst::error_depotauszug_bereits_erfasst;
 use crate::io::http::sparen::error_isin_bereits_erfasst::error_isin_bereits_erfasst;
 use crate::io::http::sparen::{
@@ -43,6 +47,7 @@ use crate::model::state::non_persistent_application_state::{
     OnlineRedirectState, OrderChanges, OrderDauerauftragChanges, SparbuchungenChanges,
     StaticPathDirectory, UserApplicationDirectory,
 };
+use crate::model::state::shares::SharesData;
 use io::http::core::{configuration, dashboard};
 use io::http::einzelbuchungen::{
     dauerauftraege_uebersicht, einzelbuchungen_uebersicht, modify_ausgabe,
@@ -54,16 +59,21 @@ async fn main() -> std::io::Result<()> {
 
     let user_data_location = user_data_location(&cli_args);
     let static_path = compute_static_path(&cli_args);
+    let user_application_directory = UserApplicationDirectory {
+        path: user_data_location.clone(),
+    };
+
+    run_migrations(
+        get_current_application_version(),
+        load_user_data_version(&user_application_directory),
+        &user_application_directory,
+    );
 
     let app_domain = get_domain();
     let app_port: u16 = get_port();
     let app_protocol: String = get_protocol();
 
     let config = init_and_load_config(&user_data_location);
-
-    let user_application_directory = UserApplicationDirectory {
-        path: user_data_location.clone(),
-    };
 
     let database = init_database(&user_data_location, &config, &user_application_directory);
 
@@ -124,7 +134,9 @@ async fn main() -> std::io::Result<()> {
         app_port,
     });
 
-    let shares_state = Data::new(load_shares(&user_data_location));
+    let shares_state = Data::new(SharesData {
+        data: Mutex::new(load_shares(&user_application_directory)),
+    });
 
     let user_application_directory = Data::new(user_application_directory);
     let static_path_directory = Data::new(StaticPathDirectory { path: static_path });
@@ -250,6 +262,9 @@ async fn main() -> std::io::Result<()> {
             .service(uebersicht_sparen::get_view)
             .service(uebersicht_etfs::get_view)
             .service(submit_reload_database)
+            .service(aktualisiere_isin_daten::aktualisiere)
+            .service(aktualisiere_isin_daten::update_isin_alternativ)
+            .service(aktualisiere_isin_daten::get_view_alternativ)
     })
     .bind((get_port_binding_domain(app_domain), app_port))?
     .run()

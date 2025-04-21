@@ -4,7 +4,7 @@ use crate::budgetbutler::view::optimistic_locking::{
 use crate::budgetbutler::view::redirect_targets::redirect_to_optimistic_locking_error;
 use crate::io::http::redirect::http_redirect;
 use crate::io::http::shared::server_url_updater::update_server_url;
-use crate::io::online::login::request_login;
+use crate::io::online::begleiterapp::login::request_login;
 use crate::model::local::LocalServerName;
 use crate::model::state::config::ConfigurationData;
 use crate::model::state::non_persistent_application_state::{

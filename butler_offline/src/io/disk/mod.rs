@@ -7,4 +7,5 @@ pub mod primitive;
 pub mod reader;
 pub mod shares;
 pub mod updater;
+pub mod version;
 pub mod writer;

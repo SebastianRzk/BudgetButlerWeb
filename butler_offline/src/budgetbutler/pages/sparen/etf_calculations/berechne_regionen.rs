@@ -121,8 +121,9 @@ mod tests {
     use crate::budgetbutler::pages::sparen::uebersicht_etfs::DepotwertMitDaten;
     use crate::model::database::depotwert::builder::depotwert_mit_name;
     use crate::model::primitives::betrag::{Betrag, Vorzeichen};
+    use crate::model::primitives::datum::builder::any_datum;
     use crate::model::primitives::prozent::Prozent;
-    use crate::model::shares::{ShareData, ShareDataContent};
+    use crate::model::shares::shares_state::{ShareDataContent, ShareSnapshot};
     use std::collections::HashMap;
 
     #[test]
@@ -145,13 +146,14 @@ mod tests {
         let depotwerte_mit_kontostand = vec![
             DepotwertMitDaten {
                 depotwert: depotwert_mit_name("Depotwert1"),
-                data: ShareData {
-                    date: "any datum".to_string(),
+                data: ShareSnapshot {
+                    datum: any_datum(),
                     source: "any source".to_string(),
                     data: ShareDataContent {
                         sektoren: HashMap::new(),
                         name: "any name".to_string(),
                         index_name: "any index name".to_string(),
+                        nachhaltigkeitskriterium: None,
                         kosten: 0.0,
                         regionen: depotwert1_regionen,
                     },
@@ -160,13 +162,14 @@ mod tests {
             },
             DepotwertMitDaten {
                 depotwert: depotwert_mit_name("Depotwert2"),
-                data: ShareData {
-                    date: "any datum".to_string(),
+                data: ShareSnapshot {
+                    datum: any_datum(),
                     source: "any source".to_string(),
                     data: ShareDataContent {
                         sektoren: HashMap::new(),
                         name: "any name".to_string(),
                         index_name: "any index name".to_string(),
+                        nachhaltigkeitskriterium: None,
                         kosten: 0.0,
                         regionen: depotwert2_regionen,
                     },
@@ -251,12 +254,13 @@ mod tests {
 
         let depotwerte_mit_kontostand = vec![DepotwertMitDaten {
             depotwert: depotwert_mit_name("Depotwert1"),
-            data: ShareData {
-                date: "any datum".to_string(),
+            data: ShareSnapshot {
+                datum: any_datum(),
                 source: "any source".to_string(),
                 data: ShareDataContent {
                     sektoren: HashMap::new(),
                     name: "any name".to_string(),
+                    nachhaltigkeitskriterium: None,
                     index_name: "any index name".to_string(),
                     kosten: 0.0,
                     regionen: depotwert_regionen,

@@ -1,6 +1,8 @@
 pub mod betrag;
 pub mod betrag_ohne_vorzeichen;
 pub mod datum;
+pub mod etf_index;
+pub mod etf_name;
 pub mod farbe;
 pub mod isin;
 pub mod kategorie;

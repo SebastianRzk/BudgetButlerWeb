@@ -2,7 +2,7 @@ use crate::model::remote::login::LoginCredentials;
 use reqwest::Client;
 use std::fmt::Debug;
 
-pub async fn get_request(
+pub async fn authenticated_get_request(
     route: String,
     login_credentials: LoginCredentials,
 ) -> Result<String, ErrorOnRequest> {
@@ -19,9 +19,19 @@ pub async fn get_request(
         .header("Accept", "application/json");
     let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     println!("HTTP Status{:?}", r_raw.status());
-    let test = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
-    println!("Result text {:?}", test);
-    Ok(test)
+    let text = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
+    println!("Result text {:?}", text);
+    Ok(text)
+}
+
+pub async fn get_request(route: &str) -> Result<String, ErrorOnRequest> {
+    println!("GET request for {}", route);
+    let builder1 = Client::builder().build().unwrap().get(route);
+    let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
+    println!("HTTP Status {:?}", r_raw.status());
+    let text = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
+    println!("Result text {:?}", text);
+    Ok(text)
 }
 
 pub async fn post_request(

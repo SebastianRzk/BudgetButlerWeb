@@ -81,6 +81,7 @@ pub struct AdditionalKategorie {
     pub kategorie: Mutex<Option<Kategorie>>,
 }
 
+#[derive(Debug)]
 pub struct UserApplicationDirectory {
     pub path: PathBuf,
 }
