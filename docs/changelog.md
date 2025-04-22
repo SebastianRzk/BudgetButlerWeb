@@ -39,6 +39,12 @@ layout: default
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
+### v4.3.1 (2025-04-22)
+
+#### Änderungen Desktop-Client
+
+* Bug in Kreisdiagrammen bei der Genauigkeit der Nachkommastellen behoben
+
 ### v4.3.0 (2025-04-21)
 
 #### Änderungen Desktop-Client
