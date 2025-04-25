@@ -80,7 +80,7 @@ fn map_to_template(view_result: GemeinsamAbrechnenViewResult) -> GemeinsamAbrech
             .unwrap_or("".to_string()),
         set_limit_value: view_result
             .limit
-            .map(|x| x.value.abs().to_string())
+            .map(|x| x.value.abs().to_iso_string())
             .unwrap_or("50".to_string()),
         set_mindate: view_result.set_mindate.to_german_string(),
         set_mindate_rfc: view_result.set_mindate.to_iso_string(),

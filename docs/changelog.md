@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.3.2 (2025-04-25)](#v432-2025-04-25)
 - [v4.3.1 (2025-04-22)](#v431-2025-04-22)
 - [v4.3.0 (2025-04-21)](#v430-2025-04-21)
 - [v4.2.11 (2025-04-10)](#v4211-2025-04-10)
@@ -40,6 +41,14 @@ layout: default
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
+### v4.3.2 (2025-04-25)
+
+#### Änderungen Desktop-Client
+
+* Aktualisierung der Abhängigkeiten des Application-Wrappers
+* Internes Refactoring
+* Fix Gleitkomma-Trennungszeichen in Depotauszüge
+
 ### v4.3.1 (2025-04-22)
 
 #### Änderungen Desktop-Client
@@ -50,7 +59,7 @@ layout: default
 
 #### Änderungen Desktop-Client
 
-* Feature: Ünterstützung neuer
+* Feature: Unterstützung neuer
   ETF-API [BudgetButlerWeb-ISIN-Data](https://github.com/SebastianRzk/BudgetButlerWeb-ISIN-Data)
 * Fix Country-Codes mit Fußnoten
 * Fix Gesamtkosten-Berechnung in ETF-Analyse
@@ -106,7 +115,7 @@ layout: default
 
 #### Änderungen Begleiter-Web-App
 
-* Auf den Übersichts-Seiten sind die Beträge nun rechtsbündig ausgerichtet
+* Auf den Übersichtsseiten sind die Beträge nun rechtsbündig ausgerichtet
 
 ## v4.2.5 (2025-03-08)
 
@@ -124,7 +133,7 @@ layout: default
 ### Änderungen Desktop-Client
 
 - Aktualisieren von Pfad-Berechnung in der config.json. **Migration nötig**: Das Pfad-Präfix "data/" aus allen
-  bestehenden Konfigurations-Pfaden entfernen.
+  bestehenden Konfigurationspfaden entfernen.
 
 ## v4.2.3 (2025-03-06)
 
@@ -206,7 +215,7 @@ layout: default
 
 ### Änderungen Begleiter-Web-App
 
-- Hinzufügen von fehlendem Animations Modul
+- Hinzufügen von fehlendem Animationsmodul
 
 ## v4.0.3 (2024-01-23)
 
