@@ -11,7 +11,7 @@ impl Display for JSONBetragList {
             .content
             .iter()
             .map(|element| {
-                let format = format!("\"{}\"", element);
+                let format = format!("\"{}\"", element.to_iso_string());
                 format
             })
             .collect::<Vec<String>>()

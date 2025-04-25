@@ -46,7 +46,7 @@ pub fn map_to_template(
                     .iter()
                     .map(|depotwert| DepotwertTemplate {
                         depotwert: depotwert.depotwert.isin.isin.clone(),
-                        wert: depotwert.wert.to_string(),
+                        wert: depotwert.wert.to_german_string(),
                     })
                     .collect(),
             })
