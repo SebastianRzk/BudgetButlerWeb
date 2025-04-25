@@ -45,6 +45,7 @@ layout: default
 
 #### Änderungen Desktop-Client
 
+* Aktualisierung der Abhängigkeiten des Application-Wrappers
 * Internes Refactoring
 * Fix Gleitkomma-Trennungszeichen in Depotauszüge
 
