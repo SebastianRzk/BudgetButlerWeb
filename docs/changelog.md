@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.3.3 (2025-05-18)](#v433-2025-05-18)
 - [v4.3.2 (2025-04-25)](#v432-2025-04-25)
 - [v4.3.1 (2025-04-22)](#v431-2025-04-22)
 - [v4.3.0 (2025-04-21)](#v430-2025-04-21)
@@ -41,6 +42,20 @@ layout: default
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
 
+### v4.3.3 (2025-05-18)
+
+#### Änderungen Desktop-Client
+
+* Aktualisierung der Abhängigkeiten des Application-Wrappers
+* Aktualisierung der Abhängigkeiten des Rust-Backends
+
+#### Änderungen Begleiter-Web-App
+
+* Fix: Login-Redirect bei Export/Import
+* Fix: Korrektes Umbrechen von langen Texten in der Zusammenfassung bei der Ansicht "Ausgabe teilen"
+* Aktualisierung der Abhängigkeiten des Frontends
+* Aktualisierung der Abhängigkeiten des Backends
+
 ### v4.3.2 (2025-04-25)
 
 #### Änderungen Desktop-Client
@@ -53,7 +68,7 @@ layout: default
 
 #### Änderungen Desktop-Client
 
-* Bug in Kreisdiagrammen bei der Genauigkeit der Nachkommastellen behoben
+* Fix in Kreisdiagrammen bei der Genauigkeit der Nachkommastellen behoben
 
 ### v4.3.0 (2025-04-21)
 

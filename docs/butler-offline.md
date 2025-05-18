@@ -195,3 +195,38 @@ dem die Webseite angezeigt wird.
 Der ISIN-Datensatz wird im
 Projekt [BudgetButlerWeb-ISIN-Data](https://github.com/SebastianRzk/BudgetButlerWeb-ISIN-Data) verwaltet und kann dort
 erweitert werden. 
+
+
+### Bekannte Probleme / Herausforderungen
+
+
+#### Allgemein
+
+* Die Anwendung ist aktuell nur in deutscher Sprache verfügbar
+* Die Anwendung ist aktuell nur für Linux getestet
+* Die Anwendung ist aktuell nur für `x86_64` getestet
+
+#### Spezifisch
+
+##### 1. Das Starten der Applikation bricht mit folgender Meldung ab:
+```
+ Gtk-ERROR **: 21:57:46.125: GTK 2/3 symbols detected. Using GTK 2/3 and GTK 4 in the same process is not supported
+/usr/bin/budgetbutlerweb: Zeile 3:  4649 Trace/Breakpoint ausgelöst   (Speicherabzug geschrieben) electron /usr/share/budgetbutlerweb/app.asar --installed "$@"
+```
+
+Lösung: Warten auf eine neue Electron Version (36.2.1 ist nicht kompatibel mit GTK 4.0+)
+
+Work-Around: Electron Version <= 35.0 verwenden. Also beispielsweise das Paket `electron-35.0.0` installieren, und in der Datei `/usr/share/budgetbutlerweb/budgetbutlerweb` die Zeile `electron ...` durch `electron35 ...` ersetzen.
+
+##### 2. Das Bauen der Applikation bricht mit folgender Fehlermeldung ab:
+
+```
+An unhandled rejection has occurred inside Forge:
+Error [ERR_MODULE_NOT_FOUND]: 
+1. Cannot find module '/tmp/test/my-app/webpack.main.config' imported from /tmp/test/my-app/forge.config.ts
+2. Cannot find module '/tmp/test/my-app/webpack.main.config' imported from /tmp/test/my-app/forge.config.ts
+at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+```
+Lösung: BudgetButlerWeb auf die aktuelle Version aktualisieren.
+
+Work-Around: Node-Version <= 23.5 verwenden (siehe [Bug bei Electron Forge](https://github.com/electron/forge/issues/3872))
