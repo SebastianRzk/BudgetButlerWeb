@@ -90,11 +90,8 @@ mat-card-header {
   margin-bottom: 2ex;
 }
 
-dl { width: 100%; }
-dt, dd {
-  display: inline-block;
-  width: 50%;
-  margin: 0;
+dl {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto;
 }
-dt { float: left; }
-dd { float: right; }

@@ -11,7 +11,7 @@ import {
   PERSOENLICHE_BUCHUNGEN_UEBERSICHT_ROUTE,
   SETTINGS_ROUTE,
 } from '../app-routes';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
 
 export interface MenuItem {
@@ -100,7 +100,10 @@ export class MenuItemService {
   private opened = new BehaviorSubject(false);
   private visible = new BehaviorSubject(true);
 
-  public readonly opened$ = this.opened.asObservable();
+  public readonly opened$ = combineLatest({
+    opened: this.opened.asObservable(),
+    visible: this.visible.asObservable()
+  }).pipe(map(state => state.opened && state.visible));
 
   public readonly closed$ = this.opened$.pipe(map(opened => !opened));
 
