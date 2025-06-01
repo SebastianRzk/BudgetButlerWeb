@@ -11,7 +11,8 @@ Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung
 
 ## Leitsatz: Einfachheit schlägt Perfektion
 
-BudgetButlerWeb ist nach dem Pareto Prinzip gestaltet: Mit 20% des Aufwands 80% erreichen. Es akzeptiert Un-Perfektion, weil Menschen
+BudgetButlerWeb ist nach dem Pareto Prinzip gestaltet: Mit 20% des Aufwands 80% erreichen. Es akzeptiert Un-Perfektion,
+weil Menschen
 nun einmal nicht perfekt sind. Anstelle von aufwändigen Soll/Haben Prozessen wird Einnahmen, Ausgaben und Sparen mittels
 Input/Output Prinzip einfach verständlich und effizient ermittelt und verwaltet. Der Nutzer ist nicht in der Rolle eines
 Finanzbuchhalters, sondern ein Mensch, der seine Finanzen im Griff haben möchte.
@@ -23,8 +24,8 @@ Finanzbuchhalters, sondern ein Mensch, der seine Finanzen im Griff haben möchte
 * [Unterstützte Plattformen](#unterstützte-plattformen)
 * [Mitmachen](#mitmachen)
 * [Screenshots](#screenshots)
-    * [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
-    * [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
+	* [Screenshots BudgetButlerWeb Offline Anwendung](#screenshots-budgetbutlerweb-offline-anwendung)
+	* [Screenshots Begleiter Web-App](#screenshots-begleiter-web-app)
 
 ## Weiterführende Links
 
@@ -49,30 +50,30 @@ Finanzbuchhalters, sondern ein Mensch, der seine Finanzen im Griff haben möchte
 ## Merkmale
 
 * **Einzelbuchungen**
-    * **Erfassen, Ändern, Löschen**: Verwalte Einnahmen und Ausgaben einfach und effizient.
-    * **Daueraufträge**: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob
-      in der Zukunft oder in der Vergangenheit.
-    * **Monats- und Jahresübersicht**: : Behalten deine Finanzen im Blick mit detaillierten Übersichten.
-    * Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht
-    * Importiere Buchungen aus der Begleiter Web-App.
+	* **Erfassen, Ändern, Löschen**: Verwalte Einnahmen und Ausgaben einfach und effizient.
+	* **Daueraufträge**: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob
+	  in der Zukunft oder in der Vergangenheit.
+	* **Monats- und Jahresübersicht**: : Behalten deine Finanzen im Blick mit detaillierten Übersichten.
+	* Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht
+	* Importiere Buchungen aus der Begleiter Web-App.
 
 * **Gemeinsame Buchungen**
-    * **Verwalten**: Erfasse, ändere und lösche gemeinsame Buchungen.
-    * **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
-      Abrechnungsmöglichkeiten stehen zur Verfügung.
-    * **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
+	* **Verwalten**: Erfasse, ändere und lösche gemeinsame Buchungen.
+	* **Abrechnungen**: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene
+	  Abrechnungsmöglichkeiten stehen zur Verfügung.
+	* **Import**: Importiere gemeinsame Buchungen aus der Begleiter Web-App.
 
 * **Sparen**
-    * **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
-      einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
-    * **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
-      deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
-    * **ETF-Portfolio**: Analysiere dein ETF-Portfolio nach Kosten, Sektoren und Ländern.
+	* **Verwalten**: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels
+	  einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.
+	* **Übersichten**: Vergleichen deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance
+	  deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.
+	* **ETF-Portfolio**: Analysiere dein ETF-Portfolio nach Kosten, Sektoren und Ländern.
 
 * **Konfiguration**
-    * **Anpassung**: Passe das Farbthema und die Kategorien nach deinen Wünschen an.
-    * **Übergreifende Aktionen**: Führe Aktionen wie das Umbenennen von Kategorien oder das Ausschließen von
-      Kategorien für Eingabefelder durch.
+	* **Anpassung**: Passe das Farbthema und die Kategorien nach deinen Wünschen an.
+	* **Übergreifende Aktionen**: Führe Aktionen wie das Umbenennen von Kategorien oder das Ausschließen von
+	  Kategorien für Eingabefelder durch.
 
 ## Unterstützte Plattformen
 
@@ -83,8 +84,13 @@ Finanzbuchhalters, sondern ein Mensch, der seine Finanzen im Griff haben möchte
 | Linux-Desktop (any)     | selbst bauen                                                                                     | ✓ [Installationsanleitung](butler-offline.md)                                                           | ✓ Über Webrowser             | möglich, aktuell keine Dokumentation            |
 | Docker / docker-compose | [fertiges image von dockerhub](https://hub.docker.com/r/sebastianrzk/budgetbutlerweb-desktopapp) | ✓ [Installationsanleitung](butler-offline.md)                                                           |                              | ✓ [Installationsanleitung](butler-companion.md) |
 | Docker / docker-compose | selbst bauen                                                                                     | ✓ [Installationsanleitung](butler-offline.md)                                                           |                              | ✓ [Installationsanleitung](butler-companion.md) |
-| Windows                 | selbst bauen                                                                                     | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über WSL oder Docker | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
-| MacOS                   | selbst bauen                                                                                     | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über Docker          | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
+| Windows                 | selbst bauen *)                                                                                  | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über WSL oder Docker | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
+| MacOS                   | selbst bauen *)                                                                                  | nicht getestet, theoretisch möglich über eine Anpassung der `build.sh`, alternativ über Docker          | ✓ Über Webrowser             | Wahrscheinlich nicht ohne Anpassungen möglich   |
+
+*) Windows und MacOS sind aktuell nicht offiziell unterstützt, da ich weder die Kenntnisse noch die Hardware dafür habe.
+Über Pull-Requests oder Issues freue ich mich, wenn jemand die Anwendung auf diesen Plattformen portiert bekommt.
+Die Anwendung ist so konzipiert, dass sie auf diesen Plattformen laufen sollte, der Anpassungsaufwand sollte gering
+sein.
 
 ## Mitmachen
 
