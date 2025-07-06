@@ -23,7 +23,7 @@ pub fn read_next_element(zeile: Element) -> ParseErgebnis {
     let rest = if was_quoted {
         zeile
             .element
-            .strip_prefix(&format!("\"{}\"", element))
+            .strip_prefix(&format!("\"{element}\""))
             .unwrap()
     } else {
         zeile.element.strip_prefix(&element).unwrap()
@@ -75,7 +75,7 @@ impl Element {
         let element = element.clone().replace("\"", "");
         if element.contains(COMMA) {
             Element {
-                element: format!("\"{}\"", element),
+                element: format!("\"{element}\""),
             }
         } else {
             Element { element }

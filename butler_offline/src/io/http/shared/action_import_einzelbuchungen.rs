@@ -29,7 +29,7 @@ pub async fn import_einzelbuchungen_request(
         request_einzelbuchungen(&config.server_configuration, login.clone()).await;
     match einzelbuchungen {
         Ok(einzelbuchungen) => {
-            println!("{:?}", einzelbuchungen);
+            println!("{einzelbuchungen:?}");
             let abrechnung = Abrechnung {
                 lines: generiere_text(
                     EinfuehrungsText { lines: vec![] },
@@ -62,7 +62,7 @@ pub async fn import_einzelbuchungen_request(
                 .await
                 .unwrap();
 
-            println!("Abrechnung zu Import:\n{}", abrechnung_str);
+            println!("Abrechnung zu Import:\n{abrechnung_str}");
 
             let pruefe_kategorien =
                 pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind(database, &abrechnung);

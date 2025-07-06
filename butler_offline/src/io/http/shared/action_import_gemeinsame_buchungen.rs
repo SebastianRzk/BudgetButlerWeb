@@ -33,7 +33,7 @@ pub async fn import_gemeinsame_buchungen_request(
     .await;
     match gemeinsame_buchungen {
         Ok(gemeinsam) => {
-            println!("{:?}", gemeinsam);
+            println!("{gemeinsam:?}");
             let abrechnung = Abrechnung {
                 lines: generiere_text(
                     EinfuehrungsText { lines: vec![] },
@@ -67,7 +67,7 @@ pub async fn import_gemeinsame_buchungen_request(
                 .await
                 .unwrap();
 
-            println!("Abrechnung zu Import:\n{}", abrechnung_str);
+            println!("Abrechnung zu Import:\n{abrechnung_str}");
 
             let pruefe_kategorien =
                 pruefe_ob_kategorien_bereits_in_datenbank_vorhanden_sind(database, &abrechnung);

@@ -22,7 +22,7 @@ impl Rhythmus {
             "vierteljährlich" => Rhythmus::Vierteljaehrlich,
             "halbjährlich" => Rhythmus::Halbjaehrlich,
             "jährlich" => Rhythmus::Jaehrlich,
-            _ => panic!("Invalid rhythmus string: {}", string),
+            _ => panic!("Invalid rhythmus string: {string}"),
         }
     }
 }

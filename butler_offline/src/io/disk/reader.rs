@@ -55,7 +55,7 @@ pub fn exists_database(
     config: &DatabaseConfiguration,
 ) -> bool {
     let full_path = get_database_location(user_data_location, config);
-    println!("Checking if database exists at {:?}", full_path);
+    println!("Checking if database exists at {full_path:?}");
     full_path.exists()
 }
 
@@ -65,7 +65,7 @@ pub fn read_database(
     current_database_version: DatabaseVersion,
 ) -> Database {
     let db_location = get_database_location(user_application_directory, config);
-    println!("Reading database from {:?}", db_location);
+    println!("Reading database from {db_location:?}");
     let file = read_file(db_location);
     let data = read_data(file);
     create_database(data, today(), current_database_version)

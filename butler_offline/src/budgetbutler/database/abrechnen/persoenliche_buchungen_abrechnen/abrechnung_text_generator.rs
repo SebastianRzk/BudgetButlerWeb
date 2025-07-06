@@ -76,12 +76,12 @@ pub fn ziel_from_str(ziel_str: String) -> Ziel {
         ZIEL_ABRECHNUNG_SELBST => Ziel::GemeinsameAbrechnungFuerSelbst,
         ZIEL_IMPORT_GEMEINSAME_BUCHUNGEN_AUS_APP => Ziel::ImportGemeinsamerBuchungenAusApp,
         ZIEL_IMPORT_EINZELBUCHUNGEN => Ziel::ImportBuchungenAusApp,
-        _ => panic!("Unbekanntes Ziel: {}", ziel_str),
+        _ => panic!("Unbekanntes Ziel: {ziel_str}"),
     }
 }
 
 pub fn maschinen_import_metadaten(metadaten: Metadaten) -> String {
-    let mut result = format!("{}\n", METADATEN_START).to_string();
+    let mut result = format!("{METADATEN_START}\n").to_string();
     result.push_str(&format!(
         "{}{}\n",
         METADATEN_ABRECHNUNGSDATUM_KEY,
@@ -105,7 +105,7 @@ pub fn maschinen_import_metadaten(metadaten: Metadaten) -> String {
         METADATEN_AUSFUEHRUNGSDATUM_KEY,
         metadaten.ausfuehrungsdatum.to_iso_string()
     ));
-    result.push_str(&format!("{}\n", METADATEN_END));
+    result.push_str(&format!("{METADATEN_END}\n"));
     result
 }
 

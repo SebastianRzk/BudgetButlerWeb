@@ -13,7 +13,7 @@ pub struct Cookie {
 impl Cookie {
     pub fn from_session_str(session: String) -> Cookie {
         let splitted_session = session.split('=').collect::<Vec<&str>>();
-        println!("{:?}", splitted_session);
+        println!("{splitted_session:?}");
         Cookie {
             name: splitted_session[0].to_string(),
             value: splitted_session[1].to_string(),

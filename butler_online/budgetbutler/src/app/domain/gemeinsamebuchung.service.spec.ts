@@ -12,7 +12,7 @@ describe('GemeinsamebuchungService', () => {
 }));
 
   it('should be created', () => {
-    const service: GemeinsamebuchungService = TestBed.get(GemeinsamebuchungService);
+    const service: GemeinsamebuchungService = TestBed.inject(GemeinsamebuchungService);
     expect(service).toBeTruthy();
   });
 });

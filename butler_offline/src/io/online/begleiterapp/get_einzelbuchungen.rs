@@ -16,9 +16,9 @@ pub async fn request_einzelbuchungen(
     let url = einzelbuchungen_route(server_configuration);
     let request = authenticated_get_request(url, login_credentials).await?;
     let result_dtos = serde_json::from_str::<Vec<EinzelbuchungDto>>(&request).unwrap();
-    println!("Result dto {:?}", result_dtos);
+    println!("Result dto {result_dtos:?}");
     let result = map_einzelbuchungen(result_dtos);
-    println!("Result as entity {:?}", result);
+    println!("Result as entity {result:?}");
     Ok(result)
 }
 

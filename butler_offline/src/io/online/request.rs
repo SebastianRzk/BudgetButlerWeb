@@ -6,7 +6,7 @@ pub async fn authenticated_get_request(
     route: String,
     login_credentials: LoginCredentials,
 ) -> Result<String, ErrorOnRequest> {
-    println!("GET request for {}", route);
+    println!("GET request for {route}");
     let formatted_cookie = format!(
         "{}={}",
         login_credentials.session_cookie.name, login_credentials.session_cookie.value
@@ -20,17 +20,17 @@ pub async fn authenticated_get_request(
     let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     println!("HTTP Status{:?}", r_raw.status());
     let text = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
-    println!("Result text {:?}", text);
+    println!("Result text {text:?}");
     Ok(text)
 }
 
 pub async fn get_request(route: &str) -> Result<String, ErrorOnRequest> {
-    println!("GET request for {}", route);
+    println!("GET request for {route}");
     let builder1 = Client::builder().build().unwrap().get(route);
     let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     println!("HTTP Status {:?}", r_raw.status());
     let text = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
-    println!("Result text {:?}", text);
+    println!("Result text {text:?}");
     Ok(text)
 }
 
@@ -39,7 +39,7 @@ pub async fn post_request(
     login_credentials: LoginCredentials,
     body: String,
 ) -> Result<(), ErrorOnRequest> {
-    println!("POST request for {}", route);
+    println!("POST request for {route}");
     let formatted_cookie = format!(
         "{}={}",
         login_credentials.session_cookie.name, login_credentials.session_cookie.value
@@ -54,9 +54,9 @@ pub async fn post_request(
         .body(body);
     let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     let status = r_raw.status();
-    println!("HTTP Status{:?}", status);
+    println!("HTTP Status{status:?}");
     let test = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
-    println!("Result text {:?}", test);
+    println!("Result text {test:?}");
     if status.is_success() {
         Ok(())
     } else {
@@ -68,7 +68,7 @@ pub async fn delete_request(
     route: String,
     login_credentials: LoginCredentials,
 ) -> Result<(), ErrorOnRequest> {
-    println!("DELETE request for {}", route);
+    println!("DELETE request for {route}");
     let formatted_cookie = format!(
         "{}={}",
         login_credentials.session_cookie.name, login_credentials.session_cookie.value
@@ -81,9 +81,9 @@ pub async fn delete_request(
         .header("Accept", "application/json");
     let r_raw = builder1.send().await.map_err(|_| ErrorOnRequest {})?;
     let status = r_raw.status();
-    println!("HTTP Status{:?}", status);
+    println!("HTTP Status{status:?}");
     let test = r_raw.text().await.map_err(|_| ErrorOnRequest {})?;
-    println!("Result text {:?}", test);
+    println!("Result text {test:?}");
     if status.is_success() {
         Ok(())
     } else {

@@ -16,7 +16,7 @@ impl Display for JSONBetragList {
             })
             .collect::<Vec<String>>()
             .join(",");
-        write!(f, "[{}]", content)
+        write!(f, "[{content}]")
     }
 }
 
@@ -35,10 +35,10 @@ impl Display for JSONStringList {
         let content = self
             .content
             .iter()
-            .map(|element| format!("\"{}\"", element))
+            .map(|element| format!("\"{element}\""))
             .collect::<Vec<String>>()
             .join(",");
-        write!(f, "[{}]", content)
+        write!(f, "[{content}]")
     }
 }
 
