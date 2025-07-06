@@ -25,7 +25,7 @@ pub fn update_server_url(
 fn verarbeite_server_url(server_url: String) -> String {
     let mut verarbeitet = server_url;
     if !verarbeitet.starts_with("http://") && !verarbeitet.starts_with("https://") {
-        verarbeitet = format!("https://{}", verarbeitet);
+        verarbeitet = format!("https://{verarbeitet}");
     }
 
     if verarbeitet.ends_with("/") {

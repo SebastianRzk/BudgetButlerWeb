@@ -34,8 +34,7 @@ pub fn delete_ausgabe(context: DeleteContext) -> RedirectResult<EinzelbuchungCha
                 .change_einzelbuchungen(neue_einzelbuchungen),
             target: Redirect {
                 target: format!(
-                    "{}{}",
-                    EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT_JAHR_PARAM, jahr_von_delete_buchung
+                    "{EINZELBUCHUNGEN_EINZELBUCHUNGEN_UEBERSICHT_JAHR_PARAM}{jahr_von_delete_buchung}"
                 ),
             },
         },

@@ -17,7 +17,7 @@ pub async fn put_gemeinsame_buchungen(
     let gemeinsame_buchungen_dtos =
         map_gemeinsame_buchungen(gemeinsame_buchungen, user_configuration.self_name.clone());
     let request_str = serde_json::to_string(&gemeinsame_buchungen_dtos).unwrap();
-    println!("Result dto {:?}", request_str);
+    println!("Result dto {request_str:?}");
     post_request(url, login_credentials.clone(), request_str).await?;
     Ok(())
 }

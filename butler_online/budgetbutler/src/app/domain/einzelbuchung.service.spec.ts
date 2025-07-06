@@ -12,7 +12,7 @@ describe('EinzelbuchungService', () => {
 }));
 
   it('should be created', () => {
-    const service: EinzelbuchungService = TestBed.get(EinzelbuchungService);
+    const service: EinzelbuchungService = TestBed.inject(EinzelbuchungService);
     expect(service).toBeTruthy();
   });
 });

@@ -12,7 +12,7 @@ pub async fn request_set_kategorien(
     let url = kategorien_batch_route(server_configuration);
     let unpacked_kategorien: Vec<String> = kategorien.iter().map(|x| x.kategorie.clone()).collect();
     let kategorien_as_string = serde_json::to_string(&unpacked_kategorien).unwrap();
-    eprintln!("Setting Kategorien to: {}", url);
+    eprintln!("Setting Kategorien to: {url}");
     post_request(url, login_credentials, kategorien_as_string).await?;
     Ok(())
 }

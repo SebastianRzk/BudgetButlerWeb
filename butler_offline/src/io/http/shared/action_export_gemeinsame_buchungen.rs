@@ -42,8 +42,7 @@ pub async fn export_gemeinsame_buchungen_request(
     let database_name = config.database_configuration.name.clone();
     let context = DisplaySuccessMessage {
         message: format!(
-            "Erfolgreich {} gemeinsame Buchungen exportiert",
-            alle_gemeinsamen_buchungen_anzahl
+            "Erfolgreich {alle_gemeinsamen_buchungen_anzahl} gemeinsame Buchungen exportiert"
         ),
         link_name: "Zurück zu Import / Export".to_string(),
         link_url: CORE_IMPORT.to_string(),

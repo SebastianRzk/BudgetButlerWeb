@@ -160,8 +160,7 @@ pub fn erfolgreich_importiert(
         PageTitle::new("Export / Import"),
         render_success_message_template(SuccessZurueckZuViewResult {
             text: format!(
-                "Erfolgreich {} Einzelbuchungen und {} Gemeinsame Buchungen importiert. Zurück zu Export / Import",
-                diff_einzelbuchungen, diff_gemeinsame_buchungen
+                "Erfolgreich {diff_einzelbuchungen} Einzelbuchungen und {diff_gemeinsame_buchungen} Gemeinsame Buchungen importiert. Zurück zu Export / Import"
             ),
             link: CORE_IMPORT.to_string(),
         }),

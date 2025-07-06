@@ -81,7 +81,7 @@ pub fn handle_view(context: AddDepotauszugContext) -> AddDepotauszugViewResult {
                             x.wert.to_german_string()
                         )
                     })
-                    .reduce(|x, y| format!("{}\n{}", x, y))
+                    .reduce(|x, y| format!("{x}\n{y}"))
                     .unwrap_or("".to_string()),
                 konto: change.konto.konto_name.name.clone(),
             })

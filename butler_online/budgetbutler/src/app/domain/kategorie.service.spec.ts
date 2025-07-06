@@ -11,7 +11,7 @@ describe('KategorieService', () => {
 }));
 
   it('should be created', () => {
-    const service: KategorieService = TestBed.get(KategorieService);
+    const service: KategorieService = TestBed.inject(KategorieService);
     expect(service).toBeTruthy();
   });
 });

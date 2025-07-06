@@ -62,7 +62,7 @@ pub async fn load_shares_index() -> Option<SharesIndex> {
         let result_content = response.expect("Can not parse shares index response");
         let result = serde_json::from_str::<Vec<SharesIndexEntryDto>>(&result_content);
         println!("{:?}", result.err());
-        println!("{}", result_content);
+        println!("{result_content}");
         println!("{}", result_content.get(0..0).unwrap());
         let result = serde_json::from_str::<Vec<SharesIndexEntryDto>>(&result_content);
         result.ok().map(|dto| SharesIndex {

@@ -34,7 +34,7 @@ async fn authorize(oidc_client: Data<DiscoveredClient>) -> impl Responder {
         ..Default::default()
     });
 
-    eprintln!("authorize: {}", auth_url);
+    eprintln!("authorize: {auth_url}");
 
     HttpResponse::Found()
         .append_header((http::header::LOCATION, auth_url.to_string()))
@@ -52,7 +52,7 @@ async fn request_token(
 ) -> Result<Option<(Token, Userinfo)>, error::Error> {
     let token_request_result = oidc_client.request_token(&query.code).await;
     if token_request_result.is_err() {
-        println!("error in token request: {:?}", token_request_result);
+        println!("error in token request: {token_request_result:?}");
     }
 
     let mut token: Token = token_request_result
@@ -67,7 +67,7 @@ async fn request_token(
     }
     let user_info_request = oidc_client.request_userinfo(&token).await;
     if user_info_request.is_err() {
-        println!("error in userinfo request: {:?}", user_info_request);
+        println!("error in userinfo request: {user_info_request:?}");
     }
 
     let userinfo = user_info_request.map_err(error::ErrorInternalServerError)?;
@@ -100,7 +100,7 @@ async fn login(
                 lang_key: Some("en".to_string()),
                 authorities: vec!["ROLE_USER".to_string()], //FIXME: read from token
             };
-            eprintln!("{:?}", user);
+            eprintln!("{user:?}");
             sessions
                 .write()
                 .unwrap()
@@ -115,7 +115,7 @@ async fn login(
             Redirect::to("/").temporary()
         }
         Err(err) => {
-            eprintln!("login error in call: {:?}", err);
+            eprintln!("login error in call: {err:?}");
             Redirect::to("/").temporary()
         }
     }
@@ -149,7 +149,7 @@ async fn offline_access(
         .clone()
         .unwrap_or("http://localhost:5000".to_string());
 
-    eprintln!("offline_access: {:?}", redirect_location);
+    eprintln!("offline_access: {redirect_location:?}");
     if !allowed_redirects
         .allowed
         .iter()
@@ -160,18 +160,12 @@ async fn offline_access(
             "redirect is not in allowed list: {:?}",
             allowed_redirects.allowed
         );
-        eprintln!(
-            "offline_access: redirect to {} without token",
-            redirect_location
-        );
+        eprintln!("offline_access: redirect to {redirect_location} without token");
         return Redirect::to(redirect_location.to_string());
     }
     eprintln!("offline_access: redirect allowed");
 
-    let url = format!(
-        "{}/butler-online-callback?{}",
-        redirect_location, auth_params
-    );
+    let url = format!("{redirect_location}/butler-online-callback?{auth_params}");
     Redirect::to(url)
 }
 
@@ -183,7 +177,7 @@ async fn logout(
 ) -> impl Responder {
     if let Ok(id) = identity.id() {
         if let Some((user, _, _userinfo)) = sessions.write().unwrap().map.remove(&id) {
-            eprintln!("logout user: {:?}", user);
+            eprintln!("logout user: {user:?}");
 
             identity.logout();
             let logout_url = oidc_client.config().end_session_endpoint.clone();
@@ -198,10 +192,10 @@ pub fn compute_allowed_redirects() -> AllowedRedirects {
     let conf = dotenvy::var("ALLOWED_REDIRECTS").unwrap_or("http://localhost:5000".to_string());
     if conf.contains(',') {
         let allowed = conf.split(',').map(|x| x.to_string()).collect();
-        eprintln!("allowed offline redirects: {:?}", allowed);
+        eprintln!("allowed offline redirects: {allowed:?}");
         return AllowedRedirects { allowed };
     }
-    eprintln!("allowed offline redirects: {:?}", conf);
+    eprintln!("allowed offline redirects: {conf:?}");
     let allowed = vec![conf];
     AllowedRedirects { allowed }
 }
@@ -215,10 +209,7 @@ pub async fn generate_discovery_client() -> Result<openid::Client, error::Error>
         DiscoveredClient::discover(client_id, client_secret, redirect, issuer).await;
 
     if resolve_discovery_client_request.is_err() {
-        eprintln!(
-            "error in discovery client request: {:?}",
-            resolve_discovery_client_request
-        );
+        eprintln!("error in discovery client request: {resolve_discovery_client_request:?}");
     }
     resolve_discovery_client_request.map_err(error::ErrorInternalServerError)
 }

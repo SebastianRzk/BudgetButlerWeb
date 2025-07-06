@@ -1,7 +1,7 @@
 {
   "name": "budgetbutlerweb",
   "productName": "budgetbutlerweb",
-  "version": "4.3.3",
+  "version": "4.3.4",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -25,9 +25,9 @@
     "@typescript-eslint/parser": "^5.62.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.11.0",
-    "electron": "^34.5.6",
+    "electron": "37.1.0",
     "eslint": "^8.57.1",
-    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-import": "^2.32.0",
     "fork-ts-checker-webpack-plugin": "7.3.0",
     "node-loader": "^2.1.0",
     "style-loader": "^3.3.4",

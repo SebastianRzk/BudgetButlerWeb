@@ -48,10 +48,10 @@ impl Prozent {
 
     pub fn als_halbwegs_gerundeter_string(&self) -> String {
         if let Some(int_representation) = self.int_representation {
-            format!("{}", int_representation)
+            format!("{int_representation}")
         } else if let Some(float_representation) = self.float_representation {
             let rounded = (float_representation * 100.0).round() / 100.0;
-            format!("{:.2}", rounded).replace(".", ",")
+            format!("{rounded:.2}").replace(".", ",")
         } else {
             "".to_string()
         }
@@ -59,10 +59,10 @@ impl Prozent {
 
     pub fn als_halbwegs_gerundeter_iso_string(&self) -> String {
         if let Some(int_representation) = self.int_representation {
-            format!("{}", int_representation)
+            format!("{int_representation}")
         } else if let Some(float_representation) = self.float_representation {
             let rounded = (float_representation * 100.0).round() / 100.0;
-            format!("{:.2}", rounded)
+            format!("{rounded:.2}")
         } else {
             "".to_string()
         }

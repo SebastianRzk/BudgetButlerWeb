@@ -11,7 +11,7 @@ pub fn lade_alle_abrechnungen(
     let path = user_application_directory
         .path
         .join(std::path::Path::new(&config.location));
-    eprintln!("Lade Abrechnungen aus: {:?}", path);
+    eprintln!("Lade Abrechnungen aus: {path:?}");
 
     for file in std::fs::read_dir(path).unwrap() {
         let file = file.unwrap();

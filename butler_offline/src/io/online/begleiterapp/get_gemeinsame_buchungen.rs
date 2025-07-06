@@ -19,14 +19,14 @@ pub async fn request_gemeinsame_buchungen(
     let url = gemeinsame_buchungen_route(server_configuration);
     let request = authenticated_get_request(url, login_credentials.clone()).await?;
     let result_dtos = serde_json::from_str::<Vec<GemeinsamebuchungDto>>(&request).unwrap();
-    println!("Result dto {:?}", result_dtos);
+    println!("Result dto {result_dtos:?}");
     let result = map_gemeinsame_buchungen(
         result_dtos,
         login_credentials.username.clone(),
         user_configuration.self_name.clone(),
         user_configuration.partner_name.clone(),
     );
-    println!("Result as entity {:?}", result);
+    println!("Result as entity {result:?}");
     Ok(result)
 }
 
@@ -63,9 +63,9 @@ pub fn map_gemeinsame_buchung(
     self_name_local: Person,
     partner_name_local: Person,
 ) -> GemeinsameBuchung {
-    println!("Mapping dto {:?}", dto);
-    println!("self_name_remote {:?}", self_name_remote);
-    println!("self_name_local {:?}", self_name_local);
+    println!("Mapping dto {dto:?}");
+    println!("self_name_remote {self_name_remote:?}");
+    println!("self_name_local {self_name_local:?}");
     let person = if dto.zielperson == self_name_remote {
         self_name_local
     } else {

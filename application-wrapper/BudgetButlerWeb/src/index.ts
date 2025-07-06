@@ -6,6 +6,7 @@ import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
 // plugin that tells the Electron app where to look for the Webpack-bundled app code (depending on
 // whether you're running in development or production).
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
 const port = 5000;
 
@@ -64,8 +65,6 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = async (): Promise<void> => {
-    pollServer();
-    await firstValueFrom(serverUp.pipe(filter((up) => up)));
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         height: 800,
@@ -74,6 +73,9 @@ const createWindow = async (): Promise<void> => {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         },
     });
+    await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    pollServer();
+    await firstValueFrom(serverUp.pipe(filter((up) => up)));
     mainWindow.on('app-command', (e, cmd) => {
         // Navigate the window back when the user hits their mouse back button
         if (cmd === 'browser-backward' && mainWindow.webContents.navigationHistory.canGoBack()) {

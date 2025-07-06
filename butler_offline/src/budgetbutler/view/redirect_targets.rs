@@ -27,7 +27,7 @@ pub fn redirect_to_depotauszug_bereits_erfasst() -> Redirect {
 
 pub fn redirect_to_depot_analyse_mit_message(message: String) -> Redirect {
     Redirect {
-        target: format!("/uebersicht_etfs/?message={}", message),
+        target: format!("/uebersicht_etfs/?message={message}"),
     }
 }
 

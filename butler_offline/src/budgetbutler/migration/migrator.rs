@@ -11,10 +11,7 @@ pub fn run_migrations(
     data_state_version: ApplicationVersion,
     user_application_directory: &UserApplicationDirectory,
 ) {
-    println!(
-        "Running migrations from version {} to {}",
-        data_state_version, current_version
-    );
+    println!("Running migrations from version {data_state_version} to {current_version}");
 
     if data_state_version > current_version {
         panic!("Der Datenbestand ist neuer als die aktuelle Version. Bitte aktualisieren Sie die Anwendung.");
@@ -32,10 +29,7 @@ pub fn run_migrations(
     }
 
     save_user_data_version(user_application_directory, &current_version);
-    println!(
-        "Migrated from version {} to {}",
-        data_state_version, current_version
-    );
+    println!("Migrated from version {data_state_version} to {current_version}");
 }
 
 fn migriere_4_3_0(user_application_directory: &UserApplicationDirectory) {
@@ -45,7 +39,7 @@ fn migriere_4_3_0(user_application_directory: &UserApplicationDirectory) {
             shares_filename,
             user_application_directory
                 .path
-                .join(format!("{}.4.3.0.migration.backup", SHARES_FILE_NAME)),
+                .join(format!("{SHARES_FILE_NAME}.4.3.0.migration.backup")),
         )
         .expect("Could not copy shares file");
         save_shares(user_application_directory, &ShareState::default());
@@ -55,5 +49,5 @@ fn migriere_4_3_0(user_application_directory: &UserApplicationDirectory) {
 }
 
 fn print_running_migration(migration: ApplicationVersion) {
-    println!("Running migration: {}", migration);
+    println!("Running migration: {migration}");
 }

@@ -18,7 +18,7 @@ impl Selector<Indiziert<Depotauszug>> {
             .filter(|x| x.value.konto == konto)
             .last()
             .map(|x| x.value.wert.clone())
-            .unwrap_or(Betrag::zero())
+            .unwrap_or_default()
     }
 
     pub fn lade_kontostand(
@@ -33,7 +33,7 @@ impl Selector<Indiziert<Depotauszug>> {
             .filter(|x| x.value.datum == datum)
             .last()
             .map(|x| x.value.wert.clone())
-            .unwrap_or(Betrag::zero())
+            .unwrap_or_default()
     }
 
     pub fn get_kombinierter_kontostand(&self) -> Betrag {

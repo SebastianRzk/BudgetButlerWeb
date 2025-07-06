@@ -111,7 +111,7 @@ pub fn handle_view(context: UebersichtMonatContext) -> UebersichtMonatViewResult
         .collect();
 
     UebersichtMonatViewResult {
-        selected_date: format!("{}-{:02}", selektiertes_jahr, selektierter_monat,),
+        selected_date: format!("{selektiertes_jahr}-{selektierter_monat:02}",),
         selected_year: selektiertes_jahr.to_string(),
         monate: verfuegbare_jahre,
 

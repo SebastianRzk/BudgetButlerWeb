@@ -6,7 +6,7 @@ describe('MenuitemService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MenuItemService = TestBed.get(MenuItemService);
+    const service: MenuItemService = TestBed.inject(MenuItemService);
     expect(service).toBeTruthy();
   });
 });

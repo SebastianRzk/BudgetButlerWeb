@@ -6,6 +6,7 @@ layout: default
 
 ## Inhalt
 
+- [v4.3.4 (2025-07-03)](#v434-2025-07-03)
 - [v4.3.3 (2025-05-18)](#v433-2025-05-18)
 - [v4.3.2 (2025-04-25)](#v432-2025-04-25)
 - [v4.3.1 (2025-04-22)](#v431-2025-04-22)
@@ -41,6 +42,19 @@ layout: default
 - [v1.0.0 (2018-01-29)](#v100-2018-01-29)
 - ...
 - [v0.0.1 (2017-08-10)](#v001-2017-08-10)
+
+### v4.3.4 (2025-07-03)
+
+### Änderungen Desktop-Client
+
+* Aktualisierung der Abhängigkeiten des Application-Wrappers
+* Aktualisierung der Abhängigkeiten des Rust-Backends
+* Einführung eines Boot-Screens
+
+### Änderungen Begleiter-Web-App
+
+* Aktualisierung der Abhängigkeiten des Frontends
+* Aktualisierung der Abhängigkeiten des Backends
 
 ### v4.3.3 (2025-05-18)
 

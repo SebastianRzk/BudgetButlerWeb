@@ -125,7 +125,7 @@ pub fn create_database_backup(
         .path
         .join(Path::new(backup_configuration.location.as_str()))
         .join(filename);
-    println!("Creating backup at: {:?}", path);
+    println!("Creating backup at: {path:?}");
     let sorted_file = map_database_to_file(database);
     let db_file = map_sorted_to_file(sorted_file);
 
