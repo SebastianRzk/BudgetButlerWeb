@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "BudgetButlerWeb Dokumentation" }}</title>
+  <link rel="stylesheet" href="{{config.pathPrefix}}assets/css/style.css">
+  <link rel="icon" type="image/png" href="{{config.pathPrefix}}fav.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  {% include "menu.njk" %}
+  <header>
+  <img src="{{config.pathPrefix}}fav.png" alt="BudgetButlerWeb Logo" class="logo">
+  <div class="header-title">
+  <h1>
+  BudgetButlerWeb
+  </h1>
+  <h2>
+  Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung.
+  </h2>
+  </div>
+  </header>
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer>
+    <p>Besuche BudgetButlerWeb auf <a href="https://github.com/SebastianRzk/BudgetButlerWeb">GitHub</a>, erstelle ein <a href="https://github.com/SebastianRzk/BudgetButlerWeb/issues">Issue</a> oder beteilige ich an einer <a href="https://github.com/SebastianRzk/BudgetButlerWeb/discussions">Diskussion</a></p>
+  </footer>
+</body>
+</html>
