@@ -1,0 +1,238 @@
+---
+title: BudgetButlerWeb
+layout: base.njk
+---
+<img src="{{config.pathPrefix}}img/header_image.png" alt="header image mobile desktop" />
+
+
+<img src="https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/build.yml/badge.svg?branch=master" alt="GithubCI Build and Test">
+<img src="https://github.com/SebastianRzk/BudgetButlerWeb/actions/workflows/docker-to-docker-hub.yml/badge.svg?branch=master" alt="GithubCI Publish">
+
+<div class="leitsatz-box">
+<h2>Leitsatz: Einfachheit schlägt Perfektion</h2>
+<p>BudgetButlerWeb ist nach dem Pareto Prinzip gestaltet: Mit 20% des Aufwands 80% erreichen. Es akzeptiert Un-Perfektion, weil Menschen nun einmal nicht perfekt sind. Anstelle von aufwändigen Soll/Haben Prozessen wird Einnahmen, Ausgaben und Sparen mittels Input/Output Prinzip einfach verständlich und effizient ermittelt und verwaltet. Der Nutzer ist nicht in der Rolle eines Finanzbuchhalters, sondern ein Mensch, der seine Finanzen im Griff haben möchte.</p>
+</div>
+
+<h2>Inhaltsverzeichnis</h2>
+<ul>
+  <li><a href="#idee">Idee</a></li>
+  <li><a href="#merkmale">Merkmale</a></li>
+  <li><a href="#unterstützte-plattformen">Unterstützte Plattformen</a></li>
+  <li><a href="#mitmachen">Mitmachen</a></li>
+  <li><a href="#screenshots">Screenshots</a>
+    <ul>
+      <li><a href="#screenshots-budgetbutlerweb-offline-anwendung">Screenshots BudgetButlerWeb Offline Anwendung</a></li>
+      <li><a href="#screenshots-begleiter-web-app">Screenshots Begleiter Web-App</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2>Weiterführende Links</h2>
+<ul class="weiterfuehrende-links">
+  <li><a href="{{config.pathPrefix}}butler-offline/">Desktop Anwendung</a></li>
+  <li><a href="{{config.pathPrefix}}fachlicher-ansatz/">Idee und fachlicher Ansatz</a></li>
+  <li><a href="{{config.pathPrefix}}butler-companion/">Begleiter App / Webseite</a></li>
+  <li><a href="{{config.pathPrefix}}changelog/">Changelog</a></li>
+</ul>
+
+<h2 id="idee">Idee</h2>
+<ul class="feature-list">
+  <li><strong>Einfache lokale Datenhaltung</strong>Die Daten sind im CSV-Format gespeichert und sind damit mit einem Textverarbeitungsprogramm oder einem Tabellenverarbeitungsprogramm zugänglich.</li>
+  <li><strong>Unkomplizierte Einnahmen/Ausgaben-Rechnung</strong> keine doppelte Buchführung.</li>
+  <li><strong>Schlanke Begleiter-Web-App für unterwegs</strong> online-Version, mobil-optimiert <br>Automatisierter Import der Daten in die lokale Anwendung. Single-Sign-On über OpenID-Provider.</li>
+  <li><strong>Schlankes und minimalistisches Design</strong></li>
+  <li><strong>Hohe Geschwindigkeit</strong> ... auch bei großen Datenmengen. Tracking über viele Jahre mit 30000 Buchungen oder mehr stellen keine Herausforderung dar</li>
+  <li><strong>Individualisierbar</strong>Definiere eigene Kategorien, und ordne ihnen eine Farbe zu, die über die gesamte Anwendung hinweg verwendet werden. Die Design-Farbe ist ebenefalls mit einem Klick änderbar</li>
+  <li><strong>Quelloffen</strong><div>AGPLv3<img src="{{config.pathPrefix}}img/red_heart.svg"></img></div></li>
+</ul>
+
+<h2 id="merkmale">Merkmale</h2>
+<ul>
+  <li><strong>Einzelbuchungen</strong>
+    <ul>
+      <li><strong>Erfassen, Ändern, Löschen</strong>: Verwalte Einnahmen und Ausgaben einfach und effizient.</li>
+      <li><strong>Daueraufträge</strong>: Richte wiederkehrende Zahlungen ein und passe diese flexibel an deine Bedürfnisse an. Egal ob in der Zukunft oder in der Vergangenheit.</li>
+      <li><strong>Monats- und Jahresübersicht</strong>: Behalte deine Finanzen im Blick mit detaillierten Übersichten.</li>
+      <li>Automatischer Import von Sparbuchungen, Order sowie gemeinsamen Buchungen in die "Einzelbuchungen"-Gesamtübersicht</li>
+      <li>Importiere Buchungen aus der Begleiter Web-App.</li>
+    </ul>
+  </li>
+  <li><strong>Gemeinsame Buchungen</strong>
+    <ul>
+      <li><strong>Verwalten</strong>: Erfasse, ändere und lösche gemeinsame Buchungen.</li>
+      <li><strong>Abrechnungen</strong>: Erstelle und exportiere Abrechnungen für gemeinsame Ausgaben. Viele verschiedene Abrechnungsmöglichkeiten stehen zur Verfügung.</li>
+      <li><strong>Import</strong>: Importiere gemeinsame Buchungen aus der Begleiter Web-App.</li>
+    </ul>
+  </li>
+  <li><strong>Sparen</strong>
+    <ul>
+      <li><strong>Verwalten</strong>: Erfasse und verfolge dein Sparen von klassischen Sparkonten bis zu Aktien und ETFs, mittels einfacher Input-Output-Rechnung. Berücksichtige dabei Kosten wie Depotgebühren oder Vorabpauschale.</li>
+      <li><strong>Übersichten</strong>: Vergleiche deine Einnahmen, Ausgaben und Spar-Buchungen über die Zeit. Tracke die Performance deiner einzelnen Werte sowie die Zusammensetzung deiner Sparanlage.</li>
+      <li><strong>ETF-Portfolio</strong>: Analysiere dein ETF-Portfolio nach Kosten, Sektoren und Ländern.</li>
+    </ul>
+  </li>
+  <li><strong>Konfiguration</strong>
+    <ul>
+      <li><strong>Anpassung</strong>: Passe das Farbthema und die Kategorien nach deinen Wünschen an.</li>
+      <li><strong>Übergreifende Aktionen</strong>: Führe Aktionen wie das Umbenennen von Kategorien oder das Ausschließen von Kategorien für Eingabefelder durch.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="unterstützte-plattformen">Unterstützte Plattformen</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Plattform</th>
+      <th>Installationstyp</th>
+      <th>Offline-Anwendung</th>
+      <th>Nutzung Mobile Begleiter-App</th>
+      <th>Deployment Mobile Begleiter App</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Arch Linux</td>
+      <td><a href="https://aur.archlinux.org/packages/budgetbutlerweb-desktop">AUR</a></td>
+      <td>✓ <a href="{{config.pathPrefix}}butler-offline/">Installationsanleitung</a></td>
+      <td>✓ Über Webrowser</td>
+      <td>möglich, aktuell keine Dokumentation</td>
+    </tr>
+    <tr>
+      <td>Arch Linux</td>
+      <td>Pacman/PKGBUILD (selbst bauen)</td>
+      <td>✓ <a href="{{config.pathPrefix}}butler-offline/">Installationsanleitung</a></td>
+      <td>✓ Über Webrowser</td>
+      <td>möglich, aktuell keine Dokumentation</td>
+    </tr>
+    <tr>
+      <td>Linux-Desktop (any)</td>
+      <td>selbst bauen</td>
+      <td>✓ <a href="{{config.pathPrefix}}butler-offline/">Installationsanleitung</a></td>
+      <td>✓ Über Webrowser</td>
+      <td>möglich, aktuell keine Dokumentation</td>
+    </tr>
+    <tr>
+      <td>Docker / docker-compose</td>
+      <td><a href="https://hub.docker.com/r/sebastianrzk/budgetbutlerweb-desktopapp">fertiges image von dockerhub</a></td>
+      <td>✓ <a href="{{config.pathPrefix}}butler-offline/">Installationsanleitung</a></td>
+      <td></td>
+      <td>✓ <a href="{{config.pathPrefix}}butler-companion/">Installationsanleitung</a></td>
+    </tr>
+    <tr>
+      <td>Docker / docker-compose</td>
+      <td>selbst bauen</td>
+      <td>✓ <a href="{{config.pathPrefix}}butler-offline/">Installationsanleitung</a></td>
+      <td></td>
+      <td>✓ <a href="{{config.pathPrefix}}butler-companion/">Installationsanleitung</a></td>
+    </tr>
+    <tr>
+      <td>Windows</td>
+      <td>selbst bauen *)</td>
+      <td>nicht getestet, theoretisch möglich über eine Anpassung der <code>build.sh</code>, alternativ über WSL oder Docker</td>
+      <td>✓ Über Webrowser</td>
+      <td>Wahrscheinlich nicht ohne Anpassungen möglich</td>
+    </tr>
+    <tr>
+      <td>MacOS</td>
+      <td>selbst bauen *)</td>
+      <td>nicht getestet, theoretisch möglich über eine Anpassung der <code>build.sh</code>, alternativ über Docker</td>
+      <td>✓ Über Webrowser</td>
+      <td>Wahrscheinlich nicht ohne Anpassungen möglich</td>
+    </tr>
+  </tbody>
+</table>
+<p><em>*) Windows und MacOS sind aktuell nicht offiziell unterstützt, da ich weder die Kenntnisse noch die Hardware dafür habe. Über Pull-Requests oder Issues freue ich mich, wenn jemand die Anwendung auf diesen Plattformen portiert bekommt. Die Anwendung ist so konzipiert, dass sie auf diesen Plattformen laufen sollte, der Anpassungsaufwand sollte gering sein.</em></p>
+
+<h2 id="mitmachen">Mitmachen</h2>
+<ul>
+  <li>Fehler, Fragen, Anmerkungen oder Ideen gerne als <a href="https://github.com/SebastianRzk/BudgetButlerWeb/issues">ISSUE hier hinterlassen</a></li>
+  <li>Code-Änderungen (Pull-Requests) immer bitte immer gegen den <code>dev</code>-<a href="https://github.com/SebastianRzk/BudgetButlerWeb/pulls">Branch hier hin</a></li>
+  <li><a href="https://github.com/SebastianRzk/BudgetButlerWeb">Hier liegt der Code</a></li>
+  <li><a href="https://hub.docker.com/u/sebastianrzk">Hier liegen die Docker-Images für die Begleiter Web-App, sowie auch für die Desktop-App</a>, und <a href="https://github.com/SebastianRzk/BudgetButlerWeb/tree/master/docker-compose-examples">hier sind Deployment Beispiele für die Begleiter Web-App</a></li>
+</ul>
+
+<h2 id="screenshots">Screenshots</h2>
+
+
+<h3 id="screenshots-budgetbutlerweb-offline-anwendung">Screenshots BudgetButlerWeb Offline Anwendung</h3>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/dashboard.png" alt="Dashboard" />
+
+<h4>Einzelbuchungen</h4>
+
+<div class="screenshots">
+<div class="screenshot">
+<strong>Übersicht Einzelbuchungen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/uebersicht_einzelbuchungen.png" alt="Übersicht Einzelbuchungen" />
+</div>
+<div class="screenshot">
+<strong>Daueraufträge hinzufügen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/dauerauftraege_add.png" alt="Daueraufträge hinzufügen" />
+</div>
+<div class="screenshot">
+<strong>Übersicht Daueraufträge</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/uebersicht_dauerauftraege.png" alt="Übersicht Daueraufträge" />
+</div>
+<div class="screenshot">
+<strong>Jahresübersicht</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/uebersicht_jahr.png" alt="Übersicht Jahr" />
+</div>
+<div class="screenshot">
+<strong>Monatsübersicht</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/uebersicht_monat.png" alt="Übersicht Monat" />
+</div>
+</div>
+
+<h4>Gemeinsame Buchungen</h4>
+<strong>Gemeinsame Buchungen hinzufügen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/add_gemeinsam.png" alt="Gemeinsame Buchungen hinzufügen" />
+<strong>Gemeinsame Buchungen abrechnen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/gemeinsam_abrechnen.png" alt="Gemeinsame Buchungen abrechnen" />
+
+<h4>Sparen</h4>
+<strong>Sparen Übersicht</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/sparen_uebersicht.png" alt="Sparen Übersicht" />
+<strong>Depotwerte Übersicht</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/sparen_uebersicht_depotwerte.png" alt="Depotwerte Übersicht" />
+<strong>ETF Übersicht</strong>
+<img src="{{config.pathPrefix}}img/screenshots_desktop/sparen_uebersicht_etfs.png" alt="ETFs Übersicht" />
+
+<h3 id="screenshots-begleiter-web-app">Screenshots Begleiter Web-App</h3>
+<div class="screenshots screenshots-mobile">
+<div class="screenshot">
+<strong>Menu</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/menu.png" alt="Menü" />
+</div>
+<div class="screenshot">
+<strong>Schnellerfassung</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/erfassen.png" alt="Erfassen" />
+</div>
+<div class="screenshot">
+<strong>Ausgabe in kleinere Buchungen aufteilen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/erfassen_teilen.png" alt="Aufteilen" />
+</div>
+<div class="screenshot">
+<strong>Übersicht gemeinsame Buchungen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/gemeinsam.png" alt="Gemeinsam" />
+</div>
+<div class="screenshot">
+<strong>Zusammenfassung gemeinsame Buchungen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/uebersicht.png" alt="Uebersicht" />
+</div>
+<div class="screenshot">
+<strong>Übersicht persönliche Buchungen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/einzel.png" alt="Einzel" />
+</div>
+<div class="screenshot">
+<strong>Dauerauftrag erfassen</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/erfassen_dauerauftrag.png" alt="Erfassen Dauerauftrag" />
+</div>
+<div class="screenshot">
+<strong>Übersicht Daueraufträge</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/uebersicht_dauerauftrag.png" alt="Übersicht Dauerauftrag" />
+</div>
+<div class="screenshot">
+<strong>Buchungen erfassen in Desktop-Ansicht</strong>
+<img src="{{config.pathPrefix}}img/screenshots_mobile/erfassen_desktop.png" alt="Erfassen Desktop" />
+</div>
+</div>

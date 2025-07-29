@@ -1,21 +1,9 @@
 ---
-layout: default
+layout: base.njk
+title: Idee und fachlicher Ansatz
 ---
 
 # Idee und fachlicher Ansatz
-
-## Menu
-
-### Weitere Seiten
-
-* [Hauptseite / Idee und Motivation](index.md)
-* [Desktop Anwendung](butler-offline.md)
-* [Begleiter App / Webseite](butler-companion)
-
-### Inhaltsverzeichnis
-
-* [Datenmodell](#datenmodell)
-* [Zusammenarbeit mit der Begleiter-App](#zusammenarbeit-mit-der-begleiter-app)
 
 ## Datenmodell
 

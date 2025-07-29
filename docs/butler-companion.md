@@ -1,24 +1,11 @@
 ---
-layout: default
+layout: base.njk
+title: BudgetButlerWeb Begleiter App
 ---
 
 # Begleiter App / Webseite
 
-## Menu
-
-### Weitere Seiten
-
-* [Hauptseite / Idee und Motivation](index.md)
-* [Idee und fachlicher Ansatz](fachlicher-ansatz.md)
-* [Desktop Anwendung](butler-offline.md)
-
-### Inhaltsverzeichnis
-
-* [Idee](#idee)
-* [Build](#build)
-* [Betrieb](#betrieb)
-
-![Mobile Schnellerfassung](img/screenshots_mobile/erfassen.png)
+![Mobile Schnellerfassung]({{config.pathPrefix}}img/screenshots_mobile/erfassen.png)
 
 ## Idee
 
