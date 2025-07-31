@@ -18,6 +18,12 @@ def fill_element(driver, elementname, content):
     elem.send_keys(content)
 
 
+def fill_element_by_id(driver, elementname, content):
+    elem = driver.find_element(By.ID, elementname)
+    elem.clear()
+    elem.send_keys(content)
+
+
 def select_option(driver, option_id, item):
     el = driver.find_element(By.ID, option_id)
     for option in el.find_elements(By.TAG_NAME, 'option'):
@@ -29,6 +35,11 @@ def select_option(driver, option_id, item):
 def click_add_button(driver, button_postfix = ''):
     add_button = driver.find_element(By.ID, 'add' + button_postfix)
     add_button.click()
+
+
+def click_open_more_button(driver, button_postfix = ''):
+    open_more_button = driver.find_element(By.ID, 'open_' + button_postfix)
+    open_more_button.click()
 
 
 def fill_element_by_id(driver, elementname, content):

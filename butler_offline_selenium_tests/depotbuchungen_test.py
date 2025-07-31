@@ -56,11 +56,12 @@ class TestUI(SeleniumTestClass):
         page_order_add.visit()
         page_order_add.add('2020-01-01', 'testname', 'Testdepotwert (ISINDEMO)', 'Testdepot', 10,  True)
         page_depotauszug_add.visit()
+        page_depotauszug_add.open_weitere_depotwerte('TestKonto')
         page_depotauszug_add.add('2020-01-02', 'TestKonto', 'ISINDEMO', 9)
 
         page_sparkonto_uebersicht.visit()
 
-        assert page_sparkonto_uebersicht.get(0) == {
+        assert page_sparkonto_uebersicht.get(1) == {
             'name': 'TestKonto',
             'typ': 'Depot',
             'wert': '9,00 €',
@@ -81,7 +82,7 @@ class TestUI(SeleniumTestClass):
 
         page_depotwert_uebersicht.visit()
 
-        assert page_depotwert_uebersicht.get(0) == {
+        assert page_depotwert_uebersicht.get(1) == {
             'name': 'Testdepotwert',
             'isin': 'ISINDEMO',
             'wert': '0,00 €'

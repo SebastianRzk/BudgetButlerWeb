@@ -37,14 +37,14 @@ class TestUI(SeleniumTestClass):
         page_einzelbuchungen_uebersicht.visit()
         page_einzelbuchungen_uebersicht.open_module(month=1, year=2012)
 
-        assert page_einzelbuchungen_uebersicht.get_item_in_opened_module(2) == {
+        assert page_einzelbuchungen_uebersicht.get_item_in_opened_module(3) == {
             'name': '2name',
             'kategorie': '2test_kategorie',
             'datum': '01.01.2012',
             'wert': '-2,00 €'
         }
 
-        page_einzelbuchungen_uebersicht.click_edit_button(2)
+        page_einzelbuchungen_uebersicht.click_edit_button(3)
 
         assert page_einzelbuchungen_add.get_vorbelegung() == {
             'name': '2name',

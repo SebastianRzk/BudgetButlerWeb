@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
 
+from butler_offline_selenium_tests.page.util import select_option
+
 
 class EinzelbuchungenUebersicht:
     def __init__(self, driver):
@@ -15,6 +17,11 @@ class EinzelbuchungenUebersicht:
 
         open_table_button = self.driver.find_element(By.ID, 'open_{month}/{year}'.format(year=year, month=month))
         open_table_button.click()
+
+    def open_year(self, year):
+        select_option(self.driver, 'date', str(year))
+        submit_button = self.driver.find_element(By.ID, 'set_date_button')
+        submit_button.click()
 
     def get_item_in_opened_module(self, id):
         return {

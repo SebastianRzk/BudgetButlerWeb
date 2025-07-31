@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 
 class GemeinsamAbrechnen:
     URL = 'http://localhost:5000/gemeinsamabrechnen/'
+    titel_set = False
 
     def __init__(self, driver):
         self.driver = driver
@@ -12,26 +13,41 @@ class GemeinsamAbrechnen:
         self.driver.get(self.URL)
 
     def update_abrechnungsverhältnis(self, neues_verhaeltnis):
+        if not self.titel_set:
+            self.update_titel('mock titel')
         fill_element_by_id(self.driver, 'abrechnungsverhaeltnis', str(neues_verhaeltnis))
         self.driver.find_element(By.ID, 'abrechnung_aktualisieren').click()
 
     def update_limit(self, person, value):
+        if not self.titel_set:
+            self.update_titel('mock titel')
         self.driver.find_element(By.ID, 'set_limit').click()
         select_option(self.driver, 'set_limit_fuer', person)
         fill_element(self.driver, 'set_limit_value', str(value))
         self.driver.find_element(By.ID, 'abrechnung_aktualisieren').click()
 
+    def update_titel(self, value):
+        fill_element_by_id(self.driver, 'set_titel', str(value))
+        self.driver.find_element(By.ID, 'abrechnung_aktualisieren').click()
+        self.titel_set = True
+
     def set_self_kategorie(self, kategorie):
+        if not self.titel_set:
+            self.update_titel('mock titel')
         self.driver.find_element(By.ID, 'set_self_kategorie').click()
         select_option(self.driver, 'set_self_kategorie_value', kategorie)
         self.driver.find_element(By.ID, 'abrechnung_aktualisieren').click()
 
     def set_other_kategorie(self, kategorie):
+        if not self.titel_set:
+            self.update_titel('mock titel')
         self.driver.find_element(By.ID, 'set_other_kategorie').click()
         fill_element_by_id(self.driver, 'set_other_kategorie_value', kategorie)
         self.driver.find_element(By.ID, 'abrechnung_aktualisieren').click()
 
     def abrechnen(self):
+        if not self.titel_set:
+            self.update_titel('mock titel')
         self.driver.find_element(By.ID, 'abrechnen').click()
 
     def result_self(self):
@@ -48,6 +64,6 @@ class GemeinsamAbrechnen:
             'ausgabe_partner_diff': content_of(self.driver, 'ausgabe_partner_diff'),
         }
 
-    def abrechnung_result(self) -> str:
-        return content_of(self.driver, 'abrechnung').replace('<br>', '\n').strip()
+    def abrechnung_partner_result(self) -> str:
+        return content_of(self.driver, 'abrechnung_partner').replace('<br>', '\n').strip()
 

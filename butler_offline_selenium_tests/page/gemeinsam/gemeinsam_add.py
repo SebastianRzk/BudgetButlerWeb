@@ -2,6 +2,8 @@ from butler_offline_selenium_tests.page.util import fill_element, select_option,
     get_selected_option
 from selenium.webdriver.common.by import By
 
+DEFAULT_PARTNERNAME = 'kein_Partnername_gesetzt'
+
 
 class GemeinsamAdd:
 
@@ -13,7 +15,7 @@ class GemeinsamAdd:
 
 
     def add(self, date, name, kategorie, wert, person):
-        fill_element(self.driver, 'date', date)
+        fill_element(self.driver, 'datum', date)
         fill_element(self.driver, 'name', name)
         fill_element(self.driver, 'wert', wert)
         select_option(self.driver, 'kategorie_auswahl', kategorie)
