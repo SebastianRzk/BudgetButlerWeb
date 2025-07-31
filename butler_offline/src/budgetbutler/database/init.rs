@@ -13,12 +13,20 @@ pub fn init_database_if_needed(
 ) {
     if !exists_database(user_application_directory, &config.database_configuration) {
         create_path_if_needed(&user_application_directory.path.join("abrechnungen"));
-        create_path_if_needed(&user_application_directory.path.join("backups").join("import_backup"));
+        create_path_if_needed(
+            &user_application_directory
+                .path
+                .join("backups")
+                .join("import_backup"),
+        );
         write_database(
             user_application_directory,
             &generate_initial_database(),
             &config.database_configuration,
         );
-        save_user_data_version(user_application_directory, &get_current_application_version());
+        save_user_data_version(
+            user_application_directory,
+            &get_current_application_version(),
+        );
     }
 }
