@@ -24,11 +24,13 @@ pub fn get_domain() -> String {
     get_env(ENV_APP_ROOT).unwrap_or(DEFAULT_APP_NAME.to_string())
 }
 
-pub fn init_and_load_config(user_data_location: &PathBuf) -> Configuration {
+pub fn load_config(user_data_location: &PathBuf) -> Configuration {
+    load_configuration(user_data_location)
+}
+
+pub fn init_if_needed(user_data_location: &PathBuf) {
     create_path_if_needed(user_data_location);
-    if exists_config(user_data_location) {
-        load_configuration(user_data_location)
-    } else {
-        update_configuration(user_data_location, generate_initial_config())
+    if !exists_config(user_data_location) {
+        update_configuration(user_data_location, generate_initial_config());
     }
 }

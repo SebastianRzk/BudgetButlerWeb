@@ -6,7 +6,9 @@ mod budgetbutler;
 pub mod io;
 pub mod model;
 
-use crate::budgetbutler::config::{get_domain, get_port, get_protocol, init_and_load_config};
+use crate::budgetbutler::config::{
+    get_domain, get_port, get_protocol, init_if_needed, load_config,
+};
 use crate::budgetbutler::database::init::init_database;
 use crate::budgetbutler::migration::migrator::run_migrations;
 use crate::io::cargo::get_current_application_version;
@@ -62,7 +64,7 @@ async fn main() -> std::io::Result<()> {
     let user_application_directory = UserApplicationDirectory {
         path: user_data_location.clone(),
     };
-
+    init_if_needed(&user_data_location);
     run_migrations(
         get_current_application_version(),
         load_user_data_version(&user_application_directory),
@@ -73,7 +75,7 @@ async fn main() -> std::io::Result<()> {
     let app_port: u16 = get_port();
     let app_protocol: String = get_protocol();
 
-    let config = init_and_load_config(&user_data_location);
+    let config = load_config(&user_data_location);
 
     let database = init_database(&user_data_location, &config, &user_application_directory);
 
