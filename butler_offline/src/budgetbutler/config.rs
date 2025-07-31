@@ -6,6 +6,10 @@ use crate::model::initial_config::path::create_path_if_needed;
 use crate::model::local::{DEFAULT_APP_NAME, DEFAULT_APP_PORT, DEFAULT_PROTOCOL};
 use crate::model::state::config::Configuration;
 use std::path::PathBuf;
+use crate::budgetbutler::database::init::init_database_if_needed;
+use crate::io::disk::shares::save_shares;
+use crate::model::shares::shares_state::ShareState;
+use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
 
 pub fn get_protocol() -> String {
     get_env(ENV_APP_PROTOCOL).unwrap_or(DEFAULT_PROTOCOL.to_string())
@@ -28,9 +32,12 @@ pub fn load_config(user_data_location: &PathBuf) -> Configuration {
     load_configuration(user_data_location)
 }
 
-pub fn init_if_needed(user_data_location: &PathBuf) {
-    create_path_if_needed(user_data_location);
-    if !exists_config(user_data_location) {
-        update_configuration(user_data_location, generate_initial_config());
+pub fn init_user_data_location_if_needed(user_data_location: &UserApplicationDirectory) {
+    create_path_if_needed(&user_data_location.path);
+    if !exists_config(&user_data_location.path) {
+        let initial_config = generate_initial_config();
+        update_configuration(&user_data_location.path, &initial_config);
+        save_shares(user_data_location, &ShareState::default());
+        init_database_if_needed(&initial_config, user_data_location);
     }
 }

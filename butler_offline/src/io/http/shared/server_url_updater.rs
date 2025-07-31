@@ -16,7 +16,7 @@ pub fn update_server_url(
         server_url: verarbeitet,
     };
     let clone = config.server_configuration.clone();
-    let refreshed_config = update_configuration(&root_path.path, config.clone());
+    let refreshed_config = update_configuration(&root_path.path, &config);
     *config = refreshed_config;
     drop(config);
     clone

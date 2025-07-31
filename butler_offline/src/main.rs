@@ -7,13 +7,13 @@ pub mod io;
 pub mod model;
 
 use crate::budgetbutler::config::{
-    get_domain, get_port, get_protocol, init_if_needed, load_config,
+    get_domain, get_port, get_protocol, init_user_data_location_if_needed, load_config,
 };
-use crate::budgetbutler::database::init::init_database;
 use crate::budgetbutler::migration::migrator::run_migrations;
 use crate::io::cargo::get_current_application_version;
 use crate::io::cli::endpoints::get_cli_args;
 use crate::io::disk::butler::{compute_static_path, user_data_location};
+use crate::io::disk::reader::read_database;
 use crate::io::disk::shares::load_shares;
 use crate::io::disk::version::load_user_data_version;
 use crate::io::http::core::error_keine_aktion_gefunden::error_keine_aktion_gefunden;
@@ -49,6 +49,7 @@ use crate::model::state::non_persistent_application_state::{
     OnlineRedirectState, OrderChanges, OrderDauerauftragChanges, SparbuchungenChanges,
     StaticPathDirectory, UserApplicationDirectory,
 };
+use crate::model::state::persistent_state::database_version::create_initial_database_version;
 use crate::model::state::shares::SharesData;
 use io::http::core::{configuration, dashboard};
 use io::http::einzelbuchungen::{
@@ -64,7 +65,7 @@ async fn main() -> std::io::Result<()> {
     let user_application_directory = UserApplicationDirectory {
         path: user_data_location.clone(),
     };
-    init_if_needed(&user_data_location);
+    init_user_data_location_if_needed(&user_application_directory);
     run_migrations(
         get_current_application_version(),
         load_user_data_version(&user_application_directory),
@@ -77,7 +78,11 @@ async fn main() -> std::io::Result<()> {
 
     let config = load_config(&user_data_location);
 
-    let database = init_database(&user_data_location, &config, &user_application_directory);
+    let database = read_database(
+        &user_application_directory,
+        &config.database_configuration,
+        create_initial_database_version(config.database_configuration.name.clone()),
+    );
 
     let state = model::state::persistent_application_state::ApplicationState {
         database: Mutex::new(database),
