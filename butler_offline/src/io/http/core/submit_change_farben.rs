@@ -35,7 +35,7 @@ pub async fn submit(
         config: &config,
     });
 
-    let refreshed_config = update_configuration(&root_path.path, result.new_config);
+    let refreshed_config = update_configuration(&root_path.path, &result.new_config);
     *config = refreshed_config;
 
     drop(config);

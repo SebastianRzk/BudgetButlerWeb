@@ -5,6 +5,13 @@ title: Changelog
 
 <a href="{{config.pathPrefix}}">zurück zur Übersicht</a>
 
+### v4.3.5 (2025-07-31)
+
+### Änderungen Desktop-Client
+
+* Behebe Probleme, wenn Anwendung das erste Mal startet (neue Initialisierungs-Reihenfolge)
+* Selenium-Tests weiter angepasst
+
 ### v4.3.4 (2025-07-03)
 
 ### Änderungen Desktop-Client
