@@ -1,3 +1,4 @@
+use crate::budgetbutler::database::abrechnen::AbrechnungZeitlicheRahmendaten;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_text_generator::generiere_einfuehrungs_text;
 use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::{generiere_text, HeaderInsertModus, Metadaten, Ziel};
 use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::einzel_buchungen_text_generator::einzelbuchungen_as_import_text;
@@ -29,7 +30,7 @@ pub mod builder {
 
     pub fn abrechnung_from_str(str: &str) -> Abrechnung {
         Abrechnung {
-            lines: Line::from_multiline_str(str.to_string()),
+            lines: Line::from_multiline_str(&str.to_string()),
         }
     }
 }
@@ -82,11 +83,9 @@ pub fn rechne_ab(
     eigene_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
     partner_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
     praeable: String,
-    partner: Person,
-    selbst: Person,
-    today: Datum,
-    min_date: Datum,
-    max_date: Datum,
+    partner: &Person,
+    selbst: &Person,
+    abrechnung_zeitliche_rahmendaten: &AbrechnungZeitlicheRahmendaten,
     ausgleichs_gesamt_konfiguration: AusgleichsGesamtKonfiguration,
     abrechungs_werte: AbrechnungsWerte,
     titel: Titel,
@@ -97,11 +96,9 @@ pub fn rechne_ab(
             eigene_buchungen.clone(),
             partner_buchungen.clone(),
             praeable.clone(),
-            partner.clone(),
-            selbst.clone(),
-            today.clone(),
-            min_date.clone(),
-            max_date.clone(),
+            partner,
+            selbst,
+            abrechnung_zeitliche_rahmendaten,
             ausgleichs_gesamt_konfiguration.selbst.clone(),
             abrechungs_werte.clone(),
             titel.clone(),
@@ -114,9 +111,7 @@ pub fn rechne_ab(
             praeable,
             selbst,
             partner,
-            today,
-            min_date,
-            max_date,
+            abrechnung_zeitliche_rahmendaten,
             ausgleichs_gesamt_konfiguration.partner,
             abrechungs_werte.inveritere_fuer_partner(),
             titel,
@@ -131,32 +126,28 @@ fn rechne_ab_fuer_eine_person(
     eigene_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
     partner_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
     praeable: String,
-    partner: Person,
-    selbst: Person,
-    today: Datum,
-    min_date: Datum,
-    max_date: Datum,
+    partner: &Person,
+    selbst: &Person,
+    abrechnung_zeitliche_rahmendaten: &AbrechnungZeitlicheRahmendaten,
     ausgleichs_konfiguration: AusgleichsKonfiguration,
     abrechnungs_werte: AbrechnungsWerte,
     titel: Titel,
     ziel: Ziel,
 ) -> Abrechnung {
     let buchungen = berechne_neue_einzelbuchungen(
-        gemeinsame_buchungen,
-        abrechnungs_werte.gesamt_betrag.clone(),
-        today.clone(),
-        ausgleichs_konfiguration,
-        abrechnungs_werte.diff_selbst.clone(),
+        &gemeinsame_buchungen,
+        &abrechnungs_werte.gesamt_betrag,
+        &abrechnung_zeitliche_rahmendaten.heute,
+        &ausgleichs_konfiguration,
+        &abrechnungs_werte.diff_selbst,
     );
     let einfuehrungs_text = generiere_einfuehrungs_text(
         eigene_buchungen,
         partner_buchungen,
         praeable,
         partner,
-        selbst.clone(),
-        today.clone(),
-        min_date,
-        max_date,
+        selbst,
+        abrechnung_zeitliche_rahmendaten,
         abrechnungs_werte,
     );
     Abrechnung {
@@ -165,10 +156,10 @@ fn rechne_ab_fuer_eine_person(
             einzelbuchungen_as_import_text(&buchungen),
             Metadaten {
                 titel,
-                ausfuehrungsdatum: today.clone(),
-                abrechnende_person: selbst,
+                ausfuehrungsdatum: abrechnung_zeitliche_rahmendaten.heute.clone(),
+                abrechnende_person: selbst.clone(),
                 ziel,
-                abrechnungsdatum: today,
+                abrechnungsdatum: abrechnung_zeitliche_rahmendaten.heute.clone(),
             },
             HeaderInsertModus::Insert,
         ),
@@ -176,11 +167,11 @@ fn rechne_ab_fuer_eine_person(
 }
 
 fn berechne_neue_einzelbuchungen(
-    gemeinsame_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
-    erwartete_gesamt_summe: Betrag,
-    today: Datum,
-    ausgleichs_konfiguration: AusgleichsKonfiguration,
-    ausgleichs_betrag: Betrag,
+    gemeinsame_buchungen: &Vec<Indiziert<GemeinsameBuchung>>,
+    erwartete_gesamt_summe: &Betrag,
+    today: &Datum,
+    ausgleichs_konfiguration: &AusgleichsKonfiguration,
+    ausgleichs_betrag: &Betrag,
 ) -> Vec<Einzelbuchung> {
     let mut neue_buchungen: Vec<Einzelbuchung> = vec![];
     let mut berechnete_gesamt_summe = Betrag::zero();
@@ -210,10 +201,10 @@ fn berechne_neue_einzelbuchungen(
 
     if ausgleichs_betrag.abs().as_cent() > 0 {
         let neue_buchung = Einzelbuchung {
-            datum: today,
+            datum: today.clone(),
             name: ausgleichs_konfiguration.ausgleichs_name.clone(),
             kategorie: ausgleichs_konfiguration.ausgleichs_kategorie.clone(),
-            betrag: ausgleichs_betrag,
+            betrag: ausgleichs_betrag.clone(),
         };
         neue_buchungen.push(neue_buchung);
     }
@@ -223,8 +214,9 @@ fn berechne_neue_einzelbuchungen(
 
 #[cfg(test)]
 mod tests {
+    use crate::budgetbutler::database::abrechnen::AbrechnungZeitlicheRahmendaten;
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::{berechne_neue_einzelbuchungen, rechne_ab, AbrechnungsWerte, AusgleichsGesamtKonfiguration, AusgleichsKonfiguration, Titel};
-    use crate::io::disk::diskrepresentation::line::builder::as_string;
+    use crate::io::disk::diskrepresentation::line::as_string;
     use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::indiziert::Indiziert;
@@ -238,20 +230,20 @@ mod tests {
     #[test]
     fn test_berechne_neue_einzelbuchungen() {
         let result = berechne_neue_einzelbuchungen(
-            vec![indiziert(GemeinsameBuchung {
+            &vec![indiziert(GemeinsameBuchung {
                 person: demo_person(),
                 name: name("testname"),
                 kategorie: Kategorie::new("testkategorie".to_string()),
                 betrag: Betrag::new(Vorzeichen::Negativ, 100, 0),
                 datum: Datum::new(1, 1, 2021),
             })],
-            Betrag::new(Vorzeichen::Negativ, 100, 0),
-            Datum::new(2, 1, 2021),
-            AusgleichsKonfiguration {
+            &Betrag::new(Vorzeichen::Negativ, 100, 0),
+            &Datum::new(2, 1, 2021),
+            &AusgleichsKonfiguration {
                 ausgleichs_kategorie: kategorie("Ausgleichskategorie"),
                 ausgleichs_name: name("Ausgleichsname"),
             },
-            Betrag::new(Vorzeichen::Positiv, 20, 0),
+            &Betrag::new(Vorzeichen::Positiv, 20, 0),
         );
 
         assert_eq!(result.len(), 2);
@@ -279,19 +271,19 @@ mod tests {
     #[test]
     fn test_berechne_neue_einzelbuchungen_mit_rundungscent() {
         let result = berechne_neue_einzelbuchungen(
-            vec![
+            &vec![
                 gemeinssame_buchung_1_cent(),
                 gemeinssame_buchung_1_cent(),
                 gemeinssame_buchung_1_cent(),
                 gemeinssame_buchung_1_cent(),
             ],
-            Betrag::new(Vorzeichen::Negativ, 0, 4),
-            Datum::new(2, 1, 2021),
-            AusgleichsKonfiguration {
+            &Betrag::new(Vorzeichen::Negativ, 0, 4),
+            &Datum::new(2, 1, 2021),
+            &AusgleichsKonfiguration {
                 ausgleichs_kategorie: kategorie("Ausgleichskategorie"),
                 ausgleichs_name: name("Ausgleichsname"),
             },
-            Betrag::new(Vorzeichen::Positiv, 20, 0),
+            &Betrag::new(Vorzeichen::Positiv, 20, 0),
         );
 
         assert_eq!(result.len(), 6);
@@ -340,11 +332,13 @@ mod tests {
                 datum: Datum::new(1, 1, 2021),
             })],
             "mein kleiner Abrechnugnstext".to_string(),
-            person("PartnerName"),
-            person("IchName"),
-            Datum::new(3, 1, 2021),
-            Datum::new(1, 1, 2021),
-            Datum::new(2, 1, 2021),
+            &person("PartnerName"),
+            &person("IchName"),
+            &AbrechnungZeitlicheRahmendaten {
+                heute: Datum::new(3, 1, 2021),
+                start_datum: Datum::new(1, 1, 2021),
+                ende_datum: Datum::new(2, 1, 2021),
+            },
             AusgleichsGesamtKonfiguration {
                 partner: AusgleichsKonfiguration {
                     ausgleichs_name: name("AusgleichPartnerName"),

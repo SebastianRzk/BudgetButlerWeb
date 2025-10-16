@@ -140,7 +140,7 @@ pub fn create_database_backup(
 mod tests {
     use crate::budgetbutler::database::reader::database_reader::create_database;
     use crate::io::disk::diskrepresentation::file::File;
-    use crate::io::disk::diskrepresentation::line::builder::as_string;
+    use crate::io::disk::diskrepresentation::line::as_string;
     use crate::io::disk::reader::read_data;
     use crate::io::disk::writer::{map_database_to_file, map_sorted_to_file};
     use crate::model::primitives::datum::builder::any_datum;

@@ -5,22 +5,33 @@ title: Changelog
 
 <a href="{{config.pathPrefix}}">zurück zur Übersicht</a>
 
+### v4.3.6 (2025-10-16)
+
+#### Änderungen Desktop-Client
+
+* Aktualisierung von Abhängigkeiten (application-wrapper und backend)
+* Refactoring (fix von clippy warnings)
+
+#### Änderungen Begleiter-Web-App
+
+* Aktualisierung von Abhängigkeiten im Backend
+
 ### v4.3.5 (2025-07-31)
 
-### Änderungen Desktop-Client
+#### Änderungen Desktop-Client
 
 * Behebe Probleme, wenn Anwendung das erste Mal startet (neue Initialisierungs-Reihenfolge)
 * Selenium-Tests weiter angepasst
 
 ### v4.3.4 (2025-07-03)
 
-### Änderungen Desktop-Client
+#### Änderungen Desktop-Client
 
 * Aktualisierung der Abhängigkeiten des Application-Wrappers
 * Aktualisierung der Abhängigkeiten des Rust-Backends
 * Einführung eines Boot-Screens
 
-### Änderungen Begleiter-Web-App
+#### Änderungen Begleiter-Web-App
 
 * Aktualisierung der Abhängigkeiten des Frontends
 * Aktualisierung der Abhängigkeiten des Backends

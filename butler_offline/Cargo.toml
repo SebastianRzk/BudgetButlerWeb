@@ -1,20 +1,20 @@
 [package]
 name = "budgetbutlerweboffline"
-version = "4.3.5"
+version = "4.3.6"
 edition = "2021"
 
 [dependencies]
-actix-files = "0.6.6"
+actix-files = "0.6.8"
 actix-web = "4.11.0"
 askama = "0.14.0"
-chrono = "0.4.41"
+chrono = "0.4.42"
 mime = "0.3.17"
-serde = { version = "1.0.219", features = ["derive"] }
-rand = "0.9.1"
-serde_json = "1.0.140"
-reqwest = { version = "0.12.15", features = ["json"] }
+serde = { version = "1.0.228", features = ["derive"] }
+rand = "0.9.2"
+serde_json = "1.0.145"
+reqwest = { version = "0.12.24", features = ["json"] }
 # Cli Parser
-clap = { version = "4.5.38", features = ["derive"] }
+clap = { version = "4.5.49", features = ["derive"] }
 
 [features]
 default = []

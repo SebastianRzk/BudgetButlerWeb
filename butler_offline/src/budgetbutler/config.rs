@@ -9,7 +9,7 @@ use crate::model::local::{DEFAULT_APP_NAME, DEFAULT_APP_PORT, DEFAULT_PROTOCOL};
 use crate::model::shares::shares_state::ShareState;
 use crate::model::state::config::Configuration;
 use crate::model::state::non_persistent_application_state::UserApplicationDirectory;
-use std::path::PathBuf;
+use std::path::Path;
 
 pub fn get_protocol() -> String {
     get_env(ENV_APP_PROTOCOL).unwrap_or(DEFAULT_PROTOCOL.to_string())
@@ -28,7 +28,7 @@ pub fn get_domain() -> String {
     get_env(ENV_APP_ROOT).unwrap_or(DEFAULT_APP_NAME.to_string())
 }
 
-pub fn load_config(user_data_location: &PathBuf) -> Configuration {
+pub fn load_config(user_data_location: &Path) -> Configuration {
     load_configuration(user_data_location)
 }
 

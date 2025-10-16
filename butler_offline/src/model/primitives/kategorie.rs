@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 pub const SPAREN_KATEGORIE: &str = "Sparen";
 
@@ -15,12 +16,14 @@ impl Kategorie {
         self.kategorie == other.kategorie
     }
 
-    pub fn to_string(&self) -> String {
-        self.kategorie.clone()
-    }
-
     pub fn empty() -> Kategorie {
         Kategorie::new("".to_string())
+    }
+}
+
+impl Display for Kategorie {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.kategorie.clone())
     }
 }
 
@@ -78,5 +81,11 @@ mod tests {
         assert_eq!(liste[0].get_kategorie(), "A");
         assert_eq!(liste[1].get_kategorie(), "B");
         assert_eq!(liste[2].get_kategorie(), "C");
+    }
+
+    #[test]
+    fn kategorie_str() {
+        let k = kategorie("Test");
+        assert_eq!(k.to_string(), "Test".to_string());
     }
 }

@@ -181,10 +181,10 @@ pub fn update_abrechnung_for_import(abrechnung: Abrechnung, heute: Datum) -> Abr
 mod tests {
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::builder::abrechnung_from_str;
     use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::importer::update_abrechnung_for_import;
-    use crate::io::disk::diskrepresentation::line::builder::as_string;
     use crate::model::primitives::datum::Datum;
     use crate::model::primitives::kategorie::kategorie;
     use std::collections::HashMap;
+    use crate::io::disk::diskrepresentation::line::as_string;
 
     const DEMO_ABRECHNUNG_INPUT: &str = "\
 ergebnis

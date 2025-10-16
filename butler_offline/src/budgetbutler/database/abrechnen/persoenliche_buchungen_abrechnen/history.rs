@@ -90,7 +90,7 @@ Datum,Kategorie,Name,Betrag
     fn test_generate_abrechnungs_title_from_filename() {
         let result = super::read_abrechnung(super::UnparsedAbrechnungsFile {
             file_content: Line::from_multiline_str(
-                DEMO_ABRECHNUNG_INPUT_WITHOUT_METADATA.to_string(),
+                &DEMO_ABRECHNUNG_INPUT_WITHOUT_METADATA.to_string(),
             ),
             file_name: "demo_abrechnung".to_string(),
         });
@@ -116,7 +116,7 @@ Datum,Kategorie,Name,Betrag
     #[test]
     fn test_read_abrechnung() {
         let result = super::read_abrechnung(super::UnparsedAbrechnungsFile {
-            file_content: Line::from_multiline_str(DEMO_ABRECHNUNG_INPUT.to_string()),
+            file_content: Line::from_multiline_str(&DEMO_ABRECHNUNG_INPUT.to_string()),
             file_name: "demo_abrechnung".to_string(),
         });
 

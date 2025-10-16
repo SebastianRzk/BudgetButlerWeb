@@ -38,10 +38,10 @@ pub fn generiere_text(
         lines.push(Line::from(metadaten.titel.titel.clone()))
     }
     lines.append(&mut einfuehrungs_text.lines.clone());
-    lines.append(&mut Line::from_multiline_str(maschinen_import_metadaten(
+    lines.append(&mut Line::from_multiline_str(&maschinen_import_metadaten(
         metadaten,
     )));
-    lines.append(&mut Line::from_multiline_str(maschienen_import(
+    lines.append(&mut Line::from_multiline_str(&maschienen_import(
         buchungen_text,
     )));
     lines
@@ -112,7 +112,7 @@ pub fn maschinen_import_metadaten(metadaten: Metadaten) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::io::disk::diskrepresentation::line::builder::as_string;
+    use crate::io::disk::diskrepresentation::line::as_string;
 
     #[test]
     fn test_ziel_from_str() {

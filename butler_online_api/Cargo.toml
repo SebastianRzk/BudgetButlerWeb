@@ -8,7 +8,7 @@ path = "src/cron.rs"
 
 [package]
 name = "budgetbutlerweb-companion-backend"
-version = "4.3.5"
+version = "4.3.6"
 edition = "2021"
 
 [dependencies]
@@ -22,8 +22,8 @@ env_logger = "0.11.8"
 log = "0.4.27"
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.17.0", features = ["v4", "serde"] }
-openid = "0.17.0"
+openid = "0.18.3"
 url = "2.5.4"
-actix-identity = "0.8.0"
-actix-session = { version="0.10.1", features = ["cookie-session"] }
+actix-identity = "0.9.0"
+actix-session = { version= "0.11.0", features = ["cookie-session"] }
 chrono = "0.4.41"

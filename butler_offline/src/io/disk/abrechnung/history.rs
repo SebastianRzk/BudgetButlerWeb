@@ -29,7 +29,7 @@ pub fn lade_alle_abrechnungen(
         let file_content = std::fs::read_to_string(file_path).unwrap();
         result.push(UnparsedAbrechnungsFile {
             file_name,
-            file_content: Line::from_multiline_str(file_content),
+            file_content: Line::from_multiline_str(&file_content),
         });
     }
 

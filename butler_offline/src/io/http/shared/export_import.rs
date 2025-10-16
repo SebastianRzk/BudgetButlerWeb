@@ -55,7 +55,7 @@ pub async fn submit_import_manuell(
     let mut database = data.database.lock().unwrap();
     let configuration = config.configuration.lock().unwrap();
 
-    let abrechnungs_file = Line::from_multiline_str(form.import.clone());
+    let abrechnungs_file = Line::from_multiline_str(&form.import);
     let abrechnung = Abrechnung::new(abrechnungs_file.clone());
 
     let pruefe_kategorien =

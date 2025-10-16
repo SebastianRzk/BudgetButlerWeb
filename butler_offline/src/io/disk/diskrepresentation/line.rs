@@ -19,7 +19,7 @@ impl Line {
         Line { line: string }
     }
 
-    pub fn from_multiline_str(multiline_string: String) -> Vec<Line> {
+    pub fn from_multiline_str(multiline_string: &str) -> Vec<Line> {
         multiline_string.lines().map(Line::new).collect()
     }
 }
@@ -32,14 +32,6 @@ pub mod builder {
         Line {
             line: line.to_string(),
         }
-    }
-
-    pub fn as_string(lines: &[Line]) -> String {
-        lines
-            .iter()
-            .map(|line| line.line.clone())
-            .collect::<Vec<String>>()
-            .join("\n")
     }
 }
 
@@ -76,7 +68,7 @@ mod tests {
     #[test]
     fn test_from_multiline_str() {
         let multiline_string = "asdf\nqwer\nzxcv".to_string();
-        let lines = Line::from_multiline_str(multiline_string);
+        let lines = Line::from_multiline_str(&multiline_string);
         assert_eq!(lines.len(), 3);
         assert_eq!(lines[0].line, "asdf");
         assert_eq!(lines[1].line, "qwer");

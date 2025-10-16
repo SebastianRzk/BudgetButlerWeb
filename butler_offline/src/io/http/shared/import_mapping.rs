@@ -41,7 +41,7 @@ pub async fn submit_import_mapping(
     }
 
     let aktualisierte_abrechung = aktualisiere_kategorien(
-        Abrechnung::new(Line::from_multiline_str(abrechnung_str)),
+        Abrechnung::new(Line::from_multiline_str(&abrechnung_str)),
         mappings,
     );
 

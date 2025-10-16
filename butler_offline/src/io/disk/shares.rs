@@ -7,11 +7,6 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
 
-#[derive(Serialize, Deserialize)]
-struct ShareStateOnDisk {
-    pub shares: HashMap<ISIN, ShareOnDisk>,
-}
-
 #[derive(Serialize, Deserialize, Clone)]
 struct ShareOnDisk {
     pub data: Vec<ShareSnapshotOnDisk>,
