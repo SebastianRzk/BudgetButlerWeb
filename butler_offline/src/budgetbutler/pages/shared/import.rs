@@ -40,7 +40,7 @@ mod tests {
     use crate::budgetbutler::pages::shared::import::{
         handle_import_abrechnung, ImportAbrechnungContext,
     };
-    use crate::io::disk::diskrepresentation::line::builder::as_string;
+    use crate::io::disk::diskrepresentation::line::as_string;
     use crate::model::database::einzelbuchung::Einzelbuchung;
     use crate::model::primitives::betrag::Betrag;
     use crate::model::primitives::datum::Datum;

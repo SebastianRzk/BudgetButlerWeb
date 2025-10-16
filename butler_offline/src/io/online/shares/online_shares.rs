@@ -58,8 +58,8 @@ pub struct ShareDataContentDto {
 pub async fn load_shares_index() -> Option<SharesIndex> {
     let response = get_request(SHARES_INDEX_URL).await;
 
-    if response.is_ok() {
-        let result_content = response.expect("Can not parse shares index response");
+    if let Ok(response) = response {
+        let result_content = response;
         let result = serde_json::from_str::<Vec<SharesIndexEntryDto>>(&result_content);
         println!("{:?}", result.err());
         println!("{result_content}");
@@ -88,8 +88,8 @@ pub async fn load_alternative_isin_index() -> Option<AlternativeISINIndex> {
         )
         .err()
     );
-    if response.is_ok() {
-        serde_json::from_str::<Vec<AlternativeISINIndexEntryDto>>(&response.unwrap())
+    if let Ok(response) = response {
+        serde_json::from_str::<Vec<AlternativeISINIndexEntryDto>>(&response)
             .ok()
             .map(|dto| AlternativeISINIndex {
                 data: dto

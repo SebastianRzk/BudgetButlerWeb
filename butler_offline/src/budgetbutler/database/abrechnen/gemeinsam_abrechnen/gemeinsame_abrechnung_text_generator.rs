@@ -1,58 +1,56 @@
+use crate::budgetbutler::database::abrechnen::AbrechnungZeitlicheRahmendaten;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::AbrechnungsWerte;
 use crate::budgetbutler::database::abrechnen::persoenliche_buchungen_abrechnen::abrechnung_text_generator::EinfuehrungsText;
 use crate::io::disk::diskrepresentation::line::Line;
 use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
 use crate::model::indiziert::Indiziert;
 use crate::model::primitives::betrag::Betrag;
-use crate::model::primitives::datum::Datum;
 use crate::model::primitives::person::Person;
 
 pub fn generiere_einfuehrungs_text(
     eigene_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
     partner_buchungen: Vec<Indiziert<GemeinsameBuchung>>,
     praeamble: String,
-    partner: Person,
-    selbst: Person,
-    today: Datum,
-    min_date: Datum,
-    max_date: Datum,
+    partner: &Person,
+    selbst: &Person,
+    abrechnung_zeitliche_rahmendaten: &AbrechnungZeitlicheRahmendaten,
     abrechnungs_werte: AbrechnungsWerte,
 ) -> EinfuehrungsText {
     let mut lines = vec![
-        Line::from(generate_title(today.clone(), min_date, max_date)),
+        Line::from(generate_title(abrechnung_zeitliche_rahmendaten)),
         Line::from(spacer()),
         Line::empty_line(),
         Line::empty_line(),
         Line::from(ergebnis()),
     ];
 
-    lines.append(&mut Line::from_multiline_str(praeamble));
+    lines.append(&mut Line::from_multiline_str(&praeamble));
     lines.push(Line::empty_line());
     lines.push(Line::empty_line());
     lines.push(Line::from(erfasste_ausgaben()));
     lines.push(Line::empty_line());
-    lines.append(&mut Line::from_multiline_str(zusammenfassung(
-        &selbst,
+    lines.append(&mut Line::from_multiline_str(&zusammenfassung(
+        selbst,
         abrechnungs_werte.sum_buchungen_selbst,
-        &partner,
+        partner,
         abrechnungs_werte.sum_buchungen_partner,
         abrechnungs_werte.gesamt_betrag,
     )));
     lines.push(Line::empty_line());
     lines.push(Line::empty_line());
-    lines.append(&mut Line::from_multiline_str(ausgaben_von_headline(
-        &selbst,
+    lines.append(&mut Line::from_multiline_str(&ausgaben_von_headline(
+        selbst,
     )));
-    lines.append(&mut Line::from_multiline_str(ausgaben_von_content(
+    lines.append(&mut Line::from_multiline_str(&ausgaben_von_content(
         &eigene_buchungen,
     )));
 
     lines.push(Line::empty_line());
     lines.push(Line::empty_line());
-    lines.append(&mut Line::from_multiline_str(ausgaben_von_headline(
-        &partner,
+    lines.append(&mut Line::from_multiline_str(&ausgaben_von_headline(
+        partner,
     )));
-    lines.append(&mut Line::from_multiline_str(ausgaben_von_content(
+    lines.append(&mut Line::from_multiline_str(&ausgaben_von_content(
         &partner_buchungen,
     )));
     lines.push(Line::empty_line());
@@ -62,12 +60,16 @@ pub fn generiere_einfuehrungs_text(
     EinfuehrungsText { lines }
 }
 
-fn generate_title(today: Datum, min_date: Datum, max_date: Datum) -> String {
+fn generate_title(abrechnung_zeitliche_rahmendaten: &AbrechnungZeitlicheRahmendaten) -> String {
     format!(
         "Abrechnung vom {} (von {} bis einschließlich {}",
-        today.to_german_string(),
-        min_date.to_german_string(),
-        max_date.to_german_string()
+        abrechnung_zeitliche_rahmendaten.heute.to_german_string(),
+        abrechnung_zeitliche_rahmendaten
+            .start_datum
+            .to_german_string(),
+        abrechnung_zeitliche_rahmendaten
+            .ende_datum
+            .to_german_string()
     )
 }
 
@@ -115,7 +117,7 @@ fn zusammenfassung(
         "{}\n{}\n{}\n{}",
         zusammenfassung_zeile(&person_self.person, person_self_summe),
         zusammenfassung_zeile(&partner.person, partner_summe),
-        format!("{:-<22}", ""),
+        "----------------------",
         zusammenfassung_zeile(&"Gesamt".to_string(), gesamt)
     )
 }
@@ -126,9 +128,10 @@ fn zusammenfassung_zeile(bezeichnung: &String, summe: Betrag) -> String {
 
 #[cfg(test)]
 mod tests {
+    use crate::budgetbutler::database::abrechnen::AbrechnungZeitlicheRahmendaten;
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::AbrechnungsWerte;
     use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_text_generator::generiere_einfuehrungs_text;
-    use crate::io::disk::diskrepresentation::line::builder::as_string;
+    use crate::io::disk::diskrepresentation::line::as_string;
     use crate::model::database::gemeinsame_buchung::GemeinsameBuchung;
     use crate::model::indiziert::builder::indiziert;
     use crate::model::primitives::betrag::builder::zwei;
@@ -157,11 +160,13 @@ mod tests {
                 person: person("PartnerName"),
             })],
             "preaeamble\nblablabla".to_string(),
-            person("PartnerName"),
-            person("IchName"),
-            Datum::new(1, 1, 2024),
-            Datum::new(1, 1, 1999),
-            Datum::new(1, 1, 2050),
+            &person("PartnerName"),
+            &person("IchName"),
+            &AbrechnungZeitlicheRahmendaten {
+                heute: Datum::new(1, 1, 2024),
+                start_datum: Datum::new(1, 1, 1999),
+                ende_datum: Datum::new(1, 1, 2050),
+            },
             AbrechnungsWerte {
                 sum_buchungen_selbst: Betrag::new(Vorzeichen::Negativ, 124, 22),
                 sum_buchungen_partner: Betrag::new(Vorzeichen::Negativ, 125, 22),

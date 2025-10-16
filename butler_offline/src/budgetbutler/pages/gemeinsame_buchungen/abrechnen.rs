@@ -1,3 +1,4 @@
+use crate::budgetbutler::database::abrechnen::AbrechnungZeitlicheRahmendaten;
 use crate::budgetbutler::database::abrechnen::gemeinsam_abrechnen::gemeinsame_abrechnung_generator::{rechne_ab, AbrechnungsErgebnis, AbrechnungsWerte, AusgleichsGesamtKonfiguration, AusgleichsKonfiguration, Titel};
 use crate::budgetbutler::database::select::functions::filters::{
     filter_auf_person, filter_auf_zeitraum,
@@ -59,11 +60,13 @@ pub fn submit_rechne_ab(context: GemeinsameBuchungenAbrechnenSubmitContext) -> A
         eigene_buchungen.clone().collect(),
         partner_buchungen.clone().collect(),
         context.ergebnis,
-        context.user_configuration.partner_name.clone(),
-        context.user_configuration.self_name.clone(),
-        context.today,
-        context.set_mindate,
-        context.set_maxdate,
+        &context.user_configuration.partner_name,
+        &context.user_configuration.self_name,
+        &AbrechnungZeitlicheRahmendaten {
+            start_datum: context.set_mindate,
+            ende_datum: context.set_maxdate,
+            heute: context.today,
+        },
         AusgleichsGesamtKonfiguration {
             selbst: AusgleichsKonfiguration {
                 ausgleichs_kategorie: context.set_self_kategorie,
@@ -87,7 +90,7 @@ pub fn submit_rechne_ab(context: GemeinsameBuchungenAbrechnenSubmitContext) -> A
 #[cfg(test)]
 mod tests {
     use crate::budgetbutler::pages::gemeinsame_buchungen::abrechnen::GemeinsameBuchungenAbrechnenSubmitContext;
-    use crate::io::disk::diskrepresentation::line::builder::as_string;
+    use crate::io::disk::diskrepresentation::line::as_string;
     use crate::model::database::gemeinsame_buchung::builder::gemeinsame_buchung;
     use crate::model::primitives::betrag::builder::minus_fuenfzig;
     use crate::model::primitives::betrag::Betrag;
