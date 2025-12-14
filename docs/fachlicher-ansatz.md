@@ -11,7 +11,7 @@ BudgetButlerWeb unterscheidet im Wesentlichen 2 verschiedene Buchungstypen:
 
 * **Statische / nicht-dynamische Buchungen**: Buchungen, welche einzeln erfasst werden und keine Verbindung zu anderen
   Buchungen haben. Alle Entitäten, welche in der CSV-Datei auf der Platte gespeichert sind, gehören dieser Gruppe an.
-* **Dynamsiche Buchungen**: Buchungen, welche nicht direkt angelegt werden, sondern sich aus anderen statischen oder
+* **Dynamische Buchungen**: Buchungen, welche nicht direkt angelegt werden, sondern sich aus anderen statischen oder
   dynamischen Buchungen ergeben. Beispielsweise die einzelnen Buchungen eines Dauerauftrags, oder eine Ausgabe vom
   Typ "Sparen", welche automatisch durch eine Wertpapier-Order angelegt wird. Diese Buchungen werden nicht gespeichert,
   sondern immer wieder zur Laufzeit neu berechnet. Dies ermöglicht, dass kaskadierende Buchungs-Folgen, wie
