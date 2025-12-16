@@ -13,10 +13,10 @@ pub const DEFAULT_PROTOCOL: &str = "http";
 
 pub fn get_port_binding_domain(app_name: String) -> &'static str {
     if app_name == DEFAULT_APP_NAME {
-        eprintln!("Running in private mode");
+        println!("Running in private mode");
         return PRIVATE_DOMAIN;
     }
-    eprintln!("Running in public mode");
+    println!("Running in public mode");
     PUBLIC_DOMAIN
 }
 

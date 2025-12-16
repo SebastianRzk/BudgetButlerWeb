@@ -30,7 +30,7 @@ pub async fn get_einzelbuchungen(
     user: User,
 ) -> actix_web::Result<impl Responder> {
     let user: String = user.sub;
-    eprintln!("rufe daten ab für {:?}", user.clone());
+    println!("rufe daten ab für {:?}", user.clone());
     let buchungen = web::block(move || {
         let mut conn = pool.get()?;
         repository::find_all_einzelbuchungen(&mut conn, user)

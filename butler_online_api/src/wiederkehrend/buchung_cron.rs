@@ -14,7 +14,7 @@ pub fn verarbeite_dauerauftraege(
     for dauerauftrag in auftraege.iter() {
         anzahl_verarbeiteter_buchungen += verarbeite_dauerauftrag(connection, dauerauftrag);
     }
-    eprintln!(
+    println!(
         "{:?} Buchungen von {:?} Dauerauftraegen in {:?} verarbeitet",
         anzahl_verarbeiteter_buchungen,
         auftraege.len(),

@@ -5,6 +5,17 @@ title: Changelog
 
 <a href="{{config.pathPrefix}}">zurück zur Übersicht</a>
 
+### v4.3.7 (2025-12-16)
+
+#### Änderungen Desktop-Client
+
+* Anzeigen von Fehlermeldungen im UI, wenn das Backend nicht gestartet werden kann
+* Aktualisierung von Abhängigkeiten (application-wrapper und backend)
+
+#### Änderungen Begleiter-Web-App
+
+* Aktualisierung von Abhängigkeiten im Backend
+
 ### v4.3.6 (2025-10-16)
 
 #### Änderungen Desktop-Client

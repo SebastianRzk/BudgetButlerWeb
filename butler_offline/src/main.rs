@@ -148,7 +148,7 @@ async fn main() -> std::io::Result<()> {
     let user_application_directory = Data::new(user_application_directory);
     let static_path_directory = Data::new(StaticPathDirectory { path: static_path });
 
-    println!("Server started at {app_protocol}://{app_domain}:{app_port}");
+    eprintln!("Server started at address {app_protocol}://{app_domain}:{app_port}");
     HttpServer::new(move || {
         let json_cfg = web::FormConfig::default()
             .limit(40000 * 1000 * 1000)

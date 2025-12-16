@@ -118,7 +118,7 @@ pub async fn get_gemeinsame_dauerauftraege(
     user: User,
 ) -> actix_web::Result<impl Responder> {
     let user: String = user.sub;
-    eprintln!("rufe daten ab für {:?}", user.clone());
+    println!("rufe daten ab für {:?}", user.clone());
     let users = web::block(move || {
         let mut conn = pool.get()?;
         output_db::finde_alle_gemeinsame_dauerauftraege(&mut conn, user)
