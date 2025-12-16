@@ -14,7 +14,7 @@ pub fn verarbeite_gemeinsame_dauerauftraege(
         anzahl_verarbeiteter_buchungen +=
             verarbeite_gemeinsame_buchung_dauerauftrag(connection, dauerauftrag);
     }
-    eprintln!(
+    println!(
         "{:?} Buchungen von {:?} gemeinsamen Dauerauftraegen in {:?} verarbeitet",
         anzahl_verarbeiteter_buchungen,
         auftraege.len(),

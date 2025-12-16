@@ -106,7 +106,7 @@ impl From<Share> for ShareOnDisk {
 }
 
 pub fn load_shares(user_application_directory: &UserApplicationDirectory) -> ShareState {
-    eprintln!("Loading shares from: {user_application_directory:?}");
+    println!("Loading shares from: {user_application_directory:?}");
     if exists_shares(user_application_directory) {
         read_shares(user_application_directory)
     } else {
@@ -119,7 +119,7 @@ pub fn save_shares(
     user_application_directory: &UserApplicationDirectory,
     share_state: &ShareState,
 ) {
-    eprintln!("Saving shares to: {user_application_directory:?}");
+    println!("Saving shares to: {user_application_directory:?}");
     let full_path = user_application_directory.path.join(SHARES_FILE_NAME);
     let shares: HashMap<String, ShareOnDisk> = share_state
         .shares

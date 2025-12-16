@@ -111,7 +111,7 @@ pub fn berechne_anlagetypen(database: &Database, farbe: Vec<Farbe>) -> Vec<Anlag
         }
     }
 
-    let anlagetypen = vec![
+    let anlagetypen = [
         AnlagetypOhneFarbe {
             name: "Sparkonto".to_string(),
             gesamte_einzahlungen: sparkonto_einzahlungen,

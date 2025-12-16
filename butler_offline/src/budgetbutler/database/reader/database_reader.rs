@@ -560,7 +560,6 @@ mod tests {
         let result = create_database(data_on_disk, Datum::last(), demo_database_version());
 
         assert_eq!(result.order.select().count(), 1);
-        eprintln!("{:?}", result.order);
         let selected_order = result.order.get(3);
         assert!(selected_order.dynamisch);
         assert_eq!(
