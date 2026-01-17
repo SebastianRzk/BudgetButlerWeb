@@ -1,0 +1,3 @@
+#!/bin/sh
+export PATH="$APPDIR/usr/bin:$PATH"
+$APPDIR/usr/share/budgetbutlerweb/budgetbutlerweb --installed --custom-static-path=$APPDIR/usr/share/budgetbutlerweb/static "$@"
