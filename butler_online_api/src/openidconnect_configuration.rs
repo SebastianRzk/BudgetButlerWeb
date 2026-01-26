@@ -87,14 +87,14 @@ async fn login(
 
             let login = userinfo.preferred_username.clone();
             let email = userinfo.email.clone();
-            let sub: String = userinfo.sub.clone().unwrap_or_default();
+            let sub: String = userinfo.sub.clone();
             let user = User {
                 id: sub.clone(),
                 login,
                 last_name: userinfo.family_name.clone(),
                 first_name: userinfo.name.clone(),
                 email,
-                sub: userinfo.sub.clone().unwrap(),
+                sub: userinfo.sub.clone(),
                 activated: userinfo.email_verified,
                 image_url: userinfo.picture.clone().map(|x| x.to_string()),
                 lang_key: Some("en".to_string()),

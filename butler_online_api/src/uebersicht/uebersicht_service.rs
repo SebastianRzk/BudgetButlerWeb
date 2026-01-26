@@ -110,6 +110,7 @@ mod tests {
     use crate::einzelbuchungen::model::Einzelbuchung;
     use crate::gemeinsame_buchungen::model::GemeinsameBuchung;
     use crate::uebersicht::model::BesitztDatumKategorieUndBetrag;
+    use bigdecimal::{BigDecimal, FromPrimitive};
     use time::Month;
 
     #[test]
@@ -135,9 +136,9 @@ mod tests {
         assert_eq!(result.monate[0].werte.len(), 1);
         assert_eq!(
             result.monate[0].werte.get("Kategorie").unwrap(),
-            &100.into()
+            &BigDecimal::from_i32(100).unwrap()
         );
-        assert_eq!(result.monate[0].gesamt, 100.into());
+        assert_eq!(result.monate[0].gesamt, BigDecimal::from_i32(100).unwrap());
     }
 
     #[test]
@@ -166,9 +167,9 @@ mod tests {
         assert_eq!(result.monate[0].werte.len(), 1);
         assert_eq!(
             result.monate[0].werte.get("Kategorie").unwrap(),
-            &150.into()
+            &BigDecimal::from_i32(150).unwrap()
         );
-        assert_eq!(result.monate[0].gesamt, 150.into());
+        assert_eq!(result.monate[0].gesamt, BigDecimal::from_i32(150).unwrap());
     }
 
     #[test]
@@ -190,7 +191,7 @@ mod tests {
             &time::Date::from_calendar_date(2021, Month::January, 1).unwrap()
         );
         assert_eq!(proxy.get_kategorie(), &"Zielperson".to_string());
-        assert_eq!(proxy.get_betrag(), &100.into());
+        assert_eq!(proxy.get_betrag(), &BigDecimal::from_i32(100).unwrap());
     }
 
     #[test]
@@ -221,6 +222,6 @@ mod tests {
         assert_eq!(result.monate[0].name, "Januar 2021");
         assert_eq!(result.monate[0].werte, kategorien_map);
         assert_eq!(result.monate[0].personen, personen_map);
-        assert_eq!(result.monate[0].gesamt, 100.into());
+        assert_eq!(result.monate[0].gesamt, BigDecimal::from_i32(100).unwrap());
     }
 }
