@@ -2,9 +2,9 @@ name: Test Build AppImage
 
 on:
   pull_request:
-    branches: [ stable ]
+    branches: [ master ]
     types: [ opened, synchronize, reopened ]
-    base: [ stable ]
+    base: [ master ]
     paths-ignore:
       - '**.md'
 
