@@ -6,13 +6,13 @@ edition = "2021"
 [dependencies]
 actix-files = "0.6.9"
 actix-web = "4.12.1"
-askama = "0.14.0"
-chrono = "0.4.42"
+askama = "0.15.1"
+chrono = "0.4.43"
 mime = "0.3.17"
 serde = { version = "1.0.228", features = ["derive"] }
 rand = "0.9.2"
 serde_json = "1.0.145"
-reqwest = { version = "0.12.26", features = ["json"] }
+reqwest = { version = "0.13.1", features = ["json"] }
 # Cli Parser
 clap = { version = "4.5.53", features = ["derive"] }
 
