@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>de.sebastianruziczka.budgetbutlerweb</id>
+    <content_rating type="oars-1.1"/>
+    <url type="homepage">https://sebastianrzk.github.io/BudgetButlerWeb/</url>
+    <name>BudgetButlerWeb</name>
+    <summary>Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung</summary>
+    <metadata_license>MIT</metadata_license>
+    <project_license>AGPL-3.0-or-later</project_license>
+    <categories>
+        <category>Office</category>
+        <category>Finance</category>
+    </categories>
+    <supports>
+        <control>pointing</control>
+        <control>keyboard</control>
+        <control>touch</control>
+    </supports>
+    <description>
+        <p>Ein einfaches Haushaltsbuch für eine schlanke und individuelle Finanzverwaltung.
+        </p>
+        <p>
+            Kernfunktionen:
+        </p>
+        <ul>
+            <li>
+                Einfache lokale Datenhaltung: Die Daten sind im CSV-Format gespeichert und sind damit mit einem Textverarbeitungsprogramm oder einem Tabellenverarbeitungsprogramm zugänglich.
+            </li>
+            <li>
+                Unkomplizierte Einnahmen/Ausgaben-Rechnung: keine doppelte Buchführung.
+            </li>
+            <li>
+                Schlanke Begleiter-Web-App für unterwegs:
+                online-Version, mobil-optimiert
+                Automatisierter Import der Daten in die lokale Anwendung. Single-Sign-On über OpenID-Provider.
+            </li>
+            <li>
+                Schlankes und minimalistisches Design
+
+            </li>
+            <li>
+
+                    Hohe Geschwindigkeit:
+                ... auch bei großen Datenmengen. Tracking über viele Jahre mit 30000 Buchungen oder mehr stellen keine Herausforderung dar
+            </li>
+            <li>
+                Individualisierbar:
+                Definiere eigene Kategorien, und ordne ihnen eine Farbe zu, die über die gesamte Anwendung hinweg verwendet werden. Die Design-Farbe ist ebenefalls mit einem Klick änderbar
+            </li>
+            <li>
+                Quelloffen:
+                AGPLv3
+            </li>
+        </ul>
+    </description>
+    <releases>
+        <release version="4.3.8" date="2026-01-29">
+            <url type="details">https://sebastianrzk.github.io/BudgetButlerWeb/changelog/</url>
+            <description>
+                <p>Release description</p>
+                <ul>
+                    <li>Anzeigen von Fehlermeldungen im UI, wenn das Backend nicht gestartet werden kann</li>
+                    <li>Aktualisierung von Abhängigkeiten (application-wrapper und backend)</li>
+                </ul>
+            </description>
+        </release>
+    </releases>
+    <launchable type="desktop-id">de.sebastianruziczka.budgetbutlerweb.desktop</launchable>
+    <screenshots>
+        <screenshot type="default">
+            <image>
+                https://sebastianrzk.github.io/BudgetButlerWeb/img/header_image.png
+            </image>
+            <caption>Übersicht über das BudgetButlerWeb Ökosystem</caption>
+        </screenshot>
+        <screenshot>
+            <image>
+                https://sebastianrzk.github.io/BudgetButlerWeb/img/screenshots_desktop/uebersicht_jahr.png
+            </image>
+            <caption>Jahreübersicht der Einnahmen und Ausgaben</caption>
+        </screenshot>
+    </screenshots>
+    <developer id="de.sebastianruziczka">
+        <name>Sebastian Ruziczka</name>
+    </developer>
+</component>

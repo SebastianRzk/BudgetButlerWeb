@@ -5,6 +5,17 @@ title: Changelog
 
 <a href="{{config.pathPrefix}}">zurück zur Übersicht</a>
 
+### v4.3.8 (2026-01-29)
+
+#### Änderungen Desktop-Client
+
+* Aktualisierung von Abhängigkeiten (application-wrapper und backend)
+* Bereitstellung eines AppImage für Linux
+
+#### Änderungen Begleiter-Web-App
+
+* Aktualisierung von Abhängigkeiten im Backend und im Frontend
+
 ### v4.3.7 (2025-12-16)
 
 #### Änderungen Desktop-Client

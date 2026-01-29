@@ -1,11 +1,3 @@
-@if (uebersicht.monate.length === 0) {
-  <mat-card>
-    <mat-card-content>
-      Keine Daten vorhanden.
-    </mat-card-content>
-  </mat-card>
-}
-
 @for (monat of uebersicht.monate; track monat.name) {
   <mat-card>
     <mat-card-header>
@@ -33,6 +25,12 @@
         </dl>
       }
 
+    </mat-card-content>
+  </mat-card>
+} @empty {
+  <mat-card>
+    <mat-card-content>
+      Keine Daten vorhanden.
     </mat-card-content>
   </mat-card>
 }
