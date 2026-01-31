@@ -5,6 +5,13 @@ title: Changelog
 
 <a href="{{config.pathPrefix}}">zurück zur Übersicht</a>
 
+### v4.3.9 (2026-01-30)
+
+#### Änderungen Begleiter-Web-App
+
+* Fix http2 Fehler bei Begleiter App app
+* Mache ip-resolving dynamisch in docker-compose deployment
+
 ### v4.3.8 (2026-01-29)
 
 #### Änderungen Desktop-Client
