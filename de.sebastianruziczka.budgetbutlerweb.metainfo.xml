@@ -54,6 +54,16 @@
         </ul>
     </description>
     <releases>
+        <release version="4.3.9" date="2026-01-31">
+            <url type="details">https://sebastianrzk.github.io/BudgetButlerWeb/changelog/</url>
+            <description>
+                <p>Release description</p>
+                <ul>
+                    <li>Fix http2 Fehler bei Begleiter App</li>
+                    <li>Mache ip-resolving dynamisch in docker-compose deployment</li>
+                </ul>
+            </description>
+        </release>
         <release version="4.3.8" date="2026-01-29">
             <url type="details">https://sebastianrzk.github.io/BudgetButlerWeb/changelog/</url>
             <description>
