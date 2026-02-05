@@ -1,6 +1,6 @@
 [package]
 name = "budgetbutlerweboffline"
-version = "4.3.10"
+version = "4.3.11"
 edition = "2021"
 
 [dependencies]
