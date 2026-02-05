@@ -17,7 +17,7 @@ diesel = { version = "2.3.6", features = ["mysql", "r2d2", "numeric", "time"] }
 diesel_migrations = "2.3.1"
 dotenvy = { version = "0.15.7" }
 bigdecimal = { version = "0.4.10", features = ["serde"] }
-time = { version = "0.3.46", features = ["serde"]}
+time = { version = "0.3.47", features = ["serde"]}
 env_logger = "0.11.8"
 log = "0.4.29"
 serde = { version = "1.0", features = ["derive"] }
