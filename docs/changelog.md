@@ -5,6 +5,11 @@ title: Changelog
 
 <a href="{{config.pathPrefix}}">zurück zur Übersicht</a>
 
+### v4.3.11 (2026-02-05)
+
+#### Änderungen Begleiter-Web-App
+
+* Aktualisierung von Abhängigkeiten im Backend
 
 ### v4.3.10 (2026-02-03)
 

@@ -3,6 +3,8 @@
   { "path": "butler_offline/Cargo.lock", "type": "cargo-lock", "package": "budgetbutlerweboffline" },
   { "path": "butler_online/budgetbutler/package.json", "type": "json" },
   { "path": "butler_online/budgetbutler/package-lock.json", "type": "json" },
+  { "path": "application-wrapper/BudgetButlerWeb/package.json", "type": "json" },
+  { "path": "application-wrapper/BudgetButlerWeb/package-lock.json", "type": "json" },
   { "path": "butler_online_api/Cargo.toml", "type": "cargo" },
   { "path": "butler_online_api/Cargo.lock", "type": "cargo-lock", "package": "budgetbutlerweb-companion-backend" },
   { "path": "PKGBUILD", "type": "pkgbuild" },
