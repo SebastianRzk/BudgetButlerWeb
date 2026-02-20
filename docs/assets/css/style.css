@@ -352,3 +352,20 @@ table {
     margin-bottom: 0;
     margin-top: 0.5rem;
 }
+.migration-note {
+    background: #999999;
+    border-left: 8px solid #aa0000;
+    padding: 1ex 2ex;
+    margin: 3ex;
+    font-size: larger;
+    color: var(--secondary-color)!important;
+    border-radius: 1ex;
+}
+
+.migration-note:hover {
+    background: #888888;
+    border-left: 8px solid #00c853;
+    padding: 1ex 2ex;
+    font-size: larger;
+    color: var(--secondary-color)!important;
+}
